@@ -1,0 +1,50 @@
+a {
+  color: #98cb00;
+}
+
+a:hover {
+  color: #78ab00;
+}
+
+.button {
+  border: solid 2px #98cb00;
+}
+
+.button,
+.button:visited {
+  background: #98cb00;
+}
+
+a.big.button {
+  border: solid 3px #98cb00;
+}
+
+a.big.button,
+a.big.button:visited {
+  color: #98cb00;
+}
+
+a.big.button:hover {
+  background: #98cb00;
+}
+
+.menu a,
+.menu a:visited {
+  color: #98cb00;
+}
+
+.menu a:hover {
+  color: #78ab00;
+}
+
+.menu a.active:after {
+  background: #98cb00;
+}
+
+.content{
+  padding-top:20px;
+}
+
+img{
+	max-width:300px;
+}
