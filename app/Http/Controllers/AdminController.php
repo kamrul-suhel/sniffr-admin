@@ -20,6 +20,12 @@ use App\Libraries\ThemeHelper;
 use Carbon\Carbon as Carbon;
 
 class AdminController extends Controller {
+	   
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
 	/**
 	 * Setup the layout used by the controller.
 	 *

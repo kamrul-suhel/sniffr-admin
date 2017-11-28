@@ -21,6 +21,15 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
         Route::get('videos/tag/{tag}', 'ThemeVideoController@tag' );
         Route::get('video/{id}', 'ThemeVideoController@index');
         
+    /*
+    |--------------------------------------------------------------------------
+    | Upload Routes
+    |--------------------------------------------------------------------------
+    */
+
+        Route::post('upload', 'ThemeUploadController@store');
+        Route::get('upload', 'ThemeUploadController@index');
+
 
     /*
     |--------------------------------------------------------------------------

@@ -12,20 +12,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
+
 use App\Tag;
+use App\Page;
+use App\Menu;
 use App\Video;
 use App\VideoCategory;
+use App\PostCategory;
 
 use App\Libraries\ImageHandler;
+use App\Libraries\ThemeHelper;
 
 
-
-class AdminVideosController extends Controller {
+class ThemeUploadController extends Controller {
     
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('secure');
     }
+
     /**
      * Display a listing of videos
      *
@@ -33,23 +38,19 @@ class AdminVideosController extends Controller {
      */
     public function index()
     {
-        $search_value = Input::get('s');
-        
-        if(!empty($search_value)):
-            $videos = Video::where('title', 'LIKE', '%'.$search_value.'%')->orderBy('created_at', 'desc')->paginate(9);
-        else:
-            $videos = Video::orderBy('created_at', 'DESC')->paginate(9);
-        endif;
-        
         $user = Auth::user();
 
         $data = array(
-            'videos' => $videos,
             'user' => $user,
-            'admin_user' => Auth::user()
-            );
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'admin_user' => Auth::user(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'video_categories' => VideoCategory::all(),
+            'post_categories' => PostCategory::all(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        );
 
-        return view('admin.videos.index', $data);
+        return view('Theme::upload', $data);
     }
 
     /**
@@ -82,40 +83,9 @@ class AdminVideosController extends Controller {
         {
             return Redirect::back()->withErrors($validator)->withInput();
         }
-
-        $image = (isset($data['image'])) ? $data['image'] : '';
-        if(!empty($image)){
-            $fileName = time().'.'.$request->file->getClientOriginalExtension();
-            $file = $request->file('file');
-            $fileMimeType = $file->getMimeType();
-            $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-            $data['image'] = Storage::disk('s3')->url($fileName);
-
-            //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
-
-
-        } else {
-            $data['image'] = 'placeholder.jpg';
-        }
-
-        $tags = $data['tags'];
-        unset($data['tags']);
-        
-        if(empty($data['active'])){
-            $data['active'] = 0;
-        }
-
-        if(empty($data['featured'])){
-            $data['featured'] = 0;
-        }
-
-        if(isset($data['duration'])){
-                //$str_time = $data
-                $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
-                sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-                $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-                $data['duration'] = $time_seconds;
-        }
+        $data['image'] = 'placeholder.jpg';
+        $data['active'] = 0;
+        $data['featured'] = 0;
 
         $video = Video::create($data);
         $this->addUpdateVideoTags($video, $tags);

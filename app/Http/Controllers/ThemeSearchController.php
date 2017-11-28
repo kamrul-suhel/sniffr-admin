@@ -17,7 +17,7 @@ class ThemeSearchController extends Controller {
 
 	public function __construct()
 	{
-		$this->middleware('secure');
+		//$this->middleware('secure');
 	}
 
 	/*
