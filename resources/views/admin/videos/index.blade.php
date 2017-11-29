@@ -32,7 +32,7 @@
 						
 						<!--a href="{{ URL::to('video/') . '/' . $video->id }}" target="_blank"-->
 							@if($key = $video->getKey())
-							<div class="youtube-player" data-id="{{ $key }}"></div></td>
+							<div class="youtube-player" data-id="{{ $key }}"></div>
 							@elseif(strpos($video->image,'http') === false)
 							<img src="{{ Config::get('site.uploads_dir') . 'images/' . $video->image }}" />
 							@else
