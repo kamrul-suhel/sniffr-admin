@@ -42,7 +42,7 @@ class ThemeHomeController extends Controller {
 		}
 
 		$data = array(
-			'videos' => Video::where('active', '=', '1')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
+			'videos' => Video::where('state', 'licensed')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
 			'current_page' => 1,
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
 			'pagination_url' => '/videos',

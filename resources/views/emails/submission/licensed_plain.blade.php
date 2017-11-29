@@ -1,0 +1,1 @@
+Your video is now licensed: check it out here: {{ url('video/'.$video->id) }}

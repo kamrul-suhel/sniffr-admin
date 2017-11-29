@@ -9,6 +9,7 @@ use Validator;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,7 +19,9 @@ use App\VideoCategory;
 
 use App\Libraries\ImageHandler;
 
-
+use App\Mail\SubmissionAccepted;
+use App\Mail\SubmissionRejected;
+use App\Mail\SubmissionLicensed;
 
 class AdminVideosController extends Controller {
     
@@ -31,25 +34,65 @@ class AdminVideosController extends Controller {
      *
      * @return Response
      */
-    public function index()
+    public function index($state = 'all')
     {
         $search_value = Input::get('s');
         
-        if(!empty($search_value)):
-            $videos = Video::where('title', 'LIKE', '%'.$search_value.'%')->orderBy('created_at', 'desc')->paginate(9);
-        else:
-            $videos = Video::orderBy('created_at', 'DESC')->paginate(9);
-        endif;
+        $videos = new Video;
+
+        if(!empty($search_value)){
+            $videos = $videos->where('title', 'LIKE', '%'.$search_value.'%');
+        }
         
+        if($state != 'all'){
+            $videos = $videos->where('state', $state);
+            session(['state' => $state]);
+        }
+
+        $videos = $videos->orderBy('created_at', 'DESC')->paginate(9);
+        
+
         $user = Auth::user();
 
         $data = array(
+            'state' => $state,
             'videos' => $videos,
             'user' => $user,
             'admin_user' => Auth::user()
-            );
+        );
 
         return view('admin.videos.index', $data);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function status($state, $id)
+    {
+        $video = Video::find($id);
+        $video->state = $state;
+
+        // Send email
+        if($video->state == 'accepted'){
+            $video->more_details_code = str_random(30);
+            $video->more_details_sent = now();
+
+            // Send Accepted Email
+            Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+        }else if($video->state == 'rejected'){
+            // Send Rejected Email
+            Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+        }else if($video->state == 'licensed'){
+            // Send Licensed Email
+            Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+        }
+
+        $video->save();
+
+        return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
     }
 
     /**
@@ -92,8 +135,6 @@ class AdminVideosController extends Controller {
             $data['image'] = Storage::disk('s3')->url($fileName);
 
             //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
-
-
         } else {
             $data['image'] = 'placeholder.jpg';
         }

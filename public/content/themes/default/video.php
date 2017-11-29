@@ -1,35 +1,32 @@
 <?php include('includes/header.php'); ?>
-
 	<div id="video_title">
 		<div class="container">
 			<span class="label">You're watching:</span> <h1><?= $video->title ?></h1>
 		</div>
 	</div>
-	<div id="video_bg" style="background-image:url(<?= Config::get('site.uploads_url') . '/images/' . str_replace(' ', '%20', $video->image) ?>)">
-		<div id="video_bg_dim" <?php if($video->access == 'guest' || ($video->access == 'subscriber' && !Auth::guest()) ): ?><?php else: ?>class="darker"<?php endif; ?>></div>
-		<div class="container">
-			
-			<?php if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() ) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
 
-				
-					<?php if($video->type == 'embed'): ?>
-						<div id="video_container" class="fitvid">
-							<?= $video->embed_code ?>
-						</div>
-					<?php else: ?>
-						<div id="video_container">
+	<div id="video_bg">
+		<div class="container text-center">
+			<?php if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() ) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
+				<?php if($key = $video->getKey()): ?>
+					<div id="video_container">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
+					</div>
+				<?php elseif($video->url == 'url'): ?>
+					<h1>We need to handle videoi urls (that aren't youtube)</h1>
+				<?php elseif($video->embed_code == 'embed'): ?>
+					<div id="video_container" class="fitvid">
+						<?= $video->embed_code ?>
+					</div>
+				<?php elseif($video->file): ?>
+					<div id="video_container">
 						<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . '/images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
-							<source src="<?= $video->mp4_url; ?>" type='video/mp4'>
-							<source src="<?= $video->webm_url; ?>" type='video/webm'>
-							<source src="<?= $video->ogg_url; ?>" type='video/ogg'>
+							<source src="<?php echo $video->file; ?>" type='video/mp4'>
 							<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 						</video>
-						</div>
-					<?php endif; ?>
-				
-
+					</div>
+				<?php endif; ?>
 			<?php else: ?>
-
 				<div id="subscribers_only">
 					<h2>Sorry, this video is only available to <?php if($video->access == 'subscriber'): ?>Subscribers<?php elseif($video->access == 'registered'): ?>Registered Users<?php endif; ?></h2>
 					<div class="clear"></div>
@@ -43,30 +40,24 @@
 						</form>
 					<?php endif; ?>
 				</div>
-			
 			<?php endif; ?>
 		</div>
 	</div>
 
-
 	<div class="container video-details">
-
 		<h3>
 			<?= $video->title ?>
 			<span class="view-count"><i class="fa fa-eye"></i> <?php if(isset($view_increment) && $view_increment == true ): ?><?= $video->views + 1 ?><?php else: ?><?= $video->views ?><?php endif; ?> Views </span>
 			<div class="favorite btn btn-default <?php if(isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-videoid="<?= $video->id ?>"><i class="fa fa-heart"></i> Favorite</div>
 		</h3>
 
-
-
 		<div class="video-details-container"><?= $video->details ?></div>
 
 		<div class="clear"></div>
+		
 		<h2 id="tags">Tags: 
 		<?php foreach($video->tags as $key => $tag): ?>
-
 			<span><a href="/videos/tag/<?= $tag->name ?>"><?= $tag->name ?></a></span><?php if($key+1 != count($video->tags)): ?>,<?php endif; ?>
-
 		<?php endforeach; ?>
 		</h2>
 
@@ -81,10 +72,8 @@
 		<div id="comments">
 			<div id="disqus_thread"></div>
 		</div>
-    
 	</div>
-	
-	
+
 	<script type="text/javascript">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = '<?= \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->disqus_shortname, 'hellovideo') ?>';
@@ -100,7 +89,6 @@
 
 	<script src="<?= THEME_URL . '/assets/js/jquery.fitvid.js'; ?>"></script>
 	<script type="text/javascript">
-
 		$(document).ready(function(){
 			$('#video_container').fitVids();
 			$('.favorite').click(function(){
@@ -112,7 +100,6 @@
 				}
 			});
 		});
-
 	</script>
 
 	<!-- RESIZING FLUID VIDEO for VIDEO JS -->
@@ -137,6 +124,4 @@
 	</script>
 
 	<script src="<?= THEME_URL . '/assets/js/rrssb.min.js'; ?>"></script>
-
-
 <?php include('includes/footer.php'); ?>
