@@ -106,6 +106,36 @@
 							</a>
 						</li>
 						<li>
+							<a href="{{ URL::to('admin/videos/new') }}">
+								<span class="title">New Videos</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/videos/accepted') }}">
+								<span class="title">Accepted Videos</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/videos/rejected') }}">
+								<span class="title">Rejected Videos</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/videos/pending') }}">
+								<span class="title">Pending Videos</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/videos/problem') }}">
+								<span class="title">Problem Videos</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/videos/licensed') }}">
+								<span class="title">Licensed Videos</span>
+							</a>
+						</li>
+						<li>
 							<a href="{{ URL::to('admin/videos/create') }}">
 								<span class="title">Add New Video</span>
 							</a>

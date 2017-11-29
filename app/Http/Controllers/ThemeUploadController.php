@@ -9,26 +9,47 @@ use Validator;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
 
 use App\Tag;
 use App\Page;
 use App\Menu;
 use App\Video;
+use App\Contact;
 use App\VideoCategory;
 use App\PostCategory;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 
+use App\Mail\SubmissionNew;
+use App\Mail\SubmissionThanks;
 
 class ThemeUploadController extends Controller {
-    
+
+    protected $rules = [
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'email' => 'required|email',
+        // 'url' => 'required_without_all:url,file',
+        'file' => 'mimes:jpeg,jpg,png,gif,flv,ogg,mp4,qt,avi,wmv,m4v,webm|max:200000',
+        'terms' => 'required'
+    ];
+
     public function __construct()
     {
-        //$this->middleware('secure');
+        $user = Auth::user();
+
+        $this->data = array(
+            'user' => $user,
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'video_categories' => VideoCategory::all(),
+            'post_categories' => PostCategory::all(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        );
     }
 
     /**
@@ -38,36 +59,7 @@ class ThemeUploadController extends Controller {
      */
     public function index()
     {
-        $user = Auth::user();
-
-        $data = array(
-            'user' => $user,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'admin_user' => Auth::user(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
-            'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
-            'pages' => Page::where('active', '=', 1)->get(),
-        );
-
-        return view('Theme::upload', $data);
-    }
-
-    /**
-     * Show the form for creating a new video
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        $data = array(
-            'headline' => '<i class="fa fa-plus-circle"></i> New Video',
-            'post_route' => url('admin/videos/store'),
-            'button_text' => 'Add New Video',
-            'admin_user' => Auth::user(),
-            'video_categories' => VideoCategory::all(),
-        );
-        return view('admin.videos.create_edit', $data);
+        return view('Theme::upload', $this->data);
     }
 
     /**
@@ -77,213 +69,52 @@ class ThemeUploadController extends Controller {
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($data = Input::all(), Video::$rules);
+        $validator = Validator::make(Input::all(), $this->rules);
 
         if ($validator->fails())
         {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-        $data['image'] = 'placeholder.jpg';
-        $data['active'] = 0;
-        $data['featured'] = 0;
-
-        $video = Video::create($data);
-        $this->addUpdateVideoTags($video, $tags);
-
-        return Redirect::to('admin/videos')->with(array('note' => 'New Video Successfully Added!', 'note_type' => 'success') );
-    }
-
-    /**
-     * Show the form for editing the specified video.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        $video = Video::find($id);
-
-        $data = array(
-            'headline' => '<i class="fa fa-edit"></i> Edit Video',
-            'video' => $video,
-            'post_route' => url('admin/videos/update'),
-            'button_text' => 'Update Video',
-            'admin_user' => Auth::user(),
-            'video_categories' => VideoCategory::all(),
-            );
-
-        return view('admin.videos.create_edit', $data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-        $input = Input::all();
-        $id = $input['id'];
-        $video = Video::findOrFail($id);
-
-        $validator = Validator::make($data = $input, Video::$rules);
-
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
+            return Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        $tags = $data['tags'];
-        unset($data['tags']);
-        $this->addUpdateVideoTags($video, $tags);
+        $filePath = $fileMimeType = '';
+        $contact = Contact::where('email',Input::get('email'))->first();
+        // Contact exists
+        if(!$contact){
+            $contact = new Contact();
+            $contact->first_name = Input::get('first_name');
+            $contact->last_name = Input::get('last_name');
+            $contact->email = Input::get('email');
+            $contact->save();
+        }   
 
-        if(isset($data['duration'])){
-                //$str_time = $data
-                $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
-                sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-                $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-                $data['duration'] = $time_seconds;
-        }
-
-        if(empty($data['image'])){
-            unset($data['image']);
-        } else {
-            $fileName = time().'.'.$request->image->getClientOriginalExtension();
-            $file = $request->file('image');
+        if(isset($request->file)){
+            $fileName = time().'.'.$request->file->getClientOriginalExtension();
+            $file = $request->file('file');
             $fileMimeType = $file->getMimeType();
+
+            // Neew to generate a thumbnail image
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-            $data['image'] = Storage::disk('s3')->url($fileName);
-            
-            //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
+            $filePath = Storage::disk('s3')->url($fileName);
         }
 
-        if(empty($data['active'])){
-            $data['active'] = 0;
-        }
+        $video = new Video();
+        $video->contact_id = $contact->id;
+        $video->title = Input::get('title');
+        $video->url = Input::get('url');
+        $video->file = $filePath;
+        $video->mime = $fileMimeType;
+        $video->state = 'new';
+        $video->save();
 
-        if(empty($data['featured'])){
-            $data['featured'] = 0;
-        }
+        // Add Email notifications
+        // Notification of new video
+        Mail::to('submissions@unilad.co.uk')->send(new SubmissionNew($video));
 
-        $video->update($data);
+        // Send thanks notification
+        Mail::to($contact->email)->send(new SubmissionThanks($video));
 
-        return Redirect::to('admin/videos/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+        return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        $video = Video::find($id);
-
-        // Detach and delete any unused tags
-        foreach($video->tags as $tag){
-            $this->detachTagFromVideo($video, $tag->id);
-            if(!$this->isTagContainedInAnyVideos($tag->name)){
-                $tag->delete();
-            }
-        }
-
-        $this->deleteVideoImages($video);
-
-        Video::destroy($id);
-
-        return Redirect::to('admin/videos')->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
-    }
-
-    private function addUpdateVideoTags($video, $tags){
-        $tags = array_map('trim', explode(',', $tags));
-
-
-        foreach($tags as $tag){
-            
-            $tag_id = $this->addTag($tag);
-            $this->attachTagToVideo($video, $tag_id);
-        }  
-
-        // Remove any tags that were removed from video
-        foreach($video->tags as $tag){
-            if(!in_array($tag->name, $tags)){
-                $this->detachTagFromVideo($video, $tag->id);
-                if(!$this->isTagContainedInAnyVideos($tag->name)){
-                    $tag->delete();
-                }
-            }
-        }
-    }
-
-    /**************************************************
-    /*
-    /*  PRIVATE FUNCTION
-    /*  addTag( tag_name )
-    /*
-    /*  ADD NEW TAG if Tag does not exist
-    /*  returns tag id
-    /*
-    /**************************************************/
-
-    private function addTag($tag){
-        $tag_exists = Tag::where('name', '=', $tag)->first();
-            
-        if($tag_exists){ 
-            return $tag_exists->id; 
-        } else {
-            $new_tag = new Tag;
-            $new_tag->name = strtolower($tag);
-            $new_tag->save();
-            return $new_tag->id;
-        }
-    }
-
-    /**************************************************
-    /*
-    /*  PRIVATE FUNCTION
-    /*  attachTagToVideo( video object, tag id )
-    /*
-    /*  Attach a Tag to a Video
-    /*
-    /**************************************************/
-
-    private function attachTagToVideo($video, $tag_id){
-        // Add New Tags to video
-        if (!$video->tags->contains($tag_id)) {
-            $video->tags()->attach($tag_id);
-        }
-    }
-
-    private function detachTagFromVideo($video, $tag_id){
-        // Detach the pivot table
-        $video->tags()->detach($tag_id);
-    }
-
-    public function isTagContainedInAnyVideos($tag_name){
-        // Check if a tag is associated with any videos
-        $tag = Tag::where('name', '=', $tag_name)->first();
-        return (!empty($tag) && $tag->videos->count() > 0) ? true : false;
-    }
-
-    private function deleteVideoImages($video){
-        $ext = pathinfo($video->image, PATHINFO_EXTENSION);
-        if(file_exists(config('site.uploads_dir') . 'images/' . $video->image) && $video->image != 'placeholder.jpg'){
-            @unlink(config('site.uploads_dir') . 'images/' . $video->image);
-        }
-
-        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
-            @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image) );
-        }
-
-        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
-            @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image) );
-        }
-
-        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
-            @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) );
-        }
-    }
-
 }
