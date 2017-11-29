@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Auth;
 use Validator;
 use Redirect;
+use Response;
 
 use App\Page;
 use App\Menu;
 use App\VideoCategory;
 use App\PostCategory;
+
+use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 
 use App\Libraries\ThemeHelper;
 
@@ -27,7 +31,7 @@ class AdminMediaController extends Controller {
 	}
 
 	public function files(){
-		$folder = Request::input('folder');
+		$folder = Input::get('folder');
 		if($folder == '/'){ $folder = ''; }
 		$dir = "./content/uploads" . $folder;
 
@@ -151,7 +155,7 @@ class AdminMediaController extends Controller {
 	}
 
 	public function new_folder(){
-		$new_folder = Request::input('new_folder');
+		$new_folder = Input::get('new_folder');
 		$success = false;
 		$error = '';
 		
@@ -171,7 +175,7 @@ class AdminMediaController extends Controller {
 
 
 	public function delete_file_folder(){
-		$file_folder = Request::input('file_folder');
+		$file_folder = Input::get('file_folder');
 		$success = true;
 		$error = '';
 
@@ -233,8 +237,8 @@ class AdminMediaController extends Controller {
 	}
 
 	public function move_file(){
-		$source = Request::input('source');
-		$destination = Request::input('destination');
+		$source = Input::get('source');
+		$destination = Input::get('destination');
 		$success = false;
 		$error = '';
 		
@@ -256,7 +260,7 @@ class AdminMediaController extends Controller {
 		try {
 
 			if(Request::hasFile('file')){
-				$upload_path = Request::input('upload_path');
+				$upload_path = Input::get('upload_path');
 				$file = Request::file('file');
 				$extension = $file->getClientOriginalExtension();
 				$name = str_replace('.' . $extension, '-' . time() . '.' . $extension, $file->getClientOriginalName());

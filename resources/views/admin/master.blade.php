@@ -33,7 +33,7 @@
 	<script src="{{ '/application/assets/admin/js/jquery-1.11.0.min.js' }}"></script>
 	<script src="{{ '/application/assets/admin/js/bootstrap-colorpicker.min.js' }}" id="script-resource-13"></script>
 	<script src="{{ '/application/assets/admin/js/vue.min.js' }}"></script>
-	
+
 	<script>$.noConflict();</script>
 
 	<!--[if lt IE 9]><script src="{{ '/application/assets/admin/js/ie8-responsive-file-warning.js' }}"></script><![endif]-->
