@@ -49,21 +49,22 @@
 <body class="page-body skin-black">
 
 <a href="{{ URL::to('/') }}" class="top-left-logo">
-	<img src="{{ '/application/assets/admin/images/hv-tv.png' }}" />
+	<img src="/application/assets/admin/images/unilad-logo-small.gif">
+	<!--<img src="{{ '/application/assets/admin/images/hv-tv.png' }}" />-->
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
-	
+
 	<div class="sidebar-menu page-right-in">
 
 		<div class="sidebar-menu-inner">
-			
+
 			<header class="logo-env">
 
 				<!-- logo -->
 				<div class="logo">
 					<a href="{{ URL::to('/') }}">
-						
+
 					</a>
 				</div>
 
@@ -74,7 +75,7 @@
 					</a>
 				</div>
 
-								
+
 				<!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
 				<div class="sidebar-mobile-menu visible-xs">
 					<a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
@@ -83,8 +84,8 @@
 				</div>
 
 			</header>
-			
-									
+
+
 			<ul id="main-menu" class="main-menu">
 				<!-- add class "multiple-expanded" to allow multiple submenus to open -->
 				<!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
@@ -181,12 +182,48 @@
 					</ul>
 				</li>
 				<li class="">
+					<a href="{{ URL::to('admin/clients') }}">
+						<i class="entypo-docs"></i>
+						<span class="title">Clients</span>
+					</a>
+					<ul>
+						<li>
+							<a href="{{ URL::to('admin/clients') }}">
+								<span class="title">All Clients</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/clients/create') }}">
+								<span class="title">Add New Client</span>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="">
+					<a href="{{ URL::to('admin/campaigns') }}">
+						<i class="entypo-rocket"></i>
+						<span class="title">Campaigns</span>
+					</a>
+					<ul>
+						<li>
+							<a href="{{ URL::to('admin/campaigns') }}">
+								<span class="title">All Campaigns</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/campaigns/create') }}">
+								<span class="title">Add New Campaign</span>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<!-- <li class="">
 					<a href="{{ URL::to('admin/themes') }}">
 						<i class="entypo-monitor"></i>
 						<span class="title">Themes</span>
 					</a>
-				</li>
-				<li class="">
+				</li> -->
+				<!-- <li class="">
 					<a href="{{ URL::to('admin/plugins') }}">
 						<i class="fa fa-plug"></i>
 						<span class="title">Plugins</span>
@@ -196,7 +233,7 @@
 							<a href="{{ URL::to('admin/plugins') }}">All Plugins</a>
 						</li>
 	            	</ul>
-				</li>
+				</li> -->
 				<li class="">
 					<a href="{{ URL::to('admin/settings') }}">
 						<i class="entypo-cog"></i>
@@ -208,11 +245,11 @@
 								<span class="title">Site Settings</span>
 							</a>
 						</li>
-						<li class="">
+						<!--<li class="">
 							<a href="{{ URL::to('admin/payment_settings') }}">
 								<span class="title">Payment Settings</span>
 							</a>
-						</li>
+						</li>-->
 						<li class="">
 							<a href="{{ URL::to('admin/theme_settings') }}">
 								<span class="title">Theme Settings</span>
@@ -220,21 +257,21 @@
 						</li>
 					</ul>
 				</li>
-						
-				
+
+
 			</ul>
-			
+
 		</div>
 
 	</div>
 
 	<div class="main-content">
-				
+
 		<div class="row">
-		
+
 			<!-- Profile Info and Notifications -->
 			<div class="col-md-6 col-sm-8 clearfix">
-		
+
 				<ul class="user-info pull-left pull-none-xsm">
 					<!-- Profile Info -->
 					<li class="profile"><!-- add class "pull-right" if you want to place this from right -->
@@ -244,40 +281,31 @@
 				</ul>
 			</div>
 
-		
+
 			<!-- Raw Links -->
 			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
-		
+
 				<ul class="list-inline links-list pull-right">
 
-					<li>
-						<span class="label label-warning" style="font-size:12px; background:#A8D432">Version 1.1.1</span>
-					</li>
-					<li>
-						<a href="http://hellovideoapp.com/login" target="_blank">
-							<span class="label label-danger" style="font-size:12px; background:#FC9A24">Updates <i class="entypo-download right"></i></span>
-						</a>
-					</li>
-
-					<li>
+					<!-- <li>
 						<a href="{{ URL::to('/') }}">
-							<span class="label label-info" style="font-size:12px">View My Site <i class="entypo-export right"></i></span>
+							<span class="label label-warning" style="font-size:12px; background:#A8D432">Version 1.1.1</span>
 						</a>
-					</li>
+					</li> -->
 
 					<li class="sep"></li>
-		
+
 					<li>
 						<a href="{{ URL::to('logout') }}">
 							Log Out <i class="entypo-logout right"></i>
 						</a>
 					</li>
 				</ul>
-		
+
 			</div>
-		
+
 		</div>
-		
+
 		<hr />
 
 		<div id="main-admin-content">
@@ -285,32 +313,32 @@
 			@yield('content')
 
 		</div>
-		
+
 		<!-- Footer -->
 		<footer class="main">
-			
-			&copy; 2015 <strong>Hello Video</strong> Premium Video CMS
-		
+
+			&copy; 2017 <strong>Unilad</strong> Video Licensing Platform
+
 		</footer>
 	</div>
-	
-	
+
+
 </div>
 
 	<!-- Sample Modal (Default skin) -->
 	<div class="modal fade" id="sample-modal-dialog-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Widget Options - Default Modal</h4>
 				</div>
-				
+
 				<div class="modal-body">
 					<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary">Save changes</button>
@@ -318,21 +346,21 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Sample Modal (Skin inverted) -->
 	<div class="modal invert fade" id="sample-modal-dialog-2">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Widget Options - Inverted Skin Modal</h4>
 				</div>
-				
+
 				<div class="modal-body">
 					<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary">Save changes</button>
@@ -340,21 +368,21 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Sample Modal (Skin gray) -->
 	<div class="modal gray fade" id="sample-modal-dialog-3">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Widget Options - Gray Skin Modal</h4>
 				</div>
-				
+
 				<div class="modal-body">
 					<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary">Save changes</button>
@@ -414,7 +442,7 @@
 		};
 
 		<?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
-	        
+
 	        if('<?= Session::get("note_type") ?>' == 'success'){
 	        	toastr.success('<?= Session::get("note") ?>', "Sweet Success!", opts);
 	        } else if('<?= Session::get("note_type") ?>' == 'error'){
@@ -434,7 +462,7 @@
 	    $(document).ready(function(){
 	    	display_mobile_menu();
 	    });
-		
+
 	</script>
 	<!-- End Notifications -->
 

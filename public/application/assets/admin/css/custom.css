@@ -271,25 +271,16 @@ a.post-link span{
 	height:74px;
 	z-index:999;
 	cursor:pointer;
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(45deg,  #ffffff 0%, #f9f9f9 50%, #f9f9f9 50%, #ffffff 51%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#ffffff), color-stop(50%,#f9f9f9), color-stop(50%,#f9f9f9), color-stop(51%,#ffffff)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(45deg,  #ffffff 0%,#f9f9f9 50%,#f9f9f9 50%,#ffffff 51%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(45deg,  #ffffff 0%,#f9f9f9 50%,#f9f9f9 50%,#ffffff 51%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(45deg,  #ffffff 0%,#f9f9f9 50%,#f9f9f9 50%,#ffffff 51%); /* IE10+ */
-	background: linear-gradient(45deg,  #ffffff 0%,#f9f9f9 50%,#f9f9f9 50%,#ffffff 51%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
-
+	background: #000; /* Old browsers */
+	/*background: -moz-linear-gradient(45deg,  #ffffff 0%, #f9f9f9 50%, #f9f9f9 50%, #ffffff 51%); /* FF3.6+ */
 }
 
 .top-left-logo img{
 	width:64px;
-	width: 32px;
-	margin-left: 16px;
-	margin-top: 17px;
+	margin-left: 1px;
+	margin-top: 25px;
 	opacity:0.9;
-     
+
     overflow:hidden;
 
 }
@@ -297,7 +288,7 @@ a.post-link span{
 .top-left-logo:hover img
 {
     opacity:1;
-} 
+}
 
 .toast-top-right{
 	top:5px;

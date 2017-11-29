@@ -20,7 +20,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
         Route::get('videos/category/{category}', 'ThemeVideoController@category' );
         Route::get('videos/tag/{tag}', 'ThemeVideoController@tag' );
         Route::get('video/{id}', 'ThemeVideoController@index');
-        
+
     /*
     |--------------------------------------------------------------------------
     | Upload Routes
@@ -46,11 +46,11 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Post Page Routes
     |--------------------------------------------------------------------------
     */
-        
+
         Route::get( 'posts', array('uses' => 'ThemePostController@posts', 'as' => 'posts') );
         Route::get( 'posts/category/{category}', 'ThemePostController@category' );
         Route::get( 'post/{slug}', 'ThemePostController@index' );
-        
+
 
     /*
     |--------------------------------------------------------------------------
@@ -124,7 +124,7 @@ Route::get('upload_dir', function(){
 */
 
     Route::group(array('before' => 'admin'), function(){
-        
+
         // Admin Dashboard
         Route::get('admin', 'AdminController@index');
 
@@ -172,7 +172,20 @@ Route::get('upload_dir', function(){
         Route::get('admin/pages/edit/{id}', 'AdminPageController@edit');
         Route::post('admin/pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
         Route::get('admin/pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
-        
+
+        Route::get('admin/clients', 'AdminClientController@index');
+        Route::get('admin/clients/create', 'AdminClientController@create');
+        Route::post('admin/clients/store', array('before' => 'demo', 'uses' => 'AdminClientController@store'));
+        Route::get('admin/clients/edit/{id}', 'AdminClientController@edit');
+        // Route::post('admin/pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
+        // Route::get('admin/pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
+
+        Route::get('admin/campaigns', 'AdminCampaignController@index');
+        Route::get('admin/campaigns/create', 'AdminCampaignController@create');
+        Route::post('admin/campaigns/store', array('before' => 'demo', 'uses' => 'AdminCampaignController@store'));
+        Route::get('admin/campaigns/edit/{id}', 'AdminCampaignController@edit');
+        // Route::post('admin/pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
+        // Route::get('admin/pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
 
         Route::get('admin/users', 'AdminUsersController@index');
         Route::get('admin/user/create', 'AdminUsersController@create');
@@ -235,5 +248,3 @@ Route::group(array('prefix' => 'api/v1'), function()
     Route::get('post_categories', 'Api\v1\PostController@post_categories');
     Route::get('post_category/{id}', 'Api\v1\PostController@post_category');
 });
-
-
