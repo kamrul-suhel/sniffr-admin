@@ -22,6 +22,12 @@ class ThemeVideoController extends Controller {
 
     private $videos_per_page = 12;
 
+    public static $rules = array(
+        // 'username' => 'required|unique:users',
+        // 'email' => 'required|email|unique:users',
+        // 'password' => 'required|confirmed'
+    );
+    
     public function __construct()
     {
         //$this->middleware('secure');
@@ -37,7 +43,7 @@ class ThemeVideoController extends Controller {
      */
     public function index($id)
     {
-        $video = Video::with('tags')->findOrFail($id);
+        $video = Video::where('state', 'licensed')->with('tags')->findOrFail($id);
 
         //Make sure video is active
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->active){
@@ -153,12 +159,12 @@ class ThemeVideoController extends Controller {
         if(!empty($parent_cat->id)){
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
             if(!empty($parent_cat2->id)){
-                $videos = Video::where('active', '=', '1')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
+                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
             } else {
-                $videos = Video::where('active', '=', '1')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
+                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
             }
         } else {
-            $videos = Video::where('active', '=', '1')->where('video_category_id', '=', $cat->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
+            $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
         }
 
 

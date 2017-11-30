@@ -13,7 +13,7 @@
           <div class="row">
 
               <?php if(!$settings->free_registration): ?>
-                <h1 class="panel-title col-lg-7 col-md-8 col-sm-6"><?= ThemeHelper::getThemeSetting(@$theme_settings->signup_message, 'Signup to Gain access to all content on the site for $7 a month.') ?></h1>
+                <h1 class="panel-title col-lg-7 col-md-8 col-sm-6"><?= \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->signup_message, 'Signup to Gain access to all content on the site for $7 a month.') ?></h1>
                 <div class="cc-icons col-lg-5 col-md-4">
                     <img src="<?= THEME_URL ?>/assets/img/credit-cards.png" alt="All Credit Cards Supported" />
                 </div>

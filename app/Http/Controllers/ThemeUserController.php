@@ -20,17 +20,16 @@ use Illuminate\Support\Facades\Input;
 
 class ThemeUserController extends Controller{
 
+    public static $rules = array(
+        'username' => 'required|unique:users',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|confirmed'
+    );
 
     public function __construct()
     {
         //$this->middleware('secure');
     }
-
-	public static $rules = array(
-		'username' => 'required|unique:users',
-                            'email' => 'required|email|unique:users',
-                            'password' => 'required|confirmed'
-                        );
 
     public function index($username){
     	$user = User::where('username', '=', $username)->first();

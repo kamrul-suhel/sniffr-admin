@@ -112,6 +112,11 @@
 							</a>
 						</li>
 						<li>
+							<a href="{{ URL::to('admin/videos/pending') }}">
+								<span class="title">Pending Videos</span>
+							</a>
+						</li>
+						<li>
 							<a href="{{ URL::to('admin/videos/accepted') }}">
 								<span class="title">Accepted Videos</span>
 							</a>
@@ -119,11 +124,6 @@
 						<li>
 							<a href="{{ URL::to('admin/videos/rejected') }}">
 								<span class="title">Rejected Videos <i class="fa fa-times"></i></span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/pending') }}">
-								<span class="title">Pending Videos</span>
 							</a>
 						</li>
 						<li>
@@ -218,7 +218,7 @@
 				</li>
 				<li class="">
 					<a href="{{ URL::to('admin/clients') }}">
-						<i class="entypo-docs"></i>
+						<i class="entypo-user"></i>
 						<span class="title">Clients</span>
 					</a>
 					<ul>
@@ -236,7 +236,7 @@
 				</li>
 				<li class="">
 					<a href="{{ URL::to('admin/campaigns') }}">
-						<i class="entypo-rocket"></i>
+						<i class="entypo-list"></i>
 						<span class="title">Campaigns</span>
 					</a>
 					<ul>

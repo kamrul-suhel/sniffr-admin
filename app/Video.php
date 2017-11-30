@@ -3,13 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends Model {
-	protected $guarded = array();
-
-
-	public static $rules = array();
-
+    use SoftDeletes;
+    
+    protected $table = 'videos';
+	protected $guarded = [];
+    protected $hidden = ["deleted_at"];
 	protected $fillable = array('user_id', 'video_category_id', 'title', 'type', 'access', 'details', 'description', 'active', 'featured', 'duration', 'image', 'embed_code', 'url', 'created_at');
 
 	public function tags(){

@@ -76,7 +76,7 @@
 	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
 							@else
-							<i class="entypo-video"></i> {{ $video->state == 'accepted' ? 'Awaiting more details' : ucfirst($video->state) }}
+							<i class="entypo-video"></i> {{ $video->state == 'accepted' ? 'More details sent: '.\Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() : ucfirst($video->state) }}
 							@endif
 						</div>
 						

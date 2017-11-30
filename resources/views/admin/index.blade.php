@@ -3,45 +3,46 @@
 @section('content')
 		
   <!--[hook_admin_dashboard_widgets_start]-->
-		
 		<div class="row">
-			
       <div class="col-sm-3 col-xs-6">
-				<div class="tile-stats tile-red">
-					<div class="icon"><i class="entypo-users"></i></div>
-					<div class="num" data-start="0" data-end="{{ $total_subscribers }}" data-postfix="" data-duration="1500" data-delay="0">0</div>
-					<h3>Total Subscribers</h3>
-					<p>The total amount of subscribers on your site.</p>
-				</div>
-			</div><!-- column -->
-		
-			<div class="col-sm-3 col-xs-6">
-				<div class="tile-stats tile-green">
-					<div class="icon"><i class="entypo-user-add"></i></div>
-					<div class="num" data-start="0" data-end="{{ $new_subscribers }}" data-postfix="" data-duration="1500" data-delay="600">0</div>
-					<h3>New Subscribers</h3>
-					<p>New Subscribers for today.</p>
+				<div class="tile-stats tile-default">
+          <a href="{{ url('/admin/videos') }}">
+  					<span class="icon"><i class="entypo-download"></i></span>
+  					<span class="num" data-start="0" data-end="{{ $total_videos }}" data-postfix="" data-duration="1500" data-delay="0">0</span>
+  					<h3>Total Videos</h3>
+          </a>
 				</div>
 			</div><!-- column -->
 		
 			<div class="col-sm-3 col-xs-6">
 				<div class="tile-stats tile-aqua">
-					<div class="icon"><i class="entypo-video"></i></div>
-					<div class="num" data-start="0" data-end="{{ $total_videos }}" data-postfix="" data-duration="1500" data-delay="1200">0</div>
-					<h3>Videos</h3>
-					<p>Total videos on your site.</p>
+          <a href="{{ url('/admin/videos/new') }}">
+  					<span class="icon"><i class="entypo-plus"></i></span>
+  					<span class="num" data-start="0" data-end="{{ $new_videos }}" data-postfix="" data-duration="1500" data-delay="600">0</span>
+  					<h3>New Videos</h3>
+          </a>
 				</div>
 			</div><!-- column -->
 		
 			<div class="col-sm-3 col-xs-6">
-				<div class="tile-stats tile-blue">
-					<div class="icon"><i class="entypo-doc-text"></i></div>
-					<div class="num" data-start="0" data-end="{{ $total_posts }}" data-postfix="" data-duration="1500" data-delay="1800">0</div>
-					<h3>Posts</h3>
-					<p>Total Posts/Articles on your site.</p>
+				<div class="tile-stats tile-cyan">
+          <a href="{{ url('/admin/videos/pending') }}">
+  					<span class="icon"><i class="entypo-info"></i></span>
+  					<span class="num" data-start="0" data-end="{{ $pending_videos }}" data-postfix="" data-duration="1500" data-delay="1200">0</span>
+  					<h3>Pending Videos</h3>
+          </a>
 				</div>
 			</div><!-- column -->
-
+		
+			<div class="col-sm-3 col-xs-6">
+				<div class="tile-stats tile-green">
+          <a href="{{ url('/admin/videos/licensed') }}">
+  					<span class="icon"><i class="entypo-video"></i></span>
+  					<span class="num" data-start="0" data-end="{{ $licensed_videos }}" data-postfix="" data-duration="1500" data-delay="1800">0</span>
+  					<h3>Licensed Videos</h3>
+          </a>
+				</div>
+			</div><!-- column -->
 		</div><!-- row -->
 
   <!--[hook_admin_dashboard_widgets_start]-->		

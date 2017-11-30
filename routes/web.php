@@ -85,9 +85,9 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
 
         Route::get('login', 'ThemeAuthController@login_form')->name('login');
-        Route::get('signup', 'ThemeAuthController@signup_form');
+        //Route::get('signup', 'ThemeAuthController@signup_form');
         Route::post('login', 'ThemeAuthController@login');
-        Route::post('signup', 'ThemeAuthController@signup');
+        //Route::post('signup', 'ThemeAuthController@signup');
 
         Route::get('password/reset', array('before' => 'demo', 'uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind'));
         Route::post('password/reset', array('before' => 'demo', 'uses' => 'ThemeAuthController@password_request', 'as' => 'password.request'));

@@ -25,7 +25,9 @@ use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionLicensed;
 
 class AdminVideosController extends Controller {
-    
+
+    protected $rules = [];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -120,7 +122,7 @@ class AdminVideosController extends Controller {
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($data = Input::all(), Video::$rules);
+        $validator = Validator::make($data = Input::all(), $this->rules);
 
         if ($validator->fails())
         {
@@ -199,7 +201,7 @@ class AdminVideosController extends Controller {
         $id = $input['id'];
         $video = Video::findOrFail($id);
 
-        $validator = Validator::make($data = $input, Video::$rules);
+        $validator = Validator::make($data = $input, $this->rules);
 
         if ($validator->fails())
         {
@@ -263,7 +265,8 @@ class AdminVideosController extends Controller {
 
         $this->deleteVideoImages($video);
 
-        Video::destroy($id);
+        $video->delete();
+        $video->save();
 
         return Redirect::to('admin/videos')->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
     }
