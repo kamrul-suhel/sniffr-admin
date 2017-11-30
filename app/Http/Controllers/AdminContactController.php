@@ -7,8 +7,8 @@ use Auth;
 use Validator;
 use Redirect;
 
-use App\Client;
-use App\Campaign;
+use App\Contact;
+use App\Video;
 
 use App\Libraries\ThemeHelper;
 
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Input;
 
 use App\Http\Controllers\Controller;
 
-class AdminCampaignController extends Controller
+class AdminContactController extends Controller
 {
     protected $rules = [
         'name' => 'required'
@@ -39,16 +39,16 @@ class AdminCampaignController extends Controller
      */
      public function index()
      {
-          $campaigns = Campaign::orderBy('created_at', 'DESC')->paginate(10);
+          $contacts = Contact::orderBy('created_at', 'DESC')->paginate(10);
           $user = Auth::user();
 
           $data = array(
-              'campaigns' => $campaigns,
+              'contacts' => $contacts,
               'user' => $user,
               'admin_user' => Auth::user()
               );
 
-          return view('admin.campaigns.index', $data);
+          return view('admin.contacts.index', $data);
      }
 
     /**
@@ -59,35 +59,35 @@ class AdminCampaignController extends Controller
      public function create()
      {
          $data = array(
-             'post_route' => url('admin/campaigns/store'),
-             'button_text' => 'Add New Campaign',
+             'post_route' => url('admin/contacts/store'),
+             'button_text' => 'Add New Contact',
              'admin_user' => Auth::user(),
-             'clients' => Client::get()
+             'videos' => Video::get()
              );
-         return view('admin.campaigns.create_edit', $data);
+         return view('admin.contacts.create_edit', $data);
      }
 
      public function store()
      {
-         $validator = Validator::make($data = Input::all(), Campaign::$rules);
+         $validator = Validator::make($data = Input::all(), Contact::$rules);
 
          if ($validator->fails())
          {
              return Redirect::back()->withErrors($validator)->withInput();
          }
 
-         $campaign = Campaign::create($data);
+         $contact = Contact::create($data);
 
-         return Redirect::to('admin/campaigns')->with(array('note' => 'New Campaign Successfully Added!', 'note_type' => 'success') );
+         return Redirect::to('admin/contacts')->with(array('note' => 'New Contact Successfully Added!', 'note_type' => 'success') );
      }
 
      /**
       * Display the specified resource.
       *
-      * @param  \App\Campaign  $campaign
+      * @param  \App\Contact  $contact
       * @return \Illuminate\Http\Response
       */
-     public function show(Campaign $campaign)
+     public function show(Contact $contact)
      {
          //
      }
@@ -95,31 +95,31 @@ class AdminCampaignController extends Controller
      /**
       * Show the form for editing the specified resource.
       *
-      * @param  \App\Campaign  $campaign
+      * @param  \App\Contact  $contact
       * @return \Illuminate\Http\Response
       */
 
      public function edit($id)
      {
-         $campaign = Campaign::find($id);
+         $contact = Contact::find($id);
 
          $data = array(
-             'headline' => '<i class="fa fa-edit"></i> Edit Campaign',
-             'campaign' => $campaign,
-             'post_route' => url('admin/campaigns/update'),
-             'button_text' => 'Update Campaign',
+             'headline' => '<i class="fa fa-edit"></i> Edit Contact',
+             'contact' => $contact,
+             'post_route' => url('admin/contacts/update'),
+             'button_text' => 'Update Contact',
              'admin_user' => Auth::user(),
-             'clients' => Client::get()
+             'videos' => Video::get()
              );
 
-         return view('admin.campaigns.create_edit', $data);
+         return view('admin.contacts.create_edit', $data);
      }
 
      /**
       * Update the specified resource in storage.
       *
       * @param  \Illuminate\Http\Request  $request
-      * @param  \App\Campaign  $campaign
+      * @param  \App\Contact  $contact
       * @return \Illuminate\Http\Response
       */
 
@@ -127,9 +127,9 @@ class AdminCampaignController extends Controller
      {
          $data = Input::all();
          $id = $data['id'];
-         $campaign = Campaign::findOrFail($id);
+         $contact = Contact::findOrFail($id);
 
-         $validator = Validator::make($data, Campaign::$rules);
+         $validator = Validator::make($data, Contact::$rules);
 
          if ($validator->fails())
          {
@@ -140,24 +140,24 @@ class AdminCampaignController extends Controller
          //     $data['active'] = 0;
          // }
 
-         $campaign->update($data);
+         $contact->update($data);
 
-         return Redirect::to('admin/campaigns/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Campaign!', 'note_type' => 'success') );
+         return Redirect::to('admin/contacts/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Contact!', 'note_type' => 'success') );
      }
 
      /**
       * Remove the specified resource from storage.
       *
-      * @param  \App\Campaign  $campaign
+      * @param  \App\Contact  $contact
       * @return \Illuminate\Http\Response
       */
 
      public function destroy($id)
      {
-         $campaign = Campaign::find($id);
+         $contact = Contact::find($id);
 
-         Campaign::destroy($id);
+         Contact::destroy($id);
 
-         return Redirect::to('admin/campaigns')->with(array('note' => 'Successfully Deleted Campaign', 'note_type' => 'success') );
+         return Redirect::to('admin/contacts')->with(array('note' => 'Successfully Deleted Contact', 'note_type' => 'success') );
      }
 }

@@ -24,10 +24,10 @@ class AdminClientController extends Controller
         'name' => 'required'
     ];
     //
-    // public function __construct(Request $request)
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct(Request $request)
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -68,27 +68,6 @@ class AdminClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    //     $validator = Validator::make(Input::all(), $this->rules);
-    //
-    //     $this->validate($request, $this->rules);
-    //
-    //     if ($validator->fails()) {
-    //         return Redirect::back()
-    //             ->withErrors($validator)
-    //             ->withInput();
-    //     } else {
-    //         $client = new Client();
-    //         $client->name = Input::get('name');
-    //         $client->slug = slugify($client->name);
-    //         $client->save();
-    //
-    //         session()->flash('message', 'success|Client was successfully created');
-    //
-    //         return Redirect::to('admin/clients');
-    //     }
-    // }
 
     public function store()
     {
@@ -121,11 +100,20 @@ class AdminClientController extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $client = Client::find($id);
 
-        return view('admin.clients.edit', ['client' => $client]);
+        $data = array(
+            'headline' => '<i class="fa fa-edit"></i> Edit Client',
+            'client' => $client,
+            'post_route' => url('admin/clients/update'),
+            'button_text' => 'Update Client',
+            'admin_user' => Auth::user()
+            );
+
+        return view('admin.clients.create_edit', $data);
     }
 
     /**
@@ -135,25 +123,27 @@ class AdminClientController extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+
+    public function update()
     {
-        $validator = Validator::make(Input::all(), $this->rules);
+        $data = Input::all();
+        $id = $data['id'];
+        $client = Client::findOrFail($id);
 
-        $this->validate($request, $this->rules);
+        $validator = Validator::make($data, Client::$rules);
 
-        if ($validator->fails()) {
-            return Redirect::back()
-                ->withErrors($validator)
-                ->withInput();
-        } else {
-            $client->name = Input::get('name');
-            $client->slug = slugify($client->name);
-            $client->save();
-
-            session()->flash('message', 'success|Client was successfully created');
-
-            return Redirect::to('admin/clients');
+        if ($validator->fails())
+        {
+            return Redirect::back()->withErrors($validator)->withInput();
         }
+
+        // if(!isset($data['active']) || $data['active'] == ''){
+        //     $data['active'] = 0;
+        // }
+
+        $client->update($data);
+
+        return Redirect::to('admin/clients/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Client!', 'note_type' => 'success') );
     }
 
     /**
@@ -162,12 +152,13 @@ class AdminClientController extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Client $client)
+
+    public function destroy($id)
     {
-        $client->delete();
+        $client = Client::find($id);
 
-        session()->flash('message', 'success|Client was successfully deleted');
+        Client::destroy($id);
 
-        return Redirect::to('admin/clients');
+        return Redirect::to('admin/clients')->with(array('note' => 'Successfully Deleted Client', 'note_type' => 'success') );
     }
 }

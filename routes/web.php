@@ -177,15 +177,22 @@ Route::get('upload_dir', function(){
         Route::get('admin/clients/create', 'AdminClientController@create');
         Route::post('admin/clients/store', array('before' => 'demo', 'uses' => 'AdminClientController@store'));
         Route::get('admin/clients/edit/{id}', 'AdminClientController@edit');
-        // Route::post('admin/pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
-        // Route::get('admin/pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
+        Route::post('admin/clients/update', array('before' => 'demo', 'uses' => 'AdminClientController@update'));
+        Route::get('admin/clients/delete/{id}', array('before' => 'demo', 'uses' => 'AdminClientController@destroy'));
+
+        Route::get('admin/contacts', 'AdminContactController@index');
+        Route::get('admin/contacts/create', 'AdminContactController@create');
+        Route::post('admin/contacts/store', array('before' => 'demo', 'uses' => 'AdminContactController@store'));
+        Route::get('admin/contacts/edit/{id}', 'AdminContactController@edit');
+        Route::post('admin/contacts/update', array('before' => 'demo', 'uses' => 'AdminContactController@update'));
+        Route::get('admin/contacts/delete/{id}', array('before' => 'demo', 'uses' => 'AdminContactController@destroy'));
 
         Route::get('admin/campaigns', 'AdminCampaignController@index');
         Route::get('admin/campaigns/create', 'AdminCampaignController@create');
         Route::post('admin/campaigns/store', array('before' => 'demo', 'uses' => 'AdminCampaignController@store'));
         Route::get('admin/campaigns/edit/{id}', 'AdminCampaignController@edit');
-        // Route::post('admin/pages/update', array('before' => 'demo', 'uses' => 'AdminPageController@update'));
-        // Route::get('admin/pages/delete/{id}', array('before' => 'demo', 'uses' => 'AdminPageController@destroy'));
+        Route::post('admin/campaigns/update', array('before' => 'demo', 'uses' => 'AdminCampaignController@update'));
+        Route::get('admin/campaigns/delete/{id}', array('before' => 'demo', 'uses' => 'AdminCampaignController@destroy'));
 
         Route::get('admin/users', 'AdminUsersController@index');
         Route::get('admin/user/create', 'AdminUsersController@create');

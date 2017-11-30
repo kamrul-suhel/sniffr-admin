@@ -10,16 +10,16 @@
 <div id="admin-container">
 <!-- This is where -->
 
-	<ol class="breadcrumb"> <li> <a href="/admin/campaigns"><i class="fa fa-newspaper-o"></i>All Campaigns</a> </li> <li class="active">@if(!empty($page->id)) <strong>{{ $page->title }}</strong> @else <strong>New Page</strong> @endif</li> </ol>
+	<ol class="breadcrumb">
+		<li><a href="/admin/campaigns"><i class="fa fa-newspaper-o"></i>All Campaigns</a></li>
+		<li class="active"><strong><{{ !empty($campaign->id) ? $campaign->name : 'New Campaign' }}</strong></li>
+	</ol>
 
 	<div class="admin-section-title">
-	@if(!empty($page->id))
-		<h3>{{ $page->title }}</h3>
-		<a href="{{ URL::to('page') . '/' . $page->slug }}" target="_blank" class="btn btn-info">
-			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
-		</a>
+	@if(!empty($campaign->id))
+		<h3>{{ $campaign->name }}</h3>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Page</h3>
+		<h3><i class="entypo-plus"></i> Add New Campaign</h3>
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -28,75 +28,73 @@
 
 			<div class="row">
 
-				<div class="@if(!empty($page->created_at)) col-sm-6 @else col-sm-8 @endif">
+				<div class="@if(!empty($campaign->created_at)) col-sm-6 @else col-sm-8 @endif">
 
-					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel panel-primary" data-collapsed="0">
+						<div class="panel-heading">
+							<div class="panel-title">Campaign Name</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
-							<p>Add the page title in the textbox below:</p>
-							<input type="text" class="form-control" name="title" id="title" placeholder="Page Title" value="@if(!empty($page->title)){{ $page->title }}@endif" />
+							<p>Add the campaign name in the textbox below:</p>
+							<input type="text" class="form-control" name="name" id="name" placeholder="Campaign Name" value="@if(!empty($campaign->name)){{ $campaign->name }}@endif" />
 						</div>
 					</div>
 
 				</div>
 
-				<div class="@if(!empty($page->created_at)) col-sm-3 @else col-sm-4 @endif">
+				<div class="@if(!empty($campaign->created_at)) col-sm-3 @else col-sm-4 @endif">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
-							<p>(example. /page/slug-name)</p>
-							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($page->slug)){{ $page->slug }}@endif" />
+							<p>(example. slug-name)</p>
+							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($campaign->slug)){{ $campaign->slug }}@endif" />
 						</div>
 					</div>
 				</div>
 
-				@if(!empty($page->created_at))
-					<div class="col-sm-3">
-						<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
-							<div class="panel-body" style="display: block;">
-								<p>Select Date/Time Below</p>
-								<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($page->created_at)){{ $page->created_at }}@endif" />
+				@if(!empty($campaign->created_at))
+				<div class="col-sm-3">
+					<div class="panel panel-primary" data-collapsed="0">
+
+						<div class="panel-heading">
+							<div class="panel-title">Created Date</div>
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 							</div>
 						</div>
+
+						<div class="panel-body" style="display: block;">
+							<p>Select Date/Time Below</p>
+							<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($campaign->created_at)){{ $campaign->created_at }}@endif" />
+						</div>
+
 					</div>
+				</div>
 				@endif
 
-			</div>
-
-
-			<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-				<div class="panel-title">Page Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
-				<div class="panel-body" style="display: block; padding:0px;">
-					<textarea class="form-control" name="body" id="body">@if(!empty($page->body)){{ $page->body }}@endif</textarea>
-				</div>
-			</div>
-
-			<div class="clear"></div>
-
-
-			<div class="row">
-
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<div class="panel panel-primary" data-collapsed="0">
-						<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
-						<div class="panel-body">
-							<div>
-								<label for="active" style="float:left; display:block; margin-right:10px;">Is this page Active:</label>
-								<input type="checkbox" @if(!isset($page->active) || (isset($page->active) && $page->active))checked="checked" value="1"@else value="0"@endif name="active" id="active" />
+
+						<div class="panel-heading">
+							<div class="panel-title">Client Name</div>
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 							</div>
 						</div>
-					</div>
+
+						<div class="panel-body" style="display: block;">
+							<select name="client_id" id="client_id" class="form-control">
+								<option value="">Please select</option>
+								@foreach($clients as $client)
+									<option value="{{ $client->id }}"{{ isset($campaign) && $campaign->client_id == $client->id ? " selected" : "" }}>{{ $client->name }}</option>
+								@endforeach
+							</select>
+						</div>
+
 				</div>
+			</div>
 
-			</div><!-- row -->
-
-			@if(!isset($page->user_id))
-				<input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}" />
-			@endif
-
-			@if(isset($page->id))
-				<input type="hidden" id="id" name="id" value="{{ $page->id }}" />
+			@if(isset($campaign->id))
+				<input type="hidden" id="id" name="id" value="{{ $campaign->id }}" />
 			@endif
 
 			<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
@@ -122,6 +120,19 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		function slugify(text) {
+		  return text.toString().toLowerCase()
+		    .replace(/\s+/g, '-')           // Replace spaces with -
+		    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+		    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+		    .replace(/^-+/, '')             // Trim - from start of text
+		    .replace(/-+$/, '');            // Trim - from end of text
+		}
+
+		$('#name').on('input', function() {
+		    $('#slug').val(slugify($('#name').val()));
+		});
 
 		$('#duration').mask('00:00:00');
 

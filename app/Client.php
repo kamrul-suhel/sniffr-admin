@@ -16,4 +16,9 @@ class Client extends Model
     protected $table = 'clients';
 
   	//protected $fillable = array('user_id', 'title', 'slug', 'image', 'body', 'active', 'created_at');
+
+    public function campaigns()
+    {
+        return $this->hasMany(Campaign::class);
+    }
 }

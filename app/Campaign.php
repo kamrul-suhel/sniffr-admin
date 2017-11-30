@@ -11,7 +11,7 @@ class Campaign extends Model
     // use SoftDeletes;
     // use Taggable;
 
-    protected $guarded = array();
+    protected $guarded = [];
 
   	public static $rules = array();
 
