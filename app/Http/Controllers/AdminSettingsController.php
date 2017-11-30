@@ -13,6 +13,7 @@ use App\VideoCategory;
 use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
+use App\Libraries\ImageHandler;
 
 use Illuminate\Support\Facades\Input;
 

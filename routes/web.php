@@ -30,6 +30,14 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
         Route::post('upload', 'ThemeUploadController@store');
         Route::get('upload', 'ThemeUploadController@index');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Details Routes
+    |--------------------------------------------------------------------------
+    */
+
+        Route::post('details/{code}', 'ThemeDetailsController@store');
+        Route::get('details/{code}', 'ThemeDetailsController@index');
 
     /*
     |--------------------------------------------------------------------------
@@ -141,6 +149,9 @@ Route::get('upload_dir', function(){
         Route::get('admin/videos/categories/edit/{id}', 'AdminVideoCategoriesController@edit');
         Route::post('admin/videos/categories/update', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@update'));
         Route::get('admin/videos/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@destroy'));
+        Route::get('admin/videos/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@index'));
+        Route::get('admin/videos/status/{state}/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@status'));
+
 
         Route::get('admin/posts', 'AdminPostController@index');
         Route::get('admin/posts/create', 'AdminPostController@create');

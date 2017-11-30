@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
 use App\Tag;
+use App\Menu;
 use App\Video;
 use App\VideoCategory;
 
