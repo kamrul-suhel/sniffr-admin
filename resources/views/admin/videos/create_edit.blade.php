@@ -22,6 +22,7 @@
 
 	<div class="clear"></div>
 
+	@if(isset($video))
 	<div class="row">
 		<div class="col-sm-6">
 			<?php 
@@ -52,9 +53,9 @@
 						<div id="video_container" class="fitvid">
 						<?php if($key = $video->getKey()): ?>
 							<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
-						<?php elseif($video->url == 'url'): ?>
+						<?php elseif($video->url): ?>
 							<h1>We need to handle videoi urls (that aren't youtube)</h1>
-						<?php elseif($video->embed_code == 'embed'): ?>
+						<?php elseif($video->embed_code): ?>
 							<?= $video->embed_code ?>
 						<?php elseif($video->file): ?>
 							<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
@@ -106,11 +107,11 @@
 			@endif
 		</div>
 	</div>
-
+	@endif
 
 	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div class="row">
-			<div class="col-md-9">
+			<div class="col-md-6">
 				<div class="panel panel-primary" data-collapsed="0"> 
 					<div class="panel-heading"> 
 						<div class="panel-title">Title</div> 
@@ -130,7 +131,7 @@
 			<div class="col-sm-3">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading"> 
-						<div class="panel-title">Created Date</div>
+						<div class="panel-title">Filmed Date</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
@@ -139,7 +140,24 @@
 
 					<div class="panel-body" style="display: block;"> 
 						<p>Select Date/Time Below</p> 
-						<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($video->created_at)){{ $video->created_at }}@endif" />
+						<input type="date" class="form-control" name="date_filmed" id="date_filmed" placeholder="" value="@if(!empty($video->date_filmed)){{ $video->date_filmed }}@endif" />
+					</div> 
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> 
+						<div class="panel-title">Uploaded Date</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+						</div>
+					</div> 
+
+					<div class="panel-body" style="display: block;"> 
+						<p>Select Date/Time Below</p> 
+						<input type="text" class="form-control" name="created_at" id="created_at" disabled value="@if(!empty($video->created_at)){{ $video->created_at }}@endif" />
 					</div> 
 				</div>
 			</div>
