@@ -15,9 +15,6 @@
 	<div class="admin-section-title">
 	@if(!empty($client->id))
 		<h3>{{ $client->name }}</h3>
-		<a href="{{ URL::to('client') . '/' . $client->slug }}" target="_blank" class="btn btn-info">
-			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
-		</a>
 	@else
 		<h3><i class="entypo-plus"></i> Add New Client</h3>
 	@endif
@@ -44,7 +41,7 @@
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
 						<div class="panel-title">Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
-							<p>(example. /clients/slug-name)</p>
+							<p>(example. slug-name)</p>
 							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($client->slug)){{ $client->slug }}@endif" />
 						</div>
 					</div>
@@ -91,6 +88,19 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		function slugify(text) {
+		  return text.toString().toLowerCase()
+		    .replace(/\s+/g, '-')           // Replace spaces with -
+		    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+		    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+		    .replace(/^-+/, '')             // Trim - from start of text
+		    .replace(/-+$/, '');            // Trim - from end of text
+		}
+
+		$('#name').on('input', function() {
+		    $('#slug').val(slugify($('#name').val()));
+		});
 
 		$('#duration').mask('00:00:00');
 

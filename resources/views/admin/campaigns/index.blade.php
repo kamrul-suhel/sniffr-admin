@@ -44,7 +44,7 @@
 		$(document).ready(function(){
 			$('.delete').click(function(e){
 				e.preventDefault();
-				if (confirm("Are you sure you want to delete this page?")) {
+				if (confirm("Are you sure you want to delete this campaign?")) {
 			       window.location = $(this).attr('href');
 			    }
 			    return false;

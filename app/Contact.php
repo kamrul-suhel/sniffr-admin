@@ -3,17 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contact extends Model
 {
-    use SoftDeletes;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    //use SoftDeletes;
+
+  	public static $rules = array();
+
+    protected $table = 'contacts';
+
     protected $fillable = [
         'first_name', 'last_name', 'email', 'tel', 'language', 'location', 'comments', 'facebook', 'youtube', 'instagram', 'twitter', 'other', 'terms'
     ];

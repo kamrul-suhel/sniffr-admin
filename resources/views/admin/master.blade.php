@@ -217,6 +217,24 @@
 					</ul>
 				</li>
 				<li class="">
+					<a href="{{ URL::to('admin/contacts') }}">
+						<i class="entypo-user-add"></i>
+						<span class="title">Contacts</span>
+					</a>
+					<ul>
+						<li>
+							<a href="{{ URL::to('admin/contacts') }}">
+								<span class="title">All Contacts</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/contacts/create') }}">
+								<span class="title">Add New Contact</span>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="">
 					<a href="{{ URL::to('admin/clients') }}">
 						<i class="entypo-user"></i>
 						<span class="title">Clients</span>
