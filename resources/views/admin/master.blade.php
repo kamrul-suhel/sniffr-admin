@@ -118,7 +118,7 @@
 						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/rejected') }}">
-								<span class="title">Rejected Videos</span>
+								<span class="title">Rejected Videos <i class="fa fa-times"></i></span>
 							</a>
 						</li>
 						<li>
@@ -128,12 +128,17 @@
 						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/problem') }}">
-								<span class="title">Problem Videos</span>
+								<span class="title">Problem Videos <i class="fa fa-times"></i></span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/licensed') }}">
-								<span class="title">Licensed Videos</span>
+								<span class="title">Licensed Videos <i class="entypo-check"></i></span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/videos/restricted') }}">
+								<span class="title">Restricted Videos <i class="fa fa-exclamation-triangle"></i></span>
 							</a>
 						</li>
 						<li>

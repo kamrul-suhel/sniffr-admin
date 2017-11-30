@@ -5182,6 +5182,15 @@ fieldset[disabled] .calendar-env .calendar-body .fc-content .fc-view table tbody
   border-radius: 3px;
   background-clip: padding-box;
 }
+.gallery-env article.album.success{
+  border: 1px solid #b4e8a8;
+}
+.gallery-env article.album.warning{
+  border: 1px solid #faebcc;
+}
+.gallery-env article.album.danger{
+  border: 1px solid #ffafbd;
+}
 .gallery-env article.album header {
   position: relative;
 }
@@ -5270,6 +5279,15 @@ fieldset[disabled] .calendar-env .calendar-body .fc-content .fc-view table tbody
   -moz-background-clip: padding;
   border-radius: 3px;
   background-clip: padding-box;
+}
+.gallery-env article.album footer .album-images-count a.text-success{
+  color: #00a651;
+}
+.gallery-env article.album footer .album-images-count a.text-warning{
+  color: #fad839;
+}
+.gallery-env article.album footer .album-images-count a.text-danger{
+  color: #cc2424;
 }
 .gallery-env article.album footer .album-images-count a + a,
 .gallery-env article.album footer .album-options a + a {

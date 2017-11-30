@@ -76,7 +76,6 @@
 
                     <div class="form-group form-radio">
                         <label class="form-radio-label" for="permission">Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</label>
-                        <br>
                         <input name="permission" type="radio" value="yes"> Yes
                         <br>
                         <input name="permission" type="radio" value="no"> No
@@ -84,7 +83,6 @@
 
                     <div class="form-group form-radio">
                         <label class="form-radio-label" for="submitted_elsewhere">Have you submitted this video through any other online form?</label>
-                        <br>
                         <input name="submitted_elsewhere" type="radio" value="no"> No
                         <br>
                         <input name="submitted_elsewhere" type="radio" value="yes"> Yes

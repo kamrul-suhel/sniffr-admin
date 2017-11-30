@@ -25,8 +25,21 @@
 		@foreach($videos as $video)
 		
 			<div class="col-sm-6 col-md-4">
-				
-				<article class="album">
+				<?php 
+				switch($video->state){
+					case 'rejected':
+					case 'problem':
+						$panelColour = 'danger';
+						break;
+					case 'licensed':
+					case 'restricted':
+						$panelColour = 'success';
+						break;
+					default:
+						$panelColour = 'default';
+				}
+				?>
+				<article class="album {{ $panelColour }}">
 					
 					<header>
 						
@@ -50,21 +63,21 @@
 						<h3><a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
 						
 						<p>{{ $video->description }}</p>
-
-						@if($video->state == 'new')
-						<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="btn btn-primary btn-success">Accept</a>
-                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="btn btn-primary btn-danger">Reject</a>
-						@elseif($video->state == 'pending')
-						<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="btn btn-primary btn-success">License</a>
-                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="btn btn-primary btn-warning">Restricted</a>
-                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="btn btn-primary btn-danger">Problem</a>
-                    	@endif
 					</section>
 					
 					<footer>
 						
 						<div class="album-images-count">
-							<i class="entypo-video"></i>
+							@if($video->state == 'new')
+							<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success" title="Accept Video"><i class="entypo-check"></i></a>
+	                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger" title="Reject Video"><i class="fa fa-times"></i></a>
+							@elseif($video->state == 'pending')
+							<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success" title="License Video"><i class="entypo-check"></i></a>
+	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
+							@else
+							<i class="entypo-video"></i> {{ $video->state == 'accepted' ? 'Awaiting more details' : ucfirst($video->state) }}
+							@endif
 						</div>
 						
 						<div class="album-options">

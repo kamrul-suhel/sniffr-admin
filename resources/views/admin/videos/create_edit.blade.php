@@ -11,7 +11,7 @@
 <!-- This is where -->
 	<div class="admin-section-title">
 	@if(!empty($video->id))
-		<h3>{{ ucfirst($video->state) }} - {{ $video->title }}</h3> 
+		<h3>{{ $video->title }}</h3> 
 		<a href="{{ URL::to('video') . '/' . $video->id }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
@@ -24,9 +24,23 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			<div class="panel panel-primary" data-collapsed="0"> 
+			<?php 
+			switch($video->state){
+				case 'rejected':
+				case 'problem':
+					$panelColour = 'danger';
+					break;
+				case 'licensed':
+				case 'restricted':
+					$panelColour = 'success';
+					break;
+				default:
+					$panelColour = 'default';
+			}
+			?>
+			<div class="panel panel-{{ $panelColour }}" data-collapsed="0"> 
 				<div class="panel-heading"> 
-					<div class="panel-title">Video</div>
+					<div class="panel-title">{{ ucfirst($video->state) }} Video</div>
 
 					<div class="panel-options">
 						<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
@@ -67,6 +81,7 @@
 				</div>
 			</div>
 
+			@if($video->more_details)
 			<div class="panel panel-primary" data-collapsed="0"> 
 				<div class="panel-heading"> 
 					<div class="panel-title">Rights</div> 
@@ -74,17 +89,21 @@
 				</div>
 				
 				<div class="panel-body" style="display: block;"> 
-					@if($video->more_details)
-                    <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>{{ $video->contact_is_owner ? 'Contact is owner' : 'Does not own video' }}</strong></p>
+                    <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong>{!! $video->contact_is_owner ? '<i class="entypo-check"></i> Contact is owner' : '<i class="fa fa-times"></i> Does not own video' !!}</strong></p>
                     @if($video->submitted_elsewhere)
-                    <p class="text-danger"><strong>Submitted to: {{ $video->submitted_where }}</strong></p>
+                    <p class="text-warning"><strong><i class="fa fa-exclamation"></i> Submitted to: {{ $video->submitted_where }}</strong></p>
                     @endif
-                    <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>{{ $video->allow_publish ? 'H' : 'Not h' }}appy to publish</strong></p>
-                    <p class="{{ $video->permission ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>{{ $video->permission ? 'Has' : 'Does not have' }} permission</strong></p>
-                    <p class="{{ $video->is_exclusive ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>Is {{ $video->is_exclusive ? '' : 'not ' }}exclusive</strong></p>
-                    @endif
+                    <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong>{!! $video->allow_publish ? '<i class="entypo-check"></i> H' : '<i class="fa fa-times"></i> Not h' !!}appy to publish</strong></p>
+                    <p class="{{ $video->permission ? 'text-success' : 'text-danger' }}"><strong>{!! $video->permission ? '<i class="entypo-check"></i> Has' : '<i class="fa fa-times"></i> Does not have' !!} permission</strong></p>
+                    <p class="{{ $video->is_exclusive ? 'text-success' : 'text-danger' }}"><strong>{!! $video->is_exclusive ? '<i class="entypo-check"></i> Is' : '<i class="fa fa-times"></i> Is not' !!} exclusive</strong></p>
 				</div>
 			</div>
+			@if($video->state == 'pending')
+			<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="btn btn-primary btn-success">License</a>
+        	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="btn btn-primary btn-warning">Restricted</a>
+        	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="btn btn-primary btn-danger">Problem</a>
+			@endif
+			@endif
 		</div>
 	</div>
 
