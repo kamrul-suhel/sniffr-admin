@@ -2,6 +2,7 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/jquery.tagsinput.css' }}" />
+	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
 @stop
 
 
@@ -10,7 +11,7 @@
 <!-- This is where -->
 	<div class="admin-section-title">
 	@if(!empty($video->id))
-		<h3>{{ $video->title }}</h3> 
+		<h3>{{ ucfirst($video->state) }} - {{ $video->title }}</h3> 
 		<a href="{{ URL::to('video') . '/' . $video->id }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
@@ -21,25 +22,102 @@
 
 	<div class="clear"></div>
 
-	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="panel panel-primary" data-collapsed="0"> 
+				<div class="panel-heading"> 
+					<div class="panel-title">Video</div>
 
-		@if(!empty($video->created_at))
+					<div class="panel-options">
+						<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+					</div>
+				</div> 
+
+				<div class="panel-body" style="display: block;"> 
+					<div class="text-center">
+						<div id="video_container" class="fitvid">
+						<?php if($key = $video->getKey()): ?>
+							<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
+						<?php elseif($video->url == 'url'): ?>
+							<h1>We need to handle videoi urls (that aren't youtube)</h1>
+						<?php elseif($video->embed_code == 'embed'): ?>
+							<?= $video->embed_code ?>
+						<?php elseif($video->file): ?>
+							<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
+								<source src="<?php echo $video->file; ?>" type='video/mp4'>
+								<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+							</video>
+						<?php endif; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-6">
+			<div class="panel panel-primary" data-collapsed="0"> 
+				<div class="panel-heading"> 
+					<div class="panel-title">Uploaded By</div> 
+					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+				</div>
+				
+				<div class="panel-body" style="display: block;"> 
+					<p>{{ $video->contact->first_name.' '.$video->contact->last_name }}</p>
+                    <p>{{ $video->contact->email }}</p>
+				</div>
+			</div>
+
+			<div class="panel panel-primary" data-collapsed="0"> 
+				<div class="panel-heading"> 
+					<div class="panel-title">Rights</div> 
+					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+				</div>
+				
+				<div class="panel-body" style="display: block;"> 
+					@if($video->more_details)
+                    <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>{{ $video->contact_is_owner ? 'Contact is owner' : 'Does not own video' }}</strong></p>
+                    @if($video->submitted_elsewhere)
+                    <p class="text-danger"><strong>Submitted to: {{ $video->submitted_where }}</strong></p>
+                    @endif
+                    <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>{{ $video->allow_publish ? 'H' : 'Not h' }}appy to publish</strong></p>
+                    <p class="{{ $video->permission ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>{{ $video->permission ? 'Has' : 'Does not have' }} permission</strong></p>
+                    <p class="{{ $video->is_exclusive ? 'text-success' : 'text-danger' }}"><strong><i class="entypo-check"></i>Is {{ $video->is_exclusive ? '' : 'not ' }}exclusive</strong></p>
+                    @endif
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-9">
-		@endif
-				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-					<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+				<div class="panel panel-primary" data-collapsed="0"> 
+					<div class="panel-heading"> 
+						<div class="panel-title">Title</div> 
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+						</div>
+					</div>
+
 					<div class="panel-body" style="display: block;"> 
 						<p>Add the video title in the textbox below:</p> 
 						<input type="text" class="form-control" name="title" id="title" placeholder="Video Title" value="@if(!empty($video->title)){{ $video->title }}@endif" />
 					</div> 
 				</div>
-
-			@if(!empty($video->created_at))
 			</div>
+
 			<div class="col-sm-3">
-				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-					<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> 
+						<div class="panel-title">Created Date</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+						</div>
+					</div> 
+
 					<div class="panel-body" style="display: block;"> 
 						<p>Select Date/Time Below</p> 
 						<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($video->created_at)){{ $video->created_at }}@endif" />
@@ -47,12 +125,10 @@
 				</div>
 			</div>
 		</div>
-		@endif
-
 
 		<div class="panel panel-primary" data-collapsed="0"> 
 			<div class="panel-heading"> 
-				<div class="panel-title">Video Image Cover</div> 
+				<div class="panel-title">Video Image Cover (16:9)</div> 
 
 				<div class="panel-options">
 					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
@@ -82,17 +158,9 @@
 				</div>
 			</div> 
 
-			<div class="panel-body" style="display: block;"> 
-				<!--label for="type" style="float:left; margin-right:10px; padding-top:1px;">Video Format</label>
-				
-				<select id="type" name="type">
-					<option value="embed">Embed Code</option>
-					<option value="file" @if(!empty($video->type) && $video->type == 'file'){{ 'selected' }}@endif>Video File</option>
-					<option value="url" @if(!empty($video->type) && $video->type == 'url'){{ 'selected' }}@endif>Video URL</option>
-				</select-->
-
+			<div class="panel-body"> 
 				<div class="new-video-file">
-					<label for="file">File:</label>
+					<label for="file">File: {{ !empty($video->file) ? $video->file : '' }}</label>
 					<input type="file" multiple="true" class="form-control" name="file" id="file" />
 				</div>
 
@@ -219,6 +287,28 @@
 	<script type="text/javascript" src="{{ '/application/assets/admin/js/tinymce/tinymce.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/application/assets/js/tagsinput/jquery.tagsinput.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/video.js' }}"></script>
+
+	<!-- RESIZING FLUID VIDEO for VIDEO JS -->
+	<script type="text/javascript">
+	  // Once the video is ready
+	  _V_("video_player").ready(function(){
+
+	    var myPlayer = this;    // Store the video object
+	    var aspectRatio = 9/16; // Make up an aspect ratio
+
+	    function resizeVideoJS(){
+	    	console.log(myPlayer.id);
+	      // Get the parent element's actual width
+	      var width = document.getElementById('video_container').offsetWidth;
+	      // Set width to fill parent element, Set height
+	      myPlayer.width(width).height( width * aspectRatio );
+	    }
+
+	    resizeVideoJS(); // Initialize the function
+	    window.onresize = resizeVideoJS; // Call the function on resize
+	  });
+	</script>
 
 	<script type="text/javascript">
 		$ = jQuery;

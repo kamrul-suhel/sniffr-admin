@@ -8,23 +8,18 @@
 	<div id="video_bg">
 		<div class="container text-center">
 			<?php if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() ) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
+				<div id="video_container" class="fitvid">
 				<?php if($key = $video->getKey()): ?>
-					<div id="video_container">
-						<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
-					</div>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
 				<?php elseif($video->url == 'url'): ?>
 					<h1>We need to handle videoi urls (that aren't youtube)</h1>
 				<?php elseif($video->embed_code == 'embed'): ?>
-					<div id="video_container" class="fitvid">
-						<?= $video->embed_code ?>
-					</div>
+					<?= $video->embed_code ?>
 				<?php elseif($video->file): ?>
-					<div id="video_container">
-						<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . '/images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
-							<source src="<?php echo $video->file; ?>" type='video/mp4'>
-							<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-						</video>
-					</div>
+					<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
+						<source src="<?php echo $video->file; ?>" type='video/mp4'>
+						<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+					</video>
 				<?php endif; ?>
 			<?php else: ?>
 				<div id="subscribers_only">

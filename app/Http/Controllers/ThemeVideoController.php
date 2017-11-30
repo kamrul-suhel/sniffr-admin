@@ -39,7 +39,6 @@ class ThemeVideoController extends Controller {
     {
         $video = Video::with('tags')->findOrFail($id);
 
-
         //Make sure video is active
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->active){
 
@@ -81,7 +80,7 @@ class ThemeVideoController extends Controller {
         }
 
         $data = array(
-            'videos' => Video::where('active', '=', '1')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
+            'videos' => Video::where('state', 'licensed')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
             'page_title' => 'All Videos',
             'page_description' => 'Page ' . $page,
             'current_page' => $page,
