@@ -11,6 +11,10 @@ use App\Menu;
 use App\VideoCategory;
 use App\PostCategory;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+
 use App\Libraries\ThemeHelper;
 
 class ThemeSearchController extends Controller {

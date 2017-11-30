@@ -21,7 +21,7 @@ use App\Http\Controllers\Controller;
 class AdminContactController extends Controller
 {
     protected $rules = [
-        'name' => 'required'
+        'first_name' => 'required'
     ];
 
     /**
@@ -109,7 +109,8 @@ class AdminContactController extends Controller
              'post_route' => url('admin/contacts/update'),
              'button_text' => 'Update Contact',
              'admin_user' => Auth::user(),
-             'videos' => Video::get()
+             'videos' => $contact->videos
+             //'videos' => Video::where('contact_id', '=', $contact->id)->firstOrFail()
              );
 
          return view('admin.contacts.create_edit', $data);
