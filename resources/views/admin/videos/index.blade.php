@@ -2,6 +2,12 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ '/application/assets/admin/css/sweetalert.css' }}">
+	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
+	<style>
+	.gallery-env article.album header {
+		padding-bottom: 0;
+	}
+	</style>
 @endsection
 
 @section('content')
@@ -44,13 +50,38 @@
 					<header>
 
 						<!--a href="{{ URL::to('video/') . '/' . $video->id }}" target="_blank"-->
-							@if($key = $video->getKey())
-							<div class="youtube-player" data-id="{{ $key }}"></div>
-							@elseif(strpos($video->image,'http') === false)
-							<img src="{{ Config::get('site.uploads_dir') . 'images/' . $video->image }}" />
-							@else
-							<img src="{{ $video->image }}" class="video-img" />
+
+						@if(!empty($video->url))
+							@if (str_contains($video->url, 'youtube'))
+								<div id="video_container" class="fitvid" style="padding-top:0px;">
+									<div class="youtube-player" data-id="{{ $key = $video->getKey() }}"></div>
+								</div>
+							@elseif (str_contains($video->url, 'vimeo'))
+								<div id="video_container" class="fitvid" style="padding-top:0px;">
+									<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin" controls preload="auto" width="100%" style="width:100%;"
+								    data-setup='{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "https://vimeo.com/153979733"}] }'>
+								  </video>
+								</div>
 							@endif
+						@elseif (!empty($video->file))
+							<div id="video_container" class="fitvid" style="padding-top:0px;">
+								<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
+									<source src="{{ $video->file }}" type='video/mp4'>
+									<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+								</video>
+							</div>
+						@elseif (!empty($video->embed_code))
+							<div id="video_container" class="fitvid" style="padding-top:0px;">
+              @if(strpos($video->image,'http') === false)
+              <img src="{{ Config::get('site.uploads_dir') . 'images/' . $video->image }}" />
+              @else
+              <img src="{{ $video->image }}" class="video-img" />
+              @endif
+							</div>
+						@else
+							<p>There seems to be an issue with this video</p>
+						@endif
+
 						<!--/a>
 
 						<a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}" class="album-options">
@@ -109,6 +140,38 @@
 
 	@section('javascript')
 	<script src="{{ '/application/assets/admin/js/sweetalert.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/video.js' }}"></script>
+	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/videojs-vimeo.js' }}"></script>
+
+	<!-- RESIZING FLUID VIDEO for VIDEO JS -->
+	<script type="text/javascript">
+	  // Once the video is ready
+
+		var massVideo = $('.video-js');
+		for(var i = 0; i < massVideo.length; i++){
+		  _V_(massVideo[i]).ready(function(){
+
+		    var myPlayer = this;    // Store the video object
+		    var aspectRatio = 9/16; // Make up an aspect ratio
+
+		    function resizeVideoJS(){
+		    	console.log(myPlayer.id);
+		      // Get the parent element's actual width
+		      var width = document.getElementById('video_container').offsetWidth;
+		      // Set width to fill parent element, Set height
+		      myPlayer.width(width).height( width * aspectRatio );
+		    }
+
+		    resizeVideoJS(); // Initialize the function
+		    window.onresize = resizeVideoJS; // Call the function on resize
+		  });
+		}
+
+		var massVideo = $('.video-js');
+		for(var i = 0; i < massVideo.length; i++){
+		  videojs(massVideo[i]).ready(function(){});
+		}
+	</script>
 	<script>
 
 		$(document).ready(function(){
