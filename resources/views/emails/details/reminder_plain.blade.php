@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-You've not filled out additonal details: {{ URL::to('/details/' . $video->more_details_code) }}
-=======
 Hey{{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!
 
 Thanks again for submitting your video to us - we love it!
@@ -16,4 +13,3 @@ We’re really keen to use your video so please fill this in as soon as possible
 Regards,
 
 The UNILAD Team
->>>>>>> dba84b3c9b512710331d4a9034dbb1d69ed5cf43

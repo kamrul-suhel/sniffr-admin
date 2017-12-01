@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Your video has been accepted: {{ URL::to('/details/' . $video->more_details_code) }}
-=======
 Hey{{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!
 
 Thanks again for submitting your video to us - we love it!
@@ -16,4 +13,3 @@ Once you have filled this in with the correct answers, our team will review the 
 Regards,
 
 The UNILAD Team
->>>>>>> dba84b3c9b512710331d4a9034dbb1d69ed5cf43

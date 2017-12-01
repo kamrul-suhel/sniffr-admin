@@ -96,11 +96,6 @@
         }
       }
     </style>
-<<<<<<< HEAD
-</head>
-<body class="container">
-    <h1>Reminder to fill out additonal details: <a href="{{ URL::to('/details/' . $video->more_details_code) }}">Link to more details</a></h1>
-=======
     <!--user entered Head Start-->
 
      <!--End Head user entered-->
@@ -310,7 +305,6 @@
         </tr>
       </tbody>
     </table>
->>>>>>> dba84b3c9b512710331d4a9034dbb1d69ed5cf43
 
                               </td>
                             </tr>
