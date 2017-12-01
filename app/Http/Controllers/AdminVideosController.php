@@ -40,20 +40,20 @@ class AdminVideosController extends Controller {
     public function index($state = 'all')
     {
         $search_value = Input::get('s');
-        
+
         $videos = new Video;
 
         if(!empty($search_value)){
             $videos = $videos->where('title', 'LIKE', '%'.$search_value.'%');
         }
-        
+
         if($state != 'all'){
             $videos = $videos->where('state', $state);
             session(['state' => $state]);
         }
 
         $videos = $videos->orderBy('created_at', 'DESC')->paginate(9);
-        
+
 
         $user = Auth::user();
 
@@ -144,7 +144,7 @@ class AdminVideosController extends Controller {
 
         $tags = $data['tags'];
         unset($data['tags']);
-        
+
         if(empty($data['active'])){
             $data['active'] = 0;
         }
@@ -228,7 +228,7 @@ class AdminVideosController extends Controller {
             $fileMimeType = $file->getMimeType();
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $data['image'] = Storage::disk('s3')->url($fileName);
-            
+
             //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
         }
 
@@ -276,10 +276,10 @@ class AdminVideosController extends Controller {
 
 
         foreach($tags as $tag){
-            
+
             $tag_id = $this->addTag($tag);
             $this->attachTagToVideo($video, $tag_id);
-        }  
+        }
 
         // Remove any tags that were removed from video
         foreach($video->tags as $tag){
@@ -304,9 +304,9 @@ class AdminVideosController extends Controller {
 
     private function addTag($tag){
         $tag_exists = Tag::where('name', '=', $tag)->first();
-            
-        if($tag_exists){ 
-            return $tag_exists->id; 
+
+        if($tag_exists){
+            return $tag_exists->id;
         } else {
             $new_tag = new Tag;
             $new_tag->name = strtolower($tag);
