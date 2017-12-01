@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\Storage;
 use App\Tag;
 use App\Menu;
 use App\Video;
+use App\Comment;
+use App\Campaign;
 use App\VideoCategory;
 
 use App\Libraries\ImageHandler;
 
+use App\Mail\DetailsReminder;
 use App\Mail\SubmissionAccepted;
 use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionLicensed;
@@ -99,6 +102,26 @@ class AdminVideosController extends Controller {
     }
 
     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function remind($id)
+    {
+        $video = Video::find($id);
+
+        $video->more_details_sent = now();
+        $video->reminders = $video->reminders ? $video->reminders+1 : 1;
+        $video->save();
+
+        // Send Accepted Email
+        Mail::to($video->contact->email)->send(new DetailsReminder($video));
+
+        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder socket_send(socket, buf, len, flags)', 'note_type' => 'success') );
+    }
+
+    /**
      * Show the form for creating a new video
      *
      * @return Response
@@ -111,6 +134,7 @@ class AdminVideosController extends Controller {
             'button_text' => 'Add New Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
+            'video_campaigns' => Campaign::all(),
         );
         return view('admin.videos.create_edit', $data);
     }
@@ -184,7 +208,8 @@ class AdminVideosController extends Controller {
             'button_text' => 'Update Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
-            );
+            'video_campaigns' => Campaign::all(),
+        );
 
         return view('admin.videos.create_edit', $data);
     }
@@ -232,6 +257,9 @@ class AdminVideosController extends Controller {
             //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
         }
 
+        // Many to many cmapaigns
+        $video->campaigns()->sync(Input::get('campaigns'));
+
         if(empty($data['active'])){
             $data['active'] = 0;
         }
@@ -241,6 +269,21 @@ class AdminVideosController extends Controller {
         }
 
         $video->update($data);
+
+        return Redirect::to('admin/videos/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+    }
+
+    public function comment($id)
+    {
+        $video = Video::find($id);
+
+        if(Input::get('comment')){
+            $comment = new Comment();
+            $comment->comment = Input::get('comment');
+            $comment->user_id = Auth::id();
+
+            $video->comments()->save($comment);   
+        }
 
         return Redirect::to('admin/videos/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
     }

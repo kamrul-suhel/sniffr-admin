@@ -67,16 +67,21 @@
 					</div>
 				</div>
 
-				<div class="panel-footer text-right">
+				<div class="panel-footer">
 					@if($video->state == 'pending')
-					<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="btn btn-primary btn-success">License</a>
-		        	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="btn btn-primary btn-warning">Restricted</a>
-		        	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="btn btn-primary btn-danger">Problem</a>
+					<div class="text-right">
+						<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="btn btn-primary btn-success">License</a>
+			        	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="btn btn-primary btn-warning">Restricted</a>
+			        	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="btn btn-primary btn-danger">Problem</a>
+					</div>
 					@elseif($video->state == 'new')
-					<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="btn btn-primary btn-success">Accept</a>
-		        	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="btn btn-primary btn-danger">Reject</a>
+					<div class="text-right">
+						<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="btn btn-primary btn-success">Accept</a>
+			        	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="btn btn-primary btn-danger">Reject</a>
+					</div>
 					@elseif($video->state == 'accepted')
-					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+					<div class="clearfix"></div>
 					@endif
 				</div>
 			</div>
@@ -94,6 +99,41 @@
                     <p>{{ $video->contact->email }}</p>
 				</div>
 			</div>
+
+			
+			<div class="panel panel-primary" data-collapsed="0"> 
+				<div class="panel-heading"> 
+					<div class="panel-title">Comments</div> 
+					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+				</div>
+				
+				<div class="panel-body" style="display: block;"> 
+					@if(count($video->comments))
+						@foreach($video->comments as $comment)
+	                    <p>{{ $comment->comment }}<br><br><strong class="pull-right">{{ $comment->user->username }} | {{ $comment->created_at->diffForHumans() }}</strong></p>
+	                    <br>
+	                    <hr>
+	                    @endforeach
+                    @else
+                    	<p>No Comments</p>
+                	@endif
+				</div>
+
+				<div class="panel-footer">
+					<form method="POST" action="{{ url('/admin/videos/comment/'.$video->id) }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+						<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
+
+						<div class="form-group">
+	                        <label for="comment">Add a comment</label>
+	                        <textarea class="form-control" id="comment" name="comment">{{ old('comment') }}</textarea>
+	                    </div>
+
+	                    <input type="submit" value="Add Comment" class="btn btn-success pull-right" />
+                    </form>
+                    <span class="clearfix"></span>
+                </div>
+			</div>
+
 
 			@if($video->more_details)
 			<div class="panel panel-primary" data-collapsed="0"> 
@@ -246,8 +286,15 @@
 			</div> 
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-			<div class="panel-title">Category</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+		<div class="panel panel-primary" data-collapsed="0"> 
+			<div class="panel-heading"> 
+				<div class="panel-title">Category</div> 
+
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+				</div>
+			</div>
+
 			<div class="panel-body" style="display: block;"> 
 				<p>Select a Video Category Below:</p>
 				<select id="video_category_id" name="video_category_id">
@@ -257,6 +304,24 @@
 					@endforeach
 				</select>
 			</div> 
+		</div>
+
+		<div class="panel panel-primary" data-collapsed="0">
+			<div class="panel-heading">
+				<div class="panel-title">Campaign</div>
+				
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+				</div>
+			</div>
+
+			<div class="panel-body" style="display: block;">
+				<select name="campaigns[]" id="campaigns" class="form-control" multiple>
+					@foreach($video_campaigns as $campaign)
+						<option value="{{ $campaign->id }}"{{ $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
+					@endforeach
+				</select>
+			</div>
 		</div>
 
 		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 

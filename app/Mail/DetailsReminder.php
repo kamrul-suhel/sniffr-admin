@@ -21,10 +21,10 @@ class DetailsReminder extends Mailable
      *
      * @return void
      */
-     public function __construct(Video $video)
-     {
-         $this->video = $video;
-     }
+    public function __construct(Video $video)
+    {
+        $this->video = $video;
+    }
 
     /**
      * Build the message.

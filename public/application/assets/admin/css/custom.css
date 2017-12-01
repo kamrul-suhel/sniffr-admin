@@ -7,7 +7,6 @@
 #video_container {
   position: relative;
   padding-bottom: 56.23%;
-  padding-top: 20px;
   height: 0;
   overflow: hidden;
 }
@@ -109,13 +108,13 @@ ul.links-list li a span{
 	min-height: 30px;
 }
 
-.gallery-env article.album header{
+/*.gallery-env article.album header{
     width: 100%;
     padding-bottom: 56.25%;
     overflow: hidden;
     display: block;
     position: relative;
-}
+}*/
 
 .gallery-env article.album header img{
     overflow:hidden;

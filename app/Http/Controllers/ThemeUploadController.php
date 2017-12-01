@@ -35,7 +35,7 @@ class ThemeUploadController extends Controller {
         'email' => 'required|email',
         // 'url' => 'required_without_all:url,file',
         'file' => 'mimes:jpeg,jpg,png,gif,flv,ogg,mp4,qt,avi,wmv,m4v,webm|max:200000',
-        'terms' => 'required'
+        // 'terms' => 'required'
     ];
 
     public function __construct()
@@ -91,12 +91,20 @@ class ThemeUploadController extends Controller {
 
         if(isset($request->file)){
             $fileName = time().'.'.$request->file->getClientOriginalExtension();
-            $file = $request->file('file');
-            $fileMimeType = $file->getMimeType();
+            
 
-            // Neew to generate a thumbnail image
-            $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-            $filePath = Storage::disk('s3')->url($fileName);
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileMimeType = $file->getMimeType();
+                // Neew to generate a thumbnail image
+                $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
+                $filePath = Storage::disk('s3')->url($fileName);
+            }else{
+                return Redirect::back()
+                    ->withErrors(array('message' => 'There was a problem uploading the file.'))
+                    ->withInput();
+            }
+           
         }
 
         $video = new Video();

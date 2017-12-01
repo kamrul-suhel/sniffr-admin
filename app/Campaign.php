@@ -26,4 +26,9 @@ class Campaign extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+      public function videos()
+    {
+        return $this->belongsToMany(Video::class);
+    }
 }

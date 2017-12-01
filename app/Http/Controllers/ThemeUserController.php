@@ -28,7 +28,7 @@ class ThemeUserController extends Controller{
 
     public function __construct()
     {
-        //$this->middleware('secure');
+        $this->middleware('auth');
     }
 
     public function index($username){

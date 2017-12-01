@@ -73,9 +73,9 @@
 
 				<div class="col-sm-3">
 					<div class="panel panel-primary" data-collapsed="0">
-
 						<div class="panel-heading">
 							<div class="panel-title">Client Name</div>
+							
 							<div class="panel-options">
 								<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 							</div>
@@ -89,7 +89,7 @@
 								@endforeach
 							</select>
 						</div>
-
+					</div>
 				</div>
 			</div>
 
