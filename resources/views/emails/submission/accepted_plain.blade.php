@@ -1,1 +1,1 @@
-Your video has been accepted
+Your video has been accepted: {{ URL::to('/details/' . $video->more_details_code) }}

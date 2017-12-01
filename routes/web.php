@@ -151,6 +151,8 @@ Route::get('upload_dir', function(){
         Route::get('admin/videos/categories/delete/{id}', array('before' => 'demo', 'uses' => 'AdminVideoCategoriesController@destroy'));
         Route::get('admin/videos/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@index'));
         Route::get('admin/videos/status/{state}/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@status'));
+        Route::get('admin/videos/remind/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@remind'));
+        Route::post('admin/videos/comment/{id}', array('before' => 'demo', 'uses' => 'AdminVideosController@comment'));
 
 
         Route::get('admin/posts', 'AdminPostController@index');

@@ -1,1 +1,1 @@
-You've not filled out additonal details
+You've not filled out additonal details: {{ URL::to('/details/' . $video->more_details_code) }}

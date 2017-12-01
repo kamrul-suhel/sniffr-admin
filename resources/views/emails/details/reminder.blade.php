@@ -20,7 +20,7 @@
     </style>
 </head>
 <body class="container">
-    <h1>You've not filled out additonal details</h1>
+    <h1>Reminder to fill out additonal details: <a href="{{ URL::to('/details/' . $video->more_details_code) }}">Link to more details</a></h1>
 
     
 </body>

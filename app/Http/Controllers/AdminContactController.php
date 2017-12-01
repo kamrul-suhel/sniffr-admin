@@ -7,6 +7,7 @@ use Auth;
 use Validator;
 use Redirect;
 
+use App\Comment;
 use App\Contact;
 use App\Video;
 
@@ -37,49 +38,49 @@ class AdminContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function index()
-     {
-          $contacts = Contact::orderBy('created_at', 'DESC')->paginate(10);
-          $user = Auth::user();
+    public function index()
+    {
+      $contacts = Contact::orderBy('created_at', 'DESC')->paginate(10);
+      $user = Auth::user();
 
-          $data = array(
-              'contacts' => $contacts,
-              'user' => $user,
-              'admin_user' => Auth::user()
-              );
+      $data = array(
+          'contacts' => $contacts,
+          'user' => $user,
+          'admin_user' => Auth::user()
+      );
 
-          return view('admin.contacts.index', $data);
-     }
+      return view('admin.contacts.index', $data);
+  }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-     public function create()
-     {
-         $data = array(
-             'post_route' => url('admin/contacts/store'),
-             'button_text' => 'Add New Contact',
-             'admin_user' => Auth::user(),
-             'videos' => Video::get()
-             );
-         return view('admin.contacts.create_edit', $data);
-     }
+    public function create()
+    {
+       $data = array(
+           'post_route' => url('admin/contacts/store'),
+           'button_text' => 'Add New Contact',
+           'admin_user' => Auth::user(),
+           'videos' => Video::get()
+       );
+       return view('admin.contacts.create_edit', $data);
+   }
 
-     public function store()
-     {
-         $validator = Validator::make($data = Input::all(), Contact::$rules);
+   public function store()
+   {
+       $validator = Validator::make($data = Input::all(), Contact::$rules);
 
-         if ($validator->fails())
-         {
-             return Redirect::back()->withErrors($validator)->withInput();
-         }
+       if ($validator->fails())
+       {
+           return Redirect::back()->withErrors($validator)->withInput();
+       }
 
-         $contact = Contact::create($data);
+       $contact = Contact::create($data);
 
-         return Redirect::to('admin/contacts')->with(array('note' => 'New Contact Successfully Added!', 'note_type' => 'success') );
-     }
+       return Redirect::to('admin/contacts')->with(array('note' => 'New Contact Successfully Added!', 'note_type' => 'success') );
+   }
 
      /**
       * Display the specified resource.
@@ -101,20 +102,20 @@ class AdminContactController extends Controller
 
      public function edit($id)
      {
-         $contact = Contact::find($id);
+       $contact = Contact::find($id);
 
-         $data = array(
-             'headline' => '<i class="fa fa-edit"></i> Edit Contact',
-             'contact' => $contact,
-             'post_route' => url('admin/contacts/update'),
-             'button_text' => 'Update Contact',
-             'admin_user' => Auth::user(),
-             'videos' => $contact->videos
+       $data = array(
+           'headline' => '<i class="fa fa-edit"></i> Edit Contact',
+           'contact' => $contact,
+           'post_route' => url('admin/contacts/update'),
+           'button_text' => 'Update Contact',
+           'admin_user' => Auth::user(),
+           'videos' => $contact->videos
              //'videos' => Video::where('contact_id', '=', $contact->id)->firstOrFail()
-             );
+       );
 
-         return view('admin.contacts.create_edit', $data);
-     }
+       return view('admin.contacts.create_edit', $data);
+   }
 
      /**
       * Update the specified resource in storage.
@@ -126,25 +127,29 @@ class AdminContactController extends Controller
 
      public function update()
      {
-         $data = Input::all();
-         $id = $data['id'];
-         $contact = Contact::findOrFail($id);
+       $data = Input::all();
+       $id = $data['id'];
+       $contact = Contact::findOrFail($id);
 
-         $validator = Validator::make($data, Contact::$rules);
+       $validator = Validator::make($data, Contact::$rules);
 
-         if ($validator->fails())
-         {
-             return Redirect::back()->withErrors($validator)->withInput();
-         }
+       if ($validator->fails())
+       {
+           return Redirect::back()->withErrors($validator)->withInput();
+       }
 
-         // if(!isset($data['active']) || $data['active'] == ''){
-         //     $data['active'] = 0;
-         // }
+       if($data['comment']){
+          $comment = new Comment();
+          $comment->comment = $data['comment'];
+          $comment->user_id = Auth::id();
 
-         $contact->update($data);
+          $contact->comments()->save($comment);   
+      }
 
-         return Redirect::to('admin/contacts/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Contact!', 'note_type' => 'success') );
-     }
+      $contact->update($data);
+
+      return Redirect::to('admin/contacts/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Contact!', 'note_type' => 'success') );
+  }
 
      /**
       * Remove the specified resource from storage.
@@ -155,10 +160,10 @@ class AdminContactController extends Controller
 
      public function destroy($id)
      {
-         $contact = Contact::find($id);
+       $contact = Contact::find($id);
 
-         Contact::destroy($id);
+       Contact::destroy($id);
 
-         return Redirect::to('admin/contacts')->with(array('note' => 'Successfully Deleted Contact', 'note_type' => 'success') );
-     }
+       return Redirect::to('admin/contacts')->with(array('note' => 'Successfully Deleted Contact', 'note_type' => 'success') );
+   }
 }

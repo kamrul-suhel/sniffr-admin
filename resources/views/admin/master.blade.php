@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 	<?php $settings = App\Setting::first(); ?>
 
 	<meta charset="utf-8">
@@ -24,15 +23,22 @@
 	<link rel="stylesheet" href="{{ '/application/assets/admin/css/forms.css' }}">
 	<link rel="stylesheet" href="{{ '/application/assets/admin/css/custom.css' }}">
 
-	<?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : '/favicon.png'; ?>
-	<link rel="icon" href="<?= Config::get('site.uploads_dir') . '/settings/' . $favicon ?>" type="image/x-icon">
-    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . '/settings/' . $favicon ?>" type="image/x-icon">
+	<?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
+    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
 
 	@yield('css')
 
 	<script src="{{ '/application/assets/admin/js/jquery-1.11.0.min.js' }}"></script>
 	<script src="{{ '/application/assets/admin/js/bootstrap-colorpicker.min.js' }}" id="script-resource-13"></script>
 	<script src="{{ '/application/assets/admin/js/vue.min.js' }}"></script>
+
+	<link href="<?= THEME_URL . '/assets/css/video-js.css'; ?>" rel="stylesheet">
+    <script src="<?= THEME_URL . '/assets/js/video.js'; ?>"></script>
+    <style type="text/css">
+      .vjs-default-skin .vjs-control-bar,
+      .vjs-default-skin .vjs-big-play-button { background: rgba(0,0,0,0.58) }
+      .vjs-default-skin .vjs-slider { background: rgba(0,0,0,0.19333333333333333) }
+    </style>
 
 	<script>$.noConflict();</script>
 

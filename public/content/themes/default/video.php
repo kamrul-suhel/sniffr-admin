@@ -107,10 +107,10 @@
 
 	    function resizeVideoJS(){
 	    	console.log(myPlayer.id);
-	      // Get the parent element's actual width
-	      var width = document.getElementById('video_container').offsetWidth;
-	      // Set width to fill parent element, Set height
-	      myPlayer.width(width).height( width * aspectRatio );
+	      	// Get the parent element's actual width
+	      	var width = document.getElementById('video_container').offsetWidth;
+	      	// Set width to fill parent element, Set height
+	      	myPlayer.width(width).height( width * aspectRatio );
 	    }
 
 	    resizeVideoJS(); // Initialize the function

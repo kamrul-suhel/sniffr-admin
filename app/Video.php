@@ -33,4 +33,18 @@ class Video extends Model {
     {
         return $this->belongsTo(Contact::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+
+    public function campaigns()
+    {
+        return $this->belongsToMany(Campaign::class);
+    }
 }
