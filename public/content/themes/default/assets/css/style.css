@@ -299,22 +299,22 @@ label {
 .second-nav #mobile-subnav:hover {
   color: #8793A2;
 }
-.second-nav .navbar-right {
+.second-nav .navbar-search {
   list-style: none;
   margin: 0px;
   padding: 0px;
   background: #f9f9f9;
   padding-left: 20px;
 }
-.second-nav .navbar-right form {
+.second-nav .navbar-search form {
   margin: 0px;
 }
-.second-nav .navbar-right form i {
+.second-nav .navbar-search form i {
   display: inline-block;
   font-size: 1.4em;
   color: #A7B3C2;
 }
-.second-nav .navbar-right input {
+.second-nav .navbar-search input {
   padding: 16px;
   padding-top: 17px;
   font-size: 16px;
@@ -327,7 +327,7 @@ label {
   text-shadow: 0 0.1px 0.1px #A7B3C2;
   color: #A7B3C2;
 }
-.second-nav .navbar-right input:focus {
+.second-nav .navbar-search input:focus {
   outline: none;
 }
 .second-nav.navbar {
@@ -1574,12 +1574,12 @@ Navbar Toggle
   .second-nav #mobile-subnav {
     display: block;
   }
-  .second-nav .navbar-right {
+  .second-nav .navbar-search {
     margin-right: -15px;
     width: 50%;
     float: right;
   }
-  .second-nav .navbar-right input {
+  .second-nav .navbar-search input {
     width: 170px;
   }
   .second-nav li {
@@ -1637,11 +1637,11 @@ Navbar Toggle
     font-size: 12px;
     max-width: 100%;
   }
-  .second-nav .navbar-right form i {
+  .second-nav .navbar-search form i {
     left: 12px;
     position: relative;
   }
-  .second-nav .navbar-right {
+  .second-nav .navbar-search {
     padding-left: 0px;
   }
   h3 {
@@ -1675,7 +1675,7 @@ Navbar Toggle
   #video_bg {
     padding: 0px;
   }
-  .second-nav .navbar-right input {
+  .second-nav .navbar-search input {
     width: 110px;
   }
   #signup-form .panel-heading .panel-title {

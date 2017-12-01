@@ -11,6 +11,7 @@ use App\Menu;
 use App\Setting;
 use App\VideoCategory;
 use App\PostCategory;
+use App\PaymentSetting;
 
 use Illuminate\Support\Facades\Input;
 
