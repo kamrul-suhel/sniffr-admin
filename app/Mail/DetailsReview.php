@@ -15,16 +15,16 @@ class DetailsReview extends Mailable
     use Queueable, SerializesModels;
 
     public $video, $contact;
-    
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+     public function __construct(Video $video)
+     {
+       $this->video = $video;
+     }
 
     /**
      * Build the message.

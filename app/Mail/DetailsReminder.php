@@ -15,16 +15,23 @@ class DetailsReminder extends Mailable
     use Queueable, SerializesModels;
 
     public $video, $contact;
-    
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
+<<<<<<< HEAD
     public function __construct(Video $video)
     {
         $this->video = $video;
     }
+=======
+     public function __construct(Video $video)
+     {
+         $this->video = $video;
+     }
+>>>>>>> dba84b3c9b512710331d4a9034dbb1d69ed5cf43
 
     /**
      * Build the message.
