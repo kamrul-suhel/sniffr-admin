@@ -49,8 +49,8 @@
 		<div class="video-details-container"><?= $video->details ?></div>
 
 		<div class="clear"></div>
-		
-		<h2 id="tags">Tags: 
+
+		<h2 id="tags">Tags:
 		<?php foreach($video->tags as $key => $tag): ?>
 			<span><a href="/videos/tag/<?= $tag->name ?>"><?= $tag->name ?></a></span><?php if($key+1 != count($video->tags)): ?>,<?php endif; ?>
 		<?php endforeach; ?>
@@ -80,7 +80,7 @@
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
     </script>
-    <noscript>Please enable JavaScript to view the comments</noscript> 
+    <noscript>Please enable JavaScript to view the comments</noscript>
 
 	<script src="<?= THEME_URL . '/assets/js/jquery.fitvid.js'; ?>"></script>
 	<script type="text/javascript">
@@ -100,7 +100,7 @@
 	<!-- RESIZING FLUID VIDEO for VIDEO JS -->
 	<script type="text/javascript">
 	  // Once the video is ready
-	  _V_("video_player").ready(function(){
+	  videojs("video_player").ready(function(){
 
 	    var myPlayer = this;    // Store the video object
 	    var aspectRatio = 9/16; // Make up an aspect ratio

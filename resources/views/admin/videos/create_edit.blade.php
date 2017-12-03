@@ -11,12 +11,12 @@
 <!-- This is where -->
 	<div class="admin-section-title">
 	@if(!empty($video->id))
-		<h3>{{ $video->title }}</h3> 
+		<h3>{{ $video->title }}</h3>
 		<a href="{{ URL::to('video') . '/' . $video->id }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Video</h3> 
+		<h3><i class="entypo-plus"></i> Add New Video</h3>
 	@endif
 	</div>
 
@@ -25,7 +25,7 @@
 	@if(isset($video))
 	<div class="row">
 		<div class="col-sm-6">
-			<?php 
+			<?php
 			switch($video->state){
 				case 'rejected':
 				case 'problem':
@@ -39,16 +39,16 @@
 					$panelColour = 'default';
 			}
 			?>
-			<div class="panel panel-{{ $panelColour }}" data-collapsed="0"> 
-				<div class="panel-heading"> 
+			<div class="panel panel-{{ $panelColour }}" data-collapsed="0">
+				<div class="panel-heading">
 					<div class="panel-title">{{ ucfirst($video->state) }} Video</div>
 
 					<div class="panel-options">
 						<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 					</div>
-				</div> 
+				</div>
 
-				<div class="panel-body" style="display: block;"> 
+				<div class="panel-body" style="display: block;">
 					<div class="text-center">
 						<div id="video_container" class="fitvid">
 						<?php if($key = $video->getKey()): ?>
@@ -88,26 +88,26 @@
 		</div>
 
 		<div class="col-sm-6">
-			<div class="panel panel-primary" data-collapsed="0"> 
-				<div class="panel-heading"> 
-					<div class="panel-title">Uploaded By</div> 
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Uploaded By</div>
 					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
 				</div>
-				
-				<div class="panel-body" style="display: block;"> 
+
+				<div class="panel-body" style="display: block;">
 					<p>{{ $video->contact->first_name.' '.$video->contact->last_name }}</p>
                     <p>{{ $video->contact->email }}</p>
 				</div>
 			</div>
 
-			
-			<div class="panel panel-primary" data-collapsed="0"> 
-				<div class="panel-heading"> 
-					<div class="panel-title">Comments</div> 
+
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Comments</div>
 					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
 				</div>
-				
-				<div class="panel-body" style="display: block;"> 
+
+				<div class="panel-body" style="display: block;">
 					@if(count($video->comments))
 						@foreach($video->comments as $comment)
 	                    <p>{{ $comment->comment }}<br><br><strong class="pull-right">{{ $comment->user->username }} | {{ $comment->created_at->diffForHumans() }}</strong></p>
@@ -136,13 +136,13 @@
 
 
 			@if($video->more_details)
-			<div class="panel panel-primary" data-collapsed="0"> 
-				<div class="panel-heading"> 
-					<div class="panel-title">Rights</div> 
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Rights</div>
 					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
 				</div>
-				
-				<div class="panel-body" style="display: block;"> 
+
+				<div class="panel-body" style="display: block;">
                     <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong>{!! $video->contact_is_owner ? '<i class="entypo-check"></i> Contact is owner' : '<i class="fa fa-times"></i> Does not own video' !!}</strong></p>
                     @if($video->submitted_elsewhere)
                     <p class="text-warning"><strong><i class="fa fa-exclamation"></i> Submitted to: {{ $video->submitted_where }}</strong></p>
@@ -160,69 +160,69 @@
 	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-6">
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> 
-						<div class="panel-title">Title</div> 
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Title</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 						</div>
 					</div>
 
-					<div class="panel-body" style="display: block;"> 
-						<p>Add the video title in the textbox below:</p> 
+					<div class="panel-body" style="display: block;">
+						<p>Add the video title in the textbox below:</p>
 						<input type="text" class="form-control" name="title" id="title" placeholder="Video Title" value="@if(!empty($video->title)){{ $video->title }}@endif" />
-					</div> 
+					</div>
 				</div>
 			</div>
 
 			<div class="col-sm-3">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> 
+					<div class="panel-heading">
 						<div class="panel-title">Filmed Date</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 						</div>
-					</div> 
+					</div>
 
-					<div class="panel-body" style="display: block;"> 
-						<p>Select Date/Time Below</p> 
+					<div class="panel-body" style="display: block;">
+						<p>Select Date/Time Below</p>
 						<input type="date" class="form-control" name="date_filmed" id="date_filmed" placeholder="" value="@if(!empty($video->date_filmed)){{ $video->date_filmed }}@endif" />
-					</div> 
+					</div>
 				</div>
 			</div>
 
 			<div class="col-sm-3">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> 
+					<div class="panel-heading">
 						<div class="panel-title">Uploaded Date</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 						</div>
-					</div> 
+					</div>
 
-					<div class="panel-body" style="display: block;"> 
-						<p>Select Date/Time Below</p> 
+					<div class="panel-body" style="display: block;">
+						<p>Select Date/Time Below</p>
 						<input type="text" class="form-control" name="created_at" id="created_at" disabled value="@if(!empty($video->created_at)){{ $video->created_at }}@endif" />
-					</div> 
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-sm-6">
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> 
-						<div class="panel-title">Video Image Cover (16:9)</div> 
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Video Image Cover (16:9)</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 						</div>
-					</div> 
+					</div>
 
-					<div class="panel-body" style="display: block;"> 
+					<div class="panel-body" style="display: block;">
 						@if(!empty($video->image))
 							@if(strpos($video->image,'http') === false)
 							<img src="{{ Config::get('site.uploads_dir') . 'images/' . $video->image }}" class="video-img" width="200"/>
@@ -233,21 +233,21 @@
 						<p>Select the video image (1280x720 px or 16:9 ratio):</p>
 
 						<input type="file" multiple="true" class="form-control" name="image" id="image" />
-					</div> 
+					</div>
 				</div>
 			</div>
 
 			<div class="col-sm-6">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> 
+					<div class="panel-heading">
 						<div class="panel-title">Video Source</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 						</div>
-					</div> 
+					</div>
 
-					<div class="panel-body"> 
+					<div class="panel-body">
 						<div class="new-video-file">
 							<label for="file">File: {{ !empty($video->file) ? $video->file : '' }}</label>
 							<input type="file" multiple="true" class="form-control" name="file" id="file" />
@@ -266,36 +266,36 @@
 							<label for="embed_code">Embed Code:</label>
 							<textarea class="form-control" name="embed_code" id="embed_code">{{ !empty($video->embed_code) ? $video->embed_code : '' }}</textarea>
 						</div>
-					</div> 
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-			<div class="panel-title">Short Description</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-			<div class="panel-body" style="display: block;"> 
-				<p>Add a short description of the video below:</p> 
+		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+			<div class="panel-title">Short Description</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+			<div class="panel-body" style="display: block;">
+				<p>Add a short description of the video below:</p>
 				<textarea class="form-control" name="description" id="description">@if(!empty($video->description)){{ htmlspecialchars($video->description) }}@endif</textarea>
-			</div> 
+			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-			<div class="panel-title">Video Details, Links, and Info</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+			<div class="panel-title">Video Details, Links, and Info</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 			<div class="panel-body" style="display: block; padding:0px;">
 				<textarea class="form-control" name="details" id="details">@if(!empty($video->details)){{ htmlspecialchars($video->details) }}@endif</textarea>
-			</div> 
+			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
-			<div class="panel-heading"> 
-				<div class="panel-title">Category</div> 
+		<div class="panel panel-primary" data-collapsed="0">
+			<div class="panel-heading">
+				<div class="panel-title">Category</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 				</div>
 			</div>
 
-			<div class="panel-body" style="display: block;"> 
+			<div class="panel-body" style="display: block;">
 				<p>Select a Video Category Below:</p>
 				<select id="video_category_id" name="video_category_id">
 					<option value="0">Uncategorized</option>
@@ -303,13 +303,13 @@
 						<option value="{{ $category->id }}" @if(!empty($video->video_category_id) && $video->video_category_id == $category->id)selected="selected"@endif>{{ $category->name }}</option>
 					@endforeach
 				</select>
-			</div> 
+			</div>
 		</div>
 
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
 				<div class="panel-title">Campaign</div>
-				
+
 				<div class="panel-options">
 					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 				</div>
@@ -324,33 +324,33 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-			<div class="panel-body" style="display: block;"> 
-				<p>Add video tags below:</p> 
+		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+			<div class="panel-body" style="display: block;">
+				<p>Add video tags below:</p>
 				<input class="form-control" name="tags" id="tags" value="@if(!empty($video) && $video->tags->count() > 0)@foreach($video->tags as $tag){{ $tag->name . ', ' }}@endforeach @endif">
-			</div> 
+			</div>
 		</div>
 
 		<div class="clear"></div>
 
 
-		<div class="row"> 
+		<div class="row">
 
-			<div class="col-sm-4"> 
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> <div class="panel-title"> Duration</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-					<div class="panel-body"> 
-						<p>Enter the video duration in the following format (Hours : Minutes : Seconds)</p> 
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> <div class="panel-title"> Duration</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-body">
+						<p>Enter the video duration in the following format (Hours : Minutes : Seconds)</p>
 						<input class="form-control" name="duration" id="duration" value="@if(!empty($video->duration)){{ gmdate('H:i:s', $video->duration) }}@endif">
-					</div> 
+					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-4"> 
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> <div class="panel-title"> User Access</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-					<div class="panel-body"> 
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> <div class="panel-title"> User Access</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-body">
 						<label for="access" style="float:left; margin-right:10px;">Who is allowed to view this video?</label>
 						<select id="access" name="access">
 							<option value="guest" @if(!empty($video->access) && $video->access == 'guest'){{ 'selected' }}@endif>Guest (everyone)</option>
@@ -358,14 +358,14 @@
 							<option value="subscriber" @if(!empty($video->access) && $video->access == 'subscriber'){{ 'selected' }}@endif>Subscriber (only paid subscription users)</option-->
 						</select>
 						<div class="clear"></div>
-					</div> 
+					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-4"> 
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-					<div class="panel-body"> 
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-body">
 						<div>
 							<label for="featured" style="float:left; display:block; margin-right:10px;">Is this video Featured:</label>
 							<input type="checkbox" @if(!empty($video->featured) && $video->featured == 1){{ 'checked="checked"' }}@endif name="featured" value="1" id="featured" />
@@ -375,7 +375,7 @@
 							<label for="active" style="float:left; display:block; margin-right:10px;">Is this video Active:</label>
 							<input type="checkbox" @if(!empty($video->active) && $video->active == 1){{ 'checked="checked"' }}@elseif(!isset($video->active)){{ 'checked="checked"' }}@endif name="active" value="1" id="active" />
 						</div>
-					</div> 
+					</div>
 				</div>
 			</div>
 
@@ -406,7 +406,7 @@
 	<!-- RESIZING FLUID VIDEO for VIDEO JS -->
 	<script type="text/javascript">
 	  // Once the video is ready
-	  _V_("video_player").ready(function(){
+	  videojs("video_player").ready(function(){
 
 	    var myPlayer = this;    // Store the video object
 	    var aspectRatio = 9/16; // Make up an aspect ratio

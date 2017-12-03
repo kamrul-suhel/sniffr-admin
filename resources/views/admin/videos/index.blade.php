@@ -49,8 +49,6 @@
 
 					<header>
 
-						<!--a href="{{ URL::to('video/') . '/' . $video->id }}" target="_blank"-->
-
 						@if(!empty($video->url))
 							@if (str_contains($video->url, 'youtube'))
 								<div id="video_container" class="fitvid" style="padding-top:0px;">
@@ -58,14 +56,15 @@
 								</div>
 							@elseif (str_contains($video->url, 'vimeo'))
 								<div id="video_container" class="fitvid" style="padding-top:0px;">
-									<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin" controls preload="auto" width="100%" style="width:100%;"
-								    data-setup='{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "https://vimeo.com/153979733"}] }'>
+									<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
+								    data-setup='{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "{{ $video->url }}"}] }'>
+										<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 								  </video>
 								</div>
 							@endif
 						@elseif (!empty($video->file))
 							<div id="video_container" class="fitvid" style="padding-top:0px;">
-								<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
+								<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
 									<source src="{{ $video->file }}" type='video/mp4'>
 									<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 								</video>
@@ -79,10 +78,10 @@
               @endif
 							</div>
 						@else
-							<p>There seems to be an issue with this video</p>
+							<div id="video_container" class="fitvid" style="padding-top:0px;">
+								<p>There seems to be an issue with this video</p>
+							</div>
 						@endif
-
-						<!--/a>
 
 						<a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}" class="album-options">
 							<i class="entypo-pencil"></i>
@@ -149,7 +148,7 @@
 
 		var massVideo = $('.video-js');
 		for(var i = 0; i < massVideo.length; i++){
-		  _V_(massVideo[i]).ready(function(){
+		  videojs(massVideo[i]).ready(function(){
 
 		    var myPlayer = this;    // Store the video object
 		    var aspectRatio = 9/16; // Make up an aspect ratio
@@ -165,11 +164,6 @@
 		    resizeVideoJS(); // Initialize the function
 		    window.onresize = resizeVideoJS; // Call the function on resize
 		  });
-		}
-
-		var massVideo = $('.video-js');
-		for(var i = 0; i < massVideo.length; i++){
-		  videojs(massVideo[i]).ready(function(){});
 		}
 	</script>
 	<script>

@@ -1,7 +1,7 @@
 <?php include('content/themes/' . THEME . '/includes/header.php'); ?>
 <link rel="stylesheet" type="text/css" href="/content/themes/<?= THEME ?>/plugins/series/style.css">
 <?php
-	
+
 	$plugin_data = (object) array_build(PluginData::where('plugin_slug', 'series')->get(), function($key, $data) {
         return array($data->key, $data->value);
     });
@@ -29,24 +29,24 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<?php $bg_image = (isset($episode->snippet->thumbnails->maxres->url)) ? $episode->snippet->thumbnails->maxres->url : Config::get('site.uploads_url') . '/images/' . $episode->image  ?>
 
 	<div id="video_bg" style="background-image:url(<?= $bg_image ?>)">
 		<div id="video_bg_overlay"></div>
-	
+
 
 		<div class="container">
 
 			<div class="row">
 
 				<div class="col-md-8" id="left_column" style="padding-right:0px;">
-				
+
 					<div id="video_left">
 
 						<?php if(($series->youtube == 1) || $episode->access == 'guest' || ( ($episode->access == 'subscriber' || $episode->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $episode->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
 
-							
+
 								<?php if(($series->youtube == 1) || $episode->type == 'embed'): ?>
 									<div id="video_container" class="fitvid">
 										<?php if($series->youtube): ?>
@@ -65,7 +65,7 @@
 									</video>
 									</div>
 								<?php endif; ?>
-							
+
 
 						<?php else: ?>
 
@@ -77,7 +77,7 @@
 									<button id="button">Signup Now<?php if($episode->access == 'subscriber'): ?> to Become a Subscriber<?php elseif($episode->access == 'registered'): ?> for Free!<?php endif; ?></button>
 								</form>
 							</div>
-						
+
 						<?php endif; ?>
 
 					</div><!-- #video_left -->
@@ -98,7 +98,7 @@
 								<div id="episodes">
 
 									<?php if($series->youtube): ?>
-									
+
 											<?php foreach($episodes as $playlist_episode): ?>
 
 												<?php if(isset($playlist_episode->contentDetails)):
@@ -121,7 +121,7 @@
 											<?php endforeach; ?>
 
 									<?php else: ?>
-									
+
 										<div class="vueLoad1">
 											<div v-repeat="prev_episodes" class="content">
 										  		<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' ?>{{ slug }}">
@@ -168,7 +168,7 @@
 
 	<div class="container">
 
-		<div id="left_content">						
+		<div id="left_content">
 
 			<h3 class="video_title">
 				<?= $title ?>
@@ -193,8 +193,8 @@
 
 		</div><!-- #left_container -->
 	</div>
-	
-		
+
+
 	<script type="text/javascript">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'thedevdojo'; // required: replace example with your forum shortname
@@ -206,7 +206,7 @@
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
     </script>
-    <noscript>Please enable JavaScript to view the comments</noscript> 
+    <noscript>Please enable JavaScript to view the comments</noscript>
 
 	<script src="<?= URL::asset(THEME_URL . '/assets/js/jquery.fitvid.js') ?>"></script>
 	<script type="text/javascript">
@@ -274,7 +274,7 @@
 					repositionActive();
 				}, 1000);
 			});
-			
+
 		}
 
 		function repositionActive(){
@@ -305,7 +305,7 @@
 			$(document).ready(function(){
 
 			  // Once the video is ready
-				_V_("video_player").ready(function(){
+				videojs("video_player").ready(function(){
 
 					console.log('test');
 
