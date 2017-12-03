@@ -317,9 +317,11 @@
 
 			<div class="panel-body" style="display: block;">
 				<select name="campaigns[]" id="campaigns" class="form-control" multiple>
-					@foreach($video_campaigns as $campaign)
-						<option value="{{ $campaign->id }}"{{ $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
-					@endforeach
+					@if(!empty($video_campaigns))
+						@foreach($video_campaigns as $campaign)
+							<option value="{{ $campaign->id }}"{{ $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
+						@endforeach
+					@endif
 				</select>
 			</div>
 		</div>

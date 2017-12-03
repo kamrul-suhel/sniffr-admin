@@ -133,6 +133,7 @@ class AdminVideosController extends Controller {
             'post_route' => url('admin/videos/store'),
             'button_text' => 'Add New Video',
             'admin_user' => Auth::user(),
+            'video' => Video::all(),
             'video_categories' => VideoCategory::all(),
             'video_campaigns' => Campaign::all(),
         );
@@ -282,7 +283,7 @@ class AdminVideosController extends Controller {
             $comment->comment = Input::get('comment');
             $comment->user_id = Auth::id();
 
-            $video->comments()->save($comment);   
+            $video->comments()->save($comment);
         }
 
         return Redirect::to('admin/videos/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
