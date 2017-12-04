@@ -319,7 +319,7 @@
 				<select name="campaigns[]" id="campaigns" class="form-control" multiple>
 					@if(!empty($video_campaigns))
 						@foreach($video_campaigns as $campaign)
-							<option value="{{ $campaign->id }}"{{ $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
+							<option value="{{ $campaign->id }}"{{ isset($video) && $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
 						@endforeach
 					@endif
 				</select>

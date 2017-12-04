@@ -133,7 +133,6 @@ class AdminVideosController extends Controller {
             'post_route' => url('admin/videos/store'),
             'button_text' => 'Add New Video',
             'admin_user' => Auth::user(),
-            'video' => Video::all(),
             'video_categories' => VideoCategory::all(),
             'video_campaigns' => Campaign::all(),
         );
