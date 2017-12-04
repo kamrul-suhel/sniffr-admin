@@ -174,7 +174,7 @@
 
 <div>&nbsp;</div>
 
-<div><a href="{{ URL::to('/details/' . $video->more_details_code) }}">Click here for our questionnaire to provide more details</a></div>
+<div><a href="{{ URL::to('/details/' . $video->more_details_code) }}">Confirm additional details</a></div>
 
 <div>&nbsp;</div>
 

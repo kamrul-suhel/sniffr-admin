@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use View;
 use Auth;
+use Youtube;
 use Redirect;
 use Validator;
 
@@ -89,29 +90,33 @@ class ThemeUploadController extends Controller {
             $contact->save();
         }   
 
-        if(isset($request->file)){
-            $fileName = time().'.'.$request->file->getClientOriginalExtension();
-            
+        if($request->hasFile('file')){
+            $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
 
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                $fileMimeType = $file->getMimeType();
-                // Neew to generate a thumbnail image
-                $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-                $filePath = Storage::disk('s3')->url($fileName);
-            }else{
-                return Redirect::back()
-                    ->withErrors(array('message' => 'There was a problem uploading the file.'))
-                    ->withInput();
-            }
-           
+            $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
+
+            $file = $request->file('file');
+            $fileMimeType = $file->getMimeType();
+
+            // Upload to S3
+            $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
+            $filePath = Storage::disk('s3')->url($fileName);
+
+            // Upload it to youtube!!! ??
+            $video = Youtube::upload($file, ['title' => Input::get('title')], 'unlisted');
+            $youtubeId  = $video->getVideoId();
+        }else{
+            return Redirect::back()
+                ->withErrors(array('message' => 'There was a problem uploading the file.'))
+                ->withInput();
         }
-
+           
         $video = new Video();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title');
         $video->url = Input::get('url');
         $video->file = $filePath;
+        $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
         $video->save();
