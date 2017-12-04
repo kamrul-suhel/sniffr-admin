@@ -526,7 +526,7 @@
 	<!-- End Notifications -->
 
 	@yield('javascript')
-
+	@yield('javascript-videojs')
 
 </body>
 </html>
