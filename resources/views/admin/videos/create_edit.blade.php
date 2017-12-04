@@ -50,20 +50,7 @@
 
 				<div class="panel-body" style="display: block;">
 					<div class="text-center">
-						<div id="video_container" class="fitvid">
-						<?php if($key = $video->getKey()): ?>
-							<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
-						<?php elseif($video->url): ?>
-							<h1>We need to handle videoi urls (that aren't youtube)</h1>
-						<?php elseif($video->embed_code): ?>
-							<?= $video->embed_code ?>
-						<?php elseif($video->file): ?>
-							<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
-								<source src="<?php echo $video->file; ?>" type='video/mp4'>
-								<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-							</video>
-						<?php endif; ?>
-						</div>
+						@include ('partials.videojs')
 					</div>
 				</div>
 
@@ -404,6 +391,7 @@
 	<script type="text/javascript" src="{{ '/application/assets/js/tagsinput/jquery.tagsinput.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/video.js' }}"></script>
+	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/videojs-vimeo.js' }}"></script>
 
 	<!-- RESIZING FLUID VIDEO for VIDEO JS -->
 	<script type="text/javascript">
