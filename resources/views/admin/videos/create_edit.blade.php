@@ -1,7 +1,8 @@
 @extends('admin.master')
 
 @section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/jquery.tagsinput.css' }}" />
+	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.css' }}" />
+	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.extras.css' }}" />
 	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
 @stop
 
@@ -317,7 +318,7 @@
 			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 			<div class="panel-body" style="display: block;">
 				<p>Add video tags below:</p>
-				<input class="form-control" name="tags" id="tags" value="@if(!empty($video) && $video->tags->count() > 0)@foreach($video->tags as $tag){{ $tag->name . ', ' }}@endforeach @endif">
+				<input class="form-control" name="tags" id="tags" data-role="tagsinput" value="@if(!empty($video) && $video->tags->count() > 0)@foreach($video->tags as $tag){{ $tag->name . ', ' }}@endforeach @endif">
 			</div>
 		</div>
 
@@ -388,7 +389,8 @@
 
 @section('javascript')
 	<script type="text/javascript" src="{{ '/application/assets/admin/js/tinymce/tinymce.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/js/tagsinput/jquery.tagsinput.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/application/assets/js/typeahead.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/video.js' }}"></script>
 	<script type="text/javascript" src="{{ '/content/themes/default/assets/js/videojs-vimeo.js' }}"></script>
@@ -417,11 +419,37 @@
 	<script type="text/javascript">
 		$ = jQuery;
 
+		var tagnames = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			prefetch: {
+		    url: '/tags',
+		    filter: function(list) {
+		      return $.map(list, function(tagname) {
+		        return { name: tagname }; });
+		    }
+		  }
+		});
+		tagnames.initialize();
+
+		$('#tags').tagsinput({
+				typeaheadjs: [{
+							minLength: 1,
+							highlight: true,
+				},{
+						minlength: 1,
+						name: 'tagnames',
+						displayKey: 'name',
+						valueKey: 'name',
+						source: tagnames.ttAdapter()
+				}],
+				freeInput: true
+		});
+
 		$(document).ready(function(){
 			console.log($(this).val());
 
 			$('#duration').mask('00:00:00');
-			$('#tags').tagsInput();
 
 			$('#type').change(function(){
 				if($(this).val() == 'file'){

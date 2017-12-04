@@ -36,7 +36,7 @@
 		a{
 				width:300px;
 				margin:0px auto;
-				background:#98cb00;
+				background:#ef626c;
 				padding:20px 0px;
 				border-radius:30px;
 				display:block;

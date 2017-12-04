@@ -229,7 +229,7 @@ if(!function_exists ( 'dynamic_styles' )):
 	function dynamic_styles($theme_settings){
 		//$hex_color = \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->color, '');
 		//if(empty($hex_color)){
-			$hex_color = '#98cb00';
+			$hex_color = '#ef626c';
 		//}
 
 		$color = $hex_color;

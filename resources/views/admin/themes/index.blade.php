@@ -35,7 +35,7 @@
 							
 							<div class="album-options">
 								<?php if($active_theme == $theme->slug): ?>
-									<a href="" onclick="return false;" style="background:#98cb00; color:#fff; cursor:default;">
+									<a href="" onclick="return false;" style="background:#ef626c; color:#fff; cursor:default;">
 										<i class="fa fa-check"></i> Active
 									</a>
 								<?php else: ?>

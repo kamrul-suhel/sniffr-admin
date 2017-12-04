@@ -64,7 +64,7 @@
         <div class="pull-left col-md-7 terms" style="padding-left: 0;"></div>
       
           <div class="pull-right sign-up-buttons">
-          	<a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . $user->username; ?>/billing" class="btn" style="color: #98cb00;">Cancel</a>
+          	<a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . $user->username; ?>/billing" class="btn" style="color: #ef626c;">Cancel</a>
             <button class="btn btn-primary" type="submit" name="create-account">Update Credit Card</button>
             
           </div>

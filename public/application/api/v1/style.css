@@ -1,5 +1,5 @@
 a {
-  color: #98cb00;
+  color: #ef626c;
 }
 
 a:hover {
@@ -7,30 +7,30 @@ a:hover {
 }
 
 .button {
-  border: solid 2px #98cb00;
+  border: solid 2px #ef626c;
 }
 
 .button,
 .button:visited {
-  background: #98cb00;
+  background: #ef626c;
 }
 
 a.big.button {
-  border: solid 3px #98cb00;
+  border: solid 3px #ef626c;
 }
 
 a.big.button,
 a.big.button:visited {
-  color: #98cb00;
+  color: #ef626c;
 }
 
 a.big.button:hover {
-  background: #98cb00;
+  background: #ef626c;
 }
 
 .menu a,
 .menu a:visited {
-  color: #98cb00;
+  color: #ef626c;
 }
 
 .menu a:hover {
@@ -38,7 +38,7 @@ a.big.button:hover {
 }
 
 .menu a.active:after {
-  background: #98cb00;
+  background: #ef626c;
 }
 
 .content{

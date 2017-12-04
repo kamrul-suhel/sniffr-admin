@@ -495,7 +495,7 @@ li.login-desktop a {
   font-size: 20px;
   border-radius: 50px;
   border: 0px;
-  background: #98cb00;
+  background: #ef626c;
   outline: none;
 }
 #home-hero button:hover {
@@ -668,7 +668,7 @@ h2#tags {
   font-size: 20px;
   border-radius: 50px;
   border: 0px;
-  background: #98cb00;
+  background: #ef626c;
   color: #fff;
   outline: none;
 }
@@ -830,7 +830,7 @@ h4.modal-title {
   background: #C0C0C0;
 }
 .block .block-contents p.date .label.label-success {
-  background: #98cb00;
+  background: #ef626c;
 }
 .block .block-contents p.desc {
   color: #9a9a9a;
@@ -1014,7 +1014,7 @@ footer ul li a,
 .home footer ul li a {
   padding: 4px 0px;
   display: block;
-  color: #98cb00;
+  color: #ef626c;
 }
 footer ul li a:hover,
 .home footer ul li a:hover {
@@ -1078,7 +1078,7 @@ footer a.social-link:hover,
   bottom: 0px;
   padding: 20px 20px;
   left: 20px;
-  background: #98cb00;
+  background: #ef626c;
   color: #fff;
   border-bottom: 0px;
   margin-bottom: 0px;
@@ -1138,7 +1138,7 @@ footer a.social-link:hover,
   text-align: center;
 }
 .page a {
-  color: #98cb00;
+  color: #ef626c;
 }
 .page p {
   margin: 20px 0px;
@@ -1159,7 +1159,7 @@ ul.pages li {
   list-style: none;
 }
 ul.pages li a {
-  color: #98cb00;
+  color: #ef626c;
 }
 ul.pages li a:hover {
   color: #a8db10;
@@ -1217,7 +1217,7 @@ form.search .form-search .fa {
   top: 5px;
 }
 .form-control:focus {
-  border-color: #98cb00;
+  border-color: #ef626c;
   box-shadow: 0px 0px 0px;
 }
 /********** BILLING FORM **********/
@@ -1236,7 +1236,7 @@ form.search .form-search .fa {
   margin: 15px auto;
 }
 #signup-form .panel-heading {
-  background: #98cb00;
+  background: #ef626c;
   color: #fff;
   padding: 50px;
 }
@@ -1257,8 +1257,8 @@ form.search .form-search .fa {
   margin-top: 8px;
 }
 .btn-primary {
-  background: #98cb00;
-  border-color: #98cb00;
+  background: #ef626c;
+  border-color: #ef626c;
 }
 /********** END BILLING FORM **********/
 #signup-form .demo-info p {
