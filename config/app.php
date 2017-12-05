@@ -170,7 +170,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Dawson\Youtube\YoutubeServiceProvider::class,
+        //Dawson\Youtube\YoutubeServiceProvider::class,
+        App\Providers\MyYoutubeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -234,7 +235,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
-        'Youtube' => Dawson\Youtube\Facades\Youtube::class,
+        //'Youtube' => Dawson\Youtube\Facades\Youtube::class,
+        'MyYoutube' => App\Libraries\Facades\MyYoutube::class,
 
     ],
 

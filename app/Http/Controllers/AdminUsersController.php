@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use Auth;
 use Redirect;
 
 use App\User;
 
+use App\Libraries\ImageHandler;
+
+use Illuminate\Http\File;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 class AdminUsersController extends Controller {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 	/**
 	 * Setup the layout used by the controller.
@@ -67,14 +78,16 @@ class AdminUsersController extends Controller {
     	return view('admin.users.create_edit', $data);
     }
 
-    public function update(){
+    public function update(Request $request){
     	$input = Input::all();
         $id = $input['id'];
         $user = User::find($id);
 
     	if(Input::hasFile('avatar')){
         	$input['avatar'] = ImageHandler::uploadImage(Input::file('avatar'), 'avatars');
-        } else { $input['avatar'] = $user->avatar; }
+        } else { 
+            $input['avatar'] = $user->avatar; 
+        }
 
         if(empty($input['active'])){
             $input['active'] = 0;
@@ -85,6 +98,7 @@ class AdminUsersController extends Controller {
         } else{ $input['password'] = Hash::make($input['password']); }
 
     	$user->update($input);
+
     	return Redirect::to('admin/user/edit/' . $id)->with(array('note' => 'Successfully Updated User Settings', 'note_type' => 'success') );
     }
 

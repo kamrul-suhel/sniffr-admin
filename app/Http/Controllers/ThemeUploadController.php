@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use View;
 use Auth;
-use Youtube;
+use MyYoutube;
 use Redirect;
 use Validator;
 
@@ -103,7 +103,7 @@ class ThemeUploadController extends Controller {
             $filePath = Storage::disk('s3')->url($fileName);
 
             // Upload it to youtube!!! ??
-            $video = Youtube::upload($file, ['title' => Input::get('title')], 'unlisted');
+            $video = MyYoutube::upload($file, ['title' => Input::get('title')], 'unlisted');
             $youtubeId  = $video->getVideoId();
         }else{
             return Redirect::back()

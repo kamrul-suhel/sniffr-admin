@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use finfo;
 use View;
 use Auth;
 use Youtube;
+use MyYoutube;
 use Redirect;
 use Validator;
+
+use Google_Client;
+use Google_Service_YouTube;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -22,6 +25,7 @@ use App\Video;
 use App\Comment;
 use App\Campaign;
 use App\VideoCategory;
+
 
 use App\Libraries\ImageHandler;
 
@@ -95,19 +99,10 @@ class AdminVideosController extends Controller {
             // Send Rejected Email
             Mail::to($video->contact->email)->send(new SubmissionRejected($video));
         }else if($video->state == 'licensed'){
-
-            // Only do it if video file (not url)
-            if($video->file){
-                // Upload it to youtube!!! ??
-                $video = Youtube::upload($video->file, [
-                    'title'       => $video->title,
-                    'description' => $video->description,
-                    'tags'        => $video->tags->pluck('name'),
-                    'category_id' => 10
-                ]);
+            // Make youtube video public
+            if($video->youtube_id){
+                MyYoutube::updatePrivacy($video->youtube_id);
             }
-            
-            dd($video->getVideoId());
 
             // Send Licensed Email
             Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
