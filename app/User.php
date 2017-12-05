@@ -14,11 +14,11 @@ class User extends Authenticatable
      *
      * @var array
      */
-    // protected $fillable = [
-    //     'name', 'email', 'password',
-    // ];
+    protected $fillable = [
+        'username', 'email', 'password', 'avatar', 'role', 'active', 
+    ];
+
     protected $table = 'users';
-	  protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -28,4 +28,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function client(){
+        return $this->belongsTo(Client::class)->first();
+    }
 }

@@ -6,6 +6,7 @@ use Hash;
 use Auth;
 use Redirect;
 
+use App\Client;
 use App\User;
 
 use App\Libraries\ImageHandler;
@@ -67,14 +68,16 @@ class AdminUsersController extends Controller {
     }
 
 	public function edit($id){
-
     	$user = User::find($id);
+
     	$data = array(
     		'user' => $user,
+            'clients' => Client::get(),
     		'post_route' => url('admin/user/update'),
     		'admin_user' => Auth::user(),
     		'button_text' => 'Update User',
-    		);
+		);
+        
     	return view('admin.users.create_edit', $data);
     }
 

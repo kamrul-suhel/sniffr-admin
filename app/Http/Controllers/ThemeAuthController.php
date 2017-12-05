@@ -117,7 +117,7 @@ class ThemeAuthController extends Controller {
     		}
 
 	    	//if(Auth::user()->subscribed() || (Auth::user()->role == 'admin' || Auth::user()->role == 'demo') || ($settings->free_registration && Auth::user()->role == 'registered') ):
-	    	if((Auth::user()->role == 'admin' || Auth::user()->role == 'demo') || ($settings->free_registration && Auth::user()->role == 'registered') ):
+	    	if((Auth::user()->role == 'admin' || Auth::user()->role == 'demo' || Auth::user()->role == 'client') || ($settings->free_registration && Auth::user()->role == 'registered') ):
 
 	    		$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
 	    		if(Auth::user()->role == 'demo' && Setting::first()->demo_mode != 1){

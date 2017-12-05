@@ -28,14 +28,17 @@
                     <li class="dropdown">
                         <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
-                            <li><a href="<?= ($settings->enable_https) ? secure_url('favorites') : URL::to('favorites') ?>">My Favorites</a></li>
+                            <li><a href="<?= url('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
+                            <!--li><a href="<?= url('favorites') ?>">My Favorites</a></li-->
+                            <?php if(Auth::user()->role == 'client'): ?>
+                                <li><a href="<?= url('dailies') ?>">Daily Videos</a></li>
+                            <?php endif; ?>
                             <?php if(Auth::user()->role == 'admin' || Auth::user()->role == 'demo'): ?>
                                 <li class="divider"></li>
-                                <li><a href="<?= ($settings->enable_https) ? secure_url('admin') : URL::to('admin') ?>"> Admin</a></li>
+                                <li><a href="<?= url('admin') ?>"> Admin</a></li>
                             <?php endif; ?>
                             <li class="divider"></li>
-                            <li><a href="<?= ($settings->enable_https) ? secure_url('logout') : URL::to('logout') ?>" id="user_logout_mobile"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <li><a href="<?= url('logout') ?>" id="user_logout_mobile"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>

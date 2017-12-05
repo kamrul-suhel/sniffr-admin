@@ -188,52 +188,6 @@
 	</script>
 	@endif
 
-	<script type="text/javascript">
-
-	$ = jQuery;
-
-	$(document).ready(function(){
-
-		function slugify(text) {
-		  return text.toString().toLowerCase()
-		    .replace(/\s+/g, '-')           // Replace spaces with -
-		    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-		    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-		    .replace(/^-+/, '')             // Trim - from start of text
-		    .replace(/-+$/, '');            // Trim - from end of text
-		}
-
-		$('#name').on('input', function() {
-		    $('#slug').val(slugify($('#name').val()));
-		});
-
-		$('#duration').mask('00:00:00');
-
-		$('input[type="checkbox"]').change(function() {
-			if($(this).is(":checked")) {
-		    	$(this).val(1);
-		    } else {
-		    	$(this).val(0);
-		    }
-		    console.log('test ' + $(this).is( ':checked' ));
-		});
-
-		tinymce.init({
-			relative_urls: false,
-		    selector: '#body',
-		    toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor | code",
-		    plugins: [
-		         "advlist autolink link image code lists charmap print preview hr anchor pagebreak spellchecker code fullscreen",
-		         "save table contextmenu directionality emoticons template paste textcolor code"
-		   ],
-		   menubar:false,
-		 });
-
-	});
-
-
-
-	</script>
 
 	@stop
 
