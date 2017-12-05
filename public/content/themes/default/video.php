@@ -11,9 +11,11 @@
 				<div id="video_container" class="fitvid">
 				<?php if($key = $video->getKey()): ?>
 					<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
-				<?php elseif($video->url == 'url'): ?>
+				<?php elseif(str_contains($video->url,'facebook')): ?>
+					<div class="fb-video" data-href="<?php echo $video->url; ?>" data-allowfullscreen="true"></div>
+				<?php elseif($video->url): ?>
 					<h1>We need to handle videoi urls (that aren't youtube)</h1>
-				<?php elseif($video->embed_code == 'embed'): ?>
+				<?php elseif($video->embed_code): ?>
 					<?= $video->embed_code ?>
 				<?php elseif($video->file): ?>
 					<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
@@ -105,4 +107,12 @@
 	</script>
 
 	<script src="<?= THEME_URL . '/assets/js/rrssb.min.js'; ?>"></script>
+
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504';
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
 <?php include('includes/footer.php'); ?>

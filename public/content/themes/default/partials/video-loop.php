@@ -1,10 +1,11 @@
 <?php foreach($videos as $video): ?>
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 	<article class="block">
-		<a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('video') : URL::to('video') ?><?= '/' . $video->id ?>">
+		<a class="block-thumbnail" href="<?= url('video') ?><?= '/' . $video->id ?>">
 			<div class="thumbnail-overlay"></div>
 			<span class="play-button"></span>
-			<img src="<?= \App\Libraries\ImageHandler::getImage($video->image, 'medium')  ?>">
+					
+			<img src="<?= \App\Libraries\ImageHandler::getVideoImage($video, 'medium')  ?>">
 			<div class="details">
 				<h2><?= $video->title; ?></h2>
 				<span><?= \App\Libraries\TimeHelper::convert_seconds_to_HMS($video->duration); ?></span>

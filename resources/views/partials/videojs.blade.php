@@ -16,9 +16,7 @@
     </div>
   @elseif (str_contains($video->url, 'facebook'))
     <div id="video_container" class="fitvid" style="padding-top:0px;">
-      <div class="fb-video"
-        data-href="{{ $video->url }}"
-        data-allowfullscreen="true"></div>
+      <div class="fb-video" data-href="{{ $video->url }}" data-allowfullscreen="true"></div>
     </div>
   @endif
 @elseif (!empty($video->file))
