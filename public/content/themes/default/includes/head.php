@@ -1,11 +1,11 @@
 <?php $settings = \App\Setting::first(); ?>
-    
+
 <?php if(isset($video->id)): ?>
 
     <title><?= $video->title; ?></title>
     <meta name="description" content="<?= $video->description ?>">
 
-    <?php 
+    <?php
     $keywords = '';
 
     foreach($video->tags as $tag):
@@ -23,14 +23,14 @@
     <meta itemprop="description" content="<?= $video->description ?>">
     <meta itemprop="image" content="<?= ($settings->enable_https) ? secure_url('/') : URL::to('/') ?><?= \App\Libraries\ImageHandler::getImage($video->image, 'large')  ?>">
 
-    <!-- for Facebook -->          
+    <!-- for Facebook -->
     <meta property="og:title" content="<?= $video->title ?>" />
     <meta property="og:type" content="video.other" />
     <meta property="og:image" content="<?= ($settings->enable_https) ? secure_url('/') : URL::to('/') ?><?= \App\Libraries\ImageHandler::getImage($video->image, 'large')  ?>" />
     <meta property="og:url" content="<?= Request::url(); ?>" />
     <meta property="og:description" content="<?= $video->description ?>" />
 
-    <!-- for Twitter -->          
+    <!-- for Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="<?= $video->title ?>" />
     <meta name="twitter:description" content="<?= $video->description ?>" />
@@ -48,14 +48,14 @@
     <meta itemprop="description" content="<?= $post_description ?>">
     <meta itemprop="image" content="<?= ($settings->enable_https) ? secure_url('/') : URL::to('/') ?><?= \App\Libraries\ImageHandler::getImage($post->image, 'large')  ?>">
 
-    <!-- for Facebook -->          
+    <!-- for Facebook -->
     <meta property="og:title" content="<?= $post->title ?>" />
     <meta property="og:type" content="article" />
     <meta property="og:image" content="<?= ($settings->enable_https) ? secure_url('/') : URL::to('/') ?><?= \App\Libraries\ImageHandler::getImage($post->image, 'large')  ?>" />
     <meta property="og:url" content="<?= Request::url(); ?>" />
     <meta property="og:description" content="<?= $post_description ?>" />
 
-    <!-- for Twitter -->          
+    <!-- for Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="<?= $post->title ?>" />
     <meta name="twitter:description" content="<?= $post_description ?>" />
@@ -70,7 +70,7 @@
 
     <title><?php echo $settings->website_name . ' - ' . $settings->website_description; ?></title>
     <meta name="description" content="<?= $settings->website_description ?>">
-    
+
 <?php endif; ?>
 
 <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1">
@@ -101,5 +101,3 @@
 
 <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
 <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
-
-
