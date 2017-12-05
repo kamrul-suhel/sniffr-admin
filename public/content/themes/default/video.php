@@ -16,7 +16,7 @@
 				<?php elseif($video->embed_code == 'embed'): ?>
 					<?= $video->embed_code ?>
 				<?php elseif($video->file): ?>
-					<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
+					<video id="video_player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
 						<source src="<?php echo $video->file; ?>" type='video/mp4'>
 						<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 					</video>
