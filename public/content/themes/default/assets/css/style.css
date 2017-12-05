@@ -344,7 +344,7 @@ label span {
   font-weight: bold;
   border: 0px;
   background: #F9F9F9;
-  width: 200px;
+  width: 95%;
   background: transparent;
   border: none;
   text-shadow: 0 0.1px 0.1px #A7B3C2;
@@ -1629,12 +1629,12 @@ Navbar Toggle
     display: block;
   }
   .second-nav .navbar-search {
-    margin-right: -15px;
-    width: 50%;
+    /*margin-right: -15px;*/
+    width: 100%;
     float: right;
   }
   .second-nav .navbar-search input {
-    width: 170px;
+    width: 75%;
   }
   .second-nav li {
     width: 100%;
@@ -1732,7 +1732,7 @@ Navbar Toggle
     padding: 0px;
   }
   .second-nav .navbar-search input {
-    width: 110px;
+    width: 75%;
   }
   #signup-form .panel-heading .panel-title {
     margin-bottom: 25px;
