@@ -72,8 +72,18 @@
 							<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success" title="License Video"><i class="entypo-check"></i></a>
 	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
+							@elseif($video->state == 'licensed')
+							<i class="entypo-check"></i> Licensed
+							@elseif($video->state == 'accepted')
+							<i class="entypo-clock"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+							@elseif($video->state == 'rejected')
+							<i class="fa fa-times"></i> Rejected
+							@elseif($video->state == 'problem')
+							<i class="fa fa-exclamation"></i> Problem
+							@elseif($video->state == 'restricted')
+							<i class="fa fa-exclamation-triangle"></i> Restricted
 							@else
-							<i class="entypo-video"></i> {{ $video->state == 'accepted' ? 'More details sent: '.\Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->created_at)->diffForHumans() : ucfirst($video->state) }}
+							<i class="entypo-video"></i> {{ ucfirst($video->state) }}
 							@endif
 						</div>
 
