@@ -100,9 +100,9 @@
 						<p>Select the user's role below</p>
 						<select id="role" name="role">
 							<option value="">Please Select</option>
-							<option value="admin"{{ $user->role == 'admin' ? ' selected' : '' }}>Admin</option>
-							<option value="manager"{{ $user->role == 'manager' ? ' selected' : '' }}>Manager</option>
-							<option value="client"{{ $user->role == 'client' ? ' selected' : '' }}>Client</option>
+							<option value="admin"{{ isset($user) && $user->role == 'admin' ? ' selected' : '' }}>Admin</option>
+							<option value="manager"{{ isset($user) && $user->role == 'manager' ? ' selected' : '' }}>Manager</option>
+							<option value="client"{{ isset($user) && $user->role == 'client' ? ' selected' : '' }}>Client</option>
 						</select>
 					</div>
 				</div>
