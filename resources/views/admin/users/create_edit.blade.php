@@ -1,44 +1,48 @@
 @extends('admin.master')
 
 @section('content')
+
 <div id="admin-container">
+<!-- This is where -->
+
 	<div class="admin-section-title">
 	@if(!empty($user->id))
-		<h3><i class="entypo-user"></i> {{ $user->username }}</h3> 
+		<h3><i class="entypo-user"></i> {{ $user->username }}</h3>
 		<a href="{{ URL::to('user') . '/' . $user->username }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-user"></i> Add New User</h3> 
+		<h3><i class="entypo-user"></i> Add New User</h3>
 	@endif
 	</div>
-
 	<div class="clear"></div>
 
-	<form method="POST" action="<?= $post_route ?>" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-		<div id="user-badge">
-			<img src="{{ config('site.uploads_url') . 'avatars/' . (isset($user->avatar) ? $user->avatar : 'default.jpg' ) }}" />
-			<label for="avatar">{{ isset($user->username) ? ucfirst($user->username). '\'s' : '' }} Profile Image</label>
-			<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
-		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
-			<div class="panel-heading"> 
-				<div class="panel-title">Username</div> 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
-				</div>
+
+		<form method="POST" action="<?= $post_route ?>" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+
+			<div id="user-badge">
+				@if(isset($user->avatar))<?php $avatar = $user->avatar; ?>@else<?php $avatar = 'default.jpg'; ?>@endif
+				<img src="<?= Config::get('site.uploads_url') . 'avatars/' . $avatar ?>" />
+				<label for="avatar">@if(isset($user->username))<?= ucfirst($user->username). '\'s'; ?>@endif Profile Image</label>
+				<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
 			</div>
 
-			<div class="panel-body" style="display: block;"> 
-				@if($errors->first('username'))
-				<div class="alert alert-danger">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-					<strong>Oh snap!</strong><?= $errors->first('username'); ?>
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Username</div>
+					<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
 				</div>
-				@endif
-				<p>User's Username</p>
-				<input type="text" class="form-control" name="username" id="username" value="{{ isset($user->username) ? $user->username : old('username') }}" />
+				<div class="panel-body" style="display: block;">
+					<?php if($errors->first('username')): ?>
+						<div class="alert alert-danger">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <strong>Oh snap!</strong>
+							<?= $errors->first('username'); ?>
+						</div>
+					<?php endif; ?>
+					<p>User's Username</p>
+					<input type="text" class="form-control" name="username" id="username" value="<?php if(!empty($user->username)): ?><?= $user->username ?><?php endif; ?>" />
+				</div>
 			</div>
 		</div>
 
@@ -128,10 +132,10 @@
 				</div>
 			</div>
 
-			<div class="col-sm-4"> 
-				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-					<div class="panel-title">User Active Status</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-					<div class="panel-body" style="display: block;"> 
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+					<div class="panel-title">User Active Status</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-body" style="display: block;">
 						<label>User Active Status </label>
 						<input type="checkbox" id="active" name="active" @if(isset($user->active) && $user->active == 1)checked="checked" value="1" @else value="0" @endif />
 					</div>
@@ -150,11 +154,16 @@
 	</form>
 
 	<div class="clear"></div>
+<!-- This is where now -->
 </div>
-@stop
 
-@section('javascript')
-<script type="text/javascript">
+
+
+
+	@section('javascript')
+
+	<script type="text/javascript">
+
 	$ = jQuery;
 
 	$(document).ready(function(){
@@ -181,6 +190,11 @@
 		});
 
 	});
-</script>
-@stop
 
+
+
+	</script>
+
+	@stop
+
+@stop

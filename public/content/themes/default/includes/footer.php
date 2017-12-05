@@ -1,4 +1,4 @@
-	
+
 	<footer>
 		<div class="container">
 
@@ -45,14 +45,17 @@
 
 		</div>
 	</footer>
-    <script src="<?= THEME_URL . '/assets/js/bootstrap.min.js'; ?>"></script>
-    <script src="<?= THEME_URL . '/assets/js/moment.min.js'; ?>"></script>
+
+  <script type="text/javascript" src="<?= THEME_URL . '/assets/js/bootstrap.min.js'; ?>"></script>
+  <script type="text/javascript" src="<?= THEME_URL . '/assets/js/moment.min.js'; ?>"></script>
+	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.validate.min.js'; ?>"></script>
+	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/additional-methods.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/jquery.noty.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/themes/default.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/layouts/top.js'; ?>"></script>
 
 	<script type="text/javascript">
-	  
+
 	  $('document').ready(function(){
 
 		    $('.dropdown').hover(function(){
@@ -86,8 +89,84 @@
 	    		});
 	    		$(this).html('<i class="fa fa-close"></i> Close Submenu');
 	    	}
-	    	
+
 	    });
+
+			// make video url or file area shaded/unshaded
+			$('#make-shaded-url').on('click', function() {
+				$('#make-shaded-file').removeClass('shaded');
+				$('#make-shaded-file').addClass('unshaded');
+				$('#make-shaded-url').removeClass('unshaded');
+		    $('#make-shaded-url').addClass('shaded');
+				$('.circle-url').removeClass('circle-unshaded');
+				$('.circle-url').addClass('circle-shaded');
+				$('.circle-file').removeClass('circle-shaded');
+				$('.circle-file').addClass('circle-unshaded');
+			});
+
+			$('#make-shaded-file').on('click', function() {
+				$('#make-shaded-url').removeClass('shaded');
+				$('#make-shaded-url').addClass('unshaded');
+				$('#make-shaded-file').removeClass('unshaded');
+		    $('#make-shaded-file').addClass('shaded');
+				$('.circle-file').removeClass('circle-unshaded');
+				$('.circle-file').addClass('circle-shaded');
+				$('.circle-url').removeClass('circle-shaded');
+				$('.circle-url').addClass('circle-unshaded');
+			});
+
+			$('#file, #url').on('change', function() {
+				$('#video-error').css('display','none');
+				$('#file').css('color','#333');
+			});
+
+			//js form validations
+			$('#upload-form').validate({
+				groups: {  // consolidate messages into one
+					names: "file url"
+				},
+				rules: {
+					first_name: {
+	        	required: true
+	        },
+					last_name: {
+	        	required: true
+	        },
+					email: {
+	        	required: true,
+						email: true
+	        },
+					title: {
+	        	required: true
+	        },
+					file: {
+						require_from_group: [1, ".files"]
+					},
+					url: {
+						require_from_group: [1, ".files"]
+					},
+					terms: {
+						required: true
+					}
+				},
+				messages: {
+	        first_name: 'You must enter your first name',
+					last_name: 'You must enter your last name (surname)',
+					email: 'You must enter your email address',
+					title: 'You must enter your video title',
+					terms: 'You must check the box agreeing to our terms'
+		    },
+				errorPlacement: function (error, element) {
+					if (element.is('#file')||element.is('#url')) {
+							$('#video-error').css('display','block');
+					} else {
+							error.insertAfter(element);
+					}
+				}
+				// submitHandler: function(form) {
+				// 	form.submit();
+				// }
+			});
 
 	  });
 
@@ -97,7 +176,7 @@
 	  var loginSignupModal = $('<div class="modal fade" id="loginSignupModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Login Below</h4></div><div class="modal-body"></div></div></div></div>');
 
 		$(document).ready(function(){
-			
+
 			// Load the Modal Window for login signup when they are clicked
 			$('.login-desktop a').click(function(e){
 				e.preventDefault();
@@ -106,10 +185,10 @@
 					$('#loginSignupModal').show(200, function(){
 						setTimeout(function() { $('#email').focus() }, 300);
 
-						
+
 					});
 					$('#loginSignupModal').modal();
-					
+
 				});
 
 				// Be sure to remove the modal from the DOM after it is closed
@@ -118,9 +197,6 @@
 				});
 
 			});
-
-			
-			
 
 		});
 

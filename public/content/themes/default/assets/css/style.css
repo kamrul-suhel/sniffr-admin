@@ -92,11 +92,73 @@ label span {
   font-size:18px;
   font-weight:800;
 }
+.push-down {
+  margin-top:10px;
+}
+.shaded {
+  background:#F9F9F7;
+  border-radius:6px;
+  padding:15px;
+}
+.unshaded {
+  background:inherit;
+  border-radius:0px;
+  padding:15px;
+}
+.radio input[type=radio] {
+  margin-left: -7px;
+  margin-top: -7px;
+}
+input[type="radio"]:checked:before {
+    content: "";
+    display: block;
+    position: relative;
+    top: 0px;
+    left: -1px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border:none;
+    background: #ef626c;
+}
+.circle-shaded {
+  display: block;
+  position: relative;
+  top: -5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border:none;
+  background: #333;
+}
+.circle-unshaded {
+  display: block;
+  position: relative;
+  top: -5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border:#999 solid 1px;
+  background: #ffffff;
+}
+.page p span {
+  color: #ef626c;
+  font-size:18px;
+  font-weight:800;
+}
 .form-check-label {
   text-align: right;
 }
 .form-check-label input {
   margin-right:15px;
+}
+.error {
+  color:#ef626c;
+}
+#video-error {
+  color:#ef626c;
+  font-weight:bold;
+  text-align:center;
 }
 /* Place Holder CSS */
 ::-webkit-input-placeholder {
