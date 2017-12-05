@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Redirect;
 
 use App\User;
@@ -11,10 +12,12 @@ use App\Page;
 use App\Menu;
 use App\Video;
 use App\Setting;
+use App\PaymentSetting;
 use App\VideoCategory;
 use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
+use App\Libraries\Imagehandler;
 
 use Illuminate\Support\Facades\Input;
 
@@ -119,21 +122,21 @@ class ThemeUserController extends Controller{
 
         if(Auth::user()->username == $username){
 
-        if(Auth::user()->role == 'admin' || Auth::user()->role == 'admin'){
-            return Redirect::to('/user/' . $username . '/edit')->with(array('note' => 'This user type does not have billing info associated with their account.', 'note_type' => 'warning'));
-        }
+            if(Auth::user()->role == 'admin'){
+                return Redirect::to('/user/' . $username . '/edit')->with(array('note' => 'This user type does not have billing info associated with their account.', 'note_type' => 'warning'));
+            }
 
             $user = User::where('username', '=', $username)->first();
 
-            $payment_settings = PaymentSetting::first();
+            // $payment_settings = PaymentSetting::first();
 
-            if($payment_settings->live_mode){
-                User::setStripeKey( $payment_settings->live_secret_key );
-            } else {
-                User::setStripeKey( $payment_settings->test_secret_key );
-            }
+            // if($payment_settings->live_mode){
+            //     User::setStripeKey( $payment_settings->live_secret_key );
+            // } else {
+            //     User::setStripeKey( $payment_settings->test_secret_key );
+            // }
 
-            $invoices = $user->invoices(); 
+            // $invoices = $user->invoices(); 
 
             $data = array(
                     'user' => $user,
@@ -278,11 +281,11 @@ class ThemeUserController extends Controller{
 
         $payment_settings = PaymentSetting::first();
 
-        if($payment_settings->live_mode){
-            User::setStripeKey( $payment_settings->live_secret_key );
-        } else {
-            User::setStripeKey( $payment_settings->test_secret_key );
-        }
+        // if($payment_settings->live_mode){
+        //     User::setStripeKey( $payment_settings->live_secret_key );
+        // } else {
+        //     User::setStripeKey( $payment_settings->test_secret_key );
+        // }
 
         if(Auth::user()->username == $username){
 

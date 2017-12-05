@@ -16,37 +16,27 @@
 </div>
 
 <div class="container">
-
 	<div id="home-content">
-
 		<h3>Checkout our Latest Videos Below</h3>
 		<div class="row">
-
 			<?php include('partials/video-loop.php'); ?>
-
 		</div>
-
 	</div>
 
 	<?php include('partials/pagination.php'); ?>
-
 </div>
 
 
 <script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.vidbg.min.js'; ?>"></script>
-<script>
+<!-- <script>
 	$(document).ready(function(){
-
-		// $("#home-hero").bgswitcher({
-		//   images: ["<?= THEME_URL ?>/assets/img/home/1.jpg", "<?= THEME_URL ?>/assets/img/home/2.jpg", "<?= THEME_URL ?>/assets/img/home/3.jpg", "<?= THEME_URL ?>/assets/img/home/4.jpg"], // Background images
-		//   effect: "fade", // fade, blind, clip, slide, drop, hide
-		//   interval: 4200,
-		//   duration:1000
-		// });
-
-
-
+		$("#home-hero").bgswitcher({
+		  images: ["<?= THEME_URL ?>/assets/img/home/1.jpg", "<?= THEME_URL ?>/assets/img/home/2.jpg", "<?= THEME_URL ?>/assets/img/home/3.jpg", "<?= THEME_URL ?>/assets/img/home/4.jpg"], // Background images
+		  effect: "fade", // fade, blind, clip, slide, drop, hide
+		  interval: 4200,
+		  duration:1000
+		});
 	});
-</script>
+</script> -->
 
 <?php include('includes/footer.php'); ?>

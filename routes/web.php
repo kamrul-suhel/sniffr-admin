@@ -50,6 +50,12 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::post('favorite', 'ThemeFavoriteController@favorite');
     Route::get('favorites', 'ThemeFavoriteController@show_favorites');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Dailies Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::get('dailies', 'ThemeDailiesController@index');
 
     /*
     |--------------------------------------------------------------------------

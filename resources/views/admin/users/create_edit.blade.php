@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/application/assets/js/tagsinput/jquery.tagsinput.css' }}" />
-@stop
-
-
 @section('content')
 <div id="admin-container">
 	<div class="admin-section-title">
@@ -43,21 +38,39 @@
 				</div>
 				@endif
 				<p>User's Username</p>
-				<input type="text" class="form-control" name="username" id="username" value="" />
+				<input type="text" class="form-control" name="username" id="username" value="{{ isset($user->username) ? $user->username : old('username') }}" />
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-			<div class="panel-title">Email</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+		<div class="panel panel-primary" data-collapsed="0"> 
+			<div class="panel-heading"> 
+				<div class="panel-title">Email</div> 
+
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+				</div>
+			</div> 
+
 			<div class="panel-body" style="display: block;"> 
-				<?php if($errors->first('email')): ?><div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <strong>Oh snap!</strong> <?= $errors->first('email'); ?></div><?php endif; ?>
+				@if($errors->first('email'))
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
+					<strong>Oh snap!</strong> <?= $errors->first('email'); ?></div>
+				@endif
+
 				<p>User's Email Address</p>
-				<input type="text" class="form-control" name="email" id="email" value="<?php if(!empty($user->email)): ?><?= $user->email ?><?php endif; ?>" />
+				<input type="text" class="form-control" name="email" id="email" value="{{ isset($user->email) ? $user->email : old('email') }}" />
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-			<div class="panel-title">Password</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+		<div class="panel panel-primary" data-collapsed="0"> 
+			<div class="panel-heading"> 
+				<div class="panel-title">Password</div>
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+				</div>
+			</div> 
+
 			<div class="panel-body" style="display: block;">
 				@if(isset($user->password))
 					<p>(leave empty to keep your original password)</p>
@@ -69,17 +82,47 @@
 		</div>
 
 		<div class="row"> 
-
 			<div class="col-sm-4"> 
-				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-					<div class="panel-title">User Role</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+				<div class="panel panel-primary" data-collapsed="0"> 
+					<div class="panel-heading"> 
+						<div class="panel-title">User Role</div> 
+						
+						<div class="panel-options"> 
+							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+						</div>
+					</div>
+
 					<div class="panel-body" style="display: block;"> 
-					<p>Select the user's role below</p>
+						<p>Select the user's role below</p>
 						<select id="role" name="role">
-							<option value="admin" @if(isset($user->role) && $user->role == 'admin')selected="selected"@endif>Admin</option>
-							<option value="demo" @if(isset($user->role) && $user->role == 'demo')selected="selected"@endif>Demo</option>
-							<option value="registered" @if(isset($user->role) && $user->role == 'registered')selected="selected"@endif>Registered Users (free registration must be enabled)</option>
-							<option value="subscriber" @if(isset($user->role) && $user->role == 'subscriber')selected="selected"@endif>Subscriber</option>
+							<option value="">Please Select</option>
+							<option value="admin"{{ $user->role == 'admin' ? ' selected' : '' }}>Admin</option>
+							<option value="manager"{{ $user->role == 'manager' ? ' selected' : '' }}>Manager</option>
+							<option value="client"{{ $user->role == 'client' ? ' selected' : '' }}>Client</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4" id="client-box"> 
+				<div class="panel panel-primary" data-collapsed="0"> 
+					<div class="panel-heading"> 
+						<div class="panel-title">Client</div> 
+						
+						<div class="panel-options"> 
+							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;"> 
+						<p>Select user client</p>
+						<select id="client_id" name="client_id">
+							@if(isset($clients))
+								<option value="">Please Select</option>
+								@foreach($clients as $client)
+								<option value="{{ $client->id }}"{{ $client->id == $user->client_id ? ' selected' : '' }}>{{ $client->name }}</option>
+								@endforeach
+							@endif
 						</select>
 					</div>
 				</div>
@@ -115,6 +158,18 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		$('#role').change(function(){
+			if($(this).val() == 'client'){
+				$('#client-box').show();
+			} else {
+				$('#client-box').hide();
+			}
+		});
+
+		if($('#role').val() != 'client'){
+			$('#client-box').hide();
+		}
 
 		$('#active, #disabled').change(function() {
 			if($(this).is(":checked")) {
