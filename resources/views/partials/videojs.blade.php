@@ -1,4 +1,8 @@
-@if(!empty($video->url))
+@if($video->youtube_id)
+<div id="video_container" class="fitvid" style="padding-top:0px;">
+    <div class="youtube-player" data-id="{{ $video->youtube_id }}"></div>
+</div>
+@elseif(!empty($video->url))
   @if (str_contains($video->url, 'youtube'))
     <div id="video_container" class="fitvid" style="padding-top:0px;">
       <div class="youtube-player" data-id="{{ $key = $video->getKey() }}"></div>

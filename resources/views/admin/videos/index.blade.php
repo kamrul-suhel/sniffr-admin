@@ -48,7 +48,6 @@
 				<article class="album {{ $panelColour }}">
 
 					<header>
-
 						@include ('partials.videojs')
 
 						<a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}" class="album-options">
