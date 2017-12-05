@@ -1,30 +1,15 @@
 <?php include('includes/header.php'); ?>
 
-<style type="text/css">
-#home-content{
-	margin-top:545px;
-}
-ul.video_list{
-	margin:0px;
-	padding:0px;
-}
-
-.video_list li{
-	display:inline;
-	list-style: none;
-}
-</style>
-
-
-<div id="home-hero">
+<div id="home-hero" class="vidbg-box" data-vidbg-bg="mp4: /content/themes/default/assets/video/ocean.mp4, webm: /content/themes/default/assets/video/ocean.webm, poster: /content/themes/default/assets/video/ocean.jpg"
+  data-vidbg-options="loop: true, muted: true">
 	<div id="dim-bg">
 		<div class="container home-titles">
-			<h1>Your Online Video Subscription Platform</h1>
-			<h4>A bit more details about your Online Video Subscription Service</h4>
+			<h1>Video Licensing Platform</h1>
+			<h4>License viral videos viewed by millions around the world from UNILAD</h4>
 			<?php if(Auth::guest()): ?>
-				<button class="btn btn-primary" onClick="window.location='/signup'" href="/signup">Become a Member for just $7 a month</button>
+				<button class="btn btn-primary" onClick="window.location='/signup'" href="/signup">View latest videos</button>
 			<?php else: ?>
-				<button class="btn btn-primary" onClick="window.location='/videos'" href="/videos">Start Watching Videos Now</button>
+				<button class="btn btn-primary" onClick="window.location='/videos'" href="/videos">View latest videos</button>
 			<?php endif; ?>
 		</div>
 	</div>
@@ -33,12 +18,12 @@ ul.video_list{
 <div class="container">
 
 	<div id="home-content">
-		
+
 		<h3>Checkout our Latest Videos Below</h3>
 		<div class="row">
 
 			<?php include('partials/video-loop.php'); ?>
-		
+
 		</div>
 
 	</div>
@@ -48,15 +33,19 @@ ul.video_list{
 </div>
 
 
-<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.bgswitcher.js'; ?>"></script>
+<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.vidbg.min.js'; ?>"></script>
 <script>
 	$(document).ready(function(){
-		$("#home-hero").bgswitcher({
-		  images: ["<?= THEME_URL ?>/assets/img/home/1.jpg", "<?= THEME_URL ?>/assets/img/home/2.jpg", "<?= THEME_URL ?>/assets/img/home/3.jpg", "<?= THEME_URL ?>/assets/img/home/4.jpg"], // Background images
-		  effect: "fade", // fade, blind, clip, slide, drop, hide
-		  interval: 4200,
-		  duration:1000
-		});
+
+		// $("#home-hero").bgswitcher({
+		//   images: ["<?= THEME_URL ?>/assets/img/home/1.jpg", "<?= THEME_URL ?>/assets/img/home/2.jpg", "<?= THEME_URL ?>/assets/img/home/3.jpg", "<?= THEME_URL ?>/assets/img/home/4.jpg"], // Background images
+		//   effect: "fade", // fade, blind, clip, slide, drop, hide
+		//   interval: 4200,
+		//   duration:1000
+		// });
+
+
+
 	});
 </script>
 

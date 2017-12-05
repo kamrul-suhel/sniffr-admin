@@ -22,7 +22,7 @@ body {
   padding: 0px;
   margin: 0px;
   background: #f1f1f1;
-  font-family: 'Gotham-Rounded', 'Helvetica Neue', 'Helvetica', Arial;
+  font-family: 'Helvetica Neue', 'Helvetica', Arial;
 }
 body.home {
   background: #f1f1f1;
@@ -34,6 +34,18 @@ body.home h3 {
 body.home .second-nav {
   display: none;
 }
+#home-content{
+	margin-top:545px;
+}
+ul.video_list{
+	margin:0px;
+	padding:0px;
+}
+
+.video_list li{
+	display:inline;
+	list-style: none;
+}
 h1 {
   color: #434a54;
   font-size: 32px;
@@ -41,7 +53,7 @@ h1 {
 }
 h3 {
   border-bottom: 1px solid #ddd;
-  color: #aaa;
+  color: #ef626c;
   margin-bottom: 30px;
   margin-top: 30px;
   padding-top: 0px;
@@ -74,6 +86,17 @@ h4.subheadline {
 }
 label {
   display: block;
+}
+label span {
+  color: #ef626c;
+  font-size:18px;
+  font-weight:800;
+}
+.form-check-label {
+  text-align: right;
+}
+.form-check-label input {
+  margin-right:15px;
 }
 /* Place Holder CSS */
 ::-webkit-input-placeholder {
@@ -137,7 +160,7 @@ label {
   width: auto;
 }
 .navbar-default {
-  background: #303641;
+  background: #000;
   border-bottom: 0px;
   margin-bottom: 0px;
   z-index: 999999;
@@ -468,7 +491,7 @@ li.login-desktop a {
 #home-hero .container.home-titles {
   text-align: center;
   position: absolute;
-  top: 50%;
+  top: 58%;
   width: 100%;
   height: 260px;
   display: block;
@@ -481,7 +504,7 @@ li.login-desktop a {
   margin-top: 0px;
   font-size: 50px;
   text-shadow: 0px 0px 15px #434A54;
-  font-weight: lighter;
+  font-weight: 600;
   padding-bottom: 0px;
   text-shadow: 0px 0px 30px rgba(255, 255, 255, 0.4);
 }
@@ -491,11 +514,12 @@ li.login-desktop a {
   color: #ddd;
 }
 #home-hero button {
-  padding: 25px 40px;
+  padding: 20px 25px;
   font-size: 20px;
-  border-radius: 50px;
+  border-radius: 10px;
   border: 0px;
-  background: #ef626c;
+  color:#333;
+  background: #fff !important;
   outline: none;
 }
 #home-hero button:hover {
@@ -618,7 +642,7 @@ ul.invoices li span.amount {
   z-index: 99;
 }
 #video_bg {
-  background-color: #000000;
+  background-color: #303636;
   width: 100%;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -629,13 +653,17 @@ ul.invoices li span.amount {
 }
 .video-details h3 {
   position: relative;
+  color: #fff;
 }
 .video-details h3 span {
   position: absolute;
   right: 130px;
   top: 5px;
-  color: #99999f;
+  color: #fff;
   font-size: 14px;
+}
+.video-details-container p {
+  color:#f1f1f1 !important;
 }
 #video_player {
   z-index: 999;
@@ -646,6 +674,7 @@ h2#tags {
   font-size: 18px;
   padding: 20px 0px;
   padding-bottom: 10px;
+  color:#fff;
 }
 #subscribers_only {
   position: relative;
@@ -1260,9 +1289,33 @@ form.search .form-search .fa {
   background: #ef626c;
   border-color: #ef626c;
 }
+.border-between > [class*='col-']:before {
+   background: #ccc;
+   bottom: 0;
+   content: " ";
+   left: 0;
+   position: absolute;
+   width: 1px;
+   top: 0;
+}
+
+.border-between > [class*='col-']:first-child:before {
+   display: none;
+}
 /********** END BILLING FORM **********/
 #signup-form .demo-info p {
   text-align: left;
+}
+.panel {
+  border: #999 !important;
+}
+.panel-heading {
+  background: #999 !important;
+  border-color: none;
+  border-bottom: 0px;
+  color: #fff;
+  padding: 20px;
+  font-size:18px;
 }
 .demo-info {
   margin-top: 20px;
@@ -1339,6 +1392,7 @@ form.search .form-search .fa {
 }
 #social_share p {
   margin-bottom: 8px;
+  color:#fff;
 }
 .rrssb-buttons li:first-child {
   margin-left: 0px;
@@ -1667,6 +1721,8 @@ Navbar Toggle
   }
   .video-details-container {
     overflow-x: scroll;
+  }
+  .video-details-container p {
   }
   #video_container {
     padding-bottom: 62%;

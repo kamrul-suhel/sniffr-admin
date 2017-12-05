@@ -13,11 +13,11 @@
 		<div class="block-contents">
 			<p class="date"><?= date("F jS, Y", strtotime($video->created_at)); ?>
 				<?php if($video->access == 'guest'): ?>
-					<span class="label label-info">Free</span>
+					<span class="label label-info">Royalty Free</span>
 				<?php elseif($video->access == 'subscriber'): ?>
-					<span class="label label-success">Subscribers Only</span>
+					<span class="label label-success">Licensed</span>
 				<?php elseif($video->access == 'registered'): ?>
-					<span class="label label-warning">Registered Users</span>
+					<span class="label label-warning">Licensed</span>
 				<?php endif; ?>
 			</p>
 			<p class="desc"><?php if(strlen($video->description) > 90){ echo substr($video->description, 0, 90) . '...'; } else { echo $video->description; } ?></p>
