@@ -104,6 +104,8 @@ class AdminVideosController extends Controller {
             // Send Rejected Email
             Mail::to($video->contact->email)->send(new SubmissionRejected($video));
         }else if($video->state == 'licensed'){
+            $video->licensed_at = now();
+
             // Make youtube video public
             if($video->youtube_id){
                 MyYoutube::updatePrivacy($video->youtube_id);

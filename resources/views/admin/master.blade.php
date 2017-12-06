@@ -60,13 +60,9 @@
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
-
 	<div class="sidebar-menu page-right-in">
-
 		<div class="sidebar-menu-inner">
-
 			<header class="logo-env">
-
 				<!-- logo -->
 				<div class="logo">
 					<a href="{{ URL::to('/') }}">
@@ -81,16 +77,13 @@
 					</a>
 				</div>
 
-
 				<!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
 				<div class="sidebar-mobile-menu visible-xs">
 					<a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
 						<i class="entypo-menu"></i>
 					</a>
 				</div>
-
 			</header>
-
 
 			<ul id="main-menu" class="main-menu">
 				<!-- add class "multiple-expanded" to allow multiple submenus to open -->
@@ -101,17 +94,13 @@
 						<span class="title">Dashboard</span>
 					</a>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/videos') }}">
 						<i class="entypo-video"></i>
 						<span class="title">Videos</span>
 					</a>
 					<ul>
-						<li>
-							<a href="{{ URL::to('admin/videos') }}">
-								<span class="title">All Videos</span>
-							</a>
-						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/new') }}">
 								<span class="title">New Videos</span>
@@ -159,6 +148,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/pages') }}">
 						<i class="entypo-book-open"></i>
@@ -192,18 +182,21 @@
 						</li>
 					</ul>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/media') }}">
 						<i class="entypo-picture"></i>
 						<span class="title">Media</span>
 					</a>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/menu') }}">
 						<i class="entypo-list"></i>
 						<span class="title">Menu</span>
 					</a>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/users') }}">
 						<i class="entypo-users"></i>
@@ -222,6 +215,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/contacts') }}">
 						<i class="entypo-user-add"></i>
@@ -240,6 +234,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/clients') }}">
 						<i class="entypo-user"></i>
@@ -258,6 +253,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li class="">
 					<a href="{{ URL::to('admin/campaigns') }}">
 						<i class="entypo-list"></i>
@@ -293,6 +289,7 @@
 						</li>
 	            	</ul>
 				</li> -->
+
 				<li class="">
 					<a href="{{ URL::to('admin/settings') }}">
 						<i class="entypo-cog"></i>
@@ -316,36 +313,26 @@
 						</li>
 					</ul>
 				</li>
-
-
 			</ul>
-
 		</div>
-
 	</div>
 
 	<div class="main-content">
-
 		<div class="row">
-
 			<!-- Profile Info and Notifications -->
 			<div class="col-md-6 col-sm-8 clearfix">
-
 				<ul class="user-info pull-left pull-none-xsm">
 					<!-- Profile Info -->
 					<li class="profile"><!-- add class "pull-right" if you want to place this from right -->
-							<img src="{{ Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar }}" alt="" class="img-circle" width="26" />
-							<span>Howdy, {{ ucfirst(Auth::user()->username) }}</span>
+						<img src="{{ Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar }}" alt="" class="img-circle" width="26" />
+						<span>Howdy, {{ ucfirst(Auth::user()->username) }}</span>
 					</li>
 				</ul>
 			</div>
 
-
 			<!-- Raw Links -->
 			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
-
 				<ul class="list-inline links-list pull-right">
-
 					<!-- <li>
 						<a href="{{ URL::to('/') }}">
 							<span class="label label-warning" style="font-size:12px; background:#A8D432">Version 1.1.1</span>
@@ -360,183 +347,172 @@
 						</a>
 					</li>
 				</ul>
-
 			</div>
-
 		</div>
 
 		<hr />
 
 		<div id="main-admin-content">
-
 			@yield('content')
-
 		</div>
 
 		<!-- Footer -->
 		<footer class="main">
-
 			&copy; 2017 <strong>Unilad</strong> Video Licensing Platform
-
 		</footer>
 	</div>
-
-
 </div>
 
-	<!-- Sample Modal (Default skin) -->
-	<div class="modal fade" id="sample-modal-dialog-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
+<!-- Sample Modal (Default skin) -->
+<div class="modal fade" id="sample-modal-dialog-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Widget Options - Default Modal</h4>
+			</div>
 
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Widget Options - Default Modal</h4>
-				</div>
+			<div class="modal-body">
+				<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
+			</div>
 
-				<div class="modal-body">
-					<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- Sample Modal (Skin inverted) -->
-	<div class="modal invert fade" id="sample-modal-dialog-2">
-		<div class="modal-dialog">
-			<div class="modal-content">
+<!-- Sample Modal (Skin inverted) -->
+<div class="modal invert fade" id="sample-modal-dialog-2">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Widget Options - Inverted Skin Modal</h4>
+			</div>
 
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Widget Options - Inverted Skin Modal</h4>
-				</div>
+			<div class="modal-body">
+				<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
+			</div>
 
-				<div class="modal-body">
-					<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- Sample Modal (Skin gray) -->
-	<div class="modal gray fade" id="sample-modal-dialog-3">
-		<div class="modal-dialog">
-			<div class="modal-content">
+<!-- Sample Modal (Skin gray) -->
+<div class="modal gray fade" id="sample-modal-dialog-3">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Widget Options - Gray Skin Modal</h4>
+			</div>
 
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Widget Options - Gray Skin Modal</h4>
-				</div>
+			<div class="modal-body">
+				<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
+			</div>
 
-				<div class="modal-body">
-					<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
+</div>
 
 
 
 
-	<!-- Imported styles on this page -->
-	<link rel="stylesheet" href="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-1.2.2.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/js/rickshaw/rickshaw.min.css' }}">
+<!-- Imported styles on this page -->
+<link rel="stylesheet" href="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-1.2.2.css' }}">
+<link rel="stylesheet" href="{{ '/application/assets/admin/js/rickshaw/rickshaw.min.css' }}">
 
-	<!-- Bottom scripts (common) -->
-	<script src="{{ '/application/assets/admin/js/gsap/main-gsap.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/bootstrap.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/joinable.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/resizeable.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-1.2.2.min.js' }}"></script>
-
-
-	<!-- Imported scripts on this page -->
-	<script src="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-europe-merc-en.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/jquery.sparkline.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/rickshaw/vendor/d3.v3.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/rickshaw/rickshaw.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/raphael-min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/morris.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/toastr.js' }}"></script>
+<!-- Bottom scripts (common) -->
+<script src="{{ '/application/assets/admin/js/gsap/main-gsap.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/bootstrap.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/joinable.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/resizeable.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-1.2.2.min.js' }}"></script>
 
 
-	<!-- JavaScripts initializations and stuff -->
-	<script src="{{ '/application/assets/admin/js/custom.js' }}"></script>
+<!-- Imported scripts on this page -->
+<script src="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-europe-merc-en.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/jquery.sparkline.min.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/rickshaw/vendor/d3.v3.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/rickshaw/rickshaw.min.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/raphael-min.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/morris.min.js' }}"></script>
+<script src="{{ '/application/assets/admin/js/toastr.js' }}"></script>
 
 
-	<!-- Demo Settings -->
-	<script src="{{ '/application/assets/admin/js/main.js' }}"></script>
+<!-- JavaScripts initializations and stuff -->
+<script src="{{ '/application/assets/admin/js/custom.js' }}"></script>
 
-	<!-- Notifications -->
-	<script>
-		var opts = {
-			"closeButton": true,
-			"debug": false,
-			"positionClass": "toast-top-right",
-			"onclick": null,
-			"showDuration": "300",
-			"hideDuration": "1000",
-			"timeOut": "5000",
-			"extendedTimeOut": "1000",
-			"showEasing": "swing",
-			"hideEasing": "linear",
-			"showMethod": "fadeIn",
-			"hideMethod": "fadeOut"
-		};
 
-		<?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
+<!-- Demo Settings -->
+<script src="{{ '/application/assets/admin/js/main.js' }}"></script>
 
-	        if('<?= Session::get("note_type") ?>' == 'success'){
-	        	toastr.success('<?= Session::get("note") ?>', "Sweet Success!", opts);
-	        } else if('<?= Session::get("note_type") ?>' == 'error'){
-	        	toastr.error('<?= Session::get("note") ?>', "Whoops!", opts);
-	        }
-	        <?php Session::forget('note');
-	              Session::forget('note_type');
-	        ?>
-	    <?php endif; ?>
+<!-- Notifications -->
+<script>
+	var opts = {
+		"closeButton": true,
+		"debug": false,
+		"positionClass": "toast-top-right",
+		"onclick": null,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	};
 
-	    function display_mobile_menu(){
-	    	if($(window).width() < 768){
-	    		$('.sidebar-collapsed').removeClass('sidebar-collapsed');
-	    	}
-	    }
+	<?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
 
-	    $(document).ready(function(){
-	    	display_mobile_menu();
-	    });
+        if('<?= Session::get("note_type") ?>' == 'success'){
+        	toastr.success('<?= Session::get("note") ?>', "Sweet Success!", opts);
+        } else if('<?= Session::get("note_type") ?>' == 'error'){
+        	toastr.error('<?= Session::get("note") ?>', "Whoops!", opts);
+        }
+        <?php Session::forget('note');
+              Session::forget('note_type');
+        ?>
+    <?php endif; ?>
 
-	</script>
-	<!-- End Notifications -->
+    function display_mobile_menu(){
+    	if($(window).width() < 768){
+    		$('.sidebar-collapsed').removeClass('sidebar-collapsed');
+    	}
+    }
 
-	<!-- Tracking -->
-	<script>(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s); js.id = id;
-		js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504';
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-	<!-- End Notifications -->
+    $(document).ready(function(){
+    	display_mobile_menu();
+    });
 
-	@yield('javascript')
-	@yield('javascript-videojs')
+</script>
+<!-- End Notifications -->
+
+<!-- Tracking -->
+<script>(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504';
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- End Notifications -->
+
+@yield('javascript')
+@yield('javascript-videojs')
 
 </body>
 </html>

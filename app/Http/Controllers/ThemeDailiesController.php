@@ -29,10 +29,9 @@ class ThemeDailiesController extends Controller {
 			}
 
 			if($user->role == 'client'){
-
 				$videos = Video::whereHas('campaigns', function ($q){
 					$q->where('id', 2);
-				})->paginate(12);
+				})->orderBy('licensed_at', 'desc')->paginate(12);
 			}else{
 				$favorites = Video::where('user_id', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
@@ -45,6 +44,7 @@ class ThemeDailiesController extends Controller {
 			}
 
 	        $data = array(
+	        	'day_sort' => true,
 	            'videos' => $videos,
 	            'page_title' => ucfirst(Auth::user()->username) . '\'s Daily Videos',
 	            'current_page' => $page,
