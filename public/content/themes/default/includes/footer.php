@@ -99,9 +99,13 @@
 	    });
 
 			//js form validations
+			// jQuery.validator.setDefaults({
+			//   debug: true,
+			//   success: 'valid'
+			// });
 			$('#upload-form').validate({
 				groups: {  // consolidate messages into one
-					names: "file url"
+					names: 'file url'
 				},
 				rules: {
 					first_name: {
@@ -118,10 +122,10 @@
 	        	required: true
 	        },
 					file: {
-						require_from_group: [1, ".files"]
+						require_from_group: [1, '.files']
 					},
 					url: {
-						require_from_group: [1, ".files"]
+						require_from_group: [1, '.files']
 					},
 					terms: {
 						required: true
@@ -143,74 +147,36 @@
 				}
 			});
 
-			//js form validations
-			$('#upload-form').validate({
-				groups: {  // consolidate messages into one
-					names: "file url"
-				},
-				rules: {
-					first_name: {
-	        	required: true
-	        },
-					last_name: {
-	        	required: true
-	        },
-					email: {
-	        	required: true,
-						email: true
-	        },
-					title: {
-	        	required: true
-	        },
-					file: {
-						require_from_group: [1, ".files"]
-					},
-					url: {
-						require_from_group: [1, ".files"]
-					},
-					terms: {
-						required: true
-					}
-				},
-				messages: {
-	        first_name: 'You must enter your first name',
-					last_name: 'You must enter your last name (surname)',
-					email: 'You must enter your email address',
-					title: 'You must enter your video title',
-					terms: 'You must check the box agreeing to our terms'
-		    },
-				errorPlacement: function (error, element) {
-					if (element.is('#file')||element.is('#url')) {
-							$('#video-error').css('display','block');
-					} else {
-							error.insertAfter(element);
-					}
-				}
-			});
-
-			// $('#video-submit').off('click').on('click', function () {
-			// 		$('#upload-form').valid();
+			// $('#video-submit').on('click',function(){
+      //
+			// 	alert('sdfdsf');
+      //
 			// });
 
 			//file upload progress etc
 	    $('#upload-form').fileupload({
 	      dataType: 'json',
+				autoUpload: false,
+				replaceFileInput: false,
+				sequentialUploads: true,
 				add: function (e, data) {
-	        $("#video-submit").off('click').on('click', function () {
-	            data.submit();
+	        $('#video-submit').off('click').on('click', function () {
+						if($('#upload-form').valid()) {
+							data.submit();
+						}
 	        });
 		    },
-				// submit: function (e, data) {
-        //
-				// },
+				submit: function (e, data) {
+
+				},
 				progress: function (e, data) {
-					$('.progress_output').css('display','block');
-					$('.progress_output').html('Submitting your video..');
 	        var progress = parseInt(data.loaded / data.total * 100, 10);
 	        $('#progress .bar').css(
 	            'width',
 	            progress + '%'
 	        );
+					$('.progress_output').css('display','block');
+					$('.progress_output').html('Submitting your video.. '+data.loaded);
 		    },
 	      done: function (e, data) {
 					$('.progress_output').html(data.result.status);
@@ -245,8 +211,6 @@
 				$('#video-error').css('display','none');
 				$('#file').css('color','#333');
 			});
-
-
 
 	  });
 
