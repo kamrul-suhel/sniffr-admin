@@ -72,8 +72,12 @@
 											<div class="circle-file circle-shaded"></div>
 										</div>
 										<label for="file">Video File</label>
-										<input class="files" type="file" id="file" name="file" value="<?php echo old('file'); ?>" />
-										<br />
+										<span class="btn btn-success fileinput-button">
+							        <i class="fa fa-plus"></i>
+							        <span>Add file...</span>
+							        <!-- The file input field used as target for the file upload widget -->
+							        <input class="files" type="file" id="file" name="file" data-url="/upload" value="<?php echo old('file'); ?>" />
+								    </span>
 									</div>
 
 								</div>
@@ -84,14 +88,14 @@
 										<div class="radio pull-right">
 											<div class="circle-url circle-unshaded"></div>
 										</div>
-										<label for="url">Video Url</label>
+										<label for="url">Video Link</label>
 										<input class="form-control files" type="text" id="url" name="url" value="<?php echo old('url'); ?>" placeholder="https://www.youtube.com/watch?v=q4cjNYGUaoA">
 									</div>
 
 								</div>
 
 								<div class="col-md-12">
-									<div id="video-error" style="display:none;">Either a video file or video url is required.</div>
+									<div id="video-error" style="display:none;">Either a video file or video link is required.</div>
 								</div>
 
 							</div>
@@ -114,9 +118,12 @@
 								<label class="form-check-label" for="terms"><input id="terms" name="terms" type="checkbox" value="1">I agree to the <a href="">terms and conditions</a></label>
 						</div>
 
-						<hr />
+						<div class="progress_output"></div>
+						<div id="progress">
+							<div class="bar" style="width: 0%;"></div>
+						</div>
 
-						<input type="submit" value="Submit your video" class="btn btn-primary">
+						<a id="video-submit" class="btn btn-primary pull-right">Submit your video</a>
 
 					</div>
 

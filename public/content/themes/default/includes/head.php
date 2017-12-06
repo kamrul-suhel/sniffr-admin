@@ -93,6 +93,8 @@
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/style.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/rrssb.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/animate.min.css'; ?>" />
+<link rel="stylesheet" href="<?= THEME_URL . '/assets/css/jquery.fileupload.css'; ?>" />
+<link rel="stylesheet" href="<?= THEME_URL . '/assets/css/jquery.fileupload-ui.css'; ?>" />
 <style type="text/css"><?= dynamic_styles($theme_settings); ?></style>
 <style type="text/css"><?= \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->custom_css, '') ?></style>
 <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>

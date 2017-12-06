@@ -160,6 +160,31 @@ input[type="radio"]:checked:before {
   font-weight:bold;
   text-align:center;
 }
+.fileinput-button {
+  margin-top:15px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  background: #333;
+  border: #333 solid 1px;
+}
+.fileinput-button:hover {
+  background: #333;
+  border: #333 solid 1px;
+  opacity:0.7;
+}
+.progress_output {
+  display:none;
+  color:#ef626c;
+  font-size:14px;
+  font-weight:bold;
+}
+.bar {
+  margin-bottom: 5px;
+  height: 10px;
+  border-radius: 4px;
+  background: #333;
+}
 /* Place Holder CSS */
 ::-webkit-input-placeholder {
   color: #000;

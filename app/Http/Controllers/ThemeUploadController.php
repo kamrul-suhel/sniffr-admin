@@ -70,33 +70,52 @@ class ThemeUploadController extends Controller {
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(Input::all(), $this->rules);
-
-        if ($validator->fails())
-        {
-            return Redirect::back()
-                ->withErrors($validator)
-                ->withInput();
+        //detect if was JSON or normal request and assign/redirect accordingly
+        header('Vary: Accept');
+        if (isset($_SERVER['HTTP_ACCEPT']) &&
+            (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+            //header('Content-type: application/json');
+            $responseType = 'json';
+        } else {
+            //header('Content-type: text/plain');
+            $responseType = 'html';
         }
 
-        $filePath = $fileMimeType = '';
+        //validate the request
+        $validator = Validator::make(Input::all(), $this->rules);
+        if ($validator->fails())
+        {
+          if($responseType='json') {
+            return response()->json(['status' => 'error']);
+          } else {
+            return Redirect::back()
+              ->withErrors($validator)
+              ->withInput();
+          }
+        }
+
+        //get additional form data
         $contact = Contact::where('email',Input::get('email'))->first();
-        // Contact exists
+        //if contact exists
         if(!$contact){
             $contact = new Contact();
             $contact->first_name = Input::get('first_name');
             $contact->last_name = Input::get('last_name');
             $contact->email = Input::get('email');
             $contact->save();
-        }   
+        }
 
+        //handle file upload to S3 and Youtube ingestion
+        $filePath = $fileMimeType = '';
         if($request->hasFile('file')){
+
             $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
 
             $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
 
             $file = $request->file('file');
             $fileMimeType = $file->getMimeType();
+            $fileSize = $file->getClientSize();
 
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
@@ -106,11 +125,12 @@ class ThemeUploadController extends Controller {
             $video = MyYoutube::upload($file, ['title' => Input::get('title')], 'unlisted');
             $youtubeId  = $video->getVideoId();
         }else{
-            return Redirect::back()
-                ->withErrors(array('message' => 'There was a problem uploading the file.'))
-                ->withInput();
+            // return Redirect::back()
+            //     ->withErrors(array('message' => 'There was a problem uploading the file.'))
+            //     ->withInput();
         }
-           
+
+        //add additional form data to db (with video file info)
         $video = new Video();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title');
@@ -128,6 +148,12 @@ class ThemeUploadController extends Controller {
         // Send thanks notification
         Mail::to($contact->email)->send(new SubmissionThanks($video));
 
-        return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+        //dd($request);
+
+        if($responseType='json') {
+          return response()->json(['status' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+        } else {
+          return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+        }
     }
 }

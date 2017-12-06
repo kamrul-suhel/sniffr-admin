@@ -48,8 +48,12 @@
 
   <script type="text/javascript" src="<?= THEME_URL . '/assets/js/bootstrap.min.js'; ?>"></script>
   <script type="text/javascript" src="<?= THEME_URL . '/assets/js/moment.min.js'; ?>"></script>
+	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.validate.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/additional-methods.min.js'; ?>"></script>
+	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.ui.widget.js'; ?>"></script>
+	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.iframe-transport.js'; ?>"></script>
+	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.fileupload.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/jquery.noty.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/themes/default.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/layouts/top.js'; ?>"></script>
@@ -58,6 +62,7 @@
 
 	  $('document').ready(function(){
 
+				//previous code for right side admin dropdown (if logged in)
 		    $('.dropdown').hover(function(){
 		        $(this).addClass('open');
 		    }, function(){
@@ -71,6 +76,7 @@
 	        ?>
 	    <?php endif; ?>
 
+			//previous code so looks like something for nav menu
 	    $('#nav-toggle').click(function(){
 	    	$(this).toggleClass('active');
 	    	$('.navbar-collapse').toggle();
@@ -92,32 +98,49 @@
 
 	    });
 
-			// make video url or file area shaded/unshaded
-			$('#make-shaded-url').on('click', function() {
-				$('#make-shaded-file').removeClass('shaded');
-				$('#make-shaded-file').addClass('unshaded');
-				$('#make-shaded-url').removeClass('unshaded');
-		    $('#make-shaded-url').addClass('shaded');
-				$('.circle-url').removeClass('circle-unshaded');
-				$('.circle-url').addClass('circle-shaded');
-				$('.circle-file').removeClass('circle-shaded');
-				$('.circle-file').addClass('circle-unshaded');
-			});
-
-			$('#make-shaded-file').on('click', function() {
-				$('#make-shaded-url').removeClass('shaded');
-				$('#make-shaded-url').addClass('unshaded');
-				$('#make-shaded-file').removeClass('unshaded');
-		    $('#make-shaded-file').addClass('shaded');
-				$('.circle-file').removeClass('circle-unshaded');
-				$('.circle-file').addClass('circle-shaded');
-				$('.circle-url').removeClass('circle-shaded');
-				$('.circle-url').addClass('circle-unshaded');
-			});
-
-			$('#file, #url').on('change', function() {
-				$('#video-error').css('display','none');
-				$('#file').css('color','#333');
+			//js form validations
+			$('#upload-form').validate({
+				groups: {  // consolidate messages into one
+					names: "file url"
+				},
+				rules: {
+					first_name: {
+	        	required: true
+	        },
+					last_name: {
+	        	required: true
+	        },
+					email: {
+	        	required: true,
+						email: true
+	        },
+					title: {
+	        	required: true
+	        },
+					file: {
+						require_from_group: [1, ".files"]
+					},
+					url: {
+						require_from_group: [1, ".files"]
+					},
+					terms: {
+						required: true
+					}
+				},
+				messages: {
+	        first_name: 'You must enter your first name',
+					last_name: 'You must enter your last name (surname)',
+					email: 'You must enter your email address',
+					title: 'You must enter your video title',
+					terms: 'You must check the box agreeing to our terms'
+		    },
+				errorPlacement: function (error, element) {
+					if (element.is('#file')||element.is('#url')) {
+							$('#video-error').css('display','block');
+					} else {
+							error.insertAfter(element);
+					}
+				}
 			});
 
 			//js form validations
@@ -163,10 +186,67 @@
 							error.insertAfter(element);
 					}
 				}
-				// submitHandler: function(form) {
-				// 	form.submit();
-				// }
 			});
+
+			// $('#video-submit').off('click').on('click', function () {
+			// 		$('#upload-form').valid();
+			// });
+
+			//file upload progress etc
+	    $('#upload-form').fileupload({
+	      dataType: 'json',
+				add: function (e, data) {
+	        $("#video-submit").off('click').on('click', function () {
+	            data.submit();
+	        });
+		    },
+				// submit: function (e, data) {
+        //
+				// },
+				progress: function (e, data) {
+					$('.progress_output').css('display','block');
+					$('.progress_output').html('Submitting your video..');
+	        var progress = parseInt(data.loaded / data.total * 100, 10);
+	        $('#progress .bar').css(
+	            'width',
+	            progress + '%'
+	        );
+		    },
+	      done: function (e, data) {
+					$('.progress_output').html(data.result.status);
+					//JSON.stringify(data.result)
+	      }
+	    });
+
+			// make video url or file area shaded/unshaded
+			$('#make-shaded-url').on('click', function() {
+				$('#make-shaded-file').removeClass('shaded');
+				$('#make-shaded-file').addClass('unshaded');
+				$('#make-shaded-url').removeClass('unshaded');
+		    $('#make-shaded-url').addClass('shaded');
+				$('.circle-url').removeClass('circle-unshaded');
+				$('.circle-url').addClass('circle-shaded');
+				$('.circle-file').removeClass('circle-shaded');
+				$('.circle-file').addClass('circle-unshaded');
+			});
+
+			$('#make-shaded-file').on('click', function() {
+				$('#make-shaded-url').removeClass('shaded');
+				$('#make-shaded-url').addClass('unshaded');
+				$('#make-shaded-file').removeClass('unshaded');
+		    $('#make-shaded-file').addClass('shaded');
+				$('.circle-file').removeClass('circle-unshaded');
+				$('.circle-file').addClass('circle-shaded');
+				$('.circle-url').removeClass('circle-shaded');
+				$('.circle-url').addClass('circle-unshaded');
+			});
+
+			$('#file, #url').on('change', function() {
+				$('#video-error').css('display','none');
+				$('#file').css('color','#333');
+			});
+
+
 
 	  });
 
