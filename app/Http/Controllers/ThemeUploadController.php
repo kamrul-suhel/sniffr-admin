@@ -35,7 +35,7 @@ class ThemeUploadController extends Controller {
         'last_name' => 'required',
         'email' => 'required|email',
         // 'url' => 'required_without_all:url,file',
-        'file' => 'mimes:jpeg,jpg,png,gif,flv,ogg,mp4,qt,avi,wmv,m4v,webm|max:200000',
+        'file' => 'mimes:flv,ogg,mp4,qt,avi,wmv,m4v,webm|max:200000',
         // 'terms' => 'required'
     ];
 
@@ -70,28 +70,19 @@ class ThemeUploadController extends Controller {
      */
     public function store(Request $request)
     {
-        //detect if was JSON or normal request and assign/redirect accordingly
-        header('Vary: Accept');
-        if (isset($_SERVER['HTTP_ACCEPT']) &&
-            (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
-            //header('Content-type: application/json');
-            $responseType = 'json';
-        } else {
-            //header('Content-type: text/plain');
-            $responseType = 'html';
-        }
+        $isJson = $request->ajax();
 
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
         if ($validator->fails())
         {
-          if($responseType='json') {
-            return response()->json(['status' => 'error']);
-          } else {
-            return Redirect::back()
-              ->withErrors($validator)
-              ->withInput();
-          }
+            if($isJson) {
+                return response()->json(['status' => 'error']);
+            } else {
+                return Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
         }
 
         //get additional form data
@@ -106,7 +97,7 @@ class ThemeUploadController extends Controller {
         }
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileMimeType = '';
+        $filePath = $fileMimeType = $youtubeId = '';
         if($request->hasFile('file')){
 
             $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
@@ -125,9 +116,13 @@ class ThemeUploadController extends Controller {
             $video = MyYoutube::upload($file, ['title' => Input::get('title')], 'unlisted');
             $youtubeId  = $video->getVideoId();
         }else{
-            // return Redirect::back()
-            //     ->withErrors(array('message' => 'There was a problem uploading the file.'))
-            //     ->withInput();
+            if($isJson) {
+              return response()->json(['status' => 'fail', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+            } else {
+              return Redirect::back()
+                ->withErrors(array('message' => 'There was a problem uploading the file.'))
+                ->withInput();
+            }
         }
 
         //add additional form data to db (with video file info)
@@ -150,10 +145,10 @@ class ThemeUploadController extends Controller {
 
         //dd($request);
 
-        if($responseType='json') {
-          return response()->json(['status' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+        if($isJson) {
+            return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
-          return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
         }
     }
 }

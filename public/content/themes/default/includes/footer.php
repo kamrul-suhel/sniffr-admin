@@ -1,7 +1,6 @@
 
 	<footer>
 		<div class="container">
-
 			<div class="row">
 				<div class="col-md-4">
 					<h3><?php echo $settings->website_name; ?></h3>
@@ -12,6 +11,7 @@
 					<?php if($settings->youtube_page_id): ?><a href="http://youtube.com/<?php echo $settings->youtube_page_id; ?>" target="_blank" class="youtube social-link"><i class="fa fa-youtube"></i></a><?php endif; ?>
 					<div class="clear"></div>
 				</div>
+
 				<div class="col-md-3">
 					<h4>Video Categories</h3>
 					<ul>
@@ -20,6 +20,7 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
+
 				<div class="col-md-3">
 					<h4>Post Categories</h3>
 					<ul>
@@ -28,6 +29,7 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
+
 				<div class="col-md-2">
 					<h4>Links</h3>
 					<ul>
@@ -42,7 +44,6 @@
 
 			<hr />
 			<p class="copyright">Copyright &copy; <?= date('Y'); ?> <?= $settings->website_name; ?></p>
-
 		</div>
 	</footer>
 
@@ -60,27 +61,27 @@
 
 	<script type="text/javascript">
 
-	  $('document').ready(function(){
-
+	$('document').ready(function(){
 		//previous code for right side admin dropdown (if logged in)
-	    $('.dropdown').hover(function(){
-	        $(this).addClass('open');
-	    }, function(){
-	        $(this).removeClass('open');
-	    });
+		$('.dropdown').hover(function(){
+			$(this).addClass('open');
+		}, function(){
+			$(this).removeClass('open');
+		});
 
 	    <?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
-	        var n = noty({text: '<?= str_replace("'", "\\'", Session::get("note")) ?>', layout: 'top', type: '<?= Session::get("note_type") ?>', template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>', closeWith: ['button'], timeout:1600 });
-	        <?php Session::forget('note');
-	              Session::forget('note_type');
+			var n = noty({text: '<?= str_replace("'", "\\'", Session::get("note")) ?>', layout: 'top', type: '<?= Session::get("note_type") ?>', template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>', closeWith: ['button'], timeout:1600 });
+	        <?php 
+	        	Session::forget('note');
+				Session::forget('note_type');
 	        ?>
 	    <?php endif; ?>
 
 		//previous code so looks like something for nav menu
 	    $('#nav-toggle').click(function(){
-	    	$(this).toggleClass('active');
-	    	$('.navbar-collapse').toggle();
-	    	$('body').toggleClass('nav-open');
+			$(this).toggleClass('active');
+			$('.navbar-collapse').toggle();
+			$('body').toggleClass('nav-open');
 	    });
 
 	    $('#mobile-subnav').click(function(){
@@ -95,7 +96,6 @@
 	    		});
 	    		$(this).html('<i class="fa fa-close"></i> Close Submenu');
 	    	}
-
 	    });
 
 		//js form validations
@@ -122,10 +122,12 @@
         			required: true
         		},
 				file: {
-					require_from_group: [1, '.files']
+					require_from_group: [1, '.files'],
+					extension: "flv|ogg|mp4|qt|avi|wmv|m4v|webm"
 				},
 				url: {
-					require_from_group: [1, '.files']
+					require_from_group: [1, '.files'],
+					url: true
 				},
 				terms: {
 					required: true
@@ -134,24 +136,29 @@
 			messages: {
         		first_name: 'You must enter your first name',
 				last_name: 'You must enter your last name (surname)',
-				email: 'You must enter your email address',
+				email: 'You must enter a valid email address',
 				title: 'You must enter your video title',
 				terms: 'You must check the box agreeing to our terms'
 	    	},
 			errorPlacement: function (error, element) {
-				if (element.is('#file')||element.is('#url')) {
-						$('#video-error').css('display','block');
+				if (element.is('#file') || element.is('#url')) {
+					$('#video-error').css('display','block');
+					if($('#file').val()){
+						$('#video-error').text('The file must be a valid video file: flv,ogg,mp4,qt,avi,wmv,m4v,webm');
+					}else{
+						$('#video-error').text('Either a video file or video url is required');
+					}
+					
 				} else {
-						error.insertAfter(element);
+					error.insertAfter(element);
 				}
 			}
 		});
 
-		// $('#video-submit').on('click',function(){
-        //
-		// 	alert('sdfdsf');
-        //
-		// });
+		$('#video-submit').on('click',function(){
+			var validator = $( "#upload-form" ).validate();
+			validator.form();
+		});
 
 		//file upload progress etc
 	    $('#upload-form').fileupload({
@@ -160,27 +167,26 @@
 			replaceFileInput: false,
 			sequentialUploads: true,
 			add: function (e, data) {
-		      	$('#video-submit').off('click').on('click', function () {
+		     	$('#video-submit').off('click').on('click', function () {
 					if($('#upload-form').valid()) {
 						data.submit();
 					}
-		        });
-		    },
-			// submit: function (e, data) {
-            //
-			// },
+		       });
+			},
 			progress: function (e, data) {
 		        var progress = parseInt(data.loaded / data.total * 100, 10);
-		        $('#progress .bar').css(
-		            'width',
-		            progress + '%'
-		        );
+		        $('#progress .bar').css('width', progress + '%');
 				$('.progress_output').css('display','block');
 				$('.progress_output').html('Submitting your video.. '+data.loaded);
 		    },
 			done: function (e, data) {
-					$('.progress_output').html(data.result.status);
-					//JSON.stringify(data.result)
+				if(data.result.status == 'success'){
+					// Add in redirect to thanks
+					$('.progress_output').html(data.result.message);
+				}else{
+					$('.progress_output').html(data.result.message);
+				}
+				
 			}
 	    });
 
@@ -211,55 +217,42 @@
 			$('#video-error').css('display','none');
 			$('#file').css('color','#333');
 		});
+	});
 
-	  });
+	/********** LOGIN MODAL FUNCTIONALITY **********/
+	var loginSignupModal = $('<div class="modal fade" id="loginSignupModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Login Below</h4></div><div class="modal-body"></div></div></div></div>');
 
-
-	  /********** LOGIN MODAL FUNCTIONALITY **********/
-
-	  var loginSignupModal = $('<div class="modal fade" id="loginSignupModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Login Below</h4></div><div class="modal-body"></div></div></div></div>');
-
-		$(document).ready(function(){
-
-			// Load the Modal Window for login signup when they are clicked
-			$('.login-desktop a').click(function(e){
-				e.preventDefault();
-				$('body').prepend(loginSignupModal);
-				$('#loginSignupModal .modal-body').load($(this).attr('href') + '?redirect=' + document.URL + ' .form-signin', function(){
-					$('#loginSignupModal').show(200, function(){
-						setTimeout(function() { $('#email').focus() }, 300);
-
-
-					});
-					$('#loginSignupModal').modal();
-
+	$(document).ready(function(){
+		// Load the Modal Window for login signup when they are clicked
+		$('.login-desktop a').click(function(e){
+			e.preventDefault();
+			$('body').prepend(loginSignupModal);
+			$('#loginSignupModal .modal-body').load($(this).attr('href') + '?redirect=' + document.URL + ' .form-signin', function(){
+				$('#loginSignupModal').show(200, function(){
+					setTimeout(function() { $('#email').focus() }, 300);
 				});
-
-				// Be sure to remove the modal from the DOM after it is closed
-				$('#loginSignupModal').on('hidden.bs.modal', function (e) {
-			    	$('#loginSignupModal').remove();
-				});
-
+				
+				$('#loginSignupModal').modal();
 			});
 
+			// Be sure to remove the modal from the DOM after it is closed
+			$('#loginSignupModal').on('hidden.bs.modal', function (e) {
+		    	$('#loginSignupModal').remove();
+			});
 		});
-
-		/********** END LOGIN MODAL FUNCTIONALITY **********/
-
+	});
+	/********** END LOGIN MODAL FUNCTIONALITY **********/
 	</script>
 
 	<?php if(isset($settings->google_tracking_id) && $settings->google_tracking_id != ''): ?>
-	  <script>
-	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	    ga('create', '<?= $settings->google_tracking_id ?>', 'auto');
-	    ga('send', 'pageview');
-	  </script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', '<?= $settings->google_tracking_id ?>', 'auto');
+		ga('send', 'pageview');
+	</script>
 	<?php endif; ?>
-
-	<script></script>
-
 </body>
 </html>

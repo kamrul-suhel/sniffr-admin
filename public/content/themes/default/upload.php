@@ -32,17 +32,17 @@
 
 							<div class="form-group">
 									<label for="first_name">First Name <span>*</span></label>
-									<input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo old('first_name'); ?>" >
+									<input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo 'Ian'; //old('first_name'); ?>" >
 							</div>
 
 							<div class="form-group">
 									<label for="last_name">Last Name <span>*</span></label>
-									<input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo old('last_name'); ?>" >
+									<input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo 'Lainchbury'; //old('last_name'); ?>" >
 							</div>
 
 							<div class="form-group">
 									<label for="tel">Email <span>*</span></label>
-									<input type="email" class="form-control" id="email" name="email" value="<?php echo old('email'); ?>" >
+									<input type="email" class="form-control" id="email" name="email" value="<?php echo 'test@example.com'; //old('email'); ?>" >
 							</div>
 
 						</div>
@@ -58,7 +58,7 @@
 
 							<div class="form-group">
 									<label for="title">Video Title <span>*</span></label>
-									<input type="text" class="form-control" id="title" name="title" value="<?php echo old('title'); ?>">
+									<input type="text" class="form-control" id="title" name="title" value="<?php echo 'The title'; //old('title'); ?>">
 							</div>
 
 							<p>Please use either send us your video link <strong>OR</strong> upload your video file below <span>*</span></p>
@@ -95,7 +95,7 @@
 								</div>
 
 								<div class="col-md-12">
-									<div id="video-error" style="display:none;">Either a video file or video link is required.</div>
+									<div id="video-error" style="display:none;"></div>
 								</div>
 
 							</div>
