@@ -43,7 +43,7 @@ trait ImageHandler {
 		if($video->youtube_id){
 			return 'https://img.youtube.com/vi/'.$video->youtube_id.'/mqdefault.jpg';
 		}elseif(str_contains($video->url, 'facebook')){
-			$bits = explode('/', rtrim($video->url,'/'));
+			$bits = explode('/', rtrim($video->url,'/	'));
 			return 'https://graph.facebook.com/'.end($bits).'/picture';
 		}elseif($video->image){
 			return ImageHandler::getImage($video->image, $size);

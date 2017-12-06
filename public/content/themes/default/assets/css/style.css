@@ -714,15 +714,13 @@ ul.invoices li span.amount {
   position: relative;
 }
 .video-details h3 {
+  line-height: 32px;
   position: relative;
   color: #fff;
 }
-.video-details h3 span {
-  position: absolute;
-  right: 130px;
-  top: 5px;
-  color: #fff;
+.video-details .view-count{
   font-size: 14px;
+  top: 3px;
 }
 .video-details-container p {
   color:#f1f1f1 !important;
@@ -800,9 +798,8 @@ h4.modal-title {
 }
 /********* FAVORITE STYLES **********/
 .favorite {
-  float: right;
   position: relative;
-  top: -5px;
+  margin-left: 10px;
   border: 0px;
 }
 .favorite i {
@@ -830,6 +827,15 @@ h4.modal-title {
   color: #444;
 }
 /********* END FAVORITE STYLES **********/
+
+/********* DOWNLOAD STYLES **********/
+.download {
+  position: relative;
+  margin-left: 10px;
+  border: 0px;
+}
+/********* END DOWNLOAD STYLES **********/
+
 .user-favorites {
   width: 200px;
   border-radius: 40px;
@@ -911,19 +917,8 @@ h4.modal-title {
   margin: 20px 0px;
   position: relative;
 }
-.block .block-contents p.date .label {
-  float: right;
-  position: absolute;
-  right: 0px;
-  top: -1px;
-}
-.block .block-contents p.date .label.label-info {
-  background: #C0C0C0;
-}
-.block .block-contents p.date .label.label-success {
-  background: #ef626c;
-}
 .block .block-contents p.desc {
+  padding: 10px 15px 0;
   color: #9a9a9a;
   clear: both;
   font-size: 14px;
@@ -942,6 +937,12 @@ h4.modal-title {
   position: relative;
   border-radius: 3px;
   display: block;
+}
+.block .block-thumbnail .label {
+  float: right;
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 .block a.block-thumbnail img {
   width: 100%;
