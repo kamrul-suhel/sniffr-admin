@@ -121,6 +121,9 @@ input[type="radio"]:checked:before {
     border:none;
     background: #ef626c;
 }
+#submitted_where_container {
+    display:none;
+}
 .circle-shaded {
   display: block;
   position: relative;

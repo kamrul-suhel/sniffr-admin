@@ -215,6 +215,15 @@
 			$('#video-error').css('display','none');
 			$('#file').css('color','#333');
 		});
+
+		//hide or show where video was uploaded submitted_elsewhere
+		$('input[name=submitted_elsewhere]').on('click', function() {
+			if($(this).val()=='yes') {
+				$('#submitted_where_container').show();
+			} else {
+				$('#submitted_where_container').hide();
+			}
+		});
 	});
 
 	/********** LOGIN MODAL FUNCTIONALITY **********/
