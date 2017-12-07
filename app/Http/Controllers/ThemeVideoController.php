@@ -43,7 +43,11 @@ class ThemeVideoController extends Controller {
      */
     public function index($id)
     {
-        $video = Video::where('state', 'licensed')->with('tags')->findOrFail($id);
+        if(Auth::guest()){
+            $video = Video::where('state', 'licensed')->with('tags')->findOrFail($id);
+        }else{
+            $video = Video::with('tags')->findOrFail($id);
+        }
 
         //Make sure video is active
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->active){

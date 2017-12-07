@@ -35,7 +35,7 @@ class ThemeUploadController extends Controller {
         'last_name' => 'required',
         'email' => 'required|email',
         // 'url' => 'required_without_all:url,file',
-        'file' => 'mimes:flv,ogg,mp4,qt,avi,wmv,m4v,webm|max:200000',
+        'file' => 'mimes:flv,ogg,mp4,qt,avi,wmv,m4v,mov,webm|max:200000',
         // 'terms' => 'required'
     ];
 
@@ -61,6 +61,16 @@ class ThemeUploadController extends Controller {
     public function index()
     {
         return view('Theme::upload', $this->data);
+    }
+
+    /**
+     * Display a listing of videos
+     *
+     * @return Response
+     */
+    public function thanks()
+    {
+        return view('Theme::thanks', $this->data);
     }
 
     /**

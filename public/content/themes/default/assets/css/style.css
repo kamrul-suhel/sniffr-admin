@@ -450,14 +450,12 @@ input[type="radio"]:checked:before {
   padding: 16px;
   padding-top: 17px;
   font-size: 16px;
-  font-weight: bold;
   border: 0px;
   background: #F9F9F9;
   width: 95%;
   background: transparent;
   border: none;
-  text-shadow: 0 0.1px 0.1px #A7B3C2;
-  color: #A7B3C2;
+  color: #999999;
 }
 .second-nav .navbar-search input:focus {
   outline: none;
