@@ -82,34 +82,14 @@
 
 	                    <div class="form-group form-radio">
 	                        <label class="form-radio-label" for="permission">Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</label>
-							<div class="pretty p-round p-jelly">
-						        <input type="radio" name="permission" value="yes">
-						        <div class="state p-danger">
-						            <label>Yes</label>
-						        </div>
-						    </div>
-							<div class="pretty p-round p-jelly">
-						        <input type="radio" name="permission" value="nes">
-						        <div class="state p-danger">
-						            <label>No</label>
-						        </div>
-						    </div>
+					        <input type="radio" name="permission" value="yes"> Yes
+					        <input type="radio" name="permission" value="nes"> No
 	                    </div>
 
 	                    <div class="form-group form-radio">
 	                        <label class="form-radio-label" for="submitted_elsewhere">Have you submitted this video through any other online form?</label>
-							<div class="pretty p-round p-jelly">
-						        <input type="radio" name="submitted_elsewhere" value="yes">
-						        <div class="state p-danger">
-						            <label>Yes</label>
-						        </div>
-						    </div>
-							<div class="pretty p-round p-jelly">
-						        <input type="radio" name="submitted_elsewhere" value="no">
-						        <div class="state p-danger">
-						            <label>No</label>
-						        </div>
-						    </div>
+					        <input type="radio" name="submitted_elsewhere" value="yes"> Yes
+					        <input type="radio" name="submitted_elsewhere" value="no"> No
 	                    </div>
 
 	                    <div class="form-group form-group">
@@ -131,17 +111,17 @@
 		            <div class="panel-body">
 
 						<div class="form-group">
-	                        <label for="first_name">First Name <span>*</span></label>
+	                        <label for="first_name">First Name</label>
 	                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $video->contact->first_name; ?>" disabled>
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="last_name">last Name <span>*</span></label>
+	                        <label for="last_name">last Name</label>
 	                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $video->contact->last_name; ?>" disabled>
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="email">Email <span>*</span></label>
+	                        <label for="email">Email</label>
 	                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $video->contact->email; ?>" disabled>
 	                    </div>
 
@@ -151,7 +131,7 @@
 
 			</div>
 
-			<div class="col-md-6 page">
+			<div class="col-md-6">
 
 				<div class="panel panel-primary" data-collapsed="0">
 
@@ -160,24 +140,18 @@
 		            <div class="panel-body">
 
 						<div class="form-group">
-							<div class="pretty p-default p-curve p-toggle">
-						        <input id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1">
-						        <label>I confirm that I filmed this video and/or I am the rightful owner to this video.</label>
-						    </div>
+					        <label class="form-check-label-left"><input class="checkbox-push-left" id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1">
+					        <div class="checkbox-desc">I confirm that I filmed this video and/or I am the rightful owner to this video.</div></label>
 						</div>
 
 						<div class="form-group">
-							<div class="pretty p-default p-curve p-toggle">
-						        <input id="allow_publish" name="allow_publish" type="checkbox" value="1">
-						        <label>I confirm that I am happy for this video to be published and viewed by potentially millions of people. (Especially in cases where there are minors/children in the video)</label>
-						    </div>
+					       <label class="form-check-label-left"><input class="checkbox-push-left" id="allow_publish" name="allow_publish" type="checkbox" value="1">
+					       <div class="checkbox-desc">I confirm that I am happy for this video to be published and viewed by potentially millions of people. (Especially in cases where there are minors/children in the video)</div></label>
 						</div>
 
 						<div class="form-group">
-							<div class="pretty p-default p-curve p-toggle">
-						        <input id="is_exclusive" name="is_exclusive" type="checkbox" value="1">
-						        <label>I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</label>
-						    </div>
+					        <label class="form-check-label-left"><input class="checkbox-push-left" id="is_exclusive" name="is_exclusive" type="checkbox" value="1">
+					        <div class="checkbox-desc">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</div></label>
 						</div>
 
 					</div>
