@@ -49,7 +49,6 @@
 
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/bootstrap.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/moment.min.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.validate.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/additional-methods.min.js'; ?>"></script>
 	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.ui.widget.js'; ?>"></script>
@@ -71,7 +70,7 @@
 
 	    <?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
 			var n = noty({text: '<?= str_replace("'", "\\'", Session::get("note")) ?>', layout: 'top', type: '<?= Session::get("note_type") ?>', template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>', closeWith: ['button'], timeout:1600 });
-	        <?php 
+	        <?php
 	        	Session::forget('note');
 				Session::forget('note_type');
 	        ?>
@@ -148,7 +147,7 @@
 					}else{
 						$('#video-error').text('Either a video file or video url is required');
 					}
-					
+
 				} else {
 					error.insertAfter(element);
 				}
@@ -186,7 +185,7 @@
 				}else{
 					$('.progress_output').html(data.result.message);
 				}
-				
+
 			}
 	    });
 
@@ -231,7 +230,7 @@
 				$('#loginSignupModal').show(200, function(){
 					setTimeout(function() { $('#email').focus() }, 300);
 				});
-				
+
 				$('#loginSignupModal').modal();
 			});
 
