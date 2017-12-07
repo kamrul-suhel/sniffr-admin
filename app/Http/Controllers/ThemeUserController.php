@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use Auth;
 use Redirect;
 
