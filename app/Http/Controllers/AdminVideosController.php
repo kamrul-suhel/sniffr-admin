@@ -330,7 +330,7 @@ class AdminVideosController extends Controller {
         $video->delete();
         $video->save();
 
-        return Redirect::to('admin/videos')->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
     }
 
     private function addUpdateVideoTags($video, $tags){

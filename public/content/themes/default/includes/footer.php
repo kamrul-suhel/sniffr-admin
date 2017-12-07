@@ -122,7 +122,7 @@
         		},
 				file: {
 					require_from_group: [1, '.files'],
-					extension: "flv|ogg|mp4|qt|avi|wmv|m4v|webm"
+					extension: "flv|ogg|mp4|qt|avi|wmv|m4v|webm|mov"
 				},
 				url: {
 					require_from_group: [1, '.files'],
