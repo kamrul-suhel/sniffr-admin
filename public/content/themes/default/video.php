@@ -47,7 +47,7 @@
 			<span class="pull-right">
 				<span class="view-count"><i class="fa fa-eye"></i> <?php if(isset($view_increment) && $view_increment == true ): ?><?= $video->views + 1 ?><?php else: ?><?= $video->views ?><?php endif; ?> Views </span>
 				<div class="favorite btn btn-default <?php if(isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-videoid="<?= $video->id ?>"><i class="fa fa-heart"></i> Favorite</div>
-				<?php if(Auth::user()->role == 'client' && $video->file): ?><a href="<?php echo $video->file; ?>" class="download btn btn-primary"><i class="fa fa-download"></i> Download</a><?php endif; ?>
+				<?php if(Auth::user() && Auth::user()->role == 'client' && $video->file): ?><a href="<?php echo $video->file; ?>" class="download btn btn-primary"><i class="fa fa-download"></i> Download</a><?php endif; ?>
 			</span>
 		</h3>
 

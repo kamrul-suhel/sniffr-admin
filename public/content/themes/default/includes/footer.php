@@ -185,7 +185,6 @@
 				}else{
 					$('.progress_output').html(data.result.message);
 				}
-
 			}
 	    });
 
@@ -194,7 +193,7 @@
 			$('#make-shaded-file').removeClass('shaded');
 			$('#make-shaded-file').addClass('unshaded');
 			$('#make-shaded-url').removeClass('unshaded');
-	    $('#make-shaded-url').addClass('shaded');
+	    	$('#make-shaded-url').addClass('shaded');
 			$('.circle-url').removeClass('circle-unshaded');
 			$('.circle-url').addClass('circle-shaded');
 			$('.circle-file').removeClass('circle-shaded');
@@ -205,7 +204,7 @@
 			$('#make-shaded-url').removeClass('shaded');
 			$('#make-shaded-url').addClass('unshaded');
 			$('#make-shaded-file').removeClass('unshaded');
-	    $('#make-shaded-file').addClass('shaded');
+	    	$('#make-shaded-file').addClass('shaded');
 			$('.circle-file').removeClass('circle-unshaded');
 			$('.circle-file').addClass('circle-shaded');
 			$('.circle-url').removeClass('circle-shaded');
