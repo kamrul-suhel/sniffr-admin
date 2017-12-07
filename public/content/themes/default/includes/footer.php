@@ -174,15 +174,19 @@
 			},
 			progress: function (e, data) {
 		        var progress = parseInt(data.loaded / data.total * 100, 10);
-		        $('#progress .bar').css('width', progress + '%');
+		        //$('#progress .bar').css('width', progress + '%');
 				$('.progress_output').css('display','block');
-				$('.progress_output').html('Submitting your video.. '+data.loaded);
+				//$('.progress_output').html('Submitting your video.. ');
+				$('#dim-screen').show();
 		    },
 			done: function (e, data) {
 				if(data.result.status == 'success'){
 					// Add in redirect to thanks
 					$('.progress_output').html(data.result.message);
+					$('#dim-screen').hide();
+					window.location.href = '/thanks';
 				}else{
+					$('#dim-screen').hide();
 					$('.progress_output').html(data.result.message);
 				}
 			}

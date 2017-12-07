@@ -5,6 +5,18 @@
 </head>
 <body <?php if(Request::is('/')) echo 'class="home"'; ?>>
 
+<div id="dim-screen">
+    <div class="menu-animated-background">
+        <p>uploading your sick vid..</p>
+        <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+        </div>
+    </div>
+</div>
+
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="container">
         <div class="navbar-header">

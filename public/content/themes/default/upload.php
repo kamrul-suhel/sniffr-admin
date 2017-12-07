@@ -119,9 +119,9 @@
 						</div>
 
 						<div class="progress_output"></div>
-						<div id="progress">
+						<!-- <div id="progress">
 							<div class="bar" style="width: 0%;"></div>
-						</div>
+						</div> -->
 
 						<a id="video-submit" class="btn btn-primary pull-right">Submit your video</a>
 

@@ -91,6 +91,7 @@
 
 <?php endif; ?>
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/style.css'; ?>" />
+<link rel="stylesheet" href="<?= THEME_URL . '/assets/css/spinkit.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/rrssb.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/animate.min.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/jquery.fileupload.css'; ?>" />

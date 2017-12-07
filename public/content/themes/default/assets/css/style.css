@@ -34,9 +34,11 @@ body.home h3 {
 body.home .second-nav {
   display: none;
 }
+
 #home-content{
 	margin-top:545px;
 }
+
 ul.video_list{
 	margin:0px;
 	padding:0px;
