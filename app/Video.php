@@ -19,9 +19,17 @@ class Video extends Model {
 
     public function getKey()
     {
-        parse_str( parse_url( $this->url, PHP_URL_QUERY ), $array );
+        if(!empty($this->url)){
+            parse_str( parse_url( $this->url, PHP_URL_QUERY ), $array );
 
-        $key = isset($array['v']) ? $array['v'] : false;
+            $key = isset($array['v']) ? $array['v'] : false;
+        }elseif(!empty($this->embed_code)){
+            preg_match('#\/embed\/([\w\d-_]+)#', $this->embed_code, $matches);
+
+            $key = $matches[1];
+        }else{
+            $key = false;
+        }
 
         return $key;
     }
