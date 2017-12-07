@@ -131,7 +131,7 @@
 					        <input type="radio" name="submitted_elsewhere" value="no"> No
 	                    </div>
 
-	                    <div class="form-group" id="submitted_where_container">
+	                    <div class="form-group form-group" id="submitted_where_container">
 	                        <label for="submitted_where">Where else have you submitted this video?</label>
 	                        <input type="text" class="form-control" id="submitted_where" name="submitted_where" value="<?php old('submitted_where'); ?>">
 	                    </div>
