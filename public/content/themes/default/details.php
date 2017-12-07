@@ -39,25 +39,64 @@
 			<?php elseif(!$video->more_details): ?>
 
 			<div class="col-md-6 page">
-
 				<div class="panel panel-primary" data-collapsed="0">
-
 					<div class="panel-heading">Your Video Details</div>
 
 		            <div class="panel-body">
-
 		                <div class="text-center">
 		                    <h1><?php echo $video->title ?></h1>
 		                    <div class="item-video">
-		                        <?php if($key = $video->getKey()): ?>
-		                        <iframe src="https://www.youtube.com/embed/<?php echo $key ?>" frameborder="0" allowfullscreen="1"></iframe>
-		                        <?php elseif($source = $video->source): ?>
-		                        <a href="<?php url('video/'.$video->id); ?>"><img src="<?php echo $video->thumb; ?>"></a>
-		                        <?php endif; ?>
+		                        <div id="video_container" class="fitvid">
+								<?php if($video->youtube_id): ?>
+				    				<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $video->youtube_id; ?>" frameborder="0" allowfullscreen></iframe>
+								<?php elseif($video->url && $key = $video->getKey()): ?>
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
+								<?php elseif(str_contains($video->url,'facebook')): ?>
+									<div class="fb-video" data-href="<?php echo $video->url; ?>" data-allowfullscreen="true"></div>
+								<?php elseif($video->url): ?>
+									<h1>We need to handle videoi urls (that aren't youtube)</h1>
+								<?php elseif($video->embed_code): ?>
+									<?php echo $video->embed_code ?>
+								<?php elseif($video->file): ?>
+									<video id="video_player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
+										<source src="<?php echo $video->file; ?>" type='video/mp4'>
+										<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+									</video>
+								<?php endif; ?>
+								</div>
 		                    </div>
 		                </div>
+	                </div>
+                </div>
+
+                <div class="panel panel-primary" data-collapsed="0">
+	                <div class="panel-heading">Your Contact Details</div>
+
+		            <div class="panel-body">
+						<div class="form-group">
+	                        <label for="first_name">First Name</label>
+	                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $video->contact->first_name; ?>" disabled>
+	                    </div>
 
 	                    <div class="form-group">
+	                        <label for="last_name">last Name</label>
+	                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $video->contact->last_name; ?>" disabled>
+	                    </div>
+
+	                    <div class="form-group">
+	                        <label for="email">Email</label>
+	                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $video->contact->email; ?>" disabled>
+	                    </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6 page">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">Additional Details</div>
+
+					<div class="panel-body">
+						<div class="form-group">
 	                        <label for="date_filmed">When was the video filmed?</label>
 	                        <input type="date" class="form-control" id="date_filmed" name="date_filmed" value="<?php echo old('date_filmed'); ?>">
 	                    </div>
@@ -96,49 +135,15 @@
 	                        <label for="submitted_where">Where else have you submitted this video?</label>
 	                        <input type="text" class="form-control" id="submitted_where" name="submitted_where" value="<?php old('submitted_where'); ?>">
 	                    </div>
-
-					</div>
-
+                    </div>
 				</div>
-			</div>
-
-			<div class="col-md-6 page">
-
-				<div class="panel panel-primary" data-collapsed="0">
-
-					<div class="panel-heading">Your Contact Details</div>
-
-		            <div class="panel-body">
-
-						<div class="form-group">
-	                        <label for="first_name">First Name</label>
-	                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $video->contact->first_name; ?>" disabled>
-	                    </div>
-
-	                    <div class="form-group">
-	                        <label for="last_name">last Name</label>
-	                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $video->contact->last_name; ?>" disabled>
-	                    </div>
-
-	                    <div class="form-group">
-	                        <label for="email">Email</label>
-	                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $video->contact->email; ?>" disabled>
-	                    </div>
-
-					</div>
-
-				</div>
-
 			</div>
 
 			<div class="col-md-6">
-
 				<div class="panel panel-primary" data-collapsed="0">
-
 					<div class="panel-heading">Important Legal Stuff</div>
 
 		            <div class="panel-body">
-
 						<div class="form-group">
 					        <label class="form-check-label-left"><input class="checkbox-push-left" id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1">
 					        <div class="checkbox-desc">I confirm that I filmed this video and/or I am the rightful owner to this video.</div></label>
@@ -153,45 +158,31 @@
 					        <label class="form-check-label-left"><input class="checkbox-push-left" id="is_exclusive" name="is_exclusive" type="checkbox" value="1">
 					        <div class="checkbox-desc">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</div></label>
 						</div>
-
 					</div>
-
 				</div>
-
 			</div>
 
 			<div class="col-md-12">
-
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-body">
-
 						<div class="form-group">
 							<input type="submit" value="Update Details" class="btn btn-primary">
 						</div>
-
 					</div>
 				</div>
-
 			</div>
 
 			<?php else: ?>
 
 			<div class="col-md-12 page">
-
 				<div class="panel panel-primary" data-collapsed="0">
-
 					<div class="panel-heading">Thanks for submitting the extra details.</div>
-
 				</div>
-
 			</div>
 
 			<?php endif; ?>
-
 		</div>
-
 	</div>
-
 </form>
 
 <?php include('includes/footer.php'); ?>
