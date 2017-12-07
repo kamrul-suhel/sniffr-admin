@@ -146,11 +146,30 @@ input[type="radio"]:checked:before {
   font-size:18px;
   font-weight:800;
 }
+.form-check-label-left {
+  text-align: left;
+  margin-bottom:10px;
+}
+.form-check-label-left input {
+  margin-right:5px;
+}
+.form-check-label-left input[type=checkbox] {
+  float:left;
+  zoom: 1.5;
+}
 .form-check-label {
   text-align: right;
+  margin-bottom:10px;
 }
 .form-check-label input {
-  margin-right:15px;
+  margin-right:5px;
+}
+.form-check-label input[type=checkbox] {
+  zoom: 1.5;
+}
+.form-radio input {
+  margin-left:10px;
+  margin-right:10px;
 }
 .error {
   color:#ef626c;
