@@ -122,10 +122,10 @@
 	                    <div class="form-group form-radio">
 							<div><strong>Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</strong></div>
 	                        <label class="radio-inline">
-						        <input type="radio" name="permission" value="yes"> Yes
+						        <input type="radio" name="permission" value="yes" <?php if(old('permission')=='yes') { echo 'checked'; } ?>> Yes
 							</label>
 							<label class="radio-inline">
-						        <input type="radio" name="permission" value="no"> No
+						        <input type="radio" name="permission" value="no" <?php if(old('permission')=='no') { echo 'checked'; } ?>> No
 							</label>
 							<div class="permission-below error"></div>
 	                    </div>
@@ -133,10 +133,10 @@
 	                    <div class="form-group form-radio">
 							<div><strong>Have you submitted this video through any other online form?<strong></div>
 	                        <label class="radio-inline">
-						        <input type="radio" name="submitted_elsewhere" value="yes"> Yes
+						        <input type="radio" name="submitted_elsewhere" value="yes" <?php if(old('submitted_elsewhere')=='yes') { echo 'checked'; } ?>> Yes
 							</label>
 							<label class="radio-inline">
-						        <input type="radio" name="submitted_elsewhere" value="no"> No
+						        <input type="radio" name="submitted_elsewhere" value="no" <?php if(old('submitted_elsewhere')=='no') { echo 'checked'; } ?>> No
 							</label>
 							<div class="submitted_elsewhere-below error"></div>
 	                    </div>
@@ -155,17 +155,17 @@
 
 		            <div class="panel-body">
 						<div class="form-group">
-					        <label class="form-check-label-left"><input class="checkbox-push-left" id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1">
+					        <label class="form-check-label-left"><input class="checkbox-push-left" id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1" <?php if(old('contact_is_owner')==1) { echo 'checked'; } ?>>
 					        <div class="checkbox-desc">I confirm that I filmed this video and/or I am the rightful owner to this video.</div></label>
 						</div>
 
 						<div class="form-group">
-					       <label class="form-check-label-left"><input class="checkbox-push-left" id="allow_publish" name="allow_publish" type="checkbox" value="1">
+					       <label class="form-check-label-left"><input class="checkbox-push-left" id="allow_publish" name="allow_publish" type="checkbox" value="1" <?php if(old('allow_publish')==1) { echo 'checked'; } ?>>
 					       <div class="checkbox-desc">I confirm that I am happy for this video to be published and viewed by potentially millions of people. (Especially in cases where there are minors/children in the video)</div></label>
 						</div>
 
 						<div class="form-group">
-					        <label class="form-check-label-left"><input class="checkbox-push-left" id="is_exclusive" name="is_exclusive" type="checkbox" value="1">
+					        <label class="form-check-label-left"><input class="checkbox-push-left" id="is_exclusive" name="is_exclusive" type="checkbox" value="1" <?php if(old('is_exclusive')==1) { echo 'checked'; } ?>>
 					        <div class="checkbox-desc">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</div></label>
 						</div>
 					</div>
