@@ -108,9 +108,8 @@ class ThemeUploadController extends Controller {
         }
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileMimeType = $youtubeId = '';
+        $filePath = $fileSize = $fileMimeType = $youtubeId = '';
         if($request->hasFile('file')){
-
             $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
 
             $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
@@ -126,14 +125,6 @@ class ThemeUploadController extends Controller {
             // Upload it to youtube!!! ??
             $video = MyYoutube::upload($file, ['title' => Input::get('title')], 'unlisted');
             $youtubeId  = $video->getVideoId();
-        }else{
-            if($isJson) {
-              return response()->json(['status' => 'fail', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
-            } else {
-              return Redirect::back()
-                ->withErrors(array('message' => 'There was a problem uploading the file.'))
-                ->withInput();
-            }
         }
 
         //add additional form data to db (with video file info)

@@ -223,6 +223,10 @@
 		$('#video-submit').on('click',function(){
 			var validator = $( "#upload-form" ).validate();
 			validator.form();
+
+			if(validator.valid()){
+				$( "#upload-form" ).submit();
+			}
 		});
 
 		//file upload progress etc
