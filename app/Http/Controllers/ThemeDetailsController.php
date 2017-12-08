@@ -26,9 +26,6 @@ use App\Libraries\ThemeHelper;
 class ThemeDetailsController extends Controller
 {
     protected $rules = [
-        'first_name' => 'required',
-        'last_name' => 'required',
-        'email' => 'required|email',
         'date_filmed' => 'required',
         'location' => 'required',
         'description' => 'required',
@@ -77,7 +74,6 @@ class ThemeDetailsController extends Controller
      */
     public function store(Request $request, $code)
     {
-        dd(Input::all());
         $video = Video::where('more_details_code', $code)->first();
 
         $validator = Validator::make(Input::all(), $this->rules);
