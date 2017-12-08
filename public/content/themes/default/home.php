@@ -1,7 +1,7 @@
 <?php include('includes/header.php'); ?>
 
-<div id="home-hero" class="vidbg-box" data-vidbg-bg="mp4: /content/themes/default/assets/video/ocean.mp4, webm: /content/themes/default/assets/video/ocean.webm, poster: /content/themes/default/assets/video/ocean.jpg"
-  data-vidbg-options="loop: true, muted: true">
+<div id="home-hero" class="vidbg-box" data-vidbg-bg="mp4: /content/themes/default/assets/video/sample_bg.mp4, poster: /content/themes/default/assets/video/sample_bg.jpg"
+  data-vidbg-options="loop: true, muted: true, overlayColor: #000, overlayAlpha: 0.4">
 	<div id="dim-bg">
 		<div class="container home-titles">
 			<h1>Video Licensing Platform</h1>

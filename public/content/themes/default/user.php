@@ -5,24 +5,35 @@
 	<?php if(isset($type) && $type == 'profile'): ?>
 
 		<div id="user-badge">
-			<img src="<?= Config::get('site.uploads_url') . 'avatars/' . $user->avatar ?>" />
-			<h2 class="form-signin-heading"><?= $user->username ?></h2>
-			<div class="label label-info"><?= ucfirst($user->role) ?> User</div>
-			<p class="member-since">Member since: <?= $user->created_at ?></p>
+			<div class="row">
+				<div class="col-md-2">
+					<div class="user-img-area">
+						<img src="<?= Config::get('site.uploads_url') . 'avatars/' . $user->avatar ?>" />
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="user-text-area">
+						<h2 class="form-signin-heading"><?= $user->username ?></h2>
+						<div class="label label-info"><?= ucfirst($user->role) ?> User</div>
+						<p class="member-since">Member since: <?= $user->created_at ?></p>
 
-			<?php if(!Auth::guest() && Auth::user()->username == $user->username): ?>
-				<a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . $user->username . '/edit' ?>" class="btn btn-info"><i class="fa fa-edit"></i> Edit</a>
-			<?php endif; ?>
+						<?php if(!Auth::guest() && Auth::user()->username == $user->username): ?>
+							<a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . $user->username . '/edit' ?>" class="btn btn-info"><i class="fa fa-edit"></i> Edit</a>
+						<?php endif; ?>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="user-favorite-area">
+						<h2><?= ucfirst($user->username) ?>'s Favorites </h2>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<h2><?= ucfirst($user->username) ?>'s Favorites </h2>
-		<div class="heading-divider"></div>
 		<div class="row">
-
 			<?php include('partials/video-loop.php'); ?>
-
 			<div class="clear"></div>
-			<a class="user-favorites" href="/favorites">View All Favorites</a>
+			<!-- <a class="user-favorites" href="/favorites">View All Favorites</a> -->
 		</div>
 
 
