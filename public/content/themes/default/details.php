@@ -1,6 +1,6 @@
 <?php include('includes/header.php'); ?>
 
-<form method="POST" action="/details/<?php echo Request::segment(2); ?>" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="/details/<?php echo Request::segment(2); ?>" name="details-form" id="details-form" accept-charset="UTF-8" enctype="multipart/form-data">
 	<?php echo csrf_field(); ?>
 
 	<div class="container">
@@ -10,12 +10,12 @@
 
 			<div class="col-md-12 page">
 				<div class="alert alert-danger">
-						<p><strong>Please correct the errors below.</strong></p>
-						<ul>
-								<?php foreach ($errors->all() as $error){
-										echo '<li>'. $error .'</li>';
-								} ?>
-						</ul>
+					<p><strong>Please correct the errors below.</strong></p>
+					<ul>
+						<?php foreach ($errors->all() as $error){
+								echo '<li>'. $error .'</li>';
+						} ?>
+					</ul>
 				</div>
 			</div>
 
@@ -79,7 +79,7 @@
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="last_name">last Name</label>
+	                        <label for="last_name">Last Name</label>
 	                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $video->contact->last_name; ?>" disabled>
 	                    </div>
 
@@ -120,15 +120,25 @@
 	                    </div-->
 
 	                    <div class="form-group form-radio">
-	                        <label class="form-radio-label" for="permission">Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</label>
-					        <input type="radio" name="permission" value="yes"> Yes
-					        <input type="radio" name="permission" value="nes"> No
+							<div><strong>Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</strong></div>
+	                        <label class="radio-inline">
+						        <input type="radio" name="permission" value="yes"> Yes
+							</label>
+							<label class="radio-inline">
+						        <input type="radio" name="permission" value="no"> No
+							</label>
+							<div class="permission-below error"></div>
 	                    </div>
 
 	                    <div class="form-group form-radio">
-	                        <label class="form-radio-label" for="submitted_elsewhere">Have you submitted this video through any other online form?</label>
-					        <input type="radio" name="submitted_elsewhere" value="yes"> Yes
-					        <input type="radio" name="submitted_elsewhere" value="no"> No
+							<div><strong>Have you submitted this video through any other online form?<strong></div>
+	                        <label class="radio-inline">
+						        <input type="radio" name="submitted_elsewhere" value="yes"> Yes
+							</label>
+							<label class="radio-inline">
+						        <input type="radio" name="submitted_elsewhere" value="no"> No
+							</label>
+							<div class="submitted_elsewhere-below error"></div>
 	                    </div>
 
 	                    <div class="form-group form-group" id="submitted_where_container">

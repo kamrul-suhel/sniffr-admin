@@ -34,9 +34,10 @@ class ThemeUploadController extends Controller {
         'first_name' => 'required',
         'last_name' => 'required',
         'email' => 'required|email',
+        'title' => 'required',
         // 'url' => 'required_without_all:url,file',
         'file' => 'mimes:flv,ogg,mp4,qt,avi,wmv,m4v,mov,webm|max:200000',
-        // 'terms' => 'required'
+        'terms' => 'required'
     ];
 
     public function __construct()

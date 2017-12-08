@@ -176,6 +176,12 @@ input[type="radio"]:checked:before {
   margin-left:10px;
   margin-right:10px;
 }
+.permission-below {
+  display:none;
+}
+.submitted_elsewhere-below {
+  display:none;
+}
 .error {
   color:#ef626c;
 }
