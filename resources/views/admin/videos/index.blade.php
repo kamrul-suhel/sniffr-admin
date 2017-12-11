@@ -3,33 +3,26 @@
 @section('css')
 	<link rel="stylesheet" href="{{ '/application/assets/admin/css/sweetalert.css' }}">
 	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
-	<style>
-	.gallery-env article.album header {
-		padding-bottom: 0;
-	}
-	</style>
 @endsection
 
 @section('content')
-
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
 				<h3><i class="entypo-video"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ URL::to('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
+
 			<div class="col-md-4">
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= old('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="entypo-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
+
 	<div class="clear"></div>
 
 	<div class="gallery-env">
-
 		<div class="row">
-
-		@foreach($videos as $video)
-
+			@foreach($videos as $video)
 			<div class="col-sm-6 col-md-4">
 				<?php
 				switch($video->state){
@@ -46,14 +39,13 @@
 				}
 				?>
 				<article class="album {{ $panelColour }}">
-
 					<header>
-						@include ('partials.videojs')
+						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 
 						<a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}" class="album-options">
 							<i class="entypo-pencil"></i>
 							Edit
-						</a-->
+						</a>
 					</header>
 
 					<section class="album-info">
@@ -63,7 +55,6 @@
 					</section>
 
 					<footer>
-
 						<div class="album-images-count">
 							@if($video->state == 'new')
 							<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success" title="Accept Video"><i class="entypo-check"></i></a>
@@ -73,9 +64,9 @@
 	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
 							@elseif($video->state == 'licensed')
-							<i class="entypo-check"></i> Licensed
+							<i class="fa fa-check"></i> Licensed
 							@elseif($video->state == 'accepted')
-							<i class="entypo-clock"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+							<i class="fa fa-clock-o"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
 							@elseif($video->state == 'rejected')
 							<i class="fa fa-times"></i> Rejected
 							@elseif($video->state == 'problem')
@@ -96,21 +87,16 @@
 								<i class="entypo-trash"></i>
 							</a>
 						</div>
-
 					</footer>
-
 				</article>
-
 			</div>
+			@endforeach
 
-		@endforeach
+			<div class="clear"></div>
 
-		<div class="clear"></div>
-
-		<div class="pagination-outter"><?= $videos->appends(Request::only('s'))->render(); ?></div>
+			<div class="pagination-outter"><?= $videos->appends(Request::only('s'))->render(); ?></div>
 
 		</div>
-
 	</div>
 
 
@@ -131,7 +117,7 @@
 		});
 
 	</script>
-
 	@stop
+	@include ('partials.videojs')
 
 @stop

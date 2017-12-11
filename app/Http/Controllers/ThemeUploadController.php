@@ -121,10 +121,6 @@ class ThemeUploadController extends Controller {
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
-
-            // Upload it to youtube!!! ??
-            $video = MyYoutube::upload($file, ['title' => Input::get('title')], 'unlisted');
-            $youtubeId  = $video->getVideoId();
         }
 
         //add additional form data to db (with video file info)

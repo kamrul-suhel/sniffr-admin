@@ -1,39 +1,3 @@
-<div id="video_container" class="fitvid" style="padding-top:0px;">
-@if($video->youtube_id)
-    <div class="youtube-player" data-id="{{ $video->youtube_id }}"></div>
-@elseif(!empty($video->url))
-    @if (str_contains($video->url, 'youtube'))
-        <div class="youtube-player" data-id="{{ $key = $video->getKey() }}"></div>
-    @elseif (str_contains($video->url, 'vimeo'))
-        <video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
-        data-setup='{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "{{ $video->url }}"}] }'>
-        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-        </video>
-    @elseif (str_contains($video->url, 'facebook'))
-      <div class="fb-video" data-href="{{ $video->url }}" data-allowfullscreen="true"></div>
-    @endif
-@elseif (!empty($video->file))
-    <video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
-        <source src="{{ $video->file }}" type='video/mp4'>
-        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-    </video>
-@elseif(!empty($video->embed_code))
-    @if (str_contains($video->embed_code, 'youtube'))
-        <div class="youtube-player" data-id="{{ $key = $video->getKey() }}"></div>
-    @else
-        {!! $video->embed_code !!}
-    @endif
-@elseif(!empty($video->image))
-    @if(str_contains($video->image,'http'))
-        <img src="{{ Config::get('site.uploads_dir') . 'images/' . $video->image }}" />
-    @else
-        <img src="{{ $video->image }}" class="video-img" />
-    @endif
-@else
-    <p>There seems to be an issue with this video</p>
-@endif
-</div>
-
 <style>
   .vjs-default-skin .vjs-big-play-button {
     background: rgba(0,0,0,0.75);

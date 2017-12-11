@@ -5169,6 +5169,7 @@ fieldset[disabled] .calendar-env .calendar-body .fc-content .fc-view table tbody
 .gallery-env:after {
   clear: both;
 }
+
 .gallery-env article.album {
   border: 1px solid #ebebeb;
   margin-bottom: 30px;
@@ -5193,6 +5194,7 @@ fieldset[disabled] .calendar-env .calendar-body .fc-content .fc-view table tbody
 }
 .gallery-env article.album header {
   position: relative;
+  padding-bottom: 0;
 }
 .gallery-env article.album header img {
   line-height: 1;

@@ -17,12 +17,14 @@
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
+			<th>Videos</th>
 			<th>First Name</th>
 			<th>Last Name</th>
 			<th>Email</th>
 			<th>Actions</th>
 			@foreach($contacts as $contact)
 			<tr>
+				<td>{{ count($contact->videos) }}</td>
 				<td>{{ TextHelper::shorten($contact->first_name, 250) }}</td>
 				<td>{{ TextHelper::shorten($contact->last_name, 250) }}</td>
 				<td>{{ TextHelper::shorten($contact->email, 250) }}</td>

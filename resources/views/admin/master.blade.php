@@ -107,33 +107,33 @@
 							</a>
 						</li>
 						<li>
-							<a href="{{ URL::to('admin/videos/pending') }}">
-								<span class="title">Pending Videos</span>
-							</a>
-						</li>
-						<li>
 							<a href="{{ URL::to('admin/videos/accepted') }}">
 								<span class="title">Accepted Videos</span>
 							</a>
 						</li>
 						<li>
+							<a href="{{ URL::to('admin/videos/pending') }}">
+								<span class="title">Pending Videos</span>
+							</a>
+						</li>
+						<li>
 							<a href="{{ URL::to('admin/videos/rejected') }}">
-								<span class="title">Rejected Videos <i class="fa fa-times"></i></span>
+								<span class="title">Rejected Videos</span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/problem') }}">
-								<span class="title">Problem Videos <i class="fa fa-times"></i></span>
+								<span class="title">Problem Videos</span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/licensed') }}">
-								<span class="title">Licensed Videos <i class="entypo-check"></i></span>
+								<span class="title">Licensed Videos</span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ URL::to('admin/videos/restricted') }}">
-								<span class="title">Restricted Videos <i class="fa fa-exclamation-triangle"></i></span>
+								<span class="title">Restricted Videos</span>
 							</a>
 						</li>
 						<li>

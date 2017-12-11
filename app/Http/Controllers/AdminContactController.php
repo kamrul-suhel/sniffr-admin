@@ -12,6 +12,7 @@ use App\Contact;
 use App\Video;
 
 use App\Libraries\ThemeHelper;
+use App\Libraries\VideoHelper;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,8 @@ use App\Http\Controllers\Controller;
 
 class AdminContactController extends Controller
 {
+    use VideoHelper;
+    
     protected $rules = [
         'first_name' => 'required'
     ];

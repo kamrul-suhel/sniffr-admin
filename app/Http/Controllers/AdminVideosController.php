@@ -98,6 +98,29 @@ class AdminVideosController extends Controller {
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
 
+            // Move video to Youtube
+            if($video->file){
+                $file = file_get_contents($video->file);
+                $fileName = basename($video->file); 
+
+                file_put_contents('/tmp/'.$fileName, $file);
+
+                $file = new UploadedFile (
+                    '/tmp/'.$fileName, 
+                    $fileName,
+                    $video->mime,
+                    filesize('/tmp/'.$fileName),
+                    null,
+                    false
+                );
+
+                // Upload it to youtube
+                $response = MyYoutube::upload($file, ['title' => $video->title], 'private');
+                $youtubeId  = $response->getVideoId();
+
+                $video->youtube_id = $youtubeId;
+            }
+
             // Send Accepted Email
             Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
         }else if($video->state == 'rejected'){

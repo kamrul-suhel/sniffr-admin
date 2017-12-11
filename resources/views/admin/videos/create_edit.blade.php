@@ -51,7 +51,7 @@
 
 				<div class="panel-body" style="display: block;">
 					<div class="text-center">
-						@include ('partials.videojs')
+						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 					</div>
 				</div>
 
@@ -83,8 +83,8 @@
 				</div>
 
 				<div class="panel-body" style="display: block;">
-					<p>{{ $video->contact->first_name.' '.$video->contact->last_name }}</p>
-                    <p>{{ $video->contact->email }}</p>
+					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->first_name.' '.$video->contact->last_name }}</a></h3>
+                    <p><a href="mailto:{{ $video->contact->email }}">{{ $video->contact->email }}</a></p>
 				</div>
 			</div>
 
@@ -458,5 +458,6 @@
 		});
 	</script>
 @stop
+@include ('partials.videojs')
 
 @stop
