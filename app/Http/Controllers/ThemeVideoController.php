@@ -27,7 +27,7 @@ class ThemeVideoController extends Controller {
         // 'email' => 'required|email|unique:users',
         // 'password' => 'required|confirmed'
     );
-    
+
     public function __construct()
     {
         //$this->middleware('secure');
@@ -44,7 +44,7 @@ class ThemeVideoController extends Controller {
     public function index($id)
     {
         if(Auth::guest()){
-            $video = Video::where('state', 'licensed')->with('tags')->findOrFail($id);
+            $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->findOrFail($id);
         }else{
             $video = Video::with('tags')->findOrFail($id);
         }
@@ -81,7 +81,7 @@ class ThemeVideoController extends Controller {
      *
      */
     public function videos()
-    {   
+    {
         $page = Input::get('page');
         if( !empty($page) ){
             $page = Input::get('page');
@@ -90,7 +90,7 @@ class ThemeVideoController extends Controller {
         }
 
         $data = array(
-            'videos' => Video::where('state', 'licensed')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
+            'videos' => Video::where('state', 'licensed')->orderBy('licensed_at', 'DESC')->simplePaginate($this->videos_per_page),
             'page_title' => 'All Videos',
             'page_description' => 'Page ' . $page,
             'current_page' => $page,
@@ -106,7 +106,7 @@ class ThemeVideoController extends Controller {
 
 
     public function tag($tag)
-    {   
+    {
         $page = Input::get('page');
         if( !empty($page) ){
             $page = Input::get('page');
@@ -163,12 +163,12 @@ class ThemeVideoController extends Controller {
         if(!empty($parent_cat->id)){
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
             if(!empty($parent_cat2->id)){
-                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
+                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
             } else {
-                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
+                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
             }
         } else {
-            $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orderBy('created_at', 'DESC')->simplePaginate(9);
+            $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
         }
 
 
@@ -193,7 +193,7 @@ class ThemeVideoController extends Controller {
         // check if this key already exists in the view_media session
         $blank_array = array();
         if (! array_key_exists($id, session('viewed_video', $blank_array) ) ) {
-            
+
             try{
                 // increment view
                 $video = Video::find($id);

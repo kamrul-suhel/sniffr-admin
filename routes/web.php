@@ -7,7 +7,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Home Page Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('/', 'ThemeHomeController@index');
+    Route::get('/', 'ThemeHomeController@index')->name('home');
 
     /*
     |--------------------------------------------------------------------------

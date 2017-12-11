@@ -42,7 +42,7 @@ class ThemeSearchController extends Controller {
 			$query->where('state', '=', 'licensed')->where('title', 'LIKE', '%'.$search_value.'%');
 		})->orWhereHas('tags', function ($q) use($search_value){
 			$q->where('state', '=', 'licensed')->where('name', 'LIKE', '%'.$search_value.'%');
-		})->get();
+		})->orderBy('licensed_at', 'DESC')->get();
 
 		$data = array(
 			'videos' => $videos,
