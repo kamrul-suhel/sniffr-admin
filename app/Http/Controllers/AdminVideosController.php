@@ -38,9 +38,12 @@ class AdminVideosController extends Controller {
 
     protected $rules = [];
 
-    public function __construct()
+    /**
+     * constructor.
+     */
+    public function __construct(Request $request)
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'admin']);
     }
     /**
      * Display a listing of videos

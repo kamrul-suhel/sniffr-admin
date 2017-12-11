@@ -8,6 +8,14 @@ use Redirect;
 
 class AdminPluginsController extends Controller {
 
+	/**
+     * constructor.
+     */
+    public function __construct(Request $request)
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
 	public function index()
 	{
 
@@ -25,9 +33,9 @@ class AdminPluginsController extends Controller {
 		$plugin_folder = 'content/plugins';
 		$plugins_dir = @ opendir( $plugin_folder);
 		$plugin_files = array();
-		
+
 		if ( $plugins_dir ) {
-			
+
 			while (($folder = readdir( $plugins_dir ) ) !== false ) {
 				if( @is_readable("$plugin_folder/$folder/info.json") ){
 					$plugin_info = file_get_contents("$plugin_folder/$folder/info.json");
@@ -52,7 +60,7 @@ class AdminPluginsController extends Controller {
 	}
 
 	public function activate($slug){
-		
+
 		$plugin = Plugin::where('slug', '=', $slug)->first();
 		$plugin_data = $this->get_plugin($slug);
 		if(!empty($plugin->slug)){

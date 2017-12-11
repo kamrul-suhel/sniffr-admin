@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password', 'avatar', 'role', 'active', 
+        'username', 'email', 'password', 'avatar', 'role', 'active',
     ];
 
     protected $table = 'users';
@@ -29,7 +29,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function client(){
+    public function client() {
         return $this->belongsTo(Client::class)->first();
+    }
+
+    public function isAdmin() {
+        if($this->role=='admin') {
+            $role = true;
+        } else {
+            $role = false;
+        }
+        return $role;
     }
 }

@@ -17,6 +17,13 @@ use Illuminate\Support\Facades\Input;
 
 class AdminPostCategoriesController extends Controller {
 
+    /**
+     * constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
 
     public function index(){
         $data = array(
@@ -69,9 +76,9 @@ class AdminPostCategoriesController extends Controller {
         $category_order = json_decode(Input::get('order'));
         $post_categories = PostCategory::all();
         $order = 1;
-        
+
         foreach($category_order as $category_level_1):
-            
+
             $level1 = PostCategory::find($category_level_1->id);
             if($level1->id){
                 $level1->order = $order;
@@ -79,9 +86,9 @@ class AdminPostCategoriesController extends Controller {
                 $level1->save();
                 $order += 1;
             }
-            
+
             if(isset($category_level_1->children)):
-            
+
                 $children_level_1 = $category_level_1->children;
 
                 foreach($children_level_1 as $category_level_2):

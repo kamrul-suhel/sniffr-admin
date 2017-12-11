@@ -20,10 +20,10 @@ use App\Libraries\ThemeHelper;
 use Carbon\Carbon as Carbon;
 
 class AdminController extends Controller {
-	   
+
 	public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'admin']);
     }
 
 	/**
@@ -41,7 +41,7 @@ class AdminController extends Controller {
 		$new_videos = count(Video::where('state', 'new')->get());
 		$licensed_videos = count(Video::where('state', 'licensed')->get());
 		$pending_videos = count(Video::where('state', 'pending')->get());
-		
+
 		$settings = Setting::first();
 
 		$data = array(

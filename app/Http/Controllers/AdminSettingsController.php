@@ -19,6 +19,14 @@ use Illuminate\Support\Facades\Input;
 
 class AdminSettingsController extends Controller {
 
+	/**
+     * constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
 	public function index()
 	{
 
