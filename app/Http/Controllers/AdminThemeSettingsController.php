@@ -18,6 +18,14 @@ use Illuminate\Support\Facades\Input;
 
 class AdminThemeSettingsController extends Controller {
 
+	/**
+     * constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
 	public function theme_settings(){
 		$settings = Setting::first();
 		$user = Auth::user();
@@ -31,7 +39,7 @@ class AdminThemeSettingsController extends Controller {
 	public function theme_settings_form(){
 		$settings = Setting::first();
 		$user = Auth::user();
-		
+
 		$data = array(
 			'settings' => $settings,
 			'admin_user'	=> $user,
@@ -53,7 +61,7 @@ class AdminThemeSettingsController extends Controller {
 	}
 
 	private function createOrUpdateThemeSetting($theme_slug, $key, $value){
-       	
+
        	$setting = array(
         		'theme_slug' => $theme_slug,
         		'key' => $key,

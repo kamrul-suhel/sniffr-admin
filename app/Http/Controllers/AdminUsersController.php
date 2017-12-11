@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminUsersController extends Controller {
 
-    public function __construct()
+    /**
+     * constructor.
+     */
+    public function __construct(Request $request)
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'admin']);
     }
 
 	/**
@@ -32,7 +35,7 @@ class AdminUsersController extends Controller {
 	public function index()
 	{
         $search_value = Input::get('s');
-        
+
         if(!empty($search_value)):
             $users = User::where('username', 'LIKE', '%'.$search_value.'%')->orWhere('email', 'LIKE', '%'.$search_value.'%')->orderBy('created_at', 'desc')->get();
         else:
@@ -77,7 +80,7 @@ class AdminUsersController extends Controller {
     		'admin_user' => Auth::user(),
     		'button_text' => 'Update User',
 		);
-        
+
     	return view('admin.users.create_edit', $data);
     }
 
@@ -88,8 +91,8 @@ class AdminUsersController extends Controller {
 
     	if(Input::hasFile('avatar')){
         	$input['avatar'] = ImageHandler::uploadImage(Input::file('avatar'), 'avatars');
-        } else { 
-            $input['avatar'] = $user->avatar; 
+        } else {
+            $input['avatar'] = $user->avatar;
         }
 
         if(empty($input['active'])){

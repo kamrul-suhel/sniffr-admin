@@ -41,9 +41,9 @@ ul#admin-menu{
 }
 
 ul#admin-menu li a:hover, ul#admin-menu li a.active{
-  background: #9FCA39;
+  background: #ef626c;
   color:#fff;
-  border-bottom:1px solid #9FCA39;
+  border-bottom:1px solid #ef626c;
 }
 
 #admin-container{
@@ -169,4 +169,3 @@ ul#admin-menu li a:hover, ul#admin-menu li a.active{
   top:0px;
   margin-top:0px;
 }
-

@@ -29,11 +29,11 @@ class AdminContactController extends Controller
     ];
 
     /**
-     * AdminController constructor.
+     * constructor.
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'admin']);
     }
 
     /**
@@ -146,7 +146,7 @@ class AdminContactController extends Controller
           $comment->comment = $data['comment'];
           $comment->user_id = Auth::id();
 
-          $contact->comments()->save($comment);   
+          $contact->comments()->save($comment);
       }
 
       $contact->update($data);

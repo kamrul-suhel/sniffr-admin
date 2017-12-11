@@ -19,6 +19,14 @@ use Illuminate\Support\Facades\Input;
 
 class AdminPaymentSettingsController extends Controller {
 
+	/**
+     * constructor.
+     */
+    public function __construct(Request $request)
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
 	public function index()
 	{
 

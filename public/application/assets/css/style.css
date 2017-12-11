@@ -57,7 +57,7 @@ label{
 }
 
 .navbar-nav.navbar-right{
-  
+
 }
 
 .navbar-brand img{
@@ -84,7 +84,7 @@ label{
 .form-signin {
   max-width: 330px;
   padding: 15px;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .form-signin-heading, .form-login-heading{
@@ -111,15 +111,15 @@ label{
 }
 
 .navbar-default .navbar-nav>li>a{
-  -webkit-transition: background-color 0.3s ease;                  
-  -moz-transition: background-color 0.3s ease;                 
-  -o-transition: background-color 0.3s ease;   
-  -ms-transition: background-color 0.3s ease;          
+  -webkit-transition: background-color 0.3s ease;
+  -moz-transition: background-color 0.3s ease;
+  -o-transition: background-color 0.3s ease;
+  -ms-transition: background-color 0.3s ease;
   transition: background-color 0.3s ease;
 }
 
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
-  background:#9FCA39;
+  background:#ef626c;
 }
 
 .navbar-default .navbar-nav>a:visited, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover{
@@ -152,7 +152,7 @@ label{
 }
 
 .navbar-nav.navbar-right li{
-  
+
 }
 
 .navbar-nav.navbar-right li.signup-desktop, .navbar-nav.navbar-right li.login-desktop{
@@ -162,7 +162,7 @@ label{
 
 .navbar-nav.navbar-right li.signup-desktop a{
   border-radius:50px;
-  background:#9FCA39;
+  background:#ef626c;
   color:#fff;
   padding:12px 30px;
   margin-top:;

@@ -21,7 +21,7 @@ class AdminMediaController extends Controller {
 
 	public function __construct()
     {
-    	$this->middleware('auth');
+    	$this->middleware(['auth', 'admin']);
         //$this->middleware('isAdmin');
     }
 
@@ -49,15 +49,15 @@ class AdminMediaController extends Controller {
 
 	private function getFiles($dir){
 
-		
+
 		$files = array();
 
 		// Is there actually such a folder/file?
 
 		if(file_exists($dir)){
-		
+
 			foreach(scandir($dir) as $f) {
-			
+
 				if(!$f || $f[0] == '.') {
 					continue; // Ignore hidden files
 				}
@@ -76,7 +76,7 @@ class AdminMediaController extends Controller {
 				}
 
 				else if( $this->is_image($dir . '/' . $f) ) {
-					
+
 					$files[] = array(
 						"name" => $f,
 						"type" => "image",
@@ -120,7 +120,7 @@ class AdminMediaController extends Controller {
 					);
 				}
 			}
-		
+
 		}
 
 		return $files;
@@ -131,7 +131,7 @@ class AdminMediaController extends Controller {
 	{
 		$a = getimagesize($path);
 		$image_type = $a[2];
-		
+
 		if(in_array($image_type , array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG , IMAGETYPE_BMP)))
 		{
 			return true;
@@ -146,7 +146,7 @@ class AdminMediaController extends Controller {
 			foreach($files as $file){
 				if(!$file || $file[0] == '.') {
 					continue; // Ignore hidden files
-				} 
+				}
 				$count += 1;
 			}
 		}
@@ -158,7 +158,7 @@ class AdminMediaController extends Controller {
 		$new_folder = Input::get('new_folder');
 		$success = false;
 		$error = '';
-		
+
 
 		if(file_exists($new_folder)){
 			$error = 'Sorry that folder already exists, please delete that folder if you wish to re-create it';
@@ -196,23 +196,23 @@ class AdminMediaController extends Controller {
 
 
 	/********** recursively delete directory **********/
-	private function rrmdir($dir) { 
+	private function rrmdir($dir) {
 	   $deleted = true;
-	   if (is_dir($dir)) { 
-	     $objects = scandir($dir); 
-	     foreach ($objects as $object) { 
-	       if ($object != "." && $object != "..") { 
+	   if (is_dir($dir)) {
+	     $objects = scandir($dir);
+	     foreach ($objects as $object) {
+	       if ($object != "." && $object != "..") {
 	         if (is_dir($dir."/".$object))
 	           $this->rrmdir($dir."/".$object);
 	         else
-	           unlink($dir."/".$object); 
-	       } 
+	           unlink($dir."/".$object);
+	       }
 	     }
 	     if(!rmdir($dir)){
 	     	$deleted = false;
-	     } 
+	     }
 	   }
-	   return $deleted; 
+	   return $deleted;
 	 }
 
 
@@ -223,7 +223,7 @@ class AdminMediaController extends Controller {
 	 }
 
 	 public function expandDirectories($base_dir) {
-	 	
+
 	      $directories = array();
 	      foreach(scandir($base_dir) as $file) {
 	            if($file == '.' || $file == '..') continue;
@@ -241,7 +241,7 @@ class AdminMediaController extends Controller {
 		$destination = Input::get('destination');
 		$success = false;
 		$error = '';
-		
+
 
 		if(!file_exists($destination)){
 			if(rename($source, $destination)){
@@ -282,4 +282,3 @@ class AdminMediaController extends Controller {
 
 
 }
-

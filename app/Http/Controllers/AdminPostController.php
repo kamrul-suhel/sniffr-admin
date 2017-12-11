@@ -19,6 +19,14 @@ use Illuminate\Support\Facades\Input;
 class AdminPostController extends Controller {
 
     /**
+     * constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
+    /**
      * Display a listing of videos
      *
      * @return Response
@@ -27,7 +35,7 @@ class AdminPostController extends Controller {
     {
 
         $search_value = Input::get('s');
-        
+
         if(!empty($search_value)):
             $posts = Post::where('title', 'LIKE', '%'.$search_value.'%')->orderBy('created_at', 'desc')->paginate(10);
         else:

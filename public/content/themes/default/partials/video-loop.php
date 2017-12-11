@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $currentDay = '';
 foreach($videos as $video):
@@ -15,7 +15,7 @@ foreach($videos as $video):
 			<div class="thumbnail-overlay"></div>
 			<span class="play-button"></span>
 			<span class="label label-<?php echo $video->state == 'licensed' ? 'success' : 'danger'; ?>"><?php echo ucfirst($video->state); ?></span>
-					
+
 			<img src="<?= \App\Libraries\ImageHandler::getVideoImage($video, 'medium')  ?>">
 			<div class="details">
 				<h2><?= $video->title; ?></h2>

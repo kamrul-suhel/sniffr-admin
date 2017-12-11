@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 
 namespace App\Http\Controllers;
@@ -38,6 +38,11 @@ class ThemeUserController extends Controller{
     public function index($username){
     	$user = User::where('username', '=', $username)->first();
 
+        $authUser = Auth::user();
+        if($authUser->id!=$user->id&&$authUser->role!='admin'){
+            return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to access this page!', 'note_type' => 'error') );
+        }
+
         $favorites = Favorite::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get();
 
         $favorite_array = array();
@@ -65,14 +70,14 @@ class ThemeUserController extends Controller{
 
 	    	$user = User::where('username', '=', $username)->first();
 	    	$data = array(
-                                'user' => $user,
-                                'post_route' => url('user') . '/' . $user->username . '/update',
-                                'type' => 'edit',
-                                'menu' => Menu::orderBy('order', 'ASC')->get(),
-                                'video_categories' => VideoCategory::all(),
-                                'post_categories' => PostCategory::all(),
-                                'theme_settings' => ThemeHelper::getThemeSettings(),
-                                'pages' => Page::where('active', '=', 1)->get(),
+                    'user' => $user,
+                    'post_route' => url('user') . '/' . $user->username . '/update',
+                    'type' => 'edit',
+                    'menu' => Menu::orderBy('order', 'ASC')->get(),
+                    'video_categories' => VideoCategory::all(),
+                    'post_categories' => PostCategory::all(),
+                    'theme_settings' => ThemeHelper::getThemeSettings(),
+                    'pages' => Page::where('active', '=', 1)->get(),
 	    		);
 	    	return view('Theme::user', $data);
 
@@ -82,7 +87,7 @@ class ThemeUserController extends Controller{
     }
 
     public function update($username){
-    
+
     	$input = array_except(Input::all(), '_method');
 		$input['username'] = str_replace('.', '-', $input['username']);
 
@@ -115,7 +120,7 @@ class ThemeUserController extends Controller{
 
     }
 
-	
+
     public function billing($username){
         if(Auth::guest()):
             return Redirect::to('/');
@@ -137,7 +142,7 @@ class ThemeUserController extends Controller{
             //     User::setStripeKey( $payment_settings->test_secret_key );
             // }
 
-            // $invoices = $user->invoices(); 
+            // $invoices = $user->invoices();
 
             $data = array(
                     'user' => $user,
@@ -157,7 +162,7 @@ class ThemeUserController extends Controller{
             return Redirect::to('/');
         }
     }
-	
+
     public function cancel_account($username){
         if(Auth::guest()):
             return Redirect::to('/');
@@ -219,11 +224,11 @@ class ThemeUserController extends Controller{
         $user = Auth::user();
 
         if(Auth::user()->username == $username){
-          
+
             $token = Input::get('stripeToken');
 
             try{
-           
+
                 $user->subscription('monthly')->resume($token);
                 return Redirect::to('user/' . $username . '/billing')->with(array('note' => 'Your Credit Card Info has been successfully updated.', 'note_type' => 'success'));
 
@@ -359,11 +364,11 @@ class ThemeUserController extends Controller{
         $user = User::find(Auth::user()->id);
 
         if(Auth::user()->username == $username){
-          
+
             $token = Input::get('stripeToken');
 
             try{
-           
+
                 $user->subscription('monthly')->create($token, ['email' => $user->email]);
                 $user->role = 'subscriber';
                 $user->save();
