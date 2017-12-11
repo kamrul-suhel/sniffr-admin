@@ -11,6 +11,7 @@ use App\Tag;
 use App\Page;
 use App\Menu;
 use App\Video;
+use App\Download;
 use App\Setting;
 use App\Favorite;
 use App\VideoCategory;
@@ -57,6 +58,11 @@ class ThemeVideoController extends Controller {
                 $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
             endif;
 
+            $downloaded = false;
+            if(!Auth::guest()):
+                $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
+            endif;
+
             $view_increment = $this->handleViewCount($id);
 
             $data = array(
@@ -64,6 +70,7 @@ class ThemeVideoController extends Controller {
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'view_increment' => $view_increment,
                 'favorited' => $favorited,
+                'downloaded' => $downloaded,
                 'video_categories' => VideoCategory::all(),
                 'post_categories' => PostCategory::all(),
                 'theme_settings' => ThemeHelper::getThemeSettings(),
