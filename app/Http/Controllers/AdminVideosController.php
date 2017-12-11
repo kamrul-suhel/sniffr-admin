@@ -118,7 +118,7 @@ class AdminVideosController extends Controller {
                 );
 
                 // Upload it to youtube
-                $response = MyYoutube::upload($file, ['title' => $video->title], 'private');
+                $response = MyYoutube::upload($file, ['title' => $video->title], 'unlisted');
                 $youtubeId  = $response->getVideoId();
 
                 $video->youtube_id = $youtubeId;
