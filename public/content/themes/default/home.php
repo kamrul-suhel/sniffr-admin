@@ -1,6 +1,6 @@
 <?php include('includes/header.php'); ?>
 
-<div id="home-hero" class="vidbg-box" data-vidbg-bg="mp4: /content/themes/default/assets/video/sample_bg.mp4, poster: /content/themes/default/assets/video/sample_bg.jpg"
+<div id="home-hero" class="vidbg-box" data-vidbg-bg="mp4: /content/themes/default/assets/video/ocean.mp4, poster: /content/themes/default/assets/video/ocean.jpg"
   data-vidbg-options="loop: true, muted: true, overlayColor: #000, overlayAlpha: 0.4">
 	<div id="dim-bg">
 		<div class="container home-titles">
