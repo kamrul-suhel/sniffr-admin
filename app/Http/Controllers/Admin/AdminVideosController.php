@@ -108,12 +108,12 @@ class AdminVideosController extends Controller {
             // Move video to Youtube
             if($video->file){
                 $file = file_get_contents($video->file);
-                $fileName = basename($video->file); 
+                $fileName = basename($video->file);
 
                 file_put_contents('/tmp/'.$fileName, $file);
 
                 $file = new UploadedFile (
-                    '/tmp/'.$fileName, 
+                    '/tmp/'.$fileName,
                     $fileName,
                     $video->mime,
                     filesize('/tmp/'.$fileName),
@@ -148,6 +148,15 @@ class AdminVideosController extends Controller {
         $video->save();
 
         return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+    }
+
+    public function statusapi($state, $id)
+    {
+        $video = Video::find($id);
+
+        return response($video, 200)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Content-Type', 'application/json');
     }
 
     /**
