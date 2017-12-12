@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Validator;
@@ -19,6 +19,8 @@ use App\Libraries\ThemeHelper;
 
 use Carbon\Carbon as Carbon;
 
+use App\Http\Controllers\Controller;
+
 class AdminController extends Controller {
 
 	public function __construct()
@@ -34,9 +36,6 @@ class AdminController extends Controller {
 
 	public function index()
 	{
-		$start = (new Carbon('now'))->hour(0)->minute(0)->second(0);
-		$end = (new Carbon('now'))->hour(23)->minute(59)->second(59);
-
 		$total_videos = count(Video::get());
 		$new_videos = count(Video::where('state', 'new')->get());
 		$licensed_videos = count(Video::where('state', 'licensed')->get());

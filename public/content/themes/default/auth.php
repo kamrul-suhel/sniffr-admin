@@ -4,18 +4,11 @@
 
 		<h2 class="form-signin-heading">Please Login</h2>
 		<form method="post" action="<?= ($settings->enable_https) ? secure_url('login') : route('login') ?>" class="form-signin">
-		    <input type="text" class="form-control" placeholder="Email address or Username" tabindex="0" id="email" name="email" value="<?php if($settings->demo_mode == 1): ?>demo<?php endif; ?>">
-		    <input type="password" class="form-control" placeholder="Password" id="password" name="password" value="<?php if($settings->demo_mode == 1): ?>demo<?php endif; ?>">
+		    <input type="text" class="form-control" placeholder="Email address or Username" tabindex="0" id="email" name="email" value="">
+		    <input type="password" class="form-control" placeholder="Password" id="password" name="password" value="">
 		    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 		    <br />
 		    <input type="hidden" id="redirect" name="redirect" value="" />
-		    <?php if($settings->demo_mode == 1): ?>
-				<div class="alert alert-info demo-info" role="alert">
-					<p class="title">Demo Login</p>
-					<p><strong>username:</strong> <span>demo</span></p>
-					<p><strong>password:</strong> <span>demo</span></p>
-				</div>
-			<?php endif; ?>
 			<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		</form>
 

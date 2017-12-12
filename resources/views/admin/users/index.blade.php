@@ -22,7 +22,6 @@
 			<th>Email</th>
 			<th>User Type</th>
 			<th>Active</th>
-			<th>Subscription Status</th>
 			<th>Actions</th>
 			@foreach($users as $user)
 			<tr>
@@ -37,15 +36,12 @@
 				</td>
 				<td>@if(Auth::user()->role == 'demo')email n/a in demo mode @else{{ $user->email }}@endif</td>
 				<td>
-					@if($user->role == 'subscriber')
+					@if($user->role == 'client')
 						<div class="label label-success"><i class="fa fa-user"></i>
-						Subscribed User</div>
-					@elseif($user->role == 'registered')
+						Client</div>
+					@elseif($user->role == 'manager')
 						<div class="label label-info"><i class="fa fa-envelope"></i>
-						Registered User</div>
-					@elseif($user->role == 'demo')
-						<div class="label label-danger"><i class="fa fa-life-saver"></i>
-						Demo User</div>
+						Manager</div>
 					@elseif($user->role == 'admin')
 						<div class="label label-primary"><i class="fa fa-star"></i>
 						<?= ucfirst($user->role) ?> User</div>
@@ -53,9 +49,6 @@
 					 
 				</td>
 				<td>{{ $user->active }}</td>
-				<td>
-					<div class="label label-success"><i class="fa fa-ticket"></i> Subscribed</div>
-				</td>
 				<td>
 					<a href="{{ URL::to('admin/user/edit') . '/' . $user->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
 					<a href="{{ URL::to('admin/user/delete') . '/' . $user->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>

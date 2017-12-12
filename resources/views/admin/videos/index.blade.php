@@ -42,14 +42,14 @@
 					<header>
 						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 
-						<a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}" class="album-options">
+						<a href="{{ URL::to('admin/videos/'.$video->id.'/edit') }}" class="album-options">
 							<i class="entypo-pencil"></i>
 							Edit
 						</a>
 					</header>
 
 					<section class="album-info">
-						<h3><a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
+						<h3><a href="{{ URL::to('admin/videos/') . '/' . $video->id }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
 
 						<p>{{ $video->description }}</p>
 					</section>
@@ -79,7 +79,7 @@
 						</div>
 
 						<div class="album-options">
-							<a href="{{ URL::to('admin/videos/edit') . '/' . $video->id }}">
+							<a href="{{ URL::to('admin/videos/'.$video->id.'/edit') }}">
 								<i class="entypo-pencil"></i>
 							</a>
 

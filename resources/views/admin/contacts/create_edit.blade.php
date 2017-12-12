@@ -50,7 +50,7 @@
 				?>
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title"><a href="{{ url('admin/videos/edit/'.$video->id) }}">{{ $video->title }}</a></div>
+						<div class="panel-title"><a href="{{ url('admin/videos/'.$video->id.'/edit') }}">{{ $video->title }}</a></div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>

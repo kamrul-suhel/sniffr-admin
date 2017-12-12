@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Validator;
@@ -14,7 +14,9 @@ use App\PostCategory;
 use App\PaymentSetting;
 
 use App\Libraries\ThemeHelper;
+use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 class AdminPaymentSettingsController extends Controller {

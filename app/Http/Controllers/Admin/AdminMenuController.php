@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Validator;
@@ -15,6 +15,7 @@ use App\PostCategory;
 use App\Libraries\ThemeHelper;
 
 use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Controller;
 
 class AdminMenuController extends Controller {
 
