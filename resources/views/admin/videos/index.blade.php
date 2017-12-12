@@ -72,7 +72,12 @@
 							@elseif($video->state == 'problem')
 							<i class="fa fa-exclamation"></i> Problem
 							@elseif($video->state == 'restricted')
-							<i class="fa fa-exclamation-triangle"></i> Restricted
+								@if($video->type == 'nonex')
+								<i class="fa fa-exclamation-triangle"></i> Restricted
+								<i class="fa fa-times-circle"></i> Non-Exclusive
+								@else
+								<i class="fa fa-exclamation-triangle"></i> Restricted
+								@endif
 							@else
 							<i class="entypo-video"></i> {{ ucfirst($video->state) }}
 							@endif

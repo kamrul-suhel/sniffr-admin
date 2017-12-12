@@ -25,8 +25,8 @@ use App\PostCategory;
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 
-use App\Mail\SubmissionNew;
-use App\Mail\SubmissionThanks;
+use App\Mail\SubmissionNewNonEx;
+use App\Mail\SubmissionThanksNonEx;
 
 class ThemeSubmissionController extends Controller {
 
@@ -131,15 +131,19 @@ class ThemeSubmissionController extends Controller {
         $video->file = $filePath;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
-        $video->state = 'new';
+        $video->state = 'restricted';
+        $video->type = 'nonex';
+        $video->referrer = Input::get('referrer');
+        $video->notes = Input::get('notes');
+        $video->credit = Input::get('credit');
         $video->save();
 
         // Add Email notifications
         // Notification of new video
-        Mail::to('submissions@unilad.co.uk')->send(new SubmissionNew($video));
+        Mail::to('submissions@unilad.co.uk')->send(new SubmissionNewNonEx($video));
 
         // Send thanks notification
-        Mail::to($contact->email)->send(new SubmissionThanks($video));
+        Mail::to($contact->email)->send(new SubmissionThanksNonEx($video));
 
         //dd($request);
 

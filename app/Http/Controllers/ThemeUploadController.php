@@ -132,6 +132,7 @@ class ThemeUploadController extends Controller {
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
+        $video->type = 'ex';
         $video->save();
 
         // Add Email notifications

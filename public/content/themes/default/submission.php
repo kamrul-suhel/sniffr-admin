@@ -12,9 +12,9 @@
 				<div class="alert alert-danger">
 					<p><strong>Please correct the errors below and click 'Submit Video' again.</strong></p>
 					<ul>
-							<?php foreach ($errors->all() as $error){
-									echo '<li>'. $error .'</li>';
-							} ?>
+						<?php foreach ($errors->all() as $error){
+								echo '<li>'. $error .'</li>';
+						} ?>
 					</ul>
 				</div>
 			</div>

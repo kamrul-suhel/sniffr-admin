@@ -302,7 +302,7 @@ class AdminVideosController extends Controller {
 
             MyYoutube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
         }
-        
+
         // Duration
         if(isset($data['duration'])){
             $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
