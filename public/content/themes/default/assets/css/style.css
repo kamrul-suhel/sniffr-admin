@@ -540,6 +540,7 @@ input[type="radio"]:checked:before {
   background: rgba(0, 0, 0, 0.7);
   border: 0px;
   color: #fff;
+  width: 100%;
 }
 .home .navbar-nav > li > .dropdown-menu .divider {
   background-color: #343434;

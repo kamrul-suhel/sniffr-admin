@@ -176,7 +176,7 @@ class AdminVideosController extends Controller {
         // Send Accepted Email
         Mail::to($video->contact->email)->send(new DetailsReminder($video));
 
-        return Redirect::to('admin/videos/'.$id.'/edit')->with(array('note' => 'Reminder socket_send(socket, buf, len, flags)', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder socket_send(socket, buf, len, flags)', 'note_type' => 'success') );
     }
 
     /**
@@ -336,7 +336,7 @@ class AdminVideosController extends Controller {
 
         $video->update($data);
 
-        return Redirect::to('admin/videos/'.$id.'/edit')->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
     }
 
     public function comment($id)
@@ -351,7 +351,7 @@ class AdminVideosController extends Controller {
             $video->comments()->save($comment);
         }
 
-        return Redirect::to('admin/videos/'.$id.'/edit')->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
     }
 
     /**

@@ -42,7 +42,7 @@
 					<header>
 						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 
-						<a href="{{ URL::to('admin/videos/'.$video->id.'/edit') }}" class="album-options">
+						<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}" class="album-options">
 							<i class="entypo-pencil"></i>
 							Edit
 						</a>
@@ -79,11 +79,11 @@
 						</div>
 
 						<div class="album-options">
-							<a href="{{ URL::to('admin/videos/'.$video->id.'/edit') }}">
+							<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}">
 								<i class="entypo-pencil"></i>
 							</a>
 
-							<a href="{{ URL::to('admin/videos/delete') . '/' . $video->id }}" class="delete">
+							<a href="{{ URL::to('admin/videos/delete/'.$video->id) }}" class="delete">
 								<i class="entypo-trash"></i>
 							</a>
 						</div>

@@ -158,23 +158,26 @@ Route::get('upload_dir', function(){
 
 Route::group(array('prefix' => 'admin'), function(){
     // Admin Dashboard
-    Route::get('', 'Admin\AdminController@index');
+    Route::get('', 'Admin\Admin\AdminController@index');
 
     // Admin Video Functionality
-    Route::resource('videos', 'Admin\AdminVideosController');
+    Route::get('videos', 'Admin\AdminVideosController@index');
+    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit');
+    Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
     Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
-    Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
-    Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
-    Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
-    Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
-    Route::post('videos/comment/{id}', array('uses' => 'Admin\AdminVideosController@comment'));
-
+    Route::get('videos/create', 'Admin\AdminVideosController@create');
+    Route::post('videos/store', array('uses' => 'Admin\AdminVideosController@store'));
     Route::get('videos/categories', 'Admin\AdminVideoCategoriesController@index');
     Route::post('videos/categories/store', array('uses' => 'Admin\AdminVideoCategoriesController@store'));
     Route::post('videos/categories/order', array('uses' => 'Admin\AdminVideoCategoriesController@order'));
     Route::get('videos/categories/edit/{id}', 'Admin\AdminVideoCategoriesController@edit');
     Route::post('videos/categories/update', array('uses' => 'Admin\AdminVideoCategoriesController@update'));
     Route::get('videos/categories/delete/{id}', array('uses' => 'Admin\AdminVideoCategoriesController@destroy'));
+    Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
+    Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
+    Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
+    Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
+    Route::post('videos/comment/{id}', array('uses' => 'Admin\AdminVideosController@comment'));
 
     Route::get('posts', 'Admin\AdminPostController@index');
     Route::get('posts/create', 'Admin\AdminPostController@create');
