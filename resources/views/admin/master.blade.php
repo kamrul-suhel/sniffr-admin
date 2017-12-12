@@ -96,7 +96,7 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/videos') }}">
+					<a href="{{ URL::to('admin/videos') }}" class="tlink">
 						<i class="entypo-video"></i>
 						<span class="title">Videos</span>
 					</a>
@@ -150,7 +150,7 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/pages') }}">
+					<a href="{{ URL::to('admin/pages') }}" class="tlink">
 						<i class="entypo-book-open"></i>
 						<span class="title">Pages & Posts</span>
 					</a>
@@ -198,7 +198,7 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/contacts') }}">
+					<a href="{{ URL::to('admin/contacts') }}" class="tlink">
 						<i class="entypo-user-add"></i>
 						<span class="title">Contacts</span>
 					</a>
@@ -217,7 +217,7 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/clients') }}">
+					<a href="{{ URL::to('admin/clients') }}" class="tlink">
 						<i class="entypo-user"></i>
 						<span class="title">Clients</span>
 					</a>
@@ -236,7 +236,7 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/campaigns') }}">
+					<a href="{{ URL::to('admin/campaigns') }}" class="tlink">
 						<i class="entypo-list"></i>
 						<span class="title">Campaigns</span>
 					</a>
@@ -272,7 +272,7 @@
 				</li> -->
 
 				<li class="">
-					<a href="{{ URL::to('admin/users') }}">
+					<a href="{{ URL::to('admin/users') }}" class="tlink">
 						<i class="entypo-users"></i>
 						<span class="title">Users</span>
 					</a>
@@ -291,7 +291,7 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/settings') }}">
+					<a href="{{ URL::to('admin/settings') }}" class="tlink">
 						<i class="entypo-cog"></i>
 						<span class="title">Settings</span>
 					</a>
@@ -496,6 +496,14 @@
 
     $(document).ready(function(){
     	display_mobile_menu();
+
+		$('.tlink').click(function(){
+			var alink = $(this).attr('href');
+			if(alink){
+				window.location.href = alink;
+			}
+	    });
+
     });
 
 </script>

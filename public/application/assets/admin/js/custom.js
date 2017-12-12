@@ -1490,7 +1490,7 @@ function setup_sidebar_menu()
 			$link = $this.find('> a'),
 			$submenu = $this.find('> ul');
 
-		$this.addClass('has-sub');
+		//$this.addClass('has-sub');
 
 		$link.click(function(ev)
 		{
