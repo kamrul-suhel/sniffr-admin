@@ -158,7 +158,7 @@ Route::get('upload_dir', function(){
 
 Route::group(array('prefix' => 'admin'), function(){
     // Admin Dashboard
-    Route::get('', 'Admin\Admin\AdminController@index');
+    Route::get('', 'Admin\AdminController@index');
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index');
