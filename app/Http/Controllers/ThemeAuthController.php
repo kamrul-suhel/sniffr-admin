@@ -116,24 +116,13 @@ class ThemeAuthController extends Controller {
     			$user->save();
     		}
 
-	    	//if(Auth::user()->subscribed() || (Auth::user()->role == 'admin' || Auth::user()->role == 'demo') || ($settings->free_registration && Auth::user()->role == 'registered') ):
-	    	if((Auth::user()->role == 'admin' || Auth::user()->role == 'demo' || Auth::user()->role == 'client') || ($settings->free_registration && Auth::user()->role == 'registered') ):
-
-	    		$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
-	    		if(Auth::user()->role == 'demo' && Setting::first()->demo_mode != 1){
-	    			Auth::logout();
-	    			return Redirect::to($redirect)->with(array('note' => 'Sorry, demo mode has been disabled', 'note_type' => 'error'));
-	    		} elseif($settings->free_registration && $settings->activation_email && Auth::user()->active == 0) {
-	    			Auth::logout();
-	    			return Redirect::to($redirect)->with(array('note' => 'Please make sure to activate your account in your email before logging in.', 'note_type' => 'error'));
-	    		} else {
-	    			return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
-	    		}
-	    	else:
-	    		$username = Auth::user()->username;
-	    		return Redirect::to('user/' . $username . '/renew_subscription')->with(array('note' => 'Uh oh, looks like you don\'t have an active subscription, please renew to gain access to all content', 'note_type' => 'error'));
-	    	endif;
-	    	
+    		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
+    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
+    			return Redirect::to($redirect);
+    		} else {
+    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
+    			return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
+    		}
 	    } else {
 
 	    	$redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
