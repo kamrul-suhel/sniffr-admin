@@ -36,6 +36,14 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
     /*
     |--------------------------------------------------------------------------
+    | Submission Routes (for exclusive and non-exclusive videos)
+    |--------------------------------------------------------------------------
+    */
+    Route::post('submission', 'ThemeSubmissionController@store');
+    Route::get('submission', 'ThemeSubmissionController@index');
+
+    /*
+    |--------------------------------------------------------------------------
     | Thanks Routes
     |--------------------------------------------------------------------------
     */
@@ -167,6 +175,7 @@ Route::group(array('before' => 'admin'), function(){
     Route::get('admin/videos/categories/delete/{id}', array('uses' => 'AdminVideoCategoriesController@destroy'));
     Route::get('admin/videos/{id}', array('uses' => 'AdminVideosController@index'));
     Route::get('admin/videos/status/{state}/{id}', array('uses' => 'AdminVideosController@status'));
+    Route::get('admin/videos/statusapi/{state}/{id}', array('uses' => 'AdminVideosController@statusapi')); //test for ajax call
     Route::get('admin/videos/remind/{id}', array('uses' => 'AdminVideosController@remind'));
     Route::post('admin/videos/comment/{id}', array('uses' => 'AdminVideosController@comment'));
 
