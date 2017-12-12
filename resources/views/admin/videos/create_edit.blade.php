@@ -145,7 +145,11 @@
 	</div>
 	@endif
 
-	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	@if(Request::segment(3) == 'create')
+	{!! Form::open(['url' => $post_route]) !!}
+	@else
+	{!! Form::model($video, ['route' => ['videos.update', $video->id], 'method' => 'PUT', 'files' => 'true']) !!}
+	@endif
 		<div class="row">
 			<div class="col-md-6">
 				<div class="panel panel-primary" data-collapsed="0">
@@ -382,7 +386,7 @@
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 
-	</form>
+	{!! Form::close() !!}
 
 	<div class="clear"></div>
 </div>

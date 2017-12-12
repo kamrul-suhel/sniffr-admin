@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Validator;
@@ -13,6 +13,7 @@ use App\VideoCategory;
 use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
+use App\Http\Controllers\Controller;
 
 class AdminThemesController extends Controller {
 

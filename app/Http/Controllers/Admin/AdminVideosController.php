@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use View;
 use Auth;
@@ -8,6 +8,8 @@ use Youtube;
 use MyYoutube;
 use Redirect;
 use Validator;
+use DateTime;
+use DateInterval;
 
 use Google_Client;
 use Google_Service_YouTube;
@@ -28,6 +30,8 @@ use App\VideoCategory;
 
 
 use App\Libraries\ImageHandler;
+use App\Libraries\TimeHelper;
+use App\Http\Controllers\Controller;
 
 use App\Mail\DetailsReminder;
 use App\Mail\SubmissionAccepted;
@@ -134,7 +138,7 @@ class AdminVideosController extends Controller {
 
             // Make youtube video public
             if($video->youtube_id){
-                MyYoutube::updatePrivacy($video->youtube_id);
+                MyYoutube::setStatus($video->youtube_id, 'public');
             }
 
             // Send Licensed Email
@@ -172,7 +176,7 @@ class AdminVideosController extends Controller {
         // Send Accepted Email
         Mail::to($video->contact->email)->send(new DetailsReminder($video));
 
-        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder socket_send(socket, buf, len, flags)', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/'.$id.'/edit')->with(array('note' => 'Reminder socket_send(socket, buf, len, flags)', 'note_type' => 'success') );
     }
 
     /**
@@ -184,7 +188,7 @@ class AdminVideosController extends Controller {
     {
         $data = array(
             'headline' => '<i class="fa fa-plus-circle"></i> New Video',
-            'post_route' => url('admin/videos/store'),
+            'post_route' => url('admin/videos'),
             'button_text' => 'Add New Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
@@ -251,14 +255,14 @@ class AdminVideosController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit($video)
     {
-        $video = Video::find($id);
+        $video = Video::find($video);
 
         $data = array(
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
-            'post_route' => url('admin/videos/update'),
+            'post_route' => url('admin/videos/'.$video->id),
             'button_text' => 'Update Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
@@ -274,10 +278,9 @@ class AdminVideosController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $input = Input::all();
-        $id = $input['id'];
         $video = Video::findOrFail($id);
 
         $validator = Validator::make($data = $input, $this->rules);
@@ -291,12 +294,21 @@ class AdminVideosController extends Controller {
         unset($data['tags']);
         $this->addUpdateVideoTags($video, $tags);
 
+        // Youtube integration
+        if($video->youtube_id){ // Fetches video duration on update and is youtube if none
+            if(!$video->duration){
+                $data['duration'] = MyYoutube::getDuration($video->youtube_id);
+            }
+
+            MyYoutube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
+        }
+        
+        // Duration
         if(isset($data['duration'])){
-                //$str_time = $data
-                $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
-                sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-                $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-                $data['duration'] = $time_seconds;
+            $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
+            sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+            $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
+            $data['duration'] = $time_seconds;
         }
 
         if(empty($data['image'])){
@@ -324,7 +336,7 @@ class AdminVideosController extends Controller {
 
         $video->update($data);
 
-        return Redirect::to('admin/videos/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/'.$id.'/edit')->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
     }
 
     public function comment($id)
@@ -339,7 +351,7 @@ class AdminVideosController extends Controller {
             $video->comments()->save($comment);
         }
 
-        return Redirect::to('admin/videos/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/'.$id.'/edit')->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
     }
 
     /**
@@ -361,6 +373,11 @@ class AdminVideosController extends Controller {
         }
 
         $this->deleteVideoImages($video);
+
+        // Hide on youtube
+        if($video->youtube_id){
+            MyYoutube::setStatus($video->youtube_id, 'private');
+        }
 
         $video->delete();
         $video->save();

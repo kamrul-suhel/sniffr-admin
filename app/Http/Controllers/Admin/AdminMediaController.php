@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Validator;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 
 use App\Libraries\ThemeHelper;
+use App\Http\Controllers\Controller;
 
 class AdminMediaController extends Controller {
 

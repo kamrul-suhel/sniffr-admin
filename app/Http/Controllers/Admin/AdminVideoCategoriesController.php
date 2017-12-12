@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use View;
 use Auth;
@@ -13,8 +13,11 @@ use App\VideoCategory;
 use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
+use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+
 
 class AdminVideoCategoriesController extends Controller {
 

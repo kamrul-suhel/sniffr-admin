@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\v1;
 
 use Response;
-use Input;
 use Video;
 use Auth;
 use App\Setting as Setting;
