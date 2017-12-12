@@ -16,7 +16,7 @@ class AdminPluginsController extends Controller {
      */
     public function __construct(Request $request)
     {
-        $this->middleware(['auth', 'admin']);
+        $this->middleware('admin');
     }
 
 	public function index()
