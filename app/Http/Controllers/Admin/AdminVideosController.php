@@ -47,7 +47,7 @@ class AdminVideosController extends Controller {
      */
     public function __construct(Request $request)
     {
-        $this->middleware(['auth', 'admin']);
+        $this->middleware('admin');
     }
     /**
      * Display a listing of videos
@@ -262,7 +262,7 @@ class AdminVideosController extends Controller {
         $data = array(
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
-            'post_route' => url('admin/videos/'.$video->id),
+            'post_route' => url('admin/videos/update'),
             'button_text' => 'Update Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
@@ -278,9 +278,10 @@ class AdminVideosController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $input = Input::all();
+        $id = $input['id'];
         $video = Video::findOrFail($id);
 
         $validator = Validator::make($data = $input, $this->rules);

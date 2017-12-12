@@ -33,7 +33,11 @@ class User extends Authenticatable
         return $this->belongsTo(Client::class)->first();
     }
 
-    public function isAdmin() {
-        return $this->role=='admin';
+    public function canAccessAdmin() {
+        if($this->role=='admin' || $this->role=='manager'){
+            return true;
+        }
+
+        return false;
     }
 }

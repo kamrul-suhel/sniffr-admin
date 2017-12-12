@@ -198,25 +198,6 @@
 				</li>
 
 				<li class="">
-					<a href="{{ URL::to('admin/users') }}">
-						<i class="entypo-users"></i>
-						<span class="title">Users</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/users') }}">
-								<span class="title">All Users</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/user/create') }}">
-								<span class="title">Add New User</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="">
 					<a href="{{ URL::to('admin/contacts') }}">
 						<i class="entypo-user-add"></i>
 						<span class="title">Contacts</span>
@@ -289,6 +270,25 @@
 						</li>
 	            	</ul>
 				</li> -->
+
+				<li class="">
+					<a href="{{ URL::to('admin/users') }}">
+						<i class="entypo-users"></i>
+						<span class="title">Users</span>
+					</a>
+					<ul>
+						<li>
+							<a href="{{ URL::to('admin/users') }}">
+								<span class="title">All Users</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ URL::to('admin/user/create') }}">
+								<span class="title">Add New User</span>
+							</a>
+						</li>
+					</ul>
+				</li>
 
 				<li class="">
 					<a href="{{ URL::to('admin/settings') }}">

@@ -26,7 +26,7 @@ class AdminClientController extends Controller
     //
     public function __construct(Request $request)
     {
-        $this->middleware(['auth', 'admin']);
+        $this->middleware('admin');
     }
     /**
      * Display a listing of the resource.

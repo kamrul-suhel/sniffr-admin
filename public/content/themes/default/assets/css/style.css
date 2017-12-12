@@ -540,7 +540,6 @@ input[type="radio"]:checked:before {
   background: rgba(0, 0, 0, 0.7);
   border: 0px;
   color: #fff;
-  width: 100%;
 }
 .home .navbar-nav > li > .dropdown-menu .divider {
   background-color: #343434;
@@ -553,6 +552,7 @@ input[type="radio"]:checked:before {
 }
 .navbar-nav > li > .dropdown-menu {
   box-shadow: 0px 0px 0px;
+  width: 100%;
 }
 .navbar-nav.navbar-right li.signup-desktop,
 .navbar-nav.navbar-right li.login-desktop {
