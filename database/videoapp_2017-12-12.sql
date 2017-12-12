@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.5-10.2.10-MariaDB)
 # Database: videoapp
-# Generation Time: 2017-12-12 11:19:51 +0000
+# Generation Time: 2017-12-12 11:33:36 +0000
 # ************************************************************
 
 
@@ -944,9 +944,10 @@ LOCK TABLES `users` WRITE;
 
 INSERT INTO `users` (`id`, `client_id`, `username`, `email`, `avatar`, `password`, `role`, `active`, `created_at`, `updated_at`, `activation_code`, `remember_token`, `stripe_active`, `stripe_id`, `stripe_subscription`, `stripe_plan`, `last_four`, `trial_ends_at`, `subscription_ends_at`)
 VALUES
-	(1,NULL,'ianlainchbury','ian@unilad.co.uk','Ian_512x512.jpg','$2y$10$hQ1gfosDlXTg/lbMG13esOLBigG1Clsp5BCq89nGdFArWkgDEt3Xa','admin',1,'2014-08-26 23:43:33','2017-12-12 10:01:46',NULL,'r0CcuP0Ffzp2a1hmXthEnMWYIE4lulWNHK5HmbPvsz1zDtzQV1WgfEDwvtMc',1,NULL,NULL,NULL,NULL,NULL,NULL),
+	(1,NULL,'ianlainchbury','ian@unilad.co.uk','Ian_512x512.jpg','$2y$10$hQ1gfosDlXTg/lbMG13esOLBigG1Clsp5BCq89nGdFArWkgDEt3Xa','admin',1,'2014-08-26 23:43:33','2017-12-12 10:01:46',NULL,'AEb3Ft7wFRA7OesHjrk3dtma0m1i79q8Ju17sLeCNRdPD7H2Tp37gNfpIwrI',1,NULL,NULL,NULL,NULL,NULL,NULL),
 	(2,NULL,'mikewright','mike@unilad.co.uk','default.jpg','$2y$10$gDmaGO132AbobbUUrUBPIOaGpMdKeGdWYf1Wi0JoRBciKjTAM6aku','admin',1,'2014-12-21 19:26:04','2017-12-12 11:17:29',NULL,'p7VMXP1SQjeczysXmzCPlNaHg0TYb0ln0AmvwvGvlxgxn7bxYiwnit4RSnJ6',0,NULL,NULL,NULL,NULL,NULL,NULL),
-	(3,1,'dailymail','dailymail@unilad.co.uk','5a26c55de47c1-dm_com_29.png','$2y$10$8CylmzTwomm5IXhucbwXS.MdR7rE5NjJPgxexo57HQSonAP1uHkwW','client',1,'2017-12-05 13:36:43','2017-12-12 11:18:39',NULL,'W2Jw2yqJywkG3icOuVKmb2kC2REqm7RRSGwNF9iqp9quDMPJfwZelO6H6EAS',0,NULL,NULL,NULL,NULL,NULL,NULL);
+	(3,1,'dailymail','dailymail@unilad.co.uk','5a26c55de47c1-dm_com_29.png','$2y$10$8CylmzTwomm5IXhucbwXS.MdR7rE5NjJPgxexo57HQSonAP1uHkwW','client',1,'2017-12-05 13:36:43','2017-12-12 11:18:39',NULL,'JLreYakq8l0SXOGVTGmfYdEDy2gip4WcKvaEbOagmXxmCzgYTIRQkV7gxJYP',0,NULL,NULL,NULL,NULL,NULL,NULL),
+	(4,NULL,'Manager','manager@unilad.co.uk','default.jpg','$2y$10$pNLwNXNeluGz03vVjEUAvO9zn6Dz/1VJ.OZqkx49efbKJYzLpdz2m','manager',1,'2017-12-12 11:31:08','2017-12-12 11:31:08',NULL,'',0,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
