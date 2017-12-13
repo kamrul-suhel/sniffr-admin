@@ -56,41 +56,48 @@
 
 					<footer>
 						<div class="album-images-count">
-							@if($video->state == 'new')
-							<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success" title="Accept Video"><i class="entypo-check"></i></a>
-	                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger" title="Reject Video"><i class="fa fa-times"></i></a>
-							@elseif($video->state == 'pending')
-							<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success" title="License Video"><i class="entypo-check"></i></a>
-	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
-							@elseif($video->state == 'licensed')
-							<i class="fa fa-check"></i> Licensed
-							@elseif($video->state == 'accepted')
-							<i class="fa fa-clock-o"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
-							@elseif($video->state == 'rejected')
-							<i class="fa fa-times"></i> Rejected
-							@elseif($video->state == 'problem')
-							<i class="fa fa-exclamation"></i> Problem
-							@elseif($video->state == 'restricted')
-								@if($video->type == 'nonex')
-								<i class="fa fa-exclamation-triangle"></i> Restricted
-								<i class="fa fa-times-circle"></i> Non-Exclusive
+							@if(!$video->trashed())
+								@if($video->state == 'new')
+								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success" title="Accept Video"><i class="entypo-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger" title="Reject Video"><i class="fa fa-times"></i></a>
+								@elseif($video->state == 'pending')
+								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success" title="License Video"><i class="entypo-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
+								@elseif($video->state == 'licensed')
+								<i class="fa fa-check"></i> Licensed
+								@elseif($video->state == 'accepted')
+								<i class="fa fa-clock-o"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+								@elseif($video->state == 'rejected')
+								<i class="fa fa-times"></i> Rejected
+								@elseif($video->state == 'problem')
+								<i class="fa fa-exclamation"></i> Problem
+								@elseif($video->state == 'restricted')
+									@if($video->type == 'nonex')
+									<i class="fa fa-exclamation-triangle"></i> Restricted
+									<i class="fa fa-times-circle"></i> Non-Exclusive
+									@else
+									<i class="fa fa-exclamation-triangle"></i> Restricted
+									@endif
 								@else
-								<i class="fa fa-exclamation-triangle"></i> Restricted
+								<i class="entypo-video"></i> {{ ucfirst($video->state) }}
 								@endif
-							@else
-							<i class="entypo-video"></i> {{ ucfirst($video->state) }}
 							@endif
 						</div>
 
 						<div class="album-options">
+							@if($video->trashed())
+							<a href="{{ URL::to('admin/videos/restore/'.$video->id) }}" title="Remove from trash" class="undelete">
+								<i class="entypo-upload"></i>
+							</a>
+							@else
 							<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}">
 								<i class="entypo-pencil"></i>
 							</a>
-
-							<a href="{{ URL::to('admin/videos/delete/'.$video->id) }}" class="delete">
+							<a href="{{ URL::to('admin/videos/delete/'.$video->id) }}" title="Delete Video" class="delete">
 								<i class="entypo-trash"></i>
 							</a>
+							@endif
 						</div>
 					</footer>
 				</article>

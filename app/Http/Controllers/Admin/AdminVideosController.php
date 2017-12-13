@@ -54,14 +54,13 @@ class AdminVideosController extends Controller {
      *
      * @return Response
      */
-    public function index($state = 'all')
+    public function index(Request $request, $state = 'all')
     {
         $search_value = Input::get('s');
 
         $videos = new Video;
 
         if(!empty($search_value)){
-            //$videos = $videos->where('title', 'LIKE', '%'.$search_value.'%');
             $videos = Video::where(function($query) use($search_value){
                 $query->where('title', 'LIKE', '%'.$search_value.'%');
             })->orWhereHas('tags', function ($q) use($search_value){
@@ -70,12 +69,16 @@ class AdminVideosController extends Controller {
         }
 
         if($state != 'all'){
-            $videos = $videos->where('state', $state);
+            if($state == 'deleted'){
+                $videos = $videos->onlyTrashed();
+            }else{
+                $videos = $videos->where('state', $state);
+            }
+            
             session(['state' => $state]);
         }
 
         $videos = $videos->orderBy('created_at', 'DESC')->paginate(9);
-
 
         $user = Auth::user();
 
@@ -384,6 +387,23 @@ class AdminVideosController extends Controller {
         $video->save();
 
         return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
+    }
+
+    public function restore(Request $request, $id)
+    {
+        $data = $request->session()->all();
+
+        $video = Video::withTrashed()->find($id);
+
+        // Hide on youtube
+        if($video->youtube_id){
+            MyYoutube::setStatus($video->youtube_id, 'unlinked');
+        }
+
+        $video->restore();
+        $video->save();
+
+        return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Restored Video', 'note_type' => 'success') );
     }
 
     private function addUpdateVideoTags($video, $tags){

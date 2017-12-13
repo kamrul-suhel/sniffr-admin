@@ -56,20 +56,12 @@
 
 <a href="{{ URL::to('/') }}" class="top-left-logo">
 	<img src="/application/assets/admin/images/unilad-logo-small.gif">
-	<!--<img src="{{ '/application/assets/admin/images/hv-tv.png' }}" />-->
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 	<div class="sidebar-menu page-right-in">
 		<div class="sidebar-menu-inner">
 			<header class="logo-env">
-				<!-- logo -->
-				<div class="logo">
-					<a href="{{ URL::to('/') }}">
-
-					</a>
-				</div>
-
 				<!-- logo collapse icon -->
 				<div class="sidebar-collapse">
 					<a href="#" class="sidebar-collapse-icon"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
@@ -85,235 +77,7 @@
 				</div>
 			</header>
 
-			<ul id="main-menu" class="main-menu">
-				<!-- add class "multiple-expanded" to allow multiple submenus to open -->
-				<!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-				<li class="active">
-					<a href="{{ URL::to('admin') }}">
-						<i class="entypo-gauge"></i>
-						<span class="title">Dashboard</span>
-					</a>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/videos') }}" class="tlink">
-						<i class="entypo-video"></i>
-						<span class="title">Videos</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/videos/new') }}">
-								<span class="title">New Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/accepted') }}">
-								<span class="title">Accepted Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/pending') }}">
-								<span class="title">Pending Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/rejected') }}">
-								<span class="title">Rejected Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/problem') }}">
-								<span class="title">Problem Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/licensed') }}">
-								<span class="title">Licensed Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/restricted') }}">
-								<span class="title">Restricted Videos</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/create') }}">
-								<span class="title">Add New Video</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/videos/categories') }}">
-								<span class="title">Video Categories</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/pages') }}" class="tlink">
-						<i class="entypo-book-open"></i>
-						<span class="title">Pages & Posts</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/pages') }}">
-								<span class="title">All Pages</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/pages/create') }}">
-								<span class="title">Add New Page</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/posts') }}">
-								<span class="title">All Posts</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/posts/create') }}">
-								<span class="title">Add New Post</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/posts/categories') }}">
-								<span class="title">Post Categories</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/media') }}">
-						<i class="entypo-picture"></i>
-						<span class="title">Media</span>
-					</a>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/menu') }}">
-						<i class="entypo-list"></i>
-						<span class="title">Menu</span>
-					</a>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/contacts') }}" class="tlink">
-						<i class="entypo-user-add"></i>
-						<span class="title">Contacts</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/contacts') }}">
-								<span class="title">All Contacts</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/contacts/create') }}">
-								<span class="title">Add New Contact</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/clients') }}" class="tlink">
-						<i class="entypo-user"></i>
-						<span class="title">Clients</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/clients') }}">
-								<span class="title">All Clients</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/clients/create') }}">
-								<span class="title">Add New Client</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/campaigns') }}" class="tlink">
-						<i class="entypo-list"></i>
-						<span class="title">Campaigns</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/campaigns') }}">
-								<span class="title">All Campaigns</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/campaigns/create') }}">
-								<span class="title">Add New Campaign</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-				<!-- <li class="">
-					<a href="{{ URL::to('admin/themes') }}">
-						<i class="entypo-monitor"></i>
-						<span class="title">Themes</span>
-					</a>
-				</li> -->
-				<!-- <li class="">
-					<a href="{{ URL::to('admin/plugins') }}">
-						<i class="fa fa-plug"></i>
-						<span class="title">Plugins</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/plugins') }}">All Plugins</a>
-						</li>
-	            	</ul>
-				</li> -->
-
-				<li class="">
-					<a href="{{ URL::to('admin/users') }}" class="tlink">
-						<i class="entypo-users"></i>
-						<span class="title">Users</span>
-					</a>
-					<ul>
-						<li>
-							<a href="{{ URL::to('admin/users') }}">
-								<span class="title">All Users</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ URL::to('admin/user/create') }}">
-								<span class="title">Add New User</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="">
-					<a href="{{ URL::to('admin/settings') }}" class="tlink">
-						<i class="entypo-cog"></i>
-						<span class="title">Settings</span>
-					</a>
-					<ul>
-						<li class="">
-							<a href="{{ URL::to('admin/settings') }}">
-								<span class="title">Site Settings</span>
-							</a>
-						</li>
-						<!--<li class="">
-							<a href="{{ URL::to('admin/payment_settings') }}">
-								<span class="title">Payment Settings</span>
-							</a>
-						</li>-->
-						<li class="">
-							<a href="{{ URL::to('admin/theme_settings') }}">
-								<span class="title">Theme Settings</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
+			@include('admin.menu.main')
 		</div>
 	</div>
 
@@ -333,19 +97,8 @@
 			<!-- Raw Links -->
 			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
 				<ul class="list-inline links-list pull-right">
-					<!-- <li>
-						<a href="{{ URL::to('/') }}">
-							<span class="label label-warning" style="font-size:12px; background:#A8D432">Version 1.1.1</span>
-						</a>
-					</li> -->
-
 					<li class="sep"></li>
-
-					<li>
-						<a href="{{ URL::to('logout') }}">
-							Log Out <i class="entypo-logout right"></i>
-						</a>
-					</li>
+					<li><a href="{{ URL::to('logout') }}">Log Out <i class="entypo-logout right"></i></a></li>
 				</ul>
 			</div>
 		</div>
@@ -362,71 +115,6 @@
 		</footer>
 	</div>
 </div>
-
-<!-- Sample Modal (Default skin) -->
-<div class="modal fade" id="sample-modal-dialog-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Widget Options - Default Modal</h4>
-			</div>
-
-			<div class="modal-body">
-				<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Sample Modal (Skin inverted) -->
-<div class="modal invert fade" id="sample-modal-dialog-2">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Widget Options - Inverted Skin Modal</h4>
-			</div>
-
-			<div class="modal-body">
-				<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Sample Modal (Skin gray) -->
-<div class="modal gray fade" id="sample-modal-dialog-3">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Widget Options - Gray Skin Modal</h4>
-			</div>
-
-			<div class="modal-body">
-				<p>Now residence dashwoods she excellent you. Shade being under his bed her. Much read on as draw. Blessing for ignorant exercise any yourself unpacked. Pleasant horrible but confined day end marriage. Eagerness furniture set preserved far recommend. Did even but nor are most gave hope. Secure active living depend son repair day ladies now.</p>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
 
 
 <!-- Imported styles on this page -->

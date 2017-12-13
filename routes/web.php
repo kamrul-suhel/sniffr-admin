@@ -165,6 +165,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit');
     Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
     Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
+    Route::get('videos/restore/{id}', array('uses' => 'Admin\AdminVideosController@restore'));
     Route::get('videos/create', 'Admin\AdminVideosController@create');
     Route::post('videos/store', array('uses' => 'Admin\AdminVideosController@store'));
     Route::get('videos/categories', 'Admin\AdminVideoCategoriesController@index');

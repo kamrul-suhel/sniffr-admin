@@ -38,7 +38,7 @@ trait VideoHelper{
 		    if(str_contains($video->image,'http')){
 		        $sHTML .= '<img src="'.config('site.uploads_dir').'images/'.$video->image.'" />';
 		    }else{
-		        $sHTML .= '<img src="'.$video->image.'" class="video-img" />';
+		        $sHTML .= '<img src="'.url('content/uploads/images/'.$video->image).'" class="video-img" />';
 		    }
 		}else{
 		    $sHTML .= '<p>There seems to be an issue with this video</p>';
