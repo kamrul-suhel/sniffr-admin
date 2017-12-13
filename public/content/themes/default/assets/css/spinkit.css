@@ -5,7 +5,7 @@
     top: 0;
     overflow: hidden;
     position: fixed;
-    background:rgba(0,0,0,0.8);
+    background:rgba(0,0,0,0.9);
     z-index:99999;
     display:none;
     color:#fff;
@@ -15,6 +15,15 @@
     z-index:99999;
     margin-top:25%;
     text-align:center;
+}
+
+.menu-animated-background img {
+    width:250px;
+}
+
+.menu-animated-background p {
+    font-size:20px;
+    font-weight:800;
 }
 
 .sk-folding-cube {

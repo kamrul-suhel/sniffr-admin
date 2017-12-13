@@ -7,13 +7,15 @@
 
 <div id="dim-screen">
     <div class="menu-animated-background">
-        <p>uploading your sick vid..</p>
-        <div class="sk-folding-cube">
+        <img src="<?= THEME_URL . '/assets/img/hamster_wheel.gif';?>" border="0" />
+        <!-- <div class="sk-folding-cube">
             <div class="sk-cube1 sk-cube"></div>
             <div class="sk-cube2 sk-cube"></div>
             <div class="sk-cube4 sk-cube"></div>
             <div class="sk-cube3 sk-cube"></div>
-        </div>
+        </div> -->
+        <br />
+        <p>we're just uploading your awesome video..</p>
     </div>
 </div>
 
