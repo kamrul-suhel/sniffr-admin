@@ -95,8 +95,10 @@ class AdminVideosController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function status($state, $id)
+    public function status(Request $request, $state, $id)
     {
+        $isJson = $request->ajax();
+
         $video = Video::find($id);
         $video->state = $state;
 
@@ -147,7 +149,11 @@ class AdminVideosController extends Controller {
 
         $video->save();
 
-        return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+        if($isJson) {
+            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
+        } else {
+            return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+        }
     }
 
     public function statusapi($state, $id)

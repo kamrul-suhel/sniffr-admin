@@ -57,12 +57,12 @@
 					<footer>
 						<div class="album-images-count">
 							@if($video->state == 'new')
-							<a href="{{ url('admin/videos/statusapi/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="entypo-check"></i></a>
-	                    	<a href="{{ url('admin/videos/statusapi/rejected/'.$video->id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
+							<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="entypo-check"></i></a>
+	                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
 							@elseif($video->state == 'pending')
-							<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success" title="License Video"><i class="entypo-check"></i></a>
-	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
+							<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success state" title="License Video"><i class="entypo-check"></i></a>
+	                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+	                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
 							@elseif($video->state == 'licensed')
 							<i class="fa fa-check"></i> Licensed
 							@elseif($video->state == 'accepted')
@@ -128,6 +128,12 @@
 				var videoId = parseUrl[7];
 				var alertType;
 
+				swal({  title: '', type: 'info', showCancelButton: false, closeOnConfirm: true }, function(){ });
+				$('.sa-button-container').css('display','none');
+				$('.sa-custom').css('display','block');
+				$('.sa-custom').removeClass('sa-icon');
+				$('.sa-custom').html('<h2>loading..</h2>');
+
 				if(dataUrl) {
 					$.ajax({
 					    type: 'GET',
@@ -139,27 +145,37 @@
 							if(data.status=='success') {
 								$('#video-'+videoId).fadeOut();
 								switch(state) {
-								    case 'accepted':
-								        alertType = 'success';
-								        break;
-								    case 'rejected':
-								        alertType = 'error';
-								        break;
+									case 'accepted':
+										alertType = 'success';
+										break;
+									case 'rejected':
+										alertType = 'error';
+										break;
 									case 'licensed':
-								        alertType = 'success';
-								        break;
+										alertType = 'success';
+										break;
 									case 'restricted':
-								        alertType = 'warning';
-								        break;
+										alertType = 'warning';
+										break;
 									case 'problem':
-								        alertType = 'error';
-								        break;
+										alertType = 'error';
+										break;
 									default:
-								        alertType = 'success';
+										alertType = 'success';
 								}
-								swal({  title: data.message, type: alertType, showCancelButton: false, closeOnConfirm: true }, function(){ });
+								$('.sa-button-container').css('display','block');
+								$('.sa-info').css('display','none');
+								$('.sa-custom').html('<h2>'+data.message+'</h2>');
+								$('.sa-'+alertType).css('display','block');
+								$('.sa-'+alertType).addClass('animate');
 							} else {
-								swal({  title: "Sorry, there was an issue with performing this action", type: "warning", showCancelButton: false, closeOnConfirm: true }, function(){ });
+								$('.sa-button-container').css('display','block');
+								$('.sa-info').css('display','none');
+								$('.sa-custom').css('display','block');
+								$('.sa-custom').html('<h2>Sorry, there was an issue with performing this action</h2>');
+								$('.sa-error').css('display','block');
+								$('.sa-error').addClass('animate');
+								//swal({  title: "Sorry, there was an issue with performing this action", type: "warning", showCancelButton: false, closeOnConfirm: true }, function(){ });
 							}
 					    }
 					});
