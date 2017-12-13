@@ -61,7 +61,6 @@
 	<script type="text/javascript">
 
 	$('document').ready(function(){
-$('#dim-screen').show();
 
 		//previous code for right side admin dropdown (if logged in)
 		$('.dropdown').hover(function(){
