@@ -39,6 +39,39 @@ body.home .second-nav {
 	margin-top:545px;
 }
 
+.bg-404 {
+    background:#000;
+}
+
+.area-404 {
+   text-align:center;
+   margin-top:150px;
+}
+
+.area-404 h1 {
+   color:#fff;
+   width:50%;
+   margin:0 auto 80px auto;
+   font-size:85px;
+   font-weight:800;
+   letter-spacing: -4px;
+}
+
+.area-404 img {
+   width:30%;
+   height:auto;
+   margin-bottom:40px;
+}
+
+.area-404 p {
+   color:#fff;
+}
+
+.area-404 a {
+   color:#fff;
+   font-weight:600;
+}
+
 ul.video_list{
 	margin:0px;
 	padding:0px;
@@ -1554,6 +1587,17 @@ form.search .form-search .fa {
 @media screen and (max-width: 1080px) {
   #home-hero h1 {
     font-size: 40px;
+  }
+  .area-404 h1 {
+     color:#fff;
+     width:auto;
+     margin:0 auto 80px auto;
+     font-size:45px;
+     font-weight:800;
+     letter-spacing: -1px;
+  }
+  .area-404 img {
+      width:35%;
   }
 }
 /********** Landscape MODE **********/

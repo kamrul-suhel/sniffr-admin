@@ -107,7 +107,7 @@
 				</div>
 
 				<div class="panel-footer">
-					<form method="POST" action="{{ url('/admin/videos/comment/'.$video->id) }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+					<form method="POST" action="{{ url('/admin/videos/comment/'.$video->id) }}" id="comment-form" name="comment-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 						<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 
 						<div class="form-group">
@@ -144,7 +144,7 @@
 	</div>
 	@endif
 
-    <form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+    <form method="POST" action="{{ $post_route }}" id="video-form" name="video-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 		<!-- For non-exclusive videos -->
 		@if($video->type == 'nonex')
@@ -299,6 +299,7 @@
 				<textarea class="form-control" name="details" id="details">@if(!empty($video->details)){{ htmlspecialchars($video->details) }}@endif</textarea>
 			</div>
 		</div>
+		<div id="video-error" class="error"></div>
 
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
@@ -417,6 +418,9 @@
 	<script type="text/javascript" src="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/application/assets/js/typeahead.min.js' }}"></script>
 	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/application/assets/admin/js/jquery.validate.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/application/assets/admin/js/additional-methods.min.js' }}"></script>
+	<script type="text/javascript" src="{{ '/application/assets/admin/js/jquery.ui.widget.js' }}"></script>
 
 	<script type="text/javascript">
 		$ = jQuery;
@@ -479,6 +483,41 @@
 			   ],
 			   menubar:false,
 			 });
+
+			 //js form validations >> Admin Create edit
+	 		$('#video-form').validate({
+	 			rules: {
+	 				title: {
+	         			required: true
+	         		},
+	 				date_filmed: {
+	 					required: true
+	 				},
+	 				description: {
+	 					required: true
+	 				}
+	 			},
+	 			messages: {
+	         		title: 'You must enter the video title',
+	 				date_filmed: 'You must enter when the video was filmed',
+	 				description: 'You must enter a short description or story behind the video'
+	 	    	},
+				errorPlacement: function (error, element) {
+					error.insertAfter(element);
+				}
+	 		});
+
+			//js form validations >> Admin Comment
+		   $('#comment-form').validate({
+			   rules: {
+				   comment: {
+					   required: true
+				   }
+			   },
+			   messages: {
+				   comment: 'You must enter a comment first'
+			   }
+		   });
 
 		});
 	</script>

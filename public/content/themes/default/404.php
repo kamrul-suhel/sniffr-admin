@@ -1,12 +1,24 @@
-<?php $menu = \App\Menu::orderBy('order', 'ASC')->get(); ?>
-<?php include('includes/header.php'); ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <?php include('includes/head.php'); ?>
+</head>
+<body class="bg-404">
 
 <div class="container">
-	<h3>(404) Not found</h3>
-	<p>Sorry, the page you are looking for does not exist.</p>
-	<a href="<?= url('/') ?>">Click here to visit the homepage</a>
+	<div class="area-404">
+		<h1>Oops, looks like you broke the internet.</h1>
+		<a href="<?= url('/') ?>"><img src="/content/uploads/settings/logo-unilad-white.png" border="0" /></a>
+		<div class="clear"></div>
+	</div>
 </div>
 <br /><br />
+
+<script type="text/javascript">
+$('document').ready(function(){
+	$('footer').css('display','none')
+});
+</script>
 
 
 <?php include('includes/footer.php'); ?>

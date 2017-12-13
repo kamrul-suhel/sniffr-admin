@@ -4,6 +4,14 @@
  *
 */
 
+.error {
+    color:#FF0000;
+}
+
+#video-error {
+    display:none;
+}
+
 #video_container {
   position: relative;
   padding-bottom: 56.23%;
@@ -50,7 +58,7 @@
     -moz-transition: .4s all;
     transition: .4s all;
 
-    
+
 }
 
 .youtube-player img:hover{
