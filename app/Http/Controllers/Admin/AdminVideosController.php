@@ -153,10 +153,56 @@ class AdminVideosController extends Controller {
     public function statusapi($state, $id)
     {
         $video = Video::find($id);
+        $video->state = $state;
 
-        return response($video, 200)
-        ->header('Access-Control-Allow-Origin', '*')
-        ->header('Content-Type', 'application/json');
+        // Send email
+        if($video->state == 'accepted'){
+            $video->more_details_code = str_random(30);
+            $video->more_details_sent = now();
+
+            // Move video to Youtube
+            if($video->file){
+                $file = file_get_contents($video->file);
+                $fileName = basename($video->file);
+
+                file_put_contents('/tmp/'.$fileName, $file);
+
+                $file = new UploadedFile (
+                    '/tmp/'.$fileName,
+                    $fileName,
+                    $video->mime,
+                    filesize('/tmp/'.$fileName),
+                    null,
+                    false
+                );
+
+                // Upload it to youtube
+                $response = MyYoutube::upload($file, ['title' => $video->title], 'unlisted');
+                $youtubeId  = $response->getVideoId();
+
+                $video->youtube_id = $youtubeId;
+            }
+
+            // Send Accepted Email
+            Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+        }else if($video->state == 'rejected'){
+            // Send Rejected Email
+            Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+        }else if($video->state == 'licensed'){
+            $video->licensed_at = now();
+
+            // Make youtube video public
+            if($video->youtube_id){
+                MyYoutube::setStatus($video->youtube_id, 'public');
+            }
+
+            // Send Licensed Email
+            Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+        }
+
+        $video->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
     }
 
     /**
