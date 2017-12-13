@@ -23,7 +23,7 @@
 	<div class="gallery-env">
 		<div class="row">
 			@foreach($videos as $video)
-			<div class="col-sm-6 col-md-4">
+			<div class="col-sm-6 col-md-4" id="video-{{ $video->id }}">
 				<?php
 				switch($video->state){
 					case 'rejected':
@@ -58,12 +58,12 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success" title="Accept Video"><i class="entypo-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger" title="Reject Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="entypo-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success" title="License Video"><i class="entypo-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-		                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger" title="Problem Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success state" title="License Video"><i class="entypo-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check"></i> Licensed
 								@elseif($video->state == 'accepted')
@@ -125,6 +125,68 @@
 				delete_link = $(this).attr('href');
 				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   closeOnConfirm: false }, function(){    window.location = delete_link });
 			    return false;
+			});
+
+			$('.state').click(function(e){
+				e.preventDefault();
+				var dataUrl = $(this).attr('href');
+				var parseUrl = dataUrl.split('/');
+				var state = parseUrl[6];
+				var videoId = parseUrl[7];
+				var alertType;
+
+				swal({  title: '', type: 'info', showCancelButton: false, closeOnConfirm: true }, function(){ });
+				$('.sa-button-container').css('display','none');
+				$('.sa-custom').css('display','block');
+				$('.sa-custom').removeClass('sa-icon');
+				$('.sa-custom').html('<h2>loading..</h2>');
+
+				if(dataUrl) {
+					$.ajax({
+					    type: 'GET',
+					    url: dataUrl,
+					    data: { get_param: 'value' },
+					    dataType: 'json',
+					    success: function (data) {
+							console.log(data);
+							if(data.status=='success') {
+								$('#video-'+videoId).fadeOut();
+								switch(state) {
+									case 'accepted':
+										alertType = 'success';
+										break;
+									case 'rejected':
+										alertType = 'error';
+										break;
+									case 'licensed':
+										alertType = 'success';
+										break;
+									case 'restricted':
+										alertType = 'warning';
+										break;
+									case 'problem':
+										alertType = 'error';
+										break;
+									default:
+										alertType = 'success';
+								}
+								$('.sa-button-container').css('display','block');
+								$('.sa-info').css('display','none');
+								$('.sa-custom').html('<h2>'+data.message+'</h2>');
+								$('.sa-'+alertType).css('display','block');
+								$('.sa-'+alertType).addClass('animate');
+							} else {
+								$('.sa-button-container').css('display','block');
+								$('.sa-info').css('display','none');
+								$('.sa-custom').css('display','block');
+								$('.sa-custom').html('<h2>Sorry, there was an issue with performing this action</h2>');
+								$('.sa-error').css('display','block');
+								$('.sa-error').addClass('animate');
+								//swal({  title: "Sorry, there was an issue with performing this action", type: "warning", showCancelButton: false, closeOnConfirm: true }, function(){ });
+							}
+					    }
+					});
+				}
 			});
 		});
 

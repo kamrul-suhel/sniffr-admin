@@ -61,6 +61,7 @@
 	<script type="text/javascript">
 
 	$('document').ready(function(){
+
 		//previous code for right side admin dropdown (if logged in)
 		$('.dropdown').hover(function(){
 			$(this).addClass('open');
