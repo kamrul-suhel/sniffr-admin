@@ -10,6 +10,7 @@ skip_files:
 
 env_variables:
   # Put production environment variables here.
+  GOOGLE_BUCKET_NAME: mike-test-181909.appspot.com
   APP_LOG: errorlog
   APP_DEBUG: true
   APP_KEY: base64:wXWxg1pTrTrXMEjy/oPJS3QKGGi/eH6jAEdEaTBXWrM=
@@ -24,6 +25,19 @@ env_variables:
   DB_USERNAME: root
   DB_PASSWORD: hr6i9u5KJGzdp7K9
   DB_SOCKET: "/cloudsql/mike-test-181909:us-central1:mike-test001"
+
+  MAIL_DRIVER: smtp
+  MAIL_HOST: smtp.mailtrap.io
+  MAIL_PORT: 2525
+  MAIL_USERNAME: c325a006821a63
+  MAIL_PASSWORD: 910c6c62f7f659
+
+liveness_check:
+   path: '/liveness_check'
+   check_interval_sec: 30
+   timeout_sec: 4
+   failure_threshold: 2
+   success_threshold: 2
 
 beta_settings:
     # for Cloud SQL, set this value to the Cloud SQL connection name,

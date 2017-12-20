@@ -7,7 +7,7 @@
 			<h1>Video Licensing Platform</h1>
 			<h4>License viral videos viewed by millions around the world from UNILAD</h4>
 			<?php if(Auth::guest()): ?>
-				<button class="btn btn-primary" onClick="window.location='/signup'" href="/signup">View latest videos</button>
+				<button class="btn btn-primary" onClick="window.location='/videos'" href="/videos">View latest videos</button>
 			<?php else: ?>
 				<button class="btn btn-primary" onClick="window.location='/videos'" href="/videos">View latest videos</button>
 			<?php endif; ?>
