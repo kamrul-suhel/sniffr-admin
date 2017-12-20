@@ -19,7 +19,7 @@
 	@if(!empty($campaign->id))
 		<h3>{{ $campaign->name }}</h3>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Campaign</h3>
+		<h3><i class="fa fa-plus"></i> Add New Campaign</h3>
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -32,7 +32,7 @@
 
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
-							<div class="panel-title">Campaign Name</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+							<div class="panel-title">Campaign Name</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>Add the campaign name in the textbox below:</p>
 							<input type="text" class="form-control" name="name" id="name" placeholder="Campaign Name" value="@if(!empty($campaign->name)){{ $campaign->name }}@endif" />
@@ -43,7 +43,7 @@
 
 				<div class="@if(!empty($campaign->created_at)) col-sm-3 @else col-sm-4 @endif">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>(example. slug-name)</p>
 							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($campaign->slug)){{ $campaign->slug }}@endif" />
@@ -58,7 +58,7 @@
 						<div class="panel-heading">
 							<div class="panel-title">Created Date</div>
 							<div class="panel-options">
-								<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 							</div>
 						</div>
 
@@ -77,7 +77,7 @@
 						<div class="panel-heading">
 							<div class="panel-title">Client Name</div>
 							<div class="panel-options">
-								<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 							</div>
 						</div>
 

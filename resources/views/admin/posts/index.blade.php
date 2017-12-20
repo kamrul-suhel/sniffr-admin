@@ -9,10 +9,10 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="entypo-newspaper"></i> Posts</h3><a href="{{ URL::to('admin/posts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-file-text-o"></i> Posts</h3><a href="{{ URL::to('admin/posts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<div class="col-md-4">	
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="<?= old('s'); ?>" placeholder="Search..."> <i class="entypo-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="<?= old('s'); ?>" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
@@ -22,17 +22,22 @@
 	<table class="table table-striped posts-table">
 		<tr class="table-header">
 			<th>Post</th>
+			<th>Title</th>
 			<th>URL</th>
 			<th>Active</th>
 			<th>Actions</th>
 			@foreach($posts as $post)
 			<tr>
 				<td>
-				
-				<a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank" class="post-link">
-					<img src="<?= ImageHandler::getImage($post->image, 'small')  ?>" style="height:100px;" />
-					<span>{{ TextHelper::shorten($post->title, 80) }}</span>
-				</a></td>
+					<a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank">
+						<img src="{{ \App\Libraries\ImageHandler::getImage($post->image, 'small') }}" style="height:100px;" />
+					</a>
+				</td>
+				<td valign="bottom">
+					<p><a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank">
+						<span>{{ TextHelper::shorten($post->title, 80) }}</span>
+					</a></p>
+				</td>
 				<td valign="bottom"><p>{{ $post->slug }}</p></td>
 				<td><p>{{ $post->active }}</p></td>
 				<td>
@@ -47,7 +52,7 @@
 
 	<div class="clear"></div>
 
-	<div class="pagination-outter"><?= $posts->appends(Request::only('s'))->render(); ?></div>
+	<div class="text-center"><?= $posts->appends(Request::only('s'))->render(); ?></div>
 	<script src="{{ '/application/assets/admin/js/sweetalert.min.js' }}"></script>
 	<script>
 

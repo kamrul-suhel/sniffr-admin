@@ -19,7 +19,7 @@
 <!-- This is where -->
 	
 	<div class="admin-section-title">
-		<h3><i class="entypo-credit-card"></i> Payment Settings</h3> 
+		<h3><i class="fa fa-credit-card"></i> Payment Settings</h3> 
 	</div>
 	<div class="clear"></div>
 
@@ -31,7 +31,7 @@
 			
 			<div class="col-md-3">
 				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-					<div class="panel-title">Live Mode Or Test Mode</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+					<div class="panel-title">Live Mode Or Test Mode</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 					<div class="panel-body" style="display: block;"> 
 						<p>Payment Settings are in Live Mode:</p>
 	
@@ -47,7 +47,7 @@
 
 			<div class="col-md-9">
 				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-					<div class="panel-title">Stripe Payment API Keys (<a href="https://stripe.com/docs/tutorials/dashboard" target="_blank">https://stripe.com/docs/tutorials/dashboard</a>)</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+					<div class="panel-title">Stripe Payment API Keys (<a href="https://stripe.com/docs/tutorials/dashboard" target="_blank">https://stripe.com/docs/tutorials/dashboard</a>)</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 					<div class="panel-body" style="display: block;"> 
 						<p>Test Secret Key:</p> 
 						<input type="text" class="form-control" name="test_secret_key" id="test_secret_key" placeholder="Test Secret Key" value="@if(!empty($payment_settings->test_secret_key) && Auth::user()->role != 'demo'){{ $payment_settings->test_secret_key }}@endif" />

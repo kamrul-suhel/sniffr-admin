@@ -5,10 +5,10 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="entypo-newspaper"></i> Page</h3><a href="{{ URL::to('admin/pages/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-book"></i> Page</h3><a href="{{ URL::to('admin/pages/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<!--div class="col-md-4">	
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..."> <i class="entypo-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
 			</div-->
 		</div>
 	</div>
@@ -40,7 +40,7 @@
 
 	<div class="clear"></div>
 
-	<div class="pagination-outter"><?= $pages->render(); ?></div>
+	<div class="text-center"><?= $pages->render(); ?></div>
 
 	<script>
 

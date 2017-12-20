@@ -19,7 +19,7 @@
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Page</h3> 
+		<h3><i class="fa fa-plus"></i> Add New Page</h3> 
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -31,7 +31,7 @@
 				<div class="@if(!empty($page->created_at)) col-sm-6 @else col-sm-8 @endif"> 
 
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 						<div class="panel-body" style="display: block;"> 
 							<p>Add the page title in the textbox below:</p> 
 							<input type="text" class="form-control" name="title" id="title" placeholder="Page Title" value="@if(!empty($page->title)){{ $page->title }}@endif" />
@@ -42,7 +42,7 @@
 
 				<div class="@if(!empty($page->created_at)) col-sm-3 @else col-sm-4 @endif">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 						<div class="panel-body" style="display: block;"> 
 							<p>(example. /page/slug-name)</p> 
 							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($page->slug)){{ $page->slug }}@endif" />
@@ -53,7 +53,7 @@
 				@if(!empty($page->created_at))
 					<div class="col-sm-3">
 						<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 							<div class="panel-body" style="display: block;"> 
 								<p>Select Date/Time Below</p> 
 								<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($page->created_at)){{ $page->created_at }}@endif" />
@@ -66,7 +66,7 @@
 
 
 			<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-				<div class="panel-title">Page Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+				<div class="panel-title">Page Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 				<div class="panel-body" style="display: block; padding:0px;">
 					<textarea class="form-control" name="body" id="body">@if(!empty($page->body)){{ $page->body }}@endif</textarea>
 				</div> 
@@ -79,7 +79,7 @@
 
 				<div class="col-sm-4"> 
 					<div class="panel panel-primary" data-collapsed="0"> 
-						<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+						<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 						<div class="panel-body"> 
 							<div>
 								<label for="active" style="float:left; display:block; margin-right:10px;">Is this page Active:</label>

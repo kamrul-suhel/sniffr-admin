@@ -3,14 +3,14 @@
     <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
     <li class="{{ Request::segment(2) == '' ? 'active' : '' }}">
         <a href="{{ URL::to('admin') }}">
-            <i class="entypo-gauge"></i>
+            <i class="fa fa-tachometer"></i>
             <span class="title">Dashboard</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'videos' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/videos') }}" class="tlink">
-            <i class="entypo-video"></i>
+            <i class="fa fa-youtube-play"></i>
             <span class="title">Videos</span>
         </a>
         <ul>
@@ -66,14 +66,14 @@
 
     <li class="{{ Request::segment(2) == 'pages' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/pages') }}" class="tlink">
-            <i class="entypo-book-open"></i>
+            <i class="fa fa-book"></i>
             <span class="title">Pages</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'posts' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/posts') }}" class="tlink">
-            <i class="entypo-newspaper"></i>
+            <i class="fa fa-file-text-o"></i>
             <span class="title">Posts</span>
         </a>
         <ul>
@@ -87,41 +87,41 @@
 
     <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/media') }}">
-            <i class="entypo-picture"></i>
+            <i class="fa fa-picture-o"></i>
             <span class="title">Media</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'menu' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/menu') }}">
-            <i class="entypo-list"></i>
+            <i class="fa fa-bars"></i>
             <span class="title">Menu</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'contacts' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/contacts') }}" class="tlink">
-            <i class="entypo-user-add"></i>
+            <i class="fa fa-address-book"></i>
             <span class="title">Contacts</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'clients' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/clients') }}" class="tlink">
-            <i class="entypo-user"></i>
+            <i class="fa fa-users"></i>
             <span class="title">Clients</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'campaigns' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/campaigns') }}" class="tlink">
-            <i class="entypo-list"></i>
+            <i class="fa fa-area-chart"></i>
             <span class="title">Campaigns</span>
         </a>
     </li>
     <!-- <li>
         <a href="{{ URL::to('admin/themes') }}">
-            <i class="entypo-monitor"></i>
+            <i class="fa fa-desktop"></i>
             <span class="title">Themes</span>
         </a>
     </li> -->
@@ -139,14 +139,14 @@
 
     <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/users') }}" class="tlink">
-            <i class="entypo-users"></i>
+            <i class="fa fa-user-circle"></i>
             <span class="title">Users</span>
         </a>
     </li>
 
     <li class="{{ Request::segment(2) == 'settings' ? 'active' : '' }}">
         <a href="{{ URL::to('admin/settings') }}" class="tlink">
-            <i class="entypo-cog"></i>
+            <i class="fa fa-cog"></i>
             <span class="title">Settings</span>
         </a>
         <ul>

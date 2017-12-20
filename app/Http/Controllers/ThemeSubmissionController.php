@@ -25,8 +25,9 @@ use App\PostCategory;
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 
-use App\Mail\SubmissionNewNonEx;
 use App\Mail\SubmissionThanksNonEx;
+
+use App\Notification\SubmissionThanksNonEx;
 
 class ThemeSubmissionController extends Controller {
 
@@ -140,7 +141,8 @@ class ThemeSubmissionController extends Controller {
 
         // Add Email notifications
         // Notification of new video
-        Mail::to('submissions@unilad.co.uk')->send(new SubmissionNewNonEx($video));
+        //Mail::to('submissions@unilad.co.uk')->send(new SubmissionNewNonEx($video));
+        $video->notify(new SubmissionNewNonEx());
 
         // Send thanks notification
         Mail::to($contact->email)->send(new SubmissionThanksNonEx($video));

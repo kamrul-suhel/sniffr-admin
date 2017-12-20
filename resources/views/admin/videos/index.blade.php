@@ -9,11 +9,11 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="entypo-video"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ URL::to('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ URL::to('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 
 			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= old('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="entypo-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= old('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
@@ -43,7 +43,7 @@
 						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 
 						<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}" class="album-options">
-							<i class="entypo-pencil"></i>
+							<i class="fa fa-pencil"></i>
 							Edit
 						</a>
 					</header>
@@ -58,10 +58,10 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="entypo-check"></i></a>
+								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="fa fa-check"></i></a>
 		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success state" title="License Video"><i class="entypo-check"></i></a>
+								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success state" title="License Video"><i class="fa fa-check"></i></a>
 		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 		                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
@@ -80,7 +80,7 @@
 									<i class="fa fa-exclamation-triangle"></i> Restricted
 									@endif
 								@else
-								<i class="entypo-video"></i> {{ ucfirst($video->state) }}
+								<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
 								@endif
 							@endif
 						</div>
@@ -88,14 +88,14 @@
 						<div class="album-options">
 							@if($video->trashed())
 							<a href="{{ URL::to('admin/videos/restore/'.$video->id) }}" title="Remove from trash" class="undelete">
-								<i class="entypo-upload"></i>
+								<i class="fa fa-upload"></i>
 							</a>
 							@else
 							<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}">
-								<i class="entypo-pencil"></i>
+								<i class="fa fa-pencil"></i>
 							</a>
 							<a href="{{ URL::to('admin/videos/delete/'.$video->id) }}" title="Delete Video" class="delete">
-								<i class="entypo-trash"></i>
+								<i class="fa fa-trash-o"></i>
 							</a>
 							@endif
 						</div>
@@ -106,7 +106,7 @@
 
 			<div class="clear"></div>
 
-			<div class="pagination-outter"><?= $videos->appends(Request::only('s'))->render(); ?></div>
+			<div class="text-center"><?= $videos->appends(Request::only('s'))->render(); ?></div>
 
 		</div>
 	</div>

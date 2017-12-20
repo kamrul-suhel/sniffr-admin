@@ -16,7 +16,7 @@
 	@if(!empty($client->id))
 		<h3>{{ $client->name }}</h3>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Client</h3>
+		<h3><i class="fa fa-plus"></i> Add New Client</h3>
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -28,7 +28,7 @@
 				<div class="@if(!empty($client->created_at)) col-sm-6 @else col-sm-8 @endif">
 
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Client Name</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Client Name</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>Add the client name in the textbox below:</p>
 							<input type="text" class="form-control" name="name" id="name" placeholder="Client Name" value="@if(!empty($client->name)){{ $client->name }}@endif" />
@@ -39,7 +39,7 @@
 
 				<div class="@if(!empty($client->created_at)) col-sm-3 @else col-sm-4 @endif">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>(example. slug-name)</p>
 							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($client->slug)){{ $client->slug }}@endif" />
@@ -50,7 +50,7 @@
 				@if(!empty($client->created_at))
 					<div class="col-sm-3">
 						<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 							<div class="panel-body" style="display: block;">
 								<p>Select Date/Time Below</p>
 								<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($client->created_at)){{ $client->created_at }}@endif" />

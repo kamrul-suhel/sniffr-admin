@@ -17,7 +17,7 @@
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Video</h3>
+		<h3><i class="fa fa-plus"></i> Add New Video</h3>
 	@endif
 	</div>
 
@@ -45,7 +45,7 @@
 					<div class="panel-title">{{ ucfirst($video->state) }} {!! $video->type === 'nonex' ? '<i class="fa fa-times-circle"></i> Non-Exclusive' : '' !!} Video</div>
 
 					<div class="panel-options">
-						<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+						<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 					</div>
 				</div>
 
@@ -79,7 +79,7 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title">Uploaded By</div>
-					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+					<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 				</div>
 
 				<div class="panel-body" style="display: block;">
@@ -91,7 +91,7 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title">Comments</div>
-					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+					<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 				</div>
 
 				<div class="panel-body" style="display: block;">
@@ -126,17 +126,17 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title">Rights</div>
-					<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+					<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 				</div>
 
 				<div class="panel-body" style="display: block;">
-                    <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong>{!! $video->contact_is_owner ? '<i class="entypo-check"></i> Contact is owner' : '<i class="fa fa-times"></i> Does not own video' !!}</strong></p>
+                    <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong>{!! $video->contact_is_owner ? '<i class="fa fa-check"></i> Contact is owner' : '<i class="fa fa-times"></i> Does not own video' !!}</strong></p>
                     @if($video->submitted_elsewhere)
                     <p class="text-warning"><strong><i class="fa fa-exclamation"></i> Submitted to: {{ $video->submitted_where }}</strong></p>
                     @endif
-                    <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong>{!! $video->allow_publish ? '<i class="entypo-check"></i> H' : '<i class="fa fa-times"></i> Not h' !!}appy to publish</strong></p>
-                    <p class="{{ $video->permission ? 'text-success' : 'text-danger' }}"><strong>{!! $video->permission ? '<i class="entypo-check"></i> Has' : '<i class="fa fa-times"></i> Does not have' !!} permission</strong></p>
-                    <p class="{{ $video->is_exclusive ? 'text-success' : 'text-danger' }}"><strong>{!! $video->is_exclusive ? '<i class="entypo-check"></i> Is' : '<i class="fa fa-times"></i> Is not' !!} exclusive</strong></p>
+                    <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong>{!! $video->allow_publish ? '<i class="fa fa-check"></i> H' : '<i class="fa fa-times"></i> Not h' !!}appy to publish</strong></p>
+                    <p class="{{ $video->permission ? 'text-success' : 'text-danger' }}"><strong>{!! $video->permission ? '<i class="fa fa-check"></i> Has' : '<i class="fa fa-times"></i> Does not have' !!} permission</strong></p>
+                    <p class="{{ $video->is_exclusive ? 'text-success' : 'text-danger' }}"><strong>{!! $video->is_exclusive ? '<i class="fa fa-check"></i> Is' : '<i class="fa fa-times"></i> Is not' !!} exclusive</strong></p>
 				</div>
 			</div>
 			@endif
@@ -147,11 +147,11 @@
     <form method="POST" action="{{ $post_route }}" id="video-form" name="video-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 		<!-- For non-exclusive videos -->
-		@if($video->type == 'nonex')
+		@if(isset($video) && $video->type == 'nonex')
 		<div class="row">
 			<div class="col-md-6">
 				<div class="panel panel-{{ $panelColour }}" data-collapsed="0"> <div class="panel-heading">
-					<div class="panel-title">Notes {{ $video->referrer ? 'for '.$video->referrer : '' }}</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-title">Notes {{ $video->referrer ? 'for '.$video->referrer : '' }}</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body" style="display: block;">
 						<p>Notes for the video:</p>
 						<textarea class="form-control" name="notes" id="notes">@if(!empty($video->notes)){{ htmlspecialchars($video->notes) }}@endif</textarea>
@@ -160,7 +160,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="panel panel-{{ $panelColour }}" data-collapsed="0"> <div class="panel-heading">
-					<div class="panel-title">Credit Link</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-title">Credit Link</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body" style="display: block;">
 						<p>Credit link for the video:</p>
 						<input class="form-control" name="credit" id="credit" value="@if(!empty($video->credit)){{ htmlspecialchars($video->credit) }}@endif" />
@@ -179,7 +179,7 @@
 						<div class="panel-title">Title</div>
 
 						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -196,7 +196,7 @@
 						<div class="panel-title">Filmed Date</div>
 
 						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -213,7 +213,7 @@
 						<div class="panel-title">Uploaded Date</div>
 
 						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -232,7 +232,7 @@
 						<div class="panel-title">Video Image Cover (16:9)</div>
 
 						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -257,7 +257,7 @@
 						<div class="panel-title">Video Source</div>
 
 						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -286,7 +286,7 @@
 		</div>
 
 		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-			<div class="panel-title">Short Description</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+			<div class="panel-title">Short Description</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 			<div class="panel-body" style="display: block;">
 				<p>Add a short description of the video below:</p>
 				<textarea class="form-control" name="description" id="description">@if(!empty($video->description)){{ htmlspecialchars($video->description) }}@endif</textarea>
@@ -294,7 +294,7 @@
 		</div>
 
 		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-			<div class="panel-title">Video Details, Links, and Info</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+			<div class="panel-title">Video Details, Links, and Info</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 			<div class="panel-body" style="display: block; padding:0px;">
 				<textarea class="form-control" name="details" id="details">@if(!empty($video->details)){{ htmlspecialchars($video->details) }}@endif</textarea>
 			</div>
@@ -306,7 +306,7 @@
 				<div class="panel-title">Category</div>
 
 				<div class="panel-options">
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -326,7 +326,7 @@
 				<div class="panel-title">Campaign</div>
 
 				<div class="panel-options">
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -342,7 +342,7 @@
 		</div>
 
 		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 			<div class="panel-body" style="display: block;">
 				<p>Add video tags below:</p>
 				<input class="form-control" name="tags" id="tags" data-role="tagsinput" value="@if(!empty($video) && $video->tags->count() > 0)@foreach($video->tags as $tag){{ $tag->name . ', ' }}@endforeach @endif">
@@ -356,7 +356,7 @@
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> Duration</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-heading"> <div class="panel-title"> Duration</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<p>Enter the video duration in the following format (Hours : Minutes : Seconds)</p>
 						<input class="form-control" name="duration" id="duration" value="@if(!empty($video->duration)){{ gmdate('H:i:s', $video->duration) }}@endif">
@@ -366,7 +366,7 @@
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> User Access</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-heading"> <div class="panel-title"> User Access</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<label for="access" style="float:left; margin-right:10px;">Who is allowed to view this video?</label>
 						<select id="access" name="access">
@@ -381,7 +381,7 @@
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<div>
 							<label for="featured" style="float:left; display:block; margin-right:10px;">Is this video Featured:</label>

@@ -12,7 +12,7 @@
 <!-- This is where -->
 	
 	<div class="admin-section-title">
-		<h3><i class="entypo-picture"></i> Media</h3>
+		<h3><i class="fa fa-picture-o"></i> Media</h3>
 	</div>
 	<div class="clear"></div>
 

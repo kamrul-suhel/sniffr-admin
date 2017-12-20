@@ -7,14 +7,14 @@
 </style>
 
 	<div class="admin-section-title">
-		<h3><i class="entypo-monitor"></i> Theme Settings for Default Theme</h3> 
+		<h3><i class="fa fa-desktop"></i> Theme Settings for Default Theme</h3> 
 	</div>
 	<div class="clear"></div>
 
 	<form action="/admin/theme_settings" method="post">
 		
 		<div class="panel panel-primary" data-collapsed="0"> 
-			<div class="panel-heading"> <div class="panel-title"> Theme Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+			<div class="panel-heading"> <div class="panel-title"> Theme Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div> 
 			<div class="panel-body"> 
 				<p>Add the text to be added to the theme homepage header text Above the Homepage subscribe button</p>
 				<input type="text" id="homepage_headline" class="form-control" name="home_headline" value="<?php if(isset($theme_settings->home_headline)){ echo $theme_settings->home_headline; } ?>" />

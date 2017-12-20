@@ -6,7 +6,7 @@
 <!-- This is where -->
 	
 	<div class="admin-section-title">
-		<h3><i class="entypo-monitor"></i> Themes</h3> 
+		<h3><i class="fa fa-desktop"></i> Themes</h3> 
 	</div>
 	<div class="clear"></div>
 	<div class="gallery-env">
@@ -29,7 +29,7 @@
 						<footer>
 							
 							<div class="album-images-count">
-								<i class="entypo-monitor"></i>
+								<i class="fa fa-desktop"></i>
 								{{ $theme->name }}<span style="margin-left:8px; font-size:8px; line-height:17px; float:right; display:block">version {{ $theme->version }}</span>
 							</div>
 							

@@ -5,7 +5,7 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><i class="entypo-archive"></i> Post Categories</h3><a href="javascript:;" onclick="jQuery('#add-new').modal('show');" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-file-text-o"></i> Post Categories</h3><a href="javascript:;" onclick="jQuery('#add-new').modal('show');" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 		</div>
 	</div>
@@ -58,7 +58,7 @@
 				</div>
 				
 				<div class="panel-options">
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 			

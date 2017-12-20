@@ -17,7 +17,7 @@
 	@if(!empty($contact->id))
 		<h3>{{ $contact->first_name.' '.$contact->last_name }}</h3>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Contact</h3>
+		<h3><i class="fa fa-plus"></i> Add New Contact</h3>
 	@endif
 	</div>
 
@@ -53,7 +53,7 @@
 						<div class="panel-title"><a href="{{ url('admin/videos/'.$video->id.'/edit') }}">{{ $video->title }}</a></div>
 
 						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -78,7 +78,7 @@
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
 								<div class="panel-title">First Name</div>
-								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 							</div>
 							<div class="panel-body" style="display: block;">
 								<p>Add first name in the textbox below:</p>
@@ -91,7 +91,7 @@
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
 								<div class="panel-title">Last Name</div>
-								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 							</div>
 							<div class="panel-body" style="display: block;">
 								<p>Add last name in the textbox below:</p>
@@ -104,7 +104,7 @@
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Email Address</div>
-						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 					</div>
 					<div class="panel-body" style="display: block;">
 						<p>Add email address in the textbox below:</p>
@@ -115,7 +115,7 @@
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Telephone Number</div>
-						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 					</div>
 					<div class="panel-body" style="display: block;">
 						<p>Add telephone number in the textbox below:</p>
@@ -126,7 +126,7 @@
 				<div class="panel panel-primary" data-collapsed="0"> 
 					<div class="panel-heading"> 
 						<div class="panel-title">Comments</div> 
-						<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
+						<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 					</div>
 					
 					<div class="panel-body" style="display: block;"> 
@@ -154,7 +154,7 @@
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Locale</div>
-						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 					</div>
 					<div class="panel-body" style="display: block;">
 						<div class="form-group">
@@ -172,7 +172,7 @@
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Online Profile</div>
-						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 					</div>
 					<div class="panel-body" style="display: block;">
 						<div class="form-group">

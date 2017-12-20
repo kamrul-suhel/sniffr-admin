@@ -17,11 +17,12 @@ use App\Contact;
 use App\VideoCategory;
 use App\PostCategory;
 
-use App\Mail\DetailsReview;
 use App\Mail\DetailsThanks;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
+
+use App\Notifications\DetailsReview;
 
 class ThemeDetailsController extends Controller
 {
@@ -100,7 +101,8 @@ class ThemeDetailsController extends Controller
             $video->save();
 
             // Notification of new video
-            Mail::to('submissions@unilad.co.uk')->send(new DetailsReview($video));
+            //Mail::to('submissions@unilad.co.uk')->send(new DetailsReview($video));
+            $video->notify(new DetailsReview());
 
             // Send thanks notification
             Mail::to($video->contact->email)->send(new DetailsThanks($video));
