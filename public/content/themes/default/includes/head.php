@@ -82,7 +82,7 @@
 <?php if(isset($video->id) || isset($episode->id)): ?>
 
     <link href="<?= THEME_URL . '/assets/css/video-js.css'; ?>" rel="stylesheet">
-    <script src="<?= THEME_URL . '/assets/js/video.js'; ?>"></script>
+    <script src="/assets/js/video.js"></script>
     <style type="text/css">
       .vjs-default-skin .vjs-control-bar,
       .vjs-default-skin .vjs-big-play-button { background: rgba(0,0,0,0.58) }
@@ -99,8 +99,9 @@
 <style type="text/css"><?= dynamic_styles($theme_settings); ?></style>
 <style type="text/css"><?= \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->custom_css, '') ?></style>
 <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script>if (!window.jQuery) { document.write('<script src="<?= THEME_URL . '/assets/js/jquery.min.js'; ?>"><\/script>'); }</script>
-
 <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
 <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
+
+<!-- load app.js in header else it won't work -->
+<script type="text/javascript" src="/assets/js/app.js"></script>
+<!-- end js load -->

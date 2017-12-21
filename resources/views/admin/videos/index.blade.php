@@ -2,7 +2,7 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ '/application/assets/admin/css/sweetalert.css' }}">
-	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
+	<link rel="stylesheet" href="/assets/admin/css/video-js.css" />
 @endsection
 
 @section('content')
@@ -111,19 +111,16 @@
 		</div>
 	</div>
 
-
 	@section('javascript')
-	<script src="{{ '/application/assets/admin/js/sweetalert.min.js' }}"></script>
-
 	<script>
 
-		$(document).ready(function(){
+		(function($){
 			var delete_link = '';
 
 			$('.delete').click(function(e){
 				e.preventDefault();
 				delete_link = $(this).attr('href');
-				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   closeOnConfirm: false }, function(){    window.location = delete_link });
+				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false }, function(){    window.location = delete_link });
 			    return false;
 			});
 
@@ -135,7 +132,7 @@
 				var videoId = parseUrl[7];
 				var alertType;
 
-				swal({  title: '', type: 'info', showCancelButton: false, closeOnConfirm: true }, function(){ });
+				swal({  title: '', icon: 'info', buttons: false, closeModal: true });
 				$('.sa-button-container').css('display','none');
 				$('.sa-custom').css('display','block');
 				$('.sa-custom').removeClass('sa-icon');
@@ -188,7 +185,7 @@
 					});
 				}
 			});
-		});
+		})(jQuery);
 
 	</script>
 	@stop

@@ -1,11 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/jquery.tagsinput.css' }}" />
-	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
-@stop
-
-
 @section('content')
 <div id="admin-container">
 	<ol class="breadcrumb">
@@ -123,13 +117,13 @@
 					</div>
 				</div>
 
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> 
-						<div class="panel-title">Comments</div> 
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Comments</div>
 						<div class="panel-options"><a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a></div>
 					</div>
-					
-					<div class="panel-body" style="display: block;"> 
+
+					<div class="panel-body" style="display: block;">
 						@if(count($contact->comments))
 							@foreach($contact->comments as $comment)
 		                    <p>{{ $comment->comment }}<br><br><strong class="pull-right">{{ $comment->user->username }} | {{ $comment->created_at->diffForHumans() }}</strong></p>

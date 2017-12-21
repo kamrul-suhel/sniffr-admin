@@ -28,19 +28,7 @@
 
 	@yield('css')
 
-	<script src="{{ '/application/assets/admin/js/jquery-1.11.0.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/bootstrap-colorpicker.min.js' }}" id="script-resource-13"></script>
-	<script src="{{ '/application/assets/admin/js/vue.min.js' }}"></script>
-
-	<link href="<?= THEME_URL . '/assets/css/video-js.css'; ?>" rel="stylesheet">
-    <script src="<?= THEME_URL . '/assets/js/video.js'; ?>"></script>
-    <style type="text/css">
-      .vjs-default-skin .vjs-control-bar,
-      .vjs-default-skin .vjs-big-play-button { background: rgba(0,0,0,0.58) }
-      .vjs-default-skin .vjs-slider { background: rgba(0,0,0,0.19333333333333333) }
-    </style>
-
-	<script>$.noConflict();</script>
+	<script src="/assets/admin/js/app.js"></script>
 
 	<!--[if lt IE 9]><script src="{{ '/application/assets/admin/js/ie8-responsive-file-warning.js' }}"></script><![endif]-->
 
@@ -49,7 +37,6 @@
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js') }}"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js') }}/1.4.2/respond.min.js') }}"></script>
 	<![endif]-->
-
 
 </head>
 <body class="page-body skin-black">
@@ -116,84 +103,37 @@
 	</div>
 </div>
 
-
-<!-- Imported styles on this page -->
-<link rel="stylesheet" href="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-1.2.2.css' }}">
-<link rel="stylesheet" href="{{ '/application/assets/admin/js/rickshaw/rickshaw.min.css' }}">
-
-<!-- Bottom scripts (common) -->
-<script src="{{ '/application/assets/admin/js/gsap/main-gsap.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/bootstrap.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/joinable.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/resizeable.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-1.2.2.min.js' }}"></script>
-
-
-<!-- Imported scripts on this page -->
-<script src="{{ '/application/assets/admin/js/jvectormap/jquery-jvectormap-europe-merc-en.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/jquery.sparkline.min.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/rickshaw/vendor/d3.v3.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/rickshaw/rickshaw.min.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/raphael-min.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/morris.min.js' }}"></script>
-<script src="{{ '/application/assets/admin/js/toastr.js' }}"></script>
-
-
-<!-- JavaScripts initializations and stuff -->
-<script src="{{ '/application/assets/admin/js/custom.js' }}"></script>
-
-
-<!-- Demo Settings -->
-<script src="{{ '/application/assets/admin/js/main.js' }}"></script>
-
 <!-- Notifications -->
 <script>
-	var opts = {
-		"closeButton": true,
-		"debug": false,
-		"positionClass": "toast-top-right",
-		"onclick": null,
-		"showDuration": "300",
-		"hideDuration": "1000",
-		"timeOut": "5000",
-		"extendedTimeOut": "1000",
-		"showEasing": "swing",
-		"hideEasing": "linear",
-		"showMethod": "fadeIn",
-		"hideMethod": "fadeOut"
-	};
+	(function($){
+		var opts = {
+			"closeButton": true,
+			"debug": false,
+			"positionClass": "toast-top-right",
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		};
 
-	<?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
+		<?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
 
-        if('<?= Session::get("note_type") ?>' == 'success'){
-        	toastr.success('<?= Session::get("note") ?>', "Sweet Success!", opts);
-        } else if('<?= Session::get("note_type") ?>' == 'error'){
-        	toastr.error('<?= Session::get("note") ?>', "Whoops!", opts);
-        }
-        <?php Session::forget('note');
-              Session::forget('note_type');
-        ?>
-    <?php endif; ?>
+	        if('<?= Session::get("note_type") ?>' == 'success'){
+	        	toastr.success('<?= Session::get("note") ?>', "Sweet Success!", opts);
+	        } else if('<?= Session::get("note_type") ?>' == 'error'){
+	        	toastr.error('<?= Session::get("note") ?>', "Whoops!", opts);
+	        }
+	        <?php Session::forget('note');
+	              Session::forget('note_type');
+	        ?>
+	    <?php endif; ?>
 
-    function display_mobile_menu(){
-    	if($(window).width() < 768){
-    		$('.sidebar-collapsed').removeClass('sidebar-collapsed');
-    	}
-    }
-
-    $(document).ready(function(){
-    	display_mobile_menu();
-
-		$('.tlink').click(function(){
-			var alink = $(this).attr('href');
-			if(alink){
-				window.location.href = alink;
-			}
-	    });
-
-    });
-
+	})(jQuery);
 </script>
 <!-- End Notifications -->
 

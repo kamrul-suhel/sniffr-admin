@@ -14,12 +14,12 @@
 	<div class="modal fade" id="add-new">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">New Menu Item</h4>
 				</div>
-				
+
 				<div class="modal-body">
 					<form id="new-menu-form" accept-charset="UTF-8" action="{{ URL::to('admin/menu/store') }}" method="post">
 				        <label for="name">Enter the new menu item name below</label>
@@ -34,7 +34,7 @@
 				        <input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 				    </form>
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-info" id="submit-new-menu">Save changes</button>
@@ -47,29 +47,29 @@
 	<div class="modal fade" id="update-menu">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 			</div>
 		</div>
 	</div>
 
 	<div class="clear"></div>
-		
-		
+
+
 		<div class="panel panel-primary menu-panel" data-collapsed="0">
-					
+
 			<div class="panel-heading">
 				<div class="panel-title">
 					Organize the Menu Items below: (max of 3 levels)
 				</div>
-				
+
 				<div class="panel-options">
 					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
 				</div>
 			</div>
-			
-			
+
+
 			<div class="panel-body">
-		
+
 				<div id="nestable" class="nested-list dd with-margins">
 
 					<ol class="dd-list">
@@ -93,7 +93,7 @@
 								</li></ol>
 								<?php $depth -= 1; ?>
 							@endif
-							
+
 						@endif
 
 						@if(isset($previous_item->id) && $menu_item->parent_id == $previous_item->id && $menu_item->parent_id !== $previous_item->parent_id )
@@ -114,15 +114,15 @@
 						<?php $previous_item = $menu_item; ?>
 
 					@endforeach
-						
-						
+
+
 
 					</ol>
-						
+
 				</div>
-		
+
 			</div>
-		
+
 		</div>
 
 	<input type="hidden" id="_token" name="_token" value="<?= csrf_token() ?>" />
@@ -132,8 +132,6 @@
 	<?php endif; ?>
 
 	@section('javascript')
-
-		<script src="{{ '/application/assets/admin/js/jquery.nestable.js' }}"></script>
 
 		<script type="text/javascript">
 
@@ -182,7 +180,7 @@
 					console.log('show error');
 					window.location = '/admin/menu?menu_first_level=true';
 				} else {
-				
+
 	    			$('.menu-panel').addClass('reloading');
 	    			$.post('/admin/menu/order', { order : JSON.stringify($('.dd').nestable('serialize')), _token : $('#_token').val() }, function(data){
 	    				console.log(data);

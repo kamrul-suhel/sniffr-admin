@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/jquery.tagsinput.css' }}" />
-@stop
-
-
 @section('content')
 
 <div id="admin-container">
@@ -78,10 +73,6 @@
 
 
 	@section('javascript')
-
-
-	<script type="text/javascript" src="{{ '/application/assets/admin/js/tinymce/tinymce.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
 
 	<script type="text/javascript">
 

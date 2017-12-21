@@ -11,7 +11,7 @@
 			<div class="col-md-8">
 				<h3><i class="entypo-newspaper"></i> Posts</h3><a href="{{ URL::to('admin/posts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
-			<div class="col-md-4">	
+			<div class="col-md-4">
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="<?= old('s'); ?>" placeholder="Search..."> <i class="entypo-search"></i> </div> </form>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 			@foreach($posts as $post)
 			<tr>
 				<td>
-				
+
 				<a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank" class="post-link">
 					<img src="<?= ImageHandler::getImage($post->image, 'small')  ?>" style="height:100px;" />
 					<span>{{ TextHelper::shorten($post->title, 80) }}</span>
@@ -48,7 +48,6 @@
 	<div class="clear"></div>
 
 	<div class="pagination-outter"><?= $posts->appends(Request::only('s'))->render(); ?></div>
-	<script src="{{ '/application/assets/admin/js/sweetalert.min.js' }}"></script>
 	<script>
 
 		$ = jQuery;
@@ -67,4 +66,3 @@
 
 
 @stop
-

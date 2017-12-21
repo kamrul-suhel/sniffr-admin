@@ -1,7 +1,7 @@
 <?php include('includes/header.php'); ?>
 
-<div id="home-hero" class="vidbg-box" data-vidbg-bg="mp4: /content/themes/default/assets/video/ocean.mp4, poster: /content/themes/default/assets/video/ocean.jpg"
-  data-vidbg-options="loop: true, muted: true, overlayColor: #000, overlayAlpha: 0.4">
+<div id="home-hero" class="vidbg-box">
+    <video src="/assets/video/ocean.mp4" autoplay muted loop></video>
 	<div id="dim-bg">
 		<div class="container home-titles">
 			<h1>Video Licensing Platform</h1>
@@ -26,17 +26,8 @@
 	<?php include('partials/pagination.php'); ?>
 </div>
 
-
-<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.vidbg.min.js'; ?>"></script>
-<!-- <script>
-	$(document).ready(function(){
-		$("#home-hero").bgswitcher({
-		  images: ["<?= THEME_URL ?>/assets/img/home/1.jpg", "<?= THEME_URL ?>/assets/img/home/2.jpg", "<?= THEME_URL ?>/assets/img/home/3.jpg", "<?= THEME_URL ?>/assets/img/home/4.jpg"], // Background images
-		  effect: "fade", // fade, blind, clip, slide, drop, hide
-		  interval: 4200,
-		  duration:1000
-		});
-	});
-</script> -->
+<script>
+    $('.vidbg-box').videoBackground();
+</script>
 
 <?php include('includes/footer.php'); ?>

@@ -3,7 +3,7 @@
 @section('css')
 	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.css' }}" />
 	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.extras.css' }}" />
-	<link rel="stylesheet" href="{{ '/content/themes/default/assets/css/video-js.css' }}" />
+	<link rel="stylesheet" href="/assets/admin/css/video-js.css" />
 @stop
 
 
@@ -414,46 +414,37 @@
 </div>
 
 @section('javascript')
-	<script type="text/javascript" src="{{ '/application/assets/admin/js/tinymce/tinymce.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/js/typeahead.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/admin/js/jquery.validate.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/admin/js/additional-methods.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/admin/js/jquery.ui.widget.js' }}"></script>
 
 	<script type="text/javascript">
-		$ = jQuery;
+		// $ = jQuery;
 
-		var tagnames = new Bloodhound({
-			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-			queryTokenizer: Bloodhound.tokenizers.whitespace,
-			prefetch: {
-		    url: '/tags',
-		    filter: function(list) {
-		      return $.map(list, function(tagname) {
-		        return { name: tagname }; });
-		    }
-		  }
-		});
-		tagnames.initialize();
+		(function($){
+			var tagnames = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				prefetch: {
+			    url: '/tags',
+			    filter: function(list) {
+			      return $.map(list, function(tagname) {
+			        return { name: tagname }; });
+			    }
+			  }
+			});
+			tagnames.initialize();
 
-		$('#tags').tagsinput({
-				typeaheadjs: [{
-							minLength: 1,
-							highlight: true,
-				},{
-						minlength: 1,
-						name: 'tagnames',
-						displayKey: 'name',
-						valueKey: 'name',
-						source: tagnames.ttAdapter()
-				}],
-				freeInput: true
-		});
-
-		$(document).ready(function(){
-			console.log($(this).val());
+			$('#tags').tagsinput({
+					typeaheadjs: [{
+								minLength: 1,
+								highlight: true,
+					},{
+							minlength: 1,
+							name: 'tagnames',
+							displayKey: 'name',
+							valueKey: 'name',
+							source: tagnames.ttAdapter()
+					}],
+					freeInput: true
+			});
 
 			$('#duration').mask('00:00:00');
 
@@ -519,7 +510,7 @@
 			   }
 		   });
 
-		});
+		})(jQuery);
 	</script>
 @stop
 @include ('partials.videojs')

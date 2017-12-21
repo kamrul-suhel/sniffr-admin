@@ -1,7 +1,7 @@
 @extends('admin.master')
 
 @section('content')
-		
+
   <!--[hook_admin_dashboard_widgets_start]-->
 		<div class="row">
       <div class="col-sm-3 col-xs-6">
@@ -13,7 +13,7 @@
           </a>
 				</div>
 			</div><!-- column -->
-		
+
 			<div class="col-sm-3 col-xs-6">
 				<div class="tile-stats tile-aqua">
           <a href="{{ url('/admin/videos/new') }}">
@@ -23,7 +23,7 @@
           </a>
 				</div>
 			</div><!-- column -->
-		
+
 			<div class="col-sm-3 col-xs-6">
 				<div class="tile-stats tile-cyan">
           <a href="{{ url('/admin/videos/pending') }}">
@@ -33,7 +33,7 @@
           </a>
 				</div>
 			</div><!-- column -->
-		
+
 			<div class="col-sm-3 col-xs-6">
 				<div class="tile-stats tile-green">
           <a href="{{ url('/admin/videos/licensed') }}">
@@ -45,7 +45,7 @@
 			</div><!-- column -->
 		</div><!-- row -->
 
-  <!--[hook_admin_dashboard_widgets_start]-->		
+  <!--[hook_admin_dashboard_widgets_start]-->
 
 		<br />
 
@@ -66,7 +66,6 @@
     </script>
 
     <script src="{{ URL::to('/') }}/application/assets/admin/js/ganalytics/Chart.min.js"></script>
-    <script src="{{ URL::to('/') }}/application/assets/admin/js/ganalytics/moment.min.js"></script>
     <script src="{{ URL::to('/') }}/application/assets/admin/js/ganalytics/active-users.js"></script>
     <script src="{{ URL::to('/') }}/application/assets/admin/js/ganalytics/view-selector2.js"></script>
 
@@ -84,7 +83,7 @@
     			<div class="panel-body chart1-panel">
     				<div class="tab-content">
     					<div id="chart-1-container"></div>
-    					<div class="Chartjs-legend" id="legend-1-container"></div>					
+    					<div class="Chartjs-legend" id="legend-1-container"></div>
     				</div>
     			</div><!-- .panel-body -->
     		</div><!-- .panel-primary -->
@@ -97,10 +96,10 @@
     			<div class="panel-heading">
     			 <div class="panel-title">Real-time Visitors</div>
     		  </div>
-    			
+
           <div class="panel-body active-users-panel">
     				<div class="tab-content">
-    					<div id="active-users-container"></div>					
+    					<div id="active-users-container"></div>
     				</div>
     			</div>
     		</div>
@@ -120,7 +119,7 @@
     			<div class="panel-body">
     				<div class="tab-content">
     					<div id="chart-3-container"></div>
-    					<div class="Chartjs-legend" id="legend-3-container"></div>					
+    					<div class="Chartjs-legend" id="legend-3-container"></div>
     				</div>
     			</div>
     		</div><!-- .panel-primary -->
@@ -137,7 +136,7 @@
     			<div class="panel-body">
     				<div class="tab-content">
     					<div id="chart-4-container"></div>
-    					<div class="Chartjs-legend" id="legend-4-container"></div>					
+    					<div class="Chartjs-legend" id="legend-4-container"></div>
     				</div>
     			</div>
     		</div><!-- .panel-primary -->

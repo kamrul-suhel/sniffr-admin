@@ -47,17 +47,6 @@
 		</div>
 	</footer>
 
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/bootstrap.min.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/moment.min.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.validate.min.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/additional-methods.min.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.ui.widget.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.iframe-transport.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/jquery.fileupload.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/jquery.noty.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/themes/default.js'; ?>"></script>
-	<script type="text/javascript" src="<?= THEME_URL . '/assets/js/noty/layouts/top.js'; ?>"></script>
-
 	<script type="text/javascript">
 
 	$('document').ready(function(){

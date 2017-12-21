@@ -11,5 +11,11 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix.js('resources/assets/js/app.js', 'public/assets/js')
+   .sass('resources/assets/sass/app.scss', 'public/assets/css')
+   .js(['resources/assets/admin/js/app.js', 'resources/assets/admin/js/custom.js', 'resources/assets/admin/js/main.js', 'resources/assets/admin/js/switch.js'], 'public/assets/admin/js')
+   .sass('resources/assets/admin/sass/app.scss', 'public/assets/admin/css');
+
+mix.copy('node_modules/tinymce/themes', 'public/assets/admin/js/themes');
+mix.copy('node_modules/tinymce/skins', 'public/assets/admin/js/skins');
+mix.copy('node_modules/tinymce/plugins', 'public/assets/admin/js/plugins');

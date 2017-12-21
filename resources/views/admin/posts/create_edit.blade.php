@@ -1,25 +1,20 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/jquery.tagsinput.css' }}" />
-@stop
-
-
 @section('content')
 
 <div id="admin-container">
 <!-- This is where -->
-	
+
 	<ol class="breadcrumb"> <li> <a href="/admin/posts"><i class="fa fa-newspaper-o"></i>All Posts</a> </li> <li class="active">@if(!empty($post->id)) <strong>{{ $post->title }}</strong> @else <strong>New Post</strong> @endif</li> </ol>
 
 	<div class="admin-section-title">
 	@if(!empty($post->id))
-		<h3>{{ $post->title }}</h3> 
+		<h3>{{ $post->title }}</h3>
 		<a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Post</h3> 
+		<h3><i class="entypo-plus"></i> Add New Post</h3>
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -27,37 +22,37 @@
 		<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 			<div class="row">
-				
-				<div class="@if(!empty($post->created_at)) col-sm-6 @else col-sm-8 @endif"> 
 
-					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-						<div class="panel-body" style="display: block;"> 
-							<p>Add the post title in the textbox below:</p> 
+				<div class="@if(!empty($post->created_at)) col-sm-6 @else col-sm-8 @endif">
+
+					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-body" style="display: block;">
+							<p>Add the post title in the textbox below:</p>
 							<input type="text" class="form-control" name="title" id="title" placeholder="Post Title" value="@if(!empty($post->title)){{ $post->title }}@endif" />
-						</div> 
+						</div>
 					</div>
 
 				</div>
 
 				<div class="@if(!empty($post->created_at)) col-sm-3 @else col-sm-4 @endif">
-					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-						<div class="panel-body" style="display: block;"> 
-							<p>(example. /post/slug-name)</p> 
+					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-body" style="display: block;">
+							<p>(example. /post/slug-name)</p>
 							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($post->slug)){{ $post->slug }}@endif" />
-						</div> 
+						</div>
 					</div>
 				</div>
 
 				@if(!empty($post->created_at))
 					<div class="col-sm-3">
-						<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-							<div class="panel-body" style="display: block;"> 
-								<p>Select Date/Time Below</p> 
+						<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+							<div class="panel-body" style="display: block;">
+								<p>Select Date/Time Below</p>
 								<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($post->created_at)){{ $post->created_at }}@endif" />
-							</div> 
+							</div>
 						</div>
 					</div>
 				@endif
@@ -65,44 +60,44 @@
 			</div>
 
 
-			<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-				<div class="panel-title">Post Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+			<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+				<div class="panel-title">Post Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 				<div class="panel-body" style="display: block; padding:0px;">
 					<textarea class="form-control" name="body" id="body">@if(!empty($post->body)){{ htmlspecialchars($post->body) }}@endif</textarea>
-				</div> 
+				</div>
 			</div>
 
-			
-			<div class="panel panel-primary" id="body_guest_block" style="@if(empty($post->access) || $post->access == 'guest')display:none;@endif" data-collapsed="0"> <div class="panel-heading"> 
-				<div class="panel-title">Content to be shown to non-subscriber (if any)</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
+
+			<div class="panel panel-primary" id="body_guest_block" style="@if(empty($post->access) || $post->access == 'guest')display:none;@endif" data-collapsed="0"> <div class="panel-heading">
+				<div class="panel-title">Content to be shown to non-subscriber (if any)</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
 				<div class="panel-body" style="display: block; padding:0px;">
 					<textarea class="form-control" name="body_guest" id="body_guest">@if(!empty($post->body_guest)){{ htmlspecialchars($post->body_guest) }}@endif</textarea>
-				</div> 
+				</div>
 			</div>
 
 			<div class="clear"></div>
 
 
-			<div class="row"> 
+			<div class="row">
 
 				<div class="col-sm-4">
-					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-						<div class="panel-title">Post Image</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-						<div class="panel-body" style="display: block;"> 
+					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+						<div class="panel-title">Post Image</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-body" style="display: block;">
 							@if(!empty($post->image))
 								<img src="{{ Config::get('site.uploads_dir') . 'images/' . $post->image }}" class="post-img" width="200"/>
 							@endif
-							<p>Select the post image (1280x720 for best results):</p> 
+							<p>Select the post image (1280x720 for best results):</p>
 							<input type="file" multiple="true" class="form-control" name="image" id="image" />
-							
-						</div> 
+
+						</div>
 					</div>
 				</div>
 
-				<div class="col-sm-4"> 
-					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading"> 
-						<div class="panel-title">Category</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-						<div class="panel-body" style="display: block;"> 
+				<div class="col-sm-4">
+					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+						<div class="panel-title">Category</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-body" style="display: block;">
 							<p>Select a Post Category Below:</p>
 							<select id="post_category_id" name="post_category_id">
 								<option value="0">Uncategorized</option>
@@ -110,14 +105,14 @@
 									<option value="{{ $category->id }}" @if(!empty($post->post_category_id) && $post->post_category_id == $category->id)selected="selected"@endif>{{ $category->name }}</option>
 								@endforeach
 							</select>
-						</div> 
+						</div>
 					</div>
 				</div>
 
-				<div class="col-sm-4"> 
-					<div class="panel panel-primary" data-collapsed="0"> 
-						<div class="panel-heading"> <div class="panel-title"> Status & Access Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div> 
-						<div class="panel-body"> 
+				<div class="col-sm-4">
+					<div class="panel panel-primary" data-collapsed="0">
+						<div class="panel-heading"> <div class="panel-title"> Status & Access Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-body">
 							<div>
 								<label for="active" style="float:left; display:block; margin-right:10px;">Is this post Active:</label>
 								<input type="checkbox" @if(!isset($post->active) || (isset($post->active) && $post->active))checked="checked" value="1"@else value="0"@endif name="active" id="active" />
@@ -129,7 +124,7 @@
 									<option value="subscriber" @if(!empty($post->access) && $post->access == 'subscriber'){{ 'selected' }}@endif>Subscriber (only paid subscription users)</option>
 								</select>
 							</div>
-						</div> 
+						</div>
 					</div>
 				</div>
 
@@ -152,14 +147,10 @@
 <!-- This is where now -->
 </div>
 
-	
-	
-	
+
+
+
 	@section('javascript')
-
-
-	<script type="text/javascript" src="{{ '/application/assets/admin/js/tinymce/tinymce.min.js' }}"></script>
-	<script type="text/javascript" src="{{ '/application/assets/js/jquery.mask.min.js' }}"></script>
 
 	<script type="text/javascript">
 
