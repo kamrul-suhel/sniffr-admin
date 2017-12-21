@@ -12,16 +12,7 @@
 
 	<title>{{ $settings->website_name . ' - ' . $settings->website_description }}</title>
 
-	<link rel="stylesheet" href="{{ '/application/assets/admin/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/font-icons/entypo/css/entypo.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/font-icons/font-awesome/css/font-awesome.min.css' }}">
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/bootstrap.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/animate.min.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/core.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/theme.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/forms.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/custom.css' }}">
+	<link rel="stylesheet" href="{{ '/css/app.css' }}">
 
 	<?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
@@ -52,14 +43,14 @@
 				<!-- logo collapse icon -->
 				<div class="sidebar-collapse">
 					<a href="#" class="sidebar-collapse-icon"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-						<i class="entypo-menu"></i>
+						<i class="fa fa-bars"></i>
 					</a>
 				</div>
 
 				<!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
 				<div class="sidebar-mobile-menu visible-xs">
 					<a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
-						<i class="entypo-menu"></i>
+						<i class="fa fa-bars"></i>
 					</a>
 				</div>
 			</header>
@@ -85,7 +76,7 @@
 			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
 				<ul class="list-inline links-list pull-right">
 					<li class="sep"></li>
-					<li><a href="{{ URL::to('logout') }}">Log Out <i class="entypo-logout right"></i></a></li>
+					<li><a href="{{ URL::to('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
 				</ul>
 			</div>
 		</div>
@@ -134,6 +125,7 @@
 	    <?php endif; ?>
 
 	})(jQuery);
+
 </script>
 <!-- End Notifications -->
 

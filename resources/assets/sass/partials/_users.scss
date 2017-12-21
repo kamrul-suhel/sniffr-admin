@@ -1,0 +1,56 @@
+
+
+.ActiveUsers {
+    background: #f4f2f0;
+    border: 0px solid #d4d2d0;
+    border-radius: 0px;
+    font-weight: 300;
+    padding: .5em 1.5em;
+    white-space: nowrap;
+    height:315px;
+    text-align:center;
+    padding-top:75px;
+}
+
+.active-users-panel{
+    padding:0px;
+    height:315px;
+}
+
+.profile span{
+    font-size:14px;
+    margin-left:10px;
+}
+
+.ActiveUsers-value{
+    font-size: 80px;
+    display: block;
+    text-align: center;
+}
+
+.ActiveUsers.is-increasing {
+    -webkit-animation: increase 3s;
+    animation: increase 3s;
+}
+
+.ActiveUsers.is-decreasing {
+    -webkit-animation: decrease 3s;
+    animation: decrease 3s;
+}
+
+
+@keyframes increase {
+    10% {
+        background-color: #eaffea;
+        border-color: hsla(120, 100%, 25%, .5);
+        color: hsla(120, 100%, 25%, 1)
+    }
+}
+
+@keyframes decrease {
+    10% {
+        background-color: #ffeaea;
+        border-color: hsla(0, 100%, 50%, .5);
+        color: red
+    }
+}

@@ -7,12 +7,12 @@
 
 	<div class="admin-section-title">
 	@if(!empty($user->id))
-		<h3><i class="entypo-user"></i> {{ $user->username }}</h3>
+		<h3><i class="fa fa-users"></i> {{ $user->username }}</h3>
 		<a href="{{ URL::to('user') . '/' . $user->username }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-user"></i> Add New User</h3>
+		<h3><i class="fa fa-users"></i> Add New User</h3>
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -31,7 +31,7 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title">Username</div>
-					<div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div>
+					<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 				</div>
 				<div class="panel-body" style="display: block;">
 					<?php if($errors->first('username')): ?>
@@ -51,7 +51,7 @@
 				<div class="panel-title">Email</div> 
 
 				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
 				</div>
 			</div> 
 
@@ -71,7 +71,7 @@
 			<div class="panel-heading"> 
 				<div class="panel-title">Password</div>
 				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
 				</div>
 			</div> 
 
@@ -92,7 +92,7 @@
 						<div class="panel-title">User Role</div> 
 						
 						<div class="panel-options"> 
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
 						</div>
 					</div>
 
@@ -114,7 +114,7 @@
 						<div class="panel-title">Client</div> 
 						
 						<div class="panel-options"> 
-							<a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> 
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
 						</div>
 					</div>
 
@@ -134,7 +134,7 @@
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-					<div class="panel-title">User Active Status</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+					<div class="panel-title">User Active Status</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body" style="display: block;">
 						<label>User Active Status </label>
 						<input type="checkbox" id="active" name="active" @if(isset($user->active) && $user->active == 1)checked="checked" value="1" @else value="0" @endif />

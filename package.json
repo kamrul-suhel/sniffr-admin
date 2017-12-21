@@ -40,6 +40,12 @@
         "corejs-typeahead": "^1.2.1",
         "jquery-mask-plugin": "^1.14.13",
         "sweetalert": "^2.1.0",
-        "nestable2": "^1.6.0"
+        "nestable2": "^1.6.0",
+        "vue": "^2.1.10"
+    },
+    "dependencies": {
+        "file-loader": "^1.1.6",
+        "font-awesome": "^4.7.0",
+        "video.js": "^6.4.0"
     }
 }

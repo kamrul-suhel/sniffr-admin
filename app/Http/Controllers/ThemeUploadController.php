@@ -25,8 +25,9 @@ use App\PostCategory;
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 
-use App\Mail\SubmissionNew;
 use App\Mail\SubmissionThanks;
+
+use App\Notifications\SubmissionNew;
 
 class ThemeUploadController extends Controller {
 
@@ -135,9 +136,9 @@ class ThemeUploadController extends Controller {
         $video->type = 'ex';
         $video->save();
 
-        // Add Email notifications
-        // Notification of new video
-        Mail::to('submissions@unilad.co.uk')->send(new SubmissionNew($video));
+        // Slack notifications
+        //Mail::to('submissions@unilad.co.uk')->send(new SubmissionNew($video));
+        $video->notify(new SubmissionNew());
 
         // Send thanks notification
         Mail::to($contact->email)->send(new SubmissionThanks($video));

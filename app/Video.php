@@ -2,16 +2,17 @@
 
 namespace App;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends Model {
-    use SoftDeletes;
+    use SoftDeletes, Notifiable;
 
     protected $table = 'videos';
 	protected $guarded = [];
     protected $hidden = ["deleted_at"];
-	protected $fillable = array('user_id', 'video_category_id', 'title', 'type', 'access', 'details', 'description', 'notes', 'referrer', 'credit', 'active', 'featured', 'duration', 'image', 'embed_code', 'url', 'created_at');
+	protected $fillable = array('user_id', 'video_category_id', 'title', 'type', 'access', 'details', 'description', 'date_filmed', 'notes', 'referrer', 'credit', 'active', 'featured', 'duration', 'image', 'embed_code', 'url', 'created_at');
 
 	public function tags(){
 		return $this->belongsToMany(Tag::class);
@@ -54,5 +55,10 @@ class Video extends Model {
     public function campaigns()
     {
         return $this->belongsToMany(Campaign::class);
+    }
+
+    public function routeNotificationForSlack()
+    {
+        return 'https://hooks.slack.com/services/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';
     }
 }

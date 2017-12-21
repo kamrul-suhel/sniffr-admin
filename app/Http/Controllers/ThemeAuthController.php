@@ -215,7 +215,7 @@ class ThemeAuthController extends Controller {
 
 	public function logout(){
 		Auth::logout();
-		return Redirect::back()->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
+		return Redirect::to('/')->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
 	}
 
 

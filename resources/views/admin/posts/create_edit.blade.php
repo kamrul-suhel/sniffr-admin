@@ -14,7 +14,7 @@
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else
-		<h3><i class="entypo-plus"></i> Add New Post</h3>
+		<h3><i class="fa fa-plus"></i> Add New Post</h3>
 	@endif
 	</div>
 	<div class="clear"></div>
@@ -24,9 +24,8 @@
 			<div class="row">
 
 				<div class="@if(!empty($post->created_at)) col-sm-6 @else col-sm-8 @endif">
-
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Title</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>Add the post title in the textbox below:</p>
 							<input type="text" class="form-control" name="title" id="title" placeholder="Post Title" value="@if(!empty($post->title)){{ $post->title }}@endif" />
@@ -37,7 +36,7 @@
 
 				<div class="@if(!empty($post->created_at)) col-sm-3 @else col-sm-4 @endif">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">SEO URL Slug</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>(example. /post/slug-name)</p>
 							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($post->slug)){{ $post->slug }}@endif" />
@@ -48,7 +47,7 @@
 				@if(!empty($post->created_at))
 					<div class="col-sm-3">
 						<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+							<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 							<div class="panel-body" style="display: block;">
 								<p>Select Date/Time Below</p>
 								<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($post->created_at)){{ $post->created_at }}@endif" />
@@ -61,7 +60,7 @@
 
 
 			<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-				<div class="panel-title">Post Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+				<div class="panel-title">Post Content</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 				<div class="panel-body" style="display: block; padding:0px;">
 					<textarea class="form-control" name="body" id="body">@if(!empty($post->body)){{ htmlspecialchars($post->body) }}@endif</textarea>
 				</div>
@@ -69,7 +68,7 @@
 
 
 			<div class="panel panel-primary" id="body_guest_block" style="@if(empty($post->access) || $post->access == 'guest')display:none;@endif" data-collapsed="0"> <div class="panel-heading">
-				<div class="panel-title">Content to be shown to non-subscriber (if any)</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+				<div class="panel-title">Content to be shown to non-subscriber (if any)</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 				<div class="panel-body" style="display: block; padding:0px;">
 					<textarea class="form-control" name="body_guest" id="body_guest">@if(!empty($post->body_guest)){{ htmlspecialchars($post->body_guest) }}@endif</textarea>
 				</div>
@@ -82,7 +81,7 @@
 
 				<div class="col-sm-4">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Post Image</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Post Image</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							@if(!empty($post->image))
 								<img src="{{ Config::get('site.uploads_dir') . 'images/' . $post->image }}" class="post-img" width="200"/>
@@ -96,7 +95,7 @@
 
 				<div class="col-sm-4">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Category</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-title">Category</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
 							<p>Select a Post Category Below:</p>
 							<select id="post_category_id" name="post_category_id">
@@ -111,7 +110,7 @@
 
 				<div class="col-sm-4">
 					<div class="panel panel-primary" data-collapsed="0">
-						<div class="panel-heading"> <div class="panel-title"> Status & Access Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a> </div></div>
+						<div class="panel-heading"> <div class="panel-title"> Status & Access Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body">
 							<div>
 								<label for="active" style="float:left; display:block; margin-right:10px;">Is this post Active:</label>

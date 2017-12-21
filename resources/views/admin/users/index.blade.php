@@ -5,11 +5,11 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="entypo-user"></i> Users</h3><a href="{{ URL::to('admin/user/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-user-circle"></i> Users</h3><a href="{{ URL::to('admin/user/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<div class="col-md-4">	
 				<?php $search = old('s'); ?>
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="@if(!empty($search)){{ $search }}@endif" placeholder="Search..."> <i class="entypo-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="@if(!empty($search)){{ $search }}@endif" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
@@ -37,7 +37,7 @@
 				<td>@if(Auth::user()->role == 'demo')email n/a in demo mode @else{{ $user->email }}@endif</td>
 				<td>
 					@if($user->role == 'client')
-						<div class="label label-success"><i class="fa fa-user"></i>
+						<div class="label label-success"><i class="fa fa-users"></i>
 						Client</div>
 					@elseif($user->role == 'manager')
 						<div class="label label-info"><i class="fa fa-envelope"></i>
