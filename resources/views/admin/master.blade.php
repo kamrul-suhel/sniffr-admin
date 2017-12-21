@@ -33,7 +33,7 @@
 <body class="page-body skin-black">
 
 <a href="{{ URL::to('/') }}" class="top-left-logo">
-	<img src="/application/assets/admin/images/unilad-logo-small.gif">
+	<img src="/assets/img/unilad-logo-small.gif">
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
