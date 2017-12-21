@@ -19,7 +19,6 @@ Start adding in jquery libraries
 
 require('jquery-validation');
 require('jquery-validation/dist/additional-methods.js');
-require('rickshaw');
 require('jvectormap-next');
 require('gsap');
 require('joinable');
@@ -32,6 +31,7 @@ require('sweetalert');
 require('tinymce');
 require('nestable2');
 
+window.Rickshaw = require('rickshaw');
 window.Bloodhound = require('corejs-typeahead');
 window.toastr = require('toastr')
 
