@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/sweetalert.css' }}">
-	<link rel="stylesheet" href="/assets/admin/css/video-js.css" />
-@endsection
-
 @section('content')
 	<div class="admin-section-title">
 		<div class="row">
@@ -132,11 +127,8 @@
 				var videoId = parseUrl[7];
 				var alertType;
 
-				swal({  title: '', icon: 'info', buttons: false, closeModal: true });
-				$('.sa-button-container').css('display','none');
-				$('.sa-custom').css('display','block');
-				$('.sa-custom').removeClass('sa-icon');
-				$('.sa-custom').html('<h2>loading..</h2>');
+				swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true });
+				$('.swal-button-container').css('display','none');
 
 				if(dataUrl) {
 					$.ajax({
@@ -167,19 +159,10 @@
 									default:
 										alertType = 'success';
 								}
-								$('.sa-button-container').css('display','block');
-								$('.sa-info').css('display','none');
-								$('.sa-custom').html('<h2>'+data.message+'</h2>');
-								$('.sa-'+alertType).css('display','block');
-								$('.sa-'+alertType).addClass('animate');
+								swal({  title: data.message, icon: alertType, buttons: true, closeModal: true });
+								$('.swal-button-container').css('display','inline-block');
 							} else {
-								$('.sa-button-container').css('display','block');
-								$('.sa-info').css('display','none');
-								$('.sa-custom').css('display','block');
-								$('.sa-custom').html('<h2>Sorry, there was an issue with performing this action</h2>');
-								$('.sa-error').css('display','block');
-								$('.sa-error').addClass('animate');
-								//swal({  title: "Sorry, there was an issue with performing this action", type: "warning", showCancelButton: false, closeOnConfirm: true }, function(){ });
+								$('.swal-button-container').css('display','inline-block');
 							}
 					    }
 					});

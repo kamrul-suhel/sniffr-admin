@@ -1,12 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.css' }}" />
-	<link rel="stylesheet" href="{{ '/application/assets/js/tagsinput/bootstrap.tagsinput.extras.css' }}" />
-	<link rel="stylesheet" href="/assets/admin/css/video-js.css" />
-@stop
-
-
 @section('content')
 <div id="admin-container">
 <!-- This is where -->

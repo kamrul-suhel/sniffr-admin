@@ -19,20 +19,14 @@ Start adding in jquery libraries
 
 require('jquery-validation');
 require('jquery-validation/dist/additional-methods.js');
-require('jquery-ui');
-require('jquery.iframe-transport');
-require('blueimp-file-upload');
-require('fitvids.1.1.0');
 require('rickshaw');
 require('jvectormap-next');
 require('gsap');
-require('moment');
 require('joinable');
 require('sparkline');
 require('raphael');
 require('jquery-resizable');
 require('bootstrap-tagsinput');
-require('bootstrap-colorpicker');
 require('jquery-mask-plugin');
 require('sweetalert');
 require('tinymce');
