@@ -12,13 +12,14 @@
 
 	<title>{{ $settings->website_name . ' - ' . $settings->website_description }}</title>
 
-	<link rel="stylesheet" href="{{ '/assets/admin/css/app.css' }}">
+	<link rel="stylesheet" href="{{ '/assets/css/admin.css' }}">
 
 	<?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
 
 	@yield('css')
 
+	<script src="/assets/js/app.js"></script>
 	<script src="/assets/admin/js/app.js"></script>
 
 	<!--[if lt IE 9]><script src="{{ '/application/assets/admin/js/ie8-responsive-file-warning.js' }}"></script><![endif]-->

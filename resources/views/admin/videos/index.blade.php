@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/sweetalert.css' }}">
-	<link rel="stylesheet" href="/assets/admin/css/video-js.css" />
-@endsection
-
 @section('content')
 	<div class="admin-section-title">
 		<div class="row">
