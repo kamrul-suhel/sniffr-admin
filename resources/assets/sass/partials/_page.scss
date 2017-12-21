@@ -222,20 +222,12 @@ body {
   display: inline-block;
   border: 1px solid #454a54;
   text-align: center;
-  padding: 0;
   line-height: 1;
   font-size: 20px;
   font-weight: 300;
-  padding: 5px 2px;
-  -webkit-border-radius: 3px;
-  
-  -moz-border-radius: 3px;
-  
+  padding: 5px 6px;
   border-radius: 3px;
   background-clip: padding-box;
-  -moz-transition: all 200ms ease-in-out;
-  -o-transition: all 200ms ease-in-out;
-  -webkit-transition: all 200ms ease-in-out;
   transition: all 200ms ease-in-out;
 }
 .page-container .sidebar-menu .logo-env > div.sidebar-collapse a:hover,

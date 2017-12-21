@@ -18,6 +18,14 @@ trait TimeHelper{
 		}
 	}
 
+	public static function convert_HMS_to_seconds($hms){
+		$str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $hms);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
+
+        return $time_seconds;
+	}
+
 	public static function ISO8601ToSeconds($ISO8601)
 	{
 	    preg_match('/(\d{1,2})[H]/', $ISO8601, $hours);

@@ -353,7 +353,7 @@ class AdminVideosController extends Controller {
         // Youtube integration
         if($video->youtube_id){ // Fetches video duration on update and is youtube if none
             if(!$video->duration){
-                $data['duration'] = MyYoutube::getDuration($video->youtube_id);
+                $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
             }
 
             MyYoutube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
@@ -361,10 +361,7 @@ class AdminVideosController extends Controller {
 
         // Duration
         if(isset($data['duration'])){
-            $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
-            sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-            $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-            $data['duration'] = $time_seconds;
+            $data['duration'] = TimeHelper::convert_HMS_to_seconds($data['duration']);
         }
 
         if(empty($data['image'])){
@@ -432,7 +429,11 @@ class AdminVideosController extends Controller {
 
         // Hide on youtube
         if($video->youtube_id){
-            MyYoutube::setStatus($video->youtube_id, 'private');
+            $response = MyYoutube::setStatus($video->youtube_id, 'private');
+
+            if(!$response){ // There is no youtube video, remove the id
+                $video->youtube_id = '';
+            }
         }
 
         $video->delete();
@@ -449,7 +450,11 @@ class AdminVideosController extends Controller {
 
         // Hide on youtube
         if($video->youtube_id){
-            MyYoutube::setStatus($video->youtube_id, 'unlinked');
+            $response = MyYoutube::setStatus($video->youtube_id, 'unlisted');
+
+            if(!$response){ // There is no youtube video, remove the id
+                $video->youtube_id = '';
+            }
         }
 
         $video->restore();

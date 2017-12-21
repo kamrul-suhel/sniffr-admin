@@ -51,14 +51,14 @@
 				<!-- logo collapse icon -->
 				<div class="sidebar-collapse">
 					<a href="#" class="sidebar-collapse-icon"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-						<i class="fa fa-bar"></i>
+						<i class="fa fa-bars"></i>
 					</a>
 				</div>
 
 				<!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
 				<div class="sidebar-mobile-menu visible-xs">
 					<a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
-						<i class="fa fa-bar"></i>
+						<i class="fa fa-bars"></i>
 					</a>
 				</div>
 			</header>
@@ -140,10 +140,10 @@
 		"debug": false,
 		"positionClass": "toast-top-right",
 		"onclick": null,
-		"showDuration": "300",
-		"hideDuration": "1000",
-		"timeOut": "5000",
-		"extendedTimeOut": "1000",
+		"showDuration": "30000",
+		"hideDuration": "100000",
+		"timeOut": "50000",
+		"extendedTimeOut": "100000",
 		"showEasing": "swing",
 		"hideEasing": "linear",
 		"showMethod": "fadeIn",
