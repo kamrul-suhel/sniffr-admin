@@ -70,6 +70,18 @@ class ThemeUploadController extends Controller {
      *
      * @return Response
      */
+    public function form()
+    {
+        $this->data['iframe'] = 'true';
+
+        return view('Theme::templates/iframe', $this->data);
+    }
+
+    /**
+     * Display a listing of videos
+     *
+     * @return Response
+     */
     public function thanks()
     {
         return view('Theme::thanks', $this->data);
@@ -143,12 +155,16 @@ class ThemeUploadController extends Controller {
         // Send thanks notification
         Mail::to($contact->email)->send(new SubmissionThanks($video));
 
-        //dd($request);
+        $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
-            return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            if($iframe == 'true'){
+                return Redirect::to('https://www.unilad.co.uk');
+            }else{
+                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            }
         }
     }
 }

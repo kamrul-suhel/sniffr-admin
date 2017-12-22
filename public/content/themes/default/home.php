@@ -2,6 +2,7 @@
 
 <div id="home-hero" class="vidbg-box">
     <video src="/assets/video/ocean.mp4" autoplay muted loop></video>
+    
 	<div id="dim-bg">
 		<div class="container home-titles">
 			<h1>Video Licensing Platform</h1>
