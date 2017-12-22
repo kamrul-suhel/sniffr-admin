@@ -108,8 +108,10 @@
             <div class="col-md-12">
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-body">
-                        <div class="form-check">
-                            <label class="form-check-label" for="terms"><input id="terms" name="terms" type="checkbox" value="1">I agree to the <a href="">terms and conditions</a></label>
+                        <div class="form-check text-right">
+                            <label class="form-check-label" for="terms" id="terms-checkbox">
+                                <input id="terms" name="terms" type="checkbox" value="1">I agree to the <a href="">terms and conditions</a>
+                            </label>
                         </div>
 
                         <div class="progress_output"></div>
@@ -171,14 +173,16 @@ $('document').ready(function(){
             terms: 'You must check the box agreeing to our terms'
         },
         errorPlacement: function (error, element) {
-            if (element.is('#file') || element.is('#url')) {
+            if(element.is('#file') || element.is('#url')) {
                 $('#video-error').css('display','block');
                 if($('#file').val()){
                     $('#video-error').text('The file must be a valid video file: flv,ogg,mp4,qt,avi,wmv,m4v,webm');
                 }else{
                     $('#video-error').text('Either a video file or video url is required');
                 }
-            } else {
+            }else if(element.is('#terms') ){
+                error.insertAfter('#terms-checkbox');
+            }else{
                 error.insertAfter(element);
             }
         },
@@ -201,8 +205,8 @@ $('document').ready(function(){
             var formData = new FormData($(this)[0]);  
 
             $.ajax({
-                url: $(this).attr('action'), // le nom du fichier indiqué dans le formulaire
-                type: $(this).attr('method'), // la méthode indiquée dans le formulaire (get ou post)
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
                 cache: false,
                 processData: false,
                 contentType: false,
