@@ -25,8 +25,6 @@ use App\PostCategory;
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 
-use App\Mail\SubmissionThanksNonEx;
-
 use App\Notification\SubmissionThanksNonEx;
 
 class ThemeSubmissionController extends Controller {
@@ -63,6 +61,19 @@ class ThemeSubmissionController extends Controller {
     public function index()
     {
         return view('Theme::submission', $this->data);
+    }
+
+    /**
+     * Display a listing of videos
+     *
+     * @return Response
+     */
+    public function form()
+    {
+        $this->data['iframe'] = 'true';
+        $this->data['form'] = 'submission';
+
+        return view('Theme::templates/iframe', $this->data);
     }
 
     /**

@@ -4,6 +4,6 @@
     <?php include('content/themes/default/includes/head.php'); ?>
 </head>
 <body <?php if(Request::is('/')) echo 'class="home"'; ?>>
-    <?php include('content/themes/default/forms/upload.php'); ?>
+    <?php include('content/themes/default/forms/'.$form.'.php'); ?>
 </body>
 </html>
