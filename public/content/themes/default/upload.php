@@ -115,7 +115,7 @@
 					<div class="panel-body">
 
 						<div class="form-check">
-								<label class="form-check-label" for="terms"><input id="terms" name="terms" type="checkbox" value="1">I agree to the <a href="">terms and conditions</a></label>
+							<label class="form-check-label" for="terms"><input id="terms" name="terms" type="checkbox" value="1">I agree to the above terms and conditions</label>
 						</div>
 
 						<div class="progress_output"></div>
