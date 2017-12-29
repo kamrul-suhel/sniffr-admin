@@ -260,6 +260,8 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('theme_settings_form', 'Admin\AdminThemeSettingsController@theme_settings_form');
     Route::get('theme_settings', 'Admin\AdminThemeSettingsController@theme_settings');
     Route::post('theme_settings', array('uses' => 'Admin\AdminThemeSettingsController@update_theme_settings'));
+
+    Route::get('labels', 'Admin\AdminLabelController@index');
 });
 
 /*
