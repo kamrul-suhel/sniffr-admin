@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f9819b568bda70766aebe600a081744",
+    "content-hash": "ff0a9370de9eff5ab014c14e9229e1cb",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -198,6 +198,59 @@
                 "sdk"
             ],
             "time": "2016-01-18T06:57:07+00:00"
+        },
+        {
+            "name": "baopham/dynamodb",
+            "version": "4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/baopham/laravel-dynamodb.git",
+                "reference": "9c8a0bb74ba9af734a6c3a93f6d9d7cc015a085d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/baopham/laravel-dynamodb/zipball/9c8a0bb74ba9af734a6c3a93f6d9d7cc015a085d",
+                "reference": "9c8a0bb74ba9af734a6c3a93f6d9d7cc015a085d",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.0.0",
+                "illuminate/database": "~5.1",
+                "illuminate/support": "~5.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BaoPham\\DynamoDb\\DynamoDbServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BaoPham\\DynamoDb\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bao Pham",
+                    "email": "gbaopham@gmail.com"
+                }
+            ],
+            "description": "Eloquent syntax for DynamoDB",
+            "keywords": [
+                "aws",
+                "dynamodb",
+                "laravel"
+            ],
+            "time": "2017-11-29T15:40:19+00:00"
         },
         {
             "name": "dawson/youtube",

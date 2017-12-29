@@ -172,6 +172,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         //Dawson\Youtube\YoutubeServiceProvider::class,
         App\Providers\MyYoutubeServiceProvider::class,
+        BaoPham\DynamoDb\DynamoDbServiceProvider::class,
 
         /*
          * Application Service Providers...
