@@ -20,4 +20,5 @@
 			window.location.href = alink;
 		}
 	});
+    
 })(jQuery);

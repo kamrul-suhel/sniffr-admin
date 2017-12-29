@@ -73,6 +73,7 @@ class ThemeUploadController extends Controller {
     public function form()
     {
         $this->data['iframe'] = 'true';
+        $this->data['form'] = 'upload';
 
         return view('Theme::templates/iframe', $this->data);
     }
