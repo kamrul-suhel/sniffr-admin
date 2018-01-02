@@ -4,13 +4,15 @@
 
 // Libs
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
-@import "~video.js/dist/video-js.min.css";
+//@import "~video.js/dist/video-js.min.css";
+
 @import "~font-awesome/scss/font-awesome.scss";
 @import "~bootstrap-tagsinput/dist/bootstrap-tagsinput.css";
 @import "~bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css";
 
 // Paritals
 @import "libs/nestable";
+@import "libs/videojs.scss";
 
 // Variables
 @import "variables";
