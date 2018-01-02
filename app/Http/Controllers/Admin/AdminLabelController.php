@@ -50,7 +50,7 @@ class AdminLabelController extends Controller {
          }
 
          // list of words that are too common which should be removed
-         $blacklist = array("Human", "Person", "People");
+         $blacklist = array('Human', 'Person', 'People', 'Furniture', 'Chair');
 
          // get file name of video, strip out and create search index
          $search_value = Input::get('f');
