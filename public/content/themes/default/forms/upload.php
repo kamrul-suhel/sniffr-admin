@@ -40,17 +40,17 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="first_name">First Name <span>*</span></label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo 'yo'; //old('first_name'); ?>" >
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo old('first_name'); ?>" >
                         </div>
 
                         <div class="form-group">
                             <label for="last_name">Last Name <span>*</span></label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo 'yo'; //old('last_name'); ?>" >
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo old('last_name'); ?>" >
                         </div>
 
                         <div class="form-group">
                             <label for="tel">Email <span>*</span></label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo 'test@exmaple.com'; //old('email'); ?>" >
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo old('email'); ?>" >
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="title">Video Title <span>*</span></label>
-                            <input type="text" class="form-control" id="title" name="title" value="<?php echo 'yo'; //old('title'); ?>">
+                            <input type="text" class="form-control" id="title" name="title" value="<?php echo old('title'); ?>">
                         </div>
 
                         <p>Please use either send us your video link <strong>OR</strong> upload your video file below <span>*</span></p>
@@ -89,7 +89,7 @@
                                     <div class="radio pull-right">
                                         <div class="circle-url circle-unshaded"></div>
                                     </div>
-                                    
+
                                     <label for="url">Video Link</label>
                                     <input class="form-control files" type="text" id="url" name="url" value="<?php echo old('url'); ?>" placeholder="">
                                 </div>
@@ -109,8 +109,28 @@
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-body">
                         <div class="form-check text-right">
+                            <textarea class="form-control" rows="4" id="terms_text" name="terms_text">Terms & Conditions:
+
+I certify that I am the rights holder for the video(s) found at the link(s) above, or that I have the express permission of the rights holder to submit the video(s) to UNILAD for publishing on UNILAD web properties.
+
+Video Publishing Acknowledgement (*)
+
+I understand that the video(s) I am submitting may be published to UNILAD web properties including, but not limited to, UNILAD.co.uk, Twitter, Facebook, as determined by UNILAD according to the terms of this agreement, which I have read and agree to. UNILAD will not publish the video(s) to YouTube without my permission first.
+
+I understand that where necessary, UNILAD may edit, crop or modify the video(s) in order to tailor the video to the UNILAD audience. No edits of the video(s) will be derogatory in any way towards myself or any third party seen in the video(s).
+
+Termination Clause(*)
+
+I understand that participation in the UNILAD video system is at will and I agree that this license may only be terminated by mutual agreement between all the parties*
+
+Exclusivity(*)
+
+I certify that I am the rights holder, capable of granting a non-exclusive license to UNILAD over my content submitted hereto.
+
+The rights holder retains all rights in the submitted video(s), including without limitation, the right to copy, distribute, publish, display or modify the submitted video(s), and to transfer, assign or grant license of any such rights. Any such grant to third parties will be subject to the free and lawful grant of this license to UNILAD.
+                            </textarea>
                             <label class="form-check-label" for="terms" id="terms-checkbox">
-                                <input id="terms" name="terms" type="checkbox" value="1">I agree to the <a href="">terms and conditions</a>
+                                <input id="terms" name="terms" type="checkbox" value="1">I agree to the above terms and conditions
                             </label>
                         </div>
 
