@@ -110,16 +110,19 @@ class AdminVideosController extends Controller {
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
 
-            //moves video file to folder for analysis
-            $disk = Storage::disk('s3_sourcebucket');
-            if($disk->has($video->file)==1){
-                $disk->move(''.$video->file, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video->file);
-            }
-
-            // Move video to Youtube
+            // Move video to Youtube and move video file to folder for analysis
             if($video->file){
                 $file = file_get_contents($video->file);
                 $fileName = basename($video->file);
+
+                //anaylsis bit
+
+                $disk = Storage::disk('s3_sourcebucket');
+                if($disk->has($fileName)==1){
+                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
+                }
+
+                //youtube bit
 
                 file_put_contents('/tmp/'.$fileName, $file);
 
@@ -237,7 +240,7 @@ class AdminVideosController extends Controller {
         // Send Accepted Email
         Mail::to($video->contact->email)->send(new DetailsReminder($video));
 
-        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder socket_send(socket, buf, len, flags)', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder sent', 'note_type' => 'success') );
     }
 
     /**

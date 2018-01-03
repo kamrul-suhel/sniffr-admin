@@ -15,8 +15,15 @@
 
 	<div class="clear"></div>
 
+	@if(!count($videos))
+
+		<p>Sorry, there are no videos to show.</p>
+
+	@else
+
 	<div class="gallery-env">
 		<div class="row">
+
 			@foreach($videos as $video)
 			<div class="col-sm-6 col-md-4" id="video-{{ $video->id }}">
 				<?php
@@ -105,6 +112,8 @@
 
 		</div>
 	</div>
+
+	@endif
 
 	@section('javascript')
 	<script>
