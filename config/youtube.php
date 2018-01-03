@@ -1,26 +1,25 @@
 <?php
 
 return [
+    /**
+     * Client ID Ian's.
+     */
+    //'client_id' => env('GOOGLE_CLIENT_ID', '1093804339083-07h3fa92p78i46u4gepetiqbiuj9a4r2.apps.googleusercontent.com'),
+
+    /**
+     * Client Secret.
+     */
+    //'client_secret' => env('GOOGLE_CLIENT_SECRET', 'a7forFUe-6CLbPdPDAaKCXB6'),
 
     /**
      * Client ID UNILAD.
      */
-    'client_id' => env('GOOGLE_CLIENT_ID', '197984425086-u2p9n4ojovlfaugj47ak8pjk33t59ppa.apps.googleusercontent.com'),
+    'client_id' => env('GOOGLE_CLIENT_ID', '64989914309-i8remren8n9lb1ptiauhukiijvadl2ts.apps.googleusercontent.com'),
 
     /**
      * Client Secret.
      */
-    'client_secret' => env('GOOGLE_CLIENT_SECRET', 'gYHNx-C0LeJO3j2NKpIR1jYm'),
-
-    /**
-     * Client ID Ian's.
-     */
-    'client_id' => env('GOOGLE_CLIENT_ID', '1093804339083-07h3fa92p78i46u4gepetiqbiuj9a4r2.apps.googleusercontent.com'),
-
-    /**
-     * Client Secret.
-     */
-    'client_secret' => env('GOOGLE_CLIENT_SECRET', 'a7forFUe-6CLbPdPDAaKCXB6'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET', 'uG4yNqSAnuvEaOqciMkJmhGg'),
 
     /**
      * Scopes.
@@ -40,7 +39,7 @@ return [
          * Determine if the Routes should be disabled.
          * Note: We recommend this to be set to "false" immediately after authentication.
          */
-        'enabled' => false,
+        'enabled' => true,
 
         /**
          * The prefix for the below URI's
