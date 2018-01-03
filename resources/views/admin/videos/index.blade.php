@@ -8,15 +8,22 @@
 			</div>
 
 			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= old('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= Request::get('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
 
 	<div class="clear"></div>
 
+	@if(!count($videos))
+
+		<p>Sorry, there are no videos to show.</p>
+
+	@else
+
 	<div class="gallery-env">
 		<div class="row">
+
 			@foreach($videos as $video)
 			<div class="col-sm-6 col-md-4" id="video-{{ $video->id }}">
 				<?php
@@ -105,6 +112,8 @@
 
 		</div>
 	</div>
+
+	@endif
 
 	@section('javascript')
 	<script>
