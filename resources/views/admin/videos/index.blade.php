@@ -44,7 +44,7 @@
 					</header>
 
 					<section class="album-info">
-						<h3><a href="{{ URL::to('admin/videos/') . '/' . $video->id }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
+						<h3><a href="{{ URL::to('admin/videos/edit/'.$video->id) }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
 
 						<p>{{ $video->description }}</p>
 					</section>
@@ -110,6 +110,7 @@
 	<script>
 
 		(function($){
+
 			var delete_link = '';
 
 			$('.delete').click(function(e){
@@ -168,6 +169,7 @@
 					});
 				}
 			});
+
 		})(jQuery);
 
 	</script>

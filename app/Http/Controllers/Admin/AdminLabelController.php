@@ -13,8 +13,13 @@ use App\Label;
 
 use App\Libraries\ThemeHelper;
 
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
+
 use App\Http\Controllers\Controller;
 
 class AdminLabelController extends Controller {
@@ -34,6 +39,8 @@ class AdminLabelController extends Controller {
      */
      public function index() {
 
+         //$isJson = $request->ajax();
+
          // function to remove duplicates within multidimensional array
          function super_unique($array,$key) {
              $temp_array = [];
@@ -52,8 +59,12 @@ class AdminLabelController extends Controller {
          // list of words that are too common which should be removed
          $blacklist = array('Human', 'Person', 'People', 'Furniture', 'Chair');
 
-         // get file name of video, strip out and create search index
+         // get file name of video, then copy video for analysis
          $search_value = Input::get('f');
+         //$disk = Storage::disk('s3_sourcebucket');
+         //$disk->copy(''.$video_value, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video_value);
+
+         // strip out and create search index
          $search_value = substr($search_value, 0, strrpos($search_value, '.'));
          if($search_value){
              $search = array();
@@ -89,10 +100,28 @@ class AdminLabelController extends Controller {
 
          // if array exists then display labels
          if (!empty($labels)) {
-             foreach ($labels as $label){
-                 echo $label['Name'].'['.round($label['Confidence'],0).']<br />';
-             }
+             // foreach ($labels as $label){
+             //     echo $label['Name'].'['.round($label['Confidence'],0).']<br />';
+             // }
+             return response()->json(['status' => 'success', 'message' => 'Labels found.', 'labels' => $labels]);
+         } else {
+             return response()->json(['status' => 'fail', 'message' => 'No labels found.']);
          }
+
+     }
+
+     public function analyseVideo() {
+
+         //NOT CURRENTLY USED (moves video file to folder for analysis)
+         $video_value = Input::get('f');
+         $disk = Storage::disk('s3_sourcebucket');
+         if($disk->has($video_value)==1){
+             $disk->move(''.$video_value, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video_value);
+             return response()->json(['status' => 'success', 'message' => 'Successfully copied the file.']);
+         } else {
+             return response()->json(['status' => 'fail', 'message' => 'No file found.']);
+         }
+
      }
 
 }
