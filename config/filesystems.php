@@ -63,6 +63,14 @@ return [
             'bucket' => 'vlp-storage',
         ],
 
+        's3_sourcebucket' => [
+            'driver' => 's3',
+            'key' => 'AKIAJLBUIX4YJQYGUWTQ',
+            'secret' => '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',
+            'region' => 'us-east-1',
+            'bucket' => 'et-video-service-dev-sourcebucket-1kwpqhvzjyxc5',
+        ],
+
     ],
 
 ];

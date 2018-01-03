@@ -74,7 +74,7 @@ class AdminVideosController extends Controller {
             }else{
                 $videos = $videos->where('state', $state);
             }
-            
+
             session(['state' => $state]);
         }
 
@@ -109,6 +109,12 @@ class AdminVideosController extends Controller {
         if($video->state == 'accepted'){
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
+
+            //moves video file to folder for analysis
+            $disk = Storage::disk('s3_sourcebucket');
+            if($disk->has($video->file)==1){
+                $disk->move(''.$video->file, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video->file);
+            }
 
             // Move video to Youtube
             if($video->file){

@@ -32,6 +32,12 @@ env_variables:
   MAIL_USERNAME: c325a006821a63
   MAIL_PASSWORD: 910c6c62f7f659
 
+  DYNAMODB_CONNECTION: aws
+  DYNAMODB_KEY: AKIAJQXRSVZW4SG7EUGA
+  DYNAMODB_SECRET: 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
+  DYNAMODB_REGION: us-east-1
+  DYNAMODB_LOCAL: false
+
 liveness_check:
    path: '/liveness_check'
    check_interval_sec: 30

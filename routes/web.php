@@ -262,6 +262,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('theme_settings', array('uses' => 'Admin\AdminThemeSettingsController@update_theme_settings'));
 
     Route::get('labels', 'Admin\AdminLabelController@index');
+    Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
 });
 
 /*

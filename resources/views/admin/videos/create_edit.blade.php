@@ -337,6 +337,7 @@
 		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
 			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 			<div class="panel-body" style="display: block;">
+				<div id="video-analysis"></div>
 				<p>Add video tags below:</p>
 				<input class="form-control" name="tags" id="tags" data-role="tagsinput" value="@if(!empty($video) && $video->tags->count() > 0)@foreach($video->tags as $tag){{ $tag->name . ', ' }}@endforeach @endif">
 			</div>
@@ -399,6 +400,8 @@
 			<input type="hidden" id="id" name="id" value="{{ $video->id }}" />
 		@endif
 
+		<input type="hidden" id="temp_filename" name="temp_filename" value="{{ substr($video->file, strrpos($video->file, '/') + 1) }}" />
+
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 	</form>
@@ -406,10 +409,72 @@
 	<div class="clear"></div>
 </div>
 
+<style>
+/* IAN > add this to main.css stylesheet */
+@keyframes blink {50% { color: transparent }}
+.loader__dot { animation: 1s blink infinite }
+.loader__dot:nth-child(2) { animation-delay: 250ms }
+.loader__dot:nth-child(3) { animation-delay: 500ms }
+.copy-tag { display:inline-block; background:#666; margin-top:5px; margin-right:5px; }
+#video-analysis { margin-bottom:15px; }
+</style>
+
 @section('javascript')
 
 	<script type="text/javascript">
-		// $ = jQuery;
+
+		//video analysis function for labels from dynamodb API
+		function videoAnalysis() {
+
+		   var dataFile = $('#temp_filename').val(); //$(this).attr('href');
+
+		   //initialize video analysis + message
+		   $("#video-analysis").html('<p>Analysing video<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></p>');
+
+		   //copy over video file for analysis (this is now executed when video accepted)
+		   // $.ajax({
+			//    type: 'GET',
+			//    url: '/admin/analyse/?f='+dataFile,
+			//    data: { get_param: 'value' },
+			//    dataType: 'json',
+			//    success: function (data) {
+			// 	   if(data.status=='success') {
+			// 		   //do nothing at the moment
+			// 	   }
+			//    }
+		   // });
+
+		   //wait 2 seconds for analysis and then get the video labels (if available)
+		   timeout = setTimeout(function(){
+			   $.ajax({
+				   type: 'GET',
+				   url: '/admin/labels/?f='+dataFile,
+				   data: { get_param: 'value' },
+				   dataType: 'json',
+				   success: function (data) {
+					   if(data.status=='success') {
+						   $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
+						   for(var i=0;i<data.labels.length;i++) {
+						   		var label_output='<a href="#" title="'+data.labels[i]['Name']+'" class="tag label label-info copy-tag">'+data.labels[i]['Name']+'</a> ';
+						   		$("#video-analysis").append(label_output);
+						   }
+						   if(data.labels.length>0) {
+							   $('.copy-tag').click(function(e){
+								   e.preventDefault();
+								   var tag = $(this).attr('title');
+								   $('#tags').tagsinput('add', tag);
+								   $('#video-analysis-tag-added').html(tag+' tag added. You can also add your own tags if you like.');
+								   $(this).css('background', '#337ab7');
+							   });
+						   }
+					   } else {
+						   $('#video-analysis').css('display','none');
+					   }
+				   }
+			   });
+	   	   }, 2000);
+
+		}
 
 		(function($){
 			var tagnames = new Bloodhound({
@@ -502,6 +567,9 @@
 				   comment: 'You must enter a comment first'
 			   }
 		   });
+
+		   //execute video analysis onload
+		   videoAnalysis();
 
 		})(jQuery);
 	</script>
