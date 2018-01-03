@@ -6,9 +6,9 @@
 	<div class="admin-section-title">
 	@if(!empty($video->id))
 		<h3>{{ $video->title }}</h3>
-		<a href="{{ URL::to('video') . '/' . $video->id }}" target="_blank" class="btn btn-info">
+		<!-- <a href="{{ URL::to('video') . '/' . $video->id }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
-		</a>
+		</a> -->
 	@else
 		<h3><i class="fa fa-plus"></i> Add New Video</h3>
 	@endif
