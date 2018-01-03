@@ -107,7 +107,6 @@ class AdminLabelController extends Controller {
          } else {
              return response()->json(['status' => 'fail', 'message' => 'No labels found.']);
          }
-
      }
 
      public function analyseVideo() {

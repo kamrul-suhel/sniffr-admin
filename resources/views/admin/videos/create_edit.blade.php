@@ -400,7 +400,8 @@
 			<input type="hidden" id="id" name="id" value="{{ $video->id }}" />
 		@endif
 
-		<input type="hidden" id="temp_filename" name="temp_filename" value="{{ substr($video->file, strrpos($video->file, '/') + 1) }}" />
+		<input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}" />
+		<input type="hidden" id="temp_state" name="temp_state" value="{{ basename($video->state) }}" />
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
@@ -424,55 +425,55 @@
 	<script type="text/javascript">
 
 		//video analysis function for labels from dynamodb API
-		function videoAnalysis() {
+		function videoAnalysis(tempFile) {
 
-		   var dataFile = $('#temp_filename').val(); //$(this).attr('href');
+		   if(tempFile) {
+			   //initialize video analysis + message
+			   $("#video-analysis").html('<p>Analysing video<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></p>');
 
-		   //initialize video analysis + message
-		   $("#video-analysis").html('<p>Analysing video<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></p>');
+			   //copy over video file for analysis (this is now executed when video accepted)
+			   // $.ajax({
+				//    type: 'GET',
+				//    url: '/admin/analyse/?f='+tempFile,
+				//    data: { get_param: 'value' },
+				//    dataType: 'json',
+				//    success: function (data) {
+				// 	   if(data.status=='success') {
+				// 		   //do nothing at the moment
+				// 	   }
+				//    }
+			   // });
 
-		   //copy over video file for analysis (this is now executed when video accepted)
-		   // $.ajax({
-			//    type: 'GET',
-			//    url: '/admin/analyse/?f='+dataFile,
-			//    data: { get_param: 'value' },
-			//    dataType: 'json',
-			//    success: function (data) {
-			// 	   if(data.status=='success') {
-			// 		   //do nothing at the moment
-			// 	   }
-			//    }
-		   // });
-
-		   //wait 2 seconds for analysis and then get the video labels (if available)
-		   timeout = setTimeout(function(){
-			   $.ajax({
-				   type: 'GET',
-				   url: '/admin/labels/?f='+dataFile,
-				   data: { get_param: 'value' },
-				   dataType: 'json',
-				   success: function (data) {
-					   if(data.status=='success') {
-						   $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
-						   for(var i=0;i<data.labels.length;i++) {
-						   		var label_output='<a href="#" title="'+data.labels[i]['Name']+'" class="tag label label-info copy-tag">'+data.labels[i]['Name']+'</a> ';
-						   		$("#video-analysis").append(label_output);
+			   //wait 2 seconds for analysis and then get the video labels (if available)
+			   timeout = setTimeout(function(){
+				   $.ajax({
+					   type: 'GET',
+					   url: '/admin/labels/?f='+tempFile,
+					   data: { get_param: 'value' },
+					   dataType: 'json',
+					   success: function (data) {
+						   if(data.status=='success') {
+							   $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
+							   for(var i=0;i<data.labels.length;i++) {
+							   		var label_output='<a href="#" title="'+data.labels[i]['Name']+'" class="tag label label-info copy-tag">'+data.labels[i]['Name']+'</a> ';
+							   		$("#video-analysis").append(label_output);
+							   }
+							   if(data.labels.length>0) {
+								   $('.copy-tag').click(function(e){
+									   e.preventDefault();
+									   var tag = $(this).attr('title');
+									   $('#tags').tagsinput('add', tag);
+									   $('#video-analysis-tag-added').html(tag+' tag added. You can also add your own tags if you like.');
+									   $(this).css('background', '#337ab7');
+								   });
+							   }
+						   } else {
+							   $('#video-analysis').css('display','none');
 						   }
-						   if(data.labels.length>0) {
-							   $('.copy-tag').click(function(e){
-								   e.preventDefault();
-								   var tag = $(this).attr('title');
-								   $('#tags').tagsinput('add', tag);
-								   $('#video-analysis-tag-added').html(tag+' tag added. You can also add your own tags if you like.');
-								   $(this).css('background', '#337ab7');
-							   });
-						   }
-					   } else {
-						   $('#video-analysis').css('display','none');
 					   }
-				   }
-			   });
-	   	   }, 2000);
+				   });
+		   	   }, 2000);
+	   	   }
 
 		}
 
@@ -576,7 +577,13 @@
 		   });
 
 		   //execute video analysis onload
-		   videoAnalysis();
+		   var dataFile = $('#temp_filename').val();
+		   var dataState = $('#temp_state').val();
+		   // console.log(dataFile);
+		   // console.log(dataState);
+		   if(dataFile!=null&&dataState!='new'){
+			   videoAnalysis(dataFile);
+		   }
 
 		})(jQuery);
 	</script>
