@@ -4,11 +4,11 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ URL::to('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ url('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 
 			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= old('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
@@ -110,14 +110,27 @@
 	<script>
 
 		(function($){
-
-			var delete_link = '';
-
 			$('.delete').click(function(e){
 				e.preventDefault();
-				delete_link = $(this).attr('href');
-				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false }, function(){    window.location = delete_link });
-			    return false;
+				var delete_link = $(this).attr('href');
+				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false });
+
+				if(delete_link) {
+					$.ajax({
+					    type: 'GET',
+					    url: delete_link,
+					    dataType: 'json',
+					    success: function (data) {
+							if(data.status=='success') {
+								$('#video-'+data.video_id).fadeOut();
+								swal({  title: data.message, icon: 'success', buttons: true, closeModal: true });
+								$('.swal-button-container').css('display','inline-block');
+							} else {
+								$('.swal-button-container').css('display','inline-block');
+							}
+					    }
+					});
+				}
 			});
 
 			$('.state').click(function(e){

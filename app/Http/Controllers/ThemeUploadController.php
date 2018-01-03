@@ -151,7 +151,7 @@ class ThemeUploadController extends Controller {
 
         // Slack notifications
         //Mail::to('submissions@unilad.co.uk')->send(new SubmissionNew($video));
-        $video->notify(new SubmissionNew());
+        $video->notify(new SubmissionNew($video));
 
         // Send thanks notification
         Mail::to($contact->email)->send(new SubmissionThanks($video));

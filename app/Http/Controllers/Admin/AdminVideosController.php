@@ -419,8 +419,10 @@ class AdminVideosController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $isJson = $request->ajax();
+
         $video = Video::find($id);
 
         // Detach and delete any unused tags
@@ -445,7 +447,11 @@ class AdminVideosController extends Controller {
         $video->delete();
         $video->save();
 
-        return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
+        if($isJson) {
+            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'video_id' => $video->id]);
+        } else {
+            return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
+        }
     }
 
     public function restore(Request $request, $id)

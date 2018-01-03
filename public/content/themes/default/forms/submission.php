@@ -1,3 +1,17 @@
+<div id="dim-screen">
+    <div class="menu-animated-background">
+        <img src="<?= THEME_URL . '/assets/img/hamster_wheel.gif';?>" border="0" />
+        <!-- <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+        </div> -->
+        <br />
+        <p>we're just uploading your awesome video..</p>
+    </div>
+</div>
+
 <form method="POST" action="/submission" name="upload-form" id="upload-form" accept-charset="UTF-8" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
 

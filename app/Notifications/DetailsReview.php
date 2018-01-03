@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Video;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,9 +19,9 @@ class DetailsReview extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Video $video)
     {
-        //
+        $this->video = $video;
     }
 
     /**
@@ -42,6 +44,6 @@ class DetailsReview extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('More details submitted for: ' . $notifiable->title);
+           ->content('More details submitted for: ' . $notifiable->title .' : '. url('admin/videos/edit/' . $this->video->id));
     }
 }

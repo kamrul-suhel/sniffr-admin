@@ -76,7 +76,6 @@
 <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1">
 
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/bootstrap.min.css'; ?>" />
-<link rel="stylesheet" href="<?= THEME_URL . '/assets/css/noty.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/font-awesome.min.css'; ?>" />
 <link rel="stylesheet" href="<?= THEME_URL . '/assets/css/hellovideo-fonts.css'; ?>" />
 <?php if(isset($video->id) || isset($episode->id)): ?>

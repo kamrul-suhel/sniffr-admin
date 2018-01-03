@@ -4,7 +4,7 @@ Thanks again for submitting your video to us - we love it!
 
 We’ve received no response from you yet to verify your video and confirm your submission.
 
-Please answer the online questionnaire below, *we cannot feature your video if you do not fill out this form*:
+Please follow the link below to complete additional details, *we cannot feature your video if you do not fill out this form*:
 
 {{ URL::to('/details/' . $video->more_details_code) }}
 
