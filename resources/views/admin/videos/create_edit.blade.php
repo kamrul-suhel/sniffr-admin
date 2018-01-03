@@ -503,6 +503,13 @@
 					}],
 					freeInput: true
 			});
+			$('#tags').on('itemRemoved', function(event) {
+			   console.log(event.item);
+			   if(event.item) {
+				   $('a[title="'+event.item+'"]').css('background', '#666');
+				   $('#video-analysis-tag-added').html('');
+			   }
+			});
 
 			$('#duration').mask('00:00:00');
 
