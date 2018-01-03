@@ -358,20 +358,18 @@
 				</div>
 			</div>
 
-			<div class="col-sm-4">
+			<!-- <div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading"> <div class="panel-title"> User Access</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<label for="access" style="float:left; margin-right:10px;">Who is allowed to view this video?</label>
 						<select id="access" name="access">
 							<option value="guest" @if(!empty($video->access) && $video->access == 'guest'){{ 'selected' }}@endif>Guest (everyone)</option>
-							<!--option value="registered" @if(!empty($video->access) && $video->access == 'registered'){{ 'selected' }}@endif>Registered Users (free registration must be enabled)</option>
-							<option value="subscriber" @if(!empty($video->access) && $video->access == 'subscriber'){{ 'selected' }}@endif>Subscriber (only paid subscription users)</option-->
 						</select>
 						<div class="clear"></div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
