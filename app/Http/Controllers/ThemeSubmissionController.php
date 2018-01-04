@@ -24,8 +24,11 @@ use App\PostCategory;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
+use App\Libraries\VideoHelper;
 
-use App\Notification\SubmissionThanksNonEx;
+use App\Mail\SubmissionThanksNonEx;
+
+use App\Notifications\SubmissionNewNonEx;
 
 class ThemeSubmissionController extends Controller {
 
@@ -137,6 +140,7 @@ class ThemeSubmissionController extends Controller {
 
         //add additional form data to db (with video file info)
         $video = new Video();
+        $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title');
         $video->url = Input::get('url');
@@ -150,15 +154,11 @@ class ThemeSubmissionController extends Controller {
         $video->credit = Input::get('credit');
         $video->save();
 
-        // Add Email notifications
         // Notification of new video
-        //Mail::to('submissions@unilad.co.uk')->send(new SubmissionNewNonEx($video));
-        $video->notify(new SubmissionNewNonEx());
+        $video->notify(new SubmissionNewNonEx($video));
 
         // Send thanks notification
         Mail::to($contact->email)->send(new SubmissionThanksNonEx($video));
-
-        //dd($request);
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);

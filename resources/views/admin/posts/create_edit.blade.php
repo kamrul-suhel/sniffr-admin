@@ -10,7 +10,7 @@
 	<div class="admin-section-title">
 	@if(!empty($post->id))
 		<h3>{{ $post->title }}</h3>
-		<a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank" class="btn btn-info">
+		<a href="{{ url('post') . '/' . $post->slug }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else

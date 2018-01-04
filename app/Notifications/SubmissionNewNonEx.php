@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Video;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,9 +19,9 @@ class SubmissionNewNonEx extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Video $video)
     {
-        //
+        $this->video = $video;
     }
 
     /**
@@ -42,6 +44,6 @@ class SubmissionNewNonEx extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('A new non ex video has been submitted: ' . $notifiable->title);
+           ->content('A new non ex video has been submitted: ' . $notifiable->title .' : '. url('admin/videos/edit/' . $this->video->alpha_id));
     }
 }

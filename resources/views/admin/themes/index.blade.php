@@ -39,7 +39,7 @@
 										<i class="fa fa-check"></i> Active
 									</a>
 								<?php else: ?>
-									<a href="{{ URL::to('admin/theme/activate') . '/' . $theme->slug }}">
+									<a href="{{ url('admin/theme/activate') . '/' . $theme->slug }}">
 										Activate
 									</a>
 								<?php endif; ?>

@@ -5,7 +5,7 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-area-chart"></i> Campaigns</h3><a href="{{ URL::to('admin/campaigns/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-area-chart"></i> Campaigns</h3><a href="{{ url('admin/campaigns/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<div class="col-md-4">
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
@@ -26,8 +26,8 @@
 				<td valign="bottom"><p>{{ $campaign->slug }}</p></td>
 				<td>
 					<p>
-						<a href="{{ URL::to('admin/campaigns/edit') . '/' . $campaign->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ URL::to('admin/campaigns/delete') . '/' . $campaign->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
+						<a href="{{ url('admin/campaigns/edit') . '/' . $campaign->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
+						<a href="{{ url('admin/campaigns/delete') . '/' . $campaign->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>

@@ -1,3 +1,17 @@
+<div id="dim-screen">
+    <div class="menu-animated-background">
+        <img src="<?= THEME_URL . '/assets/img/hamster_wheel.gif';?>" border="0" />
+        <!-- <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+        </div> -->
+        <br />
+        <p>we're just uploading your awesome video..</p>
+    </div>
+</div>
+
 <form method="POST" action="/submission" name="upload-form" id="upload-form" accept-charset="UTF-8" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
 
@@ -115,7 +129,7 @@
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-body">
                         <div class="form-check">
-                            <textarea class="form-control" rows="4" id="terms_text" name="terms_text">Terms & Conditions:
+                            <textarea class="form-control" rows="10" id="terms_text" name="terms_text" disabled>Terms & Conditions:
 
 I certify that I am the rights holder for the video(s) found at the link(s) above, or that I have the express permission of the rights holder to submit the video(s) to UNILAD for publishing on UNILAD web properties.
 

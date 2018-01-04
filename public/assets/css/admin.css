@@ -13409,16 +13409,15 @@ label {
 
 .gallery-env .album footer {
   border-top: 1px solid #f0f0f0;
-}
-
-.gallery-env .album footer:before,
-.gallery-env .album footer:after {
-  content: " ";
-  display: table;
-}
-
-.gallery-env .album footer:after {
-  clear: both;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .gallery-env .album footer .album-images-count a,
@@ -13459,15 +13458,13 @@ label {
 }
 
 .gallery-env .album footer .album-images-count {
-  padding: 6px 15px;
-  float: left;
+  padding-left: 15px;
   color: #8d929a;
 }
 
 .gallery-env .album footer .album-options {
-  float: right;
   border-left: 1px solid #f0f0f0;
-  padding: 7px 10px;
+  padding: 7px 15px;
 }
 
 .modal .croppable-image {

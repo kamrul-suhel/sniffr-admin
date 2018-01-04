@@ -5,7 +5,7 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-user-circle"></i> Users</h3><a href="{{ URL::to('admin/user/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-user-circle"></i> Users</h3><a href="{{ url('admin/user/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<div class="col-md-4">	
 				<?php $search = old('s'); ?>
@@ -25,7 +25,7 @@
 			<th>Actions</th>
 			@foreach($users as $user)
 			<tr>
-				<td><a href="{{ URL::to('user') . '/' . $user->username }}" target="_blank">
+				<td><a href="{{ url('user') . '/' . $user->username }}" target="_blank">
 					<?php if(strlen($user->username) > 40){
 							echo substr($user->username, 0, 40) . '...';
 						  } else {
@@ -50,8 +50,8 @@
 				</td>
 				<td>{{ $user->active }}</td>
 				<td>
-					<a href="{{ URL::to('admin/user/edit') . '/' . $user->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-					<a href="{{ URL::to('admin/user/delete') . '/' . $user->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
+					<a href="{{ url('admin/user/edit') . '/' . $user->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
+					<a href="{{ url('admin/user/delete') . '/' . $user->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
 				</td>
 			</tr>
 			@endforeach

@@ -4,7 +4,7 @@
 </div>
 
 <div class="modal-body">
-	<form id="update-cat-form" accept-charset="UTF-8" action="{{ URL::to('admin/videos/categories/update') }}" method="post">
+	<form id="update-cat-form" accept-charset="UTF-8" action="{{ url('admin/videos/categories/update') }}" method="post">
         <label for="name">Category Name</label>
         <input name="name" id="name" placeholder="Category Name" class="form-control" value="{{ $category->name }}" /><br />
         <label for="slug">URL slug (ex. videos/categories/slug-name)</label>

@@ -33,8 +33,8 @@
 		<?= $video->title ?>
 		<span class="pull-right">
 			<span class="view-count"><i class="fa fa-eye"></i> <?php if(isset($view_increment) && $view_increment == true ): ?><?= $video->views + 1 ?><?php else: ?><?= $video->views ?><?php endif; ?> Views </span>
-			<div class="favorite btn btn-default <?php if(isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-videoid="<?= $video->id ?>"><i class="fa fa-heart"></i> Favorite</div>
-			<?php if(Auth::user() && Auth::user()->role == 'client' && $video->file): ?><a href="/download/<?php echo $video->id; ?>" class="download btn btn-primary"><i class="fa fa-download"></i> Download</a><?php endif; ?>
+			<div class="favorite btn btn-default <?php if(isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-videoid="<?= $video->alpha_id ?>"><i class="fa fa-heart"></i> Favorite</div>
+			<?php if(Auth::user() && Auth::user()->role == 'client' && $video->file): ?><a href="/download/<?php echo $video->alpha_id; ?>" class="download btn btn-primary"><i class="fa fa-download"></i> Download</a><?php endif; ?>
 		</span>
 	</h3>
 
@@ -42,11 +42,15 @@
 
 	<div class="clear"></div>
 
+	<?php 
+
+	if(count($video->tags)): ?>
 	<h2 id="tags">Tags:
 	<?php foreach($video->tags as $key => $tag): ?>
 		<span><a href="/videos/tag/<?= $tag->name ?>"><?= $tag->name ?></a></span><?php if($key+1 != count($video->tags)): ?>,<?php endif; ?>
 	<?php endforeach; ?>
 	</h2>
+	<?php endif; ?>
 
 	<div class="clear"></div>
 

@@ -109,7 +109,7 @@ class ThemeDetailsController extends Controller
 
             // Notification of new video
             //Mail::to('submissions@unilad.co.uk')->send(new DetailsReview($video));
-            $video->notify(new DetailsReview());
+            $video->notify(new DetailsReview($video));
 
             // Send thanks notification
             Mail::to($video->contact->email)->send(new DetailsThanks($video));

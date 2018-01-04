@@ -57,14 +57,6 @@
 			$(this).removeClass('open');
 		});
 
-	    <?php if(Session::get('note') != '' && Session::get('note_type') != ''): ?>
-			var n = noty({text: '<?= str_replace("'", "\\'", Session::get("note")) ?>', layout: 'top', type: '<?= Session::get("note_type") ?>', template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>', closeWith: ['button'], timeout:1600 });
-	        <?php
-	        	Session::forget('note');
-				Session::forget('note_type');
-	        ?>
-	    <?php endif; ?>
-
 		//previous code so looks like something for nav menu
 	    $('#nav-toggle').click(function(){
 			$(this).toggleClass('active');

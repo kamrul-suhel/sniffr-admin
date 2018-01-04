@@ -2,13 +2,9 @@
 
 @section('content')
 <div id="admin-container">
-<!-- This is where -->
 	<div class="admin-section-title">
-	@if(!empty($video->id))
+	@if(isset($video))
 		<h3>{{ $video->title }}</h3>
-		<!-- <a href="{{ URL::to('video') . '/' . $video->id }}" target="_blank" class="btn btn-info">
-			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
-		</a> -->
 	@else
 		<h3><i class="fa fa-plus"></i> Add New Video</h3>
 	@endif
@@ -51,17 +47,17 @@
 				<div class="panel-footer">
 					@if($video->state == 'pending'||$video->state == 'problem')
 					<div class="text-right">
-						<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="btn btn-primary btn-success">License</a>
-			        	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="btn btn-primary btn-warning">Restricted</a>
-			        	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="btn btn-primary btn-danger">Problem</a>
+						<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
+			        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>
+			        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
 					</div>
 					@elseif($video->state == 'new')
 					<div class="text-right">
-						<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="btn btn-primary btn-success">Accept</a>
-			        	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="btn btn-primary btn-danger">Reject</a>
+						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
+			        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
 					</div>
 					@elseif($video->state == 'accepted')
-					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					<div class="clearfix"></div>
 					@endif
 				</div>
@@ -100,7 +96,7 @@
 				</div>
 
 				<div class="panel-footer">
-					<form method="POST" action="{{ url('/admin/videos/comment/'.$video->id) }}" id="comment-form" name="comment-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+					<form method="POST" action="{{ url('/admin/videos/comment/'.$video->alpha_id) }}" id="comment-form" name="comment-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 						<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 
 						<div class="form-group">
@@ -371,7 +367,7 @@
 				</div>
 			</div> -->
 
-			<div class="col-sm-4">
+			<!--div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
@@ -386,7 +382,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div-->
 
 		</div><!-- row -->
 
@@ -394,12 +390,11 @@
 			<input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}" />
 		@endif
 
-		@if(isset($video->id))
-			<input type="hidden" id="id" name="id" value="{{ $video->id }}" />
+		@if(isset($video))
+			<input type="hidden" id="id" name="id" value="{{ $video->alpha_id }}" />
+			<input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}" />
+			<input type="hidden" id="temp_state" name="temp_state" value="{{ basename($video->state) }}" />
 		@endif
-
-		<input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}" />
-		<input type="hidden" id="temp_state" name="temp_state" value="{{ basename($video->state) }}" />
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />

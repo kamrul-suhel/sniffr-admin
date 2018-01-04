@@ -4,7 +4,7 @@
 </div>
 
 <div class="modal-body">
-	<form id="update-menu-form" accept-charset="UTF-8" action="{{ URL::to('admin/menu/update') }}" method="post">
+	<form id="update-menu-form" accept-charset="UTF-8" action="{{ url('admin/menu/update') }}" method="post">
         <label for="name">Menu Item Name</label>
         <input name="name" id="name" placeholder="Menu Item Name" class="form-control" value="{{ $menu->name }}" /><br />
         <label for="slug">URL (ex. /site/url)</label>

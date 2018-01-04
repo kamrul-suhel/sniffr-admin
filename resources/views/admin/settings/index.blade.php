@@ -21,7 +21,7 @@
 
 
 
-	<form method="POST" action="{{ URL::to('admin/settings') }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<form method="POST" action="{{ url('admin/settings') }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 		<div class="row">
 

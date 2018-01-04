@@ -2,6 +2,8 @@
 
 namespace App\Libraries;
 
+use App\Video;
+
 trait VideoHelper{
 
 	public static function getVideoHTML($video, $embed = false) {
@@ -46,5 +48,29 @@ trait VideoHelper{
 		$sHTML .= '</div>';
 
 		return $sHTML;
+	}
+
+	/**
+	 * Generate a "random" alpha-numeric string.
+	 *
+	 * Should not be considered sufficient for cryptography, etc.
+	 *
+	 * @param  int  $length
+	 * @return string
+	 */
+	public static function quickRandom($length = 10)
+	{
+	    $pool = '123456789bcdefghijklmnpqrstvwxyzBCDEFGHIJKLMNPQRSTVWXYZ';
+
+	    $unique = substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
+
+	    // Check it doesn't exist
+	    $result = Video::where('alpha_id', $unique)->get();
+
+	    if(count($result)){
+	    	return VideoHelper::quickRandom(10, true);
+	    }else{
+	    	return $unique;
+	    }
 	}
 }

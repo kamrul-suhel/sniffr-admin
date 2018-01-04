@@ -4,11 +4,11 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ URL::to('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ url('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 
 			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" value="<?= Request::get('s'); ?>" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
+				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> </div> </form>
 			</div>
 		</div>
 	</div>
@@ -44,14 +44,14 @@
 					<header>
 						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 
-						<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}" class="album-options">
+						<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" class="album-options">
 							<i class="fa fa-pencil"></i>
 							Edit
 						</a>
 					</header>
 
 					<section class="album-info">
-						<h3><a href="{{ URL::to('admin/videos/edit/'.$video->id) }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
+						<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
 
 						<p>{{ $video->description }}</p>
 					</section>
@@ -60,12 +60,12 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="text-success state" title="Accept Video"><i class="fa fa-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success state" title="License Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-		                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="text-success state" title="License Video"><i class="fa fa-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check"></i> Licensed
 								@elseif($video->state == 'accepted')
@@ -89,14 +89,14 @@
 
 						<div class="album-options">
 							@if($video->trashed())
-							<a href="{{ URL::to('admin/videos/restore/'.$video->id) }}" title="Remove from trash" class="undelete">
+							<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Remove from trash" class="undelete">
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-							<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}">
+							<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">
 								<i class="fa fa-pencil"></i>
 							</a>
-							<a href="{{ URL::to('admin/videos/delete/'.$video->id) }}" title="Delete Video" class="delete">
+							<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
 								<i class="fa fa-trash-o"></i>
 							</a>
 							@endif
@@ -119,14 +119,27 @@
 	<script>
 
 		(function($){
-
-			var delete_link = '';
-
 			$('.delete').click(function(e){
 				e.preventDefault();
-				delete_link = $(this).attr('href');
-				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false }, function(){    window.location = delete_link });
-			    return false;
+				var delete_link = $(this).attr('href');
+				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false });
+
+				if(delete_link) {
+					$.ajax({
+					    type: 'GET',
+					    url: delete_link,
+					    dataType: 'json',
+					    success: function (data) {
+							if(data.status=='success') {
+								$('#video-'+data.video_id).fadeOut();
+								swal({  title: data.message, icon: 'success', buttons: true, closeModal: true });
+								$('.swal-button-container').css('display','inline-block');
+							} else {
+								$('.swal-button-container').css('display','inline-block');
+							}
+					    }
+					});
+				}
 			});
 
 			$('.state').click(function(e){
