@@ -45,7 +45,7 @@
 				</div>
 
 				<div class="panel-footer">
-					@if($video->state == 'pending')
+					@if($video->state == 'pending'||$video->state == 'problem')
 					<div class="text-right">
 						<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
 			        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>

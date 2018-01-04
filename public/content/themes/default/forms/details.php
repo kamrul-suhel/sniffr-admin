@@ -76,6 +76,14 @@
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" value="<?php echo $video->contact->email; ?>" disabled>
                         </div>
+
+                        <div class="form-group">
+                            <label for="temp-tel">Phone Number</label>
+                            <input type="tel" class="form-control" id="temp-tel" name="temp-tel" value="<?php if($video->contact->tel){ echo $video->contact->tel; } else { echo ''; } ?>">
+                            <span id="valid-msg" class="hide">✓ Valid number</span>
+                            <span id="error-msg" class="hide">Invalid number</span>
+                            <input type="hidden" id="tel" name="tel" value="">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -184,8 +192,54 @@
     </div>
 </form>
 
+<link rel="stylesheet" href="/assets/css/intl-tel-input/css/intlTelInput.css">
+<style>
+#error-msg {
+  color: red;
+  margin-left:5px;
+}
+#valid-msg {
+  color: #00C900;
+  margin-left:5px;
+}
+input.error {
+  border: 1px solid #FF7C7C;
+}
+</style>
+
 <script type="text/javascript">
-$('document').ready(function(){
+(function($){
+    //internation phone numbers
+    var telInput = $('#temp-tel'),
+        errorMsg = $('#error-msg'),
+        validMsg = $('#valid-msg');
+    telInput.intlTelInput({
+        utilsScript: '/assets/js/utils.js',
+        initialCountry: 'gb',
+        preferredCountries: ['gb', 'us', 'au', 'ie', 'ca'],
+        excludeCountries: ['af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'ag', 'am', 'az']
+    });
+    var reset = function() {
+        telInput.removeClass('error');
+        errorMsg.addClass('hide');
+        validMsg.addClass('hide');
+        telInput.val('');
+    };
+    telInput.on('propertychange input', function (e) {
+        if ($.trim(telInput.val())) {
+            if (telInput.intlTelInput("isValidNumber")) {
+              validMsg.removeClass("hide");
+              errorMsg.addClass("hide");
+            } else {
+              validMsg.addClass("hide");
+              errorMsg.removeClass("hide");
+            }
+            console.log($(this).intlTelInput("getNumber"));
+            $('#tel').val($(this).intlTelInput("getNumber"));
+        }
+    });
+    telInput.on('countrychange', reset);
+
     //js form validations >> More details
     $('#details-form').validate({
         rules: {
@@ -262,5 +316,5 @@ $('document').ready(function(){
             $('#submitted_where_container').hide();
         }
     });
-});
+})(jQuery);
 </script>
