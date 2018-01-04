@@ -84188,12 +84188,17 @@ function setup_sidebar_menu() {
 			ev.preventDefault();
 
 			if (!is_multiopen && $this.hasClass(root_level_class)) {
-				var close_submenus = public_vars.$mainMenu.find('.' + root_level_class).not($this).find('> ul');
+				// var close_submenus = public_vars.$mainMenu.find('.' + root_level_class).not($this).find('> ul');
+				//
+				// close_submenus.each(function(i, el)
+				// {
+				// 	var $sub = $(el);
+				// 	menu_do_collapse($sub, $sub.parent(), submenu_options);
+				// });
 
-				close_submenus.each(function (i, el) {
-					var $sub = $(el);
-					menu_do_collapse($sub, $sub.parent(), submenu_options);
-				});
+				if ($link.attr('href')) {
+					window.location.href = $link.attr('href');
+				}
 			}
 
 			if (!$this.hasClass(submenu_options.submenu_opened_class)) {
@@ -84682,7 +84687,8 @@ function hide_loading_bar() {
 
 	display_mobile_menu();
 
-	$('.tlink').click(function () {
+	$('.tlink').click(function (e) {
+		console.log(this);
 		var alink = $(this).attr('href');
 		if (alink) {
 			window.location.href = alink;
