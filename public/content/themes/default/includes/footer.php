@@ -37,7 +37,6 @@
 							<li><a href="<?= ($settings->enable_https) ? secure_url('page') : URL::to('page'); ?><?= '/' . $page->slug ?>"><?= $page->title ?></a></li>
 						<?php endforeach; ?>
 						<li><a href="/login">Login</a></li>
-						<li><a href="/signup">Signup</a></li>
 					</ul>
 				</div>
 			</div>
