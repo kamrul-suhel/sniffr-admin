@@ -60,7 +60,13 @@ body.home .second-nav {
 .area-404 img {
    width:30%;
    height:auto;
-   margin-bottom:40px;
+   margin-bottom:150px;
+}
+
+.area-404 .hamster_thanks {
+  width:10% !important;
+  height:auto;
+  margin-bottom:150px;
 }
 
 .area-404 p {
@@ -70,6 +76,15 @@ body.home .second-nav {
 .area-404 a {
    color:#fff;
    font-weight:600;
+}
+
+#error-msg {
+  color: red;
+  margin-left:5px;
+}
+#valid-msg {
+  color: #00C900;
+  margin-left:5px;
 }
 
 ul.video_list{
