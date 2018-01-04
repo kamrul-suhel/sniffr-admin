@@ -9,8 +9,7 @@ use Redirect;
 
 use App\Page;
 use App\Menu;
-use App\VideoCategory;
-use App\PostCategory;
+use App\VideoShotType;
 
 use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
@@ -19,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 
-class AdminVideoCategoriesController extends Controller {
+class AdminVideoShotTypeController extends Controller {
 
     /**
      * constructor.
@@ -32,15 +31,15 @@ class AdminVideoCategoriesController extends Controller {
     public function index(){
         $data = array(
             'admin_user' => Auth::user(),
-            'video_categories' => json_decode(VideoCategory::orderBy('order', 'ASC')->get()->toJson()),
-            );
+            'video_collections' => json_decode(VideoShotType::orderBy('order', 'ASC')->get()->toJson()),
+        );
 
         return view('admin.videos.categories.index', $data);
     }
 
     public function store(){
         $input = Input::all();
-        $last_category = VideoCategory::orderBy('order', 'DESC')->first();
+        $last_category = VideoShotType::orderBy('order', 'DESC')->first();
 
         if(isset($last_category->order)){
             $new_category_order = intval($last_category->order) + 1;
@@ -48,7 +47,7 @@ class AdminVideoCategoriesController extends Controller {
             $new_category_order = 1;
         }
         $input['order'] = $new_category_order;
-        $video_category = VideoCategory::create($input);
+        $video_category = VideoShotType::create($input);
         if(isset($video_category->id)){
             return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Added Your New Video Category', 'note_type' => 'success') );
         }
@@ -56,15 +55,15 @@ class AdminVideoCategoriesController extends Controller {
 
     public function update(){
         $input = Input::all();
-        $category = VideoCategory::find($input['id'])->update($input);
+        $category = VideoShotType::find($input['id'])->update($input);
         if(isset($category)){
             return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Updated Category', 'note_type' => 'success') );
         }
     }
 
     public function destroy($id){
-        VideoCategory::destroy($id);
-        $child_cats = VideoCategory::where('parent_id', '=', $id)->get();
+        VideoShotType::destroy($id);
+        $child_cats = VideoShotType::where('parent_id', '=', $id)->get();
         foreach($child_cats as $cats){
             $cats->parent_id = NULL;
             $cats->save();
@@ -73,17 +72,17 @@ class AdminVideoCategoriesController extends Controller {
     }
 
     public function edit($id){
-        return view('admin.videos.categories.edit', array('category' => VideoCategory::find($id)));
+        return view('admin.videos.categories.edit', array('category' => VideoShotType::find($id)));
     }
 
     public function order(){
         $category_order = json_decode(Input::get('order'));
-        $video_categories = VideoCategory::all();
+        $video_categories = VideoShotType::all();
         $order = 1;
 
         foreach($category_order as $category_level_1):
 
-            $level1 = VideoCategory::find($category_level_1->id);
+            $level1 = VideoShotType::find($category_level_1->id);
             if($level1->id){
                 $level1->order = $order;
                 $level1->parent_id = NULL;
@@ -97,7 +96,7 @@ class AdminVideoCategoriesController extends Controller {
 
                 foreach($children_level_1 as $category_level_2):
 
-                    $level2 = VideoCategory::find($category_level_2->id);
+                    $level2 = VideoShotType::find($category_level_2->id);
                     if($level2->id){
                         $level2->order = $order;
                         $level2->parent_id = $level1->id;
@@ -112,7 +111,7 @@ class AdminVideoCategoriesController extends Controller {
 
                         foreach($children_level_2 as $category_level_3):
 
-                            $level3 = VideoCategory::find($category_level_3->id);
+                            $level3 = VideoShotType::find($category_level_3->id);
                             if($level3->id){
                                 $level3->order = $order;
                                 $level3->parent_id = $level2->id;
