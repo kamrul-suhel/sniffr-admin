@@ -44,6 +44,6 @@ class SubmissionNewNonEx extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('A new non ex video has been submitted: ' . $notifiable->title .' : '. url('admin/videos/edit/' . $this->video->id));
+           ->content('A new non ex video has been submitted: ' . $notifiable->title .' : '. url('admin/videos/edit/' . $this->video->alpha_id));
     }
 }
