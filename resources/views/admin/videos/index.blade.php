@@ -3,13 +3,28 @@
 @section('content')
 	<div class="admin-section-title">
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-4">
 				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ url('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 
-			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> </div> </form>
-			</div>
+			<form method="get" role="form" class="search-form-full">
+				<div class="col-md-4">
+					<div class="form-group">
+						<select id="video_shottype_id" name="video_shottype_id">
+							<option value="0">Shot Type</option>
+							@foreach($video_shottypes as $shottype)
+								<option value="{{ $shottype->id }}" @if(!empty($video->video_shottype_id) && $video->video_shottype_id == $shottype->id)selected="selected"@endif>{{ $shottype->name }}</option>
+							@endforeach
+						</select>
+					</div> 
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group"> 
+						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> 
+					</div> 
+				</div>
+			</form>
 		</div>
 	</div>
 

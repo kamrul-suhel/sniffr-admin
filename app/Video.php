@@ -12,7 +12,7 @@ class Video extends Model {
     protected $table = 'videos';
 	protected $guarded = [];
     protected $hidden = ["deleted_at"];
-	protected $fillable = array('user_id', 'video_category_id', 'title', 'type', 'access', 'details', 'description', 'date_filmed', 'notes', 'referrer', 'credit', 'active', 'featured', 'duration', 'image', 'embed_code', 'url', 'created_at');
+	protected $fillable = array('user_id', 'video_category_id', 'video_collection_id', 'video_shottype_id', 'title', 'type', 'access', 'details', 'description', 'date_filmed', 'notes', 'referrer', 'credit', 'active', 'featured', 'duration', 'image', 'embed_code', 'url', 'created_at');
 
 	public function tags(){
 		return $this->belongsToMany(Tag::class);

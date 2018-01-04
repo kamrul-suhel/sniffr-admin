@@ -31,58 +31,58 @@ class AdminVideoShotTypeController extends Controller {
     public function index(){
         $data = array(
             'admin_user' => Auth::user(),
-            'video_collections' => json_decode(VideoShotType::orderBy('order', 'ASC')->get()->toJson()),
+            'video_shottypes' => json_decode(VideoShotType::orderBy('order', 'ASC')->get()->toJson()),
         );
 
-        return view('admin.videos.categories.index', $data);
+        return view('admin.videos.shottypes.index', $data);
     }
 
     public function store(){
         $input = Input::all();
-        $last_category = VideoShotType::orderBy('order', 'DESC')->first();
+        $last_shottype = VideoShotType::orderBy('order', 'DESC')->first();
 
-        if(isset($last_category->order)){
-            $new_category_order = intval($last_category->order) + 1;
+        if(isset($last_shottype->order)){
+            $new_shottype_order = intval($last_shottype->order) + 1;
         } else {
-            $new_category_order = 1;
+            $new_shottype_order = 1;
         }
-        $input['order'] = $new_category_order;
-        $video_category = VideoShotType::create($input);
-        if(isset($video_category->id)){
-            return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Added Your New Video Category', 'note_type' => 'success') );
+        $input['order'] = $new_shottype_order;
+        $video_shottype = VideoShotType::create($input);
+        if(isset($video_shottype->id)){
+            return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Added Your New Video Shot Type', 'note_type' => 'success') );
         }
     }
 
     public function update(){
         $input = Input::all();
-        $category = VideoShotType::find($input['id'])->update($input);
-        if(isset($category)){
-            return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Updated Category', 'note_type' => 'success') );
+        $shottype = VideoShotType::find($input['id'])->update($input);
+        if(isset($shottype)){
+            return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Updated Shot Type', 'note_type' => 'success') );
         }
     }
 
     public function destroy($id){
         VideoShotType::destroy($id);
-        $child_cats = VideoShotType::where('parent_id', '=', $id)->get();
-        foreach($child_cats as $cats){
-            $cats->parent_id = NULL;
-            $cats->save();
+        $child_shottypes = VideoShotType::where('parent_id', '=', $id)->get();
+        foreach($child_shottypes as $shottype){
+            $shottype->parent_id = NULL;
+            $shottype->save();
         }
-        return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Deleted Category', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Deleted Shot Type', 'note_type' => 'success') );
     }
 
     public function edit($id){
-        return view('admin.videos.categories.edit', array('category' => VideoShotType::find($id)));
+        return view('admin.videos.shottypes.edit', array('shottype' => VideoShotType::find($id)));
     }
 
     public function order(){
-        $category_order = json_decode(Input::get('order'));
-        $video_categories = VideoShotType::all();
+        $shottype_order = json_decode(Input::get('order'));
+        $video_shottypes = VideoShotType::all();
         $order = 1;
 
-        foreach($category_order as $category_level_1):
+        foreach($shottype_order as $shottype_level_1):
 
-            $level1 = VideoShotType::find($category_level_1->id);
+            $level1 = VideoShotType::find($shottype_level_1->id);
             if($level1->id){
                 $level1->order = $order;
                 $level1->parent_id = NULL;
@@ -90,13 +90,13 @@ class AdminVideoShotTypeController extends Controller {
                 $order += 1;
             }
 
-            if(isset($category_level_1->children)):
+            if(isset($shottype_level_1->children)):
 
-                $children_level_1 = $category_level_1->children;
+                $children_level_1 = $shottype_level_1->children;
 
-                foreach($children_level_1 as $category_level_2):
+                foreach($children_level_1 as $shottype_level_2):
 
-                    $level2 = VideoShotType::find($category_level_2->id);
+                    $level2 = VideoShotType::find($shottype_level_2->id);
                     if($level2->id){
                         $level2->order = $order;
                         $level2->parent_id = $level1->id;
@@ -104,14 +104,14 @@ class AdminVideoShotTypeController extends Controller {
                         $order += 1;
                     }
 
-                    if(isset($category_level_2->children)):
+                    if(isset($shottype_level_2->children)):
 
-                        $children_level_2 = $category_level_2->children;
+                        $children_level_2 = $shottype_level_2->children;
 
 
-                        foreach($children_level_2 as $category_level_3):
+                        foreach($children_level_2 as $shottype_level_3):
 
-                            $level3 = VideoShotType::find($category_level_3->id);
+                            $level3 = VideoShotType::find($shottype_level_3->id);
                             if($level3->id){
                                 $level3->order = $order;
                                 $level3->parent_id = $level2->id;

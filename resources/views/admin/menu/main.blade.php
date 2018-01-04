@@ -66,6 +66,16 @@
                     <span class="title">Video Categories</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ url('admin/videos/collections') }}">
+                    <span class="title">Video Collections</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('admin/videos/shottypes') }}">
+                    <span class="title">Video Shot Types</span>
+                </a>
+            </li>
         </ul>
     </li>
 

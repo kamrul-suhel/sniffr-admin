@@ -27,6 +27,8 @@ use App\Video;
 use App\Comment;
 use App\Campaign;
 use App\VideoCategory;
+use App\VideoCollection;
+use App\VideoShotType;
 
 
 use App\Libraries\ImageHandler;
@@ -86,7 +88,10 @@ class AdminVideosController extends Controller {
             'state' => $state,
             'videos' => $videos,
             'user' => $user,
-            'admin_user' => Auth::user()
+            'admin_user' => Auth::user(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
+            'video_shottypes' => VideoShotType::all(),
         );
 
         return view('admin.videos.index', $data);
@@ -256,6 +261,8 @@ class AdminVideosController extends Controller {
             'button_text' => 'Add New Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
+            'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
         );
         return view('admin.videos.create_edit', $data);
@@ -330,6 +337,8 @@ class AdminVideosController extends Controller {
             'button_text' => 'Update Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
+            'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
         );
 

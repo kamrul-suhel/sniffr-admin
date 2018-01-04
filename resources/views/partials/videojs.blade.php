@@ -1,18 +1,3 @@
-<style>
-  .vjs-default-skin .vjs-big-play-button {
-    background: rgba(0,0,0,0.75);
-    border-radius: 50%;
-    border: #fff solid 3px;
-    height: 72px;
-    width: 72px;
-    margin-top: -7%;
-  }
-  .video-js .vjs-big-play-button:before {
-    padding-top: 12px;
-    font-size: 38px;
-  }
-</style>
-
 @section ('javascript-videojs')
   <script src="/assets/admin/js/video.js"></script>
   <script src="/assets/admin/js/videojs-vimeo.js"></script>

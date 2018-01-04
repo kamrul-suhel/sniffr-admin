@@ -175,6 +175,21 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('videos/categories/edit/{id}', 'Admin\AdminVideoCategoriesController@edit');
     Route::post('videos/categories/update', array('uses' => 'Admin\AdminVideoCategoriesController@update'));
     Route::get('videos/categories/delete/{id}', array('uses' => 'Admin\AdminVideoCategoriesController@destroy'));
+
+    Route::get('videos/collections', 'Admin\AdminVideoCollectionsController@index');
+    Route::post('videos/collections/store', array('uses' => 'Admin\AdminVideoCollectionsController@store'));
+    Route::post('videos/collections/order', array('uses' => 'Admin\AdminVideoCollectionsController@order'));
+    Route::get('videos/collections/edit/{id}', 'Admin\AdminVideoCollectionsController@edit');
+    Route::post('videos/collections/update', array('uses' => 'Admin\AdminVideoCollectionsController@update'));
+    Route::get('videos/collections/delete/{id}', array('uses' => 'Admin\AdminVideoCollectionsController@destroy'));
+
+    Route::get('videos/shottypes', 'Admin\AdminVideoShotTypeController@index');
+    Route::post('videos/shottypes/store', array('uses' => 'Admin\AdminVideoShotTypeController@store'));
+    Route::post('videos/shottypes/order', array('uses' => 'Admin\AdminVideoShotTypeController@order'));
+    Route::get('videos/shottypes/edit/{id}', 'Admin\AdminVideoShotTypeController@edit');
+    Route::post('videos/shottypes/update', array('uses' => 'Admin\AdminVideoShotTypeController@update'));
+    Route::get('videos/shottypes/delete/{id}', array('uses' => 'Admin\AdminVideoShotTypeController@destroy'));
+
     Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call

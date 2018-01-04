@@ -4,7 +4,6 @@
 
 // Libs
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
-//@import "~video.js/dist/video-js.min.css";
 
 @import "~font-awesome/scss/font-awesome.scss";
 @import "~bootstrap-tagsinput/dist/bootstrap-tagsinput.css";
@@ -28,6 +27,7 @@
 @import "partials/google";
 
 @import "partials/logo";
+@import "partials/loading";
 @import "partials/page";
 @import "partials/pagination";
 @import "partials/toastr";

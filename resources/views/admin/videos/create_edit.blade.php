@@ -274,39 +274,102 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-			<div class="panel-title">Short Description</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+		<div class="panel panel-primary" data-collapsed="0"> 
+			<div class="panel-heading">
+				<div class="panel-title">Short Description</div> 
+
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				</div>
+			</div>
+
 			<div class="panel-body" style="display: block;">
 				<p>Add a short description of the video below:</p>
 				<textarea class="form-control" name="description" id="description">@if(!empty($video->description)){{ htmlspecialchars($video->description) }}@endif</textarea>
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-			<div class="panel-title">Video Details, Links, and Info</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+		<div class="panel panel-primary" data-collapsed="0"> 
+			<div class="panel-heading">
+				<div class="panel-title">Video Details, Links, and Info</div> 
+
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				</div>
+			</div>
+
 			<div class="panel-body" style="display: block; padding:0px;">
 				<textarea class="form-control" name="details" id="details">@if(!empty($video->details)){{ htmlspecialchars($video->details) }}@endif</textarea>
 			</div>
 		</div>
+
 		<div id="video-error" class="error"></div>
 
-		<div class="panel panel-primary" data-collapsed="0">
-			<div class="panel-heading">
-				<div class="panel-title">Category</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Category</div>
 
-				<div class="panel-options">
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Select a Video Category Below:</p>
+						<select id="video_category_id" name="video_category_id">
+							<option value="0">Please Select</option>
+							@foreach($video_categories as $category)
+								<option value="{{ $category->id }}" @if(!empty($video->video_category_id) && $video->video_category_id == $category->id)selected="selected"@endif>{{ $category->name }}</option>
+							@endforeach
+						</select>
+					</div>
 				</div>
 			</div>
 
-			<div class="panel-body" style="display: block;">
-				<p>Select a Video Category Below:</p>
-				<select id="video_category_id" name="video_category_id">
-					<option value="0">Uncategorized</option>
-					@foreach($video_categories as $category)
-						<option value="{{ $category->id }}" @if(!empty($video->video_category_id) && $video->video_category_id == $category->id)selected="selected"@endif>{{ $category->name }}</option>
-					@endforeach
-				</select>
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Collection</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Select a Video Collection Below:</p>
+						<select id="video_collection_id" name="video_collection_id">
+							<option value="0">Please Select</option>
+							@foreach($video_collections as $collection)
+								<option value="{{ $collection->id }}" @if(!empty($video->video_collection_id) && $video->video_collection_id == $collection->id)selected="selected"@endif>{{ $collection->name }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Shot Type</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Select a Shot Type Below:</p>
+						<select id="video_shottype_id" name="video_shottype_id">
+							<option value="0">Please Select</option>
+							@foreach($video_shottypes as $shottype)
+								<option value="{{ $shottype->id }}" @if(!empty($video->video_shottype_id) && $video->video_shottype_id == $shottype->id)selected="selected"@endif>{{ $shottype->name }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -330,8 +393,15 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-			<div class="panel-title">Tags</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+		<div class="panel panel-primary" data-collapsed="0"> 
+			<div class="panel-heading">
+				<div class="panel-title">Tags</div> 
+
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				</div>
+			</div>
+
 			<div class="panel-body" style="display: block;">
 				<div id="video-analysis"></div>
 				<p>Add video tags below:</p>
@@ -339,11 +409,7 @@
 			</div>
 		</div>
 
-		<div class="clear"></div>
-
-
 		<div class="row">
-
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading"> <div class="panel-title"> Duration</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
@@ -402,16 +468,6 @@
 
 	<div class="clear"></div>
 </div>
-
-<style>
-/* IAN > add this to main.css stylesheet */
-@keyframes blink {50% { color: transparent }}
-.loader__dot { animation: 1s blink infinite }
-.loader__dot:nth-child(2) { animation-delay: 250ms }
-.loader__dot:nth-child(3) { animation-delay: 500ms }
-.copy-tag { display:inline-block; background:#666; margin-top:5px; margin-right:5px; }
-#video-analysis { margin-bottom:15px; }
-</style>
 
 @section('javascript')
 

@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.5-10.2.10-MariaDB)
 # Database: videoapp
-# Generation Time: 2018-01-04 11:11:49 +0000
+# Generation Time: 2018-01-04 17:17:36 +0000
 # ************************************************************
 
 
@@ -142,6 +142,7 @@ CREATE TABLE `contacts` (
   `tel` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `paypal` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `facebook` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `youtube` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `instagram` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -156,12 +157,12 @@ CREATE TABLE `contacts` (
 LOCK TABLES `contacts` WRITE;
 /*!40000 ALTER TABLE `contacts` DISABLE KEYS */;
 
-INSERT INTO `contacts` (`id`, `first_name`, `last_name`, `email`, `tel`, `language`, `location`, `facebook`, `youtube`, `instagram`, `twitter`, `other`, `deleted_at`, `created_at`, `updated_at`)
+INSERT INTO `contacts` (`id`, `first_name`, `last_name`, `email`, `tel`, `language`, `location`, `paypal`, `facebook`, `youtube`, `instagram`, `twitter`, `other`, `deleted_at`, `created_at`, `updated_at`)
 VALUES
-	(1,'Ian','Lainchbury','ian@unilad.co.uk',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 10:45:19','2018-01-03 10:45:19'),
-	(2,'Ian','Lainchbury','text@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:12:46','2018-01-03 12:12:46'),
-	(3,'Test','Test','test@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:25:55','2018-01-03 12:25:55'),
-	(4,'yo','yo','yo@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-04 09:24:14','2018-01-04 09:24:14');
+	(1,'Ian','Lainchbury','ian@unilad.co.uk',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 10:45:19','2018-01-03 10:45:19'),
+	(2,'Ian','Lainchbury','text@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:12:46','2018-01-03 12:12:46'),
+	(3,'Test','Test','test@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:25:55','2018-01-03 12:25:55'),
+	(4,'yo','yo','yo@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-04 09:24:14','2018-01-04 09:24:14');
 
 /*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -680,13 +681,72 @@ VALUES
 	(11,NULL,1,'UNILAD','unilad','2015-01-11 05:32:27','2017-11-30 11:55:40'),
 	(13,NULL,3,'Gaming','gaming','2015-01-30 16:34:33','2017-11-30 11:56:06'),
 	(15,NULL,4,'Adventure','adventure','2015-02-04 14:16:23','2017-11-30 11:56:16'),
-	(18,NULL,8,'Fitness','fitness','2015-02-04 14:21:40','2017-11-30 11:56:31'),
-	(19,NULL,9,'Grub','grub','2015-02-04 14:22:07','2017-11-30 11:56:40'),
-	(20,NULL,11,'Film','film','2015-02-04 14:22:15','2017-11-30 11:56:50'),
+	(18,NULL,6,'Fitness','fitness','2015-02-04 14:21:40','2018-01-04 11:44:11'),
+	(19,NULL,7,'Grub','grub','2015-02-04 14:22:07','2018-01-04 11:44:11'),
+	(20,NULL,8,'Film','film','2015-02-04 14:22:15','2018-01-04 11:44:11'),
 	(21,NULL,2,'Tech','tech','2015-02-04 14:23:03','2017-11-30 11:55:58'),
 	(23,NULL,5,'Sound','sound','2015-02-04 14:25:37','2017-11-30 11:56:23');
 
 /*!40000 ALTER TABLE `video_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table video_collections
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `video_collections`;
+
+CREATE TABLE `video_collections` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `order` int(11) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `video_collections` WRITE;
+/*!40000 ALTER TABLE `video_collections` DISABLE KEYS */;
+
+INSERT INTO `video_collections` (`id`, `parent_id`, `order`, `name`, `slug`, `created_at`, `updated_at`)
+VALUES
+	(1,NULL,1,'Fails','fails','2018-01-04 14:51:04','2018-01-04 14:51:04'),
+	(2,NULL,2,'Kids','kids','2018-01-04 14:51:33','2018-01-04 14:54:25'),
+	(3,NULL,3,'Animals','animals','2018-01-04 14:51:41','2018-01-04 14:54:25');
+
+/*!40000 ALTER TABLE `video_collections` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table video_shot_types
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `video_shot_types`;
+
+CREATE TABLE `video_shot_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `order` int(11) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `video_shot_types` WRITE;
+/*!40000 ALTER TABLE `video_shot_types` DISABLE KEYS */;
+
+INSERT INTO `video_shot_types` (`id`, `parent_id`, `order`, `name`, `slug`, `created_at`, `updated_at`)
+VALUES
+	(1,NULL,1,'Drone','drone','2018-01-04 15:08:01','2018-01-04 15:08:01'),
+	(2,NULL,2,'Go Pro','gopro','2018-01-04 15:08:19','2018-01-04 15:08:19'),
+	(3,NULL,3,'Camera','camera','2018-01-04 15:08:29','2018-01-04 15:08:29'),
+	(4,NULL,4,'Mobile','mobile','2018-01-04 15:08:41','2018-01-04 15:08:41');
+
+/*!40000 ALTER TABLE `video_shot_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -702,6 +762,8 @@ CREATE TABLE `videos` (
   `user_id` int(11) unsigned DEFAULT NULL,
   `contact_id` int(11) unsigned DEFAULT NULL,
   `video_category_id` int(11) NOT NULL DEFAULT 0,
+  `video_collection_id` int(11) NOT NULL DEFAULT 0,
+  `video_shottype_id` int(11) NOT NULL DEFAULT 0,
   `title` varchar(255) DEFAULT '',
   `type` varchar(255) DEFAULT '',
   `access` varchar(20) NOT NULL DEFAULT 'guest',
@@ -751,11 +813,11 @@ CREATE TABLE `videos` (
 LOCK TABLES `videos` WRITE;
 /*!40000 ALTER TABLE `videos` DISABLE KEYS */;
 
-INSERT INTO `videos` (`id`, `alpha_id`, `state`, `user_id`, `contact_id`, `video_category_id`, `title`, `type`, `access`, `details`, `description`, `notes`, `referrer`, `credit`, `active`, `featured`, `views`, `image`, `thumb`, `mime`, `ext`, `url`, `file`, `link`, `youtube_id`, `embed_code`, `duration`, `date_filmed`, `location`, `source`, `more_details`, `more_details_sent`, `more_details_code`, `reminders`, `contact_is_owner`, `submitted_elsewhere`, `submitted_where`, `allow_publish`, `filmed_by_me`, `permission`, `is_exclusive`, `terms`, `ip`, `licensed_at`, `deleted_at`, `updated_at`, `created_at`)
+INSERT INTO `videos` (`id`, `alpha_id`, `state`, `user_id`, `contact_id`, `video_category_id`, `video_collection_id`, `video_shottype_id`, `title`, `type`, `access`, `details`, `description`, `notes`, `referrer`, `credit`, `active`, `featured`, `views`, `image`, `thumb`, `mime`, `ext`, `url`, `file`, `link`, `youtube_id`, `embed_code`, `duration`, `date_filmed`, `location`, `source`, `more_details`, `more_details_sent`, `more_details_code`, `reminders`, `contact_is_owner`, `submitted_elsewhere`, `submitted_where`, `allow_publish`, `filmed_by_me`, `permission`, `is_exclusive`, `terms`, `ip`, `licensed_at`, `deleted_at`, `updated_at`, `created_at`)
 VALUES
-	(1,'IpgKmEWtre','licensed',NULL,1,0,'First Video Upload UNILAD Test','ex','guest',NULL,'The was once a bunny rabbit that lived in a far, far away land.',NULL,NULL,NULL,1,0,1,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1514976319-new-video.mp4',NULL,'aTIABejkkVM',NULL,NULL,'2017-11-30','Pixar Studios',NULL,1,'2018-01-03 10:46:47','dQ67WJev6CzVIcYi1QclIZUEq43Wbh',NULL,1,0,NULL,1,NULL,1,1,NULL,NULL,'2018-01-03 10:50:21',NULL,'2018-01-04 10:29:24','2018-01-03 10:45:24'),
-	(2,'GiJDFEW2Hj','restricted',NULL,2,0,'Title for Non Ex Video','nonex','guest',NULL,NULL,'This is the non ex notes','Smitty','https://www.youtube.com/user/uniladtv',1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=dA42vievwZk','',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:12:46','2018-01-03 12:12:46'),
-	(3,'2KgEFEWrsw','licensed',1,3,0,'Test','ex','guest',NULL,'My kid is rubbish at footy!',NULL,NULL,NULL,0,0,13,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1514982355-20170523_201849.mp4',NULL,'JCrdUGvy-o4',NULL,25,'2017-11-30','In a park',NULL,1,'2018-01-03 12:36:50','npJMD2ZEnk0e23YttVIo7NqIjemOqh',1,1,1,'LadBible',1,NULL,1,1,NULL,NULL,NULL,NULL,'2018-01-04 10:33:16','2018-01-03 12:26:02');
+	(1,'IpgKmEWtre','licensed',NULL,1,0,0,0,'First Video Upload UNILAD Test','ex','guest',NULL,'The was once a bunny rabbit that lived in a far, far away land.',NULL,NULL,NULL,1,0,1,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1514976319-new-video.mp4',NULL,'aTIABejkkVM',NULL,NULL,'2017-11-30','Pixar Studios',NULL,1,'2018-01-03 10:46:47','dQ67WJev6CzVIcYi1QclIZUEq43Wbh',NULL,1,0,NULL,1,NULL,1,1,NULL,NULL,'2018-01-03 10:50:21',NULL,'2018-01-04 10:29:24','2018-01-03 10:45:24'),
+	(2,'GiJDFEW2Hj','restricted',NULL,2,0,0,0,'Title for Non Ex Video','nonex','guest',NULL,NULL,'This is the non ex notes','Smitty','https://www.youtube.com/user/uniladtv',1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=dA42vievwZk','',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:12:46','2018-01-03 12:12:46'),
+	(3,'2KgEFEWrsw','licensed',1,3,11,1,3,'Test','ex','guest',NULL,'My kid is rubbish at footy!',NULL,NULL,NULL,0,0,13,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1514982355-20170523_201849.mp4',NULL,'JCrdUGvy-o4',NULL,25,'2017-11-30','In a park',NULL,NULL,'2018-01-03 12:36:50','npJMD2ZEnk0e23YttVIo7NqIjemOqh',1,1,1,'LadBible',1,NULL,1,1,NULL,NULL,NULL,NULL,'2018-01-04 15:48:51','2018-01-03 12:26:02');
 
 /*!40000 ALTER TABLE `videos` ENABLE KEYS */;
 UNLOCK TABLES;
