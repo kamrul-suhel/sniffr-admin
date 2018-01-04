@@ -66887,9 +66887,13 @@ $('document').ready(function () {
         $('.circle-url').addClass('circle-unshaded');
     });
 
-    $('#file, #url').on('change', function () {
+    $('#file, #url').on('change', function (e) {
         $('#video-error').css('display', 'none');
         $('#file').css('color', '#333');
+        var target = $(e.target);
+        if (target.is('#file')) {
+            $('#filename').html($('#file').prop('files')[0].name);
+        }
     });
 });
 

@@ -81,6 +81,7 @@
                                         <!-- The file input field used as target for the file upload widget -->
                                         <input class="files" type="file" id="file" name="file" data-url="/upload" value="<?php echo old('file'); ?>" />
                                     </span>
+                                    <div id="filename"></div>
                                 </div>
                             </div>
 

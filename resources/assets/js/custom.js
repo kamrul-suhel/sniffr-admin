@@ -56,7 +56,6 @@ $('document').ready(function(){
         }
     });
 
-
     $("#upload-form").on('submit', function(e){
         e.preventDefault();
 
@@ -67,7 +66,7 @@ $('document').ready(function(){
             $('.progress_output').css('display','block');
             $('#dim-screen').show();
 
-            var formData = new FormData($(this)[0]);  
+            var formData = new FormData($(this)[0]);
 
             $.ajax({
                 url: $(this).attr('action'),
@@ -79,7 +78,7 @@ $('document').ready(function(){
                 success: function(data) { // je récupère la réponse du fichier PHP
                     if(data.status == 'success'){
                         if(data.iframe == 'true'){
-                            window.top.location.href = data.href; 
+                            window.top.location.href = data.href;
                         }else{
                             window.location.href = '/thanks';
                         }
@@ -89,8 +88,8 @@ $('document').ready(function(){
                 },
                 error: function(data){
                     console.log('There was an error uploading your video');
-                } 
-            }); 
+                }
+            });
         }
     });
 
@@ -117,9 +116,13 @@ $('document').ready(function(){
         $('.circle-url').addClass('circle-unshaded');
     });
 
-    $('#file, #url').on('change', function() {
+    $('#file, #url').on('change', function(e) {
         $('#video-error').css('display','none');
         $('#file').css('color','#333');
+        var target =  $( e.target );
+        if(target.is('#file')){
+            $('#filename').html($('#file').prop('files')[0].name);
+        }
     });
-    
+
 });

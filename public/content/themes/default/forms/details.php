@@ -1,6 +1,8 @@
 <form method="POST" action="/details/<?php echo Request::segment(2); ?>" name="details-form" id="details-form" accept-charset="UTF-8" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
 
+    <?php if($video): ?>
+
     <div class="container">
         <?php if (count($errors)): ?>
         <div class="row">
@@ -178,34 +180,24 @@
                     </div>
                 </div>
             </div>
-
-            <?php else: ?>
-
-            <div class="col-md-12 page">
-                <div class="panel panel-primary" data-collapsed="0">
-                    <div class="panel-heading">Thanks for submitting the extra details.</div>
-                </div>
-            </div>
-
             <?php endif; ?>
         </div>
     </div>
+
+    <?php else: ?>
+
+    <div class="container bg-404">
+    	<div class="area-404">
+    		<h1>Thanks for the extra info buddy!</h1>
+    		<img src="/content/themes/default/assets/img/hamster_thanks.png" class="hamster_thanks" border="0" />
+    		<div class="clear"></div>
+    	</div>
+    </div>
+
+    <?php endif; ?>
 </form>
 
 <link rel="stylesheet" href="/assets/css/intl-tel-input/css/intlTelInput.css">
-<style>
-#error-msg {
-  color: red;
-  margin-left:5px;
-}
-#valid-msg {
-  color: #00C900;
-  margin-left:5px;
-}
-input.error {
-  border: 1px solid #FF7C7C;
-}
-</style>
 
 <script type="text/javascript">
 (function($){

@@ -14,11 +14,12 @@
 
 	display_mobile_menu();
 
-	$('.tlink').click(function(){
+	$('.tlink').click(function(e){
+		console.log(this);
 		var alink = $(this).attr('href');
 		if(alink){
 			window.location.href = alink;
 		}
 	});
-    
+
 })(jQuery);

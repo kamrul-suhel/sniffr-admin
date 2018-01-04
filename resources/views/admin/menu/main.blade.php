@@ -15,11 +15,6 @@
         </a>
         <ul>
             <li>
-                <a href="{{ url('admin/videos') }}">
-                    <span class="title">All Videos</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ url('admin/videos/new') }}">
                     <span class="title">New Videos</span>
                 </a>
