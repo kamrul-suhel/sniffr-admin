@@ -33,7 +33,7 @@ require('nestable2');
 
 window.Rickshaw = require('rickshaw');
 window.Bloodhound = require('corejs-typeahead');
-window.toastr = require('toastr')
+window.toastr = require('toastr');
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
