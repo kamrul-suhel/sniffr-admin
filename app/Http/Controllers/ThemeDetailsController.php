@@ -27,6 +27,8 @@ use App\Notifications\DetailsReview;
 class ThemeDetailsController extends Controller
 {
     protected $rules = [
+        'email' => 'required',
+        'tel' => 'required',
         'date_filmed' => 'required',
         'location' => 'required',
         'description' => 'required',
@@ -86,6 +88,11 @@ class ThemeDetailsController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+            //get additional form data
+            $contact = Contact::where('email',Input::get('email'))->first();
+            $contact->tel = Input::get('tel');
+            $contact->save();
+
             $video->date_filmed = Input::get('date_filmed');
             $video->location = Input::get('location');
             $video->description = Input::get('description');

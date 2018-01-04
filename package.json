@@ -19,6 +19,7 @@
         "cross-env": "^5.0.1",
         "fitvids.1.1.0": "^1.1.0",
         "gsap": "^1.20.3",
+        "intl-tel-input": "^12.1.6",
         "joinable": "^1.6.0",
         "jquery": "^3.1.1",
         "jquery-mask-plugin": "^1.14.13",

@@ -28,6 +28,7 @@ require('rrssb');
 require('fitvids.1.1.0');
 require('video_background');
 require('bootstrap-colorpicker');
+require('intl-tel-input');
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
