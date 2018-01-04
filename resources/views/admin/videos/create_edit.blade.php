@@ -31,7 +31,7 @@
 			?>
 			<div class="panel panel-{{ $panelColour }}" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">{{ ucfirst($video->state) }} {!! $video->type === 'nonex' ? '<i class="fa fa-times-circle"></i> Non-Exclusive' : '' !!} Video</div>
+					<div class="panel-title">{{ ucfirst($video->state) }} | {!! $video->type === 'nonex' ? '<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive' : '<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive' !!} Video</div>
 
 					<div class="panel-options">
 						<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
@@ -126,6 +126,7 @@
                     <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong>{!! $video->allow_publish ? '<i class="fa fa-check"></i> H' : '<i class="fa fa-times"></i> Not h' !!}appy to publish</strong></p>
                     <p class="{{ $video->permission ? 'text-success' : 'text-danger' }}"><strong>{!! $video->permission ? '<i class="fa fa-check"></i> Has' : '<i class="fa fa-times"></i> Does not have' !!} permission</strong></p>
                     <p class="{{ $video->is_exclusive ? 'text-success' : 'text-danger' }}"><strong>{!! $video->is_exclusive ? '<i class="fa fa-check"></i> Is' : '<i class="fa fa-times"></i> Is not' !!} exclusive</strong></p>
+					{!! $video->file ? '' : '<p class="text-warning"><strong><i class="fa fa-exclamation"></i> Need to source video file</strong></p>' !!}
 				</div>
 			</div>
 			@endif

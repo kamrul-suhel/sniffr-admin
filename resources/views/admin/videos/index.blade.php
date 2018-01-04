@@ -67,22 +67,23 @@
 		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 		                    	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
-								<i class="fa fa-check"></i> Licensed
+								<i class="fa fa-check" title="Licensed"></i> Licensed
 								@elseif($video->state == 'accepted')
-								<i class="fa fa-clock-o"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+								<i class="fa fa-clock-o" title="More details sent"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
 								@elseif($video->state == 'rejected')
-								<i class="fa fa-times"></i> Rejected
+								<i class="fa fa-times" title="Rejected"></i> Rejected
 								@elseif($video->state == 'problem')
-								<i class="fa fa-exclamation"></i> Problem
+								<i class="fa fa-exclamation" title="Problem"></i> Problem
 								@elseif($video->state == 'restricted')
-									@if($video->type == 'nonex')
-									<i class="fa fa-exclamation-triangle"></i> Restricted
-									<i class="fa fa-times-circle"></i> Non-Exclusive
-									@else
-									<i class="fa fa-exclamation-triangle"></i> Restricted
-									@endif
+								<i class="fa fa-exclamation-triangle" title="Restricted"></i> Restricted
 								@else
 								<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
+								@endif
+
+								| @if($video->type == 'nonex')
+								<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
+								@else
+								<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
 								@endif
 							@endif
 						</div>
