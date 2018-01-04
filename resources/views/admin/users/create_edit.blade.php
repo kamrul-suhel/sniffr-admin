@@ -8,7 +8,7 @@
 	<div class="admin-section-title">
 	@if(!empty($user->id))
 		<h3><i class="fa fa-users"></i> {{ $user->username }}</h3>
-		<a href="{{ URL::to('user') . '/' . $user->username }}" target="_blank" class="btn btn-info">
+		<a href="{{ url('user') . '/' . $user->username }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
 	@else

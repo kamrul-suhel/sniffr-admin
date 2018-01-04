@@ -102,7 +102,7 @@ class AdminVideosController extends Controller {
     {
         $isJson = $request->ajax();
 
-        $video = Video::find($id);
+        $video = Video::where('alpha_id', $id)->first();
         $video->state = $state;
 
         // Send email
@@ -170,7 +170,7 @@ class AdminVideosController extends Controller {
 
     public function statusapi($state, $id)
     {
-        $video = Video::find($id);
+        $video = Video::where('alpha_id', $id)->first();
         $video->state = $state;
 
         // Send email
@@ -231,7 +231,7 @@ class AdminVideosController extends Controller {
      */
     public function remind($id)
     {
-        $video = Video::find($id);
+        $video = Video::where('alpha_id', $id)->first();
 
         $video->more_details_sent = now();
         $video->reminders = $video->reminders ? $video->reminders+1 : 1;
@@ -319,9 +319,9 @@ class AdminVideosController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function edit($video)
+    public function edit($id)
     {
-        $video = Video::find($video);
+        $video = Video::where('alpha_id', $id)->first();
 
         $data = array(
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
@@ -346,7 +346,7 @@ class AdminVideosController extends Controller {
     {
         $input = Input::all();
         $id = $input['id'];
-        $video = Video::findOrFail($id);
+        $video = Video::where('alpha_id', $id)->first();
 
         $validator = Validator::make($data = $input, $this->rules);
 
@@ -403,7 +403,7 @@ class AdminVideosController extends Controller {
 
     public function comment($id)
     {
-        $video = Video::find($id);
+        $video = Video::where('alpha_id', $id)->first();
 
         if(Input::get('comment')){
             $comment = new Comment();
@@ -426,7 +426,7 @@ class AdminVideosController extends Controller {
     {
         $isJson = $request->ajax();
 
-        $video = Video::find($id);
+        $video = Video::where('alpha_id', $id)->first();
 
         // Detach and delete any unused tags
         foreach($video->tags as $tag){
@@ -461,7 +461,7 @@ class AdminVideosController extends Controller {
     {
         $data = $request->session()->all();
 
-        $video = Video::withTrashed()->find($id);
+        $video = Video::withTrashed()->where('alpha_id', $id)->first();
 
         // Hide on youtube
         if($video->youtube_id){

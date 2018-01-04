@@ -33,7 +33,7 @@
 </head>
 <body class="page-body skin-black">
 
-<a href="{{ URL::to('/') }}" class="top-left-logo">
+<a href="{{ url('/') }}" class="top-left-logo">
 	<img src="/assets/img/unilad-logo-small.gif">
 </a>
 
@@ -77,7 +77,7 @@
 			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
 				<ul class="list-inline links-list pull-right">
 					<li class="sep"></li>
-					<li><a href="{{ URL::to('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
+					<li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
 				</ul>
 			</div>
 		</div>

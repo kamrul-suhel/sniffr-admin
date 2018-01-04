@@ -4,7 +4,7 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-address-book"></i> Contacts</h3><a href="{{ URL::to('admin/contacts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-address-book"></i> Contacts</h3><a href="{{ url('admin/contacts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<div class="col-md-4">
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> </div> </form>
@@ -29,8 +29,8 @@
 				<td>{{ TextHelper::shorten($contact->email, 250) }}</td>
 				<td>
 					<p>
-						<a href="{{ URL::to('admin/contacts/edit') . '/' . $contact->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ URL::to('admin/contacts/delete') . '/' . $contact->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
+						<a href="{{ url('admin/contacts/edit') . '/' . $contact->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
+						<a href="{{ url('admin/contacts/delete') . '/' . $contact->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>

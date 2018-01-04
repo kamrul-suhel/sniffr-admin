@@ -62,7 +62,7 @@
 								<div class="link_icon">
 									<i class="icon"></i>
 									<template v-if="file.type == 'image'">
-										<div class="img_icon" style="background-image:url({{ URL::to('/') }}@{{file.path.replace('./', '/')}}); background-position:center center; background-size: auto 50px; background-repeat:no-repeat"></div>
+										<div class="img_icon" style="background-image:url({{ url('/') }}@{{file.path.replace('./', '/')}}); background-position:center center; background-size: auto 50px; background-repeat:no-repeat"></div>
 									</template>	
 									
 								</div>
@@ -114,7 +114,7 @@
 							<span><h4>Size:</h4>
 							<p><span class="selected_file_count">@{{ selected_file.items }} item(s)</span><span class="selected_file_size">@{{selected_file.size}}</span></p></span>
 							<span><h4>Public URL:</h4>
-							<p><a href="{{ URL::to('/') }}@{{selected_file.path.replace('./', '/')}}" target="_blank">Click Here</a></p></span>
+							<p><a href="{{ url('/') }}@{{selected_file.path.replace('./', '/')}}" target="_blank">Click Here</a></p></span>
 							<span><h4>Last Modified:</h4>
 							<p>@{{selected_file.last_modified}}</p></span>
 						</div>

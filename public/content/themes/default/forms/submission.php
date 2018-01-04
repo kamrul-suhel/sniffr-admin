@@ -129,7 +129,7 @@
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-body">
                         <div class="form-check">
-                            <textarea class="form-control" rows="4" id="terms_text" name="terms_text">Terms & Conditions:
+                            <textarea class="form-control" rows="10" id="terms_text" name="terms_text" disabled>Terms & Conditions:
 
 I certify that I am the rights holder for the video(s) found at the link(s) above, or that I have the express permission of the rights holder to submit the video(s) to UNILAD for publishing on UNILAD web properties.
 

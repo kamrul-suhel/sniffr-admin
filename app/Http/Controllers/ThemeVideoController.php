@@ -11,6 +11,7 @@ use App\Tag;
 use App\Page;
 use App\Menu;
 use App\Video;
+use App\VideoTag;
 use App\Download;
 use App\Setting;
 use App\Favorite;
@@ -45,9 +46,9 @@ class ThemeVideoController extends Controller {
     public function index($id)
     {
         if(Auth::guest()){
-            $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->findOrFail($id);
+            $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->where('alpha_id', $id)->first();
         }else{
-            $video = Video::with('tags')->findOrFail($id);
+            $video = Video::with('tags')->where('alpha_id', $id)->first();
         }
 
         //Make sure video is active
@@ -136,7 +137,7 @@ class ThemeVideoController extends Controller {
             array_push($tag_array, $tag->video_id);
         }
 
-        $videos = Video::where('active', '=', '1')->whereIn('id', $tag_array)->paginate($this->videos_per_page);
+        $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->videos_per_page);
 
         $data = array(
             'videos' => $videos,
@@ -203,7 +204,7 @@ class ThemeVideoController extends Controller {
 
             try{
                 // increment view
-                $video = Video::find($id);
+                $video = Video::where('alpha_id', $id)->first();
                 $video->views = $video->views + 1;
                 $video->save();
                 // Add key to the view_media session

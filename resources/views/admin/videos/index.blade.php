@@ -44,14 +44,14 @@
 					<header>
 						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
 
-						<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}" class="album-options">
+						<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" class="album-options">
 							<i class="fa fa-pencil"></i>
 							Edit
 						</a>
 					</header>
 
 					<section class="album-info">
-						<h3><a href="{{ URL::to('admin/videos/edit/'.$video->id) }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
+						<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
 
 						<p>{{ $video->description }}</p>
 					</section>
@@ -60,12 +60,12 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<a href="{{ url('admin/videos/status/accepted/'.$video->id ) }}" class="text-success state" title="Accept Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="text-success state" title="Accept Video"><i class="fa fa-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<a href="{{ url('admin/videos/status/licensed/'.$video->id ) }}" class="text-success state" title="License Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-		                    	<a href="{{ url('admin/videos/status/problem/'.$video->id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="text-success state" title="License Video"><i class="fa fa-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check"></i> Licensed
 								@elseif($video->state == 'accepted')
@@ -89,14 +89,14 @@
 
 						<div class="album-options">
 							@if($video->trashed())
-							<a href="{{ URL::to('admin/videos/restore/'.$video->id) }}" title="Remove from trash" class="undelete">
+							<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Remove from trash" class="undelete">
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-							<a href="{{ URL::to('admin/videos/edit/'.$video->id) }}">
+							<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">
 								<i class="fa fa-pencil"></i>
 							</a>
-							<a href="{{ URL::to('admin/videos/delete/'.$video->id) }}" title="Delete Video" class="delete">
+							<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
 								<i class="fa fa-trash-o"></i>
 							</a>
 							@endif

@@ -11,7 +11,7 @@ foreach($videos as $video):
 ?>
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 	<article class="block">
-		<a class="block-thumbnail" href="<?= url('video') ?><?= '/' . $video->id ?>">
+		<a class="block-thumbnail" href="<?= url('video') ?><?= '/' . $video->alpha_id ?>">
 			<div class="thumbnail-overlay"></div>
 			<span class="play-button"></span>
 			<span class="label label-<?php echo $video->state == 'licensed' ? 'success' : 'danger'; ?>"><?php echo ucfirst($video->state); ?></span>

@@ -34,7 +34,7 @@ class ThemeDownloadController extends Controller {
             return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to download this video!', 'note_type' => 'error') );
         }
 
-        $video = Video::where('id', '=', $id)->first();
+        $video = Video::where('alpha_id', $id)->first();
 
         if($video) {
 

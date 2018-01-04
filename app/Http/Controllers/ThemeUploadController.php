@@ -24,6 +24,7 @@ use App\PostCategory;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
+use App\Libraries\VideoHelper;
 
 use App\Mail\SubmissionThanks;
 
@@ -32,6 +33,7 @@ use App\Notifications\SubmissionNew;
 class ThemeUploadController extends Controller {
 
     protected $rules = [
+        'alpha_id' => 'unique',
         'first_name' => 'required',
         'last_name' => 'required',
         'email' => 'required|email',
@@ -54,6 +56,7 @@ class ThemeUploadController extends Controller {
             'pages' => Page::where('active', '=', 1)->get(),
         );
     }
+
 
     /**
      * Display a listing of videos
@@ -139,6 +142,7 @@ class ThemeUploadController extends Controller {
 
         //add additional form data to db (with video file info)
         $video = new Video();
+        $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title');
         $video->url = Input::get('url');
@@ -148,9 +152,9 @@ class ThemeUploadController extends Controller {
         $video->state = 'new';
         $video->type = 'ex';
         $video->save();
+        
 
         // Slack notifications
-        //Mail::to('submissions@unilad.co.uk')->send(new SubmissionNew($video));
         $video->notify(new SubmissionNew($video));
 
         // Send thanks notification

@@ -172,7 +172,7 @@
 
 <div>&nbsp;</div>
 
-<div>If you would like to submit any more content to us, you can do so by following this link: <a href="{{ URL::to('/upload/') }}">{{ URL::to('/upload/') }}</a></div>
+<div>If you would like to submit any more content to us, you can do so by following this link: <a href="{{ url('/upload/') }}">{{ url('/upload/') }}</a></div>
 
 <div>&nbsp;</div>
 

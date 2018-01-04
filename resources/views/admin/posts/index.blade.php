@@ -9,7 +9,7 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-file-text-o"></i> Posts</h3><a href="{{ URL::to('admin/posts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-file-text-o"></i> Posts</h3><a href="{{ url('admin/posts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 			<div class="col-md-4">
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="<?= old('s'); ?>" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
@@ -29,12 +29,12 @@
 			@foreach($posts as $post)
 			<tr>
 				<td>
-					<a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank">
+					<a href="{{ url('post') . '/' . $post->slug }}" target="_blank">
 						<img src="{{ \App\Libraries\ImageHandler::getImage($post->image, 'small') }}" style="height:100px;" />
 					</a>
 				</td>
 				<td valign="bottom">
-					<p><a href="{{ URL::to('post') . '/' . $post->slug }}" target="_blank">
+					<p><a href="{{ url('post') . '/' . $post->slug }}" target="_blank">
 						<span>{{ TextHelper::shorten($post->title, 80) }}</span>
 					</a></p>
 				</td>
@@ -42,8 +42,8 @@
 				<td><p>{{ $post->active }}</p></td>
 				<td>
 					<p>
-						<a href="{{ URL::to('admin/posts/edit') . '/' . $post->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ URL::to('admin/posts/delete') . '/' . $post->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
+						<a href="{{ url('admin/posts/edit') . '/' . $post->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
+						<a href="{{ url('admin/posts/delete') . '/' . $post->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>
