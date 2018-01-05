@@ -61,7 +61,7 @@
 	<div class="gallery-env">
 		<div class="row">
 			@foreach($videos as $video)
-			<div class="col-sm-6 col-md-4" id="video-{{ $video->id }}">
+			<div class="col-sm-6 col-md-4" id="video-{{ $video->alpha_id }}">
 				<?php
 				switch($video->state){
 					case 'rejected':
