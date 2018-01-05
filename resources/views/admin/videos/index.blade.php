@@ -117,10 +117,12 @@
 								@endif
 
 								@if($video->state != 'new')
-									| @if($video->type == 'nonex')
-									<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
-									@else
-									<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
+									@if($video->state != 'accepted')
+										| @if($video->type == 'nonex')
+										<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
+										@else
+										<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
+										@endif
 									@endif
 								@endif
 							@endif
@@ -132,12 +134,17 @@
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-							<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">
-								<i class="fa fa-pencil"></i>
-							</a>
-							<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
-								<i class="fa fa-trash-o"></i>
-							</a>
+								@if($video->state == 'licensed'&&$video->file)
+								<a href="{{ $video->file }}" title="Download Video" download>
+									<i class="fa fa-download"></i>
+								</a>
+								@endif
+								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
+									<i class="fa fa-pencil"></i>
+								</a>
+								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
+									<i class="fa fa-trash-o"></i>
+								</a>
 							@endif
 						</div>
 					</footer>

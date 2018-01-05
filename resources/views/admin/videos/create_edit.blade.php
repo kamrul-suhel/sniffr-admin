@@ -59,6 +59,10 @@
 					@elseif($video->state == 'accepted')
 					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					<div class="clearfix"></div>
+					@elseif($video->state == 'licensed'&&$video->file)
+					<div class="text-right">
+						<a href="{{ $video->file }}" download><i class="fa fa-download"></i> Download Video</a>
+					</div>
 					@endif
 				</div>
 			</div>
