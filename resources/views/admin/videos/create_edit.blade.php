@@ -275,12 +275,12 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
+		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title">Short Description</div> 
+				<div class="panel-title">Short Description</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -290,12 +290,12 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
+		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title">Video Details, Links, and Info</div> 
+				<div class="panel-title">Video Details, Links, and Info</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -394,12 +394,12 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
+		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title">Tags</div> 
+				<div class="panel-title">Tags</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -505,7 +505,7 @@
 						   if(data.status=='success') {
 							   $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
 							   for(var i=0;i<data.labels.length;i++) {
-							   		var label_output='<a href="#" title="'+data.labels[i]['Name']+'" class="tag label label-info copy-tag">'+data.labels[i]['Name']+'</a> ';
+							   		var label_output='<a href="#" title="'+data.labels[i]['Name'].toLowerCase()+'" class="tag label label-info copy-tag">'+data.labels[i]['Name'].toLowerCase()+'</a> ';
 							   		$("#video-analysis").append(label_output);
 							   }
 							   if(data.labels.length>0) {
@@ -552,7 +552,23 @@
 							valueKey: 'name',
 							source: tagnames.ttAdapter()
 					}],
-					freeInput: true
+					freeInput: true,
+					allowDuplicates: false
+			});
+			$('#tags').on('beforeItemAdd', function(event) {
+				var tagsArray = $('#tags').val().split(",");
+				var tagsCheck = false;
+				event.item = event.item.toLowerCase();
+				if(!event.item) {
+					event.cancel = true;
+				}
+				for (i=0;i<tagsArray.length;i++){
+					if(tagsArray[i].trim()==event.item){
+						tagsCheck = true;
+						$('.tt-input valid').val('');
+						event.cancel = true;
+					}
+				}
 			});
 			$('#tags').on('itemRemoved', function(event) {
 			   console.log(event.item);
