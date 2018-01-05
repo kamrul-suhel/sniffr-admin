@@ -263,6 +263,17 @@ input[type="radio"]:checked:before {
   border-radius: 4px;
   background: #333;
 }
+#filename {
+    display: inline-flex;
+    margin-top: 2px;
+    margin-left: 3px;
+    vertical-align: -webkit-baseline-middle;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color:#666;
+    font-size:12px;
+    width:35px;
+}
 /* Place Holder CSS */
 ::-webkit-input-placeholder {
   color: #000;

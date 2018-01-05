@@ -60837,8 +60837,8 @@ return zhTw;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(133);
-__webpack_require__(144);
-module.exports = __webpack_require__(145);
+__webpack_require__(146);
+module.exports = __webpack_require__(147);
 
 
 /***/ }),
@@ -60902,7 +60902,7 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(186);
+__webpack_require__(144);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -66766,195 +66766,16 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 /* 144 */
-/***/ (function(module, exports) {
-
-$('document').ready(function () {
-    //js form validations >> Video upload
-    $('#upload-form').validate({
-        groups: { // consolidate messages into one
-            names: 'file url'
-        },
-        rules: {
-            first_name: {
-                required: true
-            },
-            last_name: {
-                required: true
-            },
-            email: {
-                required: true,
-                email: true
-            },
-            title: {
-                required: true
-            },
-            file: {
-                require_from_group: [1, '.files'],
-                extension: "flv|ogg|mp4|qt|avi|wmv|m4v|webm|mov"
-            },
-            url: {
-                require_from_group: [1, '.files'],
-                url: true
-            },
-            terms: {
-                required: true
-            }
-        },
-        messages: {
-            first_name: 'You must enter your first name',
-            last_name: 'You must enter your last name (surname)',
-            email: 'You must enter a valid email address',
-            title: 'You must enter your video title',
-            terms: 'You must check the box agreeing to our terms'
-        },
-        errorPlacement: function errorPlacement(error, element) {
-            if (element.is('#file') || element.is('#url')) {
-                $('#video-error').css('display', 'block');
-                if ($('#file').val()) {
-                    $('#video-error').text('The file must be a valid video file: flv,ogg,mp4,qt,avi,wmv,m4v,webm');
-                } else {
-                    $('#video-error').text('Either a video file or video url is required');
-                }
-            } else if (element.is('#terms')) {
-                error.insertAfter('#terms-checkbox');
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        successHandler: function successHandler() {
-            alert('valid!');
-        }
-    });
-
-    $("#upload-form").on('submit', function (e) {
-        e.preventDefault();
-
-        var validator = $(this).validate();
-        validator.form();
-
-        if (validator.valid()) {
-            $('.progress_output').css('display', 'block');
-            $('#dim-screen').show();
-
-            var formData = new FormData($(this)[0]);
-
-            $.ajax({
-                url: $(this).attr('action'),
-                type: $(this).attr('method'),
-                cache: false,
-                processData: false,
-                contentType: false,
-                data: formData,
-                success: function success(data) {
-                    // je récupère la réponse du fichier PHP
-                    if (data.status == 'success') {
-                        if (data.iframe == 'true') {
-                            window.top.location.href = data.href;
-                        } else {
-                            window.location.href = '/thanks';
-                        }
-                    } else {
-                        console.log(data.message);
-                    }
-                },
-                error: function error(data) {
-                    console.log('There was an error uploading your video');
-                }
-            });
-        }
-    });
-
-    // make video url or file area shaded/unshaded
-    $('#make-shaded-url').on('click', function () {
-        $('#make-shaded-file').removeClass('shaded');
-        $('#make-shaded-file').addClass('unshaded');
-        $('#make-shaded-url').removeClass('unshaded');
-        $('#make-shaded-url').addClass('shaded');
-        $('.circle-url').removeClass('circle-unshaded');
-        $('.circle-url').addClass('circle-shaded');
-        $('.circle-file').removeClass('circle-shaded');
-        $('.circle-file').addClass('circle-unshaded');
-    });
-
-    $('#make-shaded-file').on('click', function () {
-        $('#make-shaded-url').removeClass('shaded');
-        $('#make-shaded-url').addClass('unshaded');
-        $('#make-shaded-file').removeClass('unshaded');
-        $('#make-shaded-file').addClass('shaded');
-        $('.circle-file').removeClass('circle-unshaded');
-        $('.circle-file').addClass('circle-shaded');
-        $('.circle-url').removeClass('circle-shaded');
-        $('.circle-url').addClass('circle-unshaded');
-    });
-
-    $('#file, #url').on('change', function (e) {
-        $('#video-error').css('display', 'none');
-        $('#file').css('color', '#333');
-        var target = $(e.target);
-        if (target.is('#file')) {
-            $('#filename').html($('#file').prop('files')[0].name);
-        }
-    });
-});
-
-/***/ }),
-/* 145 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 146 */,
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
-/* 157 */,
-/* 158 */,
-/* 159 */,
-/* 160 */,
-/* 161 */,
-/* 162 */,
-/* 163 */,
-/* 164 */,
-/* 165 */,
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */,
-/* 176 */,
-/* 177 */,
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Exposing intl-tel-input as a component
  */
-module.exports = __webpack_require__(187);
+module.exports = __webpack_require__(145);
 
 
 /***/ }),
-/* 187 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -68100,6 +67921,145 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
         };
     }
 });
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports) {
+
+$('document').ready(function () {
+    //js form validations >> Video upload
+    $('#upload-form').validate({
+        groups: { // consolidate messages into one
+            names: 'file url'
+        },
+        rules: {
+            first_name: {
+                required: true
+            },
+            last_name: {
+                required: true
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            title: {
+                required: true
+            },
+            file: {
+                require_from_group: [1, '.files'],
+                extension: "flv|ogg|mp4|qt|avi|wmv|m4v|webm|mov"
+            },
+            url: {
+                require_from_group: [1, '.files'],
+                url: true
+            },
+            terms: {
+                required: true
+            }
+        },
+        messages: {
+            first_name: 'You must enter your first name',
+            last_name: 'You must enter your last name (surname)',
+            email: 'You must enter a valid email address',
+            title: 'You must enter your video title',
+            terms: 'You must check the box agreeing to our terms'
+        },
+        errorPlacement: function errorPlacement(error, element) {
+            if (element.is('#file') || element.is('#url')) {
+                $('#video-error').css('display', 'block');
+                if ($('#file').val()) {
+                    $('#video-error').text('The file must be a valid video file: flv,ogg,mp4,qt,avi,wmv,m4v,webm');
+                } else {
+                    $('#video-error').text('Either a video file or video url is required');
+                }
+            } else if (element.is('#terms')) {
+                error.insertAfter('#terms-checkbox');
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        successHandler: function successHandler() {
+            alert('valid!');
+        }
+    });
+
+    $("#upload-form").on('submit', function (e) {
+        e.preventDefault();
+
+        var validator = $(this).validate();
+        validator.form();
+
+        if (validator.valid()) {
+            $('.progress_output').css('display', 'block');
+            $('#dim-screen').show();
+
+            var formData = new FormData($(this)[0]);
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function success(data) {
+                    // je récupère la réponse du fichier PHP
+                    if (data.status == 'success') {
+                        if (data.iframe == 'true') {
+                            window.top.location.href = data.href;
+                        } else {
+                            window.location.href = '/thanks';
+                        }
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function error(data) {
+                    console.log('There was an error uploading your video');
+                }
+            });
+        }
+    });
+
+    // make video url or file area shaded/unshaded
+    $('#make-shaded-url').on('click', function () {
+        $('#make-shaded-file').removeClass('shaded');
+        $('#make-shaded-file').addClass('unshaded');
+        $('#make-shaded-url').removeClass('unshaded');
+        $('#make-shaded-url').addClass('shaded');
+        $('.circle-url').removeClass('circle-unshaded');
+        $('.circle-url').addClass('circle-shaded');
+        $('.circle-file').removeClass('circle-shaded');
+        $('.circle-file').addClass('circle-unshaded');
+    });
+
+    $('#make-shaded-file').on('click', function () {
+        $('#make-shaded-url').removeClass('shaded');
+        $('#make-shaded-url').addClass('unshaded');
+        $('#make-shaded-file').removeClass('unshaded');
+        $('#make-shaded-file').addClass('shaded');
+        $('.circle-file').removeClass('circle-unshaded');
+        $('.circle-file').addClass('circle-shaded');
+        $('.circle-url').removeClass('circle-shaded');
+        $('.circle-url').addClass('circle-unshaded');
+    });
+
+    $('#file, #url').on('change', function (e) {
+        $('#video-error').css('display', 'none');
+        $('#file').css('color', '#333');
+        var target = $(e.target);
+        if (target.is('#file')) {
+            $('#filename').html($('#file').prop('files')[0].name);
+        }
+    });
+});
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
