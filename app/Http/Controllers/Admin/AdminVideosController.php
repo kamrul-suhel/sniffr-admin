@@ -59,6 +59,9 @@ class AdminVideosController extends Controller {
     public function index(Request $request, $state = 'all')
     {
         $search_value = Input::get('s');
+        $category_value = Input::get('category');
+        $collection_value = Input::get('collection');
+        $shot_value = Input::get('shot_type');
 
         $videos = new Video;
 
@@ -68,6 +71,18 @@ class AdminVideosController extends Controller {
             })->orWhereHas('tags', function ($q) use($search_value){
                 $q->where('name', 'LIKE', '%'.$search_value.'%');
             });
+        }
+
+        if(!empty($category_value)){
+            $videos = Video::where('video_category_id', $category_value);
+        }
+
+        if(!empty($collection_value)){
+            $videos = Video::where('video_collection_id', $collection_value);
+        }
+
+        if(!empty($shot_value)){
+            $videos = Video::where('video_shottype_id', $shot_value);
         }
 
         if($state != 'all'){

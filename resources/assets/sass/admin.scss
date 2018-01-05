@@ -4,6 +4,7 @@
 
 // Libs
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap-select/dist/css/bootstrap-select.css";
 
 @import "~font-awesome/scss/font-awesome.scss";
 @import "~bootstrap-tagsinput/dist/bootstrap-tagsinput.css";
@@ -17,7 +18,6 @@
 @import "variables";
 
 // Paritals
-@import "partials/admin";
 @import "partials/badge";
 @import "partials/buttons";
 @import "partials/chartjs";

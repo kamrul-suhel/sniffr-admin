@@ -5,7 +5,8 @@
 	<div class="admin-section-title">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><i class="fa fa-bars"></i> Menu Items</h3><a href="javascript:;" onclick="jQuery('#add-new').modal('show');" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-bars"></i> Menu Items</h3>
+				<a href="javascript:;" onclick="jQuery('#add-new').modal('show');" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
 			</div>
 		</div>
 	</div>

@@ -44,6 +44,7 @@
         "vue": "^2.5.13"
     },
     "dependencies": {
+        "bootstrap-select": "^1.12.4",
         "file-loader": "^1.1.6",
         "font-awesome": "^4.7.0",
         "video.js": "^6.6.0"
