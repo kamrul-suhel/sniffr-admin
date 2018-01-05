@@ -19,7 +19,6 @@
 
 	@yield('css')
 
-	<script src="/assets/js/app.js"></script>
 	<script src="/assets/admin/js/app.js"></script>
 
 	<!--[if lt IE 9]><script src="{{ '/application/assets/admin/js/ie8-responsive-file-warning.js' }}"></script><![endif]-->

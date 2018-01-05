@@ -1,25 +1,49 @@
 @extends('admin.master')
 
 @section('content')
-	<div class="admin-section-title">
+	<div class="admin-section-title bottom-padding">
 		<div class="row">
-			<div class="col-md-4">
-				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3><a href="{{ url('admin/videos/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+			<div class="col-xs-12">
+				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos <a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
+		</div>
 
-			<form method="get" role="form" class="search-form-full">
-				<div class="col-md-4">
+		<div class="row">
+			<form id="search-form" method="get" role="form" class="search-form-full">
+				<div class="col-md-3">
 					<div class="form-group">
-						<select id="video_shottype_id" name="video_shottype_id">
-							<option value="0">Shot Type</option>
-							@foreach($video_shottypes as $shottype)
-								<option value="{{ $shottype->id }}" @if(!empty($video->video_shottype_id) && $video->video_shottype_id == $shottype->id)selected="selected"@endif>{{ $shottype->name }}</option>
+						<select id="category" name="category" class="selectpicker form-control">
+							<option value="">Category</option>
+							@foreach($video_categories as $category)
+								<option value="{{ $category->id }}"{{ isset($_GET['category']) && ($_GET['category'] == $category->id) ? ' selected="selected"' : '' }}>{{ $category->name }}</option>
 							@endforeach
 						</select>
 					</div> 
 				</div>
 
-				<div class="col-md-4">
+				<div class="col-md-3">
+					<div class="form-group">
+						<select id="collection" name="collection" class="selectpicker form-control">
+							<option value="">Collection</option>
+							@foreach($video_collections as $collection)
+								<option value="{{ $collection->id }}"{{ isset($_GET['collection']) && ($_GET['collection'] == $collection->id) ? ' selected="selected"' : '' }}>{{ $collection->name }}</option>
+							@endforeach
+						</select>
+					</div> 
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<select id="shot_type" name="shot_type" class="selectpicker form-control">
+							<option value="">Shot Type</option>
+							@foreach($video_shottypes as $shottype)
+								<option value="{{ $shottype->id }}"{{ isset($_GET['shot_type']) && ($_GET['shot_type'] == $shottype->id) ? ' selected="selected"' : '' }}>{{ $shottype->name }}</option>
+							@endforeach
+						</select>
+					</div> 
+				</div>
+
+				<div class="col-md-3">
 					<div class="form-group"> 
 						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> 
 					</div> 
@@ -31,14 +55,11 @@
 	<div class="clear"></div>
 
 	@if(!count($videos))
-
 		<p>Sorry, there are no videos to show.</p>
-
 	@else
 
 	<div class="gallery-env">
 		<div class="row">
-
 			@foreach($videos as $video)
 			<div class="col-sm-6 col-md-4" id="video-{{ $video->id }}">
 				<?php
@@ -125,7 +146,6 @@
 			<div class="clear"></div>
 
 			<div class="text-center"><?= $videos->appends(Request::only('s'))->render(); ?></div>
-
 		</div>
 	</div>
 
@@ -133,8 +153,13 @@
 
 	@section('javascript')
 	<script>
-
 		(function($){
+			$('.selectpicker').selectpicker('refresh');
+
+			$('#search-form').change(function() {
+		        $(this).submit();
+		    });
+
 			$('.delete').click(function(e){
 				e.preventDefault();
 				var delete_link = $(this).attr('href');
@@ -209,9 +234,7 @@
 			});
 
 		})(jQuery);
-
 	</script>
 	@stop
 	@include ('partials.videojs')
-
 @stop

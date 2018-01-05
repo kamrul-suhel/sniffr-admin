@@ -11,3 +11,9 @@
 .actions .delete {
     background:#EA6153;
 }
+
+.btn-group{
+    > .btn:first-child{
+        height:38px;
+    }
+}

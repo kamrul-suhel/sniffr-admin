@@ -30,6 +30,7 @@ require('jquery-mask-plugin');
 require('sweetalert');
 require('tinymce');
 require('nestable2');
+require('bootstrap-select');
 
 window.Rickshaw = require('rickshaw');
 window.Bloodhound = require('corejs-typeahead');
