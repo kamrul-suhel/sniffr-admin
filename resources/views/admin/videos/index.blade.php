@@ -16,13 +16,13 @@
 								<option value="{{ $shottype->id }}" @if(!empty($video->video_shottype_id) && $video->video_shottype_id == $shottype->id)selected="selected"@endif>{{ $shottype->name }}</option>
 							@endforeach
 						</select>
-					</div> 
+					</div>
 				</div>
 
 				<div class="col-md-4">
-					<div class="form-group"> 
-						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> 
-					</div> 
+					<div class="form-group">
+						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -95,10 +95,12 @@
 								<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
 								@endif
 
-								| @if($video->type == 'nonex')
-								<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
-								@else
-								<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
+								@if($video->state != 'new')
+									| @if($video->type == 'nonex')
+									<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
+									@else
+									<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
+									@endif
 								@endif
 							@endif
 						</div>

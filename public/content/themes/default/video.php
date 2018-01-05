@@ -42,7 +42,7 @@
 
 	<div class="clear"></div>
 
-	<?php 
+	<?php
 
 	if(count($video->tags)): ?>
 	<h2 id="tags">Tags:

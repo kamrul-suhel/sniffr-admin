@@ -11,7 +11,7 @@ trait VideoHelper{
 
 		$sHTML .= '<div id="video_container" class="fitvid">';
 		if($embed){
-			$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'" frameborder="0" allowfullscreen></iframe>';
+			$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?playsinline=1&rel=0" type="text/html" frameborder="0" allowfullscreen></iframe>';
 		}elseif($video->youtube_id){
 		    $sHTML .= '<div class="youtube-player" data-id="'.$video->youtube_id.'"></div>';
 		}elseif(!empty($video->url)){
