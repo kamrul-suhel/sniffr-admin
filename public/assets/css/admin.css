@@ -13869,9 +13869,37 @@ label {
   opacity: 1;
 }
 
+.page-container.sidebar-collapsed .sidebar-menu #main-menu > li > a > span.mobile-menu {
+  display: none;
+}
+
 @media (max-width: 767px) {
+  .top-left-logo {
+    float: right;
+    top: 0px;
+    right: 0px;
+    position: relative;
+    width: 65px;
+    height: 74px;
+    z-index: 999;
+    cursor: pointer;
+    background: #000;
+  }
+
   .page-body .page-container .sidebar-menu .logo-env {
-    padding: 21px 20px !important;
+    padding: 18px 20px !important;
+  }
+
+  .page-container .sidebar-menu {
+    background: #000 !important;
+  }
+
+  .page-container.sidebar-collapsed .sidebar-menu #main-menu > li > a > .mobile-menu {
+    display: inline-block;
+    font-size: 16px;
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 30px;
   }
 }
 
@@ -14632,7 +14660,7 @@ float: left;
 }
 
 .page-container.sidebar-collapsed .sidebar-menu .logo-env {
-  display: block;
+  display: inline-block;
   padding: 20px;
 }
 
@@ -14642,7 +14670,7 @@ float: left;
 }
 
 .page-container.sidebar-collapsed .sidebar-menu .logo-env > div.sidebar-collapse {
-  display: block;
+  display: inline-block;
   padding: 0;
   left: 3px;
 }
