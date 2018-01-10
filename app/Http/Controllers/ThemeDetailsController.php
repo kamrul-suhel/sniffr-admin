@@ -111,7 +111,7 @@ class ThemeDetailsController extends Controller
             $video->notify(new DetailsReview($video));
 
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'details_thanks')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'details_thanks');
 
             $this->data['video'] = $video;
 

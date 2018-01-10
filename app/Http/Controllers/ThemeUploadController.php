@@ -158,7 +158,7 @@ class ThemeUploadController extends Controller {
         $video->notify(new SubmissionNew($video));
 
         // Send thanks notification email (via queue after 2mins)
-        QueueEmail::dispatch($video->id, 'submission_thanks')->delay(now()->addMinutes(1));
+        QueueEmail::dispatch($video->id, 'submission_thanks');
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
