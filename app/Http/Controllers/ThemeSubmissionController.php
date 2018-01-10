@@ -26,7 +26,7 @@ use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
 
-use App\Mail\SubmissionThanksNonEx;
+use App\Jobs\QueueEmail;
 
 use App\Notifications\SubmissionNewNonEx;
 
@@ -157,8 +157,8 @@ class ThemeSubmissionController extends Controller {
         // Notification of new video
         $video->notify(new SubmissionNewNonEx($video));
 
-        // Send thanks notification
-        Mail::to($contact->email)->send(new SubmissionThanksNonEx($video));
+        // Send thanks notification email (via queue after 2mins)
+        QueueEmail::dispatch($video->id, 'submission_thanks_nonex')->delay(now()->addMinutes(2));
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);

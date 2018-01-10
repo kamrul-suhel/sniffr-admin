@@ -28,11 +28,8 @@ use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
 
-use App\Mail\SubmissionThanks;
-
-use App\Notifications\SubmissionNew;
-
 use App\Jobs\QueueEmail;
+use App\Notifications\SubmissionNew;
 
 class ThemeUploadController extends Controller {
 
@@ -161,7 +158,7 @@ class ThemeUploadController extends Controller {
         $video->notify(new SubmissionNew($video));
 
         // Send thanks notification email (via queue after 2mins)
-        QueueEmail::dispatch($video->id, 'submission_thanks')->delay(now()->addMinutes(10));
+        QueueEmail::dispatch($video->id, 'submission_thanks')->delay(now()->addMinutes(1));
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
