@@ -31,16 +31,12 @@ use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
 
+use App\Jobs\QueueEmail;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
-
-use App\Mail\DetailsReminder;
-use App\Mail\SubmissionAccepted;
-use App\Mail\SubmissionRejected;
-use App\Mail\SubmissionLicensed;
 
 class AdminVideosController extends Controller {
 
@@ -164,11 +160,11 @@ class AdminVideosController extends Controller {
                 $video->youtube_id = $youtubeId;
             }
 
-            // Send Accepted Email
-            Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'submission_accepted')->delay(now()->addMinutes(2));
         }else if($video->state == 'rejected'){
-            // Send Rejected Email
-            Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'submission_rejected')->delay(now()->addMinutes(2));
         }else if($video->state == 'licensed'){
             $video->licensed_at = now();
 
@@ -177,8 +173,8 @@ class AdminVideosController extends Controller {
                 MyYoutube::setStatus($video->youtube_id, 'public');
             }
 
-            // Send Licensed Email
-            Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'submission_licensed')->delay(now()->addMinutes(2));
         }
 
         $video->save();
@@ -223,11 +219,11 @@ class AdminVideosController extends Controller {
                 $video->youtube_id = $youtubeId;
             }
 
-            // Send Accepted Email
-            Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'submission_accepted')->delay(now()->addMinutes(2));
         }else if($video->state == 'rejected'){
-            // Send Rejected Email
-            Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'submission_rejected')->delay(now()->addMinutes(2));
         }else if($video->state == 'licensed'){
             $video->licensed_at = now();
 
@@ -236,8 +232,8 @@ class AdminVideosController extends Controller {
                 MyYoutube::setStatus($video->youtube_id, 'public');
             }
 
-            // Send Licensed Email
-            Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'submission_licensed')->delay(now()->addMinutes(2));
         }
 
         $video->save();
@@ -259,8 +255,8 @@ class AdminVideosController extends Controller {
         $video->reminders = $video->reminders ? $video->reminders+1 : 1;
         $video->save();
 
-        // Send Accepted Email
-        Mail::to($video->contact->email)->send(new DetailsReminder($video));
+        // Send thanks notification email (via queue after 2mins)
+        QueueEmail::dispatch($video->id, 'details_reminder')->delay(now()->addMinutes(2));
 
         return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder sent', 'note_type' => 'success') );
     }

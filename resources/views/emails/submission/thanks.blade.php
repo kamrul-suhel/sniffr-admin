@@ -157,7 +157,7 @@
             height="100%"
             valign="top"
             bgcolor="">
-            <div><span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;"><b>Hey{{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!</b></span></div>
+            <div><span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;"><b>Hey {{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!</b></span></div>
 
 <div>&nbsp;</div>
 

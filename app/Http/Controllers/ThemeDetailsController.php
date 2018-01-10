@@ -17,7 +17,7 @@ use App\Contact;
 use App\VideoCategory;
 use App\PostCategory;
 
-use App\Mail\DetailsThanks;
+use App\Jobs\QueueEmail;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
@@ -110,8 +110,8 @@ class ThemeDetailsController extends Controller
             //Mail::to('submissions@unilad.co.uk')->send(new DetailsReview($video));
             $video->notify(new DetailsReview($video));
 
-            // Send thanks notification
-            Mail::to($video->contact->email)->send(new DetailsThanks($video));
+            // Send thanks notification email (via queue after 2mins)
+            QueueEmail::dispatch($video->id, 'details_thanks')->delay(now()->addMinutes(2));
 
             $this->data['video'] = $video;
 
