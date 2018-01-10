@@ -1,4 +1,10 @@
 
+## Notes for FFMpeg install and video watermarking
+
+- Install package using instructions (https://packagist.org/packages/pbmedia/laravel-ffmpeg)
+- Edit /config/laravel-ffmpeg.php (if needed)
+- 
+
 ## Notes for Laravel Scheduler + AWS SQS (WIP)
 
 Laravel Scheduler (with local CRON) working. Currently it just calls DeleteInActiveUsers:deleteusers (which just updates my contact id:5 on the updated_at field). We can use this as a template to create other functions.
