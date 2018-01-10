@@ -12,6 +12,7 @@
         <a href="{{ url('admin/videos') }}" class="tlink">
             <i class="fa fa-youtube-play"></i>
             <span class="title">Videos</span>
+            <!-- <div class="mobile-menu">Videos</div> -->
         </a>
         <ul>
             <li>

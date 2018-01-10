@@ -18,7 +18,7 @@
 								<option value="{{ $category->id }}"{{ isset($_GET['category']) && ($_GET['category'] == $category->id) ? ' selected="selected"' : '' }}>{{ $category->name }}</option>
 							@endforeach
 						</select>
-					</div> 
+					</div>
 				</div>
 
 				<div class="col-md-3">
@@ -29,7 +29,7 @@
 								<option value="{{ $collection->id }}"{{ isset($_GET['collection']) && ($_GET['collection'] == $collection->id) ? ' selected="selected"' : '' }}>{{ $collection->name }}</option>
 							@endforeach
 						</select>
-					</div> 
+					</div>
 				</div>
 
 				<div class="col-md-3">
@@ -40,13 +40,13 @@
 								<option value="{{ $shottype->id }}"{{ isset($_GET['shot_type']) && ($_GET['shot_type'] == $shottype->id) ? ' selected="selected"' : '' }}>{{ $shottype->name }}</option>
 							@endforeach
 						</select>
-					</div> 
+					</div>
 				</div>
 
 				<div class="col-md-3">
-					<div class="form-group"> 
-						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i> 
-					</div> 
+					<div class="form-group">
+						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -61,7 +61,7 @@
 	<div class="gallery-env">
 		<div class="row">
 			@foreach($videos as $video)
-			<div class="col-sm-6 col-md-4" id="video-{{ $video->id }}">
+			<div class="col-sm-6 col-md-4" id="video-{{ $video->alpha_id }}">
 				<?php
 				switch($video->state){
 					case 'rejected':
@@ -116,10 +116,14 @@
 								<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
 								@endif
 
-								| @if($video->type == 'nonex')
-								<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
-								@else
-								<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
+								@if($video->state != 'new')
+									@if($video->state != 'accepted')
+										| @if($video->type == 'nonex')
+										<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
+										@else
+										<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
+										@endif
+									@endif
 								@endif
 							@endif
 						</div>
@@ -130,12 +134,17 @@
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-							<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">
-								<i class="fa fa-pencil"></i>
-							</a>
-							<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
-								<i class="fa fa-trash-o"></i>
-							</a>
+								@if($video->state == 'licensed'&&$video->file)
+								<a href="{{ $video->file }}" title="Download Video" download>
+									<i class="fa fa-download"></i>
+								</a>
+								@endif
+								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
+									<i class="fa fa-pencil"></i>
+								</a>
+								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
+									<i class="fa fa-trash-o"></i>
+								</a>
 							@endif
 						</div>
 					</footer>

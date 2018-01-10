@@ -18,7 +18,7 @@
 						<p class="member-since">Member since: <?= $user->created_at ?></p>
 
 						<?php if(!Auth::guest() && Auth::user()->username == $user->username): ?>
-							<a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . $user->username . '/edit' ?>" class="btn btn-info"><i class="fa fa-edit"></i> Edit</a>
+							<!-- <a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?><?= '/' . $user->username . '/edit' ?>" class="btn btn-info"><i class="fa fa-edit"></i> Edit</a> -->
 						<?php endif; ?>
 					</div>
 				</div>

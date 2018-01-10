@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
+use App\User;
 use App\Tag;
 use App\Menu;
 use App\Video;
@@ -33,6 +34,7 @@ use App\VideoShotType;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
+use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
 
 use App\Mail\DetailsReminder;
@@ -42,7 +44,7 @@ use App\Mail\SubmissionLicensed;
 
 class AdminVideosController extends Controller {
 
-    protected $rules = [];
+    protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
 
     /**
      * constructor.
@@ -272,7 +274,7 @@ class AdminVideosController extends Controller {
     {
         $data = array(
             'headline' => '<i class="fa fa-plus-circle"></i> New Video',
-            'post_route' => url('admin/videos'),
+            'post_route' => url('admin/videos/store'),
             'button_text' => 'Add New Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
@@ -297,40 +299,86 @@ class AdminVideosController extends Controller {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        $image = (isset($data['image'])) ? $data['image'] : '';
-        if(!empty($image)){
-            $fileName = time().'.'.$request->file->getClientOriginalExtension();
+        //handle file upload to S3 and Youtube ingestion
+        $filePath = $fileSize = $fileMimeType = $youtubeId = '';
+        if($request->hasFile('file')){
+            $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
+
+            $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
+
             $file = $request->file('file');
             $fileMimeType = $file->getMimeType();
+            $fileSize = $file->getClientSize();
+
+            // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-            $data['image'] = Storage::disk('s3')->url($fileName);
+            $filePath = Storage::disk('s3')->url($fileName);
+        }
 
-            //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
+        //get URL
+        $url = Input::get('url');
+
+        //if no video file or video url then try embed code
+        if(!$filePath&&!$url) {
+            $embed_code = Input::get('embed_code');
         } else {
-            $data['image'] = 'placeholder.jpg';
+            $embed_code = '';
         }
 
-        $tags = $data['tags'];
-        unset($data['tags']);
-
-        if(empty($data['active'])){
-            $data['active'] = 0;
-        }
-
-        if(empty($data['featured'])){
-            $data['featured'] = 0;
-        }
-
+        // Duration
         if(isset($data['duration'])){
-                //$str_time = $data
-                $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $data['duration']);
-                sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-                $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-                $data['duration'] = $time_seconds;
+            $data['duration'] = TimeHelper::convert_HMS_to_seconds($data['duration']);
         }
 
-        $video = Video::create($data);
-        $this->addUpdateVideoTags($video, $tags);
+        //add additional form data to db (with video file info)
+        $video = new Video();
+        $video->alpha_id = VideoHelper::quickRandom();
+        $video->title = Input::get('title');
+        $video->description = Input::get('description');
+        $video->url = $url;
+        $video->embed_code = $embed_code;
+        $video->file = $filePath;
+        $video->youtube_id = $youtubeId;
+        $video->mime = $fileMimeType;
+        $video->state = 'new';
+        $video->type = Input::get('type');
+        $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
+        $video->date_filmed = Input::get('date_filmed');
+        $video->details = Input::get('details');
+        $video->video_category_id = Input::get('video_category_id');
+        $video->video_collection_id = Input::get('video_collection_id');
+        $video->video_shottype_id = Input::get('video_shottype_id');
+        $video->contact_id = 0;
+        $video->active = 0;
+        $video->featured = 0;
+        $user = Auth::user();
+        $video->user_id = $user->id;
+        $video->save();
+
+        //add to campaign (need to get this working)
+        // $campaign = new Campaign();
+        // $campaign->Input::get('campaigns');
+        // $campaign->save();
+
+        //adds tags
+        $tags = trim(Input::get('tags'));
+        if($tags) {
+            $this->addUpdateVideoTags($video, $tags);
+        }
+
+        // $image = (isset($data['image'])) ? $data['image'] : '';
+        // if(!empty($image)){
+        //     $fileName = time().'.'.$request->file->getClientOriginalExtension();
+        //     $file = $request->file('file');
+        //     $fileMimeType = $file->getMimeType();
+        //     $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
+        //     $data['image'] = Storage::disk('s3')->url($fileName);
+        //
+        //     //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
+        // } else {
+        //     $data['image'] = 'placeholder.gif';
+        // }
+        //$video = Video::create($data);
 
         return Redirect::to('admin/videos')->with(array('note' => 'New Video Successfully Added!', 'note_type' => 'success') );
     }
@@ -345,6 +393,8 @@ class AdminVideosController extends Controller {
     {
         $video = Video::where('alpha_id', $id)->first();
 
+        $user = User::where('id', $video->user_id)->first();
+
         $data = array(
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
@@ -355,6 +405,7 @@ class AdminVideosController extends Controller {
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
+            'user' => $user
         );
 
         return view('admin.videos.create_edit', $data);

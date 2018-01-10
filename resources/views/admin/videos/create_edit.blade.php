@@ -31,8 +31,12 @@
 			?>
 			<div class="panel panel-{{ $panelColour }}" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">{{ ucfirst($video->state) }} | {!! $video->type === 'nonex' ? '<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive' : '<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive' !!} Video</div>
-
+					<div class="panel-title">
+						{{ ucfirst($video->state) }}
+						@if($video->state=='licensed')
+						| {!! $video->type === 'nonex' ? '<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive' : '<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive' !!} Video
+						@endif
+					</div>
 					<div class="panel-options">
 						<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 					</div>
@@ -59,6 +63,10 @@
 					@elseif($video->state == 'accepted')
 					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					<div class="clearfix"></div>
+					@elseif($video->state == 'licensed'&&$video->file)
+					<div class="text-right">
+						<a href="{{ $video->file }}" download><i class="fa fa-download"></i> Download Video</a>
+					</div>
 					@endif
 				</div>
 			</div>
@@ -71,10 +79,17 @@
 					<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 				</div>
 
+				@if($video->contact_id!=0)
 				<div class="panel-body" style="display: block;">
 					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->first_name.' '.$video->contact->last_name }}</a></h3>
                     <p><a href="mailto:{{ $video->contact->email }}">{{ $video->contact->email }}</a></p>
 				</div>
+				@else
+				<div class="panel-body" style="display: block;">
+					<h3><a href="#">Admin: {{ $user->username }}</a></h3>
+					<p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
+				</div>
+				@endif
 			</div>
 
 			<div class="panel panel-primary" data-collapsed="0">
@@ -275,12 +290,12 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
+		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title">Short Description</div> 
+				<div class="panel-title">Short Description</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -290,12 +305,12 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
+		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title">Video Details, Links, and Info</div> 
+				<div class="panel-title">Video Details, Links, and Info</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -394,12 +409,12 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
+		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title">Tags</div> 
+				<div class="panel-title">Tags</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -417,6 +432,19 @@
 					<div class="panel-body">
 						<p>Enter the video duration in the following format (Hours : Minutes : Seconds)</p>
 						<input class="form-control" name="duration" id="duration" value="@if(!empty($video->duration)){{ gmdate('H:i:s', $video->duration) }}@endif">
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> <div class="panel-title"> Exclusivity</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+					<div class="panel-body">
+						<p>Select if the video is exclusive or non-exclusive</p>
+						<select id="type" name="type">
+							<option value="ex" @if(isset($video->type)) @if($video->type == 'ex') selected @endif @endif>Exclusive</option>
+							<option value="nonex" @if(isset($video->type)) @if($video->type == 'nonex') selected @endif @endif>Non-Exclusive</option>
+						</select>
 					</div>
 				</div>
 			</div>
@@ -505,7 +533,7 @@
 						   if(data.status=='success') {
 							   $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
 							   for(var i=0;i<data.labels.length;i++) {
-							   		var label_output='<a href="#" title="'+data.labels[i]['Name']+'" class="tag label label-info copy-tag">'+data.labels[i]['Name']+'</a> ';
+							   		var label_output='<a href="#" title="'+data.labels[i]['Name'].toLowerCase()+'" class="tag label label-info copy-tag">'+data.labels[i]['Name'].toLowerCase()+'</a> ';
 							   		$("#video-analysis").append(label_output);
 							   }
 							   if(data.labels.length>0) {
@@ -552,7 +580,23 @@
 							valueKey: 'name',
 							source: tagnames.ttAdapter()
 					}],
-					freeInput: true
+					freeInput: true,
+					allowDuplicates: false
+			});
+			$('#tags').on('beforeItemAdd', function(event) {
+				var tagsArray = $('#tags').val().split(",");
+				var tagsCheck = false;
+				event.item = event.item.toLowerCase();
+				if(!event.item) {
+					event.cancel = true;
+				}
+				for (i=0;i<tagsArray.length;i++){
+					if(tagsArray[i].trim()==event.item){
+						tagsCheck = true;
+						$('.tt-input valid').val('');
+						event.cancel = true;
+					}
+				}
 			});
 			$('#tags').on('itemRemoved', function(event) {
 			   console.log(event.item);

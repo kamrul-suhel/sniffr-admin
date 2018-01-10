@@ -7,9 +7,11 @@ use Auth;
 use MyYoutube;
 use Redirect;
 use Validator;
+use Carbon\Carbon;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +31,8 @@ use App\Libraries\VideoHelper;
 use App\Mail\SubmissionThanks;
 
 use App\Notifications\SubmissionNew;
+
+use App\Jobs\QueueSubmissionThanks;
 
 class ThemeUploadController extends Controller {
 
@@ -152,12 +156,16 @@ class ThemeUploadController extends Controller {
         $video->state = 'new';
         $video->type = 'ex';
         $video->save();
-        
 
         // Slack notifications
         $video->notify(new SubmissionNew($video));
 
-        // Send thanks notification
+        // Send thanks notification email (via queue after 2mins)
+        //$job = (new QueueSubmissionThanks($contact->email, $contact->first_name, $video->title, $video->alpha_id));
+        // $job = (new QueueSubmissionThanks($video));
+        //     // ->delay(Carbon::now()->addMinutes(2));
+        // dispatch($job);
+
         Mail::to($contact->email)->send(new SubmissionThanks($video));
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
