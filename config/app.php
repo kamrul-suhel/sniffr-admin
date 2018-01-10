@@ -173,6 +173,7 @@ return [
         //Dawson\Youtube\YoutubeServiceProvider::class,
         App\Providers\MyYoutubeServiceProvider::class,
         BaoPham\DynamoDb\DynamoDbServiceProvider::class,
+        Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -238,6 +239,7 @@ return [
         'AWS' => Aws\Laravel\AwsFacade::class,
         //'Youtube' => Dawson\Youtube\Facades\Youtube::class,
         'MyYoutube' => App\Libraries\Facades\MyYoutube::class,
+        'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
 
     ],
 
