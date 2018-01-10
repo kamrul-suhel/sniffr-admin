@@ -40,8 +40,8 @@ class DeleteInActiveUsers extends Command
     public function handle()
     {
         //this is just a test, we can add whatever scheduled functions and code we want below
-        DB::table('contacts')
-            ->where('id', 5)
-            ->update(['updated_at' => \Carbon\Carbon::now()]);
+        // DB::table('contacts')
+        //     ->where('id', 5)
+        //     ->update(['updated_at' => \Carbon\Carbon::now()]);
     }
 }
