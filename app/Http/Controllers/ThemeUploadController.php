@@ -32,7 +32,7 @@ use App\Mail\SubmissionThanks;
 
 use App\Notifications\SubmissionNew;
 
-use App\Jobs\QueueSubmissionThanks;
+use App\Jobs\QueueEmail;
 
 class ThemeUploadController extends Controller {
 
@@ -161,12 +161,7 @@ class ThemeUploadController extends Controller {
         $video->notify(new SubmissionNew($video));
 
         // Send thanks notification email (via queue after 2mins)
-        //$job = (new QueueSubmissionThanks($contact->email, $contact->first_name, $video->title, $video->alpha_id));
-        // $job = (new QueueSubmissionThanks($video));
-        //     // ->delay(Carbon::now()->addMinutes(2));
-        // dispatch($job);
-
-        Mail::to($contact->email)->send(new SubmissionThanks($video));
+        QueueEmail::dispatch($video->id, 'submission_thanks')->delay(now()->addMinutes(10));
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 

@@ -68016,6 +68016,8 @@ $('document').ready(function () {
                     }
                 },
                 error: function error(data) {
+                    $('#dim-screen').hide();
+                    alert('There was an error uploading your video');
                     console.log('There was an error uploading your video');
                 }
             });

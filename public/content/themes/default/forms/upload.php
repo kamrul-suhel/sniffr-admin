@@ -40,17 +40,17 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="first_name">First Name <span>*</span></label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo old('first_name'); ?>" >
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo 'test';//old('first_name'); ?>" >
                         </div>
 
                         <div class="form-group">
                             <label for="last_name">Last Name <span>*</span></label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo old('last_name'); ?>" >
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo 'test';//old('last_name'); ?>" >
                         </div>
 
                         <div class="form-group">
                             <label for="tel">Email <span>*</span></label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo old('email'); ?>" >
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo 'test@example.com';//old('email'); ?>" >
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="title">Video Title <span>*</span></label>
-                            <input type="text" class="form-control" id="title" name="title" value="<?php echo old('title'); ?>">
+                            <input type="text" class="form-control" id="title" name="title" value="<?php echo 'test';//old('title'); ?>">
                         </div>
 
                         <p>Please use either send us your video link <strong>OR</strong> upload your video file below <span>*</span></p>
@@ -92,7 +92,7 @@
                                     </div>
 
                                     <label for="url">Video Link</label>
-                                    <input class="form-control files" type="text" id="url" name="url" value="<?php echo old('url'); ?>" placeholder="">
+                                    <input class="form-control files" type="text" id="url" name="url" value="<?php echo 'https://www.youtube.com/watch?v=2kSjgiV4wG8';//old('url'); ?>" placeholder="">
                                 </div>
                             </div>
 
