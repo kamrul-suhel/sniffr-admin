@@ -9,6 +9,8 @@ use Redirect;
 use Validator;
 use Carbon\Carbon;
 
+use FFMpeg;
+
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,6 +31,7 @@ use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
 
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueVideo;
 use App\Notifications\SubmissionNew;
 
 class ThemeUploadController extends Controller {
@@ -159,6 +162,9 @@ class ThemeUploadController extends Controller {
 
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');
+
+        // Send video to queue for watermarking
+        QueueVideo::dispatch($video->id)->delay(now()->addMinutes(2));
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
