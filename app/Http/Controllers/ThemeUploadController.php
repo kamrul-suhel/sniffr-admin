@@ -161,7 +161,7 @@ class ThemeUploadController extends Controller {
         $video->notify(new SubmissionNew($video));
 
         // Send thanks notification email (via queue after 2mins)
-        QueueEmail::dispatch($video->id, 'submission_thanks')->delay(now()->addMinutes(1));
+        QueueEmail::dispatch($video->id, 'submission_thanks');
 
         // Send video to queue for watermarking
         QueueVideo::dispatch($video->id)->delay(now()->addMinutes(2));

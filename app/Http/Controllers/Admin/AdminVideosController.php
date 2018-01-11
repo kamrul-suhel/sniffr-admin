@@ -161,10 +161,10 @@ class AdminVideosController extends Controller {
             }
 
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_accepted')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'submission_accepted');
         }else if($video->state == 'rejected'){
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_rejected')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'submission_rejected');
         }else if($video->state == 'licensed'){
             $video->licensed_at = now();
 
@@ -174,7 +174,7 @@ class AdminVideosController extends Controller {
             }
 
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_licensed')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'submission_licensed');
         }
 
         $video->save();
@@ -220,10 +220,10 @@ class AdminVideosController extends Controller {
             }
 
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_accepted')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'submission_accepted');
         }else if($video->state == 'rejected'){
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_rejected')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'submission_rejected');
         }else if($video->state == 'licensed'){
             $video->licensed_at = now();
 
@@ -233,7 +233,7 @@ class AdminVideosController extends Controller {
             }
 
             // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_licensed')->delay(now()->addMinutes(2));
+            QueueEmail::dispatch($video->id, 'submission_licensed');
         }
 
         $video->save();
@@ -256,7 +256,7 @@ class AdminVideosController extends Controller {
         $video->save();
 
         // Send thanks notification email (via queue after 2mins)
-        QueueEmail::dispatch($video->id, 'details_reminder')->delay(now()->addMinutes(2));
+        QueueEmail::dispatch($video->id, 'details_reminder');
 
         return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder sent', 'note_type' => 'success') );
     }
