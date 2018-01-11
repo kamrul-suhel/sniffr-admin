@@ -7,6 +7,8 @@ use Auth;
 use Validator;
 use Redirect;
 
+use FFMpeg;
+
 use App\Page;
 use App\Menu;
 use App\Label;
@@ -119,6 +121,55 @@ class AdminLabelController extends Controller {
              return response()->json(['status' => 'success', 'message' => 'Successfully copied the file.']);
          } else {
              return response()->json(['status' => 'fail', 'message' => 'No file found.']);
+         }
+
+     }
+
+     public function makeWatermark() {
+
+         // FFMpeg
+         $file = '1515606869-ian_phone.mp4';
+         $ext = pathinfo($file, PATHINFO_EXTENSION);
+         $watermark_file = substr($file, 0, strrpos($file, '.')).'-watermark.'.$ext;
+         $gif_file = substr($file, 0, strrpos($file, '.')).'.gif';
+
+         $watermark = FFMpeg::open($file);
+
+         $video_dimensions = $watermark
+             ->getStreams()
+             ->videos()
+             ->first()
+             ->getDimensions();
+         $video_width = $video_dimensions->getWidth();
+         $video_height = $video_dimensions->getHeight();
+
+         if($video_width>700) {
+             $logo_watermark = 'logo-unilad-watermark.png';
+         } else {
+             $logo_watermark = 'logo-unilad-watermark-small.png';
+         }
+
+         $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter(public_path('content/uploads/settings/'.$logo_watermark), array(
+            'position' => 'relative',
+            'bottom' => 35,
+            'right' => 30,
+         ));
+
+         $watermark->addFilter($watermark_filter)
+             ->export()
+             ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
+             ->save($watermark_file);
+
+         // $url = Storage::temporaryUrl( //used for making public for set period
+         //     $watermark_file, now()->addMinutes(25)
+         // );
+
+         if(Storage::disk('s3')->exists($watermark_file)) {
+
+
+             echo $url;
+         } else {
+             echo 'No found.';
          }
 
      }
