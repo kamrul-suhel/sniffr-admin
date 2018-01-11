@@ -136,11 +136,6 @@ The rights holder retains all rights in the submitted video(s), including withou
                         </div>
 
                         <div class="progress_output"></div>
-                        <!-- <div id="progress">
-                            <div class="bar" style="width: 0%;"></div>
-                        </div> -->
-
-                        <!--a id="video-submit" class="btn btn-primary pull-right">Submit your video</a-->
 
                         <input type="submit" class="btn btn-primary pull-right" value="Submit your video">
                     </div>

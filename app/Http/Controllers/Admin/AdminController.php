@@ -33,7 +33,6 @@ class AdminController extends Controller {
 	 *
 	 * @return void
 	 */
-
 	public function index()
 	{
 		$total_videos = count(Video::get());

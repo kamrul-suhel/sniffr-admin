@@ -389,23 +389,53 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0">
-			<div class="panel-heading">
-				<div class="panel-title">Campaign</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Campaign</div>
 
-				<div class="panel-options">
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<select name="campaigns[]" id="campaigns" class="form-control" multiple>
+							@if(!empty($video_campaigns))
+								@foreach($video_campaigns as $campaign)
+									<option value="{{ $campaign->id }}"{{ isset($video) && $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
+								@endforeach
+							@endif
+						</select>
+					</div>
 				</div>
 			</div>
 
-			<div class="panel-body" style="display: block;">
-				<select name="campaigns[]" id="campaigns" class="form-control" multiple>
-					@if(!empty($video_campaigns))
-						@foreach($video_campaigns as $campaign)
-							<option value="{{ $campaign->id }}"{{ isset($video) && $video->campaigns()->get()->contains($campaign->id)  ? " selected" : "" }}>{{ $campaign->name }}</option>
+			<div class="col-sm-6">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Client Exclusivity</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						@foreach($video->campaigns as $campaign)
+							<?php
+                                $date1 = now();
+                                $date2 = new DateTime($campaign->pivot->updated_at);
+
+                                $diff = $date2->diff($date1);
+
+                                $exclusivity = 48 - ($diff->h + ($diff->days*24));
+                            ?>
+							{{ $campaign->name }} : {{ $exclusivity }} Hours left
 						@endforeach
-					@endif
-				</select>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -438,7 +468,7 @@
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> Exclusivity</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+					<div class="panel-heading"> <div class="panel-title"> Rights</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<p>Select if the video is exclusive or non-exclusive</p>
 						<select id="type" name="type">

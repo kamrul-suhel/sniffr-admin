@@ -280,6 +280,23 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Client Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::group(array('prefix' => 'client'), function(){
+    // Admin Dashboard
+    Route::get('', 'Client\ClientController@index');
+
+    // Admin Video Functionality
+    Route::get('videos', 'Client\ClientVideosController@index');
+    Route::get('videos/{id}', array('uses' => 'Client\ClientVideosController@index'));
+    Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
+});
+
 /*
 |--------------------------------------------------------------------------
 | Payment Webhooks

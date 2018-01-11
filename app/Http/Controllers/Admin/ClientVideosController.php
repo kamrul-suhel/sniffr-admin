@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Client;
 
 use View;
 use Auth;
@@ -38,7 +38,7 @@ use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
 
-class AdminVideosController extends Controller {
+class ClientVideosController extends Controller {
 
     protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
 
@@ -47,7 +47,7 @@ class AdminVideosController extends Controller {
      */
     public function __construct(Request $request)
     {
-        $this->middleware('admin');
+        $this->middleware('client');
     }
     /**
      * Display a listing of videos
@@ -107,7 +107,7 @@ class AdminVideosController extends Controller {
             'video_shottypes' => VideoShotType::all(),
         );
 
-        return view('admin.videos.index', $data);
+        return view('client.videos.index', $data);
     }
 
     /**
@@ -431,7 +431,7 @@ class AdminVideosController extends Controller {
         $this->addUpdateVideoTags($video, $tags);
 
         // Youtube integration
-        if($video->youtube_id && env('APP_ENV') != 'local'){ // Fetches video duration on update and is youtube if none
+        if($video->youtube_id){ // Fetches video duration on update and is youtube if none
             if(!$video->duration){
                 $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
             }
@@ -452,6 +452,8 @@ class AdminVideosController extends Controller {
             $fileMimeType = $file->getMimeType();
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $data['image'] = Storage::disk('s3')->url($fileName);
+
+            //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
         }
 
         // Many to many cmapaigns
