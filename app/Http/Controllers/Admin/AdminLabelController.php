@@ -160,14 +160,15 @@ class AdminLabelController extends Controller {
              ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
              ->save($watermark_file);
 
+         // $watermark->gif(FFMpeg\Coordinate\TimeCode::fromSeconds(2), new FFMpeg\Coordinate\Dimension(360, 200), 3)
+         //     ->save('assets/img/tmp/'.$gif_file);
+
          // $url = Storage::temporaryUrl( //used for making public for set period
          //     $watermark_file, now()->addMinutes(25)
          // );
 
          if(Storage::disk('s3')->exists($watermark_file)) {
-
-
-             echo $url;
+             echo $watermark_file;
          } else {
              echo 'No found.';
          }
