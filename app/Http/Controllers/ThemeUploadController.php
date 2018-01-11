@@ -163,8 +163,52 @@ class ThemeUploadController extends Controller {
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');
 
-        // Send video to queue for watermarking
-        QueueVideo::dispatch($video->id)->delay(now()->addMinutes(2));
+        if($request->hasFile('file')){
+            // Send video to queue for watermarking
+            //QueueVideo::dispatch($video->id)->delay(now()->addMinutes(2));
+
+            $fileName = basename($video->file);
+
+            if($fileName){
+
+                // FFMpeg
+                $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+                $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
+
+                $watermark = FFMpeg::open($fileName);
+
+                $video_dimensions = $watermark
+                    ->getStreams()
+                    ->videos()
+                    ->first()
+                    ->getDimensions();
+                $video_width = $video_dimensions->getWidth();
+                $video_height = $video_dimensions->getHeight();
+
+                if($video_width>700) {
+                    $logo_watermark = 'logo-unilad-watermark.png';
+                } else {
+                    $logo_watermark = 'logo-unilad-watermark-small.png';
+                }
+
+                $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter(public_path('content/uploads/settings/'.$logo_watermark), array(
+                   'position' => 'relative',
+                   'bottom' => 35,
+                   'top' => 30,
+                ));
+
+                $watermark->addFilter($watermark_filter)
+                    ->export()
+                    ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
+                    ->save($watermark_file);
+
+                if(Storage::disk('s3')->exists($watermark_file)) {
+                    $watermark_file = 'https://vlp-storage.s3.eu-west-1.amazonaws.com/'.$watermark_file;
+                    $video->file_watermark = $watermark_file;
+                    $video->save();
+                }
+            }
+        }
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 

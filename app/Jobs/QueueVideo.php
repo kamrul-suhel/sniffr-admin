@@ -76,16 +76,19 @@ class QueueVideo implements ShouldQueue
             $video_width = $video_dimensions->getWidth();
             $video_height = $video_dimensions->getHeight();
 
-            if($video_width>700) {
-                $logo_watermark = 'logo-unilad-watermark.png';
-            } else {
-                $logo_watermark = 'logo-unilad-watermark-small.png';
-            }
+            // Save logo to right size
+            $logo_width = floor($video_width/10);
+            $logo_padding_width = floor($video_width/100);
+            $logo_file = public_path('content/uploads/settings/logo-unilad-white-'.$logo_width .'.png');
 
-            $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter(public_path('content/uploads/settings/'.$logo_watermark), array(
+            Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(80)->resize($logo_width, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($logo_file);
+
+            $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter($logo_file, array(
                'position' => 'relative',
-               'bottom' => 35,
-               'right' => 30,
+               'right' => $logo_padding_width,
+               'top' => $logo_padding_width,
             ));
 
             $watermark->addFilter($watermark_filter)
@@ -93,18 +96,12 @@ class QueueVideo implements ShouldQueue
                 ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
                 ->save($watermark_file);
 
-            // $url = Storage::temporaryUrl( //used for making public for set period
-            //     $watermark_file, now()->addMinutes(25)
-            // );
-
             if(Storage::disk('s3')->exists($watermark_file)) {
                 $watermark_file = 'https://vlp-storage.s3.eu-west-1.amazonaws.com/'.$watermark_file;
                 $video->file_watermark = $watermark_file;
                 $video->save();
             }
-
         }
-
     }
 
     /**

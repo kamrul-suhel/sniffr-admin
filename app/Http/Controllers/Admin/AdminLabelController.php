@@ -21,6 +21,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 use App\Http\Controllers\Controller;
 
@@ -126,52 +127,54 @@ class AdminLabelController extends Controller {
      }
 
      public function makeWatermark() {
+        // FFMpeg
+        $file = '1514988307-snow_angels.mp4';
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        $watermark_file = substr($file, 0, strrpos($file, '.')).'-watermark.'.$ext;
+        $gif_file = substr($file, 0, strrpos($file, '.')).'.gif';
 
-         // FFMpeg
-         $file = '1515606869-ian_phone.mp4';
-         $ext = pathinfo($file, PATHINFO_EXTENSION);
-         $watermark_file = substr($file, 0, strrpos($file, '.')).'-watermark.'.$ext;
-         $gif_file = substr($file, 0, strrpos($file, '.')).'.gif';
+        $watermark = FFMpeg::open($file);
 
-         $watermark = FFMpeg::open($file);
+        $video_dimensions = $watermark
+            ->getStreams()
+            ->videos()
+            ->first()
+            ->getDimensions();
+        $video_width = $video_dimensions->getWidth();
+        $video_height = $video_dimensions->getHeight();
 
-         $video_dimensions = $watermark
-             ->getStreams()
-             ->videos()
-             ->first()
-             ->getDimensions();
-         $video_width = $video_dimensions->getWidth();
-         $video_height = $video_dimensions->getHeight();
+        // Save logo to right size
+        $logo_width = floor($video_width/10);
+        $logo_padding_width = floor($video_width/100);
+        $logo_file = public_path('content/uploads/settings/logo-unilad-white-'.$logo_width .'.png');
 
-         if($video_width>700) {
-             $logo_watermark = 'logo-unilad-watermark.png';
-         } else {
-             $logo_watermark = 'logo-unilad-watermark-small.png';
-         }
+        Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(80)->resize($logo_width, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($logo_file);
 
-         $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter(public_path('content/uploads/settings/'.$logo_watermark), array(
+        $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter($logo_file, array(
             'position' => 'relative',
-            'bottom' => 35,
-            'right' => 30,
-         ));
+            'right' => $logo_padding_width,
+            'top' => $logo_padding_width,
+        ));
 
-         $watermark->addFilter($watermark_filter)
-             ->export()
-             ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
-             ->save($watermark_file);
+        $watermark->addFilter($watermark_filter)
+            ->export()
+            ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
+            ->save($watermark_file);
 
-         // $url = Storage::temporaryUrl( //used for making public for set period
-         //     $watermark_file, now()->addMinutes(25)
-         // );
+        $url = Storage::temporaryUrl( //used for making public for set period
+            $watermark_file, now()->addMinutes(25)
+        );
 
-         if(Storage::disk('s3')->exists($watermark_file)) {
+        $data['url'] = $url;
+        return view('admin.videos.test', $data);
 
-
-             echo $url;
-         } else {
-             echo 'No found.';
-         }
-
+        if(Storage::disk('s3')->exists($url)) {
+            $data['url'] = $url;
+            return view('admin.videos.test', $data);
+        } else {
+            echo 'Not found.';
+        }
      }
-
 }
