@@ -28,6 +28,9 @@ trait VideoHelper{
 		      	$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
 		    }
 		}elseif (!empty($video->file)){
+			if($video->file_watermark) {
+				$video->file = $video->file_watermark;
+			}
 		    $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="'.config('site.uploads_url').'images/'.$video->image.'" data-setup="{}" width="100%" style="width:100%;">
 		        <source src="'.( $video->file_watermark ? $video->file_watermark : $video->file ) .'" type="video/mp4">
 		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>

@@ -8,6 +8,7 @@ use Validator;
 use Redirect;
 
 use FFMpeg;
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 use App\Page;
 use App\Menu;
@@ -127,6 +128,7 @@ class AdminLabelController extends Controller {
      }
 
      public function makeWatermark() {
+
         // FFMpeg
         $file = '1514988307-snow_angels.mp4';
         $ext = pathinfo($file, PATHINFO_EXTENSION);
@@ -174,5 +176,6 @@ class AdminLabelController extends Controller {
         } else {
             echo 'Not found.';
         }
+
      }
 }
