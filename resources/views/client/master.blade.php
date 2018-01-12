@@ -66,7 +66,7 @@
             <!-- Raw Links -->
             <div class="col-sm-6 clearfix hidden-xs">
                 <ul class="list-inline links-list pull-right">
-                    @if(count($campaigns) > 1)
+                    @if(isset($campaigns) && count($campaigns) > 1)
                     <li>
                         <form id="campaigns-form" method="get" role="form">
                             <div class="form-group">

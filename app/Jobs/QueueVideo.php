@@ -81,20 +81,24 @@ class QueueVideo implements ShouldQueue
             $logo_padding_width = floor($video_width/100);
             $logo_file = public_path('content/uploads/settings/logo-unilad-white-'.$logo_width .'.png');
 
-            Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(80)->resize($logo_width, null, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($logo_file);
+            if(!file_exists($logo_file)){
+                Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(70)->resize($logo_width, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($logo_file);
+            }
 
             $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter($logo_file, array(
                'position' => 'relative',
-               'right' => $logo_padding_width,
                'top' => $logo_padding_width,
+               'right' => $logo_padding_width,
             ));
 
             $watermark->addFilter($watermark_filter)
                 ->export()
                 ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
                 ->save($watermark_file);
+
+            $url = Storage::disk('s3')->setVisibility($watermark_file, 'public');
 
             if(Storage::disk('s3')->exists($watermark_file)) {
                 $watermark_file = 'https://vlp-storage.s3.eu-west-1.amazonaws.com/'.$watermark_file;

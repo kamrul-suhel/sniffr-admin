@@ -130,8 +130,14 @@ class AdminVideosController extends Controller {
 
             // Move video to Youtube and move video file to folder for analysis
             if($video->file){
-                $file = file_get_contents($video->file);
-                $fileName = basename($video->file);
+                if($video->file_watermark){
+                    $file = file_get_contents($video->file_watermark);
+                    $fileName = basename($video->file_watermark);
+                }else{
+                    $file = file_get_contents($video->file);
+                    $fileName = basename($video->file);
+                }
+                
 
                 //anaylsis bit
 
@@ -198,9 +204,14 @@ class AdminVideosController extends Controller {
 
             // Move video to Youtube
             if($video->file){
-                $file = file_get_contents($video->file);
-                $fileName = basename($video->file);
-
+                if($video->file_watermark){
+                    $file = file_get_contents($video->file_watermark);
+                    $fileName = basename($video->file_watermark);
+                }else{
+                    $file = file_get_contents($video->file);
+                    $fileName = basename($video->file);
+                }
+                
                 file_put_contents('/tmp/'.$fileName, $file);
 
                 $file = new UploadedFile (

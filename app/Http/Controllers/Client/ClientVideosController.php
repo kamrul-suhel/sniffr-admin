@@ -75,7 +75,6 @@ class ClientVideosController extends Controller {
             $request->session()->put('campaign', $campaign);
         }
 
-
         // Video list
         $videos = new Video;
 

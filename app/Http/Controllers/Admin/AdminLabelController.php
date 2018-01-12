@@ -163,9 +163,7 @@ class AdminLabelController extends Controller {
             ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
             ->save($watermark_file);
 
-        $url = Storage::temporaryUrl( //used for making public for set period
-            $watermark_file, now()->addMinutes(25)
-        );
+        $url = Storage::disk('s3')->setVisibility($watermark_file, 'public');
 
         $data['url'] = $url;
         return view('admin.videos.test', $data);
