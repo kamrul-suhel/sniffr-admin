@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Client;
 
 use View;
 use Auth;
@@ -38,7 +38,7 @@ use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
 
-class AdminVideosController extends Controller {
+class ClientVideosController extends Controller {
 
     protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
 
@@ -47,7 +47,7 @@ class AdminVideosController extends Controller {
      */
     public function __construct(Request $request)
     {
-        $this->middleware('admin');
+        $this->middleware('client');
     }
     /**
      * Display a listing of videos
@@ -57,11 +57,31 @@ class AdminVideosController extends Controller {
     public function index(Request $request, $state = 'all')
     {
         $search_value = Input::get('s');
-        $category_value = Input::get('category');
-        $collection_value = Input::get('collection');
-        $shot_value = Input::get('shot_type');
+        $user = Auth::user();
 
+        $campaigns = new Campaign();
+        // Set campaign id
+        if($client_id = Auth::user()->client_id){
+            $campaigns = Campaign::where('client_id', $client_id);
+        }
+        $campaigns = $campaigns->get();
+
+        // set campaign id if just 1
+        if(count($campaigns) == 1){
+            $request->session()->put('campaign', $campaigns[0]->id);
+        }
+
+        if($campaign = Input::get('campaign')){
+            $request->session()->put('campaign', $campaign);
+        }
+
+
+        // Video list
         $videos = new Video;
+
+        $videos = $videos->whereHas('campaigns', function ($q){
+            $q->where('id', session('campaign'));
+        });
 
         if(!empty($search_value)){
             $videos = Video::where(function($query) use($search_value){
@@ -71,43 +91,20 @@ class AdminVideosController extends Controller {
             });
         }
 
-        if(!empty($category_value)){
-            $videos = Video::where('video_category_id', $category_value);
-        }
-
-        if(!empty($collection_value)){
-            $videos = Video::where('video_collection_id', $collection_value);
-        }
-
-        if(!empty($shot_value)){
-            $videos = Video::where('video_shottype_id', $shot_value);
-        }
-
-        if($state != 'all'){
-            if($state == 'deleted'){
-                $videos = $videos->onlyTrashed();
-            }else{
-                $videos = $videos->where('state', $state);
-            }
-
-            session(['state' => $state]);
-        }
-
-        $videos = $videos->orderBy('created_at', 'DESC')->paginate(9);
-
-        $user = Auth::user();
+        $videos = $videos->orderBy('licensed_at', 'desc')->paginate(9);
 
         $data = array(
             'state' => $state,
             'videos' => $videos,
             'user' => $user,
+            'campaigns' => $campaigns,
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
         );
 
-        return view('admin.videos.index', $data);
+        return view('client.videos.index', $data);
     }
 
     /**
@@ -431,7 +428,7 @@ class AdminVideosController extends Controller {
         $this->addUpdateVideoTags($video, $tags);
 
         // Youtube integration
-        if($video->youtube_id && env('APP_ENV') != 'local'){ // Fetches video duration on update and is youtube if none
+        if($video->youtube_id){ // Fetches video duration on update and is youtube if none
             if(!$video->duration){
                 $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
             }
@@ -452,6 +449,8 @@ class AdminVideosController extends Controller {
             $fileMimeType = $file->getMimeType();
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $data['image'] = Storage::disk('s3')->url($fileName);
+
+            //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
         }
 
         // Many to many cmapaigns

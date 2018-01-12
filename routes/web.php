@@ -281,6 +281,23 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('water', 'Admin\AdminLabelController@makeWatermark');
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Client Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::group(array('prefix' => 'client'), function(){
+    // Admin Dashboard
+    Route::get('', 'Client\ClientController@index');
+
+    // Admin Video Functionality
+    Route::get('videos', 'Client\ClientVideosController@index');
+    Route::get('videos/{id}', array('uses' => 'Client\ClientVideosController@index'));
+    Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
+});
+
 /*
 |--------------------------------------------------------------------------
 | Payment Webhooks

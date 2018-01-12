@@ -14,6 +14,7 @@ use App\Setting;
 use App\Favorite;
 use App\VideoCategory;
 use App\PostCategory;
+use Illuminate\Support\Facades\Storage;
 
 use App\Libraries\ThemeHelper;
 
@@ -37,17 +38,20 @@ class ThemeDownloadController extends Controller {
         $video = Video::where('alpha_id', $id)->first();
 
         if($video) {
-
         	$download = new Download;
         	$download->user_id = Auth::user()->id;
-        	$download->video_id = $id;
+        	$download->video_id = $video->id;
         	$download->save();
 
-            return Redirect::to($video->file);
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header("Content-Disposition: attachment; filename=" . basename($video->file));
+            header("Content-Type: " . $video->mime);
+
+            return readfile($video->file);
         } else {
             return Redirect::to('/videos');
         }
 
     }
-
 }

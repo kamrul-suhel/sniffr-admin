@@ -91,17 +91,22 @@ class QueueVideo implements ShouldQueue
 
             } else {
 
-                // FFMpeg (old route)
+                // FFMPEG (old local server route)
 
-                $watermark = FFMpeg::open($fileName);
+                // Save logo to right size
+                $logo_width = floor($video_width/10);
+                $logo_padding_width = floor($video_width/100);
+                $logo_file = public_path('content/uploads/settings/logo-unilad-white-'.$logo_width .'.png');
 
-                $video_dimensions = $watermark
-                    ->getStreams()
-                    ->videos()
-                    ->first()
-                    ->getDimensions();
-                $video_width = $video_dimensions->getWidth();
-                $video_height = $video_dimensions->getHeight();
+                Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(80)->resize($logo_width, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($logo_file);
+
+                $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter($logo_file, array(
+                   'position' => 'relative',
+                   'right' => $logo_padding_width,
+                   'top' => $logo_padding_width,
+                ));
 
                 if($video_width>700) {
                     $logo_watermark = 'logo-unilad-watermark.png';
@@ -126,16 +131,13 @@ class QueueVideo implements ShouldQueue
 
             }
 
-            $temp = Storage::disk('s3')->setVisibility($watermark_file, 'public');
-
             if(Storage::disk('s3')->exists($watermark_file)) {
+                $temp = Storage::disk('s3')->setVisibility($watermark_file, 'public');
                 $watermark_file = 'https://vlp-storage.s3.eu-west-1.amazonaws.com/'.$watermark_file;
                 $video->file_watermark = $watermark_file;
                 $video->save();
             }
-
         }
-
     }
 
     /**

@@ -119,6 +119,9 @@ class ThemeAuthController extends Controller {
     		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
     			return Redirect::to($redirect);
+    		} elseif(Auth::user()->role == 'client'){
+    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client';
+    			return Redirect::to($redirect);
     		} else {
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
     			return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));

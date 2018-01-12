@@ -51,10 +51,17 @@ class Video extends Model {
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function downloads()
+    {
+        return $this->hasMany(Download::class);
+    }
 
     public function campaigns()
     {
-        return $this->belongsToMany(Campaign::class);
+        return $this->belongsToMany(Campaign::class)->withTimestamps();
     }
 
     public function routeNotificationForSlack()
