@@ -29,9 +29,7 @@ trait VideoHelper{
 		    }
 		}elseif (!empty($video->file)){
 			if($video->file_watermark) {
-				$video->file = Storage::disk('s3')->temporaryUrl( //used for making public for set period
-	                basename($video->file_watermark), now()->addHours(24)
-	            );
+				$video->file = $video->file_watermark;
 			}
 		    $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="'.config('site.uploads_url').'images/'.$video->image.'" data-setup="{}" width="100%" style="width:100%;">
 		        <source src="'.$video->file.'" type="video/mp4">

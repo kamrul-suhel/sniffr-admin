@@ -6,6 +6,7 @@ use App\Video;
 // use App\Contact;
 
 use FFMpeg;
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -60,42 +61,72 @@ class QueueVideo implements ShouldQueue
         $video = Video::find($this->video_id);
         $fileName = basename($video->file);
 
+        $route = 'aws';
+
         if($fileName){
 
-            // FFMpeg
+            // resolve original file, extension and watermark file
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
             $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
 
-            $watermark = FFMpeg::open($fileName);
+            if($route='aws') {
 
-            $video_dimensions = $watermark
-                ->getStreams()
-                ->videos()
-                ->first()
-                ->getDimensions();
-            $video_width = $video_dimensions->getWidth();
-            $video_height = $video_dimensions->getHeight();
+                // AWS Elastic Transcoder (new cloud route)
 
-            if($video_width>700) {
-                $logo_watermark = 'logo-unilad-watermark.png';
+                $config = [
+                       'PresetId' => '1515758587625-jyon3x',
+                       'width'  => 1920,
+                       'height' => 1080,
+                       'aspect' => '16:9',
+                   	'ext'	 => 'mp4',
+                   	'PipelineId' => '1515757750300-4fybrt',
+                       'Watermarks' => [[
+                               'PresetWatermarkId' => 'TopRight',
+                               'InputKey'          => 'logo-unilad-white.png'
+                       ]],
+                   ];
+
+                $elastcoder = new ElastcoderAWS();
+                $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
+
             } else {
-                $logo_watermark = 'logo-unilad-watermark-small.png';
+
+                // FFMpeg (old route)
+
+                $watermark = FFMpeg::open($fileName);
+
+                $video_dimensions = $watermark
+                    ->getStreams()
+                    ->videos()
+                    ->first()
+                    ->getDimensions();
+                $video_width = $video_dimensions->getWidth();
+                $video_height = $video_dimensions->getHeight();
+
+                if($video_width>700) {
+                    $logo_watermark = 'logo-unilad-watermark.png';
+                } else {
+                    $logo_watermark = 'logo-unilad-watermark-small.png';
+                }
+
+                $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter(public_path('content/uploads/settings/'.$logo_watermark), array(
+                   'position' => 'relative',
+                   'bottom' => 35,
+                   'right' => 30,
+                ));
+
+                $watermark->addFilter($watermark_filter)
+                    ->export()
+                    ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
+                    ->save($watermark_file);
+
+                // $url = Storage::temporaryUrl( //used for making public for set period
+                //     $watermark_file, now()->addMinutes(25)
+                // );
+
             }
 
-            $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter(public_path('content/uploads/settings/'.$logo_watermark), array(
-               'position' => 'relative',
-               'bottom' => 35,
-               'right' => 30,
-            ));
-
-            $watermark->addFilter($watermark_filter)
-                ->export()
-                ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
-                ->save($watermark_file);
-
-            // $url = Storage::temporaryUrl( //used for making public for set period
-            //     $watermark_file, now()->addMinutes(25)
-            // );
+            $temp = Storage::disk('s3')->setVisibility($watermark_file, 'public');
 
             if(Storage::disk('s3')->exists($watermark_file)) {
                 $watermark_file = 'https://vlp-storage.s3.eu-west-1.amazonaws.com/'.$watermark_file;

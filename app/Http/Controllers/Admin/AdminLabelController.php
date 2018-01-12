@@ -8,6 +8,7 @@ use Validator;
 use Redirect;
 
 use FFMpeg;
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 use App\Page;
 use App\Menu;
@@ -127,6 +128,34 @@ class AdminLabelController extends Controller {
 
      public function makeWatermark() {
 
+         $fileName = '1515692707-annoying-drunks.MOV';
+         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+         $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
+
+         $config = [
+                'PresetId' => '1515758587625-jyon3x',
+                'width'  => 1920,
+                'height' => 1080,
+                'aspect' => '16:9',
+            	'ext'	 => 'mp4',
+            	'PipelineId' => '1515757750300-4fybrt',
+                'Watermarks' => [[
+                        'PresetWatermarkId' => 'TopRight',
+                        'InputKey'          => 'logo-unilad-white.png'
+                ]],
+            ];
+
+         $elastcoder = new ElastcoderAWS();
+         $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
+
+         //$temp = Storage::disk('s3')->setVisibility($watermark_file, 'public');
+
+         dd($job);
+
+     }
+
+     public function makeWatermark2() {
+
          // FFMpeg
          $file = '1515606869-ian_phone.mp4';
          $ext = pathinfo($file, PATHINFO_EXTENSION);
@@ -163,7 +192,7 @@ class AdminLabelController extends Controller {
          // $watermark->gif(FFMpeg\Coordinate\TimeCode::fromSeconds(2), new FFMpeg\Coordinate\Dimension(360, 200), 3)
          //     ->save('assets/img/tmp/'.$gif_file);
 
-         // $url = Storage::temporaryUrl( //used for making public for set period
+         // $url = Storage::disk('s3')->temporaryUrl( //used for making public for set period
          //     $watermark_file, now()->addMinutes(25)
          // );
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "df7cb3c07fb9be073c5e378a4afff60b",
+    "content-hash": "2ba41135b4419b49f25fe5358f36e617",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -533,6 +533,108 @@
                 "parser"
             ],
             "time": "2014-09-09T13:34:57+00:00"
+        },
+        {
+            "name": "dumpk/elastcoder",
+            "version": "0.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dumpk/elastcoder.git",
+                "reference": "277a959b42de828a2b758254967db2682812c4e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dumpk/elastcoder/zipball/277a959b42de828a2b758254967db2682812c4e7",
+                "reference": "277a959b42de828a2b758254967db2682812c4e7",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "~3.0",
+                "dumpk/esetres": "0.9"
+            },
+            "require-dev": {
+                "laravel/laravel": "~5.1",
+                "phpspec/phpspec": "~2.1",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dumpk\\Elastcoder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolás Bistolfi",
+                    "email": "nbistolfi@gmail.com"
+                }
+            ],
+            "description": "AWS Elastic Transcoder Service Integration",
+            "homepage": "http://github.com/dumpk/elastcoder",
+            "keywords": [
+                "amazon elastic transcoder",
+                "aws",
+                "laravel",
+                "transcoder"
+            ],
+            "time": "2015-11-05T14:34:36+00:00"
+        },
+        {
+            "name": "dumpk/esetres",
+            "version": "0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dumpk/esetres.git",
+                "reference": "5dfe75952f96e42d96959d18c4dcf0024c7d8ce2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dumpk/esetres/zipball/5dfe75952f96e42d96959d18c4dcf0024c7d8ce2",
+                "reference": "5dfe75952f96e42d96959d18c4dcf0024c7d8ce2",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "~3.0"
+            },
+            "require-dev": {
+                "laravel/laravel": "~5.1",
+                "phpspec/phpspec": "~2.1",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "tests"
+                ],
+                "psr-4": {
+                    "Dumpk\\Esetres\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolás Bistolfi",
+                    "email": "nbistolfi@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel AWS S3 Service Integration",
+            "homepage": "http://github.com/dumpk/esetres",
+            "keywords": [
+                "AWS S3",
+                "Esetres",
+                "laraflock",
+                "laravel",
+                "s3"
+            ],
+            "time": "2015-11-05T13:48:23+00:00"
         },
         {
             "name": "egulias/email-validator",
