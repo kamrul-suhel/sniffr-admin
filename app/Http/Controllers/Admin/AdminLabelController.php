@@ -127,6 +127,46 @@ class AdminLabelController extends Controller {
 
      }
 
+     public function checkWatermark() {
+
+         // $elastcoder = new ElastcoderAWS();
+         // $job = $elastcoder->getJob('1515772266459-6vkk7l');
+         //
+         // if(strtolower($job['Status']) == 'complete') {
+         //     echo "complete";
+         // } else {
+         //     echo "error";
+         // }
+
+         $fileName = '1514976319-new-video.mp4';
+         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+         $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
+
+         $config = [
+                'PresetId' => '1515758587625-jyon3x',
+                'width'  => 1920,
+                'height' => 1080,
+                'aspect' => '16:9',
+             'ext'	 => 'mp4',
+             'PipelineId' => '1515757750300-4fybrt',
+                'Watermarks' => [[
+                        'PresetWatermarkId' => 'TopRight',
+                        'InputKey'          => 'logo-unilad-white.png'
+                ]],
+            ];
+
+         $elastcoder = new ElastcoderAWS();
+         $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
+
+         echo $job['Id'];
+
+         // if($job['Id']) {
+         //     QueueVideoCheck::dispatch($job['Id'], $video->id);
+         //         ->delay(now()->addMinutes(2));
+         // }
+
+     }
+
      public function makeWatermark() {
 
         // FFMpeg

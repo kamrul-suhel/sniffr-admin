@@ -423,6 +423,7 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
+						@if(isset($video))
 						@foreach($video->campaigns as $campaign)
 							<?php
                                 $date1 = now();
@@ -434,6 +435,7 @@
                             ?>
 							{{ $campaign->name }} : {{ $exclusivity }} Hours left
 						@endforeach
+						@endif
 					</div>
 				</div>
 			</div>
