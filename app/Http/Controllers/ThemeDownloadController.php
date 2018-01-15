@@ -36,19 +36,21 @@ class ThemeDownloadController extends Controller {
 
         $video = Video::where('alpha_id', $id)->first();
 
-        if($video) {
+        if($video && $video->file) {
         	$download = new Download;
         	$download->user_id = Auth::user()->id;
             $download->client_id = Auth::user()->client_id;
         	$download->video_id = $video->id;
         	$download->save();
 
+            $file = $video->file_watermark ? $video->file_watermark : $video->file;
+
             header("Cache-Control: public");
             header("Content-Description: File Transfer");
-            header("Content-Disposition: attachment; filename=" . basename($video->file));
+            header("Content-Disposition: attachment; filename=" . basename($filee));
             header("Content-Type: " . $video->mime);
 
-            return readfile($video->file);
+            return readfile($file);
         } else {
             return Redirect::to('/videos');
         }

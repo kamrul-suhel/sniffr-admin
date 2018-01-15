@@ -427,7 +427,7 @@
 						@foreach($video->campaigns as $campaign)
 							<?php
                                 $date1 = now();
-                                $date2 = new DateTime($campaign->pivot->updated_at);
+                                $date2 = new DateTime($campaign->pivot->created_at);
 
                                 $diff = $date2->diff($date1);
 
