@@ -160,6 +160,12 @@ class ThemeSubmissionController extends Controller {
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks_nonex');
 
+        if($request->hasFile('file')){
+            // Send video to queue for watermarking
+            QueueVideo::dispatch($video->id)
+                ->delay(now()->addSeconds(5));
+        }
+
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
