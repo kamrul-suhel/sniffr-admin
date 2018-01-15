@@ -297,6 +297,7 @@ Route::group(array('prefix' => 'client'), function(){
     Route::get('videos/{id}', array('uses' => 'Client\ClientVideosController@index'));
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
+    Route::get('videos/request/{id}', array('uses' => 'Client\ClientVideosController@request'));
 });
 
 /*

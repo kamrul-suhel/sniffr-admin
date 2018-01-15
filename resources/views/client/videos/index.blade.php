@@ -80,7 +80,7 @@
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             @else
-                            <a href="{{ url('/download/'.$video->alpha_id) }}" title="File not received">
+                            <a href="{{ url('client/videos/request/'.$video->alpha_id) }}" class="state" title="File not received">
                                 <i class="fa fa-exclamation-circle"></i>
                             </a>
                             @endif

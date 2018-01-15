@@ -25,6 +25,7 @@ use App\User;
 use App\Tag;
 use App\Menu;
 use App\Video;
+use App\Client;
 use App\Comment;
 use App\Campaign;
 use App\VideoCategory;
@@ -37,6 +38,8 @@ use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
+
+use App\Notifications\ClientAction;
 
 class ClientVideosController extends Controller {
 
@@ -120,6 +123,7 @@ class ClientVideosController extends Controller {
         $isJson = $request->ajax();
 
         $video = Video::where('alpha_id', $id)->first();
+        $client = Client::find(Auth::user()->client_id);
         
         $campaigns[session('campaign_id')]['state'] = $state;
         $video->campaigns()->sync($campaigns);
@@ -133,10 +137,34 @@ class ClientVideosController extends Controller {
             $message = 'We\'ll continue searching for suitable videos';
         }
 
+        $video->notify(new ClientAction($video, $state, $client->name));
+
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'current_state' => session('current_state'), 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function request(Request $request, $id)
+    {
+        $isJson = $request->ajax();
+
+        $video = Video::where('alpha_id', $id)->first();
+        $client = Client::find(Auth::user()->client_id);
+        
+        $video->notify(new ClientAction($video, 'request', $client->name));
+
+        if($isJson) {
+            return response()->json(['status' => 'success', 'message' => 'We\'ll do our best to get the video file ASAP', 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
+        } else {
+            return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'We\'ll do our best to get the video file ASAP', 'note_type' => 'success') );
         }
     }
 
