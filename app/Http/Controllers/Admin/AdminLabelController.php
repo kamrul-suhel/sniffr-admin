@@ -90,7 +90,7 @@ class AdminLabelController extends Controller {
              $temps = $file->labels;
              foreach ($temps as $temp){
                  if (!in_array($temp['Name'], $blacklist)) {
-                     if($temp['Confidence']>75) {
+                     if($temp['Confidence']>85) {
                          $labels[$count]['Name'] = $temp['Name'];
                          $labels[$count]['Confidence'] = $temp['Confidence'];
                          $count++;

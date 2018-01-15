@@ -519,7 +519,7 @@
 
 		@if(isset($video))
 			<input type="hidden" id="id" name="id" value="{{ $video->alpha_id }}" />
-			<input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file_watermark) }}" />
+			<input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}" />
 			<input type="hidden" id="temp_state" name="temp_state" value="{{ basename($video->state) }}" />
 		@endif
 
