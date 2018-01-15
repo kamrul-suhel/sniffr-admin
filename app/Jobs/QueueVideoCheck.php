@@ -36,6 +36,7 @@ class QueueVideoCheck implements ShouldQueue
 
     protected $job_id;
     protected $video_id;
+    protected $tries_loop_count;
 
     public $tries = 2;
     public $timeout = 3600;
@@ -46,10 +47,11 @@ class QueueVideoCheck implements ShouldQueue
      * @return void
      */
 
-    public function __construct($job_id, $video_id)
+    public function __construct($job_id, $video_id, $tries_loop_count)
     {
         $this->job_id = $job_id;
         $this->video_id = $video_id;
+        $this->tries_loop_count = $tries_loop_count;
     }
 
     /**
@@ -81,8 +83,12 @@ class QueueVideoCheck implements ShouldQueue
             } else {
 
                 // run this job/queue again if the video is still processing (as per above)
-                // QueueVideoCheck::dispatch($job['Id'], $video->id)
-                //     ->delay(now()->addSeconds(30));
+                $tries_loop_count = $this->tries_loop_count;
+                if($tries_loop_count<5) {
+                    $tries_loop_count++;
+                    QueueVideoCheck::dispatch($job['Id'], $video->id, $tries_loop_count)
+                        ->delay(now()->addSeconds(30));
+                }
 
                 //need to add a tries field in db so this doesn't loop forever? (maybe pass count through job function)
 
