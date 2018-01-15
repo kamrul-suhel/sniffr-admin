@@ -6,7 +6,6 @@ use App\Video;
 use App\Jobs\QueueVideoCheck;
 
 use FFMpeg;
-use Dumpk\Elastcoder\ElastcoderAWS;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -30,6 +29,7 @@ use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
 
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 class QueueVideo implements ShouldQueue
 {
@@ -86,7 +86,7 @@ class QueueVideo implements ShouldQueue
                        ]],
                    ];
 
-                $elastcoder = new ElastcoderAWS();
+                $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
                 $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
 
                 if($job['Id']) {

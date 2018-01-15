@@ -33,6 +33,6 @@ class SubmissionRejected extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.submission.rejected')->text('emails.submission.rejected_plain');
+        return $this->view('emails.submission.rejected')->text('emails.submission.rejected_plain')->subject('UNILAD Video Submission: '.$this->video->alpha_id);
     }
 }

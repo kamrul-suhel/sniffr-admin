@@ -33,6 +33,6 @@ class SubmissionLicensed extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.submission.licensed')->text('emails.submission.licensed_plain');
+        return $this->view('emails.submission.licensed')->text('emails.submission.licensed_plain')->subject('UNILAD Video Submission - LICENSED: '.$this->video->alpha_id);
     }
 }
