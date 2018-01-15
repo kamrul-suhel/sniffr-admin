@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Video;
-// use App\Contact;
+use App\Jobs\QueueVideoCheck;
 
 use FFMpeg;
 use Dumpk\Elastcoder\ElastcoderAWS;
@@ -68,8 +68,11 @@ class QueueVideo implements ShouldQueue
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
             $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
 
-            if($route='aws') {
+            if($route=='aws') {
                 // AWS Elastic Transcoder (new cloud route)
+
+                //still need to work out the width/height of the video to use correct size watermark (via preset) > maybe using getID3
+
                 $config = [
                        'PresetId' => '1515758587625-jyon3x',
                        'width'  => 1920,
@@ -85,6 +88,12 @@ class QueueVideo implements ShouldQueue
 
                 $elastcoder = new ElastcoderAWS();
                 $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
+
+                if($job['Id']) {
+                    QueueVideoCheck::dispatch($job['Id'], $video->id)
+                        ->delay(now()->addSeconds(15));
+                }
+
             } else {
                 // FFMPEG (old local server route), Save logo to right size
                 $logo_width = floor($video_width/10);
@@ -108,12 +117,14 @@ class QueueVideo implements ShouldQueue
                     ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
                     ->save($watermark_file);
 
-                if(Storage::disk('s3')->exists($watermark_file)) {
-                    $file_watermark_url = Storage::disk('s3')->setVisibility($watermark_file, 'public');
-                    $video->file_watermark = $file_watermark_url;
-                    $video->save();
-                }
             }
+
+            if(Storage::disk('s3')->exists($watermark_file)) {
+                Storage::disk('s3')->setVisibility($watermark_file, 'public');
+                $video->file_watermark = $watermark_file;
+                $video->save();
+            }
+
         }
     }
 

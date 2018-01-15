@@ -279,7 +279,6 @@ Route::group(array('prefix' => 'admin'), function(){
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
-    Route::get('water', 'Admin\AdminLabelController@makeWatermark');
 });
 
 
