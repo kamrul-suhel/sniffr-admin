@@ -130,14 +130,18 @@ class AdminVideosController extends Controller {
 
             // Move video to Youtube and move video file to folder for analysis
             if($video->file){
+
+                // set watermark and non-watermark video files for processing
+
+                $file = file_get_contents($video->file);
+                $fileName = basename($video->file);
                 if($video->file_watermark){
-                    $file = file_get_contents($video->file_watermark);
-                    $fileName = basename($video->file_watermark);
+                    $file_watermark = file_get_contents($video->file_watermark);
+                    $fileName_watermark = basename($video->file_watermark);
                 }else{
-                    $file = file_get_contents($video->file);
-                    $fileName = basename($video->file);
+                    $file_watermark = file_get_contents($video->file);
+                    $fileName_watermark = basename($video->file);
                 }
-                
 
                 //anaylsis bit
 
@@ -148,19 +152,19 @@ class AdminVideosController extends Controller {
 
                 //youtube bit
 
-                file_put_contents('/tmp/'.$fileName, $file);
+                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
 
-                $file = new UploadedFile (
-                    '/tmp/'.$fileName,
-                    $fileName,
+                $file_watermark = new UploadedFile (
+                    '/tmp/'.$fileName_watermark,
+                    $fileName_watermark,
                     $video->mime,
-                    filesize('/tmp/'.$fileName),
+                    filesize('/tmp/'.$fileName_watermark),
                     null,
                     false
                 );
 
                 // Upload it to youtube
-                $response = MyYoutube::upload($file, ['title' => $video->title], 'unlisted');
+                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
                 $youtubeId  = $response->getVideoId();
 
                 $video->youtube_id = $youtubeId;
@@ -204,27 +208,40 @@ class AdminVideosController extends Controller {
 
             // Move video to Youtube
             if($video->file){
-                if($video->file_watermark){
-                    $file = file_get_contents($video->file_watermark);
-                    $fileName = basename($video->file_watermark);
-                }else{
-                    $file = file_get_contents($video->file);
-                    $fileName = basename($video->file);
-                }
-                
-                file_put_contents('/tmp/'.$fileName, $file);
+                // set watermark and non-watermark video files for processing
 
-                $file = new UploadedFile (
-                    '/tmp/'.$fileName,
-                    $fileName,
+                $file = file_get_contents($video->file);
+                $fileName = basename($video->file);
+                if($video->file_watermark){
+                    $file_watermark = file_get_contents($video->file_watermark);
+                    $fileName_watermark = basename($video->file_watermark);
+                }else{
+                    $file_watermark = file_get_contents($video->file);
+                    $fileName_watermark = basename($video->file);
+                }
+
+                //anaylsis bit
+
+                $disk = Storage::disk('s3_sourcebucket');
+                if($disk->has($fileName)==1){
+                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
+                }
+
+                //youtube bit
+
+                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
+
+                $file_watermark = new UploadedFile (
+                    '/tmp/'.$fileName_watermark,
+                    $fileName_watermark,
                     $video->mime,
-                    filesize('/tmp/'.$fileName),
+                    filesize('/tmp/'.$fileName_watermark),
                     null,
                     false
                 );
 
                 // Upload it to youtube
-                $response = MyYoutube::upload($file, ['title' => $video->title], 'unlisted');
+                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
                 $youtubeId  = $response->getVideoId();
 
                 $video->youtube_id = $youtubeId;
@@ -477,9 +494,9 @@ class AdminVideosController extends Controller {
                 }else{
                     $campaigns[$campaign]['state'] = 'new';
                 }
-            }   
+            }
         }
-        
+
         $video->campaigns()->sync($campaigns);
 
         if(empty($data['active'])){

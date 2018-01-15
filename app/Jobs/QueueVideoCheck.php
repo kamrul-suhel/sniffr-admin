@@ -81,11 +81,9 @@ class QueueVideoCheck implements ShouldQueue
             } else {
 
                 // run this job/queue again if the video is still processing (as per above)
-                //QueueVideoCheck::dispatch($job['Id'], $video->id)
-                //    ->delay(now()->addSeconds(30));
-
+                // QueueVideoCheck::dispatch($job['Id'], $video->id)
+                //     ->delay(now()->addSeconds(30));
                 //need to add a tries field in db so this doesn't loop forever? (maybe pass count through job function)
-
             }
 
         }

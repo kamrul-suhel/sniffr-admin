@@ -91,7 +91,7 @@ class QueueVideo implements ShouldQueue
 
                 if($job['Id']) {
                     QueueVideoCheck::dispatch($job['Id'], $video->id)
-                        ->delay(now()->addSeconds(45));
+                        ->delay(now()->addSeconds(30));
                 }
 
             } else {
@@ -121,6 +121,8 @@ class QueueVideo implements ShouldQueue
 
             if(Storage::disk('s3')->exists($watermark_file)) {
                 Storage::disk('s3')->setVisibility($watermark_file, 'public');
+                $ext = pathinfo($video->file, PATHINFO_EXTENSION);
+                $watermark_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark.'.$ext;
                 $video->file_watermark = $watermark_file;
                 $video->save();
             }
