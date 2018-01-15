@@ -86,7 +86,7 @@ class QueueVideo implements ShouldQueue
                        ]],
                    ];
 
-                $elastcoder = new ElastcoderAWS();
+                $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
                 $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
 
                 if($job['Id']) {
