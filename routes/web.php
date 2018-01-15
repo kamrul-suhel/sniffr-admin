@@ -244,6 +244,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('campaigns/edit/{id}', 'Admin\AdminCampaignController@edit');
     Route::post('campaigns/update', array('uses' => 'Admin\AdminCampaignController@update'));
     Route::get('campaigns/delete/{id}', array('uses' => 'Admin\AdminCampaignController@destroy'));
+    Route::get('campaigns/{id}', array('uses' => 'Admin\AdminCampaignController@show'));
 
     Route::get('users', 'Admin\AdminUsersController@index');
     Route::get('user/create', 'Admin\AdminUsersController@create');
@@ -295,6 +296,7 @@ Route::group(array('prefix' => 'client'), function(){
     Route::get('videos', 'Client\ClientVideosController@index');
     Route::get('videos/{id}', array('uses' => 'Client\ClientVideosController@index'));
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
+    Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
 });
 
 /*

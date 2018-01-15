@@ -2,13 +2,10 @@
 
 @section('content')
 
-	<div class="admin-section-title">
+	<div class="admin-section-title bottom-padding">
 		<div class="row">
-			<div class="col-md-8">
-				<h3><i class="fa fa-area-chart"></i> Campaigns</h3><a href="{{ url('admin/campaigns/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
-			</div>
-			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
+			<div class="col-xs-12">
+				<h3><i class="fa fa-area-chart"></i> Campaigns <a href="{{ url('admin/campaigns/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
 		</div>
 	</div>
@@ -17,12 +14,14 @@
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
+			<th>Client</th>
 			<th>Name</th>
 			<th>Slug</th>
 			<th>Actions</th>
 			@foreach($campaigns as $campaign)
 			<tr>
-				<td>{{ TextHelper::shorten($campaign->name, 250) }}</td>
+				<td>{{ $campaign->client->name }}</td>
+				<td><a href="{{ url('admin/campaigns/'.$campaign->id ) }}">{{ TextHelper::shorten($campaign->name, 250) }}</a></td>
 				<td valign="bottom"><p>{{ $campaign->slug }}</p></td>
 				<td>
 					<p>

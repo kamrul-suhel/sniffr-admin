@@ -61,7 +61,7 @@ class Video extends Model {
 
     public function campaigns()
     {
-        return $this->belongsToMany(Campaign::class)->withTimestamps();
+        return $this->belongsToMany(Campaign::class)->withTimestamps()->withPivot('state', 'created_at');
     }
 
     public function routeNotificationForSlack()

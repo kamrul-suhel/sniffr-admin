@@ -20,7 +20,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url('client/videos/chosen') }}">
+                <a href="{{ url('client/videos/yes') }}">
                     <span class="title">Chosen Videos</span>
                 </a>
             </li>
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url('client/videos/rejected') }}">
+                <a href="{{ url('client/videos/no') }}">
                     <span class="title">Rejected Videos</span>
                 </a>
             </li>

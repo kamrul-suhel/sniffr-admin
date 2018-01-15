@@ -465,8 +465,22 @@ class AdminVideosController extends Controller {
             $data['image'] = Storage::disk('s3')->url($fileName);
         }
 
-        // Many to many cmapaigns
-        $video->campaigns()->sync(Input::get('campaigns'));
+
+        $selected_campaigns = $video->campaigns->pluck('id')->all();
+        $campaigns = array();
+
+        if(Input::get('campaigns')){
+            // IAN:  Hmm, tough one, only want to set their state to new if their new.
+            foreach(Input::get('campaigns') as $key => $campaign){
+                if(in_array($campaign, $selected_campaigns)){
+                    $campaigns[$campaign] = $campaign;
+                }else{
+                    $campaigns[$campaign]['state'] = 'new';
+                }
+            }   
+        }
+        
+        $video->campaigns()->sync($campaigns);
 
         if(empty($data['active'])){
             $data['active'] = 0;

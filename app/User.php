@@ -42,7 +42,7 @@ class User extends Authenticatable
     }
 
     public function canAccessClient() {
-        if($this->role=='admin' || $this->role=='client'){
+        if($this->role=='client'){
             return true;
         }
 
