@@ -165,8 +165,8 @@ class ThemeUploadController extends Controller {
 
         if($request->hasFile('file')){
             // Send video to queue for watermarking
-            QueueVideo::dispatch($video->id);
-                //->delay(now()->addMinutes(2));
+            QueueVideo::dispatch($video->id)
+                ->delay(now()->addSeconds(5));
         }
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
