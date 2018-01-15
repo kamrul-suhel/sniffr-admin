@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Video;
 
 use FFMpeg;
-use Dumpk\Elastcoder\ElastcoderAWS;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -29,6 +28,7 @@ use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
 
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 class QueueVideoCheck implements ShouldQueue
 {
@@ -67,7 +67,7 @@ class QueueVideoCheck implements ShouldQueue
         if($video->file){
 
             // initialize Elastic Transcoder and get the job status
-            $elastcoder = new ElastcoderAWS();
+            $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
             $job = $elastcoder->getJob($this->job_id);
 
             if(strtolower($job['Status']) == 'complete') { //if job is complete then check for file and add to db
@@ -81,8 +81,8 @@ class QueueVideoCheck implements ShouldQueue
             } else {
 
                 // run this job/queue again if the video is still processing (as per above)
-                QueueVideoCheck::dispatch($job['Id'], $video->id)
-                    ->delay(now()->addSeconds(30));
+                //QueueVideoCheck::dispatch($job['Id'], $video->id)
+                //    ->delay(now()->addSeconds(30));
 
                 //need to add a tries field in db so this doesn't loop forever? (maybe pass count through job function)
 

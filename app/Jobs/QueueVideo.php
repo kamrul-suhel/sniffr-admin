@@ -6,7 +6,6 @@ use App\Video;
 use App\Jobs\QueueVideoCheck;
 
 use FFMpeg;
-use Dumpk\Elastcoder\ElastcoderAWS;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -30,6 +29,7 @@ use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
 
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 class QueueVideo implements ShouldQueue
 {
@@ -91,7 +91,7 @@ class QueueVideo implements ShouldQueue
 
                 if($job['Id']) {
                     QueueVideoCheck::dispatch($job['Id'], $video->id)
-                        ->delay(now()->addSeconds(15));
+                        ->delay(now()->addSeconds(45));
                 }
 
             } else {

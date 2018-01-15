@@ -47,13 +47,12 @@ class ThemeDownloadController extends Controller {
 
             header("Cache-Control: public");
             header("Content-Description: File Transfer");
-            header("Content-Disposition: attachment; filename=" . basename($filee));
+            header("Content-Disposition: attachment; filename=" . basename($file));
             header("Content-Type: " . $video->mime);
 
             return readfile($file);
         } else {
             return Redirect::to('/videos');
         }
-
     }
 }

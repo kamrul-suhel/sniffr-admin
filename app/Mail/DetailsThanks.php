@@ -21,10 +21,9 @@ class DetailsThanks extends Mailable
      *
      * @return void
      */
-
     public function __construct(Video $video)
     {
-      $this->video = $video;
+        $this->video = $video;
     }
 
     /**
@@ -34,6 +33,6 @@ class DetailsThanks extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.details.thanks')->text('emails.details.thanks_plain');
+        return $this->view('emails.details.thanks')->text('emails.details.thanks_plain')->subject('UNILAD - Thanks for sending more details : '.$this->video->alpha_id);
     }
 }

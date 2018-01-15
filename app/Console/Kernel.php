@@ -26,9 +26,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // checks for shell access to run artisan queue and if not run command to run queue
-        if (stripos((string) shell_exec('grep \'[q]ueue:work\''), 'artisan queue:work') === false) {
-            $schedule->command('queue:work --queue=default --sleep=2 --tries=3 --timeout=5')->everyMinute()->appendOutputTo(storage_path() . '/logs/scheduler.log');
-        }
+        // if (stripos((string) shell_exec('grep \'[q]ueue:work\''), 'artisan queue:work') === false) {
+        //     $schedule->command('queue:work --queue=default --sleep=2 --tries=3 --timeout=5')->everyMinute()->appendOutputTo(storage_path() . '/logs/scheduler.log');
+        // }
 
         // this is a test for running commands in scheduler
         // $schedule->command('DeleteInActiveUsers:deleteusers')
