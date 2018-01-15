@@ -7,6 +7,7 @@ use Auth;
 use MyYoutube;
 use Redirect;
 use Validator;
+use Carbon\Carbon;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
 
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueVideo;
 
 use App\Notifications\SubmissionNewNonEx;
 
