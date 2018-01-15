@@ -7,6 +7,7 @@ use Auth;
 use Validator;
 use Redirect;
 
+use App\Video;
 use App\Client;
 use App\Campaign;
 
@@ -37,35 +38,36 @@ class AdminCampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function index()
-     {
-          $campaigns = Campaign::orderBy('created_at', 'DESC')->paginate(10);
-          $user = Auth::user();
+    public function index()
+    {
+        $campaigns = Campaign::orderBy('created_at', 'DESC')->paginate(10);
+        $user = Auth::user();
 
-          $data = array(
-              'campaigns' => $campaigns,
-              'user' => $user,
-              'admin_user' => Auth::user()
-              );
+        $data = array(
+            'campaigns' => $campaigns,
+            'user' => $user,
+            'admin_user' => Auth::user()
+        );
 
-          return view('admin.campaigns.index', $data);
-     }
+        return view('admin.campaigns.index', $data);
+    }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-     public function create()
-     {
-         $data = array(
-             'post_route' => url('admin/campaigns/store'),
-             'button_text' => 'Add New Campaign',
-             'admin_user' => Auth::user(),
-             'clients' => Client::get()
-             );
-         return view('admin.campaigns.create_edit', $data);
-     }
+    public function create()
+    {
+        $data = array(
+            'post_route' => url('admin/campaigns/store'),
+            'button_text' => 'Add New Campaign',
+            'admin_user' => Auth::user(),
+            'clients' => Client::get()
+        );
+
+        return view('admin.campaigns.create_edit', $data);
+    }
 
      public function store()
      {
@@ -87,9 +89,21 @@ class AdminCampaignController extends Controller
       * @param  \App\Campaign  $campaign
       * @return \Illuminate\Http\Response
       */
-     public function show(Campaign $campaign)
+     public function show($id)
      {
-         //
+        $campaign = Campaign::find($id);
+
+        // Need to get downloaded videos where user_id = campaign client id?
+
+        $videos = Video::whereHas('campaigns', function($q) use ($id){
+            $q->where('id', $id);
+        })->get();
+
+
+        $data['campaign'] = $campaign;
+        $data['videos'] = $videos;
+
+        return view('admin.campaigns.show', $data);
      }
 
      /**
@@ -110,7 +124,7 @@ class AdminCampaignController extends Controller
              'button_text' => 'Update Campaign',
              'admin_user' => Auth::user(),
              'clients' => Client::get()
-             );
+        );
 
          return view('admin.campaigns.create_edit', $data);
      }

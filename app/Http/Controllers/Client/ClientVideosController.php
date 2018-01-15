@@ -56,31 +56,27 @@ class ClientVideosController extends Controller {
      */
     public function index(Request $request, $state = 'all')
     {
+        $request->session()->put('current_state', $state);
         $search_value = Input::get('s');
+        $campaign_id = Input::get('campaign_id') ? Input::get('campaign_id') : session('campaign_id');
         $user = Auth::user();
 
-        $campaigns = new Campaign();
-        // Set campaign id
-        if($client_id = Auth::user()->client_id){
-            $campaigns = Campaign::where('client_id', $client_id);
-        }
-        $campaigns = $campaigns->get();
-
-        // set campaign id if just 1
-        if(count($campaigns) == 1){
-            $request->session()->put('campaign', $campaigns[0]->id);
-        }
-
-        if($campaign = Input::get('campaign')){
-            $request->session()->put('campaign', $campaign);
-        }
+        $campaigns = Campaign::where('client_id', $user->client_id)->get();
+        $campaign = Campaign::find($campaign_id);
 
         // Video list
         $videos = new Video;
 
-        $videos = $videos->whereHas('campaigns', function ($q){
-            $q->where('id', session('campaign'));
-        });
+        if($campaign_id){
+            $request->session()->put('campaign_id', $campaign_id);
+            $videos = $videos->whereHas('campaigns', function ($q) use($campaign_id) {
+                $q->where('id', $campaign_id);
+            });
+        }else{
+            $videos = $videos->whereHas('campaigns', function ($q) use($campaigns) {
+                $q->whereIn('id', $campaigns->pluck('id'));
+            });
+        }
 
         if(!empty($search_value)){
             $videos = Video::where(function($query) use($search_value){
@@ -90,12 +86,19 @@ class ClientVideosController extends Controller {
             });
         }
 
+        if($state != 'all'){
+            $videos = $videos->whereHas('campaigns', function ($q) use($state) {
+                $q->where('state', $state);
+            });
+        }
+
         $videos = $videos->orderBy('licensed_at', 'desc')->paginate(9);
 
         $data = array(
             'state' => $state,
             'videos' => $videos,
             'user' => $user,
+            'campaign' => $campaign,
             'campaigns' => $campaigns,
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
@@ -117,66 +120,21 @@ class ClientVideosController extends Controller {
         $isJson = $request->ajax();
 
         $video = Video::where('alpha_id', $id)->first();
-        $video->state = $state;
+        
+        $campaigns[session('campaign_id')]['state'] = $state;
+        $video->campaigns()->sync($campaigns);
 
         // Send email
-        if($video->state == 'accepted'){
-            $video->more_details_code = str_random(30);
-            $video->more_details_sent = now();
-
-            // Move video to Youtube and move video file to folder for analysis
-            if($video->file){
-                $file = file_get_contents($video->file);
-                $fileName = basename($video->file);
-
-                //anaylsis bit
-
-                $disk = Storage::disk('s3_sourcebucket');
-                if($disk->has($fileName)==1){
-                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
-                }
-
-                //youtube bit
-
-                file_put_contents('/tmp/'.$fileName, $file);
-
-                $file = new UploadedFile (
-                    '/tmp/'.$fileName,
-                    $fileName,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $response = MyYoutube::upload($file, ['title' => $video->title], 'unlisted');
-                $youtubeId  = $response->getVideoId();
-
-                $video->youtube_id = $youtubeId;
-            }
-
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_accepted');
-        }else if($video->state == 'rejected'){
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_rejected');
-        }else if($video->state == 'licensed'){
-            $video->licensed_at = now();
-
-            // Make youtube video public
-            if($video->youtube_id){
-                MyYoutube::setStatus($video->youtube_id, 'public');
-            }
-
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_licensed');
+        if($state == 'yes'){
+            $message = 'Thanks for choosing this video';
+        }else if($state == 'maybe'){
+            $message = 'You might use this video';
+        }else if($state == 'no'){
+            $message = 'We\'ll continue searching for suitable videos';
         }
 
-        $video->save();
-
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'current_state' => session('current_state'), 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }

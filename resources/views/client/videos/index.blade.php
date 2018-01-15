@@ -4,7 +4,7 @@
     <div class="admin-section-title bottom-padding">
         <div class="row">
             <div class="col-md-4">
-                <h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3>
+                <h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} {{ $campaign ? $campaign->name : '' }} Videos</h3>
             </div>
 
             <form id="search-form" method="get" role="form" class="search-form-full">
@@ -21,6 +21,8 @@
 
     @if(!count($videos))
         <p>Sorry, there are no videos to show.</p>
+    @elseif(!session('campaign_id'))
+        <p>Please select a campaign.</p>
     @else
 
     <div class="gallery-env">
@@ -47,20 +49,25 @@
                         <div class="album-images-count">
                             <?php
                                 $date1 = now();
-                                $date2 = new DateTime($video->updated_at);
+                                $date2 = new DateTime($video->campaigns[0]->pivot->created_at);
 
                                 $diff = $date2->diff($date1);
 
                                 $exclusivity = 48 - ($diff->h + ($diff->days*24));
                             ?>
-                            @if(!empty($video->file))
-                            <a href="{{ url('/download/'.$video->alpha_id ) }}" class="text-success state" title="Will Use"><i class="fa fa-check"></i></a>
-                            @else
-                            <a href="{{ url('/download/'.$video->alpha_id ) }}" class="text-success state" title="Will Use"><i class="fa fa-check"></i></a>
+                            @if($video->campaigns[0]->pivot->state != 'yes')
+                                @if(!empty($video->file))
+                                <a href="{{ url('client/videos/status/yes/'.$video->alpha_id ) }}" class="text-success state" title="Will Use"><i class="fa fa-check"></i></a>
+                                @else
+                                <a href="{{ url('client/videos/status/yes/'.$video->alpha_id ) }}" class="text-success state" title="Will Use"><i class="fa fa-check"></i></a>
+                                @endif
                             @endif
-                            <a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning state" title="Might Use"><i class="fa fa-question-circle"></i></a>
-                            <a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger state" title="Won't Use"><i class="fa fa-times"></i></a>
-                             
+                            @if($video->campaigns[0]->pivot->state != 'maybe')
+                            <a href="{{ url('client/videos/status/maybe/'.$video->alpha_id ) }}" class="text-warning state" title="Might Use"><i class="fa fa-question-circle"></i></a>
+                            @endif
+                            @if($video->campaigns[0]->pivot->state != 'no')
+                            <a href="{{ url('client/videos/status/no/'.$video->alpha_id ) }}" class="text-danger state" title="Won't Use"><i class="fa fa-times"></i></a>
+                            @endif
                         </div>
 
                         <div class="album-options">
@@ -69,7 +76,7 @@
 
                         <div class="album-options">
                             @if(!empty($video->file))
-                            <a href="{{ url('/download/'.$video->alpha_id) }}" title="Download" class="text-success download">
+                            <a href="{{ url('/download/'.$video->alpha_id) }}" title="Download" class="download">
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             @else
@@ -143,22 +150,19 @@
                         success: function (data) {
                             console.log(data);
                             if(data.status=='success') {
-                                $('#video-'+videoId).fadeOut();
+                                if(data.current_state!='all'){
+                                    $('#video-'+videoId).fadeOut();
+                                }
+                                
                                 switch(state) {
-                                    case 'accepted':
+                                    case 'yes':
                                         alertType = 'success';
                                         break;
-                                    case 'rejected':
+                                    case 'no':
                                         alertType = 'error';
                                         break;
-                                    case 'licensed':
-                                        alertType = 'success';
-                                        break;
-                                    case 'restricted':
+                                    case 'maybe':
                                         alertType = 'warning';
-                                        break;
-                                    case 'problem':
-                                        alertType = 'error';
                                         break;
                                     default:
                                         alertType = 'success';

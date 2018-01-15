@@ -65,24 +65,24 @@
 
             <!-- Raw Links -->
             <div class="col-sm-6 clearfix hidden-xs">
-                <ul class="list-inline links-list pull-right">
-                    @if(isset($campaigns) && count($campaigns) > 1)
-                    <li>
-                        <form id="campaigns-form" method="get" role="form">
+                <form id="campaigns-form" method="get" role="form">
+                    <ul class="list-inline links-list pull-right">
+                        @if(isset($campaigns))
+                        <li>
                             <div class="form-group">
-                                <select id="campaign" name="campaign" class="selectpicker form-control">
+                                <select id="campaign" name="campaign_id" class="selectpicker form-control">
                                     <option value="">Select Campaign</option>
                                     @foreach($campaigns as $campaign)
-                                        <option value="{{ $campaign->id }}"{{ session('campaign') == $campaign->id ? ' selected="selected"' : '' }}>{{ $campaign->name }}</option>
+                                        <option value="{{ $campaign->id }}"{{ session('campaign_id') == $campaign->id ? ' selected="selected"' : '' }}>{{ $campaign->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                        </form>
-                    </li>
-                    @endif
-                    <li class="sep"></li>
-                    <li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
-                </ul>
+                        </li>
+                        @endif
+                        <li class="sep"></li>
+                        <li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
+                    </ul>
+                </form>
             </div>
         </div>
 

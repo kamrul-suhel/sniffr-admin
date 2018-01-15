@@ -40,6 +40,7 @@ class ThemeDownloadController extends Controller {
         if($video) {
         	$download = new Download;
         	$download->user_id = Auth::user()->id;
+            $download->client_id = Auth::user()->client_id;
         	$download->video_id = $video->id;
         	$download->save();
 
