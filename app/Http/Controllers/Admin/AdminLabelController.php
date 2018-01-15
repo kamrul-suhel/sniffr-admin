@@ -90,7 +90,7 @@ class AdminLabelController extends Controller {
              $temps = $file->labels;
              foreach ($temps as $temp){
                  if (!in_array($temp['Name'], $blacklist)) {
-                     if($temp['Confidence']>92) {
+                     if($temp['Confidence']>75) {
                          $labels[$count]['Name'] = $temp['Name'];
                          $labels[$count]['Confidence'] = $temp['Confidence'];
                          $count++;
@@ -101,6 +101,8 @@ class AdminLabelController extends Controller {
 
          // remove duplicates and order labels array by confidence
          $labels = super_unique($labels,'Name');
+
+         //dd($labels);
 
          // if array exists then display labels
          if (!empty($labels)) {
