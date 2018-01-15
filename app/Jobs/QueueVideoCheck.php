@@ -60,28 +60,31 @@ class QueueVideoCheck implements ShouldQueue
     public function handle()
     {
         $video = Video::find($this->video_id);
-        $fileName = basename($video->file);
-        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-        $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
+        // resolve original file, extension and watermark file
+        $ext = pathinfo($video->file, PATHINFO_EXTENSION);
+        $watermark_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark.'.$ext;
 
-        if($fileName){
+        if($video->file){
 
+            // initialize Elastic Transcoder and get the job status
             $elastcoder = new ElastcoderAWS();
             $job = $elastcoder->getJob($this->job_id);
 
-            if(strtolower($job['Status']) == 'complete') {
+            if(strtolower($job['Status']) == 'complete') { //if job is complete then check for file and add to db
 
-                if(Storage::disk('s3')->exists($watermark_file)) {
-                    Storage::disk('s3')->setVisibility($watermark_file, 'public');
-                    $video->file_watermark = 'https://vlp-storage.s3.eu-west-1.amazonaws.com/'.$watermark_file;
+                if(Storage::disk('s3')->exists(basename($watermark_file))) {
+                    Storage::disk('s3')->setVisibility(basename($watermark_file), 'public');
+                    $video->file_watermark = $watermark_file;
                     $video->save();
                 }
 
             } else {
 
-                // maybe we can run queuse again if the video processing is still not completed (as per above)
-                // QueueVideoCheck::dispatch($job['Id'], $video->id)
-                //     ->delay(now()->addMinutes(1));
+                // run this job/queue again if the video is still processing (as per above)
+                QueueVideoCheck::dispatch($job['Id'], $video->id)
+                    ->delay(now()->addSeconds(30));
+
+                //need to add a tries field in db so this doesn't loop forever? (maybe pass count through job function)
 
             }
 

@@ -71,7 +71,7 @@ class QueueVideo implements ShouldQueue
             if($route=='aws') {
                 // AWS Elastic Transcoder (new cloud route)
 
-                //still need to work out the width/height of the video to use correct size watermark (via preset)
+                //still need to work out the width/height of the video to use correct size watermark (via preset) > maybe using getID3
 
                 $config = [
                        'PresetId' => '1515758587625-jyon3x',
@@ -91,7 +91,7 @@ class QueueVideo implements ShouldQueue
 
                 if($job['Id']) {
                     QueueVideoCheck::dispatch($job['Id'], $video->id)
-                        ->delay(now()->addMinutes(1));
+                        ->delay(now()->addSeconds(15));
                 }
 
             } else {

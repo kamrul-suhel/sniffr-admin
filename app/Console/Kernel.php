@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //This is the line of code added, at the end, we the have class name of DeleteInActiveUsers.php inside app\console\commands
-        '\App\Console\Commands\DeleteInActiveUsers',
+        //'\App\Console\Commands\DeleteInActiveUsers',
     ];
 
     /**
@@ -25,8 +25,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('DeleteInActiveUsers:deleteusers')
-                 ->everyMinute();
+        // checks for shell access to run artisan queue and if not run command to run queue
+        if (stripos((string) shell_exec('grep \'[q]ueue:work\''), 'artisan queue:work') === false) {
+            $schedule->command('queue:work --queue=default --sleep=2 --tries=3 --timeout=5')->everyMinute()->appendOutputTo(storage_path() . '/logs/scheduler.log');
+        }
+
+        // this is a test for running commands in scheduler
+        // $schedule->command('DeleteInActiveUsers:deleteusers')
+        //         ->everyMinute();
     }
 
     /**
