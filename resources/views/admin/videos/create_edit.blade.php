@@ -49,11 +49,14 @@
 				</div>
 
 				<div class="panel-footer">
-					@if($video->state == 'pending'||$video->state == 'problem')
+					@if($video->state == 'pending'||$video->state == 'problem'||$video->state == 'licensed'||$video->state=='restricted')
 					<div class="text-right">
 						<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
 			        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>
 			        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
+						@if($video->state == 'licensed'&&$video->file)
+						&nbsp;&nbsp; <a href="{{ $video->file }}" download><i class="fa fa-download"></i> Download Video</a>
+						@endif
 					</div>
 					@elseif($video->state == 'new')
 					<div class="text-right">
@@ -63,10 +66,6 @@
 					@elseif($video->state == 'accepted')
 					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					<div class="clearfix"></div>
-					@elseif($video->state == 'licensed'&&$video->file)
-					<div class="text-right">
-						<a href="{{ $video->file }}" download><i class="fa fa-download"></i> Download Video</a>
-					</div>
 					@endif
 				</div>
 			</div>
@@ -290,19 +289,44 @@
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0">
-			<div class="panel-heading">
-				<div class="panel-title">Short Description</div>
+		<div class="row">
 
-				<div class="panel-options">
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+			<div class="col-sm-8">
+
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Short Description</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Add a short description of the video below:</p>
+						<textarea class="form-control" name="description" id="description">@if(!empty($video->description)){{ htmlspecialchars($video->description) }}@endif</textarea>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Location</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Where was the video filmed?</p>
+						<input type="text" class="form-control" name="location" id="location" placeholder="" value="@if(!empty($video->location)){{ $video->location }}@endif" />
+					</div>
 				</div>
 			</div>
 
-			<div class="panel-body" style="display: block;">
-				<p>Add a short description of the video below:</p>
-				<textarea class="form-control" name="description" id="description">@if(!empty($video->description)){{ htmlspecialchars($video->description) }}@endif</textarea>
-			</div>
 		</div>
 
 		<div class="panel panel-primary" data-collapsed="0">
@@ -482,6 +506,22 @@
 					</div>
 				</div>
 			</div>
+
+			@if($video->state=='licensed'||$video->state=='restricted')
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading"> <div class="panel-title"> Change State</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+					<div class="panel-body">
+						<p class="danger">If the state of a video changes then select here</p>
+						<select id="state" name="state">
+							<option value="licensed" @if($video->state == 'licensed') selected @endif>Licensed</option>
+							<option value="restricted" @if($video->state == 'restricted') selected @endif>Restricted</option>
+							<option value="problem" @if($video->state == 'problem') selected @endif>Problem</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			@endif
 
 			<!-- <div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
