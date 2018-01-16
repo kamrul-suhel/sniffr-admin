@@ -1,9 +1,17 @@
 
+## MySQL too many connections issue
+
+- Kill mysql processes with Activity Monitor (maybe restart computer too, or at least local MAMP server)
+- Console into: mysql -u root
+- > show variables like "max_connections";
+- > set global max_connections = 500;
+- Good articles > https://stackoverflow.com/questions/14331032/mysql-error-1040-too-many-connection and https://stackoverflow.com/questions/44248036/too-many-connections-error-with-laravel-5-4-and-mariadb
+
 ## Notes for FFMpeg install and video watermarking
 
 - Install package using instructions (https://packagist.org/packages/pbmedia/laravel-ffmpeg)
 - Edit /config/laravel-ffmpeg.php (if needed)
-- 
+-
 
 ## Notes for Laravel Scheduler + AWS SQS (WIP)
 
