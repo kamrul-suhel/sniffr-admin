@@ -389,6 +389,7 @@
 			</div>
 		</div>
 
+		@if(isset($video) && $video->is_exclusive && $video->state == 'licensed')
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="panel panel-primary" data-collapsed="0">
@@ -440,6 +441,7 @@
 				</div>
 			</div>
 		</div>
+		@endif
 
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">

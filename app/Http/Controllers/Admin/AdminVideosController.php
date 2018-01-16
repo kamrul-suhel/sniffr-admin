@@ -68,19 +68,19 @@ class AdminVideosController extends Controller {
                 $query->where('title', 'LIKE', '%'.$search_value.'%');
             })->orWhereHas('tags', function ($q) use($search_value){
                 $q->where('name', 'LIKE', '%'.$search_value.'%');
-            });
+            })->orWhere('alpha_id', $search_value);
         }
 
         if(!empty($category_value)){
-            $videos = Video::where('video_category_id', $category_value);
+            $videos = $videos->where('video_category_id', $category_value);
         }
 
         if(!empty($collection_value)){
-            $videos = Video::where('video_collection_id', $collection_value);
+            $videos = $videos->where('video_collection_id', $collection_value);
         }
 
         if(!empty($shot_value)){
-            $videos = Video::where('video_shottype_id', $shot_value);
+            $videos = $videos->where('video_shottype_id', $shot_value);
         }
 
         if($state != 'all'){
@@ -562,7 +562,7 @@ class AdminVideosController extends Controller {
         $video->save();
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'video_id' => $video->alpha_id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
         }

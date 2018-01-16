@@ -107,29 +107,6 @@
                 $(this).submit();
             });
 
-            $('.delete').click(function(e){
-                e.preventDefault();
-                var delete_link = $(this).attr('href');
-                swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false });
-
-                if(delete_link) {
-                    $.ajax({
-                        type: 'GET',
-                        url: delete_link,
-                        dataType: 'json',
-                        success: function (data) {
-                            if(data.status=='success') {
-                                $('#video-'+data.video_id).fadeOut();
-                                swal({  title: data.message, icon: 'success', buttons: true, closeModal: true });
-                                $('.swal-button-container').css('display','inline-block');
-                            } else {
-                                $('.swal-button-container').css('display','inline-block');
-                            }
-                        }
-                    });
-                }
-            });
-
             $('.state').click(function(e){
                 e.preventDefault();
                 var dataUrl = $(this).attr('href');
