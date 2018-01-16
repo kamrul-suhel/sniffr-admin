@@ -174,12 +174,16 @@ class AdminVideosController extends Controller {
                 $video->youtube_id = $youtubeId;
             }
 
-            // Send thanks notification email (via queue after 2mins)
+            // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
         }else if($video->state == 'rejected'){
-            // Send thanks notification email (via queue after 2mins)
+            // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_rejected');
         }else if($video->state == 'licensed'){
+
+            // Need to check if licensed_at has already been set so we don't send contact/user another email
+            // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
+
             $video->licensed_at = now();
 
             // Make youtube video public

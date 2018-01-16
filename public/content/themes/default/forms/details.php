@@ -1,7 +1,7 @@
 <form method="POST" action="/details/<?php echo Request::segment(2); ?>" name="details-form" id="details-form" accept-charset="UTF-8" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
 
-    <?php if(!$video->more_details): ?>
+    <?php if(empty($video->more_details)): ?>
 
     <div class="container">
         <?php if (count($errors)): ?>
