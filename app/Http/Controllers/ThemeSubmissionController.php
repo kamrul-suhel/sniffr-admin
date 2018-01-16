@@ -127,7 +127,7 @@ class ThemeSubmissionController extends Controller {
         //handle file upload to S3 and Youtube ingestion
         $filePath = $fileSize = $fileMimeType = $youtubeId = '';
         if($request->hasFile('file')){
-            $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
             $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
 
@@ -155,6 +155,8 @@ class ThemeSubmissionController extends Controller {
         $video->notes = Input::get('notes');
         $video->credit = Input::get('credit');
         $video->save();
+
+        // May also need to action Youtube upload (or at least action anaylsis bit from AdminVideoController) as we skip "accepted" state
 
         // Notification of new video
         $video->notify(new SubmissionNewNonEx($video));

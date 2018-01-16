@@ -138,7 +138,6 @@ class AdminVideosController extends Controller {
 
                 // set watermark and non-watermark video files for processing
 
-                $file = file_get_contents($video->file);
                 $fileName = basename($video->file);
                 if($video->file_watermark){
                     $file_watermark = file_get_contents($video->file_watermark);
@@ -331,7 +330,7 @@ class AdminVideosController extends Controller {
         //handle file upload to S3 and Youtube ingestion
         $filePath = $fileSize = $fileMimeType = $youtubeId = '';
         if($request->hasFile('file')){
-            $fileOriginalName = pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
             $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
 
