@@ -156,6 +156,8 @@ class ThemeSubmissionController extends Controller {
         $video->credit = Input::get('credit');
         $video->save();
 
+        // May also need to action Youtube upload (or at least action anaylsis bit from AdminVideoController) as we skip "accepted" state
+
         // Notification of new video
         $video->notify(new SubmissionNewNonEx($video));
 
