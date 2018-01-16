@@ -13941,10 +13941,6 @@ label {
   margin-bottom: 15px;
 }
 
-.swal-title:not(:first-child) {
-  padding: 13px 16px 30px 16px;
-}
-
 .ps-container.ps-active-x > .ps-scrollbar-x-rail,
 .ps-container.ps-active-y > .ps-scrollbar-y-rail {
   display: block;

@@ -10,7 +10,7 @@
 
 		<div class="row">
 			<form id="search-form" method="get" role="form" class="search-form-full">
-				<div class="col-md-3">
+				<div class="col-md-2">
 					<div class="form-group">
 						<select id="category" name="category" class="selectpicker form-control">
 							<option value="">Category</option>
@@ -21,7 +21,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3">
+				<div class="col-md-2">
 					<div class="form-group">
 						<select id="collection" name="collection" class="selectpicker form-control">
 							<option value="">Collection</option>
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3">
+				<div class="col-md-2">
 					<div class="form-group">
 						<select id="shot_type" name="shot_type" class="selectpicker form-control">
 							<option value="">Shot Type</option>
@@ -43,7 +43,17 @@
 					</div>
 				</div>
 
-				<div class="col-md-3">
+				<div class="col-md-2">
+					<div class="form-group">
+						<select id="rights" name="rights" class="selectpicker form-control">
+							<option value="">Rights</option>
+							<option value="ex"{{ isset($_GET['rights']) && ($_GET['rights'] == 'ex') ? ' selected="selected"' : '' }}>Exclusive</option>
+							<option value="nonex"{{ isset($_GET['rights']) && ($_GET['rights'] == 'nonex') ? ' selected="selected"' : '' }}>Non Exclusive</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-4">
 					<div class="form-group">
 						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
 					</div>
@@ -188,7 +198,9 @@
 							    dataType: 'json',
 							    success: function (data) {
 									if(data.status=='success') {
-										$('#video-'+data.video_id).fadeOut();
+										if(data.remove=='yes'){
+		                                    $('#video-'+data.video_id).fadeOut();
+		                                }
 										swal({ title: data.message, icon: 'success', closeModal: true, buttons: { cancel: false, confirm: true } });
 										$('.swal-button-container').css('display','inline-block');
 									} else {

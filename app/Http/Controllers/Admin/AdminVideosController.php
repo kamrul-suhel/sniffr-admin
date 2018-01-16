@@ -60,6 +60,7 @@ class AdminVideosController extends Controller {
         $category_value = Input::get('category');
         $collection_value = Input::get('collection');
         $shot_value = Input::get('shot_type');
+        $rights = Input::get('rights');
 
         $videos = new Video;
 
@@ -81,6 +82,10 @@ class AdminVideosController extends Controller {
 
         if(!empty($shot_value)){
             $videos = $videos->where('video_shottype_id', $shot_value);
+        }
+
+        if(!empty($rights)){
+            $videos = $videos->where('video_category_id', $category_value);
         }
 
         if($state != 'all'){
@@ -190,7 +195,7 @@ class AdminVideosController extends Controller {
         $video->save();
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => ($state == 'all' ? 'yes' : 'no'), 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }

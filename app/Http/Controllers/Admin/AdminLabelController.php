@@ -8,7 +8,7 @@ use Validator;
 use Redirect;
 
 use FFMpeg;
-use Dumpk\Elastcoder\ElastcoderAWS;
+//
 
 use App\Page;
 use App\Menu;
@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 use App\Http\Controllers\Controller;
+use Dumpk\Elastcoder\ElastcoderAWS;
 
 class AdminLabelController extends Controller {
 
@@ -131,7 +132,10 @@ class AdminLabelController extends Controller {
 
      public function checkWatermark() {
 
-         // $elastcoder = new ElastcoderAWS();
+        
+        $elastcoder = new ElastcoderAWS();
+
+        dd('moo');
          // $job = $elastcoder->getJob('1515772266459-6vkk7l');
          //
          // if(strtolower($job['Status']) == 'complete') {

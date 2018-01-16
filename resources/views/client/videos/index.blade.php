@@ -112,7 +112,6 @@
                 var dataUrl = $(this).attr('href');
                 var parseUrl = dataUrl.split('/');
                 var state = parseUrl[6];
-                var videoId = parseUrl[7];
                 var alertType;
 
                 swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true });
@@ -127,8 +126,8 @@
                         success: function (data) {
                             console.log(data);
                             if(data.status=='success') {
-                                if(data.current_state!='all'){
-                                    $('#video-'+videoId).fadeOut();
+                                if(data.remove=='yes'){
+                                    $('#video-'+data.video_id).fadeOut();
                                 }
                                 
                                 switch(state) {

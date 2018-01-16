@@ -140,7 +140,7 @@ class ClientVideosController extends Controller {
         $video->notify(new ClientAction($video, $state, $client->name));
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'current_state' => session('current_state'), 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => ($state == 'all' ? 'yes' : 'no'), 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }
