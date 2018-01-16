@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.5-10.2.10-MariaDB)
 # Database: videoapp
-# Generation Time: 2018-01-15 09:02:50 +0000
+# Generation Time: 2018-01-16 09:42:27 +0000
 # ************************************************************
 
 
@@ -47,18 +47,6 @@ CREATE TABLE `campaign_video` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-LOCK TABLES `campaign_video` WRITE;
-/*!40000 ALTER TABLE `campaign_video` DISABLE KEYS */;
-
-INSERT INTO `campaign_video` (`video_id`, `campaign_id`, `state`, `created_at`, `updated_at`)
-VALUES
-	(3,2,'maybe','2018-01-11 12:27:18','2018-01-14 17:55:36'),
-	(1,2,'yes','2018-01-11 12:27:18','2018-01-14 17:55:33'),
-	(22,2,'maybe','2018-01-12 16:38:10','2018-01-14 17:55:25'),
-	(5,2,'new','2018-01-14 18:10:09','2018-01-14 18:10:09');
-
-/*!40000 ALTER TABLE `campaign_video` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table campaigns
@@ -134,17 +122,6 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-LOCK TABLES `comments` WRITE;
-/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-
-INSERT INTO `comments` (`id`, `video_id`, `contact_id`, `user_id`, `comment`, `moderated`, `created_at`, `updated_at`)
-VALUES
-	(1,3,NULL,1,'Need to clarify ladbible rights',0,'2018-01-03 12:58:46','2018-01-03 12:58:46'),
-	(2,3,NULL,2,'Already done ;)',0,'2018-01-05 10:59:17','2018-01-05 10:59:17'),
-	(3,5,NULL,2,'This exists elsewhere on youtube (but still owned by the user)',0,'2018-01-05 11:28:26','2018-01-05 11:28:26');
-
-/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table contacts
@@ -177,12 +154,15 @@ LOCK TABLES `contacts` WRITE;
 
 INSERT INTO `contacts` (`id`, `first_name`, `last_name`, `email`, `tel`, `language`, `location`, `paypal`, `facebook`, `youtube`, `instagram`, `twitter`, `other`, `deleted_at`, `created_at`, `updated_at`)
 VALUES
-	(1,'Ian','Lainchbury','ian@unilad.co.uk',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 10:45:19','2018-01-03 10:45:19'),
+	(1,'Ian','Lainchbury','ian@unilad.co.uk','+447895752108',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 10:45:19','2018-01-15 13:39:31'),
 	(2,'Ian','Lainchbury','text@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:12:46','2018-01-03 12:12:46'),
 	(3,'Test','Test','test@example.com','+447895752108',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:25:55','2018-01-12 12:57:41'),
 	(4,'yo','yo','yo@example.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-04 09:24:14','2018-01-04 09:24:14'),
 	(5,'Mike','Wright','mike.filmworks@gmail.com','+447782497004',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-04 17:50:21','2018-01-09 11:04:00'),
-	(6,'Moo','Moo','moo@example.com','+447885752108',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-11 14:12:51','2018-01-11 18:04:05');
+	(6,'Moo','Moo','moo@example.com','+447885752108',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-11 14:12:51','2018-01-11 18:04:05'),
+	(7,'Test','Test','test@unilad.co.uk',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-15 12:38:38','2018-01-15 12:38:38'),
+	(8,'Joe','Bloggs','joe@unillad.co.uk','+447890000000',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-15 13:36:59','2018-01-15 13:40:31'),
+	(9,'Mike','Wrifght','mike@unilad.co.uk',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-15 13:48:24','2018-01-15 13:48:24');
 
 /*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -203,20 +183,6 @@ CREATE TABLE `downloads` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-LOCK TABLES `downloads` WRITE;
-/*!40000 ALTER TABLE `downloads` DISABLE KEYS */;
-
-INSERT INTO `downloads` (`id`, `user_id`, `client_id`, `video_id`, `created_at`, `updated_at`)
-VALUES
-	(1,3,1,3,'2018-01-10 16:34:22','2018-01-10 16:34:22'),
-	(2,3,1,5,'2018-01-10 17:53:18','2018-01-10 17:53:18'),
-	(3,3,1,5,'2018-01-10 17:53:28','2018-01-10 17:53:28'),
-	(4,3,1,5,'2018-01-12 15:53:26','2018-01-12 15:53:26'),
-	(5,3,1,1,'2018-01-12 15:53:30','2018-01-12 15:53:30'),
-	(6,3,1,3,'2018-01-12 15:53:32','2018-01-12 15:53:32');
-
-/*!40000 ALTER TABLE `downloads` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table failed_jobs
@@ -608,27 +574,6 @@ CREATE TABLE `tag_video` (
   CONSTRAINT `tag_video_video_id_foreign` FOREIGN KEY (`video_id`) REFERENCES `videos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-LOCK TABLES `tag_video` WRITE;
-/*!40000 ALTER TABLE `tag_video` DISABLE KEYS */;
-
-INSERT INTO `tag_video` (`id`, `video_id`, `tag_id`)
-VALUES
-	(10,3,10),
-	(11,3,11),
-	(13,3,13),
-	(14,5,14),
-	(15,5,15),
-	(16,5,16),
-	(17,5,17),
-	(18,5,11),
-	(19,5,18),
-	(20,5,19),
-	(21,1,25),
-	(22,11,25),
-	(23,22,25);
-
-/*!40000 ALTER TABLE `tag_video` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table tags
@@ -645,28 +590,6 @@ CREATE TABLE `tags` (
   UNIQUE KEY `tags_name_unique` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-LOCK TABLES `tags` WRITE;
-/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-
-INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`)
-VALUES
-	(7,'test','2018-01-04 10:32:41','2018-01-04 10:32:41'),
-	(8,'fail','2018-01-04 10:32:41','2018-01-04 10:32:41'),
-	(9,'disaster','2018-01-04 10:32:41','2018-01-04 10:32:41'),
-	(10,'football','2018-01-04 10:33:10','2018-01-04 10:33:10'),
-	(11,'soccer','2018-01-04 10:33:10','2018-01-04 10:33:10'),
-	(13,'sport','2018-01-04 17:25:07','2018-01-04 17:25:07'),
-	(14,'cell phone','2018-01-05 11:27:33','2018-01-05 11:27:33'),
-	(15,'computer','2018-01-05 11:27:33','2018-01-05 11:27:33'),
-	(16,'electronics','2018-01-05 11:27:33','2018-01-05 11:27:33'),
-	(17,'pop','2018-01-05 11:27:33','2018-01-05 11:27:33'),
-	(18,'phone','2018-01-05 13:05:25','2018-01-05 13:05:25'),
-	(19,'top','2018-01-05 14:19:51','2018-01-05 14:19:51'),
-	(24,'mike','2018-01-08 13:56:18','2018-01-08 13:56:18'),
-	(25,'','2018-01-10 16:49:21','2018-01-10 16:49:21');
-
-/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table theme_settings
@@ -749,10 +672,10 @@ LOCK TABLES `users` WRITE;
 
 INSERT INTO `users` (`id`, `client_id`, `username`, `email`, `avatar`, `password`, `role`, `active`, `created_at`, `updated_at`, `activation_code`, `remember_token`, `stripe_active`, `stripe_id`, `stripe_subscription`, `stripe_plan`, `last_four`, `trial_ends_at`, `subscription_ends_at`)
 VALUES
-	(1,NULL,'ianlainchbury','ian@unilad.co.uk','Ian_512x512.jpg','$2y$10$hQ1gfosDlXTg/lbMG13esOLBigG1Clsp5BCq89nGdFArWkgDEt3Xa','admin',1,'2014-08-26 23:43:33','2017-12-12 10:01:46',NULL,'3f8nRufAOkfgDbscPlAPP0Dg615RUcxbgvOVB6P858d4SNmBYvXZWl4zSlre',1,NULL,NULL,NULL,NULL,NULL,NULL),
+	(1,NULL,'ianlainchbury','ian@unilad.co.uk','Ian_512x512.jpg','$2y$10$hQ1gfosDlXTg/lbMG13esOLBigG1Clsp5BCq89nGdFArWkgDEt3Xa','admin',1,'2014-08-26 23:43:33','2017-12-12 10:01:46',NULL,'ltdErx5w2KDlQIpSXHZ1BaYB4OVc1F7NL0PX1ksPKD6L53K3uW863WHfwas1',1,NULL,NULL,NULL,NULL,NULL,NULL),
 	(2,NULL,'mikewright','mike@unilad.co.uk','default.jpg','$2y$10$gDmaGO132AbobbUUrUBPIOaGpMdKeGdWYf1Wi0JoRBciKjTAM6aku','admin',1,'2014-12-21 19:26:04','2017-12-12 11:17:29',NULL,'7UxDMgjjTTA4czVgKLinnh32fn3zblSnK0TJUxN3IpUDE2eBJnnTFeXdfru3',0,NULL,NULL,NULL,NULL,NULL,NULL),
-	(3,1,'dailymail','dailymail@unilad.co.uk','5a26c55de47c1-dm_com_29.png','$2y$10$8CylmzTwomm5IXhucbwXS.MdR7rE5NjJPgxexo57HQSonAP1uHkwW','client',1,'2017-12-05 13:36:43','2017-12-12 11:18:39',NULL,'4CTIxfHVHnj1I9AwqgqPqJELXY5ixqf6soUTENUMFdQatckt023SLqPdBJ2Z',0,NULL,NULL,NULL,NULL,NULL,NULL),
-	(4,NULL,'Manager','manager@unilad.co.uk','default.jpg','$2y$10$pNLwNXNeluGz03vVjEUAvO9zn6Dz/1VJ.OZqkx49efbKJYzLpdz2m','manager',1,'2017-12-12 11:31:08','2017-12-12 11:31:08',NULL,'',0,NULL,NULL,NULL,NULL,NULL,NULL),
+	(3,1,'dailymail','dailymail@unilad.co.uk','5a26c55de47c1-dm_com_29.png','$2y$10$8CylmzTwomm5IXhucbwXS.MdR7rE5NjJPgxexo57HQSonAP1uHkwW','client',1,'2017-12-05 13:36:43','2017-12-12 11:18:39',NULL,'E0FQtfgkgq9SnGuc06FKoVqsI7rmycnQ09UJl42geLj5WwpLCb36BUp1fWAv',0,NULL,NULL,NULL,NULL,NULL,NULL),
+	(4,NULL,'Manager','manager@unilad.co.uk','default.jpg','$2y$10$WQOZKltV2TwL.4CIgMqbyeu8aUQT4c8tcNiwUvTfC6ftCtEsuu14S','manager',1,'2017-12-12 11:31:08','2018-01-15 15:54:58',NULL,'iG5o1QfjL5Ta7qGecY5z6IDf9ZNwewIIh5AH7cCB0YXgWkLHGKWAsNtgeBED',0,NULL,NULL,NULL,NULL,NULL,NULL),
 	(5,NULL,'adambourne','adam.bourne@unilad.co.uk','default.jpg','$2y$10$GuoEFJHpprFTIr3bGiA4LewB73xifcK0WN70ULJwVIYLRBhSKLnnC','admin',1,'2018-01-09 12:28:59','2018-01-09 12:28:59',NULL,'i6czf7V8ZlvMG2CTHmhPXRUpYBoxe9jKKYZc3b6rxP41744yx2BOoVYbVhqd',0,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
@@ -853,7 +776,8 @@ VALUES
 	(1,NULL,1,'Drone','drone','2018-01-04 15:08:01','2018-01-04 15:08:01'),
 	(2,NULL,2,'Go Pro','gopro','2018-01-04 15:08:19','2018-01-04 15:08:19'),
 	(3,NULL,3,'Camera','camera','2018-01-04 15:08:29','2018-01-04 15:08:29'),
-	(4,NULL,4,'Mobile','mobile','2018-01-04 15:08:41','2018-01-04 15:08:41');
+	(4,NULL,4,'Mobile','mobile','2018-01-04 15:08:41','2018-01-04 15:08:41'),
+	(5,NULL,5,'Animation','animation','2018-01-15 13:54:03','2018-01-15 13:54:03');
 
 /*!40000 ALTER TABLE `video_shot_types` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -920,30 +844,6 @@ CREATE TABLE `videos` (
   KEY `alpha_id` (`alpha_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `videos` WRITE;
-/*!40000 ALTER TABLE `videos` DISABLE KEYS */;
-
-INSERT INTO `videos` (`id`, `alpha_id`, `state`, `user_id`, `contact_id`, `video_category_id`, `video_collection_id`, `video_shottype_id`, `title`, `type`, `access`, `details`, `description`, `notes`, `referrer`, `credit`, `active`, `featured`, `views`, `image`, `thumb`, `mime`, `ext`, `url`, `file`, `file_watermark`, `link`, `youtube_id`, `embed_code`, `duration`, `date_filmed`, `location`, `source`, `more_details`, `more_details_sent`, `more_details_code`, `reminders`, `contact_is_owner`, `submitted_elsewhere`, `submitted_where`, `allow_publish`, `filmed_by_me`, `permission`, `is_exclusive`, `terms`, `ip`, `licensed_at`, `deleted_at`, `updated_at`, `created_at`)
-VALUES
-	(1,'IpgKmEWtre','licensed',1,1,0,0,0,'First Video Upload UNILAD Test','ex','guest',NULL,'The was once a bunny rabbit that lived in a far, far away land.',NULL,NULL,NULL,0,0,36,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1514976319-new-video.mp4',NULL,NULL,'aTIABejkkVM',NULL,NULL,'2017-11-30','Pixar Studios',NULL,1,'2018-01-03 10:46:47','dQ67WJev6CzVIcYi1QclIZUEq43Wbh',NULL,1,0,NULL,1,NULL,1,1,NULL,NULL,'2018-01-03 10:50:21',NULL,'2018-01-10 16:49:21','2018-01-03 10:45:24'),
-	(2,'GiJDFEW2Hj','restricted',NULL,2,0,0,0,'Title for Non Ex Video','nonex','guest',NULL,NULL,'This is the non ex notes','Smitty','https://www.youtube.com/user/uniladtv',1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=dA42vievwZk','',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-03 12:12:46','2018-01-03 12:12:46'),
-	(3,'2KgEFEWrsw','licensed',1,3,11,1,3,'Test','ex','guest',NULL,'My kid is rubbish at footy!',NULL,NULL,NULL,0,0,44,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1514982355-20170523_201849.mp4',NULL,NULL,'JCrdUGvy-o4',NULL,25,'2017-11-30','In a park',NULL,NULL,'2018-01-03 12:36:50','npJMD2ZEnk0e23YttVIo7NqIjemOqh',1,1,1,'LadBible',1,NULL,1,1,NULL,NULL,NULL,NULL,'2018-01-05 11:54:01','2018-01-03 12:26:02'),
-	(4,'mKtBEQI3Fs','accepted',NULL,5,0,0,0,'Cat stole my money','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'video/quicktime',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515088221-cat_money.MOV',NULL,NULL,'ocTWgUeLciU',NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-04 17:52:12','ho4jBKqqt4U0GutgR8ImnQaxnNOi6y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-04 17:52:17','2018-01-04 17:50:22'),
-	(5,'djrXP6tXhw','licensed',2,5,0,0,0,'chair hopping students','ex','guest',NULL,'something',NULL,NULL,NULL,0,0,0,'placeholder.gif',NULL,'video/quicktime',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515150724-chair_hopping.MOV',NULL,NULL,'apds4ejPVP8',NULL,6,'2017-12-20','London',NULL,1,'2018-01-05 11:17:02','zR01rmQbDsYInNpRiywerB6Be2s3GK',NULL,1,0,NULL,1,NULL,1,1,NULL,NULL,'2018-01-05 12:12:25',NULL,'2018-01-05 12:12:27','2018-01-05 11:12:05'),
-	(6,'MiN7cbW7IQ','accepted',2,4,0,0,0,'crazy storms around the world','ex','guest',NULL,'something',NULL,NULL,NULL,0,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=uVqTVo5XFpI','',NULL,NULL,'',NULL,NULL,'2017-12-20',NULL,NULL,NULL,'2018-01-05 16:28:39','ogCdP1FZ5aNB7Pj9A32vwsmYgshXyv',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-05 16:33:10','2018-01-05 16:12:21'),
-	(8,'s7DLNPC87P','accepted',NULL,5,0,0,0,'Mad cows','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515172872-cows001.mp4',NULL,NULL,'qb_wLhT3oZg',NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-05 17:22:46','LIVKHjvzPTd6SLCTk1FtpkkQy1OOqe',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-05 17:22:53','2018-01-05 17:21:17'),
-	(9,'ikc9gn74hX','new',NULL,3,0,0,0,'test','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=2kSjgiV4wG8','',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-10 13:05:37','2018-01-10 13:05:37'),
-	(10,'Mrf1Trmrew','accepted',NULL,3,0,0,0,'test','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=2kSjgiV4wG8','',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-12 12:52:11','nWEji3wStsqCKDKtZ15acpQw44ZhIj',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-12 12:52:11','2018-01-10 13:06:20'),
-	(11,'MswMbJmehk','licensed',1,3,0,0,0,'test','ex','guest',NULL,'Top movies',NULL,NULL,NULL,0,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=2kSjgiV4wG8','',NULL,NULL,'',NULL,NULL,'2017-10-30','A galaxy far far away',NULL,1,'2018-01-12 12:42:34','nFPeIwb1KxaYwBm0LCdl5ODDK7Vfw2',NULL,1,0,NULL,1,NULL,1,1,NULL,NULL,'2018-01-12 16:00:28',NULL,'2018-01-12 16:00:28','2018-01-10 14:28:40'),
-	(12,'lZfNSINbCK','accepted',NULL,6,0,0,0,'Moo','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=FtO62R_UKkc','',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-12 12:51:31','6ukUCJdTb8rIwNp2mfwLSL4O3nq2LX',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-12 12:51:31','2018-01-11 14:12:51'),
-	(13,'NbHD7ih7YR','new',NULL,6,0,0,0,'Moo','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'',NULL,'https://www.youtube.com/watch?v=FtO62R_UKkc','',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-11 17:31:14','2018-01-11 17:31:14','2018-01-11 14:17:34'),
-	(14,'51lpCN2kPZ','new',NULL,6,0,0,0,'Moo','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515680682-20170523_201849.mp4','https://vlp-storage.s3.eu-west-1.amazonaws.com/1515680682-20170523_201849-watermark.mp4',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-11 17:31:05','2018-01-11 17:31:05','2018-01-11 14:24:46'),
-	(15,'rer8Y8GjrY','new',NULL,6,0,0,0,'Moo','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515691241-829808276.mp4','https://vlp-storage.s3.eu-west-1.amazonaws.com/1515691241-829808276-watermark.mp4',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-11 17:31:00','2018-01-11 17:31:00','2018-01-11 17:20:42'),
-	(18,'y85ccJrbQi','new',NULL,6,0,0,0,'Moo','ex','guest',NULL,NULL,NULL,NULL,NULL,1,0,0,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515691800-829808276.mp4','https://vlp-storage.s3.eu-west-1.amazonaws.com/1515691800-829808276-watermark.mp4',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2018-01-11 17:30:47','2018-01-11 17:30:47','2018-01-11 17:30:01'),
-	(22,'RYzysYV793','licensed',1,6,0,0,0,'Moo','ex','guest',NULL,'Funny story bro!',NULL,NULL,NULL,0,0,0,'placeholder.gif',NULL,'video/mp4',NULL,NULL,'https://vlp-storage.s3.eu-west-1.amazonaws.com/1515693755-829808276.mp4','https://vlp-storage.s3.eu-west-1.amazonaws.com/1515693755-829808276-watermark.mp4',NULL,'TfmGDAED48s',NULL,NULL,'2017-01-01','In Space',NULL,1,'2018-01-11 18:02:55','wqVSCLVZNOlGyQhgYUSYKzBgWxAe9k',NULL,1,0,NULL,1,NULL,1,1,NULL,NULL,'2018-01-12 16:00:24',NULL,'2018-01-12 16:01:03','2018-01-11 18:02:35');
-
-/*!40000 ALTER TABLE `videos` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table youtube_access_tokens
@@ -965,7 +865,8 @@ INSERT INTO `youtube_access_tokens` (`id`, `access_token`, `created_at`)
 VALUES
 	(1,'{\"access_token\":\"ya29.Gls3BeVUta1G-kxxw34O0wUoBkPXKUhjoyirDXNmPe4R2f23Hnn0OwuQZSA8JF8EknldR9vyNVPwovp1AlsMQ-OzWMnKJpzWkC_nZomEPA62lv8LbPX_BnBwFXr9\",\"token_type\":\"Bearer\",\"expires_in\":3600,\"refresh_token\":\"1\\/2aXvghmBW-2nLAqoXIYXk-OiJlcKoThogr7wFEbKL_k\",\"created\":1514974123}','2018-01-03 10:30:04'),
 	(2,'{\"access_token\":\"ya29.Gls3Bbf9Da7TalRkKylWD3mVoDM--IZPC5j4GQOdLDm80XmQEb1UqEBPqGGezCVlwDpAyCbQkhKQuEirPj1byWFZjXC8M1VGeZAkeCib9ApzyogKvdKiVnG9OYlG\",\"token_type\":\"Bearer\",\"expires_in\":3600,\"created\":1514982868,\"refresh_token\":\"1\\/2aXvghmBW-2nLAqoXIYXk-OiJlcKoThogr7wFEbKL_k\"}','2018-01-03 12:34:28'),
-	(3,'{\"access_token\":\"ya29.Glw_BSRlmZ0D-tZv2HH2IhJNSpcg61kOmHHYWdb04jdNd2d9V-zb3zPgwfyGJDHNiy86DHzieXjo6Y5TFljlhfWS13qFYrrUIq7U-Nk1QxAlfunYwKywPa57acTwEg\",\"token_type\":\"Bearer\",\"expires_in\":3599,\"created\":1515692298,\"refresh_token\":\"1\\/2aXvghmBW-2nLAqoXIYXk-OiJlcKoThogr7wFEbKL_k\"}','2018-01-11 17:38:18');
+	(3,'{\"access_token\":\"ya29.Glw_BSRlmZ0D-tZv2HH2IhJNSpcg61kOmHHYWdb04jdNd2d9V-zb3zPgwfyGJDHNiy86DHzieXjo6Y5TFljlhfWS13qFYrrUIq7U-Nk1QxAlfunYwKywPa57acTwEg\",\"token_type\":\"Bearer\",\"expires_in\":3599,\"created\":1515692298,\"refresh_token\":\"1\\/2aXvghmBW-2nLAqoXIYXk-OiJlcKoThogr7wFEbKL_k\"}','2018-01-11 17:38:18'),
+	(4,'{\"access_token\":\"ya29.GlxDBWGAupem3WT_dlIQxH8sly5GOtbSyl9Ds7wgCNKSR4EdKBPdZdZTMDBUroeq9BLS2EEXqcjzFRoIe9PKXSsGBLRKusZXFKAIzSj-3u44-Csuoqhg4YNqhlKMjg\",\"token_type\":\"Bearer\",\"expires_in\":3600,\"created\":1516023454,\"refresh_token\":\"1\\/2aXvghmBW-2nLAqoXIYXk-OiJlcKoThogr7wFEbKL_k\"}','2018-01-15 13:37:34');
 
 /*!40000 ALTER TABLE `youtube_access_tokens` ENABLE KEYS */;
 UNLOCK TABLES;

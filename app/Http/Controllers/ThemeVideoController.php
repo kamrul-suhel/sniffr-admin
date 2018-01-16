@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 use Auth;
+use Redirect;
 
 use App\Tag;
 use App\Page;
@@ -52,7 +53,7 @@ class ThemeVideoController extends Controller {
         }
 
         //Make sure video is active
-        if((!Auth::guest() && Auth::user()->role == 'admin') || $video->active){
+        if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
 
             $favorited = false;
             if(!Auth::guest()):

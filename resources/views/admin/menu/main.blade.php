@@ -56,7 +56,6 @@
                     <span class="title">Deleted Videos</span>
                 </a>
             </li>
-            @endif
             <li>
                 <a href="{{ url('admin/videos/categories') }}">
                     <span class="title">Video Categories</span>
@@ -72,9 +71,11 @@
                     <span class="title">Video Shot Types</span>
                 </a>
             </li>
+            @endif
         </ul>
     </li>
 
+    @if(Auth::user()->isAdmin())
     <li class="{{ Request::segment(2) == 'pages' ? 'active' : '' }}">
         <a href="{{ url('admin/pages') }}" class="tlink">
             <i class="fa fa-book"></i>
@@ -109,6 +110,7 @@
             <span class="title">Menu</span>
         </a>
     </li>
+    @endif
 
     <li class="{{ Request::segment(2) == 'contacts' ? 'active' : '' }}">
         <a href="{{ url('admin/contacts') }}" class="tlink">
@@ -116,14 +118,17 @@
             <span class="title">Contacts</span>
         </a>
     </li>
-
+    
+    @if(Auth::user()->isAdmin())
     <li class="{{ Request::segment(2) == 'clients' ? 'active' : '' }}">
         <a href="{{ url('admin/clients') }}" class="tlink">
             <i class="fa fa-users"></i>
             <span class="title">Clients</span>
         </a>
     </li>
+    @endif
 
+    @if(Auth::user()->isAdmin())
     <li class="{{ Request::segment(2) == 'campaigns' ? 'active' : '' }}">
         <a href="{{ url('admin/campaigns') }}" class="tlink">
             <i class="fa fa-area-chart"></i>
@@ -178,4 +183,5 @@
             </li>
         </ul>
     </li>
+    @endif
 </ul>

@@ -172,24 +172,37 @@
 			$('.delete').click(function(e){
 				e.preventDefault();
 				var delete_link = $(this).attr('href');
-				swal({   title: "Are you sure?",   text: "Do you want to permanantly delete this video?",   icon: "warning",   buttons: true,  closeModal: false });
-
-				if(delete_link) {
-					$.ajax({
-					    type: 'GET',
-					    url: delete_link,
-					    dataType: 'json',
-					    success: function (data) {
-							if(data.status=='success') {
-								$('#video-'+data.video_id).fadeOut();
-								swal({  title: data.message, icon: 'success', buttons: true, closeModal: true });
-								$('.swal-button-container').css('display','inline-block');
-							} else {
-								$('.swal-button-container').css('display','inline-block');
-							}
-					    }
-					});
-				}
+				swal({ 
+					title: "Are you sure?", 
+					text: "Do you want to permanantly delete this video?", 
+					icon: "warning",
+					buttons: { cancel: true, confirm: true }
+				})
+				.then((willDelete) => {
+					swal({ title: 'loading..', icon: 'info', buttons: false, closeModal: true });
+					if (willDelete) {
+						if(delete_link) {
+							$.ajax({
+							    type: 'GET',
+							    url: delete_link,
+							    dataType: 'json',
+							    success: function (data) {
+									if(data.status=='success') {
+										$('#video-'+data.video_id).fadeOut();
+										swal({ title: data.message, icon: 'success', closeModal: true, buttons: { cancel: false, confirm: true } });
+										$('.swal-button-container').css('display','inline-block');
+									} else {
+										swal({ title: 'There was a problem!' });
+										$('.swal-button-container').css('display','inline-block');
+									}
+							    },
+							    error: function(){
+							    	swal({ title: 'There was a problem!', icon: 'error' });
+							    }
+							});
+						}
+					}
+				});
 			});
 
 			$('.state').click(function(e){
@@ -232,7 +245,7 @@
 									default:
 										alertType = 'success';
 								}
-								swal({  title: data.message, icon: alertType, buttons: true, closeModal: true });
+								swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, buttons: { cancel: false, confirm: true } });
 								$('.swal-button-container').css('display','inline-block');
 							} else {
 								$('.swal-button-container').css('display','inline-block');
