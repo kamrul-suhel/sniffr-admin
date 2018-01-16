@@ -7,18 +7,18 @@
     position: fixed;
     background:rgba(0,0,0,0.9);
     z-index:99999;
-    display:none;
     color:#fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-animated-background {
     z-index:99999;
-    margin-top:25%;
     text-align:center;
 }
 
 .menu-animated-background img {
-    margin-top:50px;
     width:250px;
 }
 

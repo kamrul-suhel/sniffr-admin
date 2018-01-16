@@ -319,7 +319,7 @@ class ClientVideosController extends Controller {
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
-        $video->type = Input::get('type');
+        $video->rights = Input::get('rights');
         $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');
