@@ -90,7 +90,7 @@ class QueueVideo implements ShouldQueue
                 $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
 
                 if($job['Id']) {
-                    QueueVideoCheck::dispatch($job['Id'], $video->id)
+                    QueueVideoCheck::dispatch($job['Id'], $video->id, 1)
                         ->delay(now()->addSeconds(30));
                 }
 

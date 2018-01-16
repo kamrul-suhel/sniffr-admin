@@ -7,6 +7,7 @@ use Auth;
 use MyYoutube;
 use Redirect;
 use Validator;
+use Carbon\Carbon;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
 
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueVideo;
 
 use App\Notifications\SubmissionNewNonEx;
 
@@ -147,7 +149,7 @@ class ThemeSubmissionController extends Controller {
         $video->file = $filePath;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
-        $video->state = 'restricted';
+        $video->state = 'problem';
         $video->type = 'nonex';
         $video->referrer = Input::get('referrer');
         $video->notes = Input::get('notes');
@@ -159,6 +161,12 @@ class ThemeSubmissionController extends Controller {
 
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks_nonex');
+
+        if($request->hasFile('file')){
+            // Send video to queue for watermarking
+            QueueVideo::dispatch($video->id)
+                ->delay(now()->addSeconds(5));
+        }
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
