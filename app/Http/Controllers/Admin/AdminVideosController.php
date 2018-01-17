@@ -119,157 +119,123 @@ class AdminVideosController extends Controller {
     public function status(Request $request, $state, $id)
     {
         $isJson = $request->ajax();
+        $video_process=0;
 
         $video = Video::where('alpha_id', $id)->first();
         $video->state = $state;
 
         // Send email
         if($video->state == 'accepted'){
+
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
 
-            // Move video to Youtube and move video file to folder for analysis
-            if($video->file){
-
-                // set watermark and non-watermark video files for processing
-
-                $fileName = basename($video->file);
-                if($video->file_watermark){
-                    $file_watermark = file_get_contents($video->file_watermark);
-                    $fileName_watermark = basename($video->file_watermark);
-                }else{
-                    $file_watermark = file_get_contents($video->file);
-                    $fileName_watermark = basename($video->file);
-                }
-
-                //anaylsis bit
-
-                $disk = Storage::disk('s3_sourcebucket');
-                if($disk->has($fileName)==1){
-                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
-                }
-
-                //youtube bit
-
-                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
-
-                $file_watermark = new UploadedFile (
-                    '/tmp/'.$fileName_watermark,
-                    $fileName_watermark,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName_watermark),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
-                $youtubeId  = $response->getVideoId();
-
-                $video->youtube_id = $youtubeId;
-            }
+            // Set to process for youtube and analysis
+            $video_process=1;
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
+
         }else if($video->state == 'rejected'){
+
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_rejected');
+
+        }else if($video->state == 'restricted'||$video->state == 'problem'){
+
+            if(!empty($video->youtube_id)){
+
+                // Make youtube video unlisted
+                MyYoutube::setStatus($video->youtube_id, 'unlisted');
+
+            }
+
         }else if($video->state == 'licensed'){
 
-            // Need to check if licensed_at has already been set so we don't send contact/user another email
+            // Check if licensed_at has already been set so we don't send contact/user another email
+            if(empty($video->licensed_at)) {
+
+                // Check if there is a contact for the video
+                if(isset($video->contact->id)) {
+
+                    // Send thanks notification email (via queue after 2mins)
+                    QueueEmail::dispatch($video->id, 'submission_licensed')
+                        ->delay(now()->addMinutes(2));
+                        // added delay, just in case the youtube encoding needs to process
+                }
+
+            }
+
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
+            if(!empty($video->youtube_id)){
+
+                // Make youtube video public
+                MyYoutube::setStatus($video->youtube_id, 'public');
+
+            } else {
+
+                // Set to process for youtube and analysis
+                $video_process=1;
+
+            }
 
             $video->licensed_at = now();
 
-            // Make youtube video public
-            if($video->youtube_id){
-                MyYoutube::setStatus($video->youtube_id, 'public');
-            }
-
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_licensed');
         }
 
+        // Save video data to database
         $video->save();
+
+        // Process > Move video to Youtube and move video file to folder for analysis
+        if($video->file&&$video_process==1){
+
+            // set watermark and non-watermark video files for processing
+
+            $fileName = basename($video->file);
+            if($video->file_watermark){
+                $file_watermark = file_get_contents($video->file_watermark);
+                $fileName_watermark = basename($video->file_watermark);
+            }else{
+                $file_watermark = file_get_contents($video->file);
+                $fileName_watermark = basename($video->file);
+            }
+
+            // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
+
+            $disk = Storage::disk('s3_sourcebucket');
+            if($disk->has($fileName)==1){
+                if($disk->exists(basename($fileName))) {
+                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
+                }
+            }
+
+            // Youtube (retrieves video to temporary local and then uploads to youtube)
+
+            file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
+
+            $file_watermark = new UploadedFile (
+                '/tmp/'.$fileName_watermark,
+                $fileName_watermark,
+                $video->mime,
+                filesize('/tmp/'.$fileName_watermark),
+                null,
+                false
+            );
+
+            // Upload it to youtube
+            $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+            $youtubeId  = $response->getVideoId();
+
+            $video->youtube_id = $youtubeId;
+
+            $video->save();
+        }
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }
-    }
-
-    public function statusapi($state, $id)
-    {
-        $video = Video::where('alpha_id', $id)->first();
-        $video->state = $state;
-
-        // Send email
-        if($video->state == 'accepted'){
-            $video->more_details_code = str_random(30);
-            $video->more_details_sent = now();
-
-            // Move video to Youtube
-            if($video->file){
-                // set watermark and non-watermark video files for processing
-
-                $file = file_get_contents($video->file);
-                $fileName = basename($video->file);
-                if($video->file_watermark){
-                    $file_watermark = file_get_contents($video->file_watermark);
-                    $fileName_watermark = basename($video->file_watermark);
-                }else{
-                    $file_watermark = file_get_contents($video->file);
-                    $fileName_watermark = basename($video->file);
-                }
-
-                //anaylsis bit
-
-                $disk = Storage::disk('s3_sourcebucket');
-                if($disk->has($fileName)==1){
-                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
-                }
-
-                //youtube bit
-
-                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
-
-                $file_watermark = new UploadedFile (
-                    '/tmp/'.$fileName_watermark,
-                    $fileName_watermark,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName_watermark),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
-                $youtubeId  = $response->getVideoId();
-
-                $video->youtube_id = $youtubeId;
-            }
-
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_accepted');
-        }else if($video->state == 'rejected'){
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_rejected');
-        }else if($video->state == 'licensed'){
-            $video->licensed_at = now();
-
-            // Make youtube video public
-            if($video->youtube_id){
-                MyYoutube::setStatus($video->youtube_id, 'public');
-            }
-
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'submission_licensed');
-        }
-
-        $video->save();
-
-        return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
     }
 
     /**
@@ -462,7 +428,7 @@ class AdminVideosController extends Controller {
         $this->addUpdateVideoTags($video, $tags);
 
         // Youtube integration
-        if($video->youtube_id && env('APP_ENV') != 'local'){ // Fetches video duration on update and is youtube if none
+        if($video->youtube_id && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
             if(!$video->duration){
                 $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
             }
@@ -485,7 +451,6 @@ class AdminVideosController extends Controller {
             $data['image'] = Storage::disk('s3')->url($fileName);
         }
 
-
         $selected_campaigns = $video->campaigns->pluck('id')->all();
         $campaigns = array();
 
@@ -498,6 +463,17 @@ class AdminVideosController extends Controller {
                     $campaigns[$campaign]['state'] = 'new';
                 }
             }
+        }
+
+        // Check if ex/nonex dropdown was changed for rights management make sure is_exclusive field is also changed
+        if($input['rights']=='nonex') {
+
+            $data['is_exclusive'] = NULL;
+
+        } else {
+
+            $data['is_exclusive'] = 1;
+
         }
 
         $video->campaigns()->sync($campaigns);

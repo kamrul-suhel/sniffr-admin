@@ -84,10 +84,15 @@
                     <p><a href="mailto:{{ $video->contact->email }}">{{ $video->contact->email }}</a></p>
 				</div>
 				@else
-				<div class="panel-body" style="display: block;">
-					<h3><a href="#">Admin: {{ $user->username }}</a></h3>
-					<p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
-				</div>
+					<div class="panel-body" style="display: block;">
+					@if(isset($user->username))
+						<h3><a href="#">Admin: {{ $user->username }}</a></h3>
+						<p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
+					@else
+						<h3><a href="#">Admin</a></h3>
+						<p><a href="mailto:ian@unilad.co.uk">ian@unilad.co.uk</a></p>
+					@endif
+					</div>
 				@endif
 			</div>
 
@@ -496,7 +501,7 @@
 
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> Rights</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+					<div class="panel-heading"> <div class="panel-title"> Rights Management</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<p>Select if the video is exclusive or non-exclusive</p>
 						<select id="type" name="type">
@@ -507,7 +512,7 @@
 				</div>
 			</div>
 
-			@if($video->state=='licensed'||$video->state=='restricted')
+			<!-- @if($video->state=='licensed'||$video->state=='restricted')
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading"> <div class="panel-title"> Change State</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
@@ -521,7 +526,7 @@
 					</div>
 				</div>
 			</div>
-			@endif
+			@endif -->
 
 			<!-- <div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">

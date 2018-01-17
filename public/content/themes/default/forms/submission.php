@@ -63,11 +63,12 @@
                                     </div>
                                     <label for="file">Video File</label>
                                     <span class="btn btn-success fileinput-button">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Add file...</span>
-                                    <!-- The file input field used as target for the file upload widget -->
-                                    <input class="files" type="file" id="file" name="file" data-url="/upload" value="<?php echo old('file'); ?>" />
+                                        <i class="fa fa-plus"></i>
+                                        <span>Add file...</span>
+                                        <!-- The file input field used as target for the file upload widget -->
+                                        <input class="files" type="file" id="file" name="file" data-url="/upload" value="<?php echo old('file'); ?>" />
                                     </span>
+                                    <div id="filename"></div>
                                 </div>
                             </div>
 

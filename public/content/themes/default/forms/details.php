@@ -84,7 +84,7 @@
                             <input type="tel" class="form-control" id="temp-tel" name="temp-tel" value="<?php if($video->contact->tel){ echo $video->contact->tel; } else { echo ''; } ?>">
                             <span id="valid-msg" class="hide">✓ Valid number</span>
                             <span id="error-msg" class="hide">Invalid number</span>
-                            <input type="hidden" id="tel" name="tel" value="">
+                            <input type="hidden" id="tel" name="tel" value="<?php if($video->contact->tel){ echo $video->contact->tel; } else { echo ''; } ?>">
                         </div>
                     </div>
                 </div>
