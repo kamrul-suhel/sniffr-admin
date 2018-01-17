@@ -153,7 +153,7 @@ class ThemeUploadController extends Controller {
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
-        $video->type = 'ex';
+        $video->rights = 'ex';
         $video->save();
 
         // Slack notifications

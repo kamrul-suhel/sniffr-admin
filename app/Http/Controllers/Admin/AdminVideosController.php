@@ -60,6 +60,7 @@ class AdminVideosController extends Controller {
         $category_value = Input::get('category');
         $collection_value = Input::get('collection');
         $shot_value = Input::get('shot_type');
+        $rights = Input::get('rights');
 
         $videos = new Video;
 
@@ -81,6 +82,10 @@ class AdminVideosController extends Controller {
 
         if(!empty($shot_value)){
             $videos = $videos->where('video_shottype_id', $shot_value);
+        }
+
+        if(!empty($rights)){
+            $videos = $videos->where('rights', $rights);
         }
 
         if($state != 'all'){
@@ -125,7 +130,7 @@ class AdminVideosController extends Controller {
         $video->state = $state;
 
         // Send email
-        if($video->state == 'accepted'){
+        if ($video->state == 'accepted'){
 
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
@@ -136,12 +141,12 @@ class AdminVideosController extends Controller {
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
 
-        }else if($video->state == 'rejected'){
+        } else if($video->state == 'rejected'){
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_rejected');
 
-        }else if($video->state == 'restricted'||$video->state == 'problem'){
+        } else if($video->state == 'restricted'||$video->state == 'problem'){
 
             if(!empty($video->youtube_id)){
 
@@ -150,7 +155,7 @@ class AdminVideosController extends Controller {
 
             }
 
-        }else if($video->state == 'licensed'){
+        } else if($video->state == 'licensed'){
 
             // Check if licensed_at has already been set so we don't send contact/user another email
             if(empty($video->licensed_at)) {
@@ -334,7 +339,7 @@ class AdminVideosController extends Controller {
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
-        $video->type = Input::get('type');
+        $video->rights = Input::get('rights');
         $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');

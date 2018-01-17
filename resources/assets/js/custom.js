@@ -64,7 +64,7 @@ $('document').ready(function(){
 
         if(validator.valid()){
             $('.progress_output').css('display','block');
-            $('#dim-screen').show();
+            $('#dim-screen').show().css('display','flex');
 
             var formData = new FormData($(this)[0]);
 

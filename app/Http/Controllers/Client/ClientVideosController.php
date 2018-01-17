@@ -140,7 +140,7 @@ class ClientVideosController extends Controller {
         $video->notify(new ClientAction($video, $state, $client->name));
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'current_state' => session('current_state'), 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => ($state == 'all' ? 'yes' : 'no'), 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }
@@ -319,7 +319,7 @@ class ClientVideosController extends Controller {
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
-        $video->type = Input::get('type');
+        $video->rights = Input::get('rights');
         $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');

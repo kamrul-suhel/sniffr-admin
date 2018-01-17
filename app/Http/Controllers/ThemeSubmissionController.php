@@ -150,7 +150,7 @@ class ThemeSubmissionController extends Controller {
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'problem';
-        $video->type = 'nonex';
+        $video->rights = 'nonex';
         $video->referrer = Input::get('referrer');
         $video->notes = Input::get('notes');
         $video->credit = Input::get('credit');
