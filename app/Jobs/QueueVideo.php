@@ -74,20 +74,22 @@ class QueueVideo implements ShouldQueue
                 //still need to work out the width/height of the video to use correct size watermark (via preset) > maybe using getID3
 
                 $config = [
-                       'PresetId' => '1515758587625-jyon3x',
-                       'width'  => 1920,
-                       'height' => 1080,
+                       'PresetId' => '1516201655942-vaq9mu',
+                       'width'  => 480, //1280
+                       'height' => 270, //720
                        'aspect' => '16:9',
                    	'ext'	 => 'mp4',
                    	'PipelineId' => '1515757750300-4fybrt',
                        'Watermarks' => [[
-                               'PresetWatermarkId' => 'TopRight',
+                               'PresetWatermarkId' => 'Centered',
                                'InputKey'          => 'logo-unilad-white.png'
                        ]],
                    ];
 
+                $config_thumbs = substr($fileName, 0, strrpos($fileName, '.')).'-{count}';
+
                 $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
-                $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
+                $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config, $config_thumbs);
 
                 if($job['Id']) {
                     QueueVideoCheck::dispatch($job['Id'], $video->id, 1)

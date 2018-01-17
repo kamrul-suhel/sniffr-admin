@@ -65,6 +65,8 @@ class QueueVideoCheck implements ShouldQueue
         // resolve original file, extension and watermark file
         $ext = pathinfo($video->file, PATHINFO_EXTENSION);
         $watermark_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark.'.$ext;
+        $thumbnail_file = substr($video->file, 0, strrpos($video->file, '.')).'-00001.jpg';
+        $thumbnail_file_alt = substr($video->file, 0, strrpos($video->file, '.')).'-00001.png'; //there is a bug in transcoder which picks PNG or JPG
 
         if($video->file){
 
@@ -77,8 +79,21 @@ class QueueVideoCheck implements ShouldQueue
                 if(Storage::disk('s3')->exists(basename($watermark_file))) {
                     Storage::disk('s3')->setVisibility(basename($watermark_file), 'public');
                     $video->file_watermark = $watermark_file;
-                    $video->save();
                 }
+
+                if(Storage::disk('s3')->exists(basename($thumbnail_file))) {
+                    Storage::disk('s3')->setVisibility(basename($thumbnail_file), 'public');
+                    $video->image = $thumbnail_file;
+                }
+
+                if($video->image!='placeholder.gif'){
+                    if(Storage::disk('s3')->exists(basename($thumbnail_file_alt))) {
+                        Storage::disk('s3')->setVisibility(basename($thumbnail_file_alt), 'public');
+                        $video->image = $thumbnail_file_alt;
+                    }
+                }
+
+                $video->save();
 
             } else {
 
