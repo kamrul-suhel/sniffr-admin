@@ -471,14 +471,10 @@ class AdminVideosController extends Controller {
         }
 
         // Check if ex/nonex dropdown was changed for rights management make sure is_exclusive field is also changed
-        if($input['rights']=='nonex') {
-
-            $data['is_exclusive'] = NULL;
-
+        if($request->rights=='nonex') {
+            $video->is_exclusive = NULL;
         } else {
-
-            $data['is_exclusive'] = 1;
-
+            $video->is_exclusive = 1;
         }
 
         $video->campaigns()->sync($campaigns);

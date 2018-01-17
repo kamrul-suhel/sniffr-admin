@@ -504,9 +504,9 @@
 					<div class="panel-heading"> <div class="panel-title"> Rights Management</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body">
 						<p>Select if the video is exclusive or non-exclusive</p>
-						<select id="type" name="type">
-							<option value="ex" @if(isset($video->type)) @if($video->type == 'ex') selected @endif @endif>Exclusive</option>
-							<option value="nonex" @if(isset($video->type)) @if($video->type == 'nonex') selected @endif @endif>Non-Exclusive</option>
+						<select id="rights" name="rights">
+							<option value="ex" @if(isset($video->rights)) @if($video->rights == 'ex') selected @endif @endif>Exclusive</option>
+							<option value="nonex" @if(isset($video->rights)) @if($video->rights == 'nonex') selected @endif @endif>Non-Exclusive</option>
 						</select>
 					</div>
 				</div>
