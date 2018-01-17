@@ -79,8 +79,10 @@
 						$panelColour = 'danger';
 						break;
 					case 'licensed':
-					case 'restricted':
 						$panelColour = 'success';
+						break;
+					case 'restricted':
+						$panelColour = 'warning';
 						break;
 					default:
 						$panelColour = 'default';
@@ -182,9 +184,9 @@
 			$('.delete').click(function(e){
 				e.preventDefault();
 				var delete_link = $(this).attr('href');
-				swal({ 
-					title: "Are you sure?", 
-					text: "Do you want to permanantly delete this video?", 
+				swal({
+					title: "Are you sure?",
+					text: "Do you want to permanantly delete this video?",
 					icon: "warning",
 					buttons: { cancel: true, confirm: true }
 				})

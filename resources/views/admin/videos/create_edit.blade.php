@@ -22,8 +22,10 @@
 					$panelColour = 'danger';
 					break;
 				case 'licensed':
-				case 'restricted':
 					$panelColour = 'success';
+					break;
+				case 'restricted':
+					$panelColour = 'warning';
 					break;
 				default:
 					$panelColour = 'default';
