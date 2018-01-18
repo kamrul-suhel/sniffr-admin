@@ -77,7 +77,7 @@ class QueueVideo implements ShouldQueue
                 $config = NULL;
                 $config_dirty = NULL;
                 $config = [
-                       'PresetId' => '1516277821859-qlni6m',
+                       'PresetId' => '1516201655942-vaq9mu',
                        'width'  => 480,
                        'height' => 270,
                        'aspect' => '16:9',
@@ -89,7 +89,7 @@ class QueueVideo implements ShouldQueue
                        ]],
                    ];
                 $config_dirty = [
-                      'PresetId' => '1516201655942-vaq9mu',
+                      'PresetId' => '1516277821859-qlni6m',
                       'width'  => 480,
                       'height' => 270,
                       'aspect' => '16:9',
