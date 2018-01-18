@@ -197,12 +197,12 @@ class AdminVideosController extends Controller {
             // set watermark and non-watermark video files for processing
 
             $fileName = basename($video->file);
-            if($video->file_watermark){
+            if($video->file_watermark_dirty){
+                $file_watermark = file_get_contents($video->file_watermark_dirty);
+                $fileName_watermark = basename($video->file_watermark_dirty);
+            }else{
                 $file_watermark = file_get_contents($video->file_watermark);
                 $fileName_watermark = basename($video->file_watermark);
-            }else{
-                $file_watermark = file_get_contents($video->file);
-                $fileName_watermark = basename($video->file);
             }
 
             // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
@@ -216,22 +216,26 @@ class AdminVideosController extends Controller {
 
             // Youtube (retrieves video to temporary local and then uploads to youtube)
 
-            file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
+            if($fileName_watermark) {
 
-            $file_watermark = new UploadedFile (
-                '/tmp/'.$fileName_watermark,
-                $fileName_watermark,
-                $video->mime,
-                filesize('/tmp/'.$fileName_watermark),
-                null,
-                false
-            );
+                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
 
-            // Upload it to youtube
-            $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
-            $youtubeId  = $response->getVideoId();
+                $file_watermark = new UploadedFile (
+                    '/tmp/'.$fileName_watermark,
+                    $fileName_watermark,
+                    $video->mime,
+                    filesize('/tmp/'.$fileName_watermark),
+                    null,
+                    false
+                );
 
-            $video->youtube_id = $youtubeId;
+                // Upload it to youtube
+                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+                $youtubeId  = $response->getVideoId();
+
+                $video->youtube_id = $youtubeId;
+
+            }
 
             $video->save();
         }

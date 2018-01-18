@@ -112,7 +112,7 @@ class QueueVideoCheck implements ShouldQueue
 
                         if(Storage::disk('s3')->exists(basename($check_file))) {
                             Storage::disk('s3')->setVisibility(basename($check_file), 'public');
-                            $video->image = $check_file;
+                            $video->file_watermark_dirty = $check_file;
                             $video->save();
                         } else {
                             $job_complete = 0;
