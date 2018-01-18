@@ -338,7 +338,7 @@ class AdminVideosController extends Controller {
         $video->file = $filePath;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
-        $video->state = 'new';
+        $video->state = 'problem';
         $video->rights = Input::get('rights');
         $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
         $video->date_filmed = Input::get('date_filmed');
