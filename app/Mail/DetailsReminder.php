@@ -33,6 +33,6 @@ class DetailsReminder extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.details.reminder')->text('emails.details.reminder_plain')->subject('UNILAD Video Submission - Reminder: '.$this->video->alpha_id);
+        return $this->view('emails.details.reminder')->text('emails.details.reminder_plain')->subject('UNILAD Video Submission - Reminder');
     }
 }

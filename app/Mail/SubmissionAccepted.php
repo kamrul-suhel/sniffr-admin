@@ -33,6 +33,6 @@ class SubmissionAccepted extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.submission.accepted')->text('emails.submission.accepted_plain')->subject('UNILAD Video Submission - ACCEPTED: '.$this->video->alpha_id);
+        return $this->view('emails.submission.accepted')->text('emails.submission.accepted_plain')->subject('UNILAD Video Submission - ACCEPTED');
     }
 }

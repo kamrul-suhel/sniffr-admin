@@ -33,6 +33,6 @@ class DetailsThanks extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.details.thanks')->text('emails.details.thanks_plain')->subject('UNILAD - Thanks for sending more details : '.$this->video->alpha_id);
+        return $this->view('emails.details.thanks')->text('emails.details.thanks_plain')->subject('UNILAD - Thanks for sending more details');
     }
 }
