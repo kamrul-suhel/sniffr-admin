@@ -36,7 +36,7 @@
 					<div class="panel-title">
 						{{ ucfirst($video->state) }}
 						@if($video->state=='licensed')
-						| {!! $video->type === 'nonex' ? '<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive' : '<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive' !!} Video
+						| {!! $video->rights === 'nonex' ? '<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive' : '<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive' !!} Video
 						@endif
 					</div>
 					<div class="panel-options">

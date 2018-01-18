@@ -130,7 +130,7 @@
 
 								@if($video->state != 'new')
 									@if($video->state != 'accepted')
-										| @if($video->type == 'nonex')
+										| @if($video->rights == 'nonex')
 										<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
 										@else
 										<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
