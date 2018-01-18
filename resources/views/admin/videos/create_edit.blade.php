@@ -455,7 +455,7 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						@if(isset($video))
+						@if(isset($video)&&count($video->campaigns)>0)
 						@foreach($video->campaigns as $campaign)
 							<?php
                                 $date1 = now();
@@ -467,6 +467,8 @@
                             ?>
 							{{ $campaign->name }} : {{ $exclusivity }} Hours left
 						@endforeach
+						@else
+						<p>Not currently selected for any campaigns</p>
 						@endif
 					</div>
 				</div>

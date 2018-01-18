@@ -345,6 +345,7 @@ class AdminVideosController extends Controller {
         $video->mime = $fileMimeType;
         $video->state = 'problem';
         $video->rights = Input::get('rights');
+        $video->is_exclusive = 1;
         $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');
