@@ -33,6 +33,6 @@ class SubmissionThanksNonEx extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.submission.thanks_nonex')->text('emails.submission.thanks_nonex_plain')->subject('UNILAD Video Non Exclusive Submission: '.$this->video->alpha_id);
+        return $this->view('emails.submission.thanks_nonex')->text('emails.submission.thanks_nonex_plain')->subject('UNILAD Video Non Exclusive Submission');
     }
 }

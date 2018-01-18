@@ -1,5 +1,7 @@
 Hey{{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!
 
+Video Ref: {{ $video->alpha_id }}
+
 Thanks again for submitting your video to us - we love it!
 
 We’ve received no response from you yet to verify your video and confirm your submission.
