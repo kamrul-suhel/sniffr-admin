@@ -32,6 +32,7 @@ use App\VideoCollection;
 use App\VideoShotType;
 
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueVideo;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
@@ -356,6 +357,11 @@ class AdminVideosController extends Controller {
         $user = Auth::user();
         $video->user_id = $user->id;
         $video->save();
+
+        if($filePath){
+            QueueVideo::dispatch($video->id)
+                ->delay(now()->addSeconds(15));
+        }
 
         //add to campaign (need to get this working)
         // $campaign = new Campaign();

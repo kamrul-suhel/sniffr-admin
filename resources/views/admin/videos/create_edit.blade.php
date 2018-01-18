@@ -514,52 +514,6 @@
 				</div>
 			</div>
 
-			<!-- @if($video->state=='licensed'||$video->state=='restricted')
-			<div class="col-sm-4">
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> Change State</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
-					<div class="panel-body">
-						<p class="danger">If the state of a video changes then select here</p>
-						<select id="state" name="state">
-							<option value="licensed" @if($video->state == 'licensed') selected @endif>Licensed</option>
-							<option value="restricted" @if($video->state == 'restricted') selected @endif>Restricted</option>
-							<option value="problem" @if($video->state == 'problem') selected @endif>Problem</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			@endif -->
-
-			<!-- <div class="col-sm-4">
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> User Access</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
-					<div class="panel-body">
-						<label for="access" style="float:left; margin-right:10px;">Who is allowed to view this video?</label>
-						<select id="access" name="access">
-							<option value="guest" @if(!empty($video->access) && $video->access == 'guest'){{ 'selected' }}@endif>Guest (everyone)</option>
-						</select>
-						<div class="clear"></div>
-					</div>
-				</div>
-			</div> -->
-
-			<!--div class="col-sm-4">
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading"> <div class="panel-title"> Status Settings</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
-					<div class="panel-body">
-						<div>
-							<label for="featured" style="float:left; display:block; margin-right:10px;">Is this video Featured:</label>
-							<input type="checkbox" @if(!empty($video->featured) && $video->featured == 1){{ 'checked="checked"' }}@endif name="featured" value="1" id="featured" />
-						</div>
-						<div class="clear"></div>
-						<div>
-							<label for="active" style="float:left; display:block; margin-right:10px;">Is this video Active:</label>
-							<input type="checkbox" @if(!empty($video->active) && $video->active == 1){{ 'checked="checked"' }}@elseif(!isset($video->active)){{ 'checked="checked"' }}@endif name="active" value="1" id="active" />
-						</div>
-					</div>
-				</div>
-			</div-->
-
 		</div><!-- row -->
 
 		@if(!isset($video->user_id))
