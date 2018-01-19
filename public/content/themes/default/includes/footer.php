@@ -26,9 +26,8 @@
 				</div>
 
 				<div class="col-md-2">
-					<h4></h4>
-					<!-- <h4>Links</h3>
-					<ul>
+					<h4>Social Links</h4>
+					<!--<ul>
 						<?php foreach($pages as $page): ?>
 							<li><a href="<?= ($settings->enable_https) ? secure_url('page') : URL::to('page'); ?><?= '/' . $page->slug ?>"><?= $page->title ?></a></li>
 						<?php endforeach; ?>
