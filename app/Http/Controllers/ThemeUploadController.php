@@ -33,6 +33,7 @@ use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
 use App\Notifications\SubmissionNew;
+use App\Notifications\SubmissionAlert;
 
 class ThemeUploadController extends Controller {
 
@@ -178,6 +179,31 @@ class ThemeUploadController extends Controller {
             }else{
                 return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
             }
+        }
+    }
+
+    public function issueAlert($alert) {
+        $allow = false;
+        $msg = substr($alert, strpos($alert, ':') + 1);
+        $alert = strtok($alert, ':');
+        switch($alert) {
+            case 'upload-form':
+                $allow = true;
+                break;
+            case 'abuse': //easter egg > sent message to slack channel e.g. /issue/abuse:mike-knows-nothing-about-coding
+                $allow = true;
+                $alert = str_replace('abuse', '', $msg);
+                break;
+        }
+        if($allow) {
+            $alert = strtoupper(str_replace('-', ' ', $alert));
+            // Slack notifications
+            $video = new Video();
+            $video->notify(new SubmissionAlert($alert));
+            //return success
+            return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
+        } else {
+            return response()->json(['status' => 'fail', 'message' => 'Something went wrong']);
         }
     }
 }

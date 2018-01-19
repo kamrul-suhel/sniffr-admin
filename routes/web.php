@@ -34,6 +34,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::post('upload', 'ThemeUploadController@store');
     Route::get('upload', 'ThemeUploadController@index');
     Route::get('upload/form', 'ThemeUploadController@form');
+    Route::get('issue/{issue}', 'ThemeUploadController@issueAlert');
 
     /*
     |--------------------------------------------------------------------------

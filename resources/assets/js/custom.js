@@ -56,6 +56,38 @@ $('document').ready(function(){
         }
     });
 
+    function errorMessage() {
+        $('#dim-screen').hide();
+        swal({
+            title: 'Dammit! Something went wrong',
+            icon: 'error',
+            buttons: {
+                cancel: 'Try again',
+                alert: {
+                    text: 'Report issue',
+                    value: 'alert'
+                }
+            },
+            closeModal: true,
+            closeOnClickOutside: true
+        })
+        .then((value) => {
+            if(value=='alert') {
+                $.ajax({
+                    type: 'GET',
+                    url: '/issue/upload-form',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        if(data.status=='success') {
+                            swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     $("#upload-form").on('submit', function(e){
         e.preventDefault();
 
@@ -83,13 +115,12 @@ $('document').ready(function(){
                             window.location.href = '/thanks';
                         }
                     }else{
-                         console.log(data.message);
+                         errorMessage();
                     }
                 },
                 error: function(data){
-                    $('#dim-screen').hide();
-                    alert('There was an error uploading your video');
-                    console.log('There was an error uploading your video');
+                    errorMessage();
+                    //console.log('There was an error uploading your video');
                 }
             });
         }
