@@ -7,13 +7,36 @@
                 <h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} {{ $campaign ? $campaign->name : '' }} Videos</h3>
             </div>
 
-            <form id="search-form" method="get" role="form" class="search-form-full">
-                <div class="col-md-4 col-md-offset-4">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+            <div class="col-md-6 col-md-offset-2">
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <form id="campaigns-form" method="get" role="form" class="search-form-full">
+                        @if(isset($campaigns))
+                            <div class="form-group">
+                                <select id="campaign" name="campaign_id" class="selectpicker form-control">
+                                    <option value="">Select Campaign</option>
+                                    @foreach($campaigns as $campaign)
+                                        <option value="{{ $campaign->id }}"{{ session('campaign_id') == $campaign->id ? ' selected="selected"' : '' }}>{{ $campaign->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+                        </form>
                     </div>
+
+                    <div class="col-md-8">
+                        <form id="search-form" method="get" role="form" class="search-form-full">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
-            </form>
+            </div>
+
         </div>
     </div>
 
@@ -75,8 +98,8 @@
                         </div>
 
                         <div class="album-options">
-                            @if(!empty($video->file))
-                            <a href="{{ url('/download/'.$video->alpha_id) }}" title="Download" class="download">
+                            @if(!empty($video->file_watermark))
+                            <a href="{{ url('/download/'.$video->alpha_id.'/watermark') }}" title="Download" class="download">
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             @else
@@ -129,7 +152,7 @@
                                 if(data.remove=='yes'){
                                     $('#video-'+data.video_id).fadeOut();
                                 }
-                                
+
                                 switch(state) {
                                     case 'yes':
                                         alertType = 'success';

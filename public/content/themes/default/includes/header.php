@@ -15,7 +15,7 @@
 
         <div class="collapse navbar-collapse right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-left">
-                <li><a href="/videos"><i class="hv-video"></i> Videos</a></li>
+                <!-- <li><a href="/videos"><i class="hv-video"></i> Videos</a></li> -->
                 <!--li><a href="/posts"><i class="hv-book"></i> Articles</a></li-->
                 <li><a href="/upload"><i class="fa fa-cloud-upload"></i> Upload</a></li>
             </ul>
