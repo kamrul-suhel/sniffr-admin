@@ -32,6 +32,7 @@ use App\VideoCollection;
 use App\VideoShotType;
 
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueVideo;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
@@ -197,12 +198,12 @@ class AdminVideosController extends Controller {
             // set watermark and non-watermark video files for processing
 
             $fileName = basename($video->file);
-            if($video->file_watermark){
+            if($video->file_watermark_dirty){
+                $file_watermark = file_get_contents($video->file_watermark_dirty);
+                $fileName_watermark = basename($video->file_watermark_dirty);
+            }else{
                 $file_watermark = file_get_contents($video->file_watermark);
                 $fileName_watermark = basename($video->file_watermark);
-            }else{
-                $file_watermark = file_get_contents($video->file);
-                $fileName_watermark = basename($video->file);
             }
 
             // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
@@ -216,22 +217,26 @@ class AdminVideosController extends Controller {
 
             // Youtube (retrieves video to temporary local and then uploads to youtube)
 
-            file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
+            if($fileName_watermark) {
 
-            $file_watermark = new UploadedFile (
-                '/tmp/'.$fileName_watermark,
-                $fileName_watermark,
-                $video->mime,
-                filesize('/tmp/'.$fileName_watermark),
-                null,
-                false
-            );
+                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
 
-            // Upload it to youtube
-            $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
-            $youtubeId  = $response->getVideoId();
+                $file_watermark = new UploadedFile (
+                    '/tmp/'.$fileName_watermark,
+                    $fileName_watermark,
+                    $video->mime,
+                    filesize('/tmp/'.$fileName_watermark),
+                    null,
+                    false
+                );
 
-            $video->youtube_id = $youtubeId;
+                // Upload it to youtube
+                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+                $youtubeId  = $response->getVideoId();
+
+                $video->youtube_id = $youtubeId;
+
+            }
 
             $video->save();
         }
@@ -338,8 +343,9 @@ class AdminVideosController extends Controller {
         $video->file = $filePath;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
-        $video->state = 'new';
+        $video->state = 'problem';
         $video->rights = Input::get('rights');
+        $video->is_exclusive = 1;
         $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');
@@ -352,6 +358,11 @@ class AdminVideosController extends Controller {
         $user = Auth::user();
         $video->user_id = $user->id;
         $video->save();
+
+        if($filePath){
+            QueueVideo::dispatch($video->id)
+                ->delay(now()->addSeconds(15));
+        }
 
         //add to campaign (need to get this working)
         // $campaign = new Campaign();

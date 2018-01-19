@@ -65,24 +65,9 @@
 
             <!-- Raw Links -->
             <div class="col-sm-6 clearfix hidden-xs">
-                <form id="campaigns-form" method="get" role="form">
-                    <ul class="list-inline links-list pull-right">
-                        @if(isset($campaigns))
-                        <li>
-                            <div class="form-group">
-                                <select id="campaign" name="campaign_id" class="selectpicker form-control">
-                                    <option value="">Select Campaign</option>
-                                    @foreach($campaigns as $campaign)
-                                        <option value="{{ $campaign->id }}"{{ session('campaign_id') == $campaign->id ? ' selected="selected"' : '' }}>{{ $campaign->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </li>
-                        @endif
-                        <li class="sep"></li>
-                        <li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
-                    </ul>
-                </form>
+                <ul class="list-inline links-list pull-right">
+                    <li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
+                </ul>
             </div>
         </div>
 

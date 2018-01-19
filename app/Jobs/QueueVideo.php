@@ -67,33 +67,62 @@ class QueueVideo implements ShouldQueue
             // resolve original file, extension and watermark file
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
             $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
+            $watermark__dirty_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark-dirty.'.$ext;
 
             if($route=='aws') {
                 // AWS Elastic Transcoder (new cloud route)
 
                 //still need to work out the width/height of the video to use correct size watermark (via preset) > maybe using getID3
 
+                $config = NULL;
+                $config_dirty = NULL;
                 $config = [
                        'PresetId' => '1516201655942-vaq9mu',
-                       'width'  => 480, //1280
-                       'height' => 270, //720
+                       'width'  => 480,
+                       'height' => 270,
                        'aspect' => '16:9',
                    	'ext'	 => 'mp4',
                    	'PipelineId' => '1515757750300-4fybrt',
                        'Watermarks' => [[
-                               'PresetWatermarkId' => 'Centered',
+                               'PresetWatermarkId' => 'TopRight',
                                'InputKey'          => 'logo-unilad-white.png'
                        ]],
                    ];
+                $config_dirty = [
+                      'PresetId' => '1516280708485-t5gxbr',
+                      'width'  => 480,
+                      'height' => 270,
+                      'aspect' => '16:9',
+                  	'ext'	 => 'mp4',
+                  	'PipelineId' => '1515757750300-4fybrt',
+                      'Watermarks' => [[
+                              'PresetWatermarkId' => 'Centered',
+                              'InputKey'          => 'logo-unilad-white.png'
+                      ]],
+                  ];
 
                 $config_thumbs = substr($fileName, 0, strrpos($fileName, '.')).'-{count}';
 
+                // Creates a job to create watermark and thumbnail
                 $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
                 $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config, $config_thumbs);
 
                 if($job['Id']) {
-                    QueueVideoCheck::dispatch($job['Id'], $video->id, 1)
+                    // Queues a laravel job to check if watermark was created uccessfully
+                    QueueVideoCheck::dispatch($job['Id'], $video->id, 'watermark', 1)
                         ->delay(now()->addSeconds(30));
+                    // Queues a laravel job to check if thumbnail was created uccessfully
+                    QueueVideoCheck::dispatch($job['Id'], $video->id, 'thumbnail', 1)
+                        ->delay(now()->addSeconds(35));
+                }
+
+                // Creates a job to create dirty watermark
+                $job = $elastcoder->transcodeVideo($fileName, $watermark__dirty_file, $config_dirty);
+
+                if($job['Id']) {
+                    // Queues a laravel job to check if watermark was created uccessfully
+                    QueueVideoCheck::dispatch($job['Id'], $video->id, 'watermark_dirty', 1)
+                        ->delay(now()->addSeconds(40));
                 }
 
             } else {

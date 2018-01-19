@@ -119,20 +119,37 @@ class AdminLabelController extends Controller {
      public function analyseVideo() {
 
          //NOT CURRENTLY USED (moves video file to folder for analysis)
-         $video_value = Input::get('f');
-         $disk = Storage::disk('s3_sourcebucket');
-         if($disk->has($video_value)==1){
-             $disk->move(''.$video_value, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video_value);
-             return response()->json(['status' => 'success', 'message' => 'Successfully copied the file.']);
-         } else {
-             return response()->json(['status' => 'fail', 'message' => 'No file found.']);
+         // $video_value = Input::get('f');
+         // $disk = Storage::disk('s3_sourcebucket');
+         // if($disk->has($video_value)==1){
+         //     $disk->move(''.$video_value, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video_value);
+         //     return response()->json(['status' => 'success', 'message' => 'Successfully copied the file.']);
+         // } else {
+         //     return response()->json(['status' => 'fail', 'message' => 'No file found.']);
+         // }
+
+         $found = 0;
+
+         $thumbnail_file = Input::get('f');
+         $thumbnail_file_alt = substr($thumbnail_file, 0, strrpos($thumbnail_file, '.')).'.png';
+
+         if(Storage::disk('s3')->exists(basename($thumbnail_file))) {
+             Storage::disk('s3')->setVisibility(basename($thumbnail_file), 'public');
+             $found = 1;
          }
+
+         if(Storage::disk('s3')->exists(basename($thumbnail_file_alt))) {
+             //Storage::disk('s3')->setVisibility(basename($thumbnail_file_alt), 'public');
+             $found = 2;
+         }
+
+         dd($found);
 
      }
 
      public function checkWatermark() {
 
-        
+
         $elastcoder = new ElastcoderAWS();
 
         dd('moo');
@@ -149,7 +166,7 @@ class AdminLabelController extends Controller {
          $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
 
          $config = [
-                'PresetId' => '1515758587625-jyon3x',
+                'PresetId' => '1516201655942-vaq9mu', //'1515758587625-jyon3x',
                 'width'  => 1920,
                 'height' => 1080,
                 'aspect' => '16:9',

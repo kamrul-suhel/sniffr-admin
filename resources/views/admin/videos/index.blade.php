@@ -130,7 +130,7 @@
 
 								@if($video->state != 'new')
 									@if($video->state != 'accepted')
-										| @if($video->type == 'nonex')
+										| @if($video->rights == 'nonex')
 										<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
 										@else
 										<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
@@ -146,8 +146,12 @@
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-								@if($video->state == 'licensed'&&$video->file)
-								<a href="{{ $video->file }}" title="Download Video" download>
+								@if($video->state == 'licensed'&&$video->file_watermark)
+								<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="download">
+									<i class="fa fa-download"></i>
+								</a>
+								@elseif($video->state == 'licensed'&&$video->file)
+								<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
 									<i class="fa fa-download"></i>
 								</a>
 								@endif
@@ -268,6 +272,39 @@
 					});
 				}
 			});
+
+			$('.download').click(function(e){
+                e.preventDefault();
+                var downloadUrl = $(this).attr('href')+'/regular';
+                var watermarkUrl = $(this).attr('href')+'/watermark';
+                swal({
+                    title: 'Please select the type of video to download below',
+                    icon: 'info',
+                    buttons: {
+                        watermark: {
+                            text: 'Watermark',
+                            value: 'watermark'
+                        },
+                        regular: {
+                            text: 'No Watermark',
+                            value: 'regular'
+                        },
+                        cancel: 'Cancel'
+                    },
+                    closeModal: true,
+                    closeOnClickOutside: true
+                })
+                .then((value) => {
+                    switch (value) {
+                        case 'regular':
+                            window.location.replace(downloadUrl);
+                            break;
+                        case 'watermark':
+                            window.location.replace(watermarkUrl);
+                            break;
+                    }
+                });
+            });
 
 		})(jQuery);
 	</script>

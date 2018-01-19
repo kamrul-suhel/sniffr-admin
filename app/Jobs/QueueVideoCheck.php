@@ -36,6 +36,7 @@ class QueueVideoCheck implements ShouldQueue
 
     protected $job_id;
     protected $video_id;
+    protected $file_type;
     protected $tries_loop_count;
 
     public $tries = 2;
@@ -47,10 +48,11 @@ class QueueVideoCheck implements ShouldQueue
      * @return void
      */
 
-    public function __construct($job_id, $video_id, $tries_loop_count)
+    public function __construct($job_id, $video_id, $file_type, $tries_loop_count)
     {
         $this->job_id = $job_id;
         $this->video_id = $video_id;
+        $this->file_type = $file_type;
         $this->tries_loop_count = $tries_loop_count;
     }
 
@@ -61,52 +63,76 @@ class QueueVideoCheck implements ShouldQueue
      */
     public function handle()
     {
-        $video = Video::find($this->video_id);
-        // resolve original file, extension and watermark file
-        $ext = pathinfo($video->file, PATHINFO_EXTENSION);
-        $watermark_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark.'.$ext;
-        $thumbnail_file = substr($video->file, 0, strrpos($video->file, '.')).'-00001.jpg';
-        $thumbnail_file_alt = substr($video->file, 0, strrpos($video->file, '.')).'-00001.png'; //there is a bug in transcoder which picks PNG or JPG
 
-        if($video->file){
+        if($this->job_id){
 
             // initialize Elastic Transcoder and get the job status
             $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
             $job = $elastcoder->getJob($this->job_id);
+            $job_complete = 1; //set to complete
 
             if(strtolower($job['Status']) == 'complete') { //if job is complete then check for file and add to db
 
-                if(Storage::disk('s3')->exists(basename($watermark_file))) {
-                    Storage::disk('s3')->setVisibility(basename($watermark_file), 'public');
-                    $video->file_watermark = $watermark_file;
-                }
+                $video = Video::find($this->video_id);
 
-                if(Storage::disk('s3')->exists(basename($thumbnail_file))) {
-                    Storage::disk('s3')->setVisibility(basename($thumbnail_file), 'public');
-                    $video->image = $thumbnail_file;
-                }
+                if($video->file){
 
-                if($video->image!='placeholder.gif'){
-                    if(Storage::disk('s3')->exists(basename($thumbnail_file_alt))) {
-                        Storage::disk('s3')->setVisibility(basename($thumbnail_file_alt), 'public');
-                        $video->image = $thumbnail_file_alt;
+                    // resolve original file extension for watermark and dirty watermark files
+                    $ext = pathinfo($video->file, PATHINFO_EXTENSION);
+
+                    if($this->file_type=='watermark') {
+
+                        $check_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark.'.$ext;
+
+                        if(Storage::disk('s3')->exists(basename($check_file))) {
+                            Storage::disk('s3')->setVisibility(basename($check_file), 'public');
+                            //$elastcoder->setPublicObject(basename($thumbnail_file), 'vlp-storage');
+                            $video->file_watermark = $check_file;
+                            $video->save();
+                        } else {
+                            $job_complete = 0;
+                        }
+
+                    } elseif($this->file_type=='thumbnail') {
+
+                        $check_file = substr($video->file, 0, strrpos($video->file, '.')).'-00001.jpg';
+                        //$thumbnail_file_alt = substr($video->file, 0, strrpos($video->file, '.')).'-00001.png'; //there is a bug in transcoder which picks PNG or JPG
+
+                        if(Storage::disk('s3')->exists(basename($check_file))) {
+                            Storage::disk('s3')->setVisibility(basename($check_file), 'public');
+                            $video->image = $check_file;
+                            $video->save();
+                        } else {
+                            $job_complete = 0;
+                        }
+
+                    } else {
+
+                        $check_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark-dirty.'.$ext;
+
+                        if(Storage::disk('s3')->exists(basename($check_file))) {
+                            Storage::disk('s3')->setVisibility(basename($check_file), 'public');
+                            $video->file_watermark_dirty = $check_file;
+                            $video->save();
+                        } else {
+                            $job_complete = 0;
+                        }
+
                     }
-                }
 
-                $video->save();
+                }
 
             } else {
 
-                // run this job/queue again if the video is still processing (as per above)
+                $job_complete = 0;
 
-                $tries_loop_count = $this->tries_loop_count;
-                if($tries_loop_count<5) {
-                    $tries_loop_count++;
-                    QueueVideoCheck::dispatch($job['Id'], $video->id, $tries_loop_count)
-                        ->delay(now()->addSeconds(30));
-                }
+            }
 
-                //need to add a tries field in db so this doesn't loop forever? (maybe pass count through job function)
+            // run this job/queue again if the job is still processing (as per above)
+            if($this->tries_loop_count<5&&$job_complete==0) {
+                $this->tries_loop_count++;
+                QueueVideoCheck::dispatch($job['Id'], $video->id, $this->file_type, $this->tries_loop_count)
+                    ->delay(now()->addSeconds(30));
             }
 
         }

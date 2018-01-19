@@ -71,7 +71,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Download Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('download/{id}', 'ThemeDownloadController@index');
+    Route::get('download/{id}/{type}', 'ThemeDownloadController@index');
 
     /*
     |--------------------------------------------------------------------------
