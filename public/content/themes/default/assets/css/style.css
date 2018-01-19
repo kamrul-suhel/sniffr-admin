@@ -1197,7 +1197,9 @@ form {
 }
 footer,
 .home footer {
-  position: relative;
+  /* position: relative; */
+  position: absolute;
+  bottom:0;
   height: auto;
   width: 100%;
   background: #FFFFFF;
