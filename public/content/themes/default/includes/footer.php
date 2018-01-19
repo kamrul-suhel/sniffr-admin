@@ -1,38 +1,13 @@
 
 	<footer>
 		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
+			<div class="footer-wrapper">
+				<div class="footer-copy">
 					<h3><?php echo $settings->website_name; ?></h3>
-					<p>UNILAD is your Video Licensing Platform. Browse oue huge catalogue of videos.</p>
+					<p>UNILAD is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
 				</div>
 
-				<div class="col-md-3">
-					<!-- <h4>Video Categories</h3>
-					<ul>
-						<?php foreach($video_categories as $category): ?>
-							<li><a href="<?= ($settings->enable_https) ? secure_url('videos/category') : URL::to('videos/category'); ?><?= '/' . $category->slug; ?>"><?= $category->name; ?></a></li>
-						<?php endforeach; ?>
-					</ul> -->
-				</div>
-
-				<div class="col-md-3">
-					<!-- <h4>Post Categories</h3>
-					<ul>
-						<?php foreach($post_categories as $category): ?>
-							<li><a href="<?= ($settings->enable_https) ? secure_url('posts/category') : URL::to('posts/category'); ?><?= '/' . $category->slug; ?>"><?= $category->name; ?></a></li>
-						<?php endforeach; ?>
-					</ul> -->
-				</div>
-
-				<div class="col-md-2">
-					<h4>Social Links</h4>
-					<!--<ul>
-						<?php foreach($pages as $page): ?>
-							<li><a href="<?= ($settings->enable_https) ? secure_url('page') : URL::to('page'); ?><?= '/' . $page->slug ?>"><?= $page->title ?></a></li>
-						<?php endforeach; ?>
-						<li><a href="/login">Login</a></li>
-					</ul> -->
+				<div class="icons-social">
 					<?php if($settings->facebook_page_id): ?><a href="http://facebook.com/<?php echo $settings->facebook_page_id; ?>" target="_blank" class="facebook social-link"><i class="fa fa-facebook"></i></a><?php endif; ?>
 					<?php if($settings->twitter_page_id): ?><a href="http://twitter.com/<?php echo $settings->twitter_page_id; ?>" target="_blank" class="twitter social-link"><i class="fa fa-twitter"></i></a><?php endif; ?>
 					<?php if($settings->google_page_id): ?><a href="http://plus.google.com/<?php echo $settings->google_page_id; ?>" target="_blank" class="google social-link"><i class="fa fa-google-plus"></i></a><?php endif; ?>
