@@ -15,21 +15,17 @@
 
         <div class="collapse navbar-collapse right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-left">
-                <!-- <li><a href="/videos"><i class="hv-video"></i> Videos</a></li> -->
-                <!--li><a href="/posts"><i class="hv-book"></i> Articles</a></li-->
                 <li><a href="/upload"><i class="fa fa-cloud-upload"></i> Upload</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <?php if(Auth::guest()): ?>
                     <li class="login-desktop"><a href="/login"><i class="fa fa-lock"></i> Login</a></li>
-                    <!--li class="signup-desktop"><a href="/signup"> Signup</a></li-->
                 <?php else: ?>
                     <li class="dropdown">
                         <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="<?= url('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
-                            <!--li><a href="<?= url('favorites') ?>">My Favorites</a></li-->
                             <?php if(Auth::user()->role == 'client'): ?>
                                 <li><a href="<?= url('dailies') ?>">Daily Videos</a></li>
                             <?php endif; ?>
@@ -43,7 +39,6 @@
                     </li>
                 <?php endif; ?>
             </ul>
-            <!--form class="navbar-form navbar-right search" role="search"><div class="form-search search-only"><i class="fa fa-search"></i> <input class="form-control search-query" placeholder="search..."></div></form-->
         </div>
      </div>
   </div>
