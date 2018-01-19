@@ -1,5 +1,4 @@
 <?php include('includes/header.php'); ?>
-
 	<?php if($type == 'login'): ?>
 
 		<h2 class="form-signin-heading">Please Login</h2>
