@@ -14,6 +14,8 @@ use DateInterval;
 use Google_Client;
 use Google_Service_YouTube;
 
+use League\Csv\Reader;
+
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -501,6 +503,61 @@ class AdminVideosController extends Controller {
         $video->update($data);
 
         return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
+    }
+
+    /**
+     * Show the form for creating a new video
+     *
+     * @return Response
+     */
+    public function upload(Request $request)
+    {
+        if($request->hasFile('csv')){
+
+            //load the CSV document from a file path
+            $csv = Reader::createFromPath(Input::file('csv'), 'r');
+            $csv->setHeaderOffset(0);
+
+            $header = $csv->getHeader(); //returns the CSV header record
+            $records = $csv->getRecords(); //returns all the CSV records as an Iterator object
+
+            foreach($records as $record){
+                $result = Video::where('url', $record['link'])->get();
+
+                if(!count($result)){
+                    if(strpos($record['link'], 'jotformeu.com')){// Check if link is jotform
+                    
+                    }else if(strpos($record['link'], 'drive.google.com')){ // Check if link google drive
+                    
+                    }else{
+                        $collection = VideoCollection::where('name', $record['category'])->first();
+
+                        $video = new Video();
+                        $video->alpha_id = VideoHelper::quickRandom();
+                        $video->title = $record['title'];
+                        $video->url = $record['link'];
+                        $video->state = 'restricted';
+                        $video->rights = 'nonex';
+
+                        if(count($collection)){
+                            $video->video_collection_id = $collection->id;
+                        }
+
+                        $video->save();
+                    }
+                }
+            }
+
+            return Redirect::to('admin/videos')->with(array('note' => 'Successfully Uploaded CSV!', 'note_type' => 'success') );
+        }
+
+        $data = array(
+            'post_route' => url('admin/videos/upload'),
+            'button_text' => 'Upload Video CSV',
+            'admin_user' => Auth::user(),
+        );
+
+        return view('admin.videos.upload', $data);
     }
 
     public function comment($id)

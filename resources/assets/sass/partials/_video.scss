@@ -68,7 +68,22 @@
         background: url("//i.imgur.com/TxzC70f.png") no-repeat;
         cursor: pointer;
     }
-} 
+}
+
+.facebook-responsive {
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+
+.facebook-responsive iframe {
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
 
 .video-img{
     border-radius:3px;
