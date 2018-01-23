@@ -93,9 +93,6 @@ class ThemeAuthController extends Controller {
 	}
 
 	public function login(){
-
-		//$settings = Setting::first();
-
 	    // get login POST data
 	    $email_login = array(
 	        'email' => Input::get('email'),
@@ -108,14 +105,6 @@ class ThemeAuthController extends Controller {
 	    );
 
 	    if ( Auth::attempt($email_login) || Auth::attempt($username_login) ){
-
-	    	if($settings->free_registration && !Auth::user()->stripe_active){
-    			Auth::user()->role = 'registered';
-    			$user = User::find(Auth::user()->id);
-    			$user->role = 'registered';
-    			$user->save();
-    		}
-
     		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
     			return Redirect::to($redirect);
