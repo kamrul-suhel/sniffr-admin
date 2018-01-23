@@ -23,7 +23,7 @@ class ThemeAuthController extends Controller {
 	{
 		//$this->middleware('secure');
 	}
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	| Auth Controller
@@ -94,7 +94,7 @@ class ThemeAuthController extends Controller {
 
 	public function login(){
 
-		$settings = Setting::first();
+		//$settings = Setting::first();
 
 	    // get login POST data
 	    $email_login = array(
@@ -127,12 +127,11 @@ class ThemeAuthController extends Controller {
     			return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
     		}
 	    } else {
-
 	    	$redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
 	        // auth failure! redirect to login with errors
 	        return Redirect::to('login' . $redirect)->with(array('note' => 'Invalid login, please try again.', 'note_type' => 'error'));
 	    }
-	    
+
 	}
 
 	public function signup(){
@@ -142,7 +141,7 @@ class ThemeAuthController extends Controller {
 
 		$settings = \Setting::first();
 		if(!$settings->free_registration){
-		
+
 			$payment_settings = PaymentSetting::first();
 
 			if($payment_settings->live_mode){
@@ -150,7 +149,7 @@ class ThemeAuthController extends Controller {
 			} else {
 				User::setStripeKey( $payment_settings->test_secret_key );
 			}
-			  
+
 			$token = Input::get('stripeToken');
 
 			unset($input['stripeToken']);
@@ -174,7 +173,7 @@ class ThemeAuthController extends Controller {
 
 	    try{
 	    	if($settings->free_registration && $settings->activation_email){
-	    		
+
 	    		Mail::send('Theme::emails.verify', array('activation_code' => $user->activation_code, 'website_name' => $settings->website_name), function($message) {
             		$message->to(Input::get('email'), Input::get('username'))->subject('Verify your email address');
        			 });
@@ -296,7 +295,7 @@ class ThemeAuthController extends Controller {
 				return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
 		}
 
-	  
+
 	}
 
 }

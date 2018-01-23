@@ -1678,10 +1678,8 @@ Navbar Toggle
   left: 20px;
   top: 25px;
   display: none;
-}
-#nav-toggle {
   cursor: pointer;
-  padding: 10px 35px 16px 0px;
+  padding: 1px 35px 16px 0px;
 }
 #nav-toggle span,
 #nav-toggle span:before,
@@ -1899,7 +1897,7 @@ Navbar Toggle
     margin: 0px auto;
     margin-top: 5px;
     padding: 0px;
-    padding-top: 13px;
+    padding-top: 6px;
   }
 }
 @media screen and (max-width: 400px) {
