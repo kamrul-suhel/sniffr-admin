@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 trait VideoHelper{
 
 	public static function getVideoHTML($video, $embed = false) {
+
 		$sHTML = '';
 
 		$sHTML .= '<div id="video_container" class="fitvid">';
@@ -21,19 +22,31 @@ trait VideoHelper{
 		        $sHTML .= '<div class="youtube-player" data-id="'.$video->getKey().'"></div>';
 		    }elseif (str_contains($video->url, 'vimeo')){
 		        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
-		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "{{ $video->url }}"}] }\'>
+		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}] }\'>
 		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 		        </video>';
 		    }elseif(str_contains($video->url, 'facebook')){
 		    	if(str_contains($video->url, 'videos')){
 		    		$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
 		    	}else{
-		    		$sHTML .= '<div class="interactive interactive-fb-post">
+		    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
 								<div id="fb-root"></div>
-								<p><script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script></p>
-				<div class="fb-post" data-href="https://www.facebook.com/atomant99/posts/10213604653764610" data-width="165"></div>';
+								<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
+				<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 		    		//$sHTML .= '<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fatomant99%2Fvideos%2F10213604653564605%2F&show_text=0&width=444" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>';
 		    	}
+			}elseif(str_contains($video->url, 'instagram')){
+
+					if (strpos($_SERVER['REQUEST_URI'],'admin/videos/edit') !== false) {
+						$sHTML .= '<iframe src="'.(str_contains($video->url, '/embed') ? $video->url :  $video->url.'embed').'" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>';
+						$sHTML .= '<style>#video_container iframe, #video_container object, #video_container embed { width:auto !important; height:500px; overflow:visible; } iframe { height:500px; }</style>';
+					} else {
+						$sHTML .= '<a href="/admin/videos/edit/'.$video->alpha_id.'"><img src="'.$video->url.'media/?size=l" border="0" onerror="this.src=\'/content/uploads/images/placeholder.gif\'"></a>';
+					}
+
+					// $sHTML .= '<blockquote class="instagram-media" data-instgrm-captioned="false" data-instgrm-version="7" style="margin-top:100px !important;"><a href="'.$video->url.'"></a></blockquote>';
+					// $sHTML .= '<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>';
+
 		    }
 		}elseif (!empty($video->file)){
 			if($video->file_watermark_dirty) {
