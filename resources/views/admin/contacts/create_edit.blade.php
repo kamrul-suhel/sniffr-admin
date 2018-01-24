@@ -4,12 +4,12 @@
 <div id="admin-container">
 	<ol class="breadcrumb">
 		<li> <a href="/admin/contacts"><i class="fa fa-newspaper-o"></i>All Contacts</a></li>
-		<li class="active">@if(!empty($contact->id)) <strong>{{ $contact->first_name.' '.$contact->last_name }}</strong> @else <strong>New Contact</strong> @endif</li>
+		<li class="active">@if(!empty($contact->id)) <strong>{{ $contact->full_name }}</strong> @else <strong>New Contact</strong> @endif</li>
 	</ol>
 
 	<div class="admin-section-title">
 	@if(!empty($contact->id))
-		<h3>{{ $contact->first_name.' '.$contact->last_name }}</h3>
+		<h3>{{ $contact->full_name }}</h3>
 	@else
 		<h3><i class="fa fa-plus"></i> Add New Contact</h3>
 	@endif
@@ -71,25 +71,12 @@
 					<div class="col-sm-6">
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">First Name</div>
+								<div class="panel-title">Full Name</div>
 								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
 							</div>
 							<div class="panel-body" style="display: block;">
 								<p>Add first name in the textbox below:</p>
-								<input type="text" class="form-control" name="first_name" id="first_name" placeholder="First Name" value="@if(!empty($contact->first_name)){{ $contact->first_name }}@endif" />
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6">
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Last Name</div>
-								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
-							</div>
-							<div class="panel-body" style="display: block;">
-								<p>Add last name in the textbox below:</p>
-								<input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name" value="@if(!empty($contact->last_name)){{ $contact->last_name }}@endif" />
+								<input type="text" class="form-control" name="full_name" id="full_name" placeholder="Full Name" value="@if(!empty($contact->full_name)){{ $contact->full_name }}@endif" />
 							</div>
 						</div>
 					</div>

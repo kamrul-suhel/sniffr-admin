@@ -9,7 +9,7 @@
 <div id="video_bg">
 	<div class="container text-center">
 		<?php if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() ) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
-			<?php echo \App\Libraries\VideoHelper::getVideoHTML($video, true); ?>
+			<?php echo \App\Libraries\VideoHelper::getVideoHTML($video); ?>
 		<?php else: ?>
 			<div id="subscribers_only">
 				<h2>Sorry, this video is only available to <?php if($video->access == 'subscriber'): ?>Subscribers<?php elseif($video->access == 'registered'): ?>Registered Users<?php endif; ?></h2>

@@ -18,7 +18,6 @@
     <div class="container">
         <?php if (count($errors)): ?>
         <div class="row">
-
             <div class="col-md-12 page">
                 <div class="alert alert-danger">
                     <p><strong>Please correct the errors below and click 'Submit Video' again.</strong></p>
@@ -32,87 +31,60 @@
         </div>
         <?php endif; ?>
 
-        <div class="row">
-            <div class="col-md-6 page">
-                <div class="panel panel-primary" data-collapsed="0">
-                    <div class="panel-heading">Your Contact Details</div>
+        <h2>Your Contact Details</h2>
 
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="first_name">First Name <span>*</span></label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo old('first_name'); ?>" >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="last_name">Last Name <span>*</span></label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo old('last_name'); ?>" >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tel">Email <span>*</span></label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo old('email'); ?>" >
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 page">
-                <div class="panel panel-primary" data-collapsed="0">
-                    <div class="panel-heading">Your Video Details</div>
-
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="title">Video Title <span>*</span></label>
-                            <input type="text" class="form-control" id="title" name="title" value="<?php echo old('title'); ?>">
-                        </div>
-
-                        <p>Please use either send us your video link <strong>OR</strong> upload your video file below <span>*</span></p>
-
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="form-group shaded" id="make-shaded-file">
-                                    <div class="radio pull-right">
-                                        <div class="circle-file circle-shaded"></div>
-                                    </div>
-                                    <label for="file">Video File</label>
-                                    <span class="btn btn-success fileinput-button">
-                                        <i class="fa fa-plus"></i>
-                                        <span>Add file...</span>
-                                        <!-- The file input field used as target for the file upload widget -->
-                                        <input class="files" type="file" id="file" name="file" data-url="/upload" value="<?php echo old('file'); ?>" />
-                                    </span>
-                                    <div id="filename"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-6">
-                                <div class="form-group unshaded" id="make-shaded-url">
-                                    <div class="radio pull-right">
-                                        <div class="circle-url circle-unshaded"></div>
-                                    </div>
-
-                                    <label for="url">Video Link</label>
-                                    <input class="form-control files" type="text" id="url" name="url" value="<?php echo old('url'); ?>" placeholder="">
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div id="video-error" style="display:none;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+            <label for="full_name">Full Name: <span>*</span></label>
+            <input type="text" class="form-control icon icon-profile" id="full_name" name="full_name" placeholder="Name" value="<?php echo old('full_name'); ?>" >
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-primary" data-collapsed="0">
-                    <div class="panel-body">
-                        <div class="form-check text-right">
-                            <textarea class="form-control" rows="10" id="terms_text" name="terms_text" disabled>Terms & Conditions:
+        <div class="form-group">
+            <label for="tel">Email Address: <span>*</span></label>
+            <input type="email" class="form-control icon icon-envelope" id="email" name="email" placeholder="Email" value="<?php echo old('email'); ?>" >
+        </div>
 
-I certify that I am the rights holder for the video(s) found at the link(s) above, or that I have the express permission of the rights holder to submit the video(s) to UNILAD for publishing on UNILAD web properties.
+        <div class="form-group">
+            <label for="temp-tel">Phone Number:</label>
+            <input type="tel" class="form-control icon icon-phone" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
+            <span id="valid-msg" class="hide">✓ Valid number</span>
+            <span id="error-msg" class="hide">Invalid number</span>
+            <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
+        </div>
+
+        <h2>Your Video Details</h2>
+
+        <div class="form-group">
+            <label for="title">Video Title: <span>*</span></label>
+            <input type="text" class="form-control icon icon-video" id="title" name="title" placeholder="Title" value="<?php echo old('title'); ?>">
+        </div>
+
+        <div class="form-group">
+            <label for="url">Video Link/URL: </label>
+            <input class="form-control files icon icon-link" type="text" id="url" name="url" placeholder="Link" value="<?php echo old('url'); ?>" placeholder="">
+        </div>
+
+        <p class="strikethrough-or"><span>OR</span></p>
+
+        <div class="form-group">
+            <label for="file" class="file">Video File:</label>
+            <span class="btn btn-success fileinput-button">
+                <i class="fa fa-plus"></i>
+                <span>Choose file...</span>
+                <!-- The file input field used as target for the file upload widget -->
+                <input class="files" type="file" id="file" name="file" data-url="/upload" value="<?php echo old('file'); ?>" />
+            </span>
+            <div id="filename"></div>
+            <p class="small">Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
+        </div>
+
+        <div class="col-md-12">
+            <div id="video-error" style="display:none;"></div>
+        </div>
+
+        <div class="form-check">
+            <h2>Terms &amp; Conditions</h2>
+
+            <div class="scroll-box">I certify that I am the rights holder for the video(s) found at the link(s) above, or that I have the express permission of the rights holder to submit the video(s) to UNILAD for publishing on UNILAD web properties.
 
 Video Publishing Acknowledgement (*)
 
@@ -129,20 +101,18 @@ Exclusivity(*)
 I certify that I am the rights holder, capable of granting a non-exclusive license to UNILAD over my content submitted hereto.
 
 The rights holder retains all rights in the submitted video(s), including without limitation, the right to copy, distribute, publish, display or modify the submitted video(s), and to transfer, assign or grant license of any such rights. Any such grant to third parties will be subject to the free and lawful grant of this license to UNILAD.
-                            </textarea>
-                            <label class="form-check-label" for="terms" id="terms-checkbox">
-                                <input id="terms" name="terms" type="checkbox" value="1">I agree to the above terms and conditions
-                            </label>
-                        </div>
+            </div>
 
-                        <div class="progress_output"></div>
-
-                        <input type="submit" class="btn btn-primary pull-right" value="Submit your video">
-                    </div>
-                </div>
+            <div class="styled-checkbox">
+                <input id="terms" name="terms" type="checkbox" value="1">
+                <label class="form-check-label-left" for="terms" id="terms-checkbox"></label>
+                <p class="terms-copy">I agree to the above terms and conditions <span>* </span></p>
             </div>
         </div>
+
+        <input type="submit" class="btn btn-primary pull-right" value="Submit your video">
     </div>
+
     <?php if(isset($iframe) && $iframe == 'true'): ?>
     <input type="hidden" name="iframe" value="true">
     <?php endif; ?>

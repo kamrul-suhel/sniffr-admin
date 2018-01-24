@@ -24,8 +24,7 @@
 			@foreach($contacts as $contact)
 			<tr>
 				<td>{{ count($contact->videos) }}</td>
-				<td>{{ TextHelper::shorten($contact->first_name, 250) }}</td>
-				<td>{{ TextHelper::shorten($contact->last_name, 250) }}</td>
+				<td>{{ TextHelper::shorten($contact->full_name, 250) }}</td>
 				<td>{{ TextHelper::shorten($contact->email, 250) }}</td>
 				<td>
 					<p>

@@ -82,7 +82,7 @@
 
 				@if($video->contact_id!=0)
 				<div class="panel-body" style="display: block;">
-					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->first_name.' '.$video->contact->last_name }}</a></h3>
+					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->full_name }}</a></h3>
                     <p><a href="mailto:{{ $video->contact->email }}">{{ $video->contact->email }}</a></p>
 				</div>
 				@else

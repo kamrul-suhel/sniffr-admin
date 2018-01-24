@@ -65,13 +65,8 @@
 
                     <div class="panel-body">
                         <div class="form-group">
-                            <label for="first_name">First Name</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $video->contact->first_name; ?>" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="last_name">Last Name</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $video->contact->last_name; ?>" disabled>
+                            <label for="full_name">Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" value="<?php echo $video->contact->full_name; ?>" disabled>
                         </div>
 
                         <div class="form-group">
@@ -80,11 +75,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="temp-tel">Phone Number</label>
-                            <input type="tel" class="form-control" id="temp-tel" name="temp-tel" value="<?php if($video->contact->tel){ echo $video->contact->tel; } else { echo ''; } ?>">
-                            <span id="valid-msg" class="hide">✓ Valid number</span>
-                            <span id="error-msg" class="hide">Invalid number</span>
-                            <input type="hidden" id="tel" name="tel" value="<?php if($video->contact->tel){ echo $video->contact->tel; } else { echo ''; } ?>">
+                            <label for="tel">Phone Number</label>
+                            <input type="tel" class="form-control" id="tel" name="tel" value="<?php echo $video->contact->tel; ?>" disabled>
                         </div>
                     </div>
                 </div>
@@ -197,47 +189,12 @@
     <?php endif; ?>
 </form>
 
-<link rel="stylesheet" href="/assets/css/intl-tel-input/css/intlTelInput.css">
-
 <script type="text/javascript">
 (function($){
-    //internation phone numbers
-    var telInput = $('#temp-tel'),
-        errorMsg = $('#error-msg'),
-        validMsg = $('#valid-msg');
-    telInput.intlTelInput({
-        utilsScript: '/assets/js/utils.js',
-        initialCountry: 'gb',
-        preferredCountries: ['gb', 'us', 'au', 'ie', 'ca'],
-        excludeCountries: ['af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'ag', 'am', 'az']
-    });
-    var reset = function() {
-        telInput.removeClass('error');
-        errorMsg.addClass('hide');
-        validMsg.addClass('hide');
-        telInput.val('');
-    };
-    telInput.on('propertychange input', function (e) {
-        if ($.trim(telInput.val())) {
-            if (telInput.intlTelInput("isValidNumber")) {
-              validMsg.removeClass("hide");
-              errorMsg.addClass("hide");
-            } else {
-              validMsg.addClass("hide");
-              errorMsg.removeClass("hide");
-            }
-            $('#tel').val($(this).intlTelInput("getNumber"));
-        }
-    });
-    telInput.on('countrychange', reset);
-
     //js form validations >> More details
     $('#details-form').validate({
         rules: {
-            first_name: {
-                required: true
-            },
-            last_name: {
+            full_name: {
                 required: true
             },
             email: {
@@ -275,8 +232,7 @@
             }
         },
         messages: {
-            first_name: 'You must enter your first name',
-            last_name: 'You must enter your last name (surname)',
+            full_name: 'You must enter your full name',
             email: 'You must enter a valid email address',
             date_filmed: 'You must enter when the video was filmed',
             location: 'You must enter where the video was filmed',

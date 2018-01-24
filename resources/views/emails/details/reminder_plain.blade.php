@@ -1,4 +1,4 @@
-Hey{{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!
+Hey{{ $video->contact->full_name }}!
 
 Video Ref: {{ $video->alpha_id }}
 
