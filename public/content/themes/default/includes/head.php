@@ -4,6 +4,7 @@
 
     <title><?= $video->title; ?></title>
     <meta name="description" content="<?= $video->description ?>">
+    <meta http-equiv="Content-Language" content="en">
 
     <?php
     $keywords = '';

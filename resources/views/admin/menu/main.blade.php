@@ -71,6 +71,11 @@
                     <span class="title">Video Shot Types</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ url('admin/videos/upload') }}">
+                    <span class="title">CSV Upload</span>
+                </a>
+            </li>
             @endif
         </ul>
     </li>

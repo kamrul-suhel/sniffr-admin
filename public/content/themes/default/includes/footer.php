@@ -1,24 +1,26 @@
-
-	<footer>
-		<div class="container">
-			<div class="footer-wrapper">
-				<div class="footer-copy">
-					<h3><?php echo $settings->website_name; ?></h3>
-					<p>UNILAD is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
-				</div>
-
-				<div class="icons-social">
-					<?php if($settings->facebook_page_id): ?><a href="http://facebook.com/<?php echo $settings->facebook_page_id; ?>" target="_blank" class="facebook social-link"><i class="fa fa-facebook"></i></a><?php endif; ?>
-					<?php if($settings->twitter_page_id): ?><a href="http://twitter.com/<?php echo $settings->twitter_page_id; ?>" target="_blank" class="twitter social-link"><i class="fa fa-twitter"></i></a><?php endif; ?>
-					<?php if($settings->google_page_id): ?><a href="http://plus.google.com/<?php echo $settings->google_page_id; ?>" target="_blank" class="google social-link"><i class="fa fa-google-plus"></i></a><?php endif; ?>
-					<?php if($settings->youtube_page_id): ?><a href="http://youtube.com/<?php echo $settings->youtube_page_id; ?>" target="_blank" class="youtube social-link"><i class="fa fa-youtube"></i></a><?php endif; ?>
-				</div>
-			</div>
-
-			<hr />
-			<p class="copyright">Copyright &copy; <?= date('Y'); ?> <?= $settings->website_name; ?></p>
 		</div>
-	</footer>
+		
+		<footer>
+			<div class="container">
+				<div class="footer-wrapper">
+					<div class="footer-copy">
+						<h3><?php echo $settings->website_name; ?></h3>
+						<p>UNILAD is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
+					</div>
+
+					<div class="icons-social">
+						<?php if($settings->facebook_page_id): ?><a href="http://facebook.com/<?php echo $settings->facebook_page_id; ?>" target="_blank" class="facebook social-link"><i class="fa fa-facebook"></i></a><?php endif; ?>
+						<?php if($settings->twitter_page_id): ?><a href="http://twitter.com/<?php echo $settings->twitter_page_id; ?>" target="_blank" class="twitter social-link"><i class="fa fa-twitter"></i></a><?php endif; ?>
+						<?php if($settings->google_page_id): ?><a href="http://plus.google.com/<?php echo $settings->google_page_id; ?>" target="_blank" class="google social-link"><i class="fa fa-google-plus"></i></a><?php endif; ?>
+						<?php if($settings->youtube_page_id): ?><a href="http://youtube.com/<?php echo $settings->youtube_page_id; ?>" target="_blank" class="youtube social-link"><i class="fa fa-youtube"></i></a><?php endif; ?>
+					</div>
+				</div>
+
+				<hr />
+				<p class="copyright">Copyright &copy; <?= date('Y'); ?> <?= $settings->website_name; ?></p>
+			</div>
+		</footer>
+	</div>
 
 	<script type="text/javascript">
 

@@ -35,6 +35,18 @@ body.home .second-nav {
   display: none;
 }
 
+#page-wrapper{
+  position:relative; /* needed for footer positioning*/
+  height:auto !important; /* real browsers */
+  height:100%; /* IE6: treaded as min-height*/
+
+  min-height:100%; /* real browsers */
+}
+
+#page-content{
+  padding-bottom: 135px;
+}
+
 #home-content{
 	margin-top:545px;
 }
@@ -1194,12 +1206,17 @@ form {
 }
 footer,
 .home footer {
-  bottom:0;
+/*  bottom:0;
   height: auto;
   width: 100%;
   background: #FFFFFF;
+  
+  position:fixed;*/
+  position:absolute;
+  width:100%;
+  bottom:0; /* stick to bottom */
+  background:#ddd;
   border-top: 1px solid #E5E5E5;
-  position:fixed;
 }
 footer h3,
 .home footer h3 {
@@ -1639,10 +1656,10 @@ form.search .form-search .fa {
   #home-hero{
     height: 100%;
   }
-  #home-hero video{
-    display: none;
+  #page-content{
+    padding-bottom:0;
   }
-  .home footer{
+  footer{
     position: relative;
   }
   footer .footer-wrapper{
@@ -1661,10 +1678,8 @@ Navbar Toggle
   left: 20px;
   top: 25px;
   display: none;
-}
-#nav-toggle {
   cursor: pointer;
-  padding: 10px 35px 16px 0px;
+  padding: 1px 35px 16px 0px;
 }
 #nav-toggle span,
 #nav-toggle span:before,
@@ -1882,7 +1897,7 @@ Navbar Toggle
     margin: 0px auto;
     margin-top: 5px;
     padding: 0px;
-    padding-top: 13px;
+    padding-top: 6px;
   }
 }
 @media screen and (max-width: 400px) {

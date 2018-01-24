@@ -24,8 +24,16 @@ trait VideoHelper{
 		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "{{ $video->url }}"}] }\'>
 		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 		        </video>';
-		    }elseif (str_contains($video->url, 'facebook')){
-		      	$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
+		    }elseif(str_contains($video->url, 'facebook')){
+		    	if(str_contains($video->url, 'videos')){
+		    		$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
+		    	}else{
+		    		$sHTML .= '<div class="interactive interactive-fb-post">
+								<div id="fb-root"></div>
+								<p><script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script></p>
+				<div class="fb-post" data-href="https://www.facebook.com/atomant99/posts/10213604653764610" data-width="165"></div>';
+		    		//$sHTML .= '<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fatomant99%2Fvideos%2F10213604653564605%2F&show_text=0&width=444" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>';
+		    	}
 		    }
 		}elseif (!empty($video->file)){
 			if($video->file_watermark_dirty) {
