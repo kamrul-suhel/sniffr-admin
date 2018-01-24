@@ -21,7 +21,7 @@ trait VideoHelper{
 		}elseif($video->youtube_id){
 		    $sHTML .= '<div class="youtube-player" data-id="'.$video->youtube_id.'"></div>';
 		}elseif(!empty($video->url)){
-		    if (str_contains($video->url, 'youtube')){
+		    if (str_contains($video->url, 'youtube')||str_contains($video->url, 'youtu')){
 		        $sHTML .= '<div class="youtube-player" data-id="'.$video->getKey().'"></div>';
 		    }elseif (str_contains($video->url, 'vimeo')){
 		        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
