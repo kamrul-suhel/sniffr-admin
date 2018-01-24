@@ -10,9 +10,12 @@ trait VideoHelper{
 
 	public static function getVideoHTML($video, $embed = false) {
 
+		// FB vertical is buggering everything, need to check for it
+		$contain_vid = str_contains($video->url, 'facebook') && str_contains($video->url, 'posts') && $embed ? '' :  ' id="video_container" class="fitvid"';
+
 		$sHTML = '';
 
-		$sHTML .= '<div id="video_container" class="fitvid">';
+		$sHTML .= '<div'.$contain_vid.'>';
 		if($embed){
 			$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?playsinline=1&rel=0" type="text/html" frameborder="0" allowfullscreen></iframe>';
 		}elseif($video->youtube_id){
@@ -34,6 +37,7 @@ trait VideoHelper{
 								<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
 				<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 		    		//$sHTML .= '<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fatomant99%2Fvideos%2F10213604653564605%2F&show_text=0&width=444" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>';
+
 		    	}
 			}elseif(str_contains($video->url, 'instagram')){
 

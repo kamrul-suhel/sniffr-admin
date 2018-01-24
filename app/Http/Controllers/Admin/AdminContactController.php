@@ -25,7 +25,7 @@ class AdminContactController extends Controller
     use VideoHelper;
     
     protected $rules = [
-        'first_name' => 'required'
+        'full_name' => 'required'
     ];
 
     /**
@@ -48,7 +48,7 @@ class AdminContactController extends Controller
         $contacts = new Contact;
 
         if(!empty($search_value)){
-            $contacts = Contact::where('first_name', 'LIKE', '%'.$search_value.'%')->orWhere('last_name', 'LIKE', '%'.$search_value.'%')->orWhere('email', 'LIKE', '%'.$search_value.'%');
+            $contacts = Contact::where('full_name', 'LIKE', '%'.$search_value.'%')->orWhere('email', 'LIKE', '%'.$search_value.'%');
         }
 
         $contacts = $contacts->orderBy('created_at', 'DESC')->paginate(10);

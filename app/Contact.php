@@ -14,7 +14,7 @@ class Contact extends Model
     protected $table = 'contacts';
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'tel', 'language', 'location', 'comments', 'facebook', 'youtube', 'instagram', 'twitter', 'other', 'terms'
+        'full_name', 'email', 'tel', 'language', 'location', 'comments', 'facebook', 'youtube', 'instagram', 'twitter', 'other', 'terms'
     ];
 
     public function videos()

@@ -3,7 +3,7 @@
 @section('content')
 <div>
     <span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;">
-        <b>Hey {{ isset($video->contact->first_name) ? ' '.$video->contact->first_name : '' }}!</b>
+        <b>Hey {{ $video->contact->full_name }}!</b>
     </span>
 </div>
 

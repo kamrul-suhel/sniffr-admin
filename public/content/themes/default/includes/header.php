@@ -46,10 +46,8 @@
 
     <div class="clear"></div>
 
-    <nav class="navbar navbar-default navbar-static-top second-nav">
+    <!--nav class="navbar navbar-default navbar-static-top second-nav">
         <div class="container">
-            <!--div id="mobile-subnav"><i class="fa fa-bars"></i> Open Submenu</div-->
-
             <ul class="navbar-search">
                 <li>
                     <div id="navbar-search-form">
@@ -60,11 +58,7 @@
                     </div>
                 </li>
             </ul>
-
-            <!--div class="row main-nav-row">
-                <?php include('menu.php'); ?>
-            </div-->
         </div>
-    </nav>
+    </nav-->
 
     <div id="page-content">

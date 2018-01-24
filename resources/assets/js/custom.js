@@ -1,14 +1,45 @@
 $('document').ready(function(){
+    //internation phone numbers
+    var telInput = $('#temp-tel'),
+        errorMsg = $('#error-msg'),
+        validMsg = $('#valid-msg');
+    telInput.intlTelInput({
+        utilsScript: '/assets/js/utils.js',
+        initialCountry: 'gb',
+        preferredCountries: ['gb', 'us', 'au', 'ie', 'ca'],
+        excludeCountries: ['af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'ag', 'am', 'az']
+    });
+    var reset = function() {
+        telInput.removeClass('error');
+        errorMsg.addClass('hide');
+        validMsg.addClass('hide');
+        telInput.val('');
+    };
+    telInput.on('propertychange input', function (e) {
+        if ($.trim(telInput.val())) {
+            if (telInput.intlTelInput("isValidNumber")) {
+              validMsg.removeClass("hide");
+              errorMsg.addClass("hide");
+            } else {
+              validMsg.addClass("hide");
+              errorMsg.removeClass("hide");
+            }
+            $('#tel').val($(this).intlTelInput("getNumber"));
+        }
+    });
+    telInput.on('countrychange', reset);
+
+    $('.terms-copy').on('click',function(){
+        $('#terms').attr("checked", !$('#terms').attr("checked"));
+    });
+
     //js form validations >> Video upload
     $('#upload-form').validate({
         groups: {  // consolidate messages into one
             names: 'file url'
         },
         rules: {
-            first_name: {
-                required: true
-            },
-            last_name: {
+            full_name: {
                 required: true
             },
             email: {
@@ -31,8 +62,7 @@ $('document').ready(function(){
             }
         },
         messages: {
-            first_name: 'You must enter your first name',
-            last_name: 'You must enter your last name (surname)',
+            full_name: 'You must enter your full name',
             email: 'You must enter a valid email address',
             title: 'You must enter your video title',
             terms: 'You must check the box agreeing to our terms'
@@ -46,9 +76,9 @@ $('document').ready(function(){
                     $('#video-error').text('Either a video file or video url is required');
                 }
             }else if(element.is('#terms') ){
-                error.insertAfter('#terms-checkbox');
+                error.appendTo('.terms-copy');
             }else{
-                error.insertAfter(element);
+                error.insertBefore(element);
             }
         },
         successHandler: function() {
@@ -95,7 +125,6 @@ $('document').ready(function(){
         validator.form();
 
         if(validator.valid()){
-            $('.progress_output').css('display','block');
             $('#dim-screen').show().css('display','flex');
 
             var formData = new FormData($(this)[0]);
@@ -127,27 +156,27 @@ $('document').ready(function(){
     });
 
     // make video url or file area shaded/unshaded
-    $('#make-shaded-url').on('click', function() {
-        $('#make-shaded-file').removeClass('shaded');
-        $('#make-shaded-file').addClass('unshaded');
-        $('#make-shaded-url').removeClass('unshaded');
-        $('#make-shaded-url').addClass('shaded');
-        $('.circle-url').removeClass('circle-unshaded');
-        $('.circle-url').addClass('circle-shaded');
-        $('.circle-file').removeClass('circle-shaded');
-        $('.circle-file').addClass('circle-unshaded');
-    });
+    // $('#make-shaded-url').on('click', function() {
+    //     $('#make-shaded-file').removeClass('shaded');
+    //     $('#make-shaded-file').addClass('unshaded');
+    //     $('#make-shaded-url').removeClass('unshaded');
+    //     $('#make-shaded-url').addClass('shaded');
+    //     $('.circle-url').removeClass('circle-unshaded');
+    //     $('.circle-url').addClass('circle-shaded');
+    //     $('.circle-file').removeClass('circle-shaded');
+    //     $('.circle-file').addClass('circle-unshaded');
+    // });
 
-    $('#make-shaded-file').on('click', function() {
-        $('#make-shaded-url').removeClass('shaded');
-        $('#make-shaded-url').addClass('unshaded');
-        $('#make-shaded-file').removeClass('unshaded');
-        $('#make-shaded-file').addClass('shaded');
-        $('.circle-file').removeClass('circle-unshaded');
-        $('.circle-file').addClass('circle-shaded');
-        $('.circle-url').removeClass('circle-shaded');
-        $('.circle-url').addClass('circle-unshaded');
-    });
+    // $('#make-shaded-file').on('click', function() {
+    //     $('#make-shaded-url').removeClass('shaded');
+    //     $('#make-shaded-url').addClass('unshaded');
+    //     $('#make-shaded-file').removeClass('unshaded');
+    //     $('#make-shaded-file').addClass('shaded');
+    //     $('.circle-file').removeClass('circle-unshaded');
+    //     $('.circle-file').addClass('circle-shaded');
+    //     $('.circle-url').removeClass('circle-shaded');
+    //     $('.circle-url').addClass('circle-unshaded');
+    // });
 
     $('#file, #url').on('change', function(e) {
         $('#video-error').css('display','none');

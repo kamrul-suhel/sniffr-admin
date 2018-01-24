@@ -35,8 +35,7 @@ use App\Notifications\SubmissionNewNonEx;
 class ThemeSubmissionController extends Controller {
 
     protected $rules = [
-        'first_name' => 'required',
-        'last_name' => 'required',
+        'full_name' => 'required',
         'email' => 'required|email',
         'title' => 'required',
         // 'url' => 'required_without_all:url,file',
@@ -118,8 +117,7 @@ class ThemeSubmissionController extends Controller {
         //if contact exists
         if(!$contact){
             $contact = new Contact();
-            $contact->first_name = Input::get('first_name');
-            $contact->last_name = Input::get('last_name');
+            $contact->full_name = Input::get('full_name');
             $contact->email = Input::get('email');
             $contact->save();
         }
