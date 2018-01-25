@@ -43,6 +43,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
     Route::post('submission', 'ThemeSubmissionController@store');
     Route::get('submission', 'ThemeSubmissionController@index');
+    Route::get('submission/form', 'ThemeSubmissionController@form');
 
     /*
     |--------------------------------------------------------------------------
