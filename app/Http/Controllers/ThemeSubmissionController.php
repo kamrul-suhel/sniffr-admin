@@ -168,10 +168,16 @@ class ThemeSubmissionController extends Controller {
                 ->delay(now()->addSeconds(5));
         }
 
+        $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
+
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
-            return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            if($iframe == 'true'){
+                return Redirect::to('https://www.unilad.co.uk');
+            }else{
+                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            }
         }
     }
 }
