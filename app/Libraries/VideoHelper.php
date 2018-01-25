@@ -31,7 +31,10 @@ trait VideoHelper{
 		    }elseif(str_contains($video->url, 'facebook')){
 
 		    	if(str_contains($video->url, 'posts')){
-
+		    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
+							<div id="fb-root"></div>
+							<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
+		               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 		    	}else if(str_contains($video->url, 'videos')){
 		    		$fb_horizonal = false;
 					$fb_id = explode('/', rtrim($video->url,'/'));
