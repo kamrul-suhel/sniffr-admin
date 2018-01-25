@@ -27,6 +27,19 @@
           });
         }
 
+        TwitterWidgetsLoader.load(function(twttr) {
+    		var tweets = jQuery(".tweet");
+    		jQuery(tweets).each( function( t, tweet ) {
+    			var id = jQuery(this).attr('id');
+    			twttr.widgets.createVideo(
+    			  id,
+    			  tweet
+    			).then( function( el ) {
+    			  //console.log('Video added.');
+    			});
+    		});
+    	});
+
     })(jQuery);
   </script>
 @stop

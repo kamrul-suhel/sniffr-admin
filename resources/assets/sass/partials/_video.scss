@@ -85,6 +85,15 @@
     position:absolute;
 }
 
+.tweet {
+    border: none !important;
+    box-shadow: none !important;
+    background:#000 !important;
+}
+.twitter-video {
+    margin: 0 !important;
+}
+
 .video-img{
     border-radius:3px;
     margin-bottom:10px;
@@ -108,4 +117,3 @@
     padding-top: 12px;
     font-size: 38px;
 }
-

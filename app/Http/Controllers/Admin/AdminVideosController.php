@@ -526,9 +526,26 @@ class AdminVideosController extends Controller {
 
                 if(!count($result)){
                     if(strpos($record['link'], 'jotformeu.com')){// Check if link is jotform
-                    
-                    }else if(strpos($record['link'], 'drive.google.com')){ // Check if link google drive
-                    
+
+                        // $collection = VideoCollection::where('name', $record['category'])->first();
+                        //
+                        // $video = new Video();
+                        // $video->alpha_id = VideoHelper::quickRandom();
+                        // $video->title = $record['title'];
+                        // $video->state = 'restricted';
+                        // $video->rights = 'nonex';
+                        //
+                        // if(count($collection)){
+                        //     $video->video_collection_id = $collection->id;
+                        // }
+                        //
+                        // $video->save();
+                        echo $record['link'].'<br />';
+
+                    }else if(strpos($record['link'], 'drive.google.com')||strpos($record['link'], 'dropbox')||strpos($record['link'], 'streamable')){ // Check if link google drive / dropbox / streamable
+
+                    }else if(!str_contains($record['link'], 'http')) {
+
                     }else{
                         $collection = VideoCollection::where('name', $record['category'])->first();
 

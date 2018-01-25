@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 trait VideoHelper{
 
 	public static function getVideoHTML($video, $embed = false) {
+
 		// FB vertical is buggering everything, need to check for it
 		$contain_vid = str_contains($video->url, 'facebook') && str_contains($video->url, 'posts') && $embed ? '' :  ' id="video_container" class="fitvid"';
 
@@ -20,26 +21,60 @@ trait VideoHelper{
 		}elseif($video->youtube_id){
 		    $sHTML .= '<div class="youtube-player" data-id="'.$video->youtube_id.'"></div>';
 		}elseif(!empty($video->url)){
-		    if (str_contains($video->url, 'youtube')){
+		    if (str_contains($video->url, 'youtube')||str_contains($video->url, 'youtu')){
 		        $sHTML .= '<div class="youtube-player" data-id="'.$video->getKey().'"></div>';
 		    }elseif (str_contains($video->url, 'vimeo')){
 		        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
-		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "{{ $video->url }}"}] }\'>
+		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}] }\'>
 		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 		        </video>';
 		    }elseif(str_contains($video->url, 'facebook')){
-		    	if(str_contains($video->url, 'videos')){
-		    		$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
-		    	}elseif(str_contains($video->url, 'posts')){
-		    		$sHTML .= '<div class="interactive interactive-fb-post">
-						<div id="fb-root"></div>
-						<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
-						<div class="fb-post" data-href="'.$video->url.'" data-width="300"></div>
-					</div>';
-		    	}else{
-		    		$sHTML .= '<img src="https://graph.facebook.com/1778105852229171/picture" class="video-img" />';
-		    	}
-		    }
+
+				$fb_horizonal = false;
+				$fb_id = explode('/', rtrim($video->url,'/'));
+				$fb_id = preg_replace('/\s+/', '', end($fb_id));
+				if($fb_id) {
+					if ($data = @getimagesize('https://graph.facebook.com/'.$fb_id.'/picture')) { //check if facebook image file exists
+						if ($data[0] >= $data[1]) { //if orientation is landscape/portrait
+							$fb_horizonal = true;
+						}
+					}
+				}
+				if($fb_horizonal) {
+					$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
+				} else {
+					$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
+								<div id="fb-root"></div>
+								<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
+				               <div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
+				}
+				if (strpos($_SERVER['REQUEST_URI'],'admin/videos/edit') !== false) {
+					$sHTML .= '<style>#video_container { padding-bottom: 0 !important; height: auto !important; }</style>';
+				}
+
+			}elseif(str_contains($video->url, 'instagram')){
+
+				if (strpos($_SERVER['REQUEST_URI'],'admin/videos/edit') !== false) {
+					$sHTML .= '<iframe src="'.(str_contains($video->url, '/embed') ? $video->url :  $video->url.'embed').'" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>';
+					$sHTML .= '<style>#video_container iframe, #video_container object, #video_container embed { width:auto !important; height:500px; overflow:visible; } iframe { height:500px; }</style>';
+				} else {
+					$sHTML .= '<a href="/admin/videos/edit/'.$video->alpha_id.'"><img src="'.$video->url.'media/?size=l" border="0" onerror="this.src=\'/content/uploads/images/placeholder.gif\'"></a>';
+				}
+
+				// $sHTML .= '<blockquote class="instagram-media" data-instgrm-captioned="false" data-instgrm-version="7" style="margin-top:100px !important;"><a href="'.$video->url.'"></a></blockquote>';
+				// $sHTML .= '<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>';
+
+			}elseif(str_contains($video->url, 'twitter')){
+
+				$tweet_id = explode("/", $video->url);
+				$tweet_id = preg_replace('/\s+/', '', end($tweet_id));
+				if($tweet_id){
+					$sHTML .= '<div class="tweet" id="'.$tweet_id.'"></div>';
+				} else {
+					$sHTML .= '<p align="center">Cannot find a valid Tweet</p>';
+				}
+
+			}
 		}elseif (!empty($video->file)){
 			if($video->file_watermark_dirty) {
 				$video->file = $video->file_watermark_dirty;
