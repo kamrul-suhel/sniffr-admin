@@ -21533,9 +21533,9 @@ module.exports = Vue$3;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(150);
-__webpack_require__(168);
 __webpack_require__(169);
-module.exports = __webpack_require__(170);
+__webpack_require__(170);
+module.exports = __webpack_require__(171);
 
 
 /***/ }),
@@ -21607,6 +21607,7 @@ __webpack_require__(162);
 window.Rickshaw = __webpack_require__(163);
 window.Bloodhound = __webpack_require__(165);
 window.toastr = __webpack_require__(166);
+window.TwitterWidgetsLoader = __webpack_require__(168);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -95689,6 +95690,70 @@ module.exports = function() {
 /***/ 168:
 /***/ (function(module, exports) {
 
+(function(window) {
+	var TwitterWidgetsLoader = {
+		src: '//platform.twitter.com/widgets.js',
+		loading: false,
+		listeners: [],
+		interval: 50,
+
+		load: function(callback) {
+			var _this = this;
+
+			this.listeners.push(callback);
+
+			if(window.twttr && window.twttr.widgets) {
+				setTimeout(function() {
+					_this.done();
+				});
+				return;
+			}
+
+			if(this.loading) {
+				return;
+			}
+
+			this.loading = true;
+
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = this.src;
+			document.body.appendChild(script);
+
+			this.poll();
+		},
+
+		poll: function() {
+			if(window.twttr && window.twttr.widgets) {
+				return this.done();
+			}
+
+			var _this = this;
+
+			setTimeout(function() {
+				_this.poll();
+			}, this.interval);
+		},
+
+		done: function() {
+			while(this.listeners.length) {
+				this.listeners.pop()(window.twttr);
+			}
+		}
+	};
+
+	if(typeof module !== 'undefined' && module.exports) {
+		module.exports = TwitterWidgetsLoader;
+	} else {
+		window.TwitterWidgetsLoader = TwitterWidgetsLoader;
+	}
+}(window));
+
+/***/ }),
+
+/***/ 169:
+/***/ (function(module, exports) {
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var public_vars = public_vars || {};
@@ -97359,7 +97424,7 @@ function hide_loading_bar() {
 
 /***/ }),
 
-/***/ 169:
+/***/ 170:
 /***/ (function(module, exports) {
 
 
@@ -97389,7 +97454,7 @@ function hide_loading_bar() {
 
 /***/ }),
 
-/***/ 170:
+/***/ 171:
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
