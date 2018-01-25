@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<form method="POST" action="/submission" name="upload-form" id="upload-form" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="/submission" name="upload-form" id="upload-form" class="slick-form" accept-charset="UTF-8" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
 
     <div class="container">
@@ -112,9 +112,9 @@ The rights holder retains all rights in the submitted video(s), including withou
             </div>
 
             <div class="styled-checkbox">
-                <input id="terms" name="terms" type="checkbox" value="1">
-                <label class="form-check-label-left" for="terms" id="terms-checkbox"></label>
-                <p class="terms-copy">By clicking the submit button, I agree to terms &amp; conditions. <span>* </span></p>
+                <input id="terms" name="terms" type="checkbox">
+                <label class="form-check-label-left js-checkbox" for="terms"></label>
+                <p class="terms-copy" data-attr="terms">By clicking the submit button, I agree to terms &amp; conditions. <span>* </span></p>
             </div>
 
             <input type="submit" class="btn btn-primary pull-right" value="Submit your video">

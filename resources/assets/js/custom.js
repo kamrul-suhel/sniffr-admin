@@ -29,8 +29,9 @@ $('document').ready(function(){
     });
     telInput.on('countrychange', reset);
 
-    $('.terms-copy').on('click',function(){
-        $('#terms').attr("checked", !$('#terms').attr("checked"));
+    $('.terms-copy').on('click',function(e){
+        var selected_id = $(e.target).attr('data-attr');
+        $('#'+selected_id).attr("checked", !$('#'+selected_id).attr("checked"));
     });
 
     //js form validations >> Video upload
@@ -83,6 +84,79 @@ $('document').ready(function(){
         },
         successHandler: function() {
             alert('valid!');
+        }
+    });
+
+    //js form validations >> More details
+    $('#details-form').validate({
+        rules: {
+            full_name: {
+                required: true
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            date_filmed: {
+                required: true
+            },
+            location: {
+                required: true
+            },
+            description: {
+                required: true
+            },
+            permission: {
+                required: true
+            },
+            submitted_elsewhere: {
+                required: true
+            },
+            submitted_where: {
+                required: function(element){
+                    return (!$("#submitted_elsewhere").val());
+                }
+            },
+            contact_is_owner: {
+                required: true
+            },
+            allow_publish: {
+                required: true
+            },
+            is_exclusive: {
+                required: true
+            }
+        },
+        messages: {
+            full_name: 'You must enter your full name',
+            email: 'You must enter a valid email address',
+            date_filmed: 'You must enter when the video was filmed',
+            location: 'You must enter where the video was filmed',
+            description: 'You must enter a short description or story behind the video',
+            permission: 'You must confirm that you have permission from those who are featured in the video',
+            submitted_elsewhere: 'You must select if you submitted the video elsewhere',
+            submitted_where: 'You must enter where you submitted the video elsewhere',
+            contact_is_owner: 'You must confirm and agree to the statement below',
+            allow_publish: 'You must confirm and agree to the statement below',
+            is_exclusive: 'You must confirm and agree to the statement below'
+        },
+        errorPlacement: function (error, element) {
+            if(element.attr('name') == 'permission') {
+                error.insertAfter('.permission-below');
+            } else if(element.attr('name') == 'submitted_elsewhere') {
+                error.insertAfter('.submitted_elsewhere-below');
+            } else {
+                error.insertAfter(element);
+            }
+        }
+    });
+
+    //hide or show where video was uploaded submitted_elsewhere
+    $('input[name=submitted_elsewhere]').on('click', function() {
+        if($(this).val()=='yes') {
+            $('#submitted_where_container').show();
+        } else {
+            $('#submitted_where_container').hide();
         }
     });
 

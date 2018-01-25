@@ -29,23 +29,26 @@ trait VideoHelper{
 		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 		        </video>';
 		    }elseif(str_contains($video->url, 'facebook')){
+		    	$fb_vertical = false;
+				$fb_id = explode('/', rtrim($video->url,'/'));
+				$fb_id = preg_replace('/\s+/', '', end($fb_id));
+				if($fb_id) {
+					if ($data = @getimagesize('https://graph.facebook.com/'.$fb_id.'/picture')) { //check if facebook image file exists
+						if ($data[0] < $data[1]) { //if orientation is landscape/portrait
+							$fb_vertical = true;
+						}
+					}
+				}
 
-		    	if(str_contains($video->url, 'posts')){
+				if($fb_vertical) {
+
+				}elseif(str_contains($video->url, 'posts')){
 		    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
 							<div id="fb-root"></div>
 							<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
 		               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 		    	}else if(str_contains($video->url, 'videos')){
-		    		$fb_horizonal = false;
-					$fb_id = explode('/', rtrim($video->url,'/'));
-					$fb_id = preg_replace('/\s+/', '', end($fb_id));
-					if($fb_id) {
-						if ($data = @getimagesize('https://graph.facebook.com/'.$fb_id.'/picture')) { //check if facebook image file exists
-							if ($data[0] >= $data[1]) { //if orientation is landscape/portrait
-								$fb_horizonal = true;
-							}
-						}
-					}
+		    		
 
 					if($fb_horizonal) {
 						$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
