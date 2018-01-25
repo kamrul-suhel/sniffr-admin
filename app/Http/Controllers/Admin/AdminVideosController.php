@@ -627,7 +627,7 @@ class AdminVideosController extends Controller {
         $video->save();
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'video_id' => $video->alpha_id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'remove' => 'yes', 'video_id' => $video->alpha_id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
         }
