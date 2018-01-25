@@ -7,7 +7,7 @@
         <div class="home-titles">
             <h1>Video Licensing Platform</h1>
             <h4>License viral videos viewed by millions around the world from UNILAD</h4>
-            <button class="btn btn-primary" onClick="window.location='/upload'" href="/videos">Upload your video</button>
+            <button class="btn btn-primary" onClick="window.location='/upload'" href="/videos">Upload Your Video</button>
         </div>
     </div>
 </div>

@@ -1342,7 +1342,7 @@ footer,
   position:absolute;
   width:100%;
   bottom:0; /* stick to bottom */
-  background:#ddd;
+  background:#fff;
   border-top: 1px solid #E5E5E5;
 }
 footer h3,
