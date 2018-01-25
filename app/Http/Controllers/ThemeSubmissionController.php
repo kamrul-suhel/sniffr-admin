@@ -171,7 +171,7 @@ class ThemeSubmissionController extends Controller {
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
             if($iframe == 'true'){
                 return Redirect::to('https://www.unilad.co.uk');
