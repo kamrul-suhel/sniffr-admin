@@ -1,12 +1,6 @@
 <div id="dim-screen">
     <div class="menu-animated-background">
         <img src="<?= THEME_URL . '/assets/img/hamster_wheel.gif';?>" border="0" />
-        <!-- <div class="sk-folding-cube">
-            <div class="sk-cube1 sk-cube"></div>
-            <div class="sk-cube2 sk-cube"></div>
-            <div class="sk-cube4 sk-cube"></div>
-            <div class="sk-cube3 sk-cube"></div>
-        </div> -->
         <br />
         <p>we're just uploading your awesome video..</p>
     </div>
@@ -35,24 +29,42 @@
 
         <div class="form-group">
             <label for="full_name">Full Name: <span>*</span></label>
-            <input type="text" class="form-control icon icon-profile" id="full_name" name="full_name" placeholder="Enter your Full Name" value="<?php echo old('full_name'); ?>" >
+
+            <div class="input-group">
+                <div class="input-group-addon icon-profile"></div>
+                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Name" value="<?php echo old('full_name'); ?>" >
+            </div>
         </div>
 
         <div class="form-group">
             <label for="email">Email: <span>*</span></label>
-            <input type="email" class="form-control icon icon-envelope" id="email" name="email" aria-describedby="emailHelpBlock" placeholder="Just in case we need to contact you again" value="<?php echo old('email'); ?>" >
+
+            <div class="input-group">
+                <div class="input-group-addon icon-envelope"></div>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelpBlock" placeholder="Just in case we need to contact you again" value="<?php echo old('email'); ?>" >
+            </div>
         </div>
 
         <h2>Your Video Details</h2>
 
         <div class="form-group">
             <label for="title">Video Title <span>*</span></label>
-            <input type="text" class="form-control icon icon-video" id="title" name="title" placeholder="Describe your video in a few words." value="<?php echo old('title'); ?>">
+
+            <div class="input-group">
+                <div class="input-group-addon icon-video"></div>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Describe your video in a few words." value="<?php echo old('title'); ?>">
+            </div>
         </div>
+
+        <h3>Please upload a link to the video, or the video file:</h3>
 
         <div class="form-group">
             <label for="url">Video Link/URL</label>
-            <input class="form-control files icon icon-link" type="text" id="url" name="url" placeholder="Link" value="<?php echo old('url'); ?>" placeholder="">
+
+            <div class="input-group">
+                <div class="input-group-addon icon-link"></div>
+                <input class="form-control files" type="text" id="url" name="url" placeholder="Link" value="<?php echo old('url'); ?>" placeholder="">
+            </div>
         </div>
 
         <div class="form-group">
@@ -82,8 +94,6 @@
             <input type="text" class="form-control" id="credit" name="credit" aria-describedby="creditHelpBlock" placeholder="Credits are placed in the pinned comment (unless alternative method is agreed)" value="<?php echo old('credit'); ?>">
         </div>
                        
-        
-
         <div class="form-group">
             <label for="referrer">UNILAD Referrer </label>
             <input type="text" class="form-control" id="referrer" name="referrer" aria-describedby="referrerHelpBlock" placeholder="Who at UNILAD asked you to fill in this form?" value="<?php echo old('referrer'); ?>" >

@@ -46,7 +46,7 @@
 
 				<div class="panel-body" style="display: block;">
 					<div class="text-center">
-						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
+						{!! App\Libraries\VideoHelper::getVideoHTML($video, true) !!}
 					</div>
 				</div>
 

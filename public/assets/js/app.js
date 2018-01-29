@@ -68072,15 +68072,21 @@ $('document').ready(function () {
             permission: 'You must confirm that you have permission from those who are featured in the video',
             submitted_elsewhere: 'You must select if you submitted the video elsewhere',
             submitted_where: 'You must enter where you submitted the video elsewhere',
-            contact_is_owner: 'You must confirm and agree to the statement below',
-            allow_publish: 'You must confirm and agree to the statement below',
-            is_exclusive: 'You must confirm and agree to the statement below'
+            contact_is_owner: 'You must confirm you are the rightful owner',
+            allow_publish: 'You must confirm you are happy to publish this video',
+            is_exclusive: 'You must confirm you agree to this statement'
         },
         errorPlacement: function errorPlacement(error, element) {
             if (element.attr('name') == 'permission') {
                 error.insertAfter('.permission-below');
             } else if (element.attr('name') == 'submitted_elsewhere') {
                 error.insertAfter('.submitted_elsewhere-below');
+            } else if (element.attr('name') == 'contact_is_owner') {
+                error.appendTo('.terms-copy[data-attr=contact_is_owner]');
+            } else if (element.attr('name') == 'allow_publish') {
+                error.appendTo('.terms-copy[data-attr=allow_publish]');
+            } else if (element.attr('name') == 'is_exclusive') {
+                error.appendTo('.terms-copy[data-attr=is_exclusive]');
             } else {
                 error.insertAfter(element);
             }
@@ -68096,7 +68102,7 @@ $('document').ready(function () {
         }
     });
 
-    function errorMessage() {
+    function errorMessage(data) {
         $('#dim-screen').hide();
         swal({
             title: 'Dammit! Something went wrong',
@@ -68111,11 +68117,13 @@ $('document').ready(function () {
             closeModal: true,
             closeOnClickOutside: true
         }).then(function (value) {
+            console.log(data.responseJSON);
             if (value == 'alert') {
                 $.ajax({
-                    type: 'GET',
-                    url: '/issue/upload-form',
+                    type: 'POST',
+                    url: '/issue',
                     dataType: 'json',
+                    data: data.responseJSON,
                     success: function success(data) {
                         console.log(data);
                         if (data.status == 'success') {
@@ -68154,39 +68162,16 @@ $('document').ready(function () {
                             window.location.href = '/thanks';
                         }
                     } else {
-                        errorMessage();
+                        errorMessage(data);
                     }
                 },
                 error: function error(data) {
-                    errorMessage();
+                    errorMessage(data);
                     //console.log('There was an error uploading your video');
                 }
             });
         }
     });
-
-    // make video url or file area shaded/unshaded
-    // $('#make-shaded-url').on('click', function() {
-    //     $('#make-shaded-file').removeClass('shaded');
-    //     $('#make-shaded-file').addClass('unshaded');
-    //     $('#make-shaded-url').removeClass('unshaded');
-    //     $('#make-shaded-url').addClass('shaded');
-    //     $('.circle-url').removeClass('circle-unshaded');
-    //     $('.circle-url').addClass('circle-shaded');
-    //     $('.circle-file').removeClass('circle-shaded');
-    //     $('.circle-file').addClass('circle-unshaded');
-    // });
-
-    // $('#make-shaded-file').on('click', function() {
-    //     $('#make-shaded-url').removeClass('shaded');
-    //     $('#make-shaded-url').addClass('unshaded');
-    //     $('#make-shaded-file').removeClass('unshaded');
-    //     $('#make-shaded-file').addClass('shaded');
-    //     $('.circle-file').removeClass('circle-unshaded');
-    //     $('.circle-file').addClass('circle-shaded');
-    //     $('.circle-url').removeClass('circle-shaded');
-    //     $('.circle-url').addClass('circle-unshaded');
-    // });
 
     $('#file, #url').on('change', function (e) {
         $('#video-error').css('display', 'none');

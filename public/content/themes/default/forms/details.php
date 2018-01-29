@@ -37,8 +37,6 @@
                     <div id="video_container" class="fitvid">
                     <?php if($video->youtube_id): ?>
                         <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $video->youtube_id; ?>" frameborder="0" allowfullscreen></iframe>
-                    <?php elseif($video->url && $key = $video->getKey()): ?>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $key; ?>" frameborder="0" allowfullscreen></iframe>
                     <?php elseif(str_contains($video->url,'facebook')): ?>
                         <div class="fb-video" data-href="<?php echo $video->url; ?>" data-allowfullscreen="true"></div>
                     <?php elseif($video->url): ?>
@@ -127,19 +125,19 @@
             <h2>Important Legal Stuff</h2>
 
             <div class="styled-checkbox">
-                <input id="contact_is_owner" name="contact_is_owner" type="checkbox">
+                <input id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1">
                 <label class="form-check-label-left" for="contact_is_owner"></label>
                 <p class="terms-copy" data-attr="contact_is_owner">I confirm that I filmed this video and/or I am the rightful owner to this video. <span>* </span></p>
             </div>
 
             <div class="styled-checkbox">
-                <input id="allow_publish" name="allow_publish" type="checkbox">
+                <input id="allow_publish" name="allow_publish" type="checkbox" value="1">
                 <label class="form-check-label-left" for="allow_publish"></label>
                 <p class="terms-copy" data-attr="allow_publish">I confirm that I am happy for this video to be published and viewed by potentially millions of people. (Especially in cases where there are minors/children in the video) <span>* </span></p>
             </div>
 
             <div class="styled-checkbox">
-                <input id="is_exclusive" name="is_exclusive" type="checkbox">
+                <input id="is_exclusive" name="is_exclusive" type="checkbox" value="1">
                 <label class="form-check-label-left" for="is_exclusive"></label>
                 <p class="terms-copy" data-attr="is_exclusive">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video. <span>* </span></p>
             </div>

@@ -35,35 +35,49 @@
 
         <div class="form-group">
             <label for="full_name">Full Name: <span>*</span></label>
-            <input type="text" class="form-control icon icon-profile" id="full_name" name="full_name" placeholder="Name" value="<?php echo old('full_name'); ?>" >
+
+            <div class="input-group">
+                <div class="input-group-addon icon-profile"></div>
+                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Name" value="<?php echo old('full_name'); ?>" >
+            </div>
         </div>
 
         <div class="form-group">
             <label for="tel">Email Address: <span>*</span></label>
-            <input type="email" class="form-control icon icon-envelope" id="email" name="email" placeholder="Email" value="<?php echo old('email'); ?>" >
+
+            <div class="input-group">
+                <div class="input-group-addon icon-envelope"></div>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo old('email'); ?>" >
+            </div>
         </div>
 
         <div class="form-group">
             <label for="temp-tel">Phone Number:</label>
-            <input type="tel" class="form-control icon icon-phone" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
-            <span id="valid-msg" class="hide">✓ Valid number</span>
-            <span id="error-msg" class="hide">Invalid number</span>
-            <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
+
+            <div class="input-group">
+                <div class="input-group-addon icon-phone"></div>
+                <input type="tel" class="form-control" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
+                <div class="input-group-addon">
+                    <span id="valid-msg" class="hide">✓ Valid number</span>
+                    <span id="error-msg" class="hide">Invalid number</span>
+                </div>
+                
+                <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
+            </div>
         </div>
 
         <h2>Your Video Details</h2>
 
         <div class="form-group">
             <label for="title">Video Title: <span>*</span></label>
-            <input type="text" class="form-control icon icon-video" id="title" name="title" placeholder="Title" value="<?php echo old('title'); ?>">
+
+            <div class="input-group">
+                <div class="input-group-addon icon-video"></div>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Title" value="<?php echo old('title'); ?>">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="url">Video Link/URL: </label>
-            <input class="form-control files icon icon-link" type="text" id="url" name="url" placeholder="Link" value="<?php echo old('url'); ?>" placeholder="">
-        </div>
-
-        <p class="strikethrough-or"><span>OR</span></p>
+        <h3>Please upload a link to the video, or the video file:</h3>
 
         <div class="form-group">
             <label for="file" class="file">Video File:</label>
@@ -75,6 +89,15 @@
             </span>
             <div id="filename"></div>
             <p class="small">Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="url">Video Link/URL: </label>
+
+            <div class="input-group">
+                <div class="input-group-addon icon-link"></div>
+                <input class="form-control files" type="text" id="url" name="url" placeholder="Link" value="<?php echo old('url'); ?>" placeholder="">
+            </div>
         </div>
 
         <div class="col-md-12">

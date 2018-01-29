@@ -101,7 +101,7 @@ class AdminVideosController extends Controller {
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('created_at', 'DESC')->paginate(9);
+        $videos = $videos->orderBy('id', 'DESC')->paginate(9);
 
         $user = Auth::user();
 
@@ -525,8 +525,7 @@ class AdminVideosController extends Controller {
                 $result = Video::where('url', $record['link'])->get();
 
                 if(!count($result)){
-                    if(strpos($record['link'], 'jotformeu.com')){// Check if link is jotform
-
+                    if(strpos($record['link'], 'jotform')){// Check if link is jotform
                         // $collection = VideoCollection::where('name', $record['category'])->first();
                         //
                         // $video = new Video();
@@ -540,8 +539,6 @@ class AdminVideosController extends Controller {
                         // }
                         //
                         // $video->save();
-                        echo $record['link'].'<br />';
-
                     }else if(strpos($record['link'], 'drive.google.com')||strpos($record['link'], 'dropbox')||strpos($record['link'], 'streamable')){ // Check if link google drive / dropbox / streamable
 
                     }else if(!str_contains($record['link'], 'http')) {
@@ -549,10 +546,19 @@ class AdminVideosController extends Controller {
                     }else{
                         $collection = VideoCollection::where('name', $record['category'])->first();
 
+                        //Check facebook
+                        $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
+                        $linkDetails = VideoHelper::videoLinkChecker($record['link']);
+
                         $video = new Video();
                         $video->alpha_id = VideoHelper::quickRandom();
+                        $video->youtube_id = $linkDetails['youtube_id'];
                         $video->title = $record['title'];
-                        $video->url = $record['link'];
+                        $video->url = $linkDetails['url'];
+                        $video->image = $linkDetails['image'];
+                        $video->thumb = $linkDetails['thumb'];
+                        $video->embed_code = $linkDetails['embed_code'];
+                        $video->vertical = $linkDetails['vertical'] ? $linkDetails['vertical'] : NULL;
                         $video->state = 'restricted';
                         $video->rights = 'nonex';
 
