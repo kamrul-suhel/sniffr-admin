@@ -559,7 +559,7 @@ class AdminVideosController extends Controller {
                         $video->image = $linkDetails['image'];
                         $video->thumb = $linkDetails['thumb'];
                         $video->embed_code = $linkDetails['embed_code'];
-                        $video->vertical = $linkDetails['vertical'] ? $linkDetails['vertical'] : NULL;
+                        $video->vertical = $linkDetails['vertical'];
                         $video->state = 'restricted';
                         $video->rights = 'nonex';
 

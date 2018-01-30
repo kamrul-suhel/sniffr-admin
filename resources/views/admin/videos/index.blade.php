@@ -170,7 +170,7 @@
 
 			<div class="clear"></div>
 
-			<div class="text-center"><?= $videos->appends(Request::only('s'))->render(); ?></div>
+			<div class="text-center"><?= $videos->appends(request()->except('page'))->render(); ?></div>
 		</div>
 	</div>
 

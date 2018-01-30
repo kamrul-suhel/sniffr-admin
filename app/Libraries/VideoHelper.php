@@ -43,10 +43,12 @@ trait VideoHelper{
 							<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
 		               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 		    	}else if(str_contains($video->url, 'videos')){
-					if(!$video->vertical || $embed) {
+					if($video->vertical === 0 || $embed) {
 						$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
-					} else {
+					} else if($video->image){
 						$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
+					} else {
+						$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
 					}
 		    	}else{
 					$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
@@ -107,24 +109,25 @@ trait VideoHelper{
 
 	public static function videoLinkChecker($url){
 		$url = rtrim($url);
-		$linkVars = ['image' => '','thumb' => '','vertical' => '', 'youtube_id' => '', 'url' => $url, 'embed_code' => ''];
+		$linkVars = ['image' => '','thumb' => '','vertical' => NULL, 'youtube_id' => '', 'url' => $url, 'embed_code' => ''];
 		$youtubeId = false;
 
 		if(str_contains($url, 'facebook')){ // Is Facebook
 			if(str_contains($url, 'videos')){
-				$fb_vertical = false;
-				$fb_id = explode('/', rtrim($url,'/'));
-				$fb_id = preg_replace('/\s+/', '', end($fb_id));
+				$fb_vertical = NULL;
+				preg_match('#videos\/([\d^]+)#', $url, $matches);
 
-				if($fb_id) {
-					if ($data = @getimagesize('https://graph.facebook.com/'.$fb_id.'/picture')) { //check if facebook image file exists
+				if(isset($matches[1])) {
+					if ($data = @getimagesize('https://graph.facebook.com/'.$matches[1].'/picture')) { //check if facebook image file exists
 						if ($data[0] <= $data[1]) { //if orientation is landscape/portrait
-							$fb_vertical = true;
+							$fb_vertical = 1;
+						}else{
+							$fb_vertical = 0;
 						}
-					}
 
-					$linkVars['image'] = 'https://graph.facebook.com/'.$fb_id.'/picture';
-					$linkVars['thumb'] = 'https://graph.facebook.com/'.$fb_id.'/picture';
+						$linkVars['image'] = 'https://graph.facebook.com/'.$matches[1].'/picture';
+						$linkVars['thumb'] = 'https://graph.facebook.com/'.$matches[1].'/picture';
+					}
 				}
 
 				$linkVars['vertical'] = $fb_vertical;

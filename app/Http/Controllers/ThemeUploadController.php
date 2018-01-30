@@ -163,7 +163,7 @@ class ThemeUploadController extends Controller {
         $video->embed_code = $embedCode;
         $video->image = $image;
         $video->thumb = $thumb;
-        $video->vertical = $vertical ? $vertical : NULL;
+        $video->vertical = $vertical;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
