@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use App\Video;
+use Thujohn\Twitter\Facades\Twitter;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -19,44 +20,7 @@ trait VideoHelper{
 			}else{
 				$sHTML .= '<div class="youtube-player" data-id="'.$video->youtube_id.'"></div>';
 			}
-		    
-		}elseif(!empty($video->url)){
-		   	if (str_contains($video->url, 'vimeo')){
-		        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
-		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}] }\'>
-		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-		        </video>';
-		    }elseif(str_contains($video->url, 'facebook')){
-				if(str_contains($video->url, 'posts') && $embed){
-		    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
-							<div id="fb-root"></div>
-							<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
-		               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
-		    	}else if(str_contains($video->url, 'videos')){
-					if(!$video->vertical || $embed) {
-						$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
-					} else {
-						$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
-					}
-		    	}				
-			}elseif(str_contains($video->url, 'instagram')){
-				if($embed){
-					$sHTML .= $video->embed_code;
-				}else{
-					$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
-				}
-			}elseif(str_contains($video->url, 'twitter')){
-				$tweet_id = explode("/", $video->url);
-				$tweet_id = preg_replace('/\s+/', '', end($tweet_id));
-				if($tweet_id){
-					$sHTML .= '<div class="tweet" id="'.$tweet_id.'"></div>';
-				} else {
-					$sHTML .= '<p align="center">Cannot find a valid Tweet</p>';
-				}
-			}elseif(str_contains($video->url, 'imgur')){
-				$sHTML .= '<img src="'.$video->url.'">';
-			}
-		}elseif (!empty($video->file)){
+		}else if(!empty($video->file)){
 			if($video->file_watermark_dirty) {
 				$video->file = $video->file_watermark_dirty;
 			} else {
@@ -71,13 +35,63 @@ trait VideoHelper{
 		        <source src="'.$video->file.'" type="video/mp4">
 		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 		    </video>';
-		}elseif(!empty($video->embed_code)){
+		}else if(!empty($video->url)){
+		   	if(str_contains($video->url, 'facebook')){
+				if(str_contains($video->url, 'posts') && $embed){
+		    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
+							<div id="fb-root"></div>
+							<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
+		               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
+		    	}else if(str_contains($video->url, 'videos')){
+					if(!$video->vertical || $embed) {
+						$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
+					} else {
+						$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
+					}
+		    	}else{
+					$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
+				}		
+			}else if(str_contains($video->url, 'twitter')){
+				if($embed){
+					preg_match('#status\/([\d^]+)#', $video->url, $matches);
+
+					if(isset($matches[1])){
+						$sHTML .= '<div class="tweet" id="'.$matches[1].'"></div>';
+					} else {
+						$sHTML .= '<p align="center">Cannot find a valid Tweet</p>';
+					}
+				}else{
+					$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
+				}
+			}else if(str_contains($video->url, 'instagram')){
+				if($embed){
+					$sHTML .= $video->embed_code;
+				}else{
+					$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
+				}
+			}else if(str_contains($video->url, 'vimeo')){
+		        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
+		        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}] }\'>
+		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+		        </video>';
+		    }else if(str_contains($video->url, 'imgur')){
+				$sHTML .= '<img src="'.$video->url.'">';
+			}else if($embed && str_contains($video->url, 'vine.co')){
+				$sHTML .= '<iframe src="'.$video->url.'embed/simple" class="vine-embed" type="text/html" width="600" height="600" frameborder="0" allowfullscreen></iframe>
+				<script async src="//platform.vine.co/static/scripts/embed.js"></script>';
+			}else if($embed && str_contains($video->url, 'streamable')){
+				$sHTML .= '<blockquote class="embedly-card"><h4><a href="'.$video->url.'"></a></h4></blockquote>
+				<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
+			}else{
+				$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
+			}
+		}else if(!empty($video->embed_code)){
 		    if (str_contains($video->embed_code, 'youtube')){
 		        $sHTML .= '<div class="youtube-player" data-id="'.$video->getKey().'"></div>';
 		    }else{
 		        $sHTML .= $video->embed_code;
 		    }
-		}elseif(!empty($video->image)){
+		}else if(!empty($video->image)){
 		    if(str_contains($video->image,'http')){
 		    	$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
 		    }else{
@@ -114,10 +128,21 @@ trait VideoHelper{
 				}
 
 				$linkVars['vertical'] = $fb_vertical;
-			}elseif(str_contains($url, 'posts')){
+			}
+		}else if(str_contains($url, 'twitter.com')){
+			preg_match('#status\/([\d^]+)#', $url, $matches);
 
-			}elseif(str_contains($url, 'story')){
+			if(isset($matches[1])){
+				try{
+					$tweet = Twitter::getTweet($matches[1]);
 
+					if(isset($tweet->entities->media[0])){
+						$linkVars['image'] = $tweet->entities->media[0]->media_url_https;
+						$linkVars['thumb'] = $tweet->entities->media[0]->media_url_https;
+					}
+				}catch(Exception $e){
+					return $e->getMessage();
+				}
 			}
 		}else if(str_contains($url, 'youtu')){
 			$youtubeId = VideoHelper::getYoutubeID($url); 
@@ -129,6 +154,7 @@ trait VideoHelper{
 			}
 		}else if(str_contains($url, 'instagram')){
 			$url = 'https://api.instagram.com/oembed/?url='.$url;
+
 			try {
 				$curl_connection = curl_init($url);
 				curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);
@@ -144,7 +170,7 @@ trait VideoHelper{
 					$linkVars['thumb'] = $data['thumbnail_url'];
 					$linkVars['embed_code'] = $data['html'];
 				}
-			} catch(Exception $e) {
+			}catch(Exception $e){
 				return $e->getMessage();
 			}
 		}else if(str_contains($url, 'imgur') && str_contains($url, '.gifv')){

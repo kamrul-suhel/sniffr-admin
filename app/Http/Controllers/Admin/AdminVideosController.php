@@ -548,6 +548,7 @@ class AdminVideosController extends Controller {
 
                         //Check facebook
                         $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
+
                         $linkDetails = VideoHelper::videoLinkChecker($record['link']);
 
                         $video = new Video();

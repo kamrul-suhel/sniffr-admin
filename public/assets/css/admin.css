@@ -21574,6 +21574,7 @@ hr {
 .video-container.embedded {
   padding-bottom: unset;
   background-color: #fff;
+  height: unset;
 }
 
 .video-container.embedded video {
@@ -21582,6 +21583,10 @@ hr {
 
 .video-container.embedded iframe {
   position: relative;
+}
+
+.video-container.embedded p a {
+  color: #888;
 }
 
 .video-container iframe,
@@ -21606,6 +21611,18 @@ hr {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.video-container p {
+  font-size: 22px;
+  color: #ccc;
+  text-align: center;
+  margin: 20px;
+  word-break: break-word;
+}
+
+.video-container p a {
+  color: #ccc;
 }
 
 .video-container .video-thumb {
