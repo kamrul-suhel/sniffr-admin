@@ -536,31 +536,28 @@ class AdminVideosController extends Controller {
             $header = $csv->getHeader(); //returns the CSV header record
             $records = $csv->getRecords(); //returns all the CSV records as an Iterator object
             $count = 1;
-            $select_state = 'restricted';
-            $select_rights = 'nonex';
+            $select_type = Input::get('type');
+            $select_state = Input::get('state');
+            $select_rights = Input::get('rights');
 
             foreach($records as $record) {
                 $result = Video::where('url', $record['link'])->get();
 
                 if(!count($result)) { // Check if URL already exists within db
+                    // Add contact details
+                    if(isset($record['email'])) {
+                        $contact = Contact::where('email',$record['email'])->first();
+                        if(!$contact){ // IF contact exists
+                            $contact = new Contact();
+                            $contact->tel = (isset($record['tel']) ? $record['tel'] : '' ); //might want to change phone to tel in CSV file
+                            $contact->email = $record['email'];
+                            $contact->save();
+                        }
+                    }
 
                     // Check if URL exists
                     if(filter_var($record['link'], FILTER_VALIDATE_URL)){
-
-                        if(strpos($record['link'], 'jotform') || strpos($record['link'], 'drive.google.com') || strpos($record['link'], 'dropbox')) { // Check if link is jotform
-                            // Add contact details
-                            if(isset($record['email'])) {
-                                $contact = Contact::where('email',$record['email'])->first();
-                                if(!$contact){ // IF contact exists
-                                    $contact = new Contact();
-                                    $contact->first_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[0] : '' );
-                                    $contact->last_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[1] : '' );
-                                    $contact->tel = (isset($record['tel']) ? $record['tel'] : '' ); //might want to change phone to tel in CSV file
-                                    $contact->email = $record['email'];
-                                    $contact->save();
-                                }
-                            }
-
+                        if(($select_type == 'both' || $select_type == 'files') && (strpos($record['link'], 'jotform') || strpos($record['link'], 'drive.google.com') || strpos($record['link'], 'dropbox'))) { // Check if link is jotform
                             // Add additional field data
                             $collection = VideoCollection::where('name', $record['category'])->first();
                             $video = new Video();
@@ -584,28 +581,15 @@ class AdminVideosController extends Controller {
 
                             $count++;
 
-                        } else if(strpos($record['link'], 'streamable') || strpos($record['link'], 'reddit') || strpos($record['link'], 'indiegogo') || strpos($record['link'], 'kickstarter') || strpos($record['link'], 'dailymail')) {
+                        } else if(($select_type == 'both' || $select_type == 'files') && (strpos($record['link'], 'streamable') || strpos($record['link'], 'reddit') || strpos($record['link'], 'indiegogo') || strpos($record['link'], 'kickstarter') || strpos($record['link'], 'dailymail'))) {
 
                             echo $record['title'].' : '.$record['link'].'<br />';
 
-                        } else if(!str_contains($record['link'], 'http')) {
+                        } else if(($select_type == 'both' || $select_type == 'files') && (!str_contains($record['link'], 'http'))) {
 
                             // Not a valid link so do nothing
 
-                        } else {
-                            // Add contact details
-                            if(isset($record['email'])) {
-                                $contact = Contact::where('email',$record['email'])->first();
-                                if(!$contact){ // IF contact exists
-                                    $contact = new Contact();
-                                    $contact->first_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[0] : '' );
-                                    $contact->last_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[1] : '' );
-                                    $contact->tel = (isset($record['tel']) ? $record['tel'] : '' ); //might want to change phone to tel in CSV file
-                                    $contact->email = $record['email'];
-                                    $contact->save();
-                                }
-                            }
-
+                        } else if($select_type == 'both' || $select_type == 'urls'){
                             // Add additional field data
                             $collection = VideoCollection::where('name', $record['category'])->first();
 
