@@ -13656,9 +13656,11 @@ label {
 .gallery-env .album .album-info h3 {
   max-height: 20px;
   height: 20px;
-  overflow: hidden;
   font-size: 18px;
   margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .gallery-env .album header {
@@ -21563,24 +21565,73 @@ hr {
   display: none;
 }
 
-#video_container {
+.video-container {
   position: relative;
   padding-bottom: 56.23%;
   height: 0;
   overflow: hidden;
+  background-color: #000;
 }
 
-#video_container iframe,
-#video_container object,
-#video_container embed {
+.video-container.embedded {
+  padding-bottom: unset;
+  background-color: #fff;
+  height: unset;
+}
+
+.video-container.embedded video {
+  position: relative;
+}
+
+.video-container.embedded iframe {
+  position: relative;
+}
+
+.video-container.embedded p a {
+  color: #888;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
   border: 0px;
+  width: 100%;
+  margin-bottom: 20px;
+  z-index: 99;
+}
+
+.video-container iframe.youtube-iframe {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.video-container video {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  margin-bottom: 20px;
-  z-index: 99;
+}
+
+.video-container p {
+  font-size: 22px;
+  color: #ccc;
+  text-align: center;
+  margin: 20px;
+  word-break: break-word;
+}
+
+.video-container p a {
+  color: #ccc;
+}
+
+.video-container .video-thumb {
+  padding-bottom: 56.23%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: contain;
 }
 
 .youtube-player iframe {

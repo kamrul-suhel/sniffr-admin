@@ -128,7 +128,8 @@ class ThemeUploadController extends Controller {
         }
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileSize = $fileMimeType = $youtubeId = '';
+        $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
+        $url = Input::get('url');
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
             $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
@@ -140,6 +141,16 @@ class ThemeUploadController extends Controller {
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
+        }else{
+            //Check link details
+            $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
+
+            $youtubeId = $linkDetails['youtube_id'];
+            $image = $linkDetails['image'];
+            $thumb = $linkDetails['thumb'];
+            $vertical = $linkDetails['vertical'];
+            $url = $linkDetails['url'];
+            $embedCode = $linkDetails['embed_code'];
         }
 
         //add additional form data to db (with video file info)
@@ -147,8 +158,12 @@ class ThemeUploadController extends Controller {
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title');
-        $video->url = Input::get('url');
+        $video->url = $url;
         $video->file = $filePath;
+        $video->embed_code = $embedCode;
+        $video->image = $image;
+        $video->thumb = $thumb;
+        $video->vertical = $vertical;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
         $video->state = 'new';
@@ -180,28 +195,14 @@ class ThemeUploadController extends Controller {
         }
     }
 
-    public function issueAlert($alert) {
-        $allow = false;
-        $msg = substr($alert, strpos($alert, ':') + 1);
-        $alert = strtok($alert, ':');
-        switch($alert) {
-            case 'upload-form':
-                $allow = true;
-                break;
-            case 'abuse': //easter egg > sent message to slack channel e.g. /issue/abuse:mike-knows-nothing-about-coding
-                $allow = true;
-                $alert = str_replace('abuse', '', $msg);
-                break;
-        }
-        if($allow) {
-            $alert = strtoupper(str_replace('-', ' ', $alert));
-            // Slack notifications
-            $video = new Video();
-            $video->notify(new SubmissionAlert($alert));
-            //return success
-            return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
-        } else {
-            return response()->json(['status' => 'fail', 'message' => 'Something went wrong']);
-        }
+    public function issueAlert() {
+        $alert = 'File: '.Input::get('file').', 
+        Line: '.Input::get('line').', 
+        Message: '.Input::get('message');
+        // Slack notifications
+        $video = new Video();
+        $video->notify(new SubmissionAlert($alert));
+        //return success
+        return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 }

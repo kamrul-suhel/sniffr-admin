@@ -103,7 +103,7 @@ class AdminVideosController extends Controller {
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('created_at', 'DESC')->paginate(9);
+        $videos = $videos->orderBy('id', 'DESC')->paginate(9);
 
         $user = Auth::user();
 
@@ -246,7 +246,7 @@ class AdminVideosController extends Controller {
         }
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }
@@ -608,17 +608,29 @@ class AdminVideosController extends Controller {
 
                             // Add additional field data
                             $collection = VideoCollection::where('name', $record['category'])->first();
+
+                            //Check facebook
+                            $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
+                            $linkDetails = VideoHelper::videoLinkChecker($record['link']);
+
                             $video = new Video();
                             if (isset($contact)) { $video->contact_id = $contact->id; }
                             $video->alpha_id = VideoHelper::quickRandom();
+                            $video->youtube_id = $linkDetails['youtube_id'];
                             $video->title = $record['title'];
-                            $video->url = $record['link'];
+                            $video->url = $linkDetails['url'];
+                            $video->image = $linkDetails['image'];
+                            $video->thumb = $linkDetails['thumb'];
+                            $video->embed_code = $linkDetails['embed_code'];
+                            $video->vertical = $linkDetails['vertical'];
                             $video->state = $select_state;
                             $video->rights = $select_rights;
-                            if(count($collection)) {
+
+                            if(count($collection)){
                                 $video->video_collection_id = $collection->id;
                             }
                             $video->save();
+
                         }
 
                     } else {
@@ -689,7 +701,7 @@ class AdminVideosController extends Controller {
         $video->save();
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'video_id' => $video->alpha_id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully Removed Video', 'remove' => 'yes', 'video_id' => $video->alpha_id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Deleted Video', 'note_type' => 'success') );
         }

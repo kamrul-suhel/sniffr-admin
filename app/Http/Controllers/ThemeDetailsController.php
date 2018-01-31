@@ -27,7 +27,6 @@ use App\Notifications\DetailsReview;
 class ThemeDetailsController extends Controller
 {
     protected $rules = [
-        'tel' => 'required',
         'date_filmed' => 'required',
         'location' => 'required',
         'description' => 'required',

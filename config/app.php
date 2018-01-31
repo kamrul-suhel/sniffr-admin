@@ -175,6 +175,7 @@ return [
         BaoPham\DynamoDb\DynamoDbServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Thujohn\Twitter\TwitterServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -242,7 +243,8 @@ return [
         //'Youtube' => Dawson\Youtube\Facades\Youtube::class,
         'MyYoutube' => App\Libraries\Facades\MyYoutube::class,
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
 
     ],
 

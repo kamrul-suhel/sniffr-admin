@@ -99,7 +99,7 @@
 					</header>
 
 					<section class="album-info">
-						<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}"><?php if(strlen($video->title) > 25){ echo substr($video->title, 0, 25) . '...'; } else { echo $video->title; } ?></a></h3>
+						<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
 
 						<p>{{ $video->description }}</p>
 					</section>
@@ -170,7 +170,7 @@
 
 			<div class="clear"></div>
 
-			<div class="text-center"><?= $videos->appends(Request::only('s'))->render(); ?></div>
+			<div class="text-center"><?= $videos->appends(request()->except('page'))->render(); ?></div>
 		</div>
 	</div>
 

@@ -123,7 +123,8 @@ class ThemeSubmissionController extends Controller {
         }
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileSize = $fileMimeType = $youtubeId = '';
+        $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
+        $url = Input::get('url');
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
@@ -136,6 +137,16 @@ class ThemeSubmissionController extends Controller {
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
+        }else{
+            //Check link details
+            $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
+
+            $youtubeId = $linkDetails['youtube_id'];
+            $image = $linkDetails['image'];
+            $thumb = $linkDetails['thumb'];
+            $vertical = $linkDetails['vertical'];
+            $url = $linkDetails['url'];
+            $embedCode = $linkDetails['embed_code'];
         }
 
         //add additional form data to db (with video file info)
@@ -143,11 +154,15 @@ class ThemeSubmissionController extends Controller {
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title');
-        $video->url = Input::get('url');
+        $video->url = $url;
         $video->file = $filePath;
+        $video->embed_code = $embedCode;
+        $video->image = $image;
+        $video->thumb = $thumb;
+        $video->vertical = $vertical;
         $video->youtube_id = $youtubeId;
         $video->mime = $fileMimeType;
-        $video->state = 'problem';
+        $video->state = 'restricted';
         $video->rights = 'nonex';
         $video->referrer = Input::get('referrer');
         $video->notes = Input::get('notes');
@@ -168,10 +183,16 @@ class ThemeSubmissionController extends Controller {
                 ->delay(now()->addSeconds(5));
         }
 
+        $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
+
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
-            return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            if($iframe == 'true'){
+                return Redirect::to('https://www.unilad.co.uk');
+            }else{
+                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
+            }
         }
     }
 }
