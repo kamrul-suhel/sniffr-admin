@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -19,6 +20,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use App\Notifications\SubmissionImport;
 use App\Notifications\SubmissionAlert;
 
 class QueueVideoImport implements ShouldQueue
@@ -161,10 +163,14 @@ class QueueVideoImport implements ShouldQueue
 
             if($invalidDelete==1) { // IF the file is invalid then flag it
 
-                $video->file = $this->file;
+                //$video->file = $this->file;
                 $video->description = 'This file is either invalid or not a video';
                 $video->state = 'problem';
                 $video->save();
+
+                $invalidType = (!empty($fileMimeType) ? ', MimeType: .'.$fileMimeType : '' );
+
+                $video->notify(new SubmissionAlert('a job in the queue was either invalid or not a video (Id: '.$this->video_id.', File: '.$this->file.' '.$invalidType.')'));
             } else {
 
                 //maybe sent out a notification on slack
@@ -178,13 +184,13 @@ class QueueVideoImport implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-     public function failed(Exception $exception)
+     public function failed($exception)
      {
          // Send user notification of failure, etc...
-         //$video = new Video();
-         //$video->notify(new SubmissionImport(''));
-         //$video->notify(new SubmissionAlert($alert));
+         $video = new Video();
+         $video->notify(new SubmissionAlert('a job in the queue has failed (Id: '.$this->video_id.', File: '.$this->file.')'));
 
-         
+         //Log::info('Job failed: '.$exception);
+
      }
 }
