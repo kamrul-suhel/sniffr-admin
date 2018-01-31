@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class SubmissionAlert extends Notification
+class SubmissionImport extends Notification
 {
     use Queueable;
 
