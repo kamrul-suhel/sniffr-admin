@@ -35,6 +35,7 @@ The difference between Laravel Scheduler and Laravel Queues >> Scheduler is more
 - Added new test queue job $ php artisan make:job SubmissionThanks
 - Updated App\Jobs\SubmissionThanks file to execute SubmissionThanks mail (WIP)
 - Then we have to create a schedule function to keep checking the queue.
+- Run $ php artisan queue:listen
 
 ## Notes for GAE setup
 

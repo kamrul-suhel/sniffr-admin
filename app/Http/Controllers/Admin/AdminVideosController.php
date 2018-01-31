@@ -27,6 +27,7 @@ use App\User;
 use App\Tag;
 use App\Menu;
 use App\Video;
+use App\Contact;
 use App\Comment;
 use App\Campaign;
 use App\VideoCategory;
@@ -35,6 +36,7 @@ use App\VideoShotType;
 
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
+use App\Jobs\QueueVideoImport;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
@@ -512,7 +514,20 @@ class AdminVideosController extends Controller {
      */
     public function upload(Request $request)
     {
-        if($request->hasFile('csv')){
+        if($request->hasFile('csv')) {
+
+            // $memory_limit = ini_get('memory_limit');
+            // if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
+            //     if ($matches[2] == 'M') {
+            //         $memory_limit = $matches[1] * 1024 * 1024; // nnnM -> nnn MB
+            //     } else if ($matches[2] == 'K') {
+            //         $memory_limit = $matches[1] * 1024; // nnnK -> nnn KB
+            //     }
+            // }
+            //
+            // $ok = ($memory_limit >= 640 * 1024 * 1024); // at least 64M?
+            //
+            // dd($memory_limit);
 
             //load the CSV document from a file path
             $csv = Reader::createFromPath(Input::file('csv'), 'r');
@@ -520,61 +535,108 @@ class AdminVideosController extends Controller {
 
             $header = $csv->getHeader(); //returns the CSV header record
             $records = $csv->getRecords(); //returns all the CSV records as an Iterator object
+            $count = 1;
+            $select_state = 'restricted';
+            $select_rights = 'nonex';
 
-            foreach($records as $record){
+            foreach($records as $record) {
                 $result = Video::where('url', $record['link'])->get();
 
-                if(!count($result)){
-                    if(strpos($record['link'], 'jotformeu.com')){// Check if link is jotform
+                if(!count($result)) { // Check if URL already exists within db
 
-                        // $collection = VideoCollection::where('name', $record['category'])->first();
-                        //
-                        // $video = new Video();
-                        // $video->alpha_id = VideoHelper::quickRandom();
-                        // $video->title = $record['title'];
-                        // $video->state = 'restricted';
-                        // $video->rights = 'nonex';
-                        //
-                        // if(count($collection)){
-                        //     $video->video_collection_id = $collection->id;
-                        // }
-                        //
-                        // $video->save();
-                        echo $record['link'].'<br />';
+                    // Check if URL exists
+                    if(filter_var($record['link'], FILTER_VALIDATE_URL)){
 
-                    }else if(strpos($record['link'], 'drive.google.com')||strpos($record['link'], 'dropbox')||strpos($record['link'], 'streamable')){ // Check if link google drive / dropbox / streamable
+                        if(strpos($record['link'], 'jotform') || strpos($record['link'], 'drive.google.com') || strpos($record['link'], 'dropbox')) { // Check if link is jotform
+                            // Add contact details
+                            if(isset($record['email'])) {
+                                $contact = Contact::where('email',$record['email'])->first();
+                                if(!$contact){ // IF contact exists
+                                    $contact = new Contact();
+                                    $contact->first_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[0] : '' );
+                                    $contact->last_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[1] : '' );
+                                    $contact->tel = (isset($record['phone']) ? $record['phone'] : '' ); //might want to change phone to tel in CSV file
+                                    $contact->email = $record['email'];
+                                    $contact->save();
+                                }
+                            }
 
-                    }else if(!str_contains($record['link'], 'http')) {
+                            // Add additional field data
+                            $collection = VideoCollection::where('name', $record['category'])->first();
+                            $video = new Video();
+                            if (isset($contact)) { $video->contact_id = $contact->id; }
+                            $video->alpha_id = VideoHelper::quickRandom();
+                            $video->title = $record['title'];
+                            $video->url = $record['link'];
+                            $video->state = $select_state;
+                            $video->rights = $select_rights;
+                            if(count($collection)){
+                                $video->video_collection_id = $collection->id;
+                            }
+                            // Save video
+                            $video->save();
 
-                    }else{
-                        $collection = VideoCollection::where('name', $record['category'])->first();
+                            //echo $count.' : '.$record['link'].'<br />';
 
-                        $video = new Video();
-                        $video->alpha_id = VideoHelper::quickRandom();
-                        $video->title = $record['title'];
-                        $video->url = $record['link'];
-                        $video->state = 'restricted';
-                        $video->rights = 'nonex';
+                            // Add job to import queue
+                            QueueVideoImport::dispatch($video->id, $record['link'])
+                                ->delay(now()->addSeconds(5));
 
-                        if(count($collection)){
-                            $video->video_collection_id = $collection->id;
+                            $count++;
+
+                        } else if(strpos($record['link'], 'streamable') || strpos($record['link'], 'reddit') || strpos($record['link'], 'indiegogo') || strpos($record['link'], 'kickstarter') || strpos($record['link'], 'dailymail')) {
+
+                            echo $record['title'].' : '.$record['link'].'<br />';
+
+                        } else if(!str_contains($record['link'], 'http')) {
+
+                            // Not a valid link so do nothing
+
+                        } else {
+                            // Add contact details
+                            if(isset($record['email'])) {
+                                $contact = Contact::where('email',$record['email'])->first();
+                                if(!$contact){ // IF contact exists
+                                    $contact = new Contact();
+                                    $contact->first_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[0] : '' );
+                                    $contact->last_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[1] : '' );
+                                    $contact->tel = (isset($record['phone']) ? $record['phone'] : '' ); //might want to change phone to tel in CSV file
+                                    $contact->email = $record['email'];
+                                    $contact->save();
+                                }
+                            }
+
+                            // Add additional field data
+                            $collection = VideoCollection::where('name', $record['category'])->first();
+                            $video = new Video();
+                            if (isset($contact)) { $video->contact_id = $contact->id; }
+                            $video->alpha_id = VideoHelper::quickRandom();
+                            $video->title = $record['title'];
+                            $video->url = $record['link'];
+                            $video->state = $select_state;
+                            $video->rights = $select_rights;
+                            if(count($collection)) {
+                                $video->video_collection_id = $collection->id;
+                            }
+                            $video->save();
                         }
 
-                        $video->save();
+                    } else {
+                        echo $record['title'].' : '.$record['link'].'<br />';
                     }
                 }
             }
 
-            return Redirect::to('admin/videos')->with(array('note' => 'Successfully Uploaded CSV!', 'note_type' => 'success') );
+            //return Redirect::to('admin/videos')->with(array('note' => 'Successfully Uploaded CSV!', 'note_type' => 'success') );
+        } else {
+            $data = array(
+                'post_route' => url('admin/videos/upload'),
+                'button_text' => 'Upload Video CSV',
+                'admin_user' => Auth::user(),
+            );
+
+            return view('admin.videos.upload', $data);
         }
-
-        $data = array(
-            'post_route' => url('admin/videos/upload'),
-            'button_text' => 'Upload Video CSV',
-            'admin_user' => Auth::user(),
-        );
-
-        return view('admin.videos.upload', $data);
     }
 
     public function comment($id)
