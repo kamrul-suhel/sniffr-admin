@@ -1,11 +1,11 @@
 		</div>
-		
+
 		<footer>
 			<div class="container">
 				<div class="footer-wrapper">
 					<div class="footer-copy">
 						<h3><?php echo $settings->website_name; ?></h3>
-						<p>UNILAD is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
+						<p>Sniffr is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
 					</div>
 
 					<div class="icons-social">

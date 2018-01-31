@@ -31,6 +31,8 @@ use App\Mail\SubmissionThanksNonEx;
 
 use Dumpk\Elastcoder\ElastcoderAWS;
 
+use App\Notifications\SubmissionAlert;
+
 class QueueVideo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -85,7 +87,7 @@ class QueueVideo implements ShouldQueue
                    	'PipelineId' => '1515757750300-4fybrt',
                        'Watermarks' => [[
                                'PresetWatermarkId' => 'TopRight',
-                               'InputKey'          => 'logo-unilad-white.png'
+                               'InputKey'          => 'logo-sniffr-white.png'
                        ]],
                    ];
                 $config_dirty = [
@@ -97,7 +99,7 @@ class QueueVideo implements ShouldQueue
                   	'PipelineId' => '1515757750300-4fybrt',
                       'Watermarks' => [[
                               'PresetWatermarkId' => 'Centered',
-                              'InputKey'          => 'logo-unilad-white.png'
+                              'InputKey'          => 'logo-sniffr-white.png'
                       ]],
                   ];
 
@@ -129,10 +131,10 @@ class QueueVideo implements ShouldQueue
                 // FFMPEG (old local server route), Save logo to right size
                 $logo_width = floor($video_width/10);
                 $logo_padding_width = floor($video_width/100);
-                $logo_file = public_path('content/uploads/settings/logo-unilad-white-'.$logo_width .'.png');
+                $logo_file = public_path('content/uploads/settings/logo-sniffr-white-'.$logo_width .'.png');
 
                 if(!file_exists($logo_file)){
-                    Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(70)->resize($logo_width, null, function ($constraint) {
+                    Image::make(public_path('content/uploads/settings/logo-sniffr-white.png'))->opacity(70)->resize($logo_width, null, function ($constraint) {
                         $constraint->aspectRatio();
                     })->save($logo_file);
                 }
@@ -167,8 +169,10 @@ class QueueVideo implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed($exception)
     {
         // Send user notification of failure, etc...
+        $video = new Video();
+        $video->notify(new SubmissionAlert('a job in the queue has failed to create a watermark (Id: '.$this->video_id.')'));
     }
 }

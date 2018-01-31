@@ -555,7 +555,7 @@ class AdminVideosController extends Controller {
                                     $contact = new Contact();
                                     $contact->first_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[0] : '' );
                                     $contact->last_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[1] : '' );
-                                    $contact->tel = (isset($record['phone']) ? $record['phone'] : '' ); //might want to change phone to tel in CSV file
+                                    $contact->tel = (isset($record['tel']) ? $record['tel'] : '' ); //might want to change phone to tel in CSV file
                                     $contact->email = $record['email'];
                                     $contact->save();
                                 }
@@ -600,7 +600,7 @@ class AdminVideosController extends Controller {
                                     $contact = new Contact();
                                     $contact->first_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[0] : '' );
                                     $contact->last_name = (isset($record['full_name']) ? explode(' ', $record['full_name'])[1] : '' );
-                                    $contact->tel = (isset($record['phone']) ? $record['phone'] : '' ); //might want to change phone to tel in CSV file
+                                    $contact->tel = (isset($record['tel']) ? $record['tel'] : '' ); //might want to change phone to tel in CSV file
                                     $contact->email = $record['email'];
                                     $contact->save();
                                 }
@@ -634,12 +634,12 @@ class AdminVideosController extends Controller {
                         }
 
                     } else {
-                        echo $record['title'].' : '.$record['link'].'<br />';
+                        //echo $record['title'].' : '.$record['link'].'<br />';
                     }
                 }
             }
 
-            //return Redirect::to('admin/videos')->with(array('note' => 'Successfully Uploaded CSV!', 'note_type' => 'success') );
+            return Redirect::to('admin/videos')->with(array('note' => 'Successfully Uploaded CSV!', 'note_type' => 'success') );
         } else {
             $data = array(
                 'post_route' => url('admin/videos/upload'),

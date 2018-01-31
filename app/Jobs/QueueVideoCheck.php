@@ -30,6 +30,8 @@ use App\Mail\SubmissionThanksNonEx;
 
 use Dumpk\Elastcoder\ElastcoderAWS;
 
+use App\Notifications\SubmissionAlert;
+
 class QueueVideoCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -122,6 +124,13 @@ class QueueVideoCheck implements ShouldQueue
 
                 }
 
+            } elseif(strtolower($job['Status']) == 'error' && $this->file_type=='watermark') {
+
+                $job_complete = 0;
+                if($this->tries_loop_count==3) { // IF fails after 3 tries then alert
+                    $video = new Video();
+                    $video->notify(new SubmissionAlert('a job in the queue has failed to create a watermark file (Id: '.$this->video_id.')'));
+                }
             } else {
 
                 $job_complete = 0;
@@ -131,7 +140,7 @@ class QueueVideoCheck implements ShouldQueue
             // run this job/queue again if the job is still processing (as per above)
             if($this->tries_loop_count<5&&$job_complete==0) {
                 $this->tries_loop_count++;
-                QueueVideoCheck::dispatch($job['Id'], $video->id, $this->file_type, $this->tries_loop_count)
+                QueueVideoCheck::dispatch($job['Id'], $this->video_id, $this->file_type, $this->tries_loop_count)
                     ->delay(now()->addSeconds(30));
             }
 
@@ -144,8 +153,12 @@ class QueueVideoCheck implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-    public function failed(Exception $exception)
-    {
-        // Send user notification of failure, etc...
-    }
+     public function failed($exception)
+     {
+         // Send user notification of failure, etc...
+         if($this->tries_loop_count==3) { // IF fails after 3 tries then alert
+             $video = new Video();
+             $video->notify(new SubmissionAlert('a job in the queue has failed to find the watermarked file (Id: '.$this->video_id.')'));
+         }
+     }
 }

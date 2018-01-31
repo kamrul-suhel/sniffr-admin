@@ -174,7 +174,7 @@ class AdminLabelController extends Controller {
              'PipelineId' => '1515757750300-4fybrt',
                 'Watermarks' => [[
                         'PresetWatermarkId' => 'TopRight',
-                        'InputKey'          => 'logo-unilad-white.png'
+                        'InputKey'          => 'logo-sniffr-white.png'
                 ]],
             ];
 
@@ -211,9 +211,9 @@ class AdminLabelController extends Controller {
         // Save logo to right size
         $logo_width = floor($video_width/10);
         $logo_padding_width = floor($video_width/100);
-        $logo_file = public_path('content/uploads/settings/logo-unilad-white-'.$logo_width .'.png');
+        $logo_file = public_path('content/uploads/settings/logo-sniffr-white-'.$logo_width .'.png');
 
-        Image::make(public_path('content/uploads/settings/logo-unilad-white.png'))->opacity(80)->resize($logo_width, null, function ($constraint) {
+        Image::make(public_path('content/uploads/settings/logo-sniffr-white.png'))->opacity(80)->resize($logo_width, null, function ($constraint) {
             $constraint->aspectRatio();
         })->save($logo_file);
 

@@ -81,8 +81,8 @@ class QueueVideoImport implements ShouldQueue
                     $t = Storage::disk('s3')->put($fileName, file_get_contents($this->file), 'public');
                     $filePath = Storage::disk('s3')->url($fileName);
 
-                    // QueueVideo::dispatch($video->id)
-                    //     ->delay(now()->addSeconds(10));
+                    QueueVideo::dispatch($video->id)
+                        ->delay(now()->addSeconds(10));
 
                     // Save the record
                     $video->file = $filePath;
@@ -121,8 +121,8 @@ class QueueVideoImport implements ShouldQueue
                         $t = Storage::disk('s3')->put($fileName, $file, 'public');
                         $filePath = Storage::disk('s3')->url($fileName);
 
-                        // QueueVideo::dispatch($video->id)
-                        //     ->delay(now()->addSeconds(10));
+                        QueueVideo::dispatch($video->id)
+                            ->delay(now()->addSeconds(10));
 
                         // Save the record
                         $video->file = $filePath;
@@ -149,8 +149,8 @@ class QueueVideoImport implements ShouldQueue
                     $t = Storage::disk('s3')->put($fileName, file_get_contents($filePath), 'public');
                     $filePath = Storage::disk('s3')->url($fileName);
 
-                    // QueueVideo::dispatch($video->id)
-                    //     ->delay(now()->addSeconds(10));
+                    QueueVideo::dispatch($video->id)
+                        ->delay(now()->addSeconds(10));
 
                     // Save the record
                     $video->file = $filePath;
