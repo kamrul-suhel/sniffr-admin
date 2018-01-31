@@ -178,10 +178,13 @@ class QueueVideoImport implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-    public function failed($event, Exception $e) {
-        // Send user notification of failure, etc...
-        $video = new Video();
-        //$video->notify(new SubmissionImport(''));
-        $video->notify(new SubmissionAlert($alert));
-    }
+     public function failed(Exception $exception)
+     {
+         // Send user notification of failure, etc...
+         //$video = new Video();
+         //$video->notify(new SubmissionImport(''));
+         //$video->notify(new SubmissionAlert($alert));
+
+         
+     }
 }
