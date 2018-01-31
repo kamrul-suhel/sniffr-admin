@@ -515,27 +515,12 @@ class AdminVideosController extends Controller {
     public function upload(Request $request)
     {
         if($request->hasFile('csv')) {
-
-            // $memory_limit = ini_get('memory_limit');
-            // if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
-            //     if ($matches[2] == 'M') {
-            //         $memory_limit = $matches[1] * 1024 * 1024; // nnnM -> nnn MB
-            //     } else if ($matches[2] == 'K') {
-            //         $memory_limit = $matches[1] * 1024; // nnnK -> nnn KB
-            //     }
-            // }
-            //
-            // $ok = ($memory_limit >= 640 * 1024 * 1024); // at least 64M?
-            //
-            // dd($memory_limit);
-
             //load the CSV document from a file path
             $csv = Reader::createFromPath(Input::file('csv'), 'r');
             $csv->setHeaderOffset(0);
 
             $header = $csv->getHeader(); //returns the CSV header record
             $records = $csv->getRecords(); //returns all the CSV records as an Iterator object
-            $count = 1;
             $select_type = Input::get('type');
             $select_state = Input::get('state');
             $select_rights = Input::get('rights');
@@ -547,6 +532,7 @@ class AdminVideosController extends Controller {
                     // Add contact details
                     if(isset($record['email'])) {
                         $contact = Contact::where('email',$record['email'])->first();
+
                         if(!$contact){ // IF contact exists
                             $contact = new Contact();
                             $contact->tel = (isset($record['tel']) ? $record['tel'] : '' ); //might want to change phone to tel in CSV file
@@ -557,66 +543,40 @@ class AdminVideosController extends Controller {
 
                     // Check if URL exists
                     if(filter_var($record['link'], FILTER_VALIDATE_URL)){
-                        if(($select_type == 'both' || $select_type == 'files') && (strpos($record['link'], 'jotform') || strpos($record['link'], 'drive.google.com') || strpos($record['link'], 'dropbox'))) { // Check if link is jotform
-                            // Add additional field data
-                            $collection = VideoCollection::where('name', $record['category'])->first();
-                            $video = new Video();
-                            if (isset($contact)) { $video->contact_id = $contact->id; }
-                            $video->alpha_id = VideoHelper::quickRandom();
-                            $video->title = $record['title'];
-                            $video->url = $record['link'];
-                            $video->state = $select_state;
-                            $video->rights = $select_rights;
-                            if(count($collection)){
-                                $video->video_collection_id = $collection->id;
+                        // Add additional field data
+                        $collection = VideoCollection::where('name', $record['category'])->first();
+                        $video = new Video();
+                        $video->contact_id = isset($contact) ? $contact->id : NULL;
+                        $video->alpha_id = VideoHelper::quickRandom();
+                        $video->title = $record['title'];
+                        $video->state = $select_state;
+                        $video->rights = $select_rights;
+                        $video->video_collection_id = count($collection) ? $collection->id : 0;
+
+                        if(strpos($record['link'], 'jotform') || strpos($record['link'], 'drive.google.com') || strpos($record['link'], 'dropbox')) { // Check if link is jotform
+                            if($select_type == 'both' || $select_type == 'files'){
+                                $video->url = $record['link'];
+                                // Save video
+                                $video->save();
+
+                                // Add job to import queue
+                                QueueVideoImport::dispatch($video->id, $record['link'])
+                                    ->delay(now()->addSeconds(5));
                             }
-                            // Save video
-                            $video->save();
+                        } else if(str_contains($record['link'], 'http')){
+                            if($select_type == 'both' || $select_type == 'urls'){
+                                $linkDetails = VideoHelper::videoLinkChecker($record['link']);
 
-                            //echo $count.' : '.$record['link'].'<br />';
-
-                            // Add job to import queue
-                            QueueVideoImport::dispatch($video->id, $record['link'])
-                                ->delay(now()->addSeconds(5));
-
-                            $count++;
-
-                        } else if(($select_type == 'both' || $select_type == 'files') && (strpos($record['link'], 'streamable') || strpos($record['link'], 'reddit') || strpos($record['link'], 'indiegogo') || strpos($record['link'], 'kickstarter') || strpos($record['link'], 'dailymail'))) {
-
-                            echo $record['title'].' : '.$record['link'].'<br />';
-
-                        } else if(($select_type == 'both' || $select_type == 'files') && (!str_contains($record['link'], 'http'))) {
-
-                            // Not a valid link so do nothing
-
-                        } else if($select_type == 'both' || $select_type == 'urls'){
-                            // Add additional field data
-                            $collection = VideoCollection::where('name', $record['category'])->first();
-
-                            //Check facebook
-                            $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
-                            $linkDetails = VideoHelper::videoLinkChecker($record['link']);
-
-                            $video = new Video();
-                            if (isset($contact)) { $video->contact_id = $contact->id; }
-                            $video->alpha_id = VideoHelper::quickRandom();
-                            $video->youtube_id = $linkDetails['youtube_id'];
-                            $video->title = $record['title'];
-                            $video->url = $linkDetails['url'];
-                            $video->image = $linkDetails['image'];
-                            $video->thumb = $linkDetails['thumb'];
-                            $video->embed_code = $linkDetails['embed_code'];
-                            $video->vertical = $linkDetails['vertical'];
-                            $video->state = $select_state;
-                            $video->rights = $select_rights;
-
-                            if(count($collection)){
-                                $video->video_collection_id = $collection->id;
+                                $video->youtube_id = $linkDetails['youtube_id'];
+                                $video->url = $linkDetails['url'];
+                                $video->image = $linkDetails['image'];
+                                $video->thumb = $linkDetails['thumb'];
+                                $video->embed_code = $linkDetails['embed_code'];
+                                $video->vertical = $linkDetails['vertical'];
+                                // Save video
+                                $video->save();
                             }
-                            $video->save();
-
                         }
-
                     } else {
                         //echo $record['title'].' : '.$record['link'].'<br />';
                     }

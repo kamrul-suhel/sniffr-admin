@@ -58,7 +58,18 @@ I have added Sessions, Cache and Queue + add a GAE specific packages and created
 
 - Added warm up using liveness_check which keeps servers live longer so they don't suspend and become slow on initial requests during slow periods. Note that warm up is different on GAE Flex from GAE Standard. More info here (https://cloud.google.com/appengine/docs/flexible/nodejs/configuring-your-app-with-app-yaml)
 
+## Check your memory:
 
-## Side hustle for a way to check if Unilad cache is down
+$memory_limit = ini_get('memory_limit');
+if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
+    if ($matches[2] == 'M') {
+        $memory_limit = $matches[1] * 1024 * 1024; // nnnM -> nnn MB
+    } else if ($matches[2] == 'K') {
+        $memory_limit = $matches[1] * 1024; // nnnK -> nnn KB
+    }
+}
 
-Working on a way to automatically check if Unilad Cloudflare cache is down (via Laravel Scheduler + CUrl).
+$ok = ($memory_limit >= 640 * 1024 * 1024); // at least 64M?
+
+dd($memory_limit);
+
