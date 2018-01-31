@@ -32,15 +32,8 @@ class ThemeHomeController extends Controller {
 	| Home Controller
 	|--------------------------------------------------------------------------
 	*/
-
 	public function index()
 	{
-
-		if(Input::get('theme')){
-			Cookie::queue('theme', \Input::get('theme'), 100);
-			return Redirect::to('/')->withCookie(cookie('theme', \Input::get('theme'), 100));
-		}
-
 		$data = array(
 			'videos' => Video::where('state', 'licensed')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
 			'current_page' => 1,
@@ -50,10 +43,9 @@ class ThemeHomeController extends Controller {
 			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
-			);
+		);
 
 		//dd($data['videos']);
 		return view('Theme::home', $data);
 	}
-
 }
