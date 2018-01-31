@@ -13656,9 +13656,11 @@ label {
 .gallery-env .album .album-info h3 {
   max-height: 20px;
   height: 20px;
-  overflow: hidden;
   font-size: 18px;
   margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .gallery-env .album header {
