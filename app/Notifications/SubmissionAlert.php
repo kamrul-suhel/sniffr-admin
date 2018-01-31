@@ -44,6 +44,6 @@ class SubmissionAlert extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('ALERT: ISSUE WITH '.$this->alert.'!');
+           ->content('ALERT: Issue with '.$this->alert.'!');
     }
 }
