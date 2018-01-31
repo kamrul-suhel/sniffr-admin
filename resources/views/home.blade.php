@@ -1,17 +1,15 @@
 @extends('app')
 
 @section('content')
-<div class="container">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="panel panel-default">
-				<div class="panel-heading">Home</div>
+<div id="home-hero" class="vidbg-box">
+    <video src="/assets/video/ocean.mp4" autoplay muted loop></video>
 
-				<div class="panel-body">
-					You are logged in!
-				</div>
-			</div>
-		</div>
-	</div>
+    <div id="dim-bg">
+        <div class="home-titles">
+            <h1>Video Licensing Platform</h1>
+            <h4>License viral videos viewed by millions around the world from UNILAD</h4>
+            <button class="btn btn-primary" href="/videos">Upload Your Video</button>
+        </div>
+    </div>
 </div>
 @endsection
