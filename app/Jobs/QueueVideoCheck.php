@@ -63,7 +63,7 @@ class QueueVideoCheck implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle() // THIS JOB CHECKS THE AWS TRANSCODER JOB QUEUE AND CHECKS IF THE FILES HAVE BEEN CREATED (IN A LOOP EVERY 30 SECS FOR 3 TRIES)
     {
 
         if($this->job_id){
