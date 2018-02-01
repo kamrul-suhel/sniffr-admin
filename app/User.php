@@ -52,4 +52,9 @@ class User extends Authenticatable
     public function isAdmin() {
         return $this->role=='admin';
     }
+
+    public function routeNotificationForSlack()
+    {
+        return 'https://hooks.slack.com/services/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';
+    }
 }

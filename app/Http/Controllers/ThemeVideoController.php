@@ -54,15 +54,14 @@ class ThemeVideoController extends Controller {
 
         //Make sure video is active
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
-
             $favorited = false;
             if(!Auth::guest()):
-                $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
+                $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->alpha_id)->first();
             endif;
 
             $downloaded = false;
             if(!Auth::guest()):
-                $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
+                $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->alpha_id)->count();
             endif;
 
             $view_increment = $this->handleViewCount($id);

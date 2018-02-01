@@ -60912,6 +60912,8 @@ __webpack_require__(144);
 __webpack_require__(145);
 __webpack_require__(9);
 
+window.TwitterWidgetsLoader = __webpack_require__(168);
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -68188,6 +68190,88 @@ $('document').ready(function () {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */
+/***/ (function(module, exports) {
+
+(function(window) {
+	var TwitterWidgetsLoader = {
+		src: '//platform.twitter.com/widgets.js',
+		loading: false,
+		listeners: [],
+		interval: 50,
+
+		load: function(callback) {
+			var _this = this;
+
+			this.listeners.push(callback);
+
+			if(window.twttr && window.twttr.widgets) {
+				setTimeout(function() {
+					_this.done();
+				});
+				return;
+			}
+
+			if(this.loading) {
+				return;
+			}
+
+			this.loading = true;
+
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = this.src;
+			document.body.appendChild(script);
+
+			this.poll();
+		},
+
+		poll: function() {
+			if(window.twttr && window.twttr.widgets) {
+				return this.done();
+			}
+
+			var _this = this;
+
+			setTimeout(function() {
+				_this.poll();
+			}, this.interval);
+		},
+
+		done: function() {
+			while(this.listeners.length) {
+				this.listeners.pop()(window.twttr);
+			}
+		}
+	};
+
+	if(typeof module !== 'undefined' && module.exports) {
+		module.exports = TwitterWidgetsLoader;
+	} else {
+		window.TwitterWidgetsLoader = TwitterWidgetsLoader;
+	}
+}(window));
 
 /***/ })
 /******/ ]);

@@ -692,13 +692,7 @@
 	 			rules: {
 	 				title: {
 	         			required: true
-	         		},
-	 				date_filmed: {
-	 					required: true
-	 				},
-	 				description: {
-	 					required: true
-	 				}
+	         		}
 	 			},
 	 			messages: {
 	         		title: 'You must enter the video title',

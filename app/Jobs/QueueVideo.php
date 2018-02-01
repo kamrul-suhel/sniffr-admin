@@ -172,7 +172,7 @@ class QueueVideo implements ShouldQueue
     public function failed($exception)
     {
         // Send user notification of failure, etc...
-        $video = new Video();
-        $video->notify(new SubmissionAlert('a job in the queue has failed to create a watermark (Id: '.$this->video_id.')'));
+        $user = new User();
+        $user->notify(new SubmissionAlert('a job in the queue has failed to create a watermark (Id: '.$this->video_id.')'));
     }
 }
