@@ -40,8 +40,6 @@
 
 	<div class="video-details-container"><?= $video->details ?></div>
 
-	<div class="clear"></div>
-
 	<?php
 
 	if(count($video->tags)): ?>
@@ -52,14 +50,10 @@
 	</h2>
 	<?php endif; ?>
 
-	<div class="clear"></div>
-
-	<div id="social_share">
+	<!--div id="social_share">
     	<p>Share This Video:</p>
-		<?php include('partials/social-share.php'); ?>
-	</div>
-
-	<div class="clear"></div>
+		<?php //include('partials/social-share.php'); ?>
+	</div-->
 </div>
 
 <script src="/assets/admin/js/video.js"></script>

@@ -24,7 +24,7 @@
 <body class="page-body skin-black">
 
 <a href="{{ url('/') }}" class="top-left-logo">
-    <img src="/assets/img/unilad-logo-small.gif">
+    <img src="/content/uploads/settings/logo-sniffr-white.png">
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->

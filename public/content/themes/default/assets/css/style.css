@@ -852,8 +852,16 @@ ul.invoices li span.amount {
   padding: 25px 0px;
   position: relative;
 }
+.twitter-video {
+    margin: 0 auto !important;
+}
 #video_bg iframe{
   margin: 0 auto !important;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.fb_iframe_widget span{
+  text-align: center !important;
 }
 .video-details h3 {
   line-height: 32px;

@@ -200,8 +200,8 @@ class ThemeUploadController extends Controller {
         Line: '.Input::get('line').', 
         Message: '.Input::get('message');
         // Slack notifications
-        $video = new Video();
-        $video->notify(new SubmissionAlert($alert));
+        $user = new User();
+        $user->notify(new SubmissionAlert($alert));
         //return success
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }

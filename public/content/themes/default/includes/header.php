@@ -17,6 +17,9 @@
             <div class="collapse navbar-collapse right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="/upload"><i class="fa fa-cloud-upload"></i> Upload</a></li>
+                    <?php if(Auth::user()->role == 'client' || Auth::user()->role == 'admin'): ?>
+                    <li><a href="<?= url('videos') ?>"><i class="fa fa-youtube-play"></i>Videos</a></li>
+                    <?php endif; ?>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -27,10 +30,10 @@
                             <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="<?= url('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
-                                <?php if(Auth::user()->role == 'client'): ?>
-                                    <li><a href="<?= url('dailies') ?>">Daily Videos</a></li>
+                                <?php if(Auth::user()->role == 'client' && Auth::user()->username == 'dailymail'): ?>
+                                <li><a href="<?= url('client/videos') ?>">Dailies</a></li>
                                 <?php endif; ?>
-                                <?php if(Auth::user()->role == 'admin' || Auth::user()->role == 'demo'): ?>
+                                <?php if(Auth::user()->role == 'admin'): ?>
                                     <li class="divider"></li>
                                     <li><a href="<?= url('admin') ?>"> Admin</a></li>
                                 <?php endif; ?>

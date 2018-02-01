@@ -128,8 +128,8 @@ class QueueVideoCheck implements ShouldQueue
 
                 $job_complete = 0;
                 if($this->tries_loop_count==3) { // IF fails after 3 tries then alert
-                    $video = new Video();
-                    $video->notify(new SubmissionAlert('a job in the queue has failed to create a watermark file (Id: '.$this->video_id.')'));
+                    $user = new User();
+                    $user->notify(new SubmissionAlert('a job in the queue has failed to create a watermark file (Id: '.$this->video_id.')'));
                 }
             } else {
 
@@ -157,8 +157,8 @@ class QueueVideoCheck implements ShouldQueue
      {
          // Send user notification of failure, etc...
          if($this->tries_loop_count==3) { // IF fails after 3 tries then alert
-             $video = new Video();
-             $video->notify(new SubmissionAlert('a job in the queue has failed to find the watermarked file (Id: '.$this->video_id.')'));
+             $user = new User();
+             $user->notify(new SubmissionAlert('a job in the queue has failed to find the watermarked file (Id: '.$this->video_id.')'));
          }
      }
 }

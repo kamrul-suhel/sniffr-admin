@@ -197,7 +197,8 @@ class QueueVideoImport implements ShouldQueue
 
                 $invalidType = (!empty($fileMimeType) ? ', MimeType: .'.$fileMimeType : '' );
 
-                $video->notify(new SubmissionAlert('a job in the queue was either invalid or not a video (Id: '.$this->video_id.', File: '.$this->file.' '.$invalidType.')'));
+                $user = new User();
+                $user->notify(new SubmissionAlert('a job in the queue was either invalid or not a video (Id: '.$this->video_id.', File: '.$this->file.' '.$invalidType.')'));
             } else {
 
                 //maybe sent out a notification on slack
@@ -214,8 +215,8 @@ class QueueVideoImport implements ShouldQueue
      public function failed($exception)
      {
          // Send user notification of failure, etc...
-         $video = new Video();
-         $video->notify(new SubmissionAlert('a job in the queue has failed (Id: '.$this->video_id.', File: '.$this->file.')'));
+         $user = new User();
+         $user->notify(new SubmissionAlert('a job in the queue has failed (Id: '.$this->video_id.', File: '.$this->file.')'));
 
          //Log::info('Job failed: '.$exception);
 
