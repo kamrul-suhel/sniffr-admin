@@ -56,8 +56,8 @@
 						<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
 			        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>
 			        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
-						@if($video->state == 'licensed'&&$video->file)
-						&nbsp;&nbsp; <a href="{{ $video->file }}" download><i class="fa fa-download"></i> Download Video</a>
+						@if($video->state == 'licensed' && $video->file)
+						&nbsp;&nbsp; <a href="{{ url('/download/'.$video->alpha_id) }}" class="btn btn-primary{{ $video->file_watermark ? ' js-download' : '' }}" download><i class="fa fa-download"></i> Download Video</a>
 						@endif
 					</div>
 					@elseif($video->state == 'new')
@@ -715,6 +715,39 @@
 				   comment: 'You must enter a comment first'
 			   }
 		   });
+
+		   $('.js-download').click(function(e){
+                e.preventDefault();
+                var downloadUrl = $(this).attr('href')+'/regular';
+                var watermarkUrl = $(this).attr('href')+'/watermark';
+                swal({
+                    title: 'Please select the type of video to download below',
+                    icon: 'info',
+                    buttons: {
+                        watermark: {
+                            text: 'Watermark',
+                            value: 'watermark'
+                        },
+                        regular: {
+                            text: 'No Watermark',
+                            value: 'regular'
+                        },
+                        cancel: 'Cancel'
+                    },
+                    closeModal: true,
+                    closeOnClickOutside: true
+                })
+                .then((value) => {
+                    switch (value) {
+                        case 'regular':
+                            window.location.replace(downloadUrl);
+                            break;
+                        case 'watermark':
+                            window.location.replace(watermarkUrl);
+                            break;
+                    }
+                });
+            });
 
 		   //execute video analysis onload
 		   var dataFile = $('#temp_filename').val();

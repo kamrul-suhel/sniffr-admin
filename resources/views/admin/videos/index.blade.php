@@ -108,12 +108,12 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="text-success state" title="Accept Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="text-danger state" title="Reject Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="text-success js-state" title="Accept Video"><i class="fa fa-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="text-danger js-state" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="text-success state" title="License Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-		                    	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger state" title="Problem Video"><i class="fa fa-times"></i></a>
+								<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="text-success js-state" title="License Video"><i class="fa fa-check"></i></a>
+		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning js-state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger js-state" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check" title="Licensed"></i> Licensed
 								@elseif($video->state == 'accepted')
@@ -146,11 +146,11 @@
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-								@if($video->state == 'licensed'&&$video->file_watermark)
-								<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="download">
+								@if($video->state == 'licensed' && $video->file_watermark)
+								<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="js-download">
 									<i class="fa fa-download"></i>
 								</a>
-								@elseif($video->state == 'licensed'&&$video->file)
+								@elseif($video->state == 'licensed' && $video->file)
 								<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
 									<i class="fa fa-download"></i>
 								</a>
@@ -158,7 +158,7 @@
 								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
 									<i class="fa fa-pencil"></i>
 								</a>
-								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="delete">
+								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="js-delete">
 									<i class="fa fa-trash-o"></i>
 								</a>
 							@endif
@@ -185,7 +185,7 @@
 		        $(this).submit();
 		    });
 
-			$('.delete').click(function(e){
+			$('.js-delete').click(function(e){
 				e.preventDefault();
 				var delete_link = $(this).attr('href');
 				swal({
@@ -223,7 +223,7 @@
 				});
 			});
 
-			$('.state').click(function(e){
+			$('.js-state').click(function(e){
 				e.preventDefault();
 				var dataUrl = $(this).attr('href');
 				var parseUrl = dataUrl.split('/');
@@ -273,7 +273,7 @@
 				}
 			});
 
-			$('.download').click(function(e){
+			$('.js-download').click(function(e){
                 e.preventDefault();
                 var downloadUrl = $(this).attr('href')+'/regular';
                 var watermarkUrl = $(this).attr('href')+'/watermark';
