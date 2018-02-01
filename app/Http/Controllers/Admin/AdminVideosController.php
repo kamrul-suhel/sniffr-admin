@@ -596,7 +596,7 @@ class AdminVideosController extends Controller {
                 $request->session()->flash('note', 'Successfully Ingested CSV!');
                 $request->session()->flash('note_type', 'success');
             }
-        } 
+        }
 
         $data = array(
             'post_route' => url('admin/videos/upload'),

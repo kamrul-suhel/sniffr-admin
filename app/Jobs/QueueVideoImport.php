@@ -51,7 +51,7 @@ class QueueVideoImport implements ShouldQueue
      *
      * @return void
      */
-    public function handle() // THIS JOB DOWNLOADS THE REQUESTED VIDEO FILE, CHECKS VALIDITY AND SCHEDULES ANOTHER JOB TO CREATE WATERMARKS ETC 
+    public function handle() // THIS JOB DOWNLOADS THE REQUESTED VIDEO FILE, CHECKS VALIDITY AND SCHEDULES ANOTHER JOB TO CREATE WATERMARKS ETC
     {
         ini_set('memory_limit', '512M'); // Increase memory limit for larger video files
         //set_time_limit(0); // Unlimited timeout
@@ -93,8 +93,8 @@ class QueueVideoImport implements ShouldQueue
 
                 } else {
 
-                    QueueVideo::dispatch($video->id)
-                        ->delay(now()->addSeconds(10));
+                    // QueueVideo::dispatch($video->id) //can't call this as there is no file to watermark
+                    //     ->delay(now()->addSeconds(10));
 
                 }
 
@@ -144,8 +144,8 @@ class QueueVideoImport implements ShouldQueue
 
                 } else {
 
-                    QueueVideo::dispatch($video->id)
-                        ->delay(now()->addSeconds(10));
+                    // QueueVideo::dispatch($video->id) //can't call this as there is no file to watermark
+                    //     ->delay(now()->addSeconds(10));
 
                 }
 
@@ -181,8 +181,8 @@ class QueueVideoImport implements ShouldQueue
 
                 } else {
 
-                    QueueVideo::dispatch($video->id)
-                        ->delay(now()->addSeconds(10));
+                    // QueueVideo::dispatch($video->id) //can't call this as there is no file to watermark
+                    //     ->delay(now()->addSeconds(10));
 
                 }
 
