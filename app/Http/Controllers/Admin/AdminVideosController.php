@@ -37,6 +37,7 @@ use App\VideoShotType;
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
 use App\Jobs\QueueVideoImport;
+use App\Jobs\QueueVideoYoutubeUpload;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
@@ -605,6 +606,18 @@ class AdminVideosController extends Controller {
         );
 
         return view('admin.videos.upload', $data);
+    }
+
+    public function checkYoutube()
+    {
+        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL]])->limit(300)->get();
+        echo 'Total Count: '.count($videos).'<br /><br />';
+        foreach ($videos as $video) {
+            echo $video->id.' : '.$video->title.'<br />';
+            QueueVideoYoutubeUpload::dispatch($video->id)
+                ->delay(now()->addSeconds(10));
+        }
+
     }
 
     public function comment($id)

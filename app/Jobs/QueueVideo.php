@@ -58,7 +58,7 @@ class QueueVideo implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle() // THIS JOB CREATES WATERMARKS (NORMAL/DIRTY) + A THUMBNAIL AND THEN SCHEDULES ANOTHER JOB TO CHECK IF EXECUTED CORRECTLY
     {
         $video = Video::find($this->video_id);
         $fileName = basename($video->file);
@@ -159,6 +159,11 @@ class QueueVideo implements ShouldQueue
                 $video->file_watermark = $watermark_file;
                 $video->save();
             }
+
+        } else {
+
+            $video = new Video();
+            $video->notify(new SubmissionAlert('a job in the queue has failed to create a watermark because there is no video file (Id: '.$this->video_id.')'));
 
         }
     }
