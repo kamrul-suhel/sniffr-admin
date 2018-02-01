@@ -25,7 +25,6 @@ require('blueimp-file-upload');
 require('moment');
 require('noty');
 require('rrssb');
-require('fitvids.1.1.0');
 require('video_background');
 require('bootstrap-colorpicker');
 require('intl-tel-input');

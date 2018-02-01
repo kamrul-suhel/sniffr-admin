@@ -12,7 +12,7 @@ trait VideoHelper{
 	public static function getVideoHTML($video, $embed = false) {
 		$sHTML = '';
 
-		$sHTML .= '<div class="fitvid video-container'.(  $embed && !$video->youtube_id ? ' embedded' : '').'">';
+		$sHTML .= '<div class="video-container'.(  $embed && !$video->youtube_id ? ' embedded' : '').'">';
 		
 		if($video->youtube_id){ // Youtube
 			if($embed){
@@ -44,7 +44,7 @@ trait VideoHelper{
 		               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 		    	}else if(str_contains($video->url, 'videos')){
 					if($video->vertical === 0 || $embed) {
-						$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
+						$sHTML .= '<div class="fb-video'.($video->vertical === 0 ? ' fb-horizontal' : '').'" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
 					} else if($video->image && str_contains($video->image,'http')){
 						$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
 					} else {

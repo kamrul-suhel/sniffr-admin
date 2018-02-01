@@ -34,7 +34,7 @@
             <div class="text-center" style="max-width:300px; margin:0 auto;">
                 <h1><?php echo $video->title ?></h1>
                 <div class="item-video">
-                    <div id="video_container" class="fitvid">
+                    <div class="video-container">
                     <?php if($video->youtube_id): ?>
                         <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $video->youtube_id; ?>" frameborder="0" allowfullscreen></iframe>
                     <?php elseif(str_contains($video->url,'facebook')): ?>

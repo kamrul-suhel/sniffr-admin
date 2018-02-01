@@ -37,38 +37,27 @@
 
 
 		<div class="container">
-
 			<div class="row">
-
 				<div class="col-md-8" id="left_column" style="padding-right:0px;">
-
 					<div id="video_left">
-
 						<?php if(($series->youtube == 1) || $episode->access == 'guest' || ( ($episode->access == 'subscriber' || $episode->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $episode->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
-
-
+							<div class="video-container">
 								<?php if(($series->youtube == 1) || $episode->type == 'embed'): ?>
-									<div id="video_container" class="fitvid">
-										<?php if($series->youtube): ?>
-											<?= $episode->player->embedHtml ?>
-										<?php else: ?>
-											<?= $episode->embed_code ?>
-										<?php endif; ?>
-									</div>
+									<?php if($series->youtube): ?>
+										<?= $episode->player->embedHtml ?>
+									<?php else: ?>
+										<?= $episode->embed_code ?>
+									<?php endif; ?>
 								<?php else: ?>
-									<div id="video_container">
 									<video id="video_player" class="video-js vjs-default-skin" controls preload="auto" poster="<?= Config::get('site.uploads_url') . '/images/' . $episode->image ?>" data-setup="{}" width="100%" style="width:100%;">
 										<source src="<?= $episode->mp4_url; ?>" type='video/mp4'>
 										<source src="<?= $episode->webm_url; ?>" type='video/webm'>
 										<source src="<?= $episode->ogg_url; ?>" type='video/ogg'>
 										<p class="vjs-no-js">To view this episode please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 									</video>
-									</div>
 								<?php endif; ?>
-
-
+							</div>
 						<?php else: ?>
-
 							<div id="subscribers_only"  style="background-image:url(<?= Config::get('site.uploads_url') . '/images/' . $episode->image ?>); background-size:cover">
 								<div style="background:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; left:0px; top:0px; z-index:-1"></div>
 								<h2 style="font-size:22px;">Sorry, this episode is only available to <?php if($episode->access == 'subscriber'): ?>Subscribers<?php elseif($episode->access == 'registered'): ?>Registered Users<?php endif; ?></h2>
@@ -77,103 +66,81 @@
 									<button id="button">Signup Now<?php if($episode->access == 'subscriber'): ?> to Become a Subscriber<?php elseif($episode->access == 'registered'): ?> for Free!<?php endif; ?></button>
 								</form>
 							</div>
-
 						<?php endif; ?>
-
 					</div><!-- #video_left -->
-
 				</div><!-- .col-md-8 -->
 
 				<div class="col-md-4" id="right_column" style="margin-left:0px; padding-left:0px;">
-
 					<div id="video_right" style="padding:0px;">
-
 						<?php $sidebar_videos = Video::where('active', '=', '1')->orderByRaw("RAND()")->take(8)->get(); ?>
+						<img src="<?= ImageHandler::getImage($series->image)  ?>" style="width:100%; height:auto; max-height:60px; min-height:60px;" />
 
-							<img src="<?= ImageHandler::getImage($series->image)  ?>" style="width:100%; height:auto; max-height:60px; min-height:60px;" />
-
-							<div id="episode_sidebar">
-
-								<h3><?= $title ?> Episodes</h3>
-								<div id="episodes">
-
-									<?php if($series->youtube): ?>
-
-											<?php foreach($episodes as $playlist_episode): ?>
-
-												<?php if(isset($playlist_episode->contentDetails)):
-														$videoId = $playlist_episode->contentDetails->videoId;
-													  else:
-													  	$videoId = $playlist_episode->id->videoId;
-													  endif;
-												?>
-
-												 <div class="content <?php if($videoId == $episode->id): ?>active<?php endif; ?>">
-												 	<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' . $videoId ?>">
-											  			<img src="<?= $playlist_episode->snippet->thumbnails->medium->url ?>" />
-											  			<p><?= $playlist_episode->snippet->title ?></p>
-											  			<?php if($videoId == $episode->id): ?>
-											  				<div class="label" style="background:#DB1D1B; position:absolute; float:right; position:absolute; left:10px; bottom:10px;"><i class="fa fa-play"></i> playing</div>
-											  			<?php endif; ?>
-											  			<div style="clear:both"></div>
-											  		</a>
-												 </div>
-											<?php endforeach; ?>
-
-									<?php else: ?>
-
-										<div class="vueLoad1">
-											<div v-repeat="prev_episodes" class="content">
-										  		<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' ?>{{ slug }}">
-										  			<img src="/content/uploads/images/{{ image | smallImage }}" />
-										  			<p>{{ title }}</p>
-										  			<div style="clear:both"></div>
-										  		</a>
-
-										  	</div>
-										 </div>
-
-										 <div class="content active">
-										 	<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' . $episode->slug ?>">
-									  			<img src="<?= ImageHandler::getImage($episode->image, 'small')  ?>" />
-									  			<p><?= $episode->title ?></p>
-									  			<div class="label" style="background:#DB1D1B; position:absolute; float:right; position:absolute; left:10px; bottom:10px;"><i class="fa fa-play"></i> playing</div>
+						<div id="episode_sidebar">
+							<h3><?= $title ?> Episodes</h3>
+							<div id="episodes">
+								<?php if($series->youtube): ?>
+									<?php foreach($episodes as $playlist_episode): ?>
+										<?php if(isset($playlist_episode->contentDetails)):
+												$videoId = $playlist_episode->contentDetails->videoId;
+											  else:
+											  	$videoId = $playlist_episode->id->videoId;
+											  endif;
+										?>
+										<div class="content <?php if($videoId == $episode->id): ?>active<?php endif; ?>">
+										 	<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' . $videoId ?>">
+									  			<img src="<?= $playlist_episode->snippet->thumbnails->medium->url ?>" />
+									  			<p><?= $playlist_episode->snippet->title ?></p>
+									  			<?php if($videoId == $episode->id): ?>
+									  				<div class="label" style="background:#DB1D1B; position:absolute; float:right; position:absolute; left:10px; bottom:10px;"><i class="fa fa-play"></i> playing</div>
+									  			<?php endif; ?>
 									  			<div style="clear:both"></div>
 									  		</a>
 										 </div>
+									<?php endforeach; ?>
+								<?php else: ?>
 
-										 <div class="vueLoad2">
-											<div v-repeat="next_episodes" class="content">
-										  		<a href="<?= URL::to($series_url) . '/' . $episode->series->slug . '/episode/' ?>{{ slug }}">
-										  			<img src="/content/uploads/images/{{ image | smallImage }}" />
-										  			<p>{{ title }}</p>
-										  			<div style="clear:both"></div>
-										  		</a>
-										  	</div>
-										 </div>
+									<div class="vueLoad1">
+										<div v-repeat="prev_episodes" class="content">
+									  		<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' ?>{{ slug }}">
+									  			<img src="/content/uploads/images/{{ image | smallImage }}" />
+									  			<p>{{ title }}</p>
+									  			<div style="clear:both"></div>
+									  		</a>
+									  	</div>
+									 </div>
 
-									<?php endif; ?>
+									 <div class="content active">
+									 	<a href="<?= URL::to($series_url) . '/' . $series->slug . '/episode/' . $episode->slug ?>">
+								  			<img src="<?= ImageHandler::getImage($episode->image, 'small')  ?>" />
+								  			<p><?= $episode->title ?></p>
+								  			<div class="label" style="background:#DB1D1B; position:absolute; float:right; position:absolute; left:10px; bottom:10px;"><i class="fa fa-play"></i> playing</div>
+								  			<div style="clear:both"></div>
+								  		</a>
+									 </div>
 
-								</div>
+									 <div class="vueLoad2">
+										<div v-repeat="next_episodes" class="content">
+									  		<a href="<?= URL::to($series_url) . '/' . $episode->series->slug . '/episode/' ?>{{ slug }}">
+									  			<img src="/content/uploads/images/{{ image | smallImage }}" />
+									  			<p>{{ title }}</p>
+									  			<div style="clear:both"></div>
+									  		</a>
+									  	</div>
+									 </div>
+
+								<?php endif; ?>
 							</div>
+						</div>
 					</div>
-
 				</div>
-
 			</div><!-- .row -->
-
 		</div><!-- .container -->
-
 	</div><!-- #video_bg -->
 
 	<div class="container">
 
 		<div id="left_content">
-
-			<h3 class="video_title">
-				<?= $title ?>
-			</h3>
-
+			<h3 class="video_title"><?= $title ?></h3>
 
 			<?php $details = (isset($episode->details)) ? $episode->details : $episode->snippet->description; ?>
 
@@ -190,7 +157,6 @@
 			<div id="comments">
 				<div id="disqus_thread"></div>
 			</div>
-
 		</div><!-- #left_container -->
 	</div>
 
@@ -198,7 +164,6 @@
 		var series_episodes = '';
 
 		$(document).ready(function(){
-			$('#video_container').fitVids();
 			$('.favorite').click(function(){
 				if($(this).data('authenticated')){
 					$.post('/favorite', { video_id : $(this).data('videoid'), _token: '<?= csrf_token(); ?>' }, function(data){});
@@ -216,7 +181,7 @@
 
 			$('#dim_mode').click(function(){
 				$(this).toggleClass('active');
-				$('#video_container').toggleClass('bringToFront');
+				$('.video_container').toggleClass('bringToFront');
 				$('#video_options').toggleClass('static');
 				$('.dimLights').fadeToggle();
 			});
@@ -300,7 +265,7 @@
 					function resizeVideoJS(){
 					console.log(myPlayer.id);
 					// Get the parent element's actual width
-					var width = document.getElementById('video_container').offsetWidth;
+					var width = $('.video-container').offsetWidth;
 					// Set width to fill parent element, Set height
 					myPlayer.width(width).height( width * aspectRatio );
 					}

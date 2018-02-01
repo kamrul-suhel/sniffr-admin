@@ -33,7 +33,7 @@ class ThemeVideoController extends Controller {
 
     public function __construct()
     {
-        //$this->middleware('secure');
+        $this->middleware('client');
         $settings = Setting::first();
         $this->videos_per_page = $settings->videos_per_page;
     }
@@ -56,12 +56,12 @@ class ThemeVideoController extends Controller {
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
             $favorited = false;
             if(!Auth::guest()):
-                $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->alpha_id)->first();
+                $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
             endif;
 
             $downloaded = false;
             if(!Auth::guest()):
-                $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->alpha_id)->count();
+                $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
             endif;
 
             $view_increment = $this->handleViewCount($id);

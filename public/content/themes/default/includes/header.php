@@ -17,7 +17,7 @@
             <div class="collapse navbar-collapse right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="/upload"><i class="fa fa-cloud-upload"></i> Upload</a></li>
-                    <?php if(Auth::user()->role == 'client' || Auth::user()->role == 'admin'): ?>
+                    <?php if(!Auth::guest() && (Auth::user()->role == 'client' || Auth::user()->role == 'admin')): ?>
                     <li><a href="<?= url('videos') ?>"><i class="fa fa-youtube-play"></i>Videos</a></li>
                     <?php endif; ?>
                 </ul>

@@ -21607,6 +21607,10 @@ hr {
   left: 0;
 }
 
+.video-container iframe.instagram-media {
+  margin: 0px auto 12px !important;
+}
+
 .video-container video {
   position: absolute;
   top: 0;
