@@ -9,7 +9,7 @@
 <div id="video_bg">
 	<div class="container text-center">
 		<?php if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() ) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
-			<?php echo \App\Libraries\VideoHelper::getVideoHTML($video); ?>
+			<?php echo \App\Libraries\VideoHelper::getVideoHTML($video, true); ?>
 		<?php else: ?>
 			<div id="subscribers_only">
 				<h2>Sorry, this video is only available to <?php if($video->access == 'subscriber'): ?>Subscribers<?php elseif($video->access == 'registered'): ?>Registered Users<?php endif; ?></h2>
@@ -62,6 +62,9 @@
 	<div class="clear"></div>
 </div>
 
+<script src="/assets/admin/js/video.js"></script>
+<script src="/assets/admin/js/videojs-vimeo.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#video_container').fitVids();
@@ -73,6 +76,35 @@
 				window.location = '/login';
 			}
 		});
+
+        var massVideo = $('.video-js');
+        for(var i = 0; i < massVideo.length; i++){
+            videojs(massVideo[i]).ready(function(){
+                var myPlayer = this;    // Store the video object
+                var aspectRatio = 9/16; // Make up an aspect ratio
+
+                function resizeVideoJS(){
+                    // Get the parent element's actual width
+                    var width = $('.video-container')[0].offsetWidth;
+                    // Set width to fill parent element, Set height
+                    myPlayer.width(width).height( width * aspectRatio );
+                }
+
+                resizeVideoJS(); // Initialize the function
+                window.onresize = resizeVideoJS; // Call the function on resize
+            });
+        }
+
+        TwitterWidgetsLoader.load(function(twttr) {
+            var tweets = jQuery(".tweet");
+            
+            jQuery(tweets).each( function( t, tweet ) {
+                var id = jQuery(this).attr('id');
+                twttr.widgets.createVideo(id,tweet).then( function( el ) {
+                    //console.log('Video added.');
+                });
+            });
+        });
 	});
 </script>
 

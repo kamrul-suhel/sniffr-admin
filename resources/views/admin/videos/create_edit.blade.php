@@ -435,7 +435,7 @@
 			</div>
 		</div>
 
-		@if(isset($video) && $video->is_exclusive && $video->state == 'licensed')
+		@if(isset($video) && $video->rights == 'ex' && $video->state == 'licensed')
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="panel panel-primary" data-collapsed="0">

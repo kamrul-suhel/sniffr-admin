@@ -99,7 +99,7 @@ class ThemeVideoController extends Controller {
         }
 
         $data = array(
-            'videos' => Video::where('state', 'licensed')->orderBy('licensed_at', 'DESC')->simplePaginate($this->videos_per_page),
+            'videos' => Video::where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($this->videos_per_page),
             'page_title' => 'All Videos',
             'page_description' => 'Page ' . $page,
             'current_page' => $page,

@@ -45,7 +45,7 @@ trait VideoHelper{
 		    	}else if(str_contains($video->url, 'videos')){
 					if($video->vertical === 0 || $embed) {
 						$sHTML .= '<div class="fb-video" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
-					} else if($video->image){
+					} else if($video->image && str_contains($video->image,'http')){
 						$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
 					} else {
 						$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
@@ -109,7 +109,7 @@ trait VideoHelper{
 
 	public static function videoLinkChecker($url){
 		$url = rtrim($url);
-		$linkVars = ['image' => '','thumb' => '','vertical' => NULL, 'youtube_id' => '', 'url' => $url, 'embed_code' => ''];
+		$linkVars = ['image' => false,'thumb' => false,'vertical' => NULL, 'youtube_id' => '', 'url' => $url, 'embed_code' => ''];
 		$youtubeId = false;
 
 		if(str_contains($url, 'facebook')){ // Is Facebook
@@ -185,6 +185,9 @@ trait VideoHelper{
                 <source src="'.$withoutExt.'.mp4" type="video/mp4">
             </video>';
 		}
+
+		$linkVars['image'] = $linkVars['image'] ? $linkVars['image'] : '/assets/img/placeholder.png';
+		$linkVars['thumb'] = $linkVars['thumb'] ? $linkVars['thumb'] : '/assets/img/placeholder.png';
 
 		return $linkVars;
 	}
