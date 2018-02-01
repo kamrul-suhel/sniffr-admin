@@ -6,7 +6,12 @@
 		<h3><i class="fa fa-upload"></i> CSV Upload</h3>
 	</div>
 
-	<div class="clear"></div>
+	@if($broken_links)
+		<h3>Links not ingested:</h3>
+		@foreach($broken_links as $link)
+			<p>{{ $link }}</p>
+		@endforeach
+	@endif
 
     <form method="POST" action="{{ $post_route }}" id="upload-form" name="upload-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div class="row">

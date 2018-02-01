@@ -852,6 +852,9 @@ ul.invoices li span.amount {
   padding: 25px 0px;
   position: relative;
 }
+#video_bg iframe{
+  margin: 0 auto !important;
+}
 .video-details h3 {
   line-height: 32px;
   position: relative;
@@ -1077,6 +1080,13 @@ h4.modal-title {
   position: relative;
   border-radius: 3px;
   display: block;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background-color: #000;
+  background-position: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .block .block-thumbnail .label {
   float: right;
@@ -1162,13 +1172,11 @@ h4.modal-title {
 form input[type="submit"] {
   float: right;
 }
-form {
-  padding-bottom: 30px;
-}
 p.small{
   font-size:12px;
 }
 .slick-form{
+  padding-bottom: 30px;
   padding-top: 30px;
 }
 .slick-form h2, .slick-form h3{

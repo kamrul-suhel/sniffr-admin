@@ -515,6 +515,8 @@ class AdminVideosController extends Controller {
      */
     public function upload(Request $request)
     {
+        $brokenLinks = $note =array();
+
         if($request->hasFile('csv')) {
             //load the CSV document from a file path
             $csv = Reader::createFromPath(Input::file('csv'), 'r');
@@ -525,9 +527,11 @@ class AdminVideosController extends Controller {
             $select_type = Input::get('type');
             $select_state = Input::get('state');
             $select_rights = Input::get('rights');
+            $count = 0;
 
             foreach($records as $record) {
-                $result = Video::where('url', $record['link'])->get();
+                $link = trim($record['link']);
+                $result = Video::where('url', $link)->get();
 
                 if(!count($result)) { // Check if URL already exists within db
                     // Add contact details
@@ -543,7 +547,8 @@ class AdminVideosController extends Controller {
                     }
 
                     // Check if URL exists
-                    if(filter_var($record['link'], FILTER_VALIDATE_URL)){
+                    if(filter_var($link, FILTER_VALIDATE_URL)){
+                        $count++;
                         // Add additional field data
                         $collection = VideoCollection::where('name', $record['category'])->first();
                         $video = new Video();
@@ -554,19 +559,19 @@ class AdminVideosController extends Controller {
                         $video->rights = $select_rights;
                         $video->video_collection_id = count($collection) ? $collection->id : 0;
 
-                        if(strpos($record['link'], 'jotform') || strpos($record['link'], 'drive.google.com') || strpos($record['link'], 'dropbox')) { // Check if link is jotform
+                        if(strpos($link, 'jotform') || strpos($link, 'drive.google.com') || strpos($link, 'dropbox')) { // Check if link is jotform
                             if($select_type == 'both' || $select_type == 'files'){
-                                $video->url = $record['link'];
+                                $video->url = $link;
                                 // Save video
                                 $video->save();
 
                                 // Add job to import queue
-                                QueueVideoImport::dispatch($video->id, $record['link'])
+                                QueueVideoImport::dispatch($video->id, $link)
                                     ->delay(now()->addSeconds(5));
                             }
-                        } else if(str_contains($record['link'], 'http')){
+                        } else if(str_contains($link, 'http')){
                             if($select_type == 'both' || $select_type == 'urls'){
-                                $linkDetails = VideoHelper::videoLinkChecker($record['link']);
+                                $linkDetails = VideoHelper::videoLinkChecker($link);
 
                                 $video->youtube_id = $linkDetails['youtube_id'];
                                 $video->url = $linkDetails['url'];
@@ -579,21 +584,28 @@ class AdminVideosController extends Controller {
                             }
                         }
                     } else {
-                        //echo $record['title'].' : '.$record['link'].'<br />';
+                        $brokenLinks[] = $record['title'].' : '.$link;
                     }
                 }
             }
 
-            return Redirect::to('admin/videos')->with(array('note' => 'Successfully Uploaded CSV!', 'note_type' => 'success') );
-        } else {
-            $data = array(
-                'post_route' => url('admin/videos/upload'),
-                'button_text' => 'Upload Video CSV',
-                'admin_user' => Auth::user(),
-            );
+            if($brokenLinks){
+                $request->session()->flash('note', 'Some issues with link ingestion!');
+                $request->session()->flash('note_type', 'error');
+            }else{
+                $request->session()->flash('note', 'Successfully Ingested CSV!');
+                $request->session()->flash('note_type', 'success');
+            }
+        } 
 
-            return view('admin.videos.upload', $data);
-        }
+        $data = array(
+            'post_route' => url('admin/videos/upload'),
+            'button_text' => 'Upload Video CSV',
+            'admin_user' => Auth::user(),
+            'broken_links' => $brokenLinks
+        );
+
+        return view('admin.videos.upload', $data);
     }
 
     public function checkYoutube()
