@@ -104,7 +104,7 @@ class AdminVideosController extends Controller {
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('id', 'DESC')->paginate(9);
+        $videos = $videos->orderBy('id', 'DESC')->paginate(24);
 
         $user = Auth::user();
 

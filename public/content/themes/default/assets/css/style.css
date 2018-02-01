@@ -842,6 +842,12 @@ ul.invoices li span.amount {
 .video-container.embedded video, .video-container.embedded iframe{
     position: relative;
 }
+.video-container iframe.youtube-iframe{
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
 #video_bg {
   background-color: #303636;

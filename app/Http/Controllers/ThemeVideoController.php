@@ -23,7 +23,7 @@ use App\Libraries\ThemeHelper;
 
 class ThemeVideoController extends Controller {
 
-    private $videos_per_page = 12;
+    private $videos_per_page = 24;
 
     public static $rules = array(
         // 'username' => 'required|unique:users',
