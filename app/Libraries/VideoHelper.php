@@ -69,7 +69,22 @@ trait VideoHelper{
 				if($embed){
 					$sHTML .= $video->embed_code;
 				}else{
-					$sHTML .= '<div class="video-thumb" style="background-image:url('.$video->image.')"></div>';
+					if (@getimagesize($video->image)) {
+						$insta_thumb = $video->image;
+					} else {
+						$data = VideoHelper::getInstagramJSON($video->url);
+
+						if($data){
+							$video = Video::find($video->id);
+							$video->thumb = $data['thumbnail_url'];
+							$video->image = $data['thumbnail_url'];
+							$video->save();
+						}
+
+						$insta_thumb = $data['thumbnail_url'];
+					}
+
+					$sHTML .= '<div class="video-thumb" style="background-image:url('.$insta_thumb.')"></div>';
 				}
 			}else if(str_contains($video->url, 'vimeo')){
 		        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
@@ -156,25 +171,12 @@ trait VideoHelper{
 				$linkVars['thumb'] = 'https://img.youtube.com/vi/'.$youtubeId.'/default.jpg';
 			}
 		}else if(str_contains($url, 'instagram')){
-			$url = 'https://api.instagram.com/oembed/?url='.$url;
+			$data = VideoHelper::getInstagramJSON($url); 
 
-			try {
-				$curl_connection = curl_init($url);
-				curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);
-				curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);
-				
-				//Data are stored in $data
-				$data = json_decode(curl_exec($curl_connection), true);
-				curl_close($curl_connection);
-
-				if($data){
-					$linkVars['image'] = $data['thumbnail_url'];
-					$linkVars['thumb'] = $data['thumbnail_url'];
-					$linkVars['embed_code'] = $data['html'];
-				}
-			}catch(Exception $e){
-				return $e->getMessage();
+			if($data){
+				$linkVars['image'] = $data['thumbnail_url'];
+				$linkVars['thumb'] = $data['thumbnail_url'];
+				$linkVars['embed_code'] = $data['html'];
 			}
 		}else if(str_contains($url, 'imgur') && str_contains($url, '.gifv')){
 			$withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $url);
@@ -190,6 +192,25 @@ trait VideoHelper{
 		$linkVars['thumb'] = $linkVars['thumb'] ? $linkVars['thumb'] : '/assets/img/placeholder.png';
 
 		return $linkVars;
+	}
+
+	public static function getInstagramJSON($url){
+		$url = 'https://api.instagram.com/oembed/?url='.$url;
+
+		try {
+			$curl_connection = curl_init($url);
+			curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);
+			curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);
+			
+			//Data are stored in $data
+			$data = json_decode(curl_exec($curl_connection), true);
+			curl_close($curl_connection);
+
+			return $data;
+		}catch(Exception $e){
+			return $e->getMessage();
+		}
 	}
 
     public static function getYoutubeID($url)
