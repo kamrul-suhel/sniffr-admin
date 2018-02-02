@@ -134,10 +134,12 @@ trait VideoHelper{
 
 				if(isset($matches[1])) {
 					if ($data = @getimagesize('https://graph.facebook.com/'.$matches[1].'/picture')) { //check if facebook image file exists
-						if ($data[0] <= $data[1]) { //if orientation is landscape/portrait
+						if ($data[0]-$data[1] > 10) { //if orientation is landscape
+							$fb_vertical = 0;
+						}elseif($data[0] <= $data[1]){
 							$fb_vertical = 1;
 						}else{
-							$fb_vertical = 0;
+							$fb_vertical = NULL;
 						}
 
 						$linkVars['image'] = 'https://graph.facebook.com/'.$matches[1].'/picture';

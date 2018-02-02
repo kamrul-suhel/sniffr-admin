@@ -133,7 +133,7 @@ class ThemeUploadController extends Controller {
         }
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
+        $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = $embedCode = '';
         $url = Input::get('url');
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
