@@ -122,9 +122,14 @@ class ThemeSubmissionController extends Controller {
             $contact->save();
         }
 
+        //add additional form data to db (with video file info)
+        $video = new Video();
+        $video->alpha_id = VideoHelper::quickRandom();
+        $video->contact_id = $contact->id;
+        $video->title = Input::get('title');
+
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileSize = $fileMimeType = $youtubeId = $vertical = $image = $thumb = '';
-        $url = Input::get('url');
+        $fileSize = '';
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
@@ -137,31 +142,22 @@ class ThemeSubmissionController extends Controller {
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
+
+            $video->url = Input::get('url');
+            $video->file = $filePath;
+            $video->mime = $fileMimeType;
         }else{
             //Check link details
             $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
 
-            $youtubeId = $linkDetails['youtube_id'];
-            $image = $linkDetails['image'];
-            $thumb = $linkDetails['thumb'];
-            $vertical = $linkDetails['vertical'];
-            $url = $linkDetails['url'];
-            $embedCode = $linkDetails['embed_code'];
+            $video->youtube_id = $linkDetails['youtube_id'];
+            $video->image = $linkDetails['image'];
+            $video->thumb = $linkDetails['thumb'];
+            $video->embed_code = $linkDetails['embed_code'];
+            $video->url = $linkDetails['url'];
+            $video->vertical = $linkDetails['vertical'];
         }
 
-        //add additional form data to db (with video file info)
-        $video = new Video();
-        $video->alpha_id = VideoHelper::quickRandom();
-        $video->contact_id = $contact->id;
-        $video->title = Input::get('title');
-        $video->url = $url;
-        $video->file = $filePath;
-        $video->embed_code = $embedCode;
-        $video->image = $image;
-        $video->thumb = $thumb;
-        $video->vertical = $vertical;
-        $video->youtube_id = $youtubeId;
-        $video->mime = $fileMimeType;
         $video->state = 'restricted';
         $video->rights = 'nonex';
         $video->referrer = Input::get('referrer');
