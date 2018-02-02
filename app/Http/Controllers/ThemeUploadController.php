@@ -103,6 +103,10 @@ class ThemeUploadController extends Controller {
      */
     public function store(Request $request)
     {
+        //increase memory limits and upload post size
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', 120);
+
         $isJson = $request->ajax();
 
         //validate the request
@@ -193,8 +197,8 @@ class ThemeUploadController extends Controller {
     }
 
     public function issueAlert() {
-        $alert = 'File: '.Input::get('file').', 
-        Line: '.Input::get('line').', 
+        $alert = 'File: '.Input::get('file').',
+        Line: '.Input::get('line').',
         Message: '.Input::get('message');
         // Slack notifications
         $user = new User();
