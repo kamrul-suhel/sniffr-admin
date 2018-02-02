@@ -40,11 +40,17 @@ class AdminController extends Controller {
 		$licensed_videos = count(Video::where('state', 'licensed')->get());
 		$pending_videos = count(Video::where('state', 'pending')->get());
 
+		$date = new Carbon;
+		$video_traffic = Video::get()->where('created_at', '>', $date->subDays(7))->groupBy(function($date) {
+	        return Carbon::parse($date->created_at)->format('d'); // grouping by days
+	    });
+
 		$settings = Setting::first();
 
 		$data = array(
 			'admin_user' => Auth::user(),
 			'total_videos' => $total_videos,
+			'video_traffic' => $video_traffic,
 			'new_videos' => $new_videos,
 			'licensed_videos' => $licensed_videos,
 			'pending_videos' => $pending_videos,

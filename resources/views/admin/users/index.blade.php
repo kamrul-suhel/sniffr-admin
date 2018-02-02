@@ -2,10 +2,10 @@
 
 @section('content')
 
-	<div class="admin-section-title">
+	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-md-8">
-				<h3><i class="fa fa-user-circle"></i> Users</h3><a href="{{ url('admin/user/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-user-circle"></i> Users<a href="{{ url('admin/user/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
 			<div class="col-md-4">	
 				<?php $search = old('s'); ?>

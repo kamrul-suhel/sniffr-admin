@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Tag;
 use App\Page;
 use App\Menu;
+use App\User;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;

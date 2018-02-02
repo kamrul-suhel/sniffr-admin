@@ -1,9 +1,7 @@
 @extends('admin.master')
 
 @section('css')	
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/media/media.css' }}" />
-	<link rel="stylesheet" type="text/css" href="{{ '/application/assets/admin/js/select2-x/select2.css' }}">
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/media/dropzone.css' }}" />
+	<link rel="stylesheet" href="{{ '/assets/admin/css/media.css' }}" />
 @stop
 
 @section('content')
@@ -231,10 +229,6 @@
 		</div>
 	</div>
 	<!-- End Delete File Modal -->
-
-
-	
-
 </div>
 
 
@@ -242,9 +236,6 @@
 
 
 	<!-- Include our script files -->
-	<script src="{{ '/application/assets/admin/js/jquery-1.11.0.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/select2-x/select2.min.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/media/dropzone.js' }}"></script>
-	<script src="{{ '/application/assets/admin/js/media/media.js' }}"></script>
+	<script src="{{ '/assets/admin/js/media.js' }}"></script>
 
 @stop

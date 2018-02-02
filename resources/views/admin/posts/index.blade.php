@@ -1,15 +1,11 @@
 @extends('admin.master')
 
-@section('css')
-	<link rel="stylesheet" href="{{ '/application/assets/admin/css/sweetalert.css' }}">
-@endsection
-
 @section('content')
 
-	<div class="admin-section-title">
+	<div class="admin-section-title bottom-padding">
 		<div class="row">
-			<div class="col-md-8">
-				<h3><i class="fa fa-file-text-o"></i> Posts</h3><a href="{{ url('admin/posts/create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+			<div class="col-md-12">
+				<h3><i class="fa fa-file-text-o"></i> Posts<a href="{{ url('admin/posts/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
 			<div class="col-md-4">
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="<?= old('s'); ?>" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
