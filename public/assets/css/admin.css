@@ -13530,6 +13530,10 @@ video::-webkit-media-text-track-display {
   height: 38px;
 }
 
+.chart {
+  width: 100%;
+}
+
 #charts_env .panel-options {
   padding-top: 6px;
   padding-right: 6px;
@@ -21407,6 +21411,10 @@ button.toast-close-button {
 
 p {
   font-size: 12px;
+}
+
+h3 {
+  margin-top: 12px;
 }
 
 hr {

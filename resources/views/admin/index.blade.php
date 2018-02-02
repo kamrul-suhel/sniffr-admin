@@ -46,167 +46,154 @@
 
 <br />
 
-    <div class="row">
-    	<div class="col-sm-8">
+<div class="row">
+    <div class="col-sm-8">
+        <div class="panel panel-primary" id="charts_env">
+            <div class="panel-heading">
+                <div class="panel-title">Video Submissions</div>
+                
+                <div class="panel-options">
+                    <div class="ViewSelector" id="view-selector-container"></div>
+                </div>
+            </div>
 
-    		<div class="panel panel-primary" id="charts_env">
-          <div class="panel-heading">
-            <div class="panel-title">This Week vs. Last Week</div>
-            <div class="panel-options">
-    				  <div class="ViewSelector" id="view-selector-container"></div>
-    			   </div>
-    		  </div>
+            <div class="panel-body chart1-panel">
+                <div class="tab-content">
+                    <div class="chart"  id="chart-1-container"></div>
+                    <div id="legend-1-container"></div>
+                </div>
+            </div><!-- .panel-body -->
+        </div><!-- .panel-primary -->
+    </div><!-- .col-sm-8 -->
 
-    			<div class="panel-body chart1-panel">
-    				<div class="tab-content">
-    					<div class="chart"  id="chart-1-container"></div>
-    					<div id="legend-1-container"></div>
-    				</div>
-    			</div><!-- .panel-body -->
-    		</div><!-- .panel-primary -->
+	<div class="col-sm-4">
+        <div class="panel panel-primary" id="charts_env">
+            <div class="panel-heading">
+                <div class="panel-title">Real-time Visitors</div>
+            </div>
 
-    	</div><!-- .col-sm-8 -->
-
-    	<div class="col-sm-4">
-
-    		<div class="panel panel-primary" id="charts_env">
-    			<div class="panel-heading">
-    			 <div class="panel-title">Real-time Visitors</div>
-    		  </div>
-
-          <div class="panel-body active-users-panel">
-    				<div class="tab-content">
-						<div class="chart" id="chart-2-container"></div>
-    					<div id="legend-2-container"></div>
-    				</div>
+            <div class="panel-body active-users-panel">
+				<div class="tab-content">
+    				<div class="chart" id="chart-2-container"></div>
+    				<div id="legend-2-container"></div>
     			</div>
     		</div>
+    	</div>
+    </div><!-- .col-sm-4 -->
+</div><!-- .row -->
 
-    	</div><!-- .col-sm-4 -->
+<div class="row">
+	<div class="col-sm-6">
+		<div class="panel panel-primary" id="charts_env">
+			<div class="panel-heading">
+			     <div class="panel-title">Top Browsers by Pageviews</div>
+            </div>
 
-    </div><!-- .row -->
+			<div class="panel-body">
+				<div class="tab-content">
+					<div class="chart" id="chart-3-container"></div>
+					
+                    <div id="legend_container">
+						<div id="smoother" title="Smoothing"></div>
+						<div id="legend-3"></div>
+					</div>
+				</div>
+			</div>
+		</div><!-- .panel-primary -->
+	</div><!-- .col-sm-6 -->
 
-    <div class="row">
-    	<div class="col-sm-6">
+	<div class="col-sm-6">
+		<div class="panel panel-primary" id="charts_env">
+			<div class="panel-heading">
+                <div class="panel-title">Top Countries by Sessions</div>
+            </div>
 
-    		<div class="panel panel-primary" id="charts_env">
-    			<div class="panel-heading">
-    			 <div class="panel-title">Top Browsers by Pageviews</div>
-    		  </div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div class="chart" id="chart-4-container"></div>
+					
+                    <div id="legend_container">
+						<div id="smoother" title="Smoothing"></div>
+						<div id="legend-4"></div>
+					</div>
+				</div>
+			</div>
+		</div><!-- .panel-primary -->
+	</div><!-- .col-sm-6 -->
+</div><!-- .row -->
 
-    			<div class="panel-body">
-    				<div class="tab-content">
-    					<div class="chart" id="chart-3-container"></div>
-						<div id="legend_container">
-							<div id="smoother" title="Smoothing"></div>
-							<div id="legend-3"></div>
-						</div>
-    				</div>
-    			</div>
-    		</div><!-- .panel-primary -->
+<script>
+	(function($){
 
-    	</div><!-- .col-sm-6 -->
+		var graph = new Rickshaw.Graph( {
+			element: document.querySelector("#chart-1-container"),
+			renderer: 'area',
+			stroke: true,
+			series: [ {
+				data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+				color: '#9cc1e0'
+			}, {
+				data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+				color: '#cae2f7'
+			} ]
+		} );
 
-    	<div class="col-sm-6">
+		graph.render();
 
-    		<div class="panel panel-primary" id="charts_env">
-    			<div class="panel-heading">
-    			 <div class="panel-title">Top Countries by Sessions</div>
-    		  </div>
+		var graph = new Rickshaw.Graph({
+			element: document.querySelector("#chart-2-container"),
+			renderer: 'line',
+			series: [{
+				data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+				color: '#4682b4'
+			}, {
+				data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+				color: '#9cc1e0'
+			}, {
+				data: [ { x: 0, y: 20 }, { x: 1, y: 10 }, { x: 2, y: 23 }, { x: 3, y: 19 }, { x: 4, y: 39 } ],
+				color: '#4682b4'
+			}, {
+				data: [ { x: 0, y: 20 }, { x: 1, y: 33 }, { x: 2, y: 10 }, { x: 3, y: 50 }, { x: 4, y: 9 } ],
+				color: '#9cc1e0'
+			}]
+		});
+		graph.render();
 
-    			<div class="panel-body">
-    				<div class="tab-content">
-    					<div class="chart" id="chart-4-container"></div>
-						<div id="legend_container">
-							<div id="smoother" title="Smoothing"></div>
-							<div id="legend-4"></div>
-						</div>
-    				</div>
-    			</div>
-    		</div><!-- .panel-primary -->
-
-    	</div><!-- .col-sm-6 -->
-
-    </div><!-- .row -->
-
-	<style>
-	.chart{
-	    width:100%;
-	}
-	</style>
-
-    <script>
-		(function($){
-
-			var graph = new Rickshaw.Graph( {
-				element: document.querySelector("#chart-1-container"),
-				renderer: 'area',
-				stroke: true,
-				series: [ {
+	  	var graph = new Rickshaw.Graph( {
+			element: document.querySelector("#chart-3-container"),
+			renderer: 'bar',
+			series: [
+				{
 					data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-					color: '#9cc1e0'
+					color: '#4682b4',
+					name: 'chrome'
 				}, {
-					data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-					color: '#cae2f7'
-				} ]
-			} );
+					data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+					color: '#9cc1e0',
+					name: 'safari'
+			} ]
+		});
 
-			graph.render();
+		graph.render();
 
-			var graph = new Rickshaw.Graph({
-				element: document.querySelector("#chart-2-container"),
-				renderer: 'line',
-				series: [{
+		var graph = new Rickshaw.Graph( {
+			element: document.querySelector("#chart-4-container"),
+			renderer: 'bar',
+			stack: false,
+			series: [
+				{
 					data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
 					color: '#4682b4'
 				}, {
 					data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
 					color: '#9cc1e0'
-				}, {
-					data: [ { x: 0, y: 20 }, { x: 1, y: 10 }, { x: 2, y: 23 }, { x: 3, y: 19 }, { x: 4, y: 39 } ],
-					color: '#4682b4'
-				}, {
-					data: [ { x: 0, y: 20 }, { x: 1, y: 33 }, { x: 2, y: 10 }, { x: 3, y: 50 }, { x: 4, y: 9 } ],
-					color: '#9cc1e0'
-				}]
-			});
-			graph.render();
 
-		  	var graph = new Rickshaw.Graph( {
-				element: document.querySelector("#chart-3-container"),
-				renderer: 'bar',
-				series: [
-					{
-						data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-						color: '#4682b4',
-						name: 'chrome'
-					}, {
-						data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-						color: '#9cc1e0',
-						name: 'safari'
-				} ]
-			});
+			} ]
+		} );
 
-			graph.render();
+		graph.render();
 
-			var graph = new Rickshaw.Graph( {
-				element: document.querySelector("#chart-4-container"),
-				renderer: 'bar',
-				stack: false,
-				series: [
-					{
-						data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-						color: '#4682b4'
-					}, {
-						data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-						color: '#9cc1e0'
-
-				} ]
-			} );
-
-			graph.render();
-
-		})(jQuery);
-    </script>
+	})(jQuery);
+</script>
 
 @stop

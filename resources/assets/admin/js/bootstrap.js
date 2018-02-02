@@ -31,6 +31,8 @@ require('sweetalert');
 require('tinymce');
 require('nestable2');
 require('bootstrap-select');
+require('dropzone');
+require('select2');
 
 window.Rickshaw = require('rickshaw');
 window.Bloodhound = require('corejs-typeahead');
