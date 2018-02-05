@@ -54,8 +54,6 @@ class QueueVideoImport implements ShouldQueue
     public function handle() // THIS JOB DOWNLOADS THE REQUESTED VIDEO FILE, CHECKS VALIDITY AND SCHEDULES ANOTHER JOB TO CREATE WATERMARKS ETC
     {
         ini_set('memory_limit', '512M'); // Increase memory limit for larger video files
-        //set_time_limit(0); // Unlimited timeout
-        //ini_set('max_execution_time', 90);
 
         $video = Video::find($this->video_id); // Find video file id in db
 
