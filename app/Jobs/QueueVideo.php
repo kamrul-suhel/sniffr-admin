@@ -119,11 +119,11 @@ class QueueVideo implements ShouldQueue
                 }
 
                 // Creates a job to create dirty watermark
-                $job = $elastcoder->transcodeVideo($fileName, $watermark__dirty_file, $config_dirty);
+                $job2 = $elastcoder->transcodeVideo($fileName, $watermark__dirty_file, $config_dirty);
 
-                if($job['Id']) {
+                if($job2['Id']) {
                     // Queues a laravel job to check if watermark was created uccessfully
-                    QueueVideoCheck::dispatch($job['Id'], $video->id, 'watermark_dirty', 1)
+                    QueueVideoCheck::dispatch($job2['Id'], $video->id, 'watermark_dirty', 1)
                         ->delay(now()->addSeconds(40));
                 }
 
