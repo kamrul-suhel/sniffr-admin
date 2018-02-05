@@ -18,8 +18,6 @@
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
 
     @yield('css')
-
-    <script src="/assets/admin/js/app.js"></script>
 </head>
 <body class="page-body skin-black">
 
@@ -84,6 +82,8 @@
     </div>
 </div>
 
+<script src="/assets/admin/js/app.js"></script>
+    
 <!-- Notifications -->
 <script>
     (function($){
@@ -134,7 +134,6 @@
 <!-- End Notifications -->
 
 @yield('javascript')
-@yield('javascript-videojs')
 
 </body>
 </html>

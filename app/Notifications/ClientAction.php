@@ -58,6 +58,9 @@ class ClientAction extends Notification
             case 'request':
                 $message = 'have chased for the file for';
                 break;
+            case 'interested':
+                $message = 'would like the following video';
+                break;
         }
 
         return (new SlackMessage)

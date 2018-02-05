@@ -19,8 +19,6 @@
 
 	@yield('css')
 
-	<script src="/assets/admin/js/app.js"></script>
-
 	<!--[if lt IE 9]><script src="{{ '/application/assets/admin/js/ie8-responsive-file-warning.js' }}"></script><![endif]-->
 
 	<!-- HTML5 shim and Respond.js') }} IE8 support of HTML5 elements and media queries -->
@@ -94,6 +92,10 @@
 	</div>
 </div>
 
+<script src="/assets/admin/js/app.js"></script>
+<script src="/assets/admin/js/video.js"></script>
+<script src="/assets/admin/js/videojs-vimeo.js"></script>
+
 <!-- Notifications -->
 <script>
 	(function($){
@@ -140,7 +142,6 @@
 <!-- End Notifications -->
 
 @yield('javascript')
-@yield('javascript-videojs')
 
 </body>
 </html>

@@ -137,6 +137,5 @@
 		})(jQuery);
 	</script>
 @stop
-@include ('partials.videojs')
 
 @stop

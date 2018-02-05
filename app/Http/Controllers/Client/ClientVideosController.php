@@ -59,50 +59,56 @@ class ClientVideosController extends Controller {
      */
     public function index(Request $request, $state = 'all')
     {
-        $request->session()->put('current_state', $state);
         $search_value = Input::get('s');
-        $campaign_id = Input::get('campaign_id') ? Input::get('campaign_id') : session('campaign_id');
-        $user = Auth::user();
+        $category_value = Input::get('category');
+        $collection_value = Input::get('collection');
+        $shot_value = Input::get('shot_type');
+        $rights = Input::get('rights');
 
-        $campaigns = Campaign::where('client_id', $user->client_id)->get();
-        $campaign = Campaign::find($campaign_id);
-
-        // Video list
         $videos = new Video;
-
-        if($campaign_id){
-            $request->session()->put('campaign_id', $campaign_id);
-            $videos = $videos->whereHas('campaigns', function ($q) use($campaign_id) {
-                $q->where('id', $campaign_id);
-            });
-        }else{
-            $videos = $videos->whereHas('campaigns', function ($q) use($campaigns) {
-                $q->whereIn('id', $campaigns->pluck('id'));
-            });
-        }
 
         if(!empty($search_value)){
             $videos = Video::where(function($query) use($search_value){
                 $query->where('title', 'LIKE', '%'.$search_value.'%');
             })->orWhereHas('tags', function ($q) use($search_value){
                 $q->where('name', 'LIKE', '%'.$search_value.'%');
-            });
+            })->orWhere('alpha_id', $search_value);
+        }
+
+        if(!empty($category_value)){
+            $videos = $videos->where('video_category_id', $category_value);
+        }
+
+        if(!empty($collection_value)){
+            $videos = $videos->where('video_collection_id', $collection_value);
+        }
+
+        if(!empty($shot_value)){
+            $videos = $videos->where('video_shottype_id', $shot_value);
+        }
+
+        if(!empty($rights)){
+            $videos = $videos->where('rights', $rights);
         }
 
         if($state != 'all'){
-            $videos = $videos->whereHas('campaigns', function ($q) use($state) {
-                $q->where('state', $state);
-            });
+            if($state == 'deleted'){
+                $videos = $videos->onlyTrashed();
+            }else{
+                $videos = $videos->where('state', $state);
+            }
+
+            session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('licensed_at', 'desc')->paginate(9);
+        $videos = $videos->orderBy('id', 'DESC')->paginate(24);
+
+        $user = Auth::user();
 
         $data = array(
             'state' => $state,
             'videos' => $videos,
             'user' => $user,
-            'campaign' => $campaign,
-            'campaigns' => $campaigns,
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
@@ -140,7 +146,7 @@ class ClientVideosController extends Controller {
         $video->notify(new ClientAction($video, $state, $client->name));
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => ($state == 'all' ? 'yes' : 'no'), 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }
@@ -165,6 +171,28 @@ class ClientVideosController extends Controller {
             return response()->json(['status' => 'success', 'message' => 'We\'ll do our best to get the video file ASAP', 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
         } else {
             return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'We\'ll do our best to get the video file ASAP', 'note_type' => 'success') );
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function interest(Request $request, $id)
+    {
+        $isJson = $request->ajax();
+
+        $video = Video::where('alpha_id', $id)->first();
+        $client = Client::find(Auth::user()->client_id);
+        
+        $video->notify(new ClientAction($video, 'interested', $client->name));
+
+        if($isJson) {
+            return response()->json(['status' => 'success', 'message' => 'Our team have been notified of your interest in this video, we\'ll be in touch shortly' , 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
+        } else {
+            return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Our team have been notified of your interest in this video, we\'ll be in touch shortly', 'note_type' => 'success') );
         }
     }
 
