@@ -134,7 +134,7 @@ class ThemeSubmissionController extends Controller {
         $video->title = Input::get('title');
 
         //handle file upload to S3 and Youtube ingestion
-        $fileSize = '';
+        $fileSize = $filePath = '';
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
@@ -161,6 +161,8 @@ class ThemeSubmissionController extends Controller {
             $video->embed_code = $linkDetails['embed_code'];
             $video->url = $linkDetails['url'];
             $video->vertical = $linkDetails['vertical'];
+
+            $filePath = $video->url;
         }
 
         $video->state = 'restricted';
