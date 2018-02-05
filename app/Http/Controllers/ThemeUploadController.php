@@ -44,7 +44,7 @@ class ThemeUploadController extends Controller {
         'email' => 'required|email',
         'title' => 'required',
         // 'url' => 'required_without_all:url,file',
-        'file' => 'mimes:flv,ogg,mp4,qt,avi,wmv,m4v,mov,webm|max:200000',
+        'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
         'terms' => 'required'
     ];
 
@@ -104,8 +104,14 @@ class ThemeUploadController extends Controller {
     public function store(Request $request)
     {
         //increase memory limits and upload post size
-        ini_set('memory_limit', '1024M');
-        ini_set('max_execution_time', 120);
+        ini_set('max_execution_time', 1800);
+        ini_set('upload_max_filesize', '512M');
+        ini_set('post_max_size', '512M');
+        // ini_set('max_input_time', 1800);
+        // ini_set('memory_limit', '1000M');
+        // ini_set('max_input_vars', 1800);
+        // ini_set('max_input_vars', 1800);
+        // ini_set('max_allowed_packet', '1000M');
 
         $isJson = $request->ajax();
 
@@ -113,13 +119,15 @@ class ThemeUploadController extends Controller {
         $validator = Validator::make(Input::all(), $this->rules);
         if ($validator->fails())
         {
-            //if($isJson) {
-            //    return response()->json(['status' => 'error']);
-            //} else {
+            $file_temp = $request->file('file');
+            $mime_temp = $file_temp->getMimeType();
+            if($isJson) {
+                return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
+            } else {
                 return Redirect::back()
                     ->withErrors($validator)
                     ->withInput();
-            //}
+            }
         }
 
         //get additional form data
@@ -166,7 +174,7 @@ class ThemeUploadController extends Controller {
             $video->url = $linkDetails['url'];
             $video->vertical = $linkDetails['vertical'];
         }
-        
+
         $video->state = 'new';
         $video->rights = 'ex';
         $video->save();

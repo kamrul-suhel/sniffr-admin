@@ -39,7 +39,7 @@ class ThemeSubmissionController extends Controller {
         'email' => 'required|email',
         'title' => 'required',
         // 'url' => 'required_without_all:url,file',
-        'file' => 'mimes:flv,ogg,mp4,qt,avi,wmv,m4v,mov,webm|max:200000',
+        'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
         'terms' => 'required'
     ];
 
@@ -97,6 +97,11 @@ class ThemeSubmissionController extends Controller {
      */
     public function store(Request $request)
     {
+        //increase memory limits and upload post size
+        ini_set('max_execution_time', 1800);
+        ini_set('upload_max_filesize', '512M');
+        ini_set('post_max_size', '512M');
+
         $isJson = $request->ajax();
 
         //validate the request

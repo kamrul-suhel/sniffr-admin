@@ -515,6 +515,11 @@ class AdminVideosController extends Controller {
      */
     public function upload(Request $request)
     {
+        //increase memory limits and upload post size
+        ini_set('max_execution_time', 1800);
+        ini_set('upload_max_filesize', '512M');
+        ini_set('post_max_size', '512M');
+
         $brokenLinks = $note =array();
 
         if($request->hasFile('csv')) {
