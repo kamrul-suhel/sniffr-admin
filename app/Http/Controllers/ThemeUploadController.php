@@ -104,7 +104,7 @@ class ThemeUploadController extends Controller {
     public function store(Request $request)
     {
         //increase memory limits and upload post size
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '1024M');
         ini_set('max_execution_time', 120);
 
         $isJson = $request->ajax();
@@ -113,13 +113,13 @@ class ThemeUploadController extends Controller {
         $validator = Validator::make(Input::all(), $this->rules);
         if ($validator->fails())
         {
-            if($isJson) {
-                return response()->json(['status' => 'error']);
-            } else {
+            //if($isJson) {
+            //    return response()->json(['status' => 'error']);
+            //} else {
                 return Redirect::back()
                     ->withErrors($validator)
                     ->withInput();
-            }
+            //}
         }
 
         //get additional form data
