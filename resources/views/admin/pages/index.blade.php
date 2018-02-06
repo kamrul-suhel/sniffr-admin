@@ -42,8 +42,9 @@
 
 	<div class="text-center"><?= $pages->render(); ?></div>
 
-	<script>
 
+	@section('javascript')
+	<script>
 		$ = jQuery;
 		$(document).ready(function(){
 			$('.delete').click(function(e){
@@ -54,9 +55,7 @@
 			    return false;
 			});
 		});
-
 	</script>
-
-
+	@stop
 @stop
 

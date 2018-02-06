@@ -16,5 +16,4 @@ class Client {
 
         return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to access this page!', 'note_type' => 'error') );
     }
-
 }

@@ -35,8 +35,8 @@
 
 	<div class="text-center"><?= $clients->render(); ?></div>
 
+	@section('javascript')
 	<script>
-
 		$ = jQuery;
 		$(document).ready(function(){
 			$('.delete').click(function(e){
@@ -47,8 +47,6 @@
 			    return false;
 			});
 		});
-
 	</script>
-
-
+	@stop
 @stop

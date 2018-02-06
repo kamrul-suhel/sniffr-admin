@@ -197,4 +197,3 @@
 	<div class="clear"></div>
 </div>
 @stop
-@include ('partials.videojs')

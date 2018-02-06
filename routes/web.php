@@ -295,14 +295,18 @@ Route::group(array('prefix' => 'admin'), function(){
 
 Route::group(array('prefix' => 'client'), function(){
     // Admin Dashboard
-    Route::get('', 'Client\ClientController@index');
+    Route::get('', 'Client\ClientVideosController@index');
 
     // Admin Video Functionality
-    Route::get('videos', 'Client\ClientVideosController@index');
-    Route::get('videos/{id}', array('uses' => 'Client\ClientVideosController@index'));
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
-    Route::get('videos/request/{id}', array('uses' => 'Client\ClientVideosController@request'));
+    Route::get('videos/interest/{id}', array('uses' => 'Client\ClientVideosController@interest'));
+
+    Route::get('dashboard', 'Client\ClientDashboardController@index');
+    Route::get('dailies', array('uses' => 'Client\ClientDailiesController@index'));
+    Route::get('dailies/{id}', array('uses' => 'Client\ClientDailiesController@index'));
+    Route::get('dailies/status/{state}/{id}', array('uses' => 'Client\ClientDailiesController@status'));
+    Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
 });
 
 /*

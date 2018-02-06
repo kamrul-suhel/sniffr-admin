@@ -53,9 +53,15 @@
 				<div class="panel-footer">
 					@if($video->state == 'pending'||$video->state == 'problem'||$video->state == 'licensed'||$video->state=='restricted')
 					<div class="text-right">
+						@if($video->state != 'licensed')
 						<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
+						@endif
+			        	@if($video->state != 'restricted')
 			        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>
+			        	@endif
+			        	@if($video->state != 'problem')
 			        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
+			        	@endif
 						@if($video->state == 'licensed' && $video->file)
 						&nbsp;&nbsp; <a href="{{ url('/download/'.$video->alpha_id) }}" class="btn btn-primary{{ $video->file_watermark ? ' js-download' : '' }}" download><i class="fa fa-download"></i> Download Video</a>
 						@endif
@@ -551,9 +557,7 @@
 </div>
 
 @section('javascript')
-
 	<script type="text/javascript">
-
 		//video analysis function for labels from dynamodb API
 		function videoAnalysis(tempFile) {
 
@@ -716,39 +720,6 @@
 			   }
 		   });
 
-		   $('.js-download').click(function(e){
-                e.preventDefault();
-                var downloadUrl = $(this).attr('href')+'/regular';
-                var watermarkUrl = $(this).attr('href')+'/watermark';
-                swal({
-                    title: 'Please select the type of video to download below',
-                    icon: 'info',
-                    buttons: {
-                        watermark: {
-                            text: 'Watermark',
-                            value: 'watermark'
-                        },
-                        regular: {
-                            text: 'No Watermark',
-                            value: 'regular'
-                        },
-                        cancel: 'Cancel'
-                    },
-                    closeModal: true,
-                    closeOnClickOutside: true
-                })
-                .then((value) => {
-                    switch (value) {
-                        case 'regular':
-                            window.location.replace(downloadUrl);
-                            break;
-                        case 'watermark':
-                            window.location.replace(watermarkUrl);
-                            break;
-                    }
-                });
-            });
-
 		   //execute video analysis onload
 		   var dataFile = $('#temp_filename').val();
 		   var dataState = $('#temp_state').val();
@@ -761,6 +732,5 @@
 		})(jQuery);
 	</script>
 @stop
-@include ('partials.videojs')
 
 @stop

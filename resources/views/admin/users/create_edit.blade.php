@@ -8,6 +8,7 @@
 	<div class="admin-section-title">
 	@if(!empty($user->id))
 		<h3><i class="fa fa-users"></i> {{ $user->username }}</h3>
+
 		<a href="{{ url('user') . '/' . $user->username }}" target="_blank" class="btn btn-info">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
 		</a>
@@ -15,34 +16,36 @@
 		<h3><i class="fa fa-users"></i> Add New User</h3>
 	@endif
 	</div>
+
 	<div class="clear"></div>
 
+	<form method="POST" action="<?= $post_route ?>" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+		<div id="user-badge">
+			@if(isset($user->avatar))<?php $avatar = $user->avatar; ?>@else<?php $avatar = 'default.jpg'; ?>@endif
+			<img src="<?= Config::get('site.uploads_url') . 'avatars/' . $avatar ?>" />
+			<label for="avatar">@if(isset($user->username))<?= ucfirst($user->username). '\'s'; ?>@endif Profile Image</label>
+			<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
+		</div>
 
+		<div class="panel panel-primary" data-collapsed="0">
+			<div class="panel-heading">
+				<div class="panel-title">Username</div>
 
-		<form method="POST" action="<?= $post_route ?>" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-
-			<div id="user-badge">
-				@if(isset($user->avatar))<?php $avatar = $user->avatar; ?>@else<?php $avatar = 'default.jpg'; ?>@endif
-				<img src="<?= Config::get('site.uploads_url') . 'avatars/' . $avatar ?>" />
-				<label for="avatar">@if(isset($user->username))<?= ucfirst($user->username). '\'s'; ?>@endif Profile Image</label>
-				<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
+				<div class="panel-options"> 
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				</div>
 			</div>
 
-			<div class="panel panel-primary" data-collapsed="0">
-				<div class="panel-heading">
-					<div class="panel-title">Username</div>
-					<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
+			<div class="panel-body" style="display: block;">
+				<?php if($errors->first('username')): ?>
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <strong>Oh snap!</strong>
+					<?= $errors->first('username'); ?>
 				</div>
-				<div class="panel-body" style="display: block;">
-					<?php if($errors->first('username')): ?>
-						<div class="alert alert-danger">
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <strong>Oh snap!</strong>
-							<?= $errors->first('username'); ?>
-						</div>
-					<?php endif; ?>
-					<p>User's Username</p>
-					<input type="text" class="form-control" name="username" id="username" value="<?php if(!empty($user->username)): ?><?= $user->username ?><?php endif; ?>" />
-				</div>
+
+				<?php endif; ?>
+				<p>User's Username</p>
+				<input type="text" class="form-control" name="username" id="username" value="<?php if(!empty($user->username)): ?><?= $user->username ?><?php endif; ?>" />
 			</div>
 		</div>
 
@@ -124,7 +127,7 @@
 							@if(isset($clients))
 								<option value="">Please Select</option>
 								@foreach($clients as $client)
-								<option value="{{ $client->id }}"{{ $client->id == $user->client_id ? ' selected' : '' }}>{{ $client->name }}</option>
+								<option value="{{ $client->id }}"{{ isset($user) && ($client->id == $user->client_id) ? ' selected' : '' }}>{{ $client->name }}</option>
 								@endforeach
 							@endif
 						</select>
@@ -152,49 +155,35 @@
 
 		<div class="clear"></div>
 	</form>
-
-	<div class="clear"></div>
-<!-- This is where now -->
 </div>
 
-
-
-
-	@section('javascript')
-
+@section('javascript')
 	<script type="text/javascript">
+		$ = jQuery;
 
-	$ = jQuery;
+		$(document).ready(function(){
+			$('#role').change(function(){
+				if($(this).val() == 'client'){
+					$('#client-box').show();
+				} else {
+					$('#client-box').hide();
+				}
+			});
 
-	$(document).ready(function(){
-
-		$('#role').change(function(){
-			if($(this).val() == 'client'){
-				$('#client-box').show();
-			} else {
+			if($('#role').val() != 'client'){
 				$('#client-box').hide();
 			}
+
+			$('#active, #disabled').change(function() {
+				if($(this).is(":checked")) {
+			    	$(this).val(1);
+			    } else {
+			    	$(this).val(0);
+			    }
+			    console.log('test ' + $(this).is( ':checked' ));
+			});
 		});
-
-		if($('#role').val() != 'client'){
-			$('#client-box').hide();
-		}
-
-		$('#active, #disabled').change(function() {
-			if($(this).is(":checked")) {
-		    	$(this).val(1);
-		    } else {
-		    	$(this).val(0);
-		    }
-		    console.log('test ' + $(this).is( ':checked' ));
-		});
-
-	});
-
-
-
 	</script>
-
-	@stop
+@stop
 
 @stop

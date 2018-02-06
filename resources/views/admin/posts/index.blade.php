@@ -50,6 +50,8 @@
 
 	<div class="text-center"><?= $posts->appends(Request::only('s'))->render(); ?></div>
 
+
+	@section('javascript')
 	<script>
 
 		$ = jQuery;
@@ -65,6 +67,6 @@
 		});
 
 	</script>
-
+	@stop
 
 @stop

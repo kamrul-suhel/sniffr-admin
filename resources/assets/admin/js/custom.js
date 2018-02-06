@@ -6,6 +6,165 @@ var public_vars = public_vars || {};
 
 	$(document).ready(function()
 	{
+		$('.selectpicker').selectpicker('refresh');
+
+	    $('#search-form').change(function() {
+	        $(this).submit();
+	    });
+
+	    $('.js-state').click(function(e){
+			e.preventDefault();
+			var dataUrl = $(this).attr('href');
+			var parseUrl = dataUrl.split('/');
+			var state = parseUrl[6];
+			var videoId = parseUrl[7];
+			var alertType;
+
+			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true });
+			$('.swal-button-container').css('display','none');
+
+			if(dataUrl) {
+				$.ajax({
+				    type: 'GET',
+				    url: dataUrl,
+				    data: { get_param: 'value' },
+				    dataType: 'json',
+				    success: function (data) {
+						if(data.status=='success') {
+							if(data.remove=='yes'){
+								$('#video-'+videoId).fadeOut();
+							}
+							switch(state) {
+								case 'accepted':
+								case 'licensed':
+								case 'yes':
+									alertType = 'success';
+									break;
+								case 'rejected':
+								case 'problem':
+								case 'no':
+									alertType = 'error';
+									break;
+								case 'restricted':
+								case 'maybe':
+
+									alertType = 'warning';
+									break;
+								default:
+									alertType = 'success';
+							}
+							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, buttons: { cancel: false, confirm: true } });
+							$('.swal-button-container').css('display','inline-block');
+						} else {
+							$('.swal-button-container').css('display','inline-block');
+						}
+				    }
+				});
+			}
+		});
+
+	    $('.js-delete').click(function(e){
+			e.preventDefault();
+			var delete_link = $(this).attr('href');
+			swal({
+				title: "Are you sure?",
+				text: "Do you want to permanantly delete this video?",
+				icon: "warning",
+				buttons: { cancel: true, confirm: true }
+			})
+			.then((willDelete) => {
+				swal({ title: 'loading..', icon: 'info', buttons: false, closeModal: true });
+				if (willDelete) {
+					if(delete_link) {
+						$.ajax({
+						    type: 'GET',
+						    url: delete_link,
+						    dataType: 'json',
+						    success: function (data) {
+								if(data.status=='success') {
+									if(data.remove=='yes'){
+	                                    $('#video-'+data.video_id).fadeOut();
+	                                }
+									swal({ title: data.message, icon: 'success', closeModal: true, buttons: { cancel: false, confirm: true } });
+									$('.swal-button-container').css('display','inline-block');
+								} else {
+									swal({ title: 'There was a problem!' });
+									$('.swal-button-container').css('display','inline-block');
+								}
+						    },
+						    error: function(){
+						    	swal({ title: 'There was a problem!', icon: 'error' });
+						    }
+						});
+					}
+				}
+			});
+		});
+
+		$('.js-download').click(function(e){
+            e.preventDefault();
+            var downloadUrl = $(this).attr('href')+'/regular';
+            var watermarkUrl = $(this).attr('href')+'/watermark';
+            swal({
+                title: 'Please select the type of video to download below',
+                icon: 'info',
+                buttons: {
+                    watermark: {
+                        text: 'Watermark',
+                        value: 'watermark'
+                    },
+                    regular: {
+                        text: 'No Watermark',
+                        value: 'regular'
+                    },
+                    cancel: 'Cancel'
+                },
+                closeModal: true,
+                closeOnClickOutside: true
+            })
+            .then((value) => {
+                switch (value) {
+                    case 'regular':
+                        window.location.replace(downloadUrl);
+                        break;
+                    case 'watermark':
+                        window.location.replace(watermarkUrl);
+                        break;
+                }
+            });
+        });
+
+		// Resize videos to width
+        var massVideo = $('.video-js');
+        for(var i = 0; i < massVideo.length; i++){
+            videojs(massVideo[i]).ready(function(){
+                var myPlayer = this;    // Store the video object
+                var aspectRatio = 9/16; // Make up an aspect ratio
+
+                function resizeVideoJS(){
+                    // Get the parent element's actual width
+                    var width = $('.video-container')[0].offsetWidth;
+                    // Set width to fill parent element, Set height
+                    myPlayer.width(width).height( width * aspectRatio );
+                }
+
+                resizeVideoJS(); // Initialize the function
+                window.onresize = resizeVideoJS; // Call the function on resize
+            });
+        }
+
+        // Create twitter video
+        TwitterWidgetsLoader.load(function(twttr) {
+            var tweets = jQuery(".tweet");
+            
+            jQuery(tweets).each( function( t, tweet ) {
+                var id = jQuery(this).attr('id');
+                twttr.widgets.createVideo(id,tweet).then( function( el ) {
+                    //console.log('Video added.');
+                });
+            });
+        });
+
 		// Sidebar Menu var
 		public_vars.$body	 	 	= $("body");
 		public_vars.$pageContainer  = public_vars.$body.find(".page-container");

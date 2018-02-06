@@ -45,16 +45,20 @@ class AdminUsersController extends Controller {
 
 		$data = array(
 			'users' => $users
-			);
+		);
 		return view('admin.users.index', $data);
 	}
 
     public function create(){
+        $clients = Client::get();
+
         $data = array(
             'post_route' => url('admin/user/store'),
             'admin_user' => Auth::user(),
             'button_text' => 'Create User',
-            );
+            'clients' => $clients
+        );
+
         return view('admin.users.create_edit', $data);
     }
 

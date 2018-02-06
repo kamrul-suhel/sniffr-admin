@@ -122,6 +122,7 @@
 	</div><!-- .col-sm-6 -->
 </div><!-- .row -->
 
+@section('javascript')
 <script>
 	(function($){
 
@@ -195,5 +196,6 @@
 
 	})(jQuery);
 </script>
+@stop
 
 @stop
