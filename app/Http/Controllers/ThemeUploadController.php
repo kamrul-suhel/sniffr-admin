@@ -173,6 +173,8 @@ class ThemeUploadController extends Controller {
             $video->embed_code = $linkDetails['embed_code'];
             $video->url = $linkDetails['url'];
             $video->vertical = $linkDetails['vertical'];
+
+            $filePath = $video->url;
         }
 
         $video->state = 'new';
