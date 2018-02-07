@@ -50,7 +50,7 @@ trait VideoHelper{
 	    	}else if($video->image && !$embed){
 				$sHTML .= '<a class="video-thumb" href="videos/'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 			}else{
-				$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
+				$sHTML .= '<p>There appears to be an issue with this video</p>';
 				if(\Auth::user()->role == 'admin'){
 			    	$sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
 			    }

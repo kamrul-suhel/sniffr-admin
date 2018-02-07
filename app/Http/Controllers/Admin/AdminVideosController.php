@@ -154,7 +154,7 @@ class AdminVideosController extends Controller {
 
         } else if($video->state == 'restricted'||$video->state == 'problem'){
 
-            if(!empty($video->youtube_id)){
+            if(!empty($video->youtube_id) && $video->file){
 
                 // Make youtube video unlisted
                 MyYoutube::setStatus($video->youtube_id, 'unlisted');
@@ -178,7 +178,7 @@ class AdminVideosController extends Controller {
             }
 
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
-            if(!empty($video->youtube_id)){
+            if(!empty($video->youtube_id) && $video->file){
 
                 // Make youtube video public
                 MyYoutube::setStatus($video->youtube_id, 'public');
@@ -682,7 +682,7 @@ class AdminVideosController extends Controller {
         $this->deleteVideoImages($video);
 
         // Hide on youtube
-        if($video->youtube_id){
+        if($video->youtube_id && $video->file){
             $response = MyYoutube::setStatus($video->youtube_id, 'private');
 
             if(!$response){ // There is no youtube video, remove the id

@@ -474,7 +474,7 @@
 
 	                                $exclusivity = 48 - ($diff->h + ($diff->days*24));
 	                            ?>
-								{{ $campaign->name }} : {{ $exclusivity }} Hours left
+								{{ $campaign->name }} : {{ $exclusivity > 0 ? $exclusivity.' Hours left' : 'Exclusivity Expired' }}
 							@endforeach
 						@else
 						<p>Not currently selected for any campaigns</p>
