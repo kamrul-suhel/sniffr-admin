@@ -25,18 +25,23 @@
 				switch($video->state){
 					case 'accepted':
 						$stateIcon = 'fa fa-clock-o';
+						$panelColor = 'default';
 						break;
 					case 'rejected':
 						$stateIcon = 'fa fa-times';
+						$panelColor = 'danger';
 						break;
 					case 'problem':
 						$stateIcon = 'fa fa-exclamation';
+						$panelColor = 'danger';
 						break;
 					case 'licensed':
 						$stateIcon = 'fa fa-check';
+						$panelColor = 'success';
 						break;
 					case 'restricted':
 						$stateIcon = 'fa fa-exclamation-triangle';
+						$panelColor = 'warning';
 						break;
 					default:
 						$stateIcon = '';
@@ -53,7 +58,7 @@
 
 					<div class="panel-body" style="display: block;">
 						<div class="text-center">
-							{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
+							{!! App\Libraries\VideoHelper::getVideoHTML($video, true, 'edit') !!}
 						</div>
 					</div>
 
@@ -67,18 +72,14 @@
 
 		<div class="col-sm-6">
 			<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Full Name</div>
-								<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
-							</div>
-							<div class="panel-body" style="display: block;">
-								<p>Add first name in the textbox below:</p>
-								<input type="text" class="form-control" name="full_name" id="full_name" placeholder="Full Name" value="@if(!empty($contact->full_name)){{ $contact->full_name }}@endif" />
-							</div>
-						</div>
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Full Name</div>
+						<div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div>
+					</div>
+					<div class="panel-body" style="display: block;">
+						<p>Add first name in the textbox below:</p>
+						<input type="text" class="form-control" name="full_name" id="full_name" placeholder="Full Name" value="@if(!empty($contact->full_name)){{ $contact->full_name }}@endif" />
 					</div>
 				</div>
 

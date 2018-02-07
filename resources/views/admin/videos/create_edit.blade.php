@@ -46,7 +46,7 @@
 
 				<div class="panel-body" style="display: block;">
 					<div class="text-center">
-						{!! App\Libraries\VideoHelper::getVideoHTML($video, true) !!}
+						{!! App\Libraries\VideoHelper::getVideoHTML($video, true, 'edit') !!}
 					</div>
 				</div>
 
@@ -86,22 +86,14 @@
 					<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 				</div>
 
-				@if($video->contact_id!=0)
 				<div class="panel-body" style="display: block;">
-					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->full_name }}</a></h3>
+					@if($video->contact_id!=0)
+					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->full_name ? $video->contact->full_name : 'Not submitted' }}</a></h3>
                     <p><a href="mailto:{{ $video->contact->email }}">{{ $video->contact->email }}</a></p>
-				</div>
-				@else
-					<div class="panel-body" style="display: block;">
-					@if(isset($user->username))
-						<h3><a href="#">Admin: {{ $user->username }}</a></h3>
-						<p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
 					@else
-						<h3><a href="#">Admin</a></h3>
-						<p><a href="mailto:ian@unilad.co.uk">ian@unilad.co.uk</a></p>
+					<h3>No Contact Details</h3>
 					@endif
-					</div>
-				@endif
+				</div>
 			</div>
 
 			<div class="panel panel-primary" data-collapsed="0">
@@ -270,11 +262,7 @@
 
 					<div class="panel-body" style="display: block;">
 						@if(!empty($video->image))
-							@if(strpos($video->image,'http') === false)
-							<img src="{{ Config::get('site.uploads_dir') . 'images/' . $video->image }}" class="video-img" width="200"/>
-							@else
 							<img src="{{ $video->image }}" class="video-img" width="200"/>
-							@endif
 						@endif
 						<p>Select the video image (1280x720 px or 16:9 ratio):</p>
 
@@ -476,18 +464,18 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						@if(isset($video)&&count($video->campaigns)>0)
-						@foreach($video->campaigns as $campaign)
-							<?php
-                                $date1 = now();
-                                $date2 = new DateTime($campaign->pivot->created_at);
+						@if(isset($video) && count($video->campaigns)>0)
+							@foreach($video->campaigns as $campaign)
+								<?php
+	                                $date1 = now();
+	                                $date2 = new DateTime($campaign->pivot->created_at);
 
-                                $diff = $date2->diff($date1);
+	                                $diff = $date2->diff($date1);
 
-                                $exclusivity = 48 - ($diff->h + ($diff->days*24));
-                            ?>
-							{{ $campaign->name }} : {{ $exclusivity }} Hours left
-						@endforeach
+	                                $exclusivity = 48 - ($diff->h + ($diff->days*24));
+	                            ?>
+								{{ $campaign->name }} : {{ $exclusivity }} Hours left
+							@endforeach
 						@else
 						<p>Not currently selected for any campaigns</p>
 						@endif

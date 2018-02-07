@@ -68152,6 +68152,25 @@ $('document').ready(function () {
             $('#filename').html($('#file').prop('files')[0].name);
         }
     });
+
+    // Resize videos to width
+    var massVideo = $('.video-js');
+    for (var i = 0; i < massVideo.length; i++) {
+        videojs(massVideo[i]).ready(function () {
+            var myPlayer = this; // Store the video object
+            var aspectRatio = 9 / 16; // Make up an aspect ratio
+
+            function resizeVideoJS() {
+                // Get the parent element's actual width
+                var width = $('.video-container')[0].offsetWidth;
+                // Set width to fill parent element, Set height
+                myPlayer.width(width).height(width * aspectRatio);
+            }
+
+            resizeVideoJS(); // Initialize the function
+            window.onresize = resizeVideoJS; // Call the function on resize
+        });
+    }
 });
 
 /***/ }),

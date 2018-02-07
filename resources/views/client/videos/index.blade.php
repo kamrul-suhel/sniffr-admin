@@ -4,7 +4,7 @@
     <div class="admin-section-title bottom-padding">
         <div class="row">
             <div class="col-xs-12">
-                <h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos</h3>
+                <h3><i class="fa fa-youtube-play"></i> Video Library</h3>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
 
                 <div class="col-md-4 col-md-offset-4">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search videos..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
                     </div>
                 </div>
             </form>
@@ -46,7 +46,7 @@
                     </header>
 
                     <section class="album-info">
-                        <h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
+                        <h3><a href="{{ url('client/videos/view/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
 
                         <p>{{ $video->description }}</p>
                     </section>
@@ -56,7 +56,7 @@
 
                         <div class="album-options">
                             <a href="{{ url('client/videos/interest/'.$video->alpha_id) }}" class="js-state btn btn-default" title="Interested in video">
-                                <i class="fa fa-envelope"></i> Download
+                                <i class="fa fa-envelope"></i> Request Interest
                             </a>
                         </div>
                     </footer>

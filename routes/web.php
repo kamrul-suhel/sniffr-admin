@@ -294,11 +294,10 @@ Route::group(array('prefix' => 'admin'), function(){
 */
 
 Route::group(array('prefix' => 'client'), function(){
-    // Admin Dashboard
-    Route::get('', 'Client\ClientVideosController@index');
-
-    // Admin Video Functionality
+    // Client Video Functionality
+    Route::get('videos', 'Client\ClientVideosController@index');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
+    Route::get('videos/view/{id}', 'Client\ClientVideosController@view');
     Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
     Route::get('videos/interest/{id}', array('uses' => 'Client\ClientVideosController@interest'));
 

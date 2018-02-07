@@ -86,7 +86,7 @@
 	<div class="col-sm-6">
 		<div class="panel panel-primary" id="charts_env">
 			<div class="panel-heading">
-			     <div class="panel-title">Top Browsers by Pageviews</div>
+			     <div class="panel-title">Best performing videos</div>
             </div>
 
 			<div class="panel-body">

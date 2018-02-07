@@ -32,7 +32,6 @@
             <h2>Your Video Details</h2>
 
             <div class="text-center" style="max-width:300px; margin:0 auto;">
-                <h1><?php echo $video->title ?></h1>
                 <div class="item-video">
                     <div class="video-container">
                     <?php if($video->youtube_id): ?>
@@ -51,6 +50,7 @@
                     <?php endif; ?>
                     </div>
                 </div>
+                <h3><?php echo $video->title ?></h3>
             </div>
 
             <h2>Your Contact Details</h2>

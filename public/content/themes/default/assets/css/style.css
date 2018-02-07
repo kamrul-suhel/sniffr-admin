@@ -1314,6 +1314,7 @@ p.small{
 }
 .terms-copy{
   margin-left: 40px;
+  cursor: pointer;
 }
 
 

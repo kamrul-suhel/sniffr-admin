@@ -198,6 +198,7 @@ class AdminVideosController extends Controller {
         $video->save();
 
         // Process > Move video to Youtube and move video file to folder for analysis
+        $fileName_watermark = false;
         if($video->file&&$video_process==1){
 
             // set watermark and non-watermark video files for processing
@@ -206,7 +207,7 @@ class AdminVideosController extends Controller {
             if($video->file_watermark_dirty){
                 $file_watermark = file_get_contents($video->file_watermark_dirty);
                 $fileName_watermark = basename($video->file_watermark_dirty);
-            }else{
+            }else if($video->file_watermark){
                 $file_watermark = file_get_contents($video->file_watermark);
                 $fileName_watermark = basename($video->file_watermark);
             }
@@ -249,7 +250,7 @@ class AdminVideosController extends Controller {
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
         } else {
-            return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+            return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
         }
     }
 
@@ -471,6 +472,24 @@ class AdminVideosController extends Controller {
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $data['image'] = Storage::disk('s3')->url($fileName);
         }
+
+        //handle file upload to S3 and Youtube ingestion
+        $filePath = $fileSize = $fileMimeType = $youtubeId = '';
+        if($request->hasFile('file')){
+            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
+
+            $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
+
+            $file = $request->file('file');
+            $fileMimeType = $file->getMimeType();
+            $fileSize = $file->getClientSize();
+
+            // Upload to S3
+            $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
+            $filePath = Storage::disk('s3')->url($fileName);
+        }
+
+        $video->file = $filePath;
 
         $selected_campaigns = $video->campaigns->pluck('id')->all();
         $campaigns = array();

@@ -90,7 +90,7 @@
 				?>
 				<article class="album {{ $panelColour }}">
 					<header>
-						{!! App\Libraries\VideoHelper::getVideoHTML($video) !!}
+						{!! App\Libraries\VideoHelper::getVideoHTML($video, false, 'edit') !!}
 
 						<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" class="album-options">
 							<i class="fa fa-pencil"></i>
@@ -128,14 +128,29 @@
 								<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
 								@endif
 
-								@if($video->state != 'new')
-									@if($video->state != 'accepted')
-										| @if($video->rights == 'nonex')
-										<i class="fa fa-times-circle" title="Non-Exclusive"></i> Non-Exclusive
-										@else
-										<i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
-										@endif
-									@endif
+								@if($video->state != 'new' && $video->state != 'accepted')
+									| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Exclusive"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Exclusive
+								@endif
+
+								@if(isset($video) && count($video->campaigns)>0)
+									<?php
+									$has_exclusivity = false;
+									foreach($video->campaigns as $campaign){
+		                                $date1 = now();
+		                                $date2 = new DateTime($campaign->pivot->created_at);
+
+		                                $diff = $date2->diff($date1);
+
+		                                $exclusivity = 48 - ($diff->h + ($diff->days*24));
+
+		                                if($exclusivity > 0){
+		                                	$has_exclusivity = true;
+		                                }
+									}
+									if($has_exclusivity){
+										echo '| <i class="fa fa-hourglass-half text-danger" title="Has Exclusivity: '.$exclusivity.' hours"></i>';
+									}
+									?>
 								@endif
 							@endif
 						</div>

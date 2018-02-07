@@ -109,7 +109,10 @@ class ThemeAuthController extends Controller {
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
     			return Redirect::to($redirect);
     		} elseif(Auth::user()->role == 'client'){
-    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client';
+    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client/videos';
+    			if(Auth::user()->username == 'dailymail'){
+    				$redirect = '/client/dashboard';
+    			}
     			return Redirect::to($redirect);
     		} else {
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';

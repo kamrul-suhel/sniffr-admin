@@ -1,12 +1,6 @@
 <ul id="main-menu" class="main-menu">
     <!-- add class "multiple-expanded" to allow multiple submenus to open -->
     <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-    <li class="{{ Request::segment(2) == '' ? 'active' : '' }}">
-        <a href="{{ url('client') }}">
-            <i class="fa fa-youtube-play"></i>
-            <span class="title">Videos</span>
-        </a>
-    </li>
 
     @if($user->username == 'dailymail')
     <li class="{{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
@@ -45,4 +39,11 @@
         </ul>
     </li>
     @endif
+
+    <li class="{{ Request::segment(2) == 'videos' ? 'active' : '' }}">
+        <a href="{{ url('client/videos') }}">
+            <i class="fa fa-youtube-play"></i>
+            <span class="title">Video library</span>
+        </a>
+    </li>
 </ul>

@@ -18,7 +18,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="/upload"><i class="fa fa-cloud-upload"></i> Upload</a></li>
                     <?php if(!Auth::guest() && (Auth::user()->role == 'client' || Auth::user()->role == 'admin')): ?>
-                    <li><a href="<?= url('videos') ?>"><i class="fa fa-youtube-play"></i>Videos</a></li>
+                    <li><a href="<?= url('client') ?>"><i class="fa fa-youtube-play"></i>Videos</a></li>
                     <?php endif; ?>
                 </ul>
 
@@ -31,7 +31,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="<?= url('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
                                 <?php if(Auth::user()->role == 'client' && Auth::user()->username == 'dailymail'): ?>
-                                <li><a href="<?= url('client/videos') ?>">Dailies</a></li>
+                                <li><a href="<?= url('client/dashboard') ?>">Dailies</a></li>
                                 <?php endif; ?>
                                 <?php if(Auth::user()->role == 'admin'): ?>
                                     <li class="divider"></li>
