@@ -177,11 +177,11 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="panel panel-primary" data-collapsed="0"> 
+				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Referrer</div> 
-						<div class="panel-options"> 
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+						<div class="panel-title">Referrer</div>
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
@@ -590,7 +590,8 @@
 								   });
 							   }
 						   } else {
-							   $('#video-analysis').css('display','none');
+							   //$('#video-analysis').css('display','none');
+							   $("#video-analysis").html('<p>No suggested tags found but you can still add your own <span id="video-analysis-tag-added"></span> </p>');
 						   }
 					   }
 				   });
