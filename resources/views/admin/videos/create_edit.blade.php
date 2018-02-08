@@ -2,12 +2,24 @@
 
 @section('content')
 <div id="admin-container">
-	<div class="admin-section-title">
-	@if(isset($video))
-		<h3>{{ $video->title }}</h3>
-	@else
-		<h3><i class="fa fa-plus"></i> Add New Video</h3>
-	@endif
+	<div class="row bottom-padding">
+		<div class="col-sm-6">
+			<div class="admin-section-title">
+				@if(isset($video))
+					<h3>{{ $video->title }}</h3>
+				@else
+					<h3><i class="fa fa-plus"></i> Add New Video</h3>
+				@endif
+			</div>
+		</div>
+
+		<div class="col-sm-6">
+			<form id="search-form" method="get" role="form" class="search-form-full" action="/admin/videos">
+				<div class="form-group">
+					<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+				</div>
+			</form>
+		</div>
 	</div>
 
 	<div class="clear"></div>
@@ -74,6 +86,10 @@
 					@elseif($video->state == 'accepted')
 					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					<div class="clearfix"></div>
+					@elseif($video->state == 'rejected')
+					<div class="text-right">
+						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
+					</div>
 					@endif
 				</div>
 			</div>
