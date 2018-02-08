@@ -98,7 +98,7 @@ class QueueVideoYoutubeUpload implements ShouldQueue
                 $disk = Storage::disk('s3_sourcebucket');
                 if($disk->has($video->file)==1){
                     if($disk->exists(basename($video->file))) {
-                        $disk->move(''.$video->file, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video->file);
+                        $disk->move(''.basename($video->file), 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.basename($video->file));
                     }
                 }
 

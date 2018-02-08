@@ -38,24 +38,35 @@ class FillFormDetails extends BaseComponent
         return [
             '@date_filmed' => 'date_filmed',
             '@location' => 'location',
-            '@decription' => 'decription',
+            '@description' => 'description',
             '@terms' => 'p.terms-copy',
+            '@permission' => 'permission',
+            '@submitted_elsewhere' => 'submitted_elsewhere',
+            '@submitted_where' => 'submitted_where',
         ];
     }
 
     public function enterTestData($browser)
     {
         $title = 'TEST more details from unit browser '.time();
-        $browser->resize(1560, 1500)
-                ->type('@date_filmed', '01/01/2017')
-                ->type('@location', 'London')
-                ->type('@decription', 'Something');
+        $browser->resize(1560, 1800)
+                ->script([
+                    "document.querySelector('#date_filmed').value = '2018-01-01'"
+                ]);
+        $browser->type('@location', 'London')
+                ->type('@description', 'Something')
+                ->radio('@permission', 'yes')
+                ->radio('@submitted_elsewhere', 'yes')
+                ->type('@submitted_where', 'Buzzfeed');
     }
 
     public function executeUpload($browser)
     {
         $browser->click('@terms')
-        ->press('Update Details')
-        ->waitForLocation('/thanks', 10);
+                ->script('$("p.terms-copy:eq(1)").click();'); //really annoying when checkboxes don't have different ids/names
+        $browser->script('$("p.terms-copy:eq(2)").click();');
+        $browser->press('Update Details')
+                ->pause(3000)
+                ->assertSee('Thanks for the extra info');
     }
 }
