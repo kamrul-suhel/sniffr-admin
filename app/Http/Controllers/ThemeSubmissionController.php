@@ -124,6 +124,7 @@ class ThemeSubmissionController extends Controller {
             $contact = new Contact();
             $contact->full_name = Input::get('full_name');
             $contact->email = Input::get('email');
+            $contact->tel = Input::get('tel');
             $contact->save();
         }
 

@@ -84,7 +84,11 @@
 			        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
 					</div>
 					@elseif($video->state == 'accepted')
-					More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+					@if($video->reminders)
+						Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+					@else
+						More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+					@endif
 					<div class="clearfix"></div>
 					@elseif($video->state == 'rejected')
 					<div class="text-right">
@@ -381,7 +385,7 @@
 			<div class="col-sm-4">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Category</div>
+						<div class="panel-title">Vertical</div>
 
 						<div class="panel-options">
 							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
@@ -389,7 +393,7 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						<p>Select a Video Category Below:</p>
+						<p>Select a Vertical Below:</p>
 						<select id="video_category_id" name="video_category_id">
 							<option value="0">Please Select</option>
 							@foreach($video_categories as $category)

@@ -450,7 +450,7 @@ class AdminVideosController extends Controller {
         $this->addUpdateVideoTags($video, $tags);
 
         // Youtube integration
-        if($video->youtube_id && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
+        if($video->youtube_id && $video->file && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
             if(!$video->duration){
                 $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
             }
