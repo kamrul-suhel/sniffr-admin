@@ -18,7 +18,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="/upload"><i class="fa fa-cloud-upload"></i> Upload</a></li>
                     <?php if(!Auth::guest() && (Auth::user()->role == 'client' || Auth::user()->role == 'admin')): ?>
-                    <li><a href="<?= url('client') ?>"><i class="fa fa-youtube-play"></i>Videos</a></li>
+                    <li><a href="<?= url('client/videos') ?>"><i class="fa fa-youtube-play"></i>Videos</a></li>
                     <?php endif; ?>
                 </ul>
 

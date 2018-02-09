@@ -2,10 +2,10 @@
 
 @section('content')
 
-	<div class="admin-section-title">
+	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><i class="fa fa-youtube-play"></i> Video Categories</h3><a href="javascript:;" onclick="jQuery('#add-new').modal('show');" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+				<h3><i class="fa fa-youtube-play"></i> Video Categories <a href="javascript:;" onclick="jQuery('#add-new').modal('show');" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
 		</div>
 	</div>
