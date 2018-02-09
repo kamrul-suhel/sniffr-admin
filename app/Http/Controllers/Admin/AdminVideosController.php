@@ -640,7 +640,7 @@ class AdminVideosController extends Controller {
         foreach ($videos as $video) {
             echo $video->id.' : '.$video->title.'<br />';
             QueueVideoYoutubeUpload::dispatch($video->id)
-                ->delay(now()->addSeconds(10));
+                ->delay(now()->addSeconds(5));
         }
 
     }

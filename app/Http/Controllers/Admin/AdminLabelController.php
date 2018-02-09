@@ -81,20 +81,21 @@ class AdminLabelController extends Controller {
          }
 
          //search database for labels associated with search index
-         $files = Label::whereIn('frame', $search)
-         ->get();
+         $files = Label::whereIn('frame', $search)->get();
 
          // create array with all labels obtained through image analysis
          $labels = array();
          $count = 0;
          foreach ($files as $file) {
              $temps = $file->labels;
-             foreach ($temps as $temp){
-                 if (!in_array($temp['Name'], $blacklist)) {
-                     if($temp['Confidence']>85) {
-                         $labels[$count]['Name'] = $temp['Name'];
-                         $labels[$count]['Confidence'] = $temp['Confidence'];
-                         $count++;
+             if(count($temps)) {
+                 foreach ($temps as $temp){
+                     if (!in_array($temp['Name'], $blacklist)) {
+                         if($temp['Confidence']>85) {
+                             $labels[$count]['Name'] = $temp['Name'];
+                             $labels[$count]['Confidence'] = $temp['Confidence'];
+                             $count++;
+                         }
                      }
                  }
              }
