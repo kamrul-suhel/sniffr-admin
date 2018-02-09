@@ -49,7 +49,7 @@
 
     <div class="clear"></div>
 
-    <nav class="navbar navbar-default navbar-static-top second-nav">
+    <!--nav class="navbar navbar-default navbar-static-top second-nav">
         <div class="container">
             <ul class="navbar-search">
                 <li>
@@ -62,6 +62,6 @@
                 </li>
             </ul>
         </div>
-    </nav>
+    </nav-->
 
     <div id="page-content">

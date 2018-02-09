@@ -1614,7 +1614,7 @@ form.search .form-search .fa {
   top: 2px;
 }
 .form-control:focus {
-  border-color: #ef626c;
+  border-color:#b3b3b3;
   box-shadow: 0px 0px 0px;
 }
 /********** BILLING FORM **********/
@@ -1819,7 +1819,7 @@ form.search .form-search .fa {
     height: 100%;
   }
   #page-content{
-    padding-bottom:0;
+    padding:0 20px 0;
   }
   footer{
     position: relative;
@@ -2044,18 +2044,14 @@ Navbar Toggle
   #sidebar .block.list .block-contents {
     padding-left: 30px;
   }
-  .navbar-brand img {
-    width: 140px;
-    height: auto;
-  }
   .navbar > .container .navbar-brand {
     display: block;
     float: none;
-    width: 140px;
     margin: 0px auto;
     margin-top: 5px;
     padding: 0px;
     padding-top: 6px;
+    text-align: center;
   }
 }
 @media screen and (max-width: 400px) {

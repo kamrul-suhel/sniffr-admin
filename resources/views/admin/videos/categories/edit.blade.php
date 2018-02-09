@@ -1,12 +1,12 @@
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<h4 class="modal-title">Update Category</h4>
+	<h4 class="modal-title">Update Vertical</h4>
 </div>
 
 <div class="modal-body">
 	<form id="update-cat-form" accept-charset="UTF-8" action="{{ url('admin/videos/categories/update') }}" method="post">
-        <label for="name">Category Name</label>
-        <input name="name" id="name" placeholder="Category Name" class="form-control" value="{{ $category->name }}" /><br />
+        <label for="name">Vertical Name</label>
+        <input name="name" id="name" placeholder="Vertical Name" class="form-control" value="{{ $category->name }}" /><br />
         <label for="slug">URL slug (ex. videos/categories/slug-name)</label>
         <input name="slug" id="slug" placeholder="URL Slug" class="form-control" value="{{ $category->slug }}" />
         <input type="hidden" name="id" id="id" value="{{ $category->id }}" />

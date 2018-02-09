@@ -96,9 +96,7 @@ trait VideoHelper{
 	        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}] }\'>
 	        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 	        </video>';
-	    }else if(str_contains($video->url, 'imgur')){
-			$sHTML .= '<img src="'.$video->url.'">';
-		}else if($embed && str_contains($video->url, 'vine.co')){
+	    }else if($embed && str_contains($video->url, 'vine.co')){
 			$sHTML .= '<iframe src="'.$video->url.'embed/simple" class="vine-embed" type="text/html" width="600" height="600" frameborder="0" allowfullscreen></iframe>
 			<script async src="//platform.vine.co/static/scripts/embed.js"></script>';
 		}else if($embed && str_contains($video->url, 'streamable')){
@@ -110,6 +108,8 @@ trait VideoHelper{
 		    }else{
 		        $sHTML .= $video->embed_code;
 		    }
+		}else if(str_contains($video->url, 'imgur')){
+			$sHTML .= '<img src="'.$video->url.'">';
 		}else if(!empty($video->image) && !$embed){
 			$sHTML .= '<a class="video-thumb" href="videos/'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 		}else{
@@ -186,7 +186,6 @@ trait VideoHelper{
 			$withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $url);
 			$linkVars['image'] = $withoutExt.'.jpg';
 			$linkVars['thumb'] = $withoutExt.'.jpg';
-			$linkVars['url'] = '';
 			$linkVars['embed_code'] = '<video poster="'.$withoutExt.'.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="">
                 <source src="'.$withoutExt.'.mp4" type="video/mp4">
             </video>';

@@ -13,7 +13,7 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<select id="category" name="category" class="selectpicker form-control">
-							<option value="">Category</option>
+							<option value="">Vertical</option>
 							@foreach($video_categories as $category)
 								<option value="{{ $category->id }}"{{ isset($_GET['category']) && ($_GET['category'] == $category->id) ? ' selected="selected"' : '' }}>{{ $category->name }}</option>
 							@endforeach
@@ -117,7 +117,12 @@
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check" title="Licensed"></i> Licensed
 								@elseif($video->state == 'accepted')
-								<i class="fa fa-clock-o" title="More details sent"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+									@if($video->reminders)
+										<i class="fa fa-clock-o" title="Reminder sent"></i> Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+									@else
+										<i class="fa fa-clock-o" title="More details sent"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+									@endif
+								
 								@elseif($video->state == 'rejected')
 								<i class="fa fa-times" title="Rejected"></i> Rejected
 								@elseif($video->state == 'problem')

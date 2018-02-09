@@ -17,13 +17,13 @@
 				
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">New Video Category</h4>
+					<h4 class="modal-title">New Video Vertical</h4>
 				</div>
 				
 				<div class="modal-body">
 					<form id="new-cat-form" accept-charset="UTF-8" action="{{ url('admin/videos/categories/store') }}" method="post">
-				        <label for="name">Enter the new category name below</label>
-				        <input name="name" id="name" placeholder="Category Name" class="form-control" value="" /><br />
+				        <label for="name">Enter the new vertical name below</label>
+				        <input name="name" id="name" placeholder="Vertical Name" class="form-control" value="" /><br />
 				        <label for="slug">URL slug (ex. videos/categories/slug-name)</label>
 				        <input name="slug" id="slug" placeholder="URL Slug" class="form-control" value="" />
 				        <input type="hidden" name="_token" value="<?= csrf_token() ?>" />

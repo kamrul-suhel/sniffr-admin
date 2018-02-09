@@ -33,22 +33,7 @@
 
             <div class="text-center" style="max-width:300px; margin:0 auto;">
                 <div class="item-video">
-                    <div class="video-container">
-                    <?php if($video->youtube_id): ?>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $video->youtube_id; ?>" frameborder="0" allowfullscreen></iframe>
-                    <?php elseif(str_contains($video->url,'facebook')): ?>
-                        <div class="fb-video" data-href="<?php echo $video->url; ?>" data-allowfullscreen="true"></div>
-                    <?php elseif($video->url): ?>
-                        <h1>We need to handle videoi urls (that aren't youtube)</h1>
-                    <?php elseif($video->embed_code): ?>
-                        <?php echo $video->embed_code ?>
-                    <?php elseif($video->file): ?>
-                        <video id="video_player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="<?= Config::get('site.uploads_url') . 'images/' . $video->image ?>" data-setup="{}" width="100%" style="width:100%;">
-                            <source src="<?php echo $video->file; ?>" type='video/mp4'>
-                            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-                        </video>
-                    <?php endif; ?>
-                    </div>
+                    <?php echo App\Libraries\VideoHelper::getVideoHTML($video, true, 'edit'); ?>
                 </div>
                 <h3><?php echo $video->title ?></h3>
             </div>
@@ -66,8 +51,22 @@
             </div>
 
             <div class="form-group">
-                <label for="tel">Phone Number</label>
-                <input type="tel" class="form-control" id="tel" name="tel" value="<?php echo $video->contact->tel; ?>" disabled>
+                <label for="temp-tel">Phone Number:</label>
+
+                <?php if($video->contact->tel): ?>
+                    <input type="tel" class="form-control" id="tel" name="tel" value="<?php echo $video->contact->tel; ?>" disabled>
+                <?php else: ?>
+                <div class="input-group">
+                    <div class="input-group-addon icon-phone"></div>
+                    <input type="tel" class="form-control" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
+                    <div class="input-group-addon">
+                        <span id="valid-msg" class="hide">✓ Valid number</span>
+                        <span id="error-msg" class="hide">Invalid number</span>
+                    </div>
+                    
+                    <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
+                </div>
+                <?php endif; ?>
             </div>
 
             <h2>Additional Details</h2>
@@ -107,7 +106,7 @@
             </div>
 
             <div class="form-group form-radio">
-                <div><strong>Have you submitted this video through any other online form?<strong></div>
+                <div><strong>Have you submitted this video through any other online form?</strong></div>
                 <label class="radio-inline">
                     <input type="radio" name="submitted_elsewhere" value="yes" <?php if(old('submitted_elsewhere')=='yes') { echo 'checked'; } ?>> Yes
                 </label>
