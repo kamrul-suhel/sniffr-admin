@@ -34,7 +34,7 @@ use App\Mail\SubmissionThanksNonEx;
 
 use App\Notifications\SubmissionAlert;
 
-class QueueVideoYoutubeUpload implements ShouldQueue
+class QueueVideoAnalysis implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -59,53 +59,24 @@ class QueueVideoYoutubeUpload implements ShouldQueue
      *
      * @return void
      */
-    public function handle() // THIS JOB DOWNLOADS THE DIRTY WATERMARKED VIDEO AND UPLOAD TO YOUTUBE
+    public function handle() // THIS JOB COPIES VIDEO FILE IN BUCKET TO START ANALYSIS PROCESS
     {
         ini_set('memory_limit', '512M'); // Increase memory limit for larger video files
-        //set_time_limit(0); // Unlimited timeout
-        //ini_set('max_execution_time', 90);
 
         if($this->video_id){
 
             $video = Video::find($this->video_id);
 
-            if($video->file_watermark_dirty){
-                $file_watermark = file_get_contents($video->file_watermark_dirty);
-                $fileName_watermark = basename($video->file_watermark_dirty);
-            }else{
-                $file_watermark = file_get_contents($video->file_watermark);
-                $fileName_watermark = basename($video->file_watermark);
-            }
-
-            if($fileName_watermark) {
-
-                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
-
-                $file_watermark = new UploadedFile (
-                    '/tmp/'.$fileName_watermark,
-                    $fileName_watermark,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName_watermark),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'public');
-                $youtubeId  = $response->getVideoId();
+            if($video->file) {
 
                 // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
                 $disk = Storage::disk('s3_sourcebucket');
+
                 if($disk->exists(basename($video->file))) {
                     $disk->move(''.basename($video->file), 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.basename($video->file));
+                } else {
+                    $video->notify(new SubmissionAlert('a job in the queue has failed to Analyse video as no file exists (Id: '.$video->file.')'));
                 }
-
-                $video->youtube_id = $youtubeId;
-                $video->save();
-
-            } else {
-
-                $video->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube as no watermark file exists (Id: '.$this->video_id.')'));
 
             }
 
@@ -122,6 +93,6 @@ class QueueVideoYoutubeUpload implements ShouldQueue
      {
          // Send user notification of failure, etc...
          $video = new Video();
-         $video->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube (Id: '.$this->video_id.')'));
+         $video->notify(new SubmissionAlert('a job in the queue has failed to Analyse video (Id: '.$this->video_id.')'));
      }
 }

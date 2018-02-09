@@ -38,6 +38,7 @@ use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
 use App\Jobs\QueueVideoImport;
 use App\Jobs\QueueVideoYoutubeUpload;
+use App\Jobs\QueueVideoAnalysis;
 
 use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
@@ -642,6 +643,28 @@ class AdminVideosController extends Controller {
                 ->delay(now()->addSeconds(10));
         }
 
+    }
+
+    public function checkAnalysis()
+    {
+        set_time_limit(3200); // Unlimited timeout
+
+        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['file_watermark_dirty', '!=', NULL]])->get();
+        $disk = Storage::disk('s3_sourcebucket');
+        $count = 0;
+
+        foreach ($videos as $video) {
+            if($disk->exists(basename($video->file))) {
+                //maybe check dynamodb also for next run
+                $count++;
+                echo 'SUCCESS: '.$video->alpha_id.' : '.$video->file.'<br />';
+                QueueVideoAnalysis::dispatch($video->id)
+                    ->delay(now()->addSeconds(5));
+            } else {
+                echo 'ALREADY DONE: '.$video->alpha_id.' : '.$video->file.'<br />';
+            }
+        }
+        echo 'Total Count: '.$count.'<br /><br />';
     }
 
     public function comment($id)
