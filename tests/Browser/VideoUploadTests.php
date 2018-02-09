@@ -11,7 +11,7 @@ use Tests\Browser\Pages\LoginPage;
 use Tests\Browser\Components\FillFormUpload;
 use Tests\Browser\Components\FillFormSubmission;
 
-class BasicTests extends DuskTestCase
+class VideoUploadTests extends DuskTestCase
 {
     public function testUploadVideoLink() // Tests upload form for video link
     {
