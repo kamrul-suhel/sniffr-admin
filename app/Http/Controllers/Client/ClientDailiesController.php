@@ -100,7 +100,7 @@ class ClientDailiesController extends Controller {
             });
         }
 
-        $videos = $videos->orderBy('licensed_at', 'desc')->paginate(9);
+        $videos = $videos->paginate(9);
 
         $data = array(
             'state' => $state,
@@ -168,7 +168,7 @@ class ClientDailiesController extends Controller {
             $message = 'We\'ll continue searching for suitable videos';
         }
 
-        $video->notify(new ClientAction($video, $state, $client->name));
+        $client->notify(new ClientAction($video, $state, $client->name));
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
@@ -190,7 +190,7 @@ class ClientDailiesController extends Controller {
         $video = Video::where('alpha_id', $id)->first();
         $client = Client::find(Auth::user()->client_id);
         
-        $video->notify(new ClientAction($video, 'request', $client->name));
+        $client->notify(new ClientAction($video, 'request', $client->name));
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'We\'ll do our best to get the video file ASAP', 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);

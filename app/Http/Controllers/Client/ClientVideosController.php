@@ -39,6 +39,8 @@ use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
 
+use Carbon\Carbon as Carbon;
+
 use App\Notifications\ClientAction;
 
 class ClientVideosController extends Controller {
@@ -67,15 +69,22 @@ class ClientVideosController extends Controller {
 
         if(!empty($search_value)){
             $videos = $videos->where(function($query) use($search_value){
-                $query->where('title', 'LIKE', '%'.$search_value.'%');
-            })->orWhereHas('tags', function ($q) use($search_value){
-                $q->where('name', 'LIKE', '%'.$search_value.'%');
-            })->orWhere('alpha_id', $search_value);
+                $query->where('title', 'LIKE', '%'.$search_value.'%')
+                ->orWhereHas('tags', function ($q) use($search_value){
+                    $q->where('name', 'LIKE', '%'.$search_value.'%');
+                })
+                ->orWhere('alpha_id', $search_value);
+            });
         }
 
         if(!empty($collection_value)){
             $videos = $videos->where('video_collection_id', $collection_value);
         }
+
+        // This strips out exclusive videos (for 48 hours) unless not being used.
+        $videos = $videos->whereDoesntHave('campaigns', function ($q) {
+            $q->where('campaign_video.created_at', '>', Carbon::now()->subDays(2))->where('campaign_video.state', '!=', 'no');
+        });
 
         $videos = $videos->orderBy('id', 'DESC')->paginate(24);
 
@@ -132,7 +141,7 @@ class ClientVideosController extends Controller {
         $video = Video::where('alpha_id', $id)->first();
         $client = Client::find(Auth::user()->client_id);
         
-        $video->notify(new ClientAction($video, 'interested', $client->name));
+        $client->notify(new ClientAction($video, 'interested', $client->name));
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Our team have been notified of your interest in this video, we\'ll be in touch' , 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
