@@ -58,7 +58,7 @@
                     </header>
 
                     <section class="album-info">
-                        <h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
+                        <h3><a href="{{ url('admin/videos/view/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
 
                         <p>{{ $video->description }}</p>
                     </section>
@@ -75,16 +75,16 @@
                             ?>
                             @if($video->campaigns[0]->pivot->state != 'yes')
                                 @if(!empty($video->file))
-                                <a href="{{ url('client/videos/status/yes/'.$video->alpha_id ) }}" class="text-success js-state" title="Will Use"><i class="fa fa-check"></i></a>
+                                <a href="{{ url('client/dailies/status/yes/'.$video->alpha_id ) }}" class="text-success js-state" title="Will Use"><i class="fa fa-check"></i></a>
                                 @else
-                                <a href="{{ url('client/videos/status/yes/'.$video->alpha_id ) }}" class="text-success js-state" title="Will Use"><i class="fa fa-check"></i></a>
+                                <a href="{{ url('client/dailies/status/yes/'.$video->alpha_id ) }}" class="text-success js-state" title="Will Use"><i class="fa fa-check"></i></a>
                                 @endif
                             @endif
                             @if($video->campaigns[0]->pivot->state != 'maybe')
-                            <a href="{{ url('client/videos/status/maybe/'.$video->alpha_id ) }}" class="text-warning js-state" title="Might Use"><i class="fa fa-question-circle"></i></a>
+                            <a href="{{ url('client/dailies/status/maybe/'.$video->alpha_id ) }}" class="text-warning js-state" title="Might Use"><i class="fa fa-question-circle"></i></a>
                             @endif
                             @if($video->campaigns[0]->pivot->state != 'no')
-                            <a href="{{ url('client/videos/status/no/'.$video->alpha_id ) }}" class="text-danger js-state" title="Won't Use"><i class="fa fa-times"></i></a>
+                            <a href="{{ url('client/dailies/status/no/'.$video->alpha_id ) }}" class="text-danger js-state" title="Won't Use"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
 
@@ -98,7 +98,7 @@
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             @else
-                            <a href="{{ url('client/videos/request/'.$video->alpha_id) }}" class="js-state" title="File not received">
+                            <a href="{{ url('client/dailies/request/'.$video->alpha_id) }}" class="js-state" title="File not received">
                                 <i class="fa fa-exclamation-circle"></i>
                             </a>
                             @endif
