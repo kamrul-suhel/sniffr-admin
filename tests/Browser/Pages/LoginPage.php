@@ -17,4 +17,9 @@ class LoginPage extends Page
     {
         $browser->loginAs(User::where('email', 'mike@unilad.co.uk')->firstOrFail());
     }
+
+    public function loginClientUser(Browser $browser)
+    {
+        $browser->loginAs(User::where('username', 'dailymail')->firstOrFail());
+    }
 }

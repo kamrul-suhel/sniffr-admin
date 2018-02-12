@@ -13,7 +13,7 @@ class LoginClientPage extends Page
         return '/login';
     }
 
-    public function loginUser(Browser $browser)
+    public function loginClientUser(Browser $browser)
     {
         $browser->loginAs(User::where('username', 'dailymail')->firstOrFail());
     }

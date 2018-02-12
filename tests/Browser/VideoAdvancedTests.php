@@ -8,7 +8,6 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Browser\Pages\LoginPage;
-use Tests\Browser\Pages\LoginClientPage;
 use Tests\Browser\Components\FillFormDetails;
 
 class VideoAdvancedTests extends DuskTestCase
@@ -50,7 +49,7 @@ class VideoAdvancedTests extends DuskTestCase
     public function testAdminVideoAccept() // Tests admin accept new video upload
     {
         $this->browse(function ($browser) {
-            $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->orderBy('created_at', 'desc')->first();
+            $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->orderBy('created_at', 'desc')->first();
             if(isset($video->id)) {
                 $browser->on(new LoginPage)
                         ->loginUser()
@@ -67,7 +66,7 @@ class VideoAdvancedTests extends DuskTestCase
     public function testAdminMoreDetailsVideo() // Tests more details form
     {
         $this->browse(function ($browser) {
-            $video = Video::where('state', 'accepted')->where('title', 'LIKE', '%unit browser%')->where('more_details', NULL)->where('more_details_code', '!=', NULL)->orderBy('created_at', 'desc')->first();
+            $video = Video::where('state', 'accepted')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('more_details', NULL)->where('more_details_code', '!=', NULL)->orderBy('created_at', 'desc')->first();
             if(isset($video->id)){
                 $browser->on(new LoginPage)
                         ->loginUser()
@@ -87,7 +86,7 @@ class VideoAdvancedTests extends DuskTestCase
     public function testAdminVideoLicense() // Tests admin license pending video
     {
         $this->browse(function ($browser) {
-            $video = Video::where('state', 'pending')->where('title', 'LIKE', '%unit browser%')->where('rights', 'ex')->orderBy('created_at', 'desc')->first();
+            $video = Video::where('state', 'pending')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('rights', 'ex')->orderBy('created_at', 'desc')->first();
             if(isset($video->id)) {
                 $browser->on(new LoginPage)
                         ->loginUser()
@@ -105,7 +104,7 @@ class VideoAdvancedTests extends DuskTestCase
 
     protected function tearDown() // Deletes test records and clears browser sessions/cookies from tests
     {
-        $video = Video::where('title', 'LIKE', '%unit browser%')->delete();
+        $video = Video::where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->forcedelete();
 
         session()->flush();
 
