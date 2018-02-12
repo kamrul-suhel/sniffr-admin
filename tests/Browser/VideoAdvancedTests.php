@@ -8,6 +8,7 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Browser\Pages\LoginPage;
+use Tests\Browser\Pages\LoginClientPage;
 use Tests\Browser\Components\FillFormDetails;
 
 class VideoAdvancedTests extends DuskTestCase
