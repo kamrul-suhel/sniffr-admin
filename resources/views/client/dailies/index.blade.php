@@ -58,7 +58,7 @@
                     </header>
 
                     <section class="album-info">
-                        <h3><a href="{{ url('admin/videos/view/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
+                        <h3><a href="{{ url('client/dailies/view/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
 
                         <p>{{ $video->description }}</p>
                     </section>

@@ -117,6 +117,32 @@ class ClientDailiesController extends Controller {
         return view('client.dailies.index', $data);
     }
 
+     /**
+     * View the specified video.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function view($id)
+    {
+        $video = Video::where('alpha_id', $id)->where('state', 'licensed')->first();
+
+        $user = Auth::user();
+
+        $data = array(
+            'headline' => '<i class="fa fa-edit"></i> Edit Video',
+            'video' => $video,
+            'admin_user' => Auth::user(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
+            'video_shottypes' => VideoShotType::all(),
+            'video_campaigns' => Campaign::all(),
+            'user' => $user
+        );
+
+        return view('client.dailies.create_edit', $data);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -147,7 +173,7 @@ class ClientDailiesController extends Controller {
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
         } else {
-            return Redirect::to('client/videos/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+            return Redirect::to('client/dailies/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
         }
     }
 
@@ -169,7 +195,7 @@ class ClientDailiesController extends Controller {
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'We\'ll do our best to get the video file ASAP', 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
         } else {
-            return Redirect::to('client/videos/'.session('state'))->with(array('note' => 'We\'ll do our best to get the video file ASAP', 'note_type' => 'success') );
+            return Redirect::to('client/dailies/'.session('state'))->with(array('note' => 'We\'ll do our best to get the video file ASAP', 'note_type' => 'success') );
         }
     }
 }

@@ -108,7 +108,6 @@ class ClientVideosController extends Controller {
         $data = array(
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
-            'button_text' => 'Update Video',
             'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
