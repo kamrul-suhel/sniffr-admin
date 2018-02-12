@@ -102,6 +102,17 @@ class VideoAdvancedTests extends DuskTestCase
         });
     }
 
-    // function to clear up tests after completion
+    protected function tearDown() // Deletes test records and clears browser sessions/cookies from tests
+    {
+        $video = Video::where('title', 'LIKE', '%unit browser%')->delete();
+
+        session()->flush();
+
+        parent::tearDown();
+
+        foreach(static::$browsers as $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+        }
+    }
 
 }
