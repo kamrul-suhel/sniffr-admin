@@ -469,13 +469,11 @@ class AdminVideosController extends Controller {
         } else {
             $fileName = time().'.'.$request->image->getClientOriginalExtension();
             $file = $request->file('image');
-            $fileMimeType = $file->getMimeType();
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $data['image'] = Storage::disk('s3')->url($fileName);
         }
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $fileSize = $fileMimeType = $youtubeId = '';
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
@@ -483,14 +481,15 @@ class AdminVideosController extends Controller {
 
             $file = $request->file('file');
             $fileMimeType = $file->getMimeType();
-            $fileSize = $file->getClientSize();
 
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
-        }
 
-        $video->file = $filePath;
+            $video->file = $filePath;
+            $video->mime = $fileMimeType;
+            $video->youtube_id = '';
+        }
 
         $selected_campaigns = $video->campaigns->pluck('id')->all();
         $campaigns = array();
@@ -524,6 +523,11 @@ class AdminVideosController extends Controller {
         }
 
         $video->update($data);
+
+        if($request->hasFile('file')){
+            QueueVideo::dispatch($video->id, true)
+                ->delay(now()->addSeconds(5));
+        }
 
         return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video!', 'note_type' => 'success') );
     }

@@ -2,7 +2,7 @@
     <div class="menu-animated-background">
         <img src="<?= THEME_URL . '/assets/img/hamster_wheel.gif';?>" border="0" />
         <br />
-        <p>we're just uploading your awesome video..</p>
+        <p>we're just uploading your video..</p>
     </div>
 </div>
 

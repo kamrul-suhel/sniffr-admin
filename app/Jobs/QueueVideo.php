@@ -38,6 +38,7 @@ class QueueVideo implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $video_id;
+    protected $youtube_ingest;
 
     public $tries = 2;
     public $timeout = 3600;
@@ -48,9 +49,10 @@ class QueueVideo implements ShouldQueue
      * @return void
      */
 
-    public function __construct($video_id)
+    public function __construct($video_id, $youtube_ingest = false)
     {
         $this->video_id = $video_id;
+        $this->youtube_ingest = $youtube_ingest;
     }
 
     /**
@@ -123,7 +125,7 @@ class QueueVideo implements ShouldQueue
 
                 if($job2['Id']) {
                     // Queues a laravel job to check if watermark was created uccessfully
-                    QueueVideoCheck::dispatch($job2['Id'], $video->id, 'watermark_dirty', 1)
+                    QueueVideoCheck::dispatch($job2['Id'], $video->id, 'watermark_dirty', 1, $this->youtube_ingest)
                         ->delay(now()->addSeconds(40));
                 }
 
