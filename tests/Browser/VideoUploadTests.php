@@ -73,4 +73,15 @@ class VideoUploadTests extends DuskTestCase
         });
     }
 
+    protected function tearDown() // Clears browser sessions/cookies from tests
+    {
+        session()->flush();
+
+        parent::tearDown();
+
+        foreach(static::$browsers as $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+        }
+    }
+
 }
