@@ -407,7 +407,7 @@ class AdminVideosController extends Controller {
      */
     public function edit($id)
     {
-        $video = Video::where('alpha_id', $id)->first();
+        $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
         $user = User::where('id', $video->user_id)->first();
 

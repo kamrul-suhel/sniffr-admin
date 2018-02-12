@@ -175,11 +175,13 @@
 									<i class="fa fa-download"></i>
 								</a>
 								@endif
-								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
-									<i class="fa fa-pencil"></i>
-								</a>
+								@if($video->state == 'problem' || $video->state == 'rejected')
 								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="js-delete">
 									<i class="fa fa-trash-o"></i>
+								</a>
+								@endif
+								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
+									<i class="fa fa-pencil"></i>
 								</a>
 							@endif
 						</div>

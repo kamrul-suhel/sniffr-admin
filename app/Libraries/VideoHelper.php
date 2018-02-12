@@ -43,12 +43,12 @@ trait VideoHelper{
 				if($video->vertical === 0 || $embed) {
 					$sHTML .= '<div class="fb-video'.($video->vertical === 0 ? ' fb-horizontal' : '').'" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
 				} else if($video->image){
-					$sHTML .= '<a class="video-thumb" href="videos/'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
+					$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 				} else {
 					$sHTML .= '<p><a href="'.$video->url.'" target="_new">'.$video->url.'</a></p>';
 				}
 	    	}else if($video->image && !$embed){
-				$sHTML .= '<a class="video-thumb" href="videos/'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
+				$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 			}else{
 				$sHTML .= '<p>There appears to be an issue with this video</p>';
 				if(\Auth::user()->role == 'admin'){
@@ -83,7 +83,7 @@ trait VideoHelper{
 				}
 
 				if($insta_thumb){
-					$sHTML .= '<a class="video-thumb" href="videos/'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$insta_thumb.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
+					$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$insta_thumb.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 				}else{
 					$sHTML .= '<p>There appears to be an issue with this video</p>';
 					if(\Auth::user()->role == 'admin'){
@@ -111,7 +111,7 @@ trait VideoHelper{
 		}else if(str_contains($video->url, 'imgur')){
 			$sHTML .= '<img src="'.$video->url.'">';
 		}else if(!empty($video->image) && !$embed){
-			$sHTML .= '<a class="video-thumb" href="videos/'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
+			$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 		}else{
 		    $sHTML .= '<p>There appears to be an issue with this video</p>';
 

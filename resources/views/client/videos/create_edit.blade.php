@@ -62,10 +62,10 @@
                 </div>
 
                 <div class="panel-body" style="display: block;">
-                    {{ $video->created_at ? 'Uploaded Date: '.$video->created_at : '' }}
-                    {{ $video->date_filmed ? 'Filmed Date: '.$video->date_filmed : '' }}
-                    {{ $video->location ? 'Location: '.$video->location : '' }}
-                    {{ $video->duration ? 'Duration: '.$video->duration : '' }}
+                    {{ $video->created_at ? '<p>Uploaded Date: '.$video->created_at.'</p>' : '' }}
+                    {{ $video->date_filmed ? '<p>Filmed Date: '.$video->date_filmed.'</p>' : '' }}
+                    {{ $video->location ? '<p>Location: '.$video->location.'</p>' : '' }}
+                    {{ $video->duration ? '<p>Duration: '.$video->duration.'</p>' : '' }}
                 </div>
             </div>
         </div>
