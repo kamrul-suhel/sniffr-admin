@@ -304,6 +304,7 @@ Route::group(array('prefix' => 'client'), function(){
 
     Route::get('dashboard', 'Client\ClientDashboardController@index');
     Route::get('dailies', array('uses' => 'Client\ClientDailiesController@index'));
+    Route::get('dailies/view/{id}', 'Client\ClientDailiesController@view');
     Route::get('dailies/{id}', array('uses' => 'Client\ClientDailiesController@index'));
     Route::get('dailies/status/{state}/{id}', array('uses' => 'Client\ClientDailiesController@status'));
     Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
