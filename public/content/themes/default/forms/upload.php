@@ -61,7 +61,7 @@
                     <span id="valid-msg" class="hide">✓ Valid number</span>
                     <span id="error-msg" class="hide">Invalid number</span>
                 </div>
-                
+
                 <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
             </div>
         </div>
@@ -133,6 +133,7 @@ The rights holder retains all rights in the submitted video(s), including withou
             </div>
         </div>
 
+        <input type="hidden" id="source" name="source" value="<?php echo (isset($_GET['source']) ? $_GET['source'] : ''); ?>">
         <input type="submit" class="btn btn-primary pull-right" value="Submit your video">
     </div>
 

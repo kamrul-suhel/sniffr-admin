@@ -93,7 +93,7 @@
             <label for="credit">Credit Link</label>
             <input type="text" class="form-control" id="credit" name="credit" aria-describedby="creditHelpBlock" placeholder="Credits are placed in the pinned comment (unless alternative method is agreed)" value="<?php echo old('credit'); ?>">
         </div>
-                       
+
         <div class="form-group">
             <label for="referrer">UNILAD Referrer </label>
             <input type="text" class="form-control" id="referrer" name="referrer" aria-describedby="referrerHelpBlock" placeholder="Who at UNILAD asked you to fill in this form?" value="<?php echo old('referrer'); ?>" >
@@ -127,6 +127,7 @@ The rights holder retains all rights in the submitted video(s), including withou
                 <p class="terms-copy" data-attr="terms">By clicking the submit button, I agree to terms &amp; conditions. <span>* </span></p>
             </div>
 
+            <input type="hidden" id="source" name="source" value="<?php echo (isset($_GET['source']) ? $_GET['source'] : ''); ?>">
             <input type="submit" class="btn btn-primary pull-right" value="Submit your video">
         </div>
     </div>

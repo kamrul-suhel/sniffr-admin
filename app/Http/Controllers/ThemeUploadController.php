@@ -180,6 +180,7 @@ class ThemeUploadController extends Controller {
 
         $video->state = 'new';
         $video->rights = 'ex';
+        $video->source = Input::get('source');
         $video->save();
 
         // Slack notifications

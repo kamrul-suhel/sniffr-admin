@@ -171,6 +171,7 @@ class ThemeSubmissionController extends Controller {
         $video->referrer = Input::get('referrer');
         $video->notes = Input::get('notes');
         $video->credit = Input::get('credit');
+        $video->source = Input::get('source');
         $video->save();
 
         // May also need to action Youtube upload (or at least action anaylsis bit from AdminVideoController) as we skip "accepted" state

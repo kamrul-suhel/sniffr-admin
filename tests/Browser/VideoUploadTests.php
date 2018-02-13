@@ -75,6 +75,8 @@ class VideoUploadTests extends DuskTestCase
 
     protected function tearDown() // Clears browser sessions/cookies from tests
     {
+        $video = Video::where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->forcedelete();
+
         session()->flush();
 
         parent::tearDown();
