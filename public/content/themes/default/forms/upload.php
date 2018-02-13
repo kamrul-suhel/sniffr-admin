@@ -43,7 +43,7 @@
         </div>
 
         <div class="form-group">
-            <label for="tel">Email Address: <span>*</span></label>
+            <label for="email">Email Address: <span>*</span></label>
 
             <div class="input-group">
                 <div class="input-group-addon icon-envelope"></div>
@@ -77,10 +77,10 @@
             </div>
         </div>
 
-        <h3>Please upload a link to the video, or the video file:</h3>
+        <h3>Please upload a link to the video, or the video file: </h3>
 
         <div class="form-group">
-            <label for="file" class="file">Video File:</label>
+            <label for="file" class="file">Video File: </label>
             <span class="btn btn-success fileinput-button">
                 <i class="fa fa-plus"></i>
                 <span>Choose file...</span>
@@ -98,10 +98,6 @@
                 <div class="input-group-addon icon-link"></div>
                 <input class="form-control files" type="text" id="url" name="url" placeholder="Link" value="<?php echo old('url'); ?>" placeholder="">
             </div>
-        </div>
-
-        <div class="col-md-12">
-            <div id="video-error" style="display:none;"></div>
         </div>
 
         <div class="form-check">

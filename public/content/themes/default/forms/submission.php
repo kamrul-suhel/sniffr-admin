@@ -56,10 +56,10 @@
             </div>
         </div>
 
-        <h3>Please upload a link to the video, or the video file:</h3>
+        <h3>Please upload a link to the video, or the video file: </h3>
 
         <div class="form-group">
-            <label for="url">Video Link/URL</label>
+            <label for="url">Video Link/URL: </label>
 
             <div class="input-group">
                 <div class="input-group-addon icon-link"></div>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="form-group">
-            <label for="file" class="file">Video File:</label>
+            <label for="file" class="file">Video File: </label>
             <span class="btn btn-success fileinput-button">
                 <i class="fa fa-plus"></i>
                 <span>Choose file...</span>
@@ -78,10 +78,6 @@
             <div id="filename"></div>
 
             <p class="small">Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
-        </div>
-
-        <div class="col-md-12">
-            <div id="video-error" style="display:none;"></div>
         </div>
 
         <div class="form-group">
