@@ -533,11 +533,11 @@ class AdminVideosController extends Controller {
     }
 
     /**
-     * Show the form for creating a new video
+     * Bulk uploader for ingesting CSV files
      *
      * @return Response
      */
-    public function upload(Request $request)
+    public function ingest(Request $request)
     {
         //increase memory limits and upload post size
         ini_set('max_execution_time', 1800);

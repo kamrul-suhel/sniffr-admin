@@ -192,8 +192,8 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('videos/shottypes/update', array('uses' => 'Admin\AdminVideoShotTypeController@update'));
     Route::get('videos/shottypes/delete/{id}', array('uses' => 'Admin\AdminVideoShotTypeController@destroy'));
 
-    Route::get('videos/upload', array('uses' => 'Admin\AdminVideosController@upload'));
-    Route::post('videos/upload', array('uses' => 'Admin\AdminVideosController@upload'));
+    Route::get('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
+    Route::post('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
     Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
