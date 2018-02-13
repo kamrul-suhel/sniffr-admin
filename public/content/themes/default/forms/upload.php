@@ -107,24 +107,40 @@
         <div class="form-check">
             <h2>Terms &amp; Conditions</h2>
 
-            <div class="scroll-box">I certify that I am the rights holder for the video(s) found at the link(s) above, or that I have the express permission of the rights holder to submit the video(s) to UNILAD for publishing on UNILAD web properties.
+            <div class="scroll-box"><strong>Ownership</strong>
 
-Video Publishing Acknowledgement (*)
+I certify that I am the sole owner of all intellectual property rights for this video or have the express permission of the rights holder to submit this video to UNILAD for exclusive publishing on UNILAD.
 
-I understand that the video(s) I am submitting may be published to UNILAD web properties including, but not limited to, UNILAD.co.uk, Twitter, Facebook, as determined by UNILAD according to the terms of this agreement, which I have read and agree to. UNILAD will not publish the video(s) to YouTube without my permission first.
+I agree to submit and licence this video and its content to UNILAD and their associated companies for their use at their sole discretion, in exchange for entry into their £300 monthly prize draw. 
 
-I understand that where necessary, UNILAD may edit, crop or modify the video(s) in order to tailor the video to the UNILAD audience. No edits of the video(s) will be derogatory in any way towards myself or any third party seen in the video(s).
+<strong>Video Publishing Acknowledgement</strong>
 
-Termination Clause(*)
+I understand that the video I am submitting may be published to UNILAD web properties including, but not limited to, YouTube, UNILAD.co.uk, Twitter, Facebook, and any other avenues of promotion, as determined by UNILAD according to the terms of this agreement, which I have read and agree to.
 
-I understand that participation in the UNILAD video system is at will and I agree that this license may only be terminated by mutual agreement between all the parties*
+<strong>Exclusive Licensing</strong>
 
-Exclusivity(*)
+I agree that UNILAD as the ‘License Holder’ be granted the exclusive, unlimited right to use, and to exhibit, distribute, and hereafter devise, in any manner upon all UNILAD platforms throughout the world, in perpetuity, for any purpose whatsoever as UNILAD in its sole discretion may determine (the “Licensed Rights”).  I do hereby irrevocably appoint UNILAD as its attorney-in-fact in relation to the rights over these images. 
 
-I certify that I am the rights holder, capable of granting a non-exclusive license to UNILAD over my content submitted hereto.
+I certify that I act with full lawful authority to grant this license, and warrant that there has not been any previous grant of any other license to third parties in relation to these images and it is expressly understood that UNILAD has not assumed any obligations under any other contracts entered into by myself.  
 
-The rights holder retains all rights in the submitted video(s), including without limitation, the right to copy, distribute, publish, display or modify the submitted video(s), and to transfer, assign or grant license of any such rights. Any such grant to third parties will be subject to the free and lawful grant of this license to UNILAD.
-            </div>
+I further undertake not to enter any future agreements over this content with any third parties, as required by the exclusivity of this agreement and will promptly forward any communications regarding my content to UNILAD, as the new License Holder. 
+
+I hereby agree to indemnify, release and hold harmless UNILAD, its successors, in any action arising from the use of the images, resulting from any breach by Licensor of any warranty, representation or any other provision of these Terms.
+
+<strong>Publicity/Confidentiality</strong>
+
+I shall not release, or cause the release, of any information concerning the Licensed Rights, UNILAD or the terms of this License.  I will inform UNILAD if there are any changes to my personal details for the duration of this agreement.  UNILAD undertakes to maintain personal details confidentially and in accordance with all relevant data protection laws and the Privacy Policy available on our Website and incorporated herein.
+
+<strong>Terms &amp; Services</strong>
+
+I acknowledged, understands and agree to the additional terms and services displayed on the UNILAD website which are incorporated herein by this reference and subject to change.
+
+<strong>Termination Clause</strong>
+
+The License shall only be terminable upon the mutual agreement of the parties with 5 months’ notice, I agree to indemnify UNILAD for any losses from third party contracts arising due to termination.  Termination will have no effect on any prior use or treatment of the images by UNILAD, which may continue in perpetuity.
+
+I understand that participation in the UNILAD video system is at will and I agree that this license may only be terminated by mutual agreement between UNILAD and I as set out above.
+</div>
 
             <div class="styled-checkbox">
                 <input id="terms" name="terms" type="checkbox">

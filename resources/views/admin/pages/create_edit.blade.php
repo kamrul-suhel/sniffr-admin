@@ -7,12 +7,12 @@
 
 	<ol class="breadcrumb"> <li> <a href="/admin/pages"><i class="fa fa-newspaper-o"></i>All Pages</a> </li> <li class="active">@if(!empty($page->id)) <strong>{{ $page->title }}</strong> @else <strong>New Page</strong> @endif</li> </ol>
 
-	<div class="admin-section-title">
+	<div class="admin-section-title bottom-padding">
 	@if(!empty($page->id))
-		<h3>{{ $page->title }}</h3>
-		<a href="{{ url('page') . '/' . $page->slug }}" target="_blank" class="btn btn-info">
+		<h3>{{ $page->title }}<a href="{{ url('page') . '/' . $page->slug }}" target="_blank" class="btn btn-info pull-right">
 			<i class="fa fa-eye"></i> Preview <i class="fa fa-external-link"></i>
-		</a>
+		</a></h3>
+		
 	@else
 		<h3><i class="fa fa-plus"></i> Add New Page</h3>
 	@endif
