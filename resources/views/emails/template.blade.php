@@ -33,9 +33,9 @@
             color: #1188E6;
             text-decoration: none;
         }
-        p { 
-            margin: 0; 
-            padding: 0; 
+        p {
+            margin: 0;
+            padding: 0;
         }
         table.wrapper {
             width:100% !important;
@@ -122,7 +122,7 @@
                                                             <table class="module" role="module" data-type="code" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
                                                                 <tr>
                                                                     <td height="100%" valign="top">
-                                                                        <svg width="300" height="69" viewBox="0 0 2050 469" xmlns="http://www.w3.org/2000/svg"><g fill="#000" fill-rule="evenodd"><path d="M277.59 302.36c0 58.5-31.24 87.77-93.688 87.77-26.77 0-47.436-8.17-61.987-24.5-14.56-16.33-21.84-38.54-21.84-66.67V.97H.75V307.8c0 54.43 16.553 94.8 49.663 121.1 33.104 26.29 78.066 39.46 134.9 39.46 61.508 0 108.94-13.95 142.29-41.84 33.334-27.9 50.014-69.28 50.014-124.16V.97H277.59v301.39M694.613 301.59L508.646.795H405.098V468.53h90.868V154.368L696.028 468.53h90.165V.795h-91.58V301.59M812.965 468.53h97.925V.795h-97.925M1921.05 348.78c-19.26 26.54-50.26 39.79-92.99 39.79h-81V81.448h72.55c23.47 0 43.44 2.702 59.87 8.106 16.43 5.407 29.95 14.076 40.51 26.062 10.57 11.976 18.2 27.357 22.89 46.14 4.68 18.785 7.05 41.326 7.05 67.615 0 53.08-9.63 92.88-28.88 119.41zm-531.14-57.42l59.88-185.966h.7l58.47 185.966h-119.05zm643.84-157.778c-10.81-28.188-25.7-52.134-44.73-71.863-19.02-19.72-41.91-34.867-68.68-45.434-26.77-10.558-55.89-15.84-87.35-15.84h-181.04V408.2L1508.25.445h-113.42L1258.06 383.65h-221.07V1.143h-97.91V468.88l392.36-.71 33.11-96.5h172.58l29.6 96.5h281.05c30.05 0 57.53-5.74 82.42-17.25 24.88-11.51 46.25-27.71 64.11-48.6 17.83-20.91 31.57-46.03 41.2-75.39 9.62-29.34 14.45-61.858 14.45-97.562 0-35.67-5.41-67.614-16.21-95.786z"></path></g></svg>
+                                                                        <img src="https://sniffrmedia.co.uk/content/uploads/settings/logo-sniffr-black.png" style="width:25%;height:auto;" border="0">
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -155,13 +155,13 @@
                                                                                 <img role="social-icon" alt="Facebook" title="Facebook" height="30" width="30" style="height: 30px, width: 30px" src="https://marketing-image-production.s3.amazonaws.com/social/white/facebook.png" />
                                                                             </a>
                                                                         </td>
-                                                                    
+
                                                                         <td style="padding: 20px 10px 30px 0;">
                                                                             <a role="social-icon-link"  href="https://twitter.com/UNILAD" target="_blank" alt="Twitter" data-nolink="false" title="Twitter" style="-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;display:inline-block;background-color:#7AC4F7;">
                                                                                 <img role="social-icon" alt="Twitter" title="Twitter " height="30" width="30" style="height: 30px, width: 30px" src="https://marketing-image-production.s3.amazonaws.com/social/white/twitter.png" />
                                                                             </a>
                                                                         </td>
-                                                                    
+
                                                                         <td style="padding: 20px 10px 30px 0;">
                                                                             <a role="social-icon-link"  href="https://www.instagram.com/unilad" target="_blank" alt="Instagram" data-nolink="false" title="Instagram" style="-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;display:inline-block;background-color:#7F4B30;">
                                                                                 <img role="social-icon" alt="Instagram" title="Instagram" height="30" width="30" style="height: 30px, width: 30px" src="https://marketing-image-production.s3.amazonaws.com/social/white/instagram.png" />
@@ -169,7 +169,7 @@
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
-                                                            </table>    
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                 </table>
