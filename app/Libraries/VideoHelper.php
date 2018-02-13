@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Storage;
 trait VideoHelper{
 
 	public static function getVideoHTML($video, $embed = false, $path = 'view') {
+		$path = '/admin/videos/'.$path;
 		$sHTML = '';
 
 		$sHTML .= '<div class="video-container'.(  $embed && !$video->youtube_id ? ' embedded' : '').'">';
-		
+
 		if($video->youtube_id){ // Youtube
 			if($embed){
 				$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0" allowfullscreen></iframe>';
@@ -54,7 +55,7 @@ trait VideoHelper{
 				if(\Auth::user()->role == 'admin'){
 			    	$sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
 			    }
-			}		
+			}
 		}else if(str_contains($video->url, 'twitter') && $embed){
 			preg_match('#status\/([\d^]+)#', $video->url, $matches);
 
@@ -167,7 +168,7 @@ trait VideoHelper{
 				}
 			}
 		}else if(str_contains($url, 'youtu')){
-			$youtubeId = VideoHelper::getYoutubeID($url); 
+			$youtubeId = VideoHelper::getYoutubeID($url);
 
 			if($youtubeId){
 				$linkVars['youtube_id'] = $youtubeId;
@@ -175,7 +176,7 @@ trait VideoHelper{
 				$linkVars['thumb'] = 'https://img.youtube.com/vi/'.$youtubeId.'/default.jpg';
 			}
 		}else if(str_contains($url, 'instagram')){
-			$data = VideoHelper::getInstagramJSON($url); 
+			$data = VideoHelper::getInstagramJSON($url);
 
 			if($data){
 				$linkVars['image'] = $data['thumbnail_url'];
@@ -205,7 +206,7 @@ trait VideoHelper{
 			curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);
 			curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);
-			
+
 			//Data are stored in $data
 			$data = json_decode(curl_exec($curl_connection), true);
 			curl_close($curl_connection);

@@ -49,7 +49,7 @@ class VideoAdvancedTests extends DuskTestCase
     public function testAdminVideoAccept() // Tests admin accept new video upload
     {
         $this->browse(function ($browser) {
-            $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->orderBy('created_at', 'desc')->first();
+            $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
             if(isset($video->id)) {
                 $browser->on(new LoginPage)
                         ->loginUser()
@@ -66,7 +66,7 @@ class VideoAdvancedTests extends DuskTestCase
     public function testAdminMoreDetailsVideo() // Tests more details form
     {
         $this->browse(function ($browser) {
-            $video = Video::where('state', 'accepted')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('more_details', NULL)->where('more_details_code', '!=', NULL)->orderBy('created_at', 'desc')->first();
+            $video = Video::where('state', 'accepted')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('more_details', NULL)->where('more_details_code', '!=', NULL)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
             if(isset($video->id)){
                 $browser->on(new LoginPage)
                         ->loginUser()
@@ -86,7 +86,7 @@ class VideoAdvancedTests extends DuskTestCase
     public function testAdminVideoLicense() // Tests admin license pending video
     {
         $this->browse(function ($browser) {
-            $video = Video::where('state', 'pending')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('rights', 'ex')->orderBy('created_at', 'desc')->first();
+            $video = Video::where('state', 'pending')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('rights', 'ex')->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
             if(isset($video->id)) {
                 $browser->on(new LoginPage)
                         ->loginUser()
