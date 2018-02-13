@@ -67977,16 +67977,17 @@ $('document').ready(function () {
         },
         errorPlacement: function errorPlacement(error, element) {
             if (element.is('#file') || element.is('#url')) {
-                $('#video-error').css('display', 'block');
                 if ($('#file').val()) {
-                    $('#video-error').text('The file must be a valid video file: flv,ogg,mp4,qt,avi,wmv,m4v,webm');
+                    error.appendTo($('label[for=file]'));
+                } else if ($('#url').val()) {
+                    error.appendTo($('label[for=url]'));
                 } else {
-                    $('#video-error').text('Either a video file or video url is required');
+                    error.appendTo($('label[for=file]'));
                 }
             } else if (element.is('#terms')) {
                 error.appendTo('.terms-copy');
             } else {
-                error.insertBefore(element);
+                error.appendTo($('label[for=' + element.attr('id') + ']'));
             }
         },
         successHandler: function successHandler() {
@@ -68005,13 +68006,13 @@ $('document').ready(function () {
                 email: true
             },
             date_filmed: {
-                required: true
+                required: false
             },
             location: {
-                required: true
+                required: false
             },
             description: {
-                required: true
+                required: false
             },
             permission: {
                 required: true
