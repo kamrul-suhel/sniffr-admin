@@ -125,9 +125,9 @@ trait VideoHelper{
 		return $sHTML;
 	}
 
-	public static function videoLinkChecker($url){
+	public static function videoLinkChecker($url, $state = 'new'){
 		$url = rtrim($url);
-		$linkVars = ['image' => false,'thumb' => false,'vertical' => NULL, 'youtube_id' => '', 'url' => $url, 'embed_code' => ''];
+		$linkVars = ['image' => false,'thumb' => false,'vertical' => NULL, 'youtube_id' => '', 'url' => $url, 'embed_code' => '', 'state' => $state];
 		$youtubeId = false;
 
 		if(str_contains($url, 'facebook')){ // Is Facebook
@@ -151,6 +151,8 @@ trait VideoHelper{
 				}
 
 				$linkVars['vertical'] = $fb_vertical;
+			} else {
+				$linkVars['state'] = 'problem';
 			}
 		}else if(str_contains($url, 'twitter.com')){
 			preg_match('#status\/([\d^]+)#', $url, $matches);
@@ -190,6 +192,8 @@ trait VideoHelper{
 			$linkVars['embed_code'] = '<video poster="'.$withoutExt.'.jpg" preload="auto" autoplay="autoplay" muted="muted" loop="loop" webkit-playsinline="">
                 <source src="'.$withoutExt.'.mp4" type="video/mp4">
             </video>';
+		} else {
+			$linkVars['state'] = 'problem';
 		}
 
 		$linkVars['image'] = $linkVars['image'] ? $linkVars['image'] : '/assets/img/placeholder.png';

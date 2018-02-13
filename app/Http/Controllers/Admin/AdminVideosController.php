@@ -544,7 +544,7 @@ class AdminVideosController extends Controller {
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
-        $brokenLinks = $note =array();
+        $brokenLinks = $problemLinks = $note =array();
 
         if($request->hasFile('csv')) {
             //load the CSV document from a file path
@@ -600,7 +600,7 @@ class AdminVideosController extends Controller {
                             }
                         } else if(str_contains($link, 'http')){
                             if($select_type == 'both' || $select_type == 'urls'){
-                                $linkDetails = VideoHelper::videoLinkChecker($link);
+                                $linkDetails = VideoHelper::videoLinkChecker($link, $select_state);
 
                                 $video->youtube_id = $linkDetails['youtube_id'];
                                 $video->url = $linkDetails['url'];
@@ -608,8 +608,13 @@ class AdminVideosController extends Controller {
                                 $video->thumb = $linkDetails['thumb'];
                                 $video->embed_code = $linkDetails['embed_code'];
                                 $video->vertical = $linkDetails['vertical'];
+                                $video->state = $linkDetails['state'];
                                 // Save video
                                 $video->save();
+
+                                if($linkDetails['state']=='problem') {
+                                    $problemLinks[] = $record['title'].' : '.$link;
+                                }
                             }
                         }
                     } else {
@@ -618,7 +623,7 @@ class AdminVideosController extends Controller {
                 }
             }
 
-            if($brokenLinks){
+            if($brokenLinks||$problemLinks){
                 $request->session()->flash('note', 'Some issues with link ingestion!');
                 $request->session()->flash('note_type', 'error');
             }else{
@@ -628,13 +633,14 @@ class AdminVideosController extends Controller {
         }
 
         $data = array(
-            'post_route' => url('admin/videos/upload'),
+            'post_route' => url('admin/videos/ingest'),
             'button_text' => 'Upload Video CSV',
             'admin_user' => Auth::user(),
-            'broken_links' => $brokenLinks
+            'broken_links' => $brokenLinks,
+            'problem_links' => $problemLinks
         );
 
-        return view('admin.videos.upload', $data);
+        return view('admin.videos.ingest', $data);
     }
 
     public function checkYoutube()

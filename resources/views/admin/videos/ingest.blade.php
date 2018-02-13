@@ -13,6 +13,13 @@
 		@endforeach
 	@endif
 
+	@if($problem_links)
+		<h3>Links with a problem:</h3>
+		@foreach($problem_links as $link)
+			<p>{{ $link }}</p>
+		@endforeach
+	@endif
+
     <form method="POST" action="{{ $post_route }}" id="upload-form" name="upload-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-3">
