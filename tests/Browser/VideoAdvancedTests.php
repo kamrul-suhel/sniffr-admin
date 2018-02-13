@@ -8,6 +8,8 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Browser\Pages\LoginPage;
+use Tests\Browser\Components\FillFormUpload;
+use Tests\Browser\Components\FillFormSubmission;
 use Tests\Browser\Components\FillFormDetails;
 
 class VideoAdvancedTests extends DuskTestCase
@@ -31,80 +33,151 @@ class VideoAdvancedTests extends DuskTestCase
     //     });
     // }
 
-    public function testAdminVideoSearch() // Tests admin search video section
+    public function testUploadVideoLink() // Tests upload form for video link
     {
         $this->browse(function ($browser) {
-            $browser->on(new LoginPage)
-                    ->loginUser()
-                    ->visit('/admin/videos/licensed')
-                    ->assertSee('Licensed Videos')
-                    ->type('s', 'Little kid shits himself')
-                    ->keys('#search-input', '{enter}')
-                    ->assertSee('Little kid shits himself')
-                    ->resize(1560, 1000)
-                    ->screenshot('success-'.$this->getName().'-'.time());
+
+            // Tests upload form for video link
+            $browser->visit('/upload')
+                ->within(new FillFormUpload, function ($browser) {
+                    $browser->enterTestData('link');
+                })
+                ->type('url', 'https://www.youtube.com/watch?v=qRHPA3LawQI')
+                ->within(new FillFormUpload, function ($browser) {
+                    $browser->executeUpload();
+                })
+                ->screenshot('success-'.$this->getName().'-'.time());
+
+                // Search for the video submission that was just added
+                $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
+                if(isset($video->id)) {
+
+                    // Tests admin accept new video upload
+                    $browser->on(new LoginPage)
+                            ->loginUser()
+                            ->visit('/admin/videos/new')
+                            ->resize(1560, 1000)
+                            ->assertVisible('#video-'.$video->alpha_id)
+                            ->click("a[href='".url('/admin/videos/status/accepted/'.$video->alpha_id)."']")
+                            ->pause(3000)
+                            ->screenshot('success-'.$this->getName().'-'.time());
+
+                    // Tests more details form
+                    sleep(10);
+                    $browser->on(new LoginPage)
+                            ->loginUser()
+                            ->visit('/details/'.$video->more_details_code)
+                            ->assertSee($video->title)
+                            ->within(new FillFormDetails, function ($browser) {
+                                $browser->enterTestData();
+                            })
+                            ->within(new FillFormDetails, function ($browser) {
+                                $browser->executeUpload();
+                            })
+                            ->screenshot('success-'.$this->getName().'-'.time());
+
+                    // Tests admin license pending video
+                    sleep(3);
+                    $browser->on(new LoginPage)
+                            ->loginUser()
+                            ->visit('/admin/videos/pending')
+                            ->resize(1560, 1000)
+                            ->type('s', $video->alpha_id)
+                            ->keys('#search-input', '{enter}')
+                            ->assertVisible('#video-'.$video->alpha_id)
+                            ->click("a[href='".url('/admin/videos/status/licensed/'.$video->alpha_id)."']")
+                            ->pause(3000)
+                            ->screenshot('success-'.$this->getName().'-'.time());
+
+                    // Tests admin search video section
+                    sleep(3);
+                    $browser->on(new LoginPage)
+                            ->loginUser()
+                            ->visit('/admin/videos/licensed')
+                            ->assertSee('Licensed Videos')
+                            ->type('s', 'Little kid shits himself')
+                            ->keys('#search-input', '{enter}')
+                            ->assertSee('Little kid shits himself')
+                            ->resize(1560, 1000)
+                            ->screenshot('success-'.$this->getName().'-'.time());
+                }
         });
     }
 
-    public function testAdminVideoAccept() // Tests admin accept new video upload
-    {
-        $this->browse(function ($browser) {
-            $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
-            if(isset($video->id)) {
-                $browser->on(new LoginPage)
-                        ->loginUser()
-                        ->visit('/admin/videos/new')
-                        ->resize(1560, 1000)
-                        ->assertVisible('#video-'.$video->alpha_id)
-                        ->click("a[href='".url('/admin/videos/status/accepted/'.$video->alpha_id)."']")
-                        ->pause(3000)
-                        ->screenshot('success-'.$this->getName().'-'.time());
-            }
-        });
-    }
-
-    public function testAdminMoreDetailsVideo() // Tests more details form
-    {
-        $this->browse(function ($browser) {
-            $video = Video::where('state', 'accepted')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('more_details', NULL)->where('more_details_code', '!=', NULL)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
-            if(isset($video->id)){
-                $browser->on(new LoginPage)
-                        ->loginUser()
-                        ->visit('/details/'.$video->more_details_code)
-                        ->assertSee($video->title)
-                        ->within(new FillFormDetails, function ($browser) {
-                            $browser->enterTestData();
-                        })
-                        ->within(new FillFormDetails, function ($browser) {
-                            $browser->executeUpload();
-                        })
-                        ->screenshot('success-'.$this->getName().'-'.time());
-            }
-        });
-    }
-
-    public function testAdminVideoLicense() // Tests admin license pending video
-    {
-        $this->browse(function ($browser) {
-            $video = Video::where('state', 'pending')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('rights', 'ex')->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
-            if(isset($video->id)) {
-                $browser->on(new LoginPage)
-                        ->loginUser()
-                        ->visit('/admin/videos/pending')
-                        ->resize(1560, 1000)
-                        ->type('s', $video->alpha_id)
-                        ->keys('#search-input', '{enter}')
-                        ->assertVisible('#video-'.$video->alpha_id)
-                        ->click("a[href='".url('/admin/videos/status/licensed/'.$video->alpha_id)."']")
-                        ->pause(3000)
-                        ->screenshot('success-'.$this->getName().'-'.time());
-            }
-        });
-    }
+    // public function testAdminVideoAccept() // Tests admin accept new video upload
+    // {
+    //     $this->browse(function ($browser) {
+    //         $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
+    //         if(isset($video->id)) {
+    //             $browser->on(new LoginPage)
+    //                     ->loginUser()
+    //                     ->visit('/admin/videos/new')
+    //                     ->resize(1560, 1000)
+    //                     ->assertVisible('#video-'.$video->alpha_id)
+    //                     ->click("a[href='".url('/admin/videos/status/accepted/'.$video->alpha_id)."']")
+    //                     ->pause(3000)
+    //                     ->screenshot('success-'.$this->getName().'-'.time());
+    //         }
+    //     });
+    // }
+    //
+    // public function testAdminMoreDetailsVideo() // Tests more details form
+    // {
+    //     $this->browse(function ($browser) {
+    //         $video = Video::where('state', 'accepted')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('more_details', NULL)->where('more_details_code', '!=', NULL)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
+    //         if(isset($video->id)){
+    //             $browser->on(new LoginPage)
+    //                     ->loginUser()
+    //                     ->visit('/details/'.$video->more_details_code)
+    //                     ->assertSee($video->title)
+    //                     ->within(new FillFormDetails, function ($browser) {
+    //                         $browser->enterTestData();
+    //                     })
+    //                     ->within(new FillFormDetails, function ($browser) {
+    //                         $browser->executeUpload();
+    //                     })
+    //                     ->screenshot('success-'.$this->getName().'-'.time());
+    //         }
+    //     });
+    // }
+    //
+    // public function testAdminVideoLicense() // Tests admin license pending video
+    // {
+    //     $this->browse(function ($browser) {
+    //         $video = Video::where('state', 'pending')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('rights', 'ex')->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
+    //         if(isset($video->id)) {
+    //             $browser->on(new LoginPage)
+    //                     ->loginUser()
+    //                     ->visit('/admin/videos/pending')
+    //                     ->resize(1560, 1000)
+    //                     ->type('s', $video->alpha_id)
+    //                     ->keys('#search-input', '{enter}')
+    //                     ->assertVisible('#video-'.$video->alpha_id)
+    //                     ->click("a[href='".url('/admin/videos/status/licensed/'.$video->alpha_id)."']")
+    //                     ->pause(3000)
+    //                     ->screenshot('success-'.$this->getName().'-'.time());
+    //         }
+    //     });
+    // }
+    //
+    // public function testAdminVideoSearch() // Tests admin search video section
+    // {
+    //     $this->browse(function ($browser) {
+    //         $browser->on(new LoginPage)
+    //                 ->loginUser()
+    //                 ->visit('/admin/videos/licensed')
+    //                 ->assertSee('Licensed Videos')
+    //                 ->type('s', 'Little kid shits himself')
+    //                 ->keys('#search-input', '{enter}')
+    //                 ->assertSee('Little kid shits himself')
+    //                 ->resize(1560, 1000)
+    //                 ->screenshot('success-'.$this->getName().'-'.time());
+    //     });
+    // }
 
     protected function tearDown() // Deletes test records and clears browser sessions/cookies from tests
     {
-        $video = Video::where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->forcedelete();
+        //$video = Video::where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->forcedelete();
 
         session()->flush();
 

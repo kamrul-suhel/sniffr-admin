@@ -61,7 +61,7 @@
                     <span id="valid-msg" class="hide">✓ Valid number</span>
                     <span id="error-msg" class="hide">Invalid number</span>
                 </div>
-                
+
                 <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
             </div>
         </div>
@@ -149,6 +149,7 @@ I understand that participation in the UNILAD video system is at will and I agre
             </div>
         </div>
 
+        <input type="hidden" id="source" name="source" value="<?php echo (isset($_GET['source']) ? $_GET['source'] : ''); ?>">
         <input type="submit" class="btn btn-primary pull-right" value="Submit your video">
     </div>
 
