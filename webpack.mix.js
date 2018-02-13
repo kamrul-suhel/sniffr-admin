@@ -20,6 +20,5 @@ mix.copy('node_modules/tinymce/themes', 'public/assets/admin/js/themes');
 mix.copy('node_modules/tinymce/skins', 'public/assets/admin/js/skins');
 mix.copy('node_modules/tinymce/plugins', 'public/assets/admin/js/plugins');
 mix.copy('node_modules/intl-tel-input/build/js/utils.js', 'public/assets/js/utils.js');
-
 mix.copy('node_modules/intl-tel-input/build/css', 'public/assets/css/intl-tel-input/css');
 mix.copy('node_modules/intl-tel-input/build/img', 'public/assets/css/intl-tel-input/img');

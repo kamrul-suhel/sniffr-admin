@@ -83,7 +83,6 @@
 <?php if(isset($video->id) || isset($episode->id)): ?>
 
     <link href="<?= THEME_URL . '/assets/css/video-js.css'; ?>" rel="stylesheet">
-    <script src="/assets/js/video.js"></script>
     <style type="text/css">
       .vjs-default-skin .vjs-control-bar,
       .vjs-default-skin .vjs-big-play-button { background: rgba(0,0,0,0.58) }

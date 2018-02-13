@@ -72,7 +72,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url('admin/videos/upload') }}">
+                <a href="{{ url('admin/videos/ingest') }}">
                     <span class="title">CSV Upload</span>
                 </a>
             </li>
