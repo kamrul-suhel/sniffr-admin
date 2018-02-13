@@ -2,7 +2,7 @@ Hey {{ $video->contact->full_name }}!
 
 Video Ref: {{ $video->alpha_id }}
 
-Thanks again for submitting your video to us - we love it!
+Thanks again for submitting your video to us!
 
 We’d just like to confirm a few more details with you which will improve your chances of being featured on our page and for making some money!
 

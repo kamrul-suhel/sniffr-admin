@@ -13,7 +13,7 @@
 
 <div>&nbsp;</div>
 
-<div>Thanks again for submitting your video to us - we love it!&nbsp;</div>
+<div>Thanks again for submitting your video to us!&nbsp;</div>
 
 <div>&nbsp;</div>
 

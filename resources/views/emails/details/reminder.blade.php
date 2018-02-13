@@ -13,7 +13,7 @@
 
 <div>&nbsp;</div>
 
-<div>Thanks again for submitting your video to us - we love it!</div>
+<div>Thanks again for submitting your video to us!</div>
 
 <div>We&rsquo;ve received no response from you yet to verify your video and confirm your submission.</div>
 

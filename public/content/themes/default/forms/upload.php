@@ -8,7 +8,7 @@
             <div class="sk-cube3 sk-cube"></div>
         </div> -->
         <br />
-        <p>we're just uploading your awesome video..</p>
+        <p>we're just uploading your video..</p>
     </div>
 </div>
 

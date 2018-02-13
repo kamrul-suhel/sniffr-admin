@@ -5,10 +5,13 @@ namespace App\Jobs;
 use App\Video;
 
 use FFMpeg;
+use Youtube;
+use MyYoutube;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -40,6 +43,7 @@ class QueueVideoCheck implements ShouldQueue
     protected $video_id;
     protected $file_type;
     protected $tries_loop_count;
+    protected $youtube_ingest;
 
     public $tries = 2;
     public $timeout = 3600;
@@ -50,12 +54,13 @@ class QueueVideoCheck implements ShouldQueue
      * @return void
      */
 
-    public function __construct($job_id, $video_id, $file_type, $tries_loop_count)
+    public function __construct($job_id, $video_id, $file_type, $tries_loop_count, $youtube_ingest = false)
     {
         $this->job_id = $job_id;
         $this->video_id = $video_id;
         $this->file_type = $file_type;
         $this->tries_loop_count = $tries_loop_count;
+        $this->youtube_ingest = $youtube_ingest;
     }
 
     /**
@@ -109,12 +114,47 @@ class QueueVideoCheck implements ShouldQueue
                         }
 
                     } else {
-
                         $check_file = substr($video->file, 0, strrpos($video->file, '.')).'-watermark-dirty.'.$ext;
 
                         if(Storage::disk('s3')->exists(basename($check_file))) {
                             Storage::disk('s3')->setVisibility(basename($check_file), 'public');
                             $video->file_watermark_dirty = $check_file;
+
+                            if($this->youtube_ingest){
+                                // IAN:  Need to de-dupe this
+                                $file_watermark = file_get_contents($video->file_watermark_dirty);
+                                $fileName_watermark = basename($video->file_watermark_dirty);
+
+                                // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
+                                $fileName = basename($video->file);
+                                $disk = Storage::disk('s3_sourcebucket');
+                                if($disk->has($fileName)==1){
+                                    if($disk->exists(basename($fileName))) {
+                                        $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
+                                    }
+                                }
+
+                                // Youtube (retrieves video to temporary local and then uploads to youtube)
+                                if($fileName_watermark) {
+                                    file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
+
+                                    $file_watermark = new UploadedFile (
+                                        '/tmp/'.$fileName_watermark,
+                                        $fileName_watermark,
+                                        $video->mime,
+                                        filesize('/tmp/'.$fileName_watermark),
+                                        null,
+                                        false
+                                    );
+
+                                    // Upload it to youtube
+                                    $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+                                    $youtubeId  = $response->getVideoId();
+
+                                    $video->youtube_id = $youtubeId;
+                                }
+                            }
+
                             $video->save();
                         } else {
                             $job_complete = 0;
@@ -140,7 +180,7 @@ class QueueVideoCheck implements ShouldQueue
             // run this job/queue again if the job is still processing (as per above)
             if($this->tries_loop_count<5&&$job_complete==0) {
                 $this->tries_loop_count++;
-                QueueVideoCheck::dispatch($job['Id'], $this->video_id, $this->file_type, $this->tries_loop_count)
+                QueueVideoCheck::dispatch($job['Id'], $this->video_id, $this->file_type, $this->tries_loop_count, $this->youtube_ingest)
                     ->delay(now()->addSeconds(30));
             }
 
