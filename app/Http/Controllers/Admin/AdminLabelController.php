@@ -119,6 +119,12 @@ class AdminLabelController extends Controller {
 
      public function analyseVideo() {
 
+         
+
+     }
+
+     public function analyseVideo_2() {
+
          //NOT CURRENTLY USED (moves video file to folder for analysis)
          // $video_value = Input::get('f');
          // $disk = Storage::disk('s3_sourcebucket');

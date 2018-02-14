@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Video;
+use App\User;
 // use App\Contact;
 
 use Illuminate\Http\Request;
@@ -57,28 +58,30 @@ class QueueEmail implements ShouldQueue
     {
         $video = Video::find($this->video_id);
 
-        switch($this->email_type){
-            case 'submission_accepted':
-                Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
-                break;
-            case 'submission_licensed':
-                Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
-                break;
-            case 'submission_rejected':
-                Mail::to($video->contact->email)->send(new SubmissionRejected($video));
-                break;
-            case 'submission_thanks':
-                Mail::to($video->contact->email)->send(new SubmissionThanks($video));
-                break;
-            case 'submission_thanks_nonex':
-                Mail::to($video->contact->email)->send(new SubmissionThanksNonEx($video));
-                break;
-            case 'details_reminder':
-                Mail::to($video->contact->email)->send(new DetailsReminder($video));
-                break;
-            case 'details_thanks':
-                Mail::to($video->contact->email)->send(new DetailsThanks($video));
-                break;
+        if(isset($video)) {
+            switch($this->email_type){
+                case 'submission_accepted':
+                    Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+                    break;
+                case 'submission_licensed':
+                    Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+                    break;
+                case 'submission_rejected':
+                    Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+                    break;
+                case 'submission_thanks':
+                    Mail::to($video->contact->email)->send(new SubmissionThanks($video));
+                    break;
+                case 'submission_thanks_nonex':
+                    Mail::to($video->contact->email)->send(new SubmissionThanksNonEx($video));
+                    break;
+                case 'details_reminder':
+                    Mail::to($video->contact->email)->send(new DetailsReminder($video));
+                    break;
+                case 'details_thanks':
+                    Mail::to($video->contact->email)->send(new DetailsThanks($video));
+                    break;
+            }
         }
     }
 
@@ -91,5 +94,7 @@ class QueueEmail implements ShouldQueue
     public function failed(Exception $exception)
     {
         // Send user notification of failure, etc...
+        $user = new User();
+        $user->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: '.$this->video_id.')'));
     }
 }

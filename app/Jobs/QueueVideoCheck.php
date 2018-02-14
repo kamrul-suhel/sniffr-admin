@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Video;
+use App\User;
 
 use FFMpeg;
 use Youtube;
@@ -82,7 +83,7 @@ class QueueVideoCheck implements ShouldQueue
 
                 $video = Video::find($this->video_id);
 
-                if($video->file){
+                if(isset($video->file)){
 
                     // resolve original file extension for watermark and dirty watermark files
                     $ext = pathinfo($video->file, PATHINFO_EXTENSION);
