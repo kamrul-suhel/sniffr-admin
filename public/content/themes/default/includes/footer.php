@@ -97,5 +97,6 @@
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 	</script>
+	<?php include('content/themes/default/includes/mousestats.php'); ?>
 </body>
 </html>
