@@ -120,9 +120,10 @@ class ThemeDetailsController extends Controller
             $video->save();
 
             // Notification of new video
-            //Mail::to('submissions@unilad.co.uk')->send(new DetailsReview($video));
-            $video->notify(new DetailsReview($video));
-
+            if(env('APP_ENV') != 'local'){
+                $video->notify(new DetailsReview($video));
+            }
+            
             // Send thanks notification email (via queue after 2mins)
             QueueEmail::dispatch($video->id, 'details_thanks');
 

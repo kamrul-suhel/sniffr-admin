@@ -177,8 +177,10 @@ class ThemeSubmissionController extends Controller {
         // May also need to action Youtube upload (or at least action anaylsis bit from AdminVideoController) as we skip "accepted" state
 
         // Notification of new video
-        $video->notify(new SubmissionNewNonEx($video));
-
+        if(env('APP_ENV') != 'local'){
+            $video->notify(new SubmissionNewNonEx($video));
+        }
+        
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks_nonex');
 

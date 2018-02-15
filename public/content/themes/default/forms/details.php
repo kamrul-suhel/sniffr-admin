@@ -58,13 +58,13 @@
                 <?php else: ?>
                 <div class="input-group">
                     <div class="input-group-addon icon-phone"></div>
-                    <input type="tel" class="form-control" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
+                    <!--input type="tel" class="form-control" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
                     <div class="input-group-addon">
                         <span id="valid-msg" class="hide">✓ Valid number</span>
                         <span id="error-msg" class="hide">Invalid number</span>
-                    </div>
+                    </div-->
 
-                    <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
+                    <input type="tel" id="tel" class="form-control" name="tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
                 </div>
                 <?php endif; ?>
             </div>
