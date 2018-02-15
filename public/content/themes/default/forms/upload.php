@@ -62,7 +62,7 @@
                     <span id="error-msg" class="hide">Invalid number</span>
                 </div-->
 
-                <input type="tel" id="tel" class="form-control" name="tel" value="<?php echo old('tel'); ?>">
+                <input type="tel" id="tel" class="form-control" placeholder="Phone" name="tel" value="<?php echo old('tel'); ?>">
             </div>
         </div>
 
