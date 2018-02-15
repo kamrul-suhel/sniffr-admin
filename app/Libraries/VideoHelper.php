@@ -52,9 +52,9 @@ trait VideoHelper{
 				$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 			}else{
 				$sHTML .= '<p>There appears to be an issue with this video</p>';
-				if(\Auth::user()->role == 'admin'){
+				//if(\Auth::user()->role == 'admin'){
 			    	$sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
-			    }
+			    //}
 			}
 		}else if(str_contains($video->url, 'twitter') && $embed){
 			preg_match('#status\/([\d^]+)#', $video->url, $matches);
@@ -87,9 +87,9 @@ trait VideoHelper{
 					$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$insta_thumb.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 				}else{
 					$sHTML .= '<p>There appears to be an issue with this video</p>';
-					if(\Auth::user()->role == 'admin'){
+					//if(\Auth::user()->role == 'admin'){
 				    	$sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
-				    }
+				    //}
 				}
 			}
 		}else if(str_contains($video->url, 'vimeo')){
@@ -116,9 +116,9 @@ trait VideoHelper{
 		}else{
 		    $sHTML .= '<p>There appears to be an issue with this video</p>';
 
-		    if(\Auth::user()->role == 'admin'){
+		    //if(\Auth::user()->role == 'admin'){
 		    	$sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
-		    }
+		    //}
 		}
 		$sHTML .= '</div>';
 
