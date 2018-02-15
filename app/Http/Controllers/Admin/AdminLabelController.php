@@ -149,11 +149,8 @@ class AdminLabelController extends Controller {
      }
 
      public function checkWatermark() {
-
-
         $elastcoder = new ElastcoderAWS();
 
-        dd('moo');
          // $job = $elastcoder->getJob('1515772266459-6vkk7l');
          //
          // if(strtolower($job['Status']) == 'complete') {
@@ -240,6 +237,5 @@ class AdminLabelController extends Controller {
         } else {
             echo 'Not found.';
         }
-
-     }
+    }
 }
