@@ -176,6 +176,7 @@ return [
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Thujohn\Twitter\TwitterServiceProvider::class,
+        Larareko\Rekognition\RekognitionServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -245,6 +246,7 @@ return [
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
+        'Rekognition' => 'Larareko\Rekognition\RekognitionFacade',
 
     ],
 

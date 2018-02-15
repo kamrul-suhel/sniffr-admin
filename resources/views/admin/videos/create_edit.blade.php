@@ -220,6 +220,48 @@
 
 		<div class="row">
 
+			<div class="col-md-3">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Assigned To</div>
+						<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Select who this video is assigned to:</p>
+						<select id="user_id" name="user_id">
+							<option value="">Not assigned</option>
+							@foreach($users as $user2)
+								<option value="{{ $user2->id }}" @if(isset($video)) @if(!empty($user2->id == $video->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<!-- <div class="col-md-3">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Used Status</div>
+						<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<p>Select if the video has been used yet:</p>
+						<select id="user_id" name="user_id">
+							<option value="">Not assigned</option>
+
+								<option value=""></option>
+
+						</select>
+					</div>
+				</div>
+			</div> -->
+
+		</div>
+
+		<div class="row">
+
 			<div class="col-md-6">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
@@ -550,10 +592,6 @@
 
 		</div><!-- row -->
 
-		@if(!isset($video->user_id))
-			<input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}" />
-		@endif
-
 		@if(isset($video))
 			<input type="hidden" id="id" name="id" value="{{ $video->alpha_id }}" />
 			<input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}" />
@@ -562,14 +600,16 @@
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 
-		@if($video->trashed())
-		<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Restore Video" class="btn btn-warning">
-			<i class="fa fa-fa-upload"></i> Restore
-		</a>
-		@else
-		<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="btn btn-danger">
-			<i class="fa fa-trash-o"></i> Delete
-		</a>
+		@if(isset($video))
+			@if($video->trashed())
+			<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Restore Video" class="btn btn-warning">
+				<i class="fa fa-fa-upload"></i> Restore
+			</a>
+			@else
+			<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="btn btn-danger">
+				<i class="fa fa-trash-o"></i> Delete
+			</a>
+			@endif
 		@endif
 
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />

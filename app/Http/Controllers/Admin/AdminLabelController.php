@@ -118,9 +118,74 @@ class AdminLabelController extends Controller {
      }
 
      public function analyseVideo() {
-
-         
-
+         $type = Input::get('type');
+         if($type=='start') {
+             $config = [
+                    'MinConfidence' => 80,
+                    'Video' => [
+                        'S3Object' => [
+                            'Bucket' => 'vlp-storage',
+                            'Name' => '1-hfcqy4pz2fnub4txlp9aof1rwpwcnff.mp4',
+                        ],
+                    ],
+                ];
+             $job = \Rekognition::startLabelDetection($config);
+             dd($job['JobId']);
+         } elseif($type=='get') {
+             $config = [
+                    'JobId' => '6333130c01cb42d2659c69d0f233ef6d046eecd7a2fd7fd341b5c3bed3423b3c',
+                    'SortBy' => 'NAME',
+                ];
+             $job = \Rekognition::getLabelDetection($config);
+             dd($job['Labels']);
+             // if($job['JobStatus']=='SUCCEEDED'){
+             //     $labels = $job['Labels'];
+             //     $blacklist = array('Human', 'Person', 'People', 'Furniture', 'Chair');
+             //     if(count($labels)) {
+             //         usort($labels, function($a, $b) {
+             //             return $b['Label']['Confidence'] <=> $a['Label']['Confidence'];
+             //         });
+             //
+             //         foreach ($labels as $label){
+             //             if (!in_array($label['Label']['Name'], $blacklist)) {
+             //                 if(round($label['Label']['Confidence'],0)>85){
+             //                     echo $label['Label']['Name'].'['.round($label['Label']['Confidence'],0).']<br />';
+             //                 }
+             //             }
+             //         }
+             //     }
+             // }
+         } elseif ($type=='adult_start') {
+             $config = [
+                    'Video' => [
+                        'S3Object' => [
+                            'Bucket' => 'vlp-storage',
+                            'Name' => '11dtbg-ys3jw8j8kqq2nt_evx4w6ilhg7.mp4',
+                        ],
+                    ],
+                ];
+             $job = \Rekognition::startContentModeration($config);
+             dd($job['JobId']);
+         } elseif ($type=='adult_get') {
+             $config = [
+                    'JobId' => '32d74b9d5ff1d85bb2f3786f5a0d72529f8f7475813d4cfaaa846ed69e4f36dd',
+                    'SortBy' => 'NAME',
+                ];
+             $job = \Rekognition::getContentModeration($config);
+             if($job['JobStatus']=='SUCCEEDED'){
+                 $labels = $job['ModerationLabels'];
+                 if(count($labels)) {
+                     foreach($labels as $label){
+                         foreach($label as $l){
+                             $uniques[$l['Name']] = ['Confidence' => $l['Confidence']];
+                         }
+                     }
+                     dd($uniques);
+                 }
+             } else {
+                 echo $job['JobStatus'];
+             }
+         }
      }
 
      public function analyseVideo_2() {

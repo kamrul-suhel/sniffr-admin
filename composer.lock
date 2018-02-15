@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a6bd0da9b3bcd95dd077c5c379a6e3b",
+    "content-hash": "58e57260203a87c898dc1956fd1bbfd7",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1519,6 +1519,50 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
+        },
+        {
+            "name": "larareko/aws-rekognition",
+            "version": "v0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/larareko/aws-rekognition.git",
+                "reference": "cba7a30c468ce419be5823f5723386cb5ce400d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/larareko/aws-rekognition/zipball/cba7a30c468ce419be5823f5723386cb5ce400d2",
+                "reference": "cba7a30c468ce419be5823f5723386cb5ce400d2",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "~3.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "~5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Larareko\\Rekognition\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kaushik Subramaniam Gnanaskandan",
+                    "email": "kaushik.subman@gmail.com"
+                },
+                {
+                    "name": "Alejandro",
+                    "email": "acarste@okstate.edu"
+                }
+            ],
+            "description": "A Laravel package for the AWS Rekognition",
+            "time": "2017-04-26T03:18:04+00:00"
         },
         {
             "name": "laravel/framework",

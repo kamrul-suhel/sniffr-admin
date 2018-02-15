@@ -291,6 +291,7 @@ class AdminVideosController extends Controller {
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
+            'users' => User::all(),
         );
         return view('admin.videos.create_edit', $data);
     }
@@ -363,7 +364,7 @@ class AdminVideosController extends Controller {
         $video->active = 0;
         $video->featured = 0;
         $user = Auth::user();
-        $video->user_id = $user->id;
+        $video->user_id = Input::get('user_id') ? Input::get('user_id') : $user->id;
         $video->save();
 
         if($filePath){
@@ -421,6 +422,7 @@ class AdminVideosController extends Controller {
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
+            'users' => User::all(),
             'user' => $user
         );
 
@@ -503,6 +505,10 @@ class AdminVideosController extends Controller {
                     $campaigns[$campaign]['state'] = 'new';
                 }
             }
+        }
+
+        if(Input::get('user_id')){
+            $video->user_id = Input::get('user_id');
         }
 
         // Check if ex/nonex dropdown was changed for rights management make sure is_exclusive field is also changed
