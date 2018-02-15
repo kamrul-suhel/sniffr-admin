@@ -74,14 +74,14 @@ class ThemeUploadController extends Controller {
     }
 
     /**
-     * Display a listing of videos
+     * Returns the form with no page wrapper
      *
      * @return Response
      */
     public function form()
     {
         $this->data['iframe'] = 'true';
-        $this->data['form'] = 'upload';
+        $this->data['form'] = 'details';
 
         return view('Theme::templates/iframe', $this->data);
     }
