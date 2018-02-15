@@ -74,7 +74,7 @@ class ThemeUploadController extends Controller {
     }
 
     /**
-     * Display a listing of videos
+     * Returns the form with no page wrapper
      *
      * @return Response
      */

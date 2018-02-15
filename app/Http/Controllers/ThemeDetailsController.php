@@ -69,6 +69,20 @@ class ThemeDetailsController extends Controller
     }
 
     /**
+     * Returns the details form with no page wrapper
+     *
+     * @return Response
+     */
+    public function form($code)
+    {
+        $this->data['iframe'] = 'true';
+        $this->data['form'] = 'details';
+        $this->data['video'] = Video::where('more_details_code', $code)->first();
+
+        return view('Theme::templates/iframe', $this->data);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @return Response

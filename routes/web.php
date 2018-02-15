@@ -59,6 +59,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
     Route::post('details/{code}', 'ThemeDetailsController@store');
     Route::get('details/{code}', 'ThemeDetailsController@index');
+    Route::get('details/form/{code}', 'ThemeDetailsController@form');
 
     /*
     |--------------------------------------------------------------------------
