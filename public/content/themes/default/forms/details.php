@@ -20,14 +20,14 @@
         <?php endif; ?>
 
         <div class="row">
-            <?php if(!$video): ?>
+            <?php if(!isset($video->id)): ?>
             <div class="col-md-12 page">
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-heading">Sorry, we can't seem to find your video with the code you provided. Please contact <u>submissions@unilad.co.uk</u></div>
                 </div>
             </div>
 
-            <?php elseif(!$video->more_details): ?>
+            <?php elseif(!isset($video->more_details)): ?>
 
             <h2>Your Video Details</h2>
 
@@ -63,7 +63,7 @@
                         <span id="valid-msg" class="hide">✓ Valid number</span>
                         <span id="error-msg" class="hide">Invalid number</span>
                     </div>
-                    
+
                     <input type="hidden" id="tel" name="tel" value="<?php echo old('tel'); ?>">
                 </div>
                 <?php endif; ?>
