@@ -1207,14 +1207,16 @@ p.small{
   border-bottom: 1px solid #b3b3b3;
   box-shadow: none;
   border-radius: 0;
+  font-size: 16px;
 }
 .slick-form textarea{
   box-shadow: none;
   border-radius: 0;
   border: 1px solid #b3b3b3;
+  font-size: 16px;
 }
 .slick-form .input-group-addon {
-    padding: 6px 15px;
+    padding: 14px 15px;
     font-size: 14px;
     font-weight: 400;
     line-height: 1;
@@ -1236,6 +1238,7 @@ p.small{
 .slick-form .icon-phone{
   background-image:url('/assets/img/phone.png');
   background-size: 20px 15px;
+  padding: 21px 15px;
 }
 .slick-form .icon-video{
   background-image:url('/assets/img/video.png');
