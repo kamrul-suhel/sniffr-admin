@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Video;
+use App\User;
 use App\Jobs\QueueVideoCheck;
 
 use FFMpeg;
@@ -63,7 +64,7 @@ class QueueVideo implements ShouldQueue
     public function handle() // THIS JOB CREATES WATERMARKS (NORMAL/DIRTY) + A THUMBNAIL AND THEN SCHEDULES ANOTHER JOB TO CHECK IF EXECUTED CORRECTLY
     {
         $video = Video::find($this->video_id);
-        $fileName = basename($video->file);
+        $fileName = (isset($video->file) ? basename($video->file) : '');
 
         $route = 'aws';
 

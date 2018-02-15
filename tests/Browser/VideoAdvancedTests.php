@@ -46,7 +46,7 @@ class VideoAdvancedTests extends DuskTestCase
                 ->within(new FillFormUpload, function ($browser) {
                     $browser->executeUpload();
                 })
-                ->screenshot('success-'.$this->getName().'-'.time());
+                ->screenshot('success-upload-form-'.$this->getName().'-'.time());
 
                 // Search for the video submission that was just added
                 $video = Video::where('state', 'new')->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->orderBy('created_at', 'desc')->first();
@@ -60,50 +60,51 @@ class VideoAdvancedTests extends DuskTestCase
                             ->assertVisible('#video-'.$video->alpha_id)
                             ->click("a[href='".url('/admin/videos/status/accepted/'.$video->alpha_id)."']")
                             ->pause(3000)
-                            ->screenshot('success-'.$this->getName().'-'.time());
+                            ->screenshot('success-accepted-'.$this->getName().'-'.time());
 
-                    // Tests more details form
-                    sleep(10);
-                    $browser->on(new LoginPage)
-                            ->loginUser()
-                            ->visit('/details/'.$video->more_details_code)
-                            ->assertSee($video->title)
-                            ->within(new FillFormDetails, function ($browser) {
-                                $browser->enterTestData();
-                            })
-                            ->within(new FillFormDetails, function ($browser) {
-                                $browser->executeUpload();
-                            })
-                            ->screenshot('success-'.$this->getName().'-'.time());
+                    $video2 = Video::where('id', $video->id)->where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->first();
+                    if(isset($video2)) {
+                        
+                        // Tests more details form
+                        $browser->visit('/details/'.$video2->more_details_code)
+                                ->assertSee($video2->title)
+                                ->within(new FillFormDetails, function ($browser) {
+                                    $browser->enterTestData();
+                                })
+                                ->within(new FillFormDetails, function ($browser) {
+                                    $browser->executeUpload();
+                                })
+                                ->screenshot('success-more-details-'.$this->getName().'-'.time());
 
-                    // Tests admin license pending video
-                    sleep(3);
-                    $browser->on(new LoginPage)
-                            ->loginUser()
-                            ->visit('/admin/videos/pending')
-                            ->resize(1560, 1000)
-                            ->type('s', $video->alpha_id)
-                            ->keys('#search-input', '{enter}')
-                            ->assertVisible('#video-'.$video->alpha_id)
-                            ->click("a[href='".url('/admin/videos/status/licensed/'.$video->alpha_id)."']")
-                            ->pause(3000)
-                            ->screenshot('success-'.$this->getName().'-'.time());
+                        // Tests admin license pending video
+                        $browser->on(new LoginPage)
+                                ->loginUser()
+                                ->visit('/admin/videos/pending')
+                                ->resize(1560, 1000)
+                                ->type('s', $video2->alpha_id)
+                                ->keys('#search-input', '{enter}')
+                                ->assertVisible('#video-'.$video2->alpha_id)
+                                ->click("a[href='".url('/admin/videos/status/licensed/'.$video2->alpha_id)."']")
+                                ->pause(3000)
+                                ->screenshot('success-licensed-'.$this->getName().'-'.time());
 
-                    // Tests admin search video section
-                    sleep(3);
-                    $browser->on(new LoginPage)
-                            ->loginUser()
-                            ->visit('/admin/videos/licensed')
-                            ->assertSee('Licensed Videos')
-                            ->type('s', 'Little kid shits himself')
-                            ->keys('#search-input', '{enter}')
-                            ->assertSee('Little kid shits himself')
-                            ->resize(1560, 1000)
-                            ->screenshot('success-'.$this->getName().'-'.time());
+                        // Tests admin search video section
+                        $browser->on(new LoginPage)
+                                ->loginUser()
+                                ->visit('/admin/videos/licensed')
+                                ->assertSee('Licensed Videos')
+                                ->type('s', 'Little kid shits himself')
+                                ->keys('#search-input', '{enter}')
+                                ->assertSee('Little kid shits himself')
+                                ->resize(1560, 1000)
+                                ->screenshot('success-search-'.$this->getName().'-'.time());
+                    }
+
                 }
         });
     }
 
+    // KEEP THESE HERE IF EVER NEEDED IN THE FUTURE
     // public function testAdminVideoAccept() // Tests admin accept new video upload
     // {
     //     $this->browse(function ($browser) {
@@ -177,7 +178,7 @@ class VideoAdvancedTests extends DuskTestCase
 
     protected function tearDown() // Deletes test records and clears browser sessions/cookies from tests
     {
-        //$video = Video::where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->forcedelete();
+        $video = Video::where('title', 'LIKE', '%unit browser%')->where('contact_id', 1157)->where('deleted_at', NULL)->forcedelete();
 
         session()->flush();
 
