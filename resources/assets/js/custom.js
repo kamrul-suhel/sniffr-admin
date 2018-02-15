@@ -183,6 +183,9 @@ $('document').ready(function(){
             closeOnClickOutside: true
         })
         .then((value) => {
+            data.userAgent = navigator.userAgent;
+            data.browser = navigator.appName;
+            data.browserVersion = ''+parseFloat(navigator.appVersion);
             console.log(data.responseJSON);
             if(value=='alert') {
                 $.ajax({

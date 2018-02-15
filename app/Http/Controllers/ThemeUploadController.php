@@ -211,7 +211,11 @@ class ThemeUploadController extends Controller {
     public function issueAlert() {
         $alert = 'File: '.Input::get('file').',
         Line: '.Input::get('line').',
-        Message: '.Input::get('message');
+        Message: '.Input::get('message').',
+        UserAgent: '.Input::get('userAgent').',
+        Browser: '.Input::get('browser').',
+        Browser Version: '.Input::get('browserVersion').'';
+        //$all = Input::all();
         // Slack notifications
         $user = new User();
         $user->notify(new SubmissionAlert($alert));
