@@ -102,6 +102,18 @@
 <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
 <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/airbrake-js/1.0.4/client.min.js"></script>
+<script>
+    // Airbrake error notificatios
+    var airbrake = new airbrakeJs.Client({
+        projectId: 173150,
+        projectKey: 'd99bce11ba0141789be1472f47cbb8a0'
+    });
+    airbrake.addFilter(function (notice) {
+        notice.context.environment = 'production';
+        return notice;
+    });
+</script>
 <!-- load app.js in header else it won't work -->
-<script type="text/javascript" src="/assets/js/app.js"></script>
+<script type="text/javascript" src="/assets/js/app.js?ver=1.0"></script>
 <!-- end js load -->
