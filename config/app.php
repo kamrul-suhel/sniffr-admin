@@ -177,6 +177,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Thujohn\Twitter\TwitterServiceProvider::class,
         Larareko\Rekognition\RekognitionServiceProvider::class,
+        Kouz\Providers\AirbrakeServiceProvider::class,
 
         /*
          * Application Service Providers...
