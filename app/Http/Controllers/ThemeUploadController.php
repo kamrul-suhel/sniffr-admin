@@ -184,7 +184,9 @@ class ThemeUploadController extends Controller {
         $video->save();
 
         // Slack notifications
-        $video->notify(new SubmissionNew($video));
+        if(env('APP_ENV') != 'local'){
+            $video->notify(new SubmissionNew($video));
+        }
 
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');
