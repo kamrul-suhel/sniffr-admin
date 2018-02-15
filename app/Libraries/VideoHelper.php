@@ -127,7 +127,7 @@ trait VideoHelper{
 
 	public static function videoLinkChecker($url, $state = 'new'){
 		$url = rtrim($url);
-		$linkVars = ['image' => false,'thumb' => false,'vertical' => NULL, 'youtube_id' => '', 'url' => $url, 'embed_code' => '', 'state' => $state];
+		$linkVars = ['image' => false,'thumb' => false,'vertical' => NULL, 'youtube_id' => '', 'youtube_time' => '', 'url' => $url, 'embed_code' => '', 'state' => $state];
 		$youtubeId = false;
 
 		if(str_contains($url, 'facebook')){ // Is Facebook
@@ -171,9 +171,10 @@ trait VideoHelper{
 			}
 		}else if(str_contains($url, 'youtu')){
 			$youtubeId = VideoHelper::getYoutubeID($url)['v'];
-
+			$youtubeTime = VideoHelper::getYoutubeID($url)['t'];
 			if($youtubeId){
 				$linkVars['youtube_id'] = $youtubeId;
+				$linkVars['youtube_time'] = $youtubeTime;
 				$linkVars['image'] = 'https://img.youtube.com/vi/'.$youtubeId.'/hqdefault.jpg';
 				$linkVars['thumb'] = 'https://img.youtube.com/vi/'.$youtubeId.'/default.jpg';
 			}
@@ -223,7 +224,13 @@ trait VideoHelper{
 
     public static function getYoutubeID($url)
     {
-        return (!empty($url) ? parse_str(parse_url($url, PHP_URL_QUERY), $key) : $key['v'] = $key['t'] = '');
+        if(!empty($url)){
+			parse_str(parse_url($url, PHP_URL_QUERY), $key);
+        } else {
+			$key['v'] = '';
+			$key['t'] = '';
+		}
+        return $key;
     }
 
 	/**

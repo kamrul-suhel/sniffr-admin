@@ -169,6 +169,7 @@ class ThemeUploadController extends Controller {
             $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
 
             $video->youtube_id = $linkDetails['youtube_id'];
+            //$video->youtube_time = $linkDetails['youtube_time'];
             $video->image = $linkDetails['image'];
             $video->thumb = $linkDetails['thumb'];
             $video->embed_code = $linkDetails['embed_code'];
