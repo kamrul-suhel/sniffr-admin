@@ -170,7 +170,7 @@ trait VideoHelper{
 				}
 			}
 		}else if(str_contains($url, 'youtu')){
-			$youtubeId = VideoHelper::getYoutubeID($url);
+			$youtubeId = VideoHelper::getYoutubeID($url)['v'];
 
 			if($youtubeId){
 				$linkVars['youtube_id'] = $youtubeId;
@@ -223,20 +223,7 @@ trait VideoHelper{
 
     public static function getYoutubeID($url)
     {
-    	$key = false;
-
-        if(!empty($url)){
-        	preg_match('#\?v\=([^\&]+)#', $url, $matches);
-
-        	$key = isset($matches[1]) ? $matches[1] : false;
-
-    		if(!$key){
-        		$bits = explode('/', rtrim($url, '/'));
-        		$key = array_pop($bits);
-        	}
-        }
-
-        return $key;
+        return (!empty($url) ? parse_str(parse_url($url, PHP_URL_QUERY), $key) : $key['v'] = $key['t'] = '');
     }
 
 	/**
