@@ -1308,7 +1308,6 @@ p.small{
   border: 1px solid rgb(221, 221, 221); 
   padding: 5px; 
   overflow: hidden; 
-  white-space: pre-wrap; 
   width: auto; 
   height: 200px;
 }
