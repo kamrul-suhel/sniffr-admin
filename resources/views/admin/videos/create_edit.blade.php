@@ -83,7 +83,7 @@
 					</div>
 					@elseif($video->state == 'new')
 					<div class="text-right">
-						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
+						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success disable-after-click">Accept</a>
 			        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
 					</div>
 					@elseif($video->state == 'accepted')
@@ -742,6 +742,12 @@
 					$('.new-video-file').hide();
 				}
 			});
+
+			$('.disable-after-click').click(function(){
+				$('.disable-after-click').click(function(e) {
+					e.preventDefault();
+				});
+			}
 
 			tinymce.init({
 				relative_urls: false,
