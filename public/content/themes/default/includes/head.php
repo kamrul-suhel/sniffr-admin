@@ -115,5 +115,5 @@
     });
 </script>
 <!-- load app.js in header else it won't work -->
-<script type="text/javascript" src="/assets/js/app.js?ver=1.1"></script>
+<script type="text/javascript" src="/assets/js/app.js?ver=1.2"></script>
 <!-- end js load -->
