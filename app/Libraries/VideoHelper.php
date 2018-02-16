@@ -170,8 +170,8 @@ trait VideoHelper{
 				}
 			}
 		}else if(str_contains($url, 'youtu')){
-			$youtubeId = VideoHelper::getYoutubeID($url)['v'];
-			$youtubeTime = VideoHelper::getYoutubeID($url)['t'];
+			$youtubeId = (isset(VideoHelper::getYoutubeID($url)['v']) ? VideoHelper::getYoutubeID($url)['v'] : '' );
+			$youtubeTime = (isset(VideoHelper::getYoutubeID($url)['t']) ? VideoHelper::getYoutubeID($url)['t'] : '' );
 			if($youtubeId){
 				$linkVars['youtube_id'] = $youtubeId;
 				$linkVars['youtube_time'] = $youtubeTime;
@@ -224,12 +224,15 @@ trait VideoHelper{
 
     public static function getYoutubeID($url)
     {
+		$key['v'] = '';
+		$key['t'] = '';
         if(!empty($url)){
-			parse_str(parse_url($url, PHP_URL_QUERY), $key);
-        } else {
-			$key['v'] = '';
-			$key['t'] = '';
-		}
+			if(str_contains($url, 'youtu.be')){
+				$key['v'] = substr($url, strrpos($url, '/') + 1);
+			} else {
+				parse_str(parse_url($url, PHP_URL_QUERY), $key);
+			}
+        }
         return $key;
     }
 
