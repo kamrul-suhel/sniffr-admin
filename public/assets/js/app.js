@@ -68076,37 +68076,32 @@ $('document').ready(function () {
 
     function errorMessage(data) {
         $('#dim-screen').hide();
+        data.userAgent = navigator.userAgent;
+        data.browser = navigator.appName;
+        data.browserVersion = parseFloat(navigator.appVersion);
+        console.log(data.responseJSON);
+        if (value == 'alert') {
+            $.ajax({
+                type: 'POST',
+                url: '/issue',
+                dataType: 'json',
+                data: data.responseJSON,
+                success: function success(data) {
+                    console.log(data);
+                    if (data.status == 'success') {
+                        //swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
+                    }
+                }
+            });
+        }
         swal({
-            title: 'Dammit! Something went wrong',
+            title: 'Dammit! Something went wrong. Our staff have been alerted',
             icon: 'error',
             buttons: {
-                cancel: 'Try again',
-                alert: {
-                    text: 'Report issue',
-                    value: 'alert'
-                }
+                cancel: 'Try again'
             },
             closeModal: true,
             closeOnClickOutside: true
-        }).then(function (value) {
-            data.userAgent = navigator.userAgent;
-            data.browser = navigator.appName;
-            data.browserVersion = '' + parseFloat(navigator.appVersion);
-            console.log(data.responseJSON);
-            if (value == 'alert') {
-                $.ajax({
-                    type: 'POST',
-                    url: '/issue',
-                    dataType: 'json',
-                    data: data.responseJSON,
-                    success: function success(data) {
-                        console.log(data);
-                        if (data.status == 'success') {
-                            swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
-                        }
-                    }
-                });
-            }
         });
     }
 
