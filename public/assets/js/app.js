@@ -68080,20 +68080,19 @@ $('document').ready(function () {
         data.browser = navigator.appName;
         data.browserVersion = parseFloat(navigator.appVersion);
         console.log(data.responseJSON);
-        if (value == 'alert') {
-            $.ajax({
-                type: 'POST',
-                url: '/issue',
-                dataType: 'json',
-                data: data.responseJSON,
-                success: function success(data) {
-                    console.log(data);
-                    if (data.status == 'success') {
-                        //swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
-                    }
+        $.ajax({
+            type: 'POST',
+            url: '/issue',
+            dataType: 'json',
+            data: data.responseJSON,
+            success: function success(data) {
+                console.log(data);
+                if (data.status == 'success') {
+                    //swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
                 }
-            });
-        }
+            }
+        });
+
         swal({
             title: 'Dammit! Something went wrong. Our staff have been alerted',
             icon: 'error',
