@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
+use Carbon\Carbon as Carbon;
+
 use App\Page;
 use App\Menu;
 use App\Video;
