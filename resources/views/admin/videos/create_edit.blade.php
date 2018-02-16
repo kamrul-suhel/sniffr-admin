@@ -83,7 +83,7 @@
 					</div>
 					@elseif($video->state == 'new')
 					<div class="text-right">
-						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success disable-after-click">Accept</a>
+						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success" onclick="disableButton(this.id);">Accept</a>
 			        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
 					</div>
 					@elseif($video->state == 'accepted')
@@ -674,6 +674,20 @@
 
 		}
 
+		function disableButton(id) {
+			$(id).removeAttr("href");
+			console.log(id);
+			swal({
+	            title: 'You already clicked this button',
+	            icon: 'error',
+	            buttons: {
+	                cancel: 'Close'
+	            },
+	            closeModal: true,
+	            closeOnClickOutside: false
+	        });
+		}
+
 		(function($){
 			var tagnames = new Bloodhound({
 				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -742,12 +756,6 @@
 					$('.new-video-file').hide();
 				}
 			});
-
-			$('.disable-after-click').click(function(){
-				$('.disable-after-click').click(function(e) {
-					e.preventDefault();
-				});
-			}
 
 			tinymce.init({
 				relative_urls: false,

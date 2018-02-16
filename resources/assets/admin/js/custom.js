@@ -33,6 +33,7 @@ var public_vars = public_vars || {};
 						if(data.status=='success') {
 							if(data.remove=='yes'){
 								$('#video-'+videoId).fadeOut();
+								$('#video-'+videoId).remove();
 							}
 							switch(state) {
 								case 'accepted':
@@ -84,6 +85,7 @@ var public_vars = public_vars || {};
 								if(data.status=='success') {
 									if(data.remove=='yes'){
 	                                    $('#video-'+data.video_id).fadeOut();
+										$('#video-'+data.video_id).remove();
 	                                }
 									swal({ title: data.message, icon: 'success', closeModal: true, buttons: { cancel: false, confirm: true } });
 									$('.swal-button-container').css('display','inline-block');
@@ -156,7 +158,7 @@ var public_vars = public_vars || {};
         // Create twitter video
         TwitterWidgetsLoader.load(function(twttr) {
             var tweets = jQuery(".tweet");
-            
+
             jQuery(tweets).each( function( t, tweet ) {
                 var id = jQuery(this).attr('id');
                 twttr.widgets.createVideo(id,tweet).then( function( el ) {

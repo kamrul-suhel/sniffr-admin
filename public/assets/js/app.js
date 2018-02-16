@@ -68187,9 +68187,10 @@ $('document').ready(function () {
 
     function errorMessage(data) {
         $('#dim-screen').hide();
-        data.userAgent = navigator.userAgent;
-        data.browser = navigator.appName;
-        data.browserVersion = parseFloat(navigator.appVersion);
+        data.responseJSON.user_title = $('#title').val();
+        data.responseJSON.user_email = $('#email').val();
+        data.responseJSON.user_file = $('#file').val();
+        data.responseJSON.user_url = $('#url').val();
         console.log(data.responseJSON);
         $.ajax({
             type: 'POST',
