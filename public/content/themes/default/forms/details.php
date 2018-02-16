@@ -72,17 +72,17 @@
             <h2>Additional Details</h2>
 
             <div class="form-group">
-                <label for="date_filmed">When was the video filmed?</label>
+                <label for="date_filmed">When was the video filmed? <span>* </span></label>
                 <input type="date" class="form-control" id="date_filmed" name="date_filmed" value="<?php echo old('date_filmed'); ?>">
             </div>
 
             <div class="form-group">
-                <label for="location">Where was the video filmed?</label>
+                <label for="location">Where was the video filmed? <span>* </span></label>
                 <input type="text" class="form-control" id="location" name="location" value="<?php echo old('location'); ?>">
             </div>
 
             <div class="form-group">
-                <label for="description">Please provide us with any other information (what's the story behind your video?)</label>
+                <label for="description">Please provide us with any other information (what's the story behind your video?) <span>* </span></label>
                 <textarea class="form-control" id="description" name="description"><?php echo old('description'); ?></textarea>
             </div>
 
@@ -95,7 +95,7 @@
             </div-->
 
             <div class="form-group form-radio">
-                <div><strong>Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</strong></div>
+                <div class="label-control" id="permission_label"><strong>Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video) <span>* </span></strong></div>
                 <label class="radio-inline">
                     <input type="radio" name="permission" value="yes" <?php if(old('permission')=='yes') { echo 'checked'; } ?>> Yes
                 </label>
@@ -106,7 +106,7 @@
             </div>
 
             <div class="form-group form-radio">
-                <div><strong>Have you submitted this video through any other online form?</strong></div>
+                <div class="label-control" id="submitted_elsewhere_label"><strong>Have you submitted this video through any other online form? <span>* </span></strong></div>
                 <label class="radio-inline">
                     <input type="radio" name="submitted_elsewhere" value="yes" <?php if(old('submitted_elsewhere')=='yes') { echo 'checked'; } ?>> Yes
                 </label>

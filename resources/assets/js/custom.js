@@ -99,13 +99,13 @@ $('document').ready(function(){
                 email: true
             },
             date_filmed: {
-                required: false
+                required: true
             },
             location: {
-                required: false
+                required: true
             },
             description: {
-                required: false
+                required: true
             },
             permission: {
                 required: true
@@ -142,18 +142,18 @@ $('document').ready(function(){
             is_exclusive: 'You must confirm you agree to this statement'
         },
         errorPlacement: function (error, element) {
-            if(element.attr('name') == 'permission') {
-                error.insertAfter('.permission-below');
-            } else if(element.attr('name') == 'submitted_elsewhere') {
-                error.insertAfter('.submitted_elsewhere-below');
-            } else if(element.attr('name') == 'contact_is_owner') {
+            if(element.attr('name') == 'contact_is_owner') {
                 error.appendTo('.terms-copy[data-attr=contact_is_owner]');
             } else if(element.attr('name') == 'allow_publish') {
                 error.appendTo('.terms-copy[data-attr=allow_publish]');
             } else if(element.attr('name') == 'is_exclusive') {
                 error.appendTo('.terms-copy[data-attr=is_exclusive]');
+            } else if(element.attr('name') == 'permission') {
+                error.appendTo('#permission_label');
+            } else if(element.attr('name') == 'submitted_elsewhere') {
+                error.appendTo('#submitted_elsewhere_label');
             } else {
-                error.insertAfter(element);
+                error.appendTo($('label[for='+element.attr('name')+']'));
             }
         }
     });

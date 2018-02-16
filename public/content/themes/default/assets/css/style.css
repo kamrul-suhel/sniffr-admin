@@ -145,7 +145,7 @@ h4.subheadline {
 label {
   display: block;
 }
-label span, .styled-checkbox span {
+label span, .styled-checkbox span, .label-control span {
   color: #ef626c;
   font-size:18px;
   font-weight:800;
