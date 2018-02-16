@@ -160,3 +160,5 @@
 
     <?php endif; ?>
 </form>
+
+<?php include('content/themes/default/includes/mousestats.php'); ?>

@@ -138,3 +138,5 @@
     <input type="hidden" name="iframe" value="true">
     <?php endif; ?>
 </form>
+
+<?php include('content/themes/default/includes/mousestats.php'); ?>
