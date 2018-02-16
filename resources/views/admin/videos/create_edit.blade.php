@@ -83,7 +83,7 @@
 					</div>
 					@elseif($video->state == 'new')
 					<div class="text-right">
-						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
+						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success" onclick="disableButton(this.id);">Accept</a>
 			        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
 					</div>
 					@elseif($video->state == 'accepted')
@@ -672,6 +672,20 @@
 		   	   }, 2000);
 	   	   }
 
+		}
+
+		function disableButton(id) {
+			$(id).removeAttr("href");
+			console.log(id);
+			swal({
+	            title: 'You already clicked this button',
+	            icon: 'error',
+	            buttons: {
+	                cancel: 'Close'
+	            },
+	            closeModal: true,
+	            closeOnClickOutside: false
+	        });
 		}
 
 		(function($){

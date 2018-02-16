@@ -211,13 +211,16 @@ class ThemeUploadController extends Controller {
         }
     }
 
-    public function issueAlert() {
+    public function issueAlert(Request $request) {
         $alert = 'File: '.Input::get('file').',
         Line: '.Input::get('line').',
         Message: '.Input::get('message').',
-        UserAgent: '.Input::get('userAgent').',
-        Browser: '.Input::get('browser').',
-        Browser Version: '.Input::get('browserVersion').'';
+        Exception: '.Input::get('exception').',
+        Title: '.Input::get('user_title').',
+        Email: '.Input::get('user_email').',
+        File: '.Input::get('user_file').',
+        Url: '.Input::get('user_url').',
+        UserAgent: '.$_SERVER['HTTP_USER_AGENT'].'';
         //$all = Input::all();
         // Slack notifications
         $user = new User();
