@@ -72,12 +72,12 @@
             <h2>Additional Details</h2>
 
             <div class="form-group">
-                <label for="date_filmed">When was the video filmed? <span>* </span></label>
+                <label for="date_filmed">When was the video filmed?</label>
                 <input type="date" class="form-control" id="date_filmed" name="date_filmed" value="<?php echo old('date_filmed'); ?>">
             </div>
 
             <div class="form-group">
-                <label for="location">Where was the video filmed? <span>* </span></label>
+                <label for="location">Where was the video filmed?</label>
                 <input type="text" class="form-control" id="location" name="location" value="<?php echo old('location'); ?>">
             </div>
 

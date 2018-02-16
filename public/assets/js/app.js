@@ -68006,10 +68006,10 @@ $('document').ready(function () {
                 email: true
             },
             date_filmed: {
-                required: true
+                required: false
             },
             location: {
-                required: true
+                required: false
             },
             description: {
                 required: true
