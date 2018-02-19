@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
+use Carbon\Carbon as Carbon;
+
 use App\Page;
 use App\Menu;
 use App\Video;
@@ -27,8 +29,6 @@ use App\Notifications\DetailsReview;
 class ThemeDetailsController extends Controller
 {
     protected $rules = [
-        'date_filmed' => 'required',
-        'location' => 'required',
         'description' => 'required',
         'permission' => 'required',
         'submitted_elsewhere' => 'required',
@@ -105,7 +105,11 @@ class ThemeDetailsController extends Controller
             $contact->tel = Input::get('tel');
             $contact->save();
 
-            $video->date_filmed = Input::get('date_filmed');
+            $date = Input::get('date_filmed');
+            if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date)) {
+                $video->date_filmed = Input::get('date_filmed');
+            }
+            
             $video->location = Input::get('location');
             $video->description = Input::get('description');
             $video->permission = Input::get('permission') == 'yes' ? 1 : 0;

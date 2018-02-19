@@ -92,7 +92,7 @@
 	</div>
 </div>
 
-<script src="/assets/admin/js/app.js"></script>
+<script src="/assets/admin/js/app.js?ver=1.0"></script>
 <script src="/assets/admin/js/video.js"></script>
 <script src="/assets/admin/js/videojs-vimeo.js"></script>
 
