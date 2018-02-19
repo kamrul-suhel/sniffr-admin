@@ -1,33 +1,33 @@
 $('document').ready(function(){
     //internation phone numbers
-    var telInput = $('#temp-tel'),
-        errorMsg = $('#error-msg'),
-        validMsg = $('#valid-msg');
-    telInput.intlTelInput({
-        utilsScript: '/assets/js/utils.js',
-        initialCountry: 'gb',
-        preferredCountries: ['gb', 'us', 'au', 'ie', 'ca'],
-        excludeCountries: ['af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'ag', 'am', 'az']
-    });
-    var reset = function() {
-        telInput.removeClass('error');
-        errorMsg.addClass('hide');
-        validMsg.addClass('hide');
-        telInput.val('');
-    };
-    telInput.on('propertychange input', function (e) {
-        if ($.trim(telInput.val())) {
-            if (telInput.intlTelInput("isValidNumber")) {
-              validMsg.removeClass("hide");
-              errorMsg.addClass("hide");
-            } else {
-              validMsg.addClass("hide");
-              errorMsg.removeClass("hide");
-            }
-            $('#tel').val($(this).intlTelInput("getNumber"));
-        }
-    });
-    telInput.on('countrychange', reset);
+    // var telInput = $('#temp-tel'),
+    //     errorMsg = $('#error-msg'),
+    //     validMsg = $('#valid-msg');
+    // telInput.intlTelInput({
+    //     utilsScript: '/assets/js/utils.js',
+    //     initialCountry: 'gb',
+    //     preferredCountries: ['gb', 'us', 'au', 'ie', 'ca'],
+    //     excludeCountries: ['af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'ag', 'am', 'az']
+    // });
+    // var reset = function() {
+    //     telInput.removeClass('error');
+    //     errorMsg.addClass('hide');
+    //     validMsg.addClass('hide');
+    //     telInput.val('');
+    // };
+    // telInput.on('propertychange input', function (e) {
+    //     if ($.trim(telInput.val())) {
+    //         if (telInput.intlTelInput("isValidNumber")) {
+    //           validMsg.removeClass("hide");
+    //           errorMsg.addClass("hide");
+    //         } else {
+    //           validMsg.addClass("hide");
+    //           errorMsg.removeClass("hide");
+    //         }
+    //         $('#tel').val($(this).intlTelInput("getNumber"));
+    //     }
+    // });
+    // telInput.on('countrychange', reset);
 
     $('.terms-copy').on('click',function(e){
         var selected_id = $(e.target).attr('data-attr');
