@@ -33,8 +33,8 @@ require('nestable2');
 require('bootstrap-select');
 require('dropzone');
 require('select2');
+require('chart.js');
 
-window.Rickshaw = require('rickshaw');
 window.Bloodhound = require('corejs-typeahead');
 window.toastr = require('toastr');
 window.TwitterWidgetsLoader = require('twitter-widgets');

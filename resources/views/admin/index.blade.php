@@ -51,16 +51,11 @@
         <div class="panel panel-primary" id="charts_env">
             <div class="panel-heading">
                 <div class="panel-title">Video Submissions</div>
-                
-                <div class="panel-options">
-                    <div class="ViewSelector" id="view-selector-container"></div>
-                </div>
             </div>
 
             <div class="panel-body chart1-panel">
                 <div class="tab-content">
-                    <div class="chart"  id="chart-1-container"></div>
-                    <div id="legend-1-container"></div>
+                    <canvas id="video-traffic"></canvas>
                 </div>
             </div><!-- .panel-body -->
         </div><!-- .panel-primary -->
@@ -124,75 +119,111 @@
 
 @section('javascript')
 <script>
+    
 	(function($){
+        var ctx = $('#video-traffic');
+        ctx.height(285);
 
-		var graph = new Rickshaw.Graph( {
-			element: document.querySelector("#chart-1-container"),
-			renderer: 'area',
-			stroke: true,
-			series: [ {
-				data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-				color: '#9cc1e0'
-			}, {
-				data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-				color: '#cae2f7'
-			} ]
-		} );
+        new Chart($("#video-traffic"),{
+            "type":"bar",
+            "data":{
+                "labels":[
+                    <?php foreach($video_traffic as $video){
+                        echo '"'.$video[0]->created_at->format('D jS').'",';
+                    }?>
+                ],
+                "datasets":[{
+                    "data":[
+                        <?php foreach($video_traffic as $video){
+                            echo count($video).',';
+                        }?>
+                    ],
+                    "fill":false,
+                    "backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],"borderColor":["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                    "borderWidth":1
+                }]
+            },
+            "options":{
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                "scales":{
+                    "yAxes":[{
+                        "ticks":{
+                            "beginAtZero":true
+                        }
+                    }]
+                }
+            }
+        });
+		// var graph = new Rickshaw.Graph( {
+		// 	element: document.querySelector("#chart-1-container"),
+		// 	renderer: 'area',
+		// 	stroke: true,
+		// 	series: [ {
+		// 		data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+		// 		color: '#9cc1e0'
+		// 	}, {
+		// 		data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+		// 		color: '#cae2f7'
+		// 	} ]
+		// } );
 
-		graph.render();
+		// graph.render();
 
-		var graph = new Rickshaw.Graph({
-			element: document.querySelector("#chart-2-container"),
-			renderer: 'line',
-			series: [{
-				data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-				color: '#4682b4'
-			}, {
-				data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-				color: '#9cc1e0'
-			}, {
-				data: [ { x: 0, y: 20 }, { x: 1, y: 10 }, { x: 2, y: 23 }, { x: 3, y: 19 }, { x: 4, y: 39 } ],
-				color: '#4682b4'
-			}, {
-				data: [ { x: 0, y: 20 }, { x: 1, y: 33 }, { x: 2, y: 10 }, { x: 3, y: 50 }, { x: 4, y: 9 } ],
-				color: '#9cc1e0'
-			}]
-		});
-		graph.render();
+		// var graph = new Rickshaw.Graph({
+		// 	element: document.querySelector("#chart-2-container"),
+		// 	renderer: 'line',
+		// 	series: [{
+		// 		data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+		// 		color: '#4682b4'
+		// 	}, {
+		// 		data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+		// 		color: '#9cc1e0'
+		// 	}, {
+		// 		data: [ { x: 0, y: 20 }, { x: 1, y: 10 }, { x: 2, y: 23 }, { x: 3, y: 19 }, { x: 4, y: 39 } ],
+		// 		color: '#4682b4'
+		// 	}, {
+		// 		data: [ { x: 0, y: 20 }, { x: 1, y: 33 }, { x: 2, y: 10 }, { x: 3, y: 50 }, { x: 4, y: 9 } ],
+		// 		color: '#9cc1e0'
+		// 	}]
+		// });
+		// graph.render();
 
-	  	var graph = new Rickshaw.Graph( {
-			element: document.querySelector("#chart-3-container"),
-			renderer: 'bar',
-			series: [
-				{
-					data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-					color: '#4682b4',
-					name: 'chrome'
-				}, {
-					data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-					color: '#9cc1e0',
-					name: 'safari'
-			} ]
-		});
+	 //  	var graph = new Rickshaw.Graph( {
+		// 	element: document.querySelector("#chart-3-container"),
+		// 	renderer: 'bar',
+		// 	series: [
+		// 		{
+		// 			data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+		// 			color: '#4682b4',
+		// 			name: 'chrome'
+		// 		}, {
+		// 			data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+		// 			color: '#9cc1e0',
+		// 			name: 'safari'
+		// 	} ]
+		// });
 
-		graph.render();
+		// graph.render();
 
-		var graph = new Rickshaw.Graph( {
-			element: document.querySelector("#chart-4-container"),
-			renderer: 'bar',
-			stack: false,
-			series: [
-				{
-					data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-					color: '#4682b4'
-				}, {
-					data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-					color: '#9cc1e0'
+		// var graph = new Rickshaw.Graph( {
+		// 	element: document.querySelector("#chart-4-container"),
+		// 	renderer: 'bar',
+		// 	stack: false,
+		// 	series: [
+		// 		{
+		// 			data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+		// 			color: '#4682b4'
+		// 		}, {
+		// 			data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+		// 			color: '#9cc1e0'
 
-			} ]
-		} );
+		// 	} ]
+		// } );
 
-		graph.render();
+		// graph.render();
 
 	})(jQuery);
 </script>

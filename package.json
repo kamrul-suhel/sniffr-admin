@@ -45,6 +45,7 @@
     },
     "dependencies": {
         "bootstrap-select": "^1.12.4",
+        "chart.js": "^2.7.1",
         "dropzone": "^5.3.0",
         "file-loader": "^1.1.6",
         "font-awesome": "^4.7.0",
