@@ -52,16 +52,10 @@
         </div>
 
         <div class="form-group">
-            <label for="temp-tel">Phone Number:</label>
+            <label for="tel">Phone Number:</label>
 
             <div class="input-group">
                 <div class="input-group-addon icon-phone"></div>
-                <!--input type="tel" class="form-control" id="temp-tel" name="temp-tel" placeholder="Phone" value="<?php echo old('tel'); ?>">
-                <div class="input-group-addon">
-                    <span id="valid-msg" class="hide">✓ Valid number</span>
-                    <span id="error-msg" class="hide">Invalid number</span>
-                </div-->
-
                 <input type="tel" id="tel" class="form-control" placeholder="Phone" name="tel" value="<?php echo old('tel'); ?>">
             </div>
         </div>
