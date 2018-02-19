@@ -73,11 +73,13 @@ class AdminVideosController extends Controller {
         $videos = new Video;
 
         if(!empty($search_value)){
-            $videos = Video::where(function($query) use($search_value){
-                $query->where('title', 'LIKE', '%'.$search_value.'%');
-            })->orWhereHas('tags', function ($q) use($search_value){
-                $q->where('name', 'LIKE', '%'.$search_value.'%');
-            })->orWhere('alpha_id', $search_value);
+            $videos = $videos->where(function($query) use($search_value){
+                $query->where('title', 'LIKE', '%'.$search_value.'%')
+                ->orWhereHas('tags', function ($q) use($search_value){
+                    $q->where('name', 'LIKE', '%'.$search_value.'%');
+                })
+                ->orWhere('alpha_id', $search_value);
+            });
         }
 
         if(!empty($category_value)){
