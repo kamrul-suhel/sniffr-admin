@@ -68325,9 +68325,9 @@ $('document').ready(function () {
                 data: data.responseJSON,
                 success: function success(data) {
                     //console.log(data);
-                    if (data.status == 'success') {
-                        //swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
-                    }
+                    // if(data.status=='success') {
+                    //     swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
+                    // }
                 }
             });
         }
