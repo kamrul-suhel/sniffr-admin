@@ -68313,24 +68313,24 @@ $('document').ready(function () {
     function errorMessage(data) {
         $('#dim-screen').hide();
         if (data && data.responseJSON) {
-            data.responseJSON.user_title = $('#title').val();
-            data.responseJSON.user_email = $('#email').val();
-            data.responseJSON.user_file = $('#file').val();
-            data.responseJSON.user_url = $('#url').val();
-            console.log(data.responseJSON);
-        }
-        $.ajax({
-            type: 'POST',
-            url: '/issue',
-            dataType: 'json',
-            data: data.responseJSON,
-            success: function success(data) {
-                console.log(data);
-                if (data.status == 'success') {
-                    //swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
+            data.responseJSON.user_title = $('#title').val() ? $('#title').val() : '';
+            data.responseJSON.user_email = $('#email').val() ? $('#email').val() : '';
+            data.responseJSON.user_file = $('#file').val() ? $('#file').val() : '';
+            data.responseJSON.user_url = $('#url').val() ? $('#url').val() : '';
+            //console.log(data.responseJSON);
+            $.ajax({
+                type: 'POST',
+                url: '/issue',
+                dataType: 'json',
+                data: data.responseJSON,
+                success: function success(data) {
+                    //console.log(data);
+                    if (data.status == 'success') {
+                        //swal({ title: 'Thanks! Our staff have been alerted', closeModal: false });
+                    }
                 }
-            }
-        });
+            });
+        }
 
         swal({
             title: 'Dammit! Something went wrong. Our staff have been alerted',
