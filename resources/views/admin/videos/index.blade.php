@@ -122,7 +122,7 @@
 									@else
 										<i class="fa fa-clock-o" title="More details sent"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
 									@endif
-								
+
 								@elseif($video->state == 'rejected')
 								<i class="fa fa-times" title="Rejected"></i> Rejected
 								@elseif($video->state == 'problem')
@@ -178,6 +178,11 @@
 								@if($video->state == 'problem' || $video->state == 'rejected')
 								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="js-delete">
 									<i class="fa fa-trash-o"></i>
+								</a>
+								@endif
+								@if($video->state != 'new')
+								<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
+									<i class="fa fa-print"></i>
 								</a>
 								@endif
 								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">

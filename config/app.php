@@ -178,6 +178,7 @@ return [
         Thujohn\Twitter\TwitterServiceProvider::class,
         Larareko\Rekognition\RekognitionServiceProvider::class,
         Kouz\Providers\AirbrakeServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -247,6 +248,7 @@ return [
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         'Rekognition' => 'Larareko\Rekognition\RekognitionFacade',
 
     ],

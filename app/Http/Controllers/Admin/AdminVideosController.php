@@ -10,6 +10,7 @@ use Redirect;
 use Validator;
 use DateTime;
 use DateInterval;
+use PDF;
 
 use Google_Client;
 use Google_Service_YouTube;
@@ -847,6 +848,23 @@ class AdminVideosController extends Controller {
 
         if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
             @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) );
+        }
+    }
+
+    public function pdfview($alpha_id)
+    {
+        $video = Video::where('alpha_id', $alpha_id)->first();
+
+        $data = array(
+            'video' => $video,
+        );
+
+        $pdf = PDF::loadView('admin.videos.pdfview', $data);
+
+        if(!empty($video)) {
+            return $pdf->download($alpha_id.'.pdf'); //return view('admin.videos.pdfview', $data);
+        } else {
+            return Redirect::to('admin/videos/')->with(array('note' => 'Sorry, we could not find the video', 'note_type' => 'error') );
         }
     }
 

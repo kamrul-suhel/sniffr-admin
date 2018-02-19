@@ -79,7 +79,10 @@
 			        	@endif
 						@if($video->state == 'licensed' && $video->file)
 						&nbsp;&nbsp; <a href="{{ url('/download/'.$video->alpha_id) }}" class="btn btn-primary{{ $video->file_watermark ? ' js-download' : '' }}" download><i class="fa fa-download"></i> Download Video</a>
+						@else
+						&nbsp;&nbsp;
 						@endif
+						<a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary" download><i class="fa fa-print"></i> Download License</a>
 					</div>
 					@elseif($video->state == 'new')
 					<div class="text-right">
@@ -88,14 +91,16 @@
 					</div>
 					@elseif($video->state == 'accepted')
 					@if($video->reminders)
-						Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+						&nbsp;&nbsp; Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					@else
-						More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
+						&nbsp;&nbsp; More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
 					@endif
+					<a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary pull-right" download><i class="fa fa-print"></i> Download License</a>
 					<div class="clearfix"></div>
 					@elseif($video->state == 'rejected')
 					<div class="text-right">
 						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
+						&nbsp;&nbsp; <a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary pull-right" download><i class="fa fa-print"></i> Download License</a>
 					</div>
 					@endif
 				</div>

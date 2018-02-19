@@ -8,6 +8,7 @@
         "php": ">=7.0.0",
         "aws/aws-sdk-php-laravel": "~3.0",
         "baopham/dynamodb": "^4.1",
+        "barryvdh/laravel-dompdf": "^0.8.2",
         "dawson/youtube": "^4.1",
         "dumpk/elastcoder": "^0.9.0",
         "facebook/graph-sdk": "^5.6",
