@@ -411,23 +411,25 @@ class AdminVideosController extends Controller {
     {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
-        $user = User::where('id', $video->user_id)->first();
+        if(!empty($video)) {
+            $user = User::where('id', $video->user_id)->first();
 
-        $data = array(
-            'headline' => '<i class="fa fa-edit"></i> Edit Video',
-            'video' => $video,
-            'post_route' => url('admin/videos/update'),
-            'button_text' => 'Update Video',
-            'admin_user' => Auth::user(),
-            'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
-            'video_shottypes' => VideoShotType::all(),
-            'video_campaigns' => Campaign::all(),
-            'users' => User::all(),
-            'user' => $user
-        );
+            $data = array(
+                'headline' => '<i class="fa fa-edit"></i> Edit Video',
+                'video' => $video,
+                'post_route' => url('admin/videos/update'),
+                'button_text' => 'Update Video',
+                'admin_user' => Auth::user(),
+                'video_categories' => VideoCategory::all(),
+                'video_collections' => VideoCollection::all(),
+                'video_shottypes' => VideoShotType::all(),
+                'video_campaigns' => Campaign::all(),
+                'users' => User::all(),
+                'user' => $user
+            );
+        }
 
-        return view('admin.videos.create_edit', $data);
+        return (!empty($video) ? view('admin.videos.create_edit', $data) : Redirect::to('admin/videos/')->with(array('note' => 'Sorry, we could not find the video', 'note_type' => 'error')));
     }
 
     /**
@@ -861,11 +863,7 @@ class AdminVideosController extends Controller {
 
         $pdf = PDF::loadView('admin.videos.pdfview', $data);
 
-        if(!empty($video)) {
-            return $pdf->download($alpha_id.'.pdf'); //return view('admin.videos.pdfview', $data);
-        } else {
-            return Redirect::to('admin/videos/')->with(array('note' => 'Sorry, we could not find the video', 'note_type' => 'error') );
-        }
+        return (!empty($video) ? $pdf->download($alpha_id.'.pdf') : Redirect::to('admin/videos/')->with(array('note' => 'Sorry, we could not find the video', 'note_type' => 'error')));
     }
 
 }
