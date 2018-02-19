@@ -32,7 +32,7 @@ td.small {
 
         <tr>
             <td class="grey">Submission Date:</td>
-			<td>{{ $video->created_at }}</td>
+			<td>{{ Carbon\Carbon::parse($video->created_at)->format('jS \o\f F, Y g:i:s a') }}</td>
 		</tr>
 
         <tr>
@@ -71,7 +71,7 @@ td.small {
         @if(!empty($video->more_details))
         <tr>
             <td class="grey">Date Filmed:</td>
-			<td>{{ (!empty($video->date_filmed) ? Carbon\Carbon::parse($video->date_filmed)->format('d m Y i') : 'Not provided') }}</td>
+			<td>{{ (!empty($video->date_filmed) ? Carbon\Carbon::parse($video->date_filmed)->format('jS \o\f F, Y g:i:s a') : 'Not provided') }}</td>
 		</tr>
         <tr>
             <td class="grey">Where Filmed:</td>
