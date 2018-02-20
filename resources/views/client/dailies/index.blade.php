@@ -50,7 +50,20 @@
 
     <div class="gallery-env">
         <div class="row">
-            @foreach($videos as $video)
+            <?php
+			$currentDay = '';
+			foreach($videos as $video):
+				if($video->created_at->isToday()) {
+					$date = 'Today';
+				} else {
+					// $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->licensed_at)->diffForHumans();
+					$date = date('jS M',strtotime($video->licensed_at));
+				}
+				if($currentDay != $date){
+					$currentDay = $date;
+					echo '<div class="col-xs-12 date-header"><h2>'.$date.'</h2></div>';
+				}
+			?>
             <div class="col-sm-6 col-md-4" id="video-{{ $video->alpha_id }}">
                 <article class="album">
                     <header>
@@ -106,9 +119,9 @@
                     </footer>
                 </article>
             </div>
-            @endforeach
+            <?php endforeach; ?>
 
-            <div class="text-center"><?= $videos->appends(Request::only('s'))->render(); ?></div>
+            <div class="col-md-12 text-center"><?= $videos->appends(Request::only('s'))->render(); ?></div>
         </div>
     </div>
     @endif

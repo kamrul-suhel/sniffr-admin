@@ -71,7 +71,6 @@
 	<div class="gallery-env">
 		<div class="row">
 			<?php
-
 			$currentDay = '';
 			foreach($videos as $video):
 				if($video->created_at->isToday()) {
