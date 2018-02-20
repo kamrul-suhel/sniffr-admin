@@ -44,6 +44,6 @@ class DetailsReview extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('More details submitted for: ' . $notifiable->title .' : '. url('admin/videos/edit/' . $this->video->alpha_id));
+           ->content('More details submitted for: ' . $notifiable->title .': '. url('admin/videos/edit/' . $this->video->alpha_id));
     }
 }

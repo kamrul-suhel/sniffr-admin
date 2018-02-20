@@ -64,6 +64,6 @@ class ClientAction extends Notification
         }
 
         return (new SlackMessage)
-           ->content($this->client_name.' '.$message.': ' . $notifiable->title .' : '. url('admin/videos/edit/' . $this->video->alpha_id));
+           ->content($this->client_name.' '.$message.': ' . $this->video->title .': '. url('admin/videos/edit/' . $this->video->alpha_id));
     }
 }

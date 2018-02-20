@@ -227,7 +227,7 @@ trait VideoHelper{
 		$key['v'] = '';
 		$key['t'] = '';
         if(!empty($url)){
-			if(str_contains($url, 'youtu.be')){
+			if(str_contains($url, '/youtu.')){
 				$key['v'] = substr($url, strrpos($url, '/') + 1);
 			} else {
 				parse_str(parse_url($url, PHP_URL_QUERY), $key);
