@@ -78,6 +78,9 @@ class AdminVideosController extends Controller {
                 ->orWhereHas('tags', function ($q) use($search_value){
                     $q->where('name', 'LIKE', '%'.$search_value.'%');
                 })
+                ->orWhereHas('contact', function ($q) use($search_value){
+                    $q->where('email', 'LIKE', '%'.$search_value.'%');
+                })
                 ->orWhere('alpha_id', $search_value);
             });
         }
