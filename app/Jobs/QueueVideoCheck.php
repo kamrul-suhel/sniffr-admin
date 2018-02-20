@@ -96,6 +96,9 @@ class QueueVideoCheck implements ShouldQueue
                             Storage::disk('s3')->setVisibility(basename($check_file), 'public');
                             //$elastcoder->setPublicObject(basename($thumbnail_file), 'vlp-storage');
                             $video->file_watermark = $check_file;
+                            if(!empty($job['Output']['Duration'])) {
+                                $video->duration = $job['Output']['Duration'];
+                            }
                             $video->save();
                         } else {
                             $job_complete = 0;

@@ -230,11 +230,15 @@ class ThemeUploadController extends Controller {
     }
 
     public function videoCheck(Request $request) {
-        $data = Input::all();
+        //$data = Input::all();
+
+        $postBody = file_get_contents('php://input');
+        $message = json_decode($postBody, true);
+
         $youtube_ingest = false;
-        if($data['jobId']){
+        if($message['jobId']){
             $user = new User();
-            $user->notify(new SubmissionAlert('watermark test (jobId: '.$data['jobId'].', input: '.$data['input']['key'].', output: '.$data['outputs']['key'].')'));
+            $user->notify(new SubmissionAlert('watermark test (jobId: '.$message['jobId'].', input: '.$message['input']['key'].', output: '.$message['outputs']['key'].')'));
         }
     }
 }
