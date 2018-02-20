@@ -228,4 +228,13 @@ class ThemeUploadController extends Controller {
         //return success
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
+
+    public function videoCheck(Request $request) {
+        $data = Input::all();
+        $youtube_ingest = false;
+        if($data['jobId']){
+            $user = new User();
+            $user->notify(new SubmissionAlert('watermark test (jobId: '.$data['jobId'].', input: '.$data['input']['key'].', output: '.$data['outputs']['key'].')'));
+        }
+    }
 }
