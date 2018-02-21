@@ -244,7 +244,8 @@ class AdminVideosController extends Controller {
                 );
 
                 // Upload it to youtube
-                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+                $video_title_temp = str_limit($video->title, $limit = 90, $end = '..');
+                $response = MyYoutube::upload($file_watermark, ['title' => $video_title_temp], 'unlisted');
                 $youtubeId  = $response->getVideoId();
 
                 $video->youtube_id = $youtubeId;
