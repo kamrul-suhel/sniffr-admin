@@ -230,15 +230,28 @@ class ThemeUploadController extends Controller {
     }
 
     public function videoCheck(Request $request) {
-        //$data = Input::all();
+        $postHeader = $request->header('x-amz-sns-message-type');
+        if($postHeader) {
+            $postBody = $request->file();
+            $postBody = array_values($postBody)[0];
+            $postFile = file_get_contents($postBody->getRealPath());
+            $postFile = preg_replace('!\\r?\\n!', '', $postFile);
+            $postFile = str_replace('(', '{', $postFile);
+            $postFile = str_replace(')', '}', $postFile);
+            $postFile = json_decode($postFile);
 
-        $postBody = file_get_contents('php://input');
-        $message = json_decode($postBody, true);
+            // echo $postFile->jobId.'<br />';
+            // echo $postFile->input->key.'<br />';
+            // echo $postFile->outputs->key.'<br />';
+            // echo $postFile->outputs->duration.'<br />';
 
-        $youtube_ingest = false;
-        if($message['jobId']){
-            $user = new User();
-            $user->notify(new SubmissionAlert('watermark test (jobId: '.$message['jobId'].', input: '.$message['input']['key'].', output: '.$message['outputs']['key'].')'));
+            $youtube_ingest = false;
+            if($postFile->jobId){
+                $user = new User();
+                $user->notify(new SubmissionAlert('watermark test '.$postHeader.' (jobId: '.$postFile->jobId.', input: '.$postFile->input->key.', output: '.$postFile->outputs->key.')'));
+            }
         }
+
+        response()->json(['jobId' => $postFile->jobId, 'input' => $postFile->input->key, 'output' => $postFile->outputs->key, 'duration' => $postFile->outputs->duration]);
     }
 }
