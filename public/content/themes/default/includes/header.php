@@ -33,7 +33,7 @@
                                 <?php if(Auth::user()->role == 'client' && Auth::user()->username == 'dailymail'): ?>
                                 <li><a href="<?= url('client/dashboard') ?>">Dailies</a></li>
                                 <?php endif; ?>
-                                <?php if(Auth::user()->role == 'admin'): ?>
+                                <?php if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'): ?>
                                     <li class="divider"></li>
                                     <li><a href="<?= url('admin') ?>"> Admin</a></li>
                                 <?php endif; ?>

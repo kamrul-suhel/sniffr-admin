@@ -33,7 +33,7 @@ class ThemeVideoController extends Controller {
 
     public function __construct()
     {
-        $this->middleware('client');
+        //$this->middleware('client');
         $settings = Setting::first();
         $this->videos_per_page = $settings->videos_per_page;
     }
