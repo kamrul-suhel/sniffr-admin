@@ -64,37 +64,32 @@
 	<div class="col-sm-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Submissions Breakdown</div>
+                <div class="panel-title">Submissions State Overview</div>
             </div>
 
             <div class="panel-body">
 				<div class="tab-content">
-    				<canvas id="sub-breakdown"></canvas>
+    				<canvas id="sub-state-overview"></canvas>
     			</div>
     		</div>
     	</div>
-    </div><!-- .col-sm-4 -->
-</div><!-- .row -->
+    </div>
+</div>
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="panel panel-primary" id="charts_env">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
-			     <div class="panel-title">Best performing videos</div>
+			     <div class="panel-title">Submissions Breakdown</div>
             </div>
 
 			<div class="panel-body">
-				<div class="tab-content">
-					<div class="chart" id="chart-3-container"></div>
-					
-                    <div id="legend_container">
-						<div id="smoother" title="Smoothing"></div>
-						<div id="legend-3"></div>
-					</div>
-				</div>
-			</div>
-		</div><!-- .panel-primary -->
-	</div><!-- .col-sm-6 -->
+                <div class="tab-content">
+                    <canvas id="sub-breakdown-graph"></canvas>
+                </div>
+            </div>
+		</div>
+	</div>
 
 	<div class="col-sm-6">
 		<div class="panel panel-primary" id="charts_env">
@@ -112,9 +107,9 @@
 					</div>
 				</div>
 			</div>
-		</div><!-- .panel-primary -->
-	</div><!-- .col-sm-6 -->
-</div><!-- .row -->
+		</div>
+	</div>
+</div>
 
 @section('javascript')
 <script>
@@ -157,10 +152,10 @@
             }
         });
 
-        var ctx = $('#sub-breakdown');
+        var ctx = $('#sub-state-overview');
         ctx.height(285);
 
-        new Chart($("#sub-breakdown"),{
+        new Chart($("#sub-state-overview"),{
             "type":"doughnut",
             "data":{
                 "labels":['Accepted','Licensed','Restricted','Problem','Rejected'],
@@ -175,7 +170,7 @@
                     "backgroundColor":[
                         "rgb(166, 255, 172)",
                         "rgb(0, 160, 90)",
-                        "rgb(238, 136, 5)",
+                        "rgb(255, 205, 86)",
                         "rgb(255, 80, 80)",
                         "rgb(255, 20, 20)",
                     ]
@@ -199,6 +194,92 @@
                             return currentValue + ' (' + precentage + "%)";
                         }
                     }
+                }
+            }
+        });
+
+        var ctx = $('#sub-breakdown-graph');
+        ctx.height(285);
+
+        new Chart($("#sub-breakdown-graph"),{
+            "type":"bar",
+            "data":{
+                "labels":[
+                    <?php foreach($video_traffic as $video){
+                        echo '"'.$video[0]->created_at->format('D jS').'",';
+                    }?>
+                ],
+                "datasets":[{
+                    "label": 'New',
+                    "data":[
+                        <?php foreach($video_traffic as $video){
+                            echo count($video->where('state','new')).',';
+                        }?>
+                    ],
+                    "fill":false,
+                    "backgroundColor":"rgba(54, 162, 235, 0.2)",
+                    "borderWidth":1
+                },
+                {
+                    "label": 'Accepted',
+                    "data":[
+                        <?php foreach($video_traffic as $video){
+                            echo count($video->where('state','accepted')).',';
+                        }?>
+                    ],
+                    "fill":false,
+                    "backgroundColor":"rgba(166, 255, 172, 0.2)",
+                    "borderWidth":1
+                },
+                {
+                    "label": 'Licensed',
+                    "data":[
+                        <?php foreach($video_traffic as $video){
+                            echo count($video->where('state','licensed')).',';
+                        }?>
+                    ],
+                    "fill":false,
+                    "backgroundColor":"rgba(0, 160, 90, 0.2)",
+                    "borderWidth":1
+                },
+                {
+                    "label": 'Restricted',
+                    "data":[
+                        <?php foreach($video_traffic as $video){
+                            echo count($video->where('state','restricted')).',';
+                        }?>
+                    ],
+                    "fill":false,
+                    "backgroundColor":"rgba(255, 205, 86, 0.2)",
+                    "borderWidth":1
+                },
+                {
+                    "label": 'Rejected',
+                    "data":[
+                        <?php foreach($video_traffic as $video){
+                            echo count($video->where('state','rejected')).',';
+                        }?>
+                    ],
+                    "fill":false,
+                    "backgroundColor":"rgba(255, 20, 20, 0.2)",
+                    "borderWidth":1
+                }]
+            },
+            "options":{
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                "scales":{
+                    "xAxes": [{
+                        stacked: true
+                    }],
+                    "yAxes":[{
+                        stacked: true,
+                        "ticks":{
+                            "beginAtZero":true
+                        }
+                    }]
                 }
             }
         });
