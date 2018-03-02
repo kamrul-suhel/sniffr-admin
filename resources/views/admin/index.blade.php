@@ -163,19 +163,21 @@
         new Chart($("#sub-breakdown"),{
             "type":"doughnut",
             "data":{
-                "labels":['Licensed','Restricted','Problem','Rejected'],
+                "labels":['Accepted','Licensed','Restricted','Problem','Rejected'],
                 "datasets":[{
                     "data":[
+                        <?php echo count($video_state_count['accepted']); ?>,
                         <?php echo count($video_state_count['licensed']); ?>,
                         <?php echo count($video_state_count['restricted']); ?>,
                         <?php echo count($video_state_count['problem']) ?>,
                         <?php echo count($video_state_count['rejected']) ?>
                     ],
                     "backgroundColor":[
-                        "rgb(0, 166, 90)",
+                        "rgb(166, 255, 172)",
+                        "rgb(0, 160, 90)",
                         "rgb(238, 136, 5)",
-                        "rgb(255, 104, 186)",
-                        "rgb(255, 99, 99)",
+                        "rgb(255, 80, 80)",
+                        "rgb(255, 20, 20)",
                     ]
                 }]
             },
