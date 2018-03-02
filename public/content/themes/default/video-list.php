@@ -1,5 +1,7 @@
 <?php include('includes/header.php'); ?>
 
+<?php include('partials/search.php'); ?>
+
 <div class="container">
 	<?php if(isset($page_title)): ?>
 		<h3><?= $page_title ?><?php if(isset($page_description)): ?><span><?= $page_description ?></span><?php endif; ?></h3>

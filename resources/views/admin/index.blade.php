@@ -48,12 +48,12 @@
 
 <div class="row">
     <div class="col-sm-8">
-        <div class="panel panel-primary" id="charts_env">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Video Submissions</div>
             </div>
 
-            <div class="panel-body chart1-panel">
+            <div class="panel-body">
                 <div class="tab-content">
                     <canvas id="video-traffic"></canvas>
                 </div>
@@ -62,15 +62,14 @@
     </div><!-- .col-sm-8 -->
 
 	<div class="col-sm-4">
-        <div class="panel panel-primary" id="charts_env">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Real-time Visitors</div>
+                <div class="panel-title">Submissions Breakdown</div>
             </div>
 
-            <div class="panel-body active-users-panel">
+            <div class="panel-body">
 				<div class="tab-content">
-    				<div class="chart" id="chart-2-container"></div>
-    				<div id="legend-2-container"></div>
+    				<canvas id="sub-breakdown"></canvas>
     			</div>
     		</div>
     	</div>
@@ -129,7 +128,7 @@
             "data":{
                 "labels":[
                     <?php foreach($video_traffic as $video){
-                        echo '"'.$video[0]->created_at->format('D jS').'",';
+                        echo '"'.$video[0]->created_at->format('D j/M').'",';
                     }?>
                 ],
                 "datasets":[{
@@ -157,74 +156,50 @@
                 }
             }
         });
-		// var graph = new Rickshaw.Graph( {
-		// 	element: document.querySelector("#chart-1-container"),
-		// 	renderer: 'area',
-		// 	stroke: true,
-		// 	series: [ {
-		// 		data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-		// 		color: '#9cc1e0'
-		// 	}, {
-		// 		data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-		// 		color: '#cae2f7'
-		// 	} ]
-		// } );
 
-		// graph.render();
+        var ctx = $('#sub-breakdown');
+        ctx.height(285);
 
-		// var graph = new Rickshaw.Graph({
-		// 	element: document.querySelector("#chart-2-container"),
-		// 	renderer: 'line',
-		// 	series: [{
-		// 		data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-		// 		color: '#4682b4'
-		// 	}, {
-		// 		data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-		// 		color: '#9cc1e0'
-		// 	}, {
-		// 		data: [ { x: 0, y: 20 }, { x: 1, y: 10 }, { x: 2, y: 23 }, { x: 3, y: 19 }, { x: 4, y: 39 } ],
-		// 		color: '#4682b4'
-		// 	}, {
-		// 		data: [ { x: 0, y: 20 }, { x: 1, y: 33 }, { x: 2, y: 10 }, { x: 3, y: 50 }, { x: 4, y: 9 } ],
-		// 		color: '#9cc1e0'
-		// 	}]
-		// });
-		// graph.render();
-
-	 //  	var graph = new Rickshaw.Graph( {
-		// 	element: document.querySelector("#chart-3-container"),
-		// 	renderer: 'bar',
-		// 	series: [
-		// 		{
-		// 			data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-		// 			color: '#4682b4',
-		// 			name: 'chrome'
-		// 		}, {
-		// 			data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-		// 			color: '#9cc1e0',
-		// 			name: 'safari'
-		// 	} ]
-		// });
-
-		// graph.render();
-
-		// var graph = new Rickshaw.Graph( {
-		// 	element: document.querySelector("#chart-4-container"),
-		// 	renderer: 'bar',
-		// 	stack: false,
-		// 	series: [
-		// 		{
-		// 			data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
-		// 			color: '#4682b4'
-		// 		}, {
-		// 			data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
-		// 			color: '#9cc1e0'
-
-		// 	} ]
-		// } );
-
-		// graph.render();
-
+        new Chart($("#sub-breakdown"),{
+            "type":"doughnut",
+            "data":{
+                "labels":['Licensed','Restricted','Problem','Rejected'],
+                "datasets":[{
+                    "data":[
+                        <?php echo count($video_state_count['licensed']); ?>,
+                        <?php echo count($video_state_count['restricted']); ?>,
+                        <?php echo count($video_state_count['problem']) ?>,
+                        <?php echo count($video_state_count['rejected']) ?>
+                    ],
+                    "backgroundColor":[
+                        "rgb(0, 166, 90)",
+                        "rgb(238, 136, 5)",
+                        "rgb(255, 104, 186)",
+                        "rgb(255, 99, 99)",
+                    ]
+                }]
+            },
+            "options":{
+                maintainAspectRatio: false,
+                legend: {
+                    display: true
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                      
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var precentage = Math.floor(((currentValue/total) * 100)+0.5);         
+                            return precentage + "%";
+                        }
+                    }
+                }
+            }
+        });
 	})(jQuery);
 </script>
 @stop
