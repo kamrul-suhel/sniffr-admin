@@ -194,7 +194,7 @@
                       
                             var currentValue = dataset.data[tooltipItem.index];
                             var precentage = Math.floor(((currentValue/total) * 100)+0.5);         
-                            return precentage + "%";
+                            return currentValue + ' (' + precentage + "%)";
                         }
                     }
                 }
