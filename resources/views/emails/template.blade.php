@@ -122,7 +122,7 @@
                                                             <table class="module" role="module" data-type="code" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
                                                                 <tr>
                                                                     <td height="100%" valign="top">
-                                                                        <img src="https://sniffrmedia.co.uk/content/uploads/settings/logo-sniffr-black.png" style="width:25%;height:auto;" border="0">
+                                                                        <img src="https://sniffrmedia.co.uk/content/uploads/settings/logo-unilad-black.png" style="width:25%;height:auto;" border="0">
                                                                     </td>
                                                                 </tr>
                                                             </table>
