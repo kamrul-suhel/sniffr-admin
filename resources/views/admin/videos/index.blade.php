@@ -180,11 +180,11 @@
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-								@if($video->state == 'licensed' && $video->file_watermark)
+								@if($video->file_watermark)
 								<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="js-download">
 									<i class="fa fa-download"></i>
 								</a>
-								@elseif($video->state == 'licensed' && $video->file)
+								@elseif($video->file)
 								<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
 									<i class="fa fa-download"></i>
 								</a>

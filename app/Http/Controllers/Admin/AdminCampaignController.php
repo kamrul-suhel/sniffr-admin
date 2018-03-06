@@ -22,7 +22,9 @@ use App\Http\Controllers\Controller;
 class AdminCampaignController extends Controller
 {
     protected $rules = [
-        'name' => 'required'
+        'name' => 'required',
+        'slug' => 'required',
+        'client_id' => 'required'
     ];
 
     /**
@@ -71,7 +73,7 @@ class AdminCampaignController extends Controller
 
      public function store()
      {
-         $validator = Validator::make($data = Input::all(), Campaign::$rules);
+         $validator = Validator::make($data = Input::all(), $this->rules);
 
          if ($validator->fails())
          {
@@ -143,7 +145,7 @@ class AdminCampaignController extends Controller
          $id = $data['id'];
          $campaign = Campaign::findOrFail($id);
 
-         $validator = Validator::make($data, Campaign::$rules);
+         $validator = Validator::make($data, $this->rules);
 
          if ($validator->fails())
          {

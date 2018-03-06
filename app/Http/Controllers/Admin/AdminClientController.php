@@ -21,7 +21,9 @@ use App\Http\Controllers\Controller;
 class AdminClientController extends Controller
 {
     protected $rules = [
-        'name' => 'required'
+        'name' => 'required',
+        'slug' => 'required'
+
     ];
     //
     public function __construct(Request $request)
@@ -35,14 +37,14 @@ class AdminClientController extends Controller
      */
     public function index()
     {
-         $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
-         $user = Auth::user();
+        $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
+        $user = Auth::user();
 
-         $data = array(
-             'clients' => $clients,
-             'user' => $user,
-             'admin_user' => Auth::user()
-             );
+        $data = array(
+            'clients' => $clients,
+            'user' => $user,
+            'admin_user' => Auth::user()
+        );
 
          return view('admin.clients.index', $data);
     }
@@ -52,15 +54,16 @@ class AdminClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function create()
-     {
-         $data = array(
-             'post_route' => url('admin/clients/store'),
-             'button_text' => 'Add New Client',
-             'admin_user' => Auth::user()
-             );
-         return view('admin.clients.create_edit', $data);
-     }
+    public function create()
+    {
+        $data = array(
+            'post_route' => url('admin/clients/store'),
+            'button_text' => 'Add New Client',
+            'admin_user' => Auth::user()
+        );
+        
+        return view('admin.clients.create_edit', $data);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -71,7 +74,7 @@ class AdminClientController extends Controller
 
     public function store()
     {
-        $validator = Validator::make($data = Input::all(), Client::$rules);
+        $validator = Validator::make($data = Input::all(), $this->rules);
 
         if ($validator->fails())
         {
@@ -111,7 +114,7 @@ class AdminClientController extends Controller
             'post_route' => url('admin/clients/update'),
             'button_text' => 'Update Client',
             'admin_user' => Auth::user()
-            );
+        );
 
         return view('admin.clients.create_edit', $data);
     }
@@ -130,7 +133,7 @@ class AdminClientController extends Controller
         $id = $data['id'];
         $client = Client::findOrFail($id);
 
-        $validator = Validator::make($data, Client::$rules);
+        $validator = Validator::make($data, $this->rules);
 
         if ($validator->fails())
         {
