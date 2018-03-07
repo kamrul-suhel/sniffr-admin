@@ -45,7 +45,8 @@ class ThemeHomeController extends Controller {
 			'pages' => Page::where('active', '=', 1)->get(),
 		);
 
-		//dd($data['videos']);
-		return view('Theme::home', $data);
+//		dd($data);
+//		return view('frontend.home', $data);
+		return view('frontend.home.home',$data);
 	}
 }
