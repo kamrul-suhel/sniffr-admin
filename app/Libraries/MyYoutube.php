@@ -38,7 +38,7 @@ class MyYoutube extends Youtube
 
         // If $listResponse is empty, the specified video was not found.
         if (!isset($listResponse[0])) {
-             return sprintf('<h3>Can\'t find a video with video id: %s</h3>', $videoId);
+             return sprintf('<h3>Can\'t find a video with video id: %s</h3>', $video_id);
         } else {
             // Since the request specified a video ID, the response only contains one video resource.
             $video = $listResponse[0];
