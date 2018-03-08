@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Setting;
 use Redirect;
 
 use App\Video;
@@ -19,6 +20,8 @@ use App\Libraries\ThemeHelper;
 
 class ThemeSearchController extends Controller {
 
+    private $videos_per_page = 24;
+
 	public function __construct()
 	{
 		//$this->middleware('secure');
@@ -30,8 +33,11 @@ class ThemeSearchController extends Controller {
 	|--------------------------------------------------------------------------
 	*/
 
-	public function index()
+	public function index(Request $request)
 	{
+        $settings = Setting::first();
+        $this->videos_per_page = $settings->videos_per_page;
+
 		$search_value = Input::get('value');
 
 		if(empty($search_value)){
@@ -42,7 +48,8 @@ class ThemeSearchController extends Controller {
 			$query->where('state', '=', 'licensed')->where('title', 'LIKE', '%'.$search_value.'%');
 		})->orWhereHas('tags', function ($q) use($search_value){
 			$q->where('state', '=', 'licensed')->where('name', 'LIKE', '%'.$search_value.'%');
-		})->orderBy('licensed_at', 'DESC')->get();
+		})->orderBy('licensed_at', 'DESC')->paginate($this->videos_per_page);
+		$videos = $videos->appends($request->input());
 
 		$data = array(
 			'videos' => $videos,
@@ -52,9 +59,10 @@ class ThemeSearchController extends Controller {
 			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
+            'settings' => $settings
 		);
 
-		return view('Theme::search-list', $data);
+		return view('frontend.pages.search.search', $data);
 	}
 
 }

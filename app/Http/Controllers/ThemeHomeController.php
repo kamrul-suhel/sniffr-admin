@@ -63,6 +63,6 @@ class ThemeHomeController extends Controller {
 
 //		dd($data);
 //		return view('frontend.home', $data);
-		return view('frontend.home.home',compact('data','settings', $this->data));
+		return view('frontend.pages.home.home',compact('data','settings', $this->data));
 	}
 }

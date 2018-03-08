@@ -34,7 +34,7 @@
     </section>
 
     <!-- partial template -->
-    @include('frontend.home.feature_section')
-    @include('frontend.home.countdown')
+    @include('frontend.pages.home.feature_section')
+    @include('frontend.pages.home.countdown')
     @include('frontend.forms.upload')
 @endsection

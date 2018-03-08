@@ -98,7 +98,7 @@ class ThemeVideoController extends Controller {
         }
 
         $data = array(
-            'videos' => Video::where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($this->videos_per_page),
+            'videos' => Video::where('state', 'licensed')->orderBy('id', 'DESC')->paginate($this->videos_per_page),
             'page_title' => 'All Videos',
             'page_description' => 'Page ' . $page,
             'current_page' => $page,
@@ -111,7 +111,7 @@ class ThemeVideoController extends Controller {
             'settings' => $settings
             );
 //        return view('Theme::video-list',$data);
-        return view('frontend.videos.video', $data);
+        return view('frontend.pages.videos.video', $data);
     }
 
 
