@@ -1,0 +1,30 @@
+@keyframes unilad_animation_from_in {
+  from{
+    transform:scale(0);
+  }
+  to{
+    transform:scale(1);
+  }
+}
+
+@keyframes unilad_animation_from_right_side {
+  from{
+    transform:translateX(200px);
+    opacity:0;
+  }
+  to{
+    transform:translateX(0);
+    opacity:1
+  }
+}
+
+@keyframes unilad_animation_from_left_side {
+  from{
+    transform:translateX(-200px);
+    opacity:0;
+  }
+  to{
+    transform:translateX(0);
+    opacity:1
+  }
+}

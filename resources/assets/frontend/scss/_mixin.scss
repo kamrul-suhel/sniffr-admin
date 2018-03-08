@@ -1,0 +1,68 @@
+@mixin headingstyle($color:$featured_title_color){
+  color: $color;
+  text-align:center;
+  margin:0 0 $featured_title_space 0;
+}
+
+@mixin heading_border($heading_border_width: 200px, $height: 5px, $margin_bottom: 10px, $color:#000) {
+  content: '';
+  width: $heading_border_width;
+  background: $color;
+  margin: 0px auto $margin_bottom auto;
+  height: $height;
+  display: block;
+}
+
+@mixin subheading{
+  color: #f47d31;
+  font-size: 15px;
+  font-weight: 200;
+}
+
+@mixin outline-button{
+  border: 1px solid #f47d31;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+  border-radius: 0;
+  color: #f47d31;
+  float: right;
+  margin-top: 20px;
+  background: transparent;
+  font-size: 12px;
+  text-transform:uppercase;
+}
+
+@mixin subheadingtext{
+  font-size: 12px;
+  line-height: 18px;
+  margin-bottom: 0px;
+  color: #777;
+}
+
+
+// Small devices (landscape phones, 576px and up)
+@mixin small-device{
+  @media (min-width: 576px) {
+    @content
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@mixin medium-device{
+  @media (min-width: 768px) {
+    @content
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@mixin large-device{
+  @media (min-width: 992px) {
+    @content
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@mixin extra-large-device{
+  @media (min-width: 1200px) {
+    @content
+  }
+}

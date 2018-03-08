@@ -112,6 +112,7 @@ class ThemeUploadController extends Controller {
         // ini_set('max_input_vars', 1800);
         // ini_set('max_input_vars', 1800);
         // ini_set('max_allowed_packet', '1000M');
+//        dd($request);
 
         $isJson = $request->ajax();
 
@@ -188,6 +189,8 @@ class ThemeUploadController extends Controller {
         if(env('APP_ENV') != 'local'){
             $video->notify(new SubmissionNew($video));
         }
+
+
 
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');

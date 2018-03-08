@@ -19,6 +19,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use App\Notifications\SubmissionAlert;
+
 use App\Mail\DetailsReminder;
 use App\Mail\DetailsThanks;
 use App\Mail\SubmissionAccepted;
@@ -91,7 +93,7 @@ class QueueEmail implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed()
     {
         // Send user notification of failure, etc...
         $user = new User();

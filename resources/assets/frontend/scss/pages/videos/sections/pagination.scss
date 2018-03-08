@@ -1,0 +1,32 @@
+.pagination_section{
+  .pagination{
+    li{
+      margin-right:5px;
+      a{
+        border:none;
+        color:#cdcdcd;
+        font-size:24px;
+        font-weight:bold;
+      }
+    }
+    li.active a{
+      color:#000;
+      background:none;
+    }
+    li.active a:focus{
+      outline:none;
+      box-shadow:none;
+    }
+  }
+
+  .page-item:last-child .page-link{
+    color:#fff;
+    background:#000;
+    border-radius:0;
+  }
+  .page-item:first-child .page-link{
+    color:#fff;
+    background:#000;
+    border-radius:0;
+  }
+}

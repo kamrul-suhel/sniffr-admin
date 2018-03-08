@@ -1,0 +1,45 @@
+//@import "fonts";
+@import "./_variables";
+@import "./fonts";
+@import "./_mixin";
+@import "./_global";
+
+
+/* ************************* Animation css ******************* */
+//@import "./animation";
+
+/* ************************* Header style ******************* */
+@import "./layout/header_section";
+
+/* ************************* NAV style ******************* */
+@import "./layout/nav";
+
+/* ************************* Home Page style ******************* */
+@import "pages/home/main";
+
+/* ************************* Login Page style ******************* */
+@import "pages/login/login";
+
+
+/* ************************* Videos Page style ******************* */
+@import "pages/videos/main";
+
+
+/* ************************* Video detail style ******************* */
+@import "pages/video_detail/main";
+
+/* ************************* Footer style ******************* */
+@import "layout/footer";
+
+
+@include small-device{
+}
+
+@include medium-device{
+
+}
+@include large-device{
+
+}
+@include extra-large-device{
+}

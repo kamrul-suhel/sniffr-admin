@@ -1,0 +1,35 @@
+/* ************************* Global style ******************* */
+
+// all section seperator height
+section.section_space{
+  padding:$section_spacing 0px;
+}
+
+.nav_background{
+  background:#000;
+}
+
+body{
+  font-family:JosefinSansregular;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1{
+  font-family:JosefinSansbold;
+  @include headingstyle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h2{
+  font-family:JosefinSansbold;
+  font-size:24px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+p{
+  font-weight:lighter;
+  font-family:JosefinSansregular;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

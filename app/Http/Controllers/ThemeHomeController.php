@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 use App\Page;
@@ -25,6 +26,20 @@ class ThemeHomeController extends Controller {
 		//$this->middleware('secure');
 		$settings = Setting::first();
         $this->videos_per_page = $settings->videos_per_page;
+
+
+        //Upload from home page
+        $user = Auth::user();
+        $this->data = array(
+            'user' => $user,
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'video_categories' => VideoCategory::all(),
+            'post_categories' => PostCategory::all(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        );
+
+
 	}
 
 	/*
@@ -34,6 +49,7 @@ class ThemeHomeController extends Controller {
 	*/
 	public function index()
 	{
+	    $settings = Setting::first();
 		$data = array(
 			'videos' => Video::where('state', 'licensed')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
 			'current_page' => 1,
@@ -47,6 +63,6 @@ class ThemeHomeController extends Controller {
 
 //		dd($data);
 //		return view('frontend.home', $data);
-		return view('frontend.home.home',$data);
+		return view('frontend.home.home',compact('data','settings', $this->data));
 	}
 }
