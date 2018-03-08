@@ -9,7 +9,7 @@
                                name="value"
                                id="filterby"
                                aria-describedby="filterhelp"
-                               @if($search_value)
+                               @if(isset($search_value))
                                     value="{{$search_value}}"
                                @endif
 

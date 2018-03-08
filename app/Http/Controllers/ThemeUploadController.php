@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Setting;
 use View;
 use Auth;
 use MyYoutube;
@@ -51,6 +52,7 @@ class ThemeUploadController extends Controller {
     public function __construct()
     {
         $user = Auth::user();
+        $settings = Setting::first();
 
         $this->data = array(
             'user' => $user,
@@ -59,6 +61,7 @@ class ThemeUploadController extends Controller {
             'video_categories' => VideoCategory::all(),
             'post_categories' => PostCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
+            'settings'  => $settings
         );
     }
 
@@ -70,7 +73,8 @@ class ThemeUploadController extends Controller {
      */
     public function index()
     {
-        return view('Theme::upload', $this->data);
+        return view('frontend.pages.upload_video.upload_video', $this->data);
+//        return view('Theme::upload', $this->data);
     }
 
     /**

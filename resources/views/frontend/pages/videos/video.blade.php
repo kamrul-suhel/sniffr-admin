@@ -21,8 +21,6 @@
         </article>
     </section>
 
-
-
     <!-- PAGINATION SECTION -->
     {{ $videos->links() }}
 

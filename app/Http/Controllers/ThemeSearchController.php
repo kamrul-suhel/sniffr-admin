@@ -49,7 +49,11 @@ class ThemeSearchController extends Controller {
 		})->orWhereHas('tags', function ($q) use($search_value){
 			$q->where('state', '=', 'licensed')->where('name', 'LIKE', '%'.$search_value.'%');
 		})->orderBy('licensed_at', 'DESC')->paginate($this->videos_per_page);
-		$videos = $videos->appends($request->input());
+
+		//check is there any input value
+        if($request->has('value')){
+            $videos = $videos->appends($request->input());
+        }
 
 		$data = array(
 			'videos' => $videos,

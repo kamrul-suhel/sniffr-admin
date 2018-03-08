@@ -11,9 +11,6 @@
         @include('frontend.includes.search_form')
     </section>
 
-
-
-
     <!-- VIDEOS ITEM SECTION -->
     <section class="videos_section section_space">
         <article class="container">

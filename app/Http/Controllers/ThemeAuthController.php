@@ -64,6 +64,7 @@ class ThemeAuthController extends Controller {
 		if(!Auth::guest()){
 			return Redirect::to('/');
 		}
+		$settings = Setting::first();
 		$data = array(
 			'type' => 'login',
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -71,8 +72,10 @@ class ThemeAuthController extends Controller {
 			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
+            'settings'=> $settings
 			);
-		return view('Theme::auth', $data);
+//		return view('Theme::auth', $data);
+		return view('frontend.pages.login.login', $data);
 	}
 
 	public function signup_form(){
