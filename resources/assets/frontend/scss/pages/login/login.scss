@@ -7,10 +7,47 @@
   .login_title{
     color: $title_color;
     text-align:center;
+    margin-top:0;
   }
   .login_title:after{
     @include heading_border(50px, 2px, 20px);
   }
+  .form-submit{
+    width:100%;
+    text-align:center;
+    input[type='submit']{
+      background: #000;
+      padding: 10px 20px;
+      color: #fff;
+      font-weight: bold;
+      line-height: 20px;
+      font-size: 14px;
+      height: 38px;
+      width:auto;
+      float:none;
+      display:inline-block;
+      -webkit-transition:all ease-in-out .3s;
+      -o-transition:all ease-in-out .3s;
+      -moz-transition:all ease-in-out .3s;
+      -ms-transition:all ease-in-out .3s;
+      transition:all ease-in-out .3s;
+    }
+    input[type='submit']:hover{
+      background:#1a1a1a;
+    }
+  }
+  .forgot-password{
+    display:block;
+    margin-top:10px;
+    a{
+      -webkit-transition:all ease-in-out .3s;
+      -o-transition:all ease-in-out .3s;
+      -moz-transition:all ease-in-out .3s;
+      -ms-transition:all ease-in-out .3s;
+      transition:all ease-in-out .3s;
+    }
+  }
+
 
   .form-group {
     input{

@@ -9,18 +9,19 @@
                         <!-- LOGIN SECTION -->
                         <section id="login_section" class="login_section">
                             <h2 class="login_title">LOGIN</h2>
-                            <form action="#" method="post">
+                            <form method="post" action="@if($settings->enable_https) {{ secure_url('login') }} @else {{ route('login') }} @endif">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="username" id="username" aria-describedby="usernamehelp" placeholder="Enter Username">
+                                    <input type="text" class="form-control" name="email" id="username" aria-describedby="usernamehelp" placeholder="Enter Email">
                                 </div>
                                 <div class="form-group">
                                     <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordhelp" placeholder="Enter password">
                                 </div>
                                 <div class="form-submit">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                                     <input type="submit" class="btn btn-block"  id="submit" value="LOGIN">
                                 </div>
                                 <div class="forgot-password">
-                                    <a href="#" class="">Forgot password</a>
+                                    <a href="{{route('password.remind')}}" class="">Forgot password</a>
                                 </div>
                             </form>
                         </section>

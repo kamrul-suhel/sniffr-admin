@@ -41,6 +41,7 @@ h2 {
 }
 
 p {
+  font-size: 16px;
   font-weight: lighter;
   font-family: JosefinSansregular;
   -webkit-font-smoothing: antialiased;
@@ -74,6 +75,8 @@ p {
   text-transform: uppercase;
   width: 250px;
   font-weight: bold;
+  -webkit-transition: all ease-in-out .2s;
+  transition: all ease-in-out .2s;
 }
 
 #video .upload_video_button:hover {
@@ -116,6 +119,8 @@ p {
 .heading .position-center h1 {
   margin-bottom: 15px;
   color: #fff;
+  width: 55%;
+  margin: 0 auto;
 }
 
 /* ************************* NAV style ******************* */
@@ -197,6 +202,34 @@ p {
 
 .navigation ul li a:focus {
   outline: none;
+}
+
+.navigation .dropdown a img {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: -2px;
+}
+
+.navigation .dropdown .dropdown-menu {
+  background: #000;
+  border: none;
+}
+
+.navigation .dropdown .dropdown-menu li {
+  display: block;
+}
+
+.navigation .dropdown .dropdown-menu li a {
+  color: #fff;
+  text-align: left;
+  -webkit-transition: all ease-in-out .2s;
+  transition: all ease-in-out .2s;
+}
+
+.navigation .dropdown .dropdown-menu li a:hover {
+  color: #fff;
+  background: #1b1b1b;
 }
 
 @media (min-width: 576px) {
@@ -351,6 +384,7 @@ p {
 .login_section .login_title {
   color: #000;
   text-align: center;
+  margin-top: 0;
 }
 
 .login_section .login_title:after {
@@ -360,6 +394,40 @@ p {
   margin: 0px auto 20px auto;
   height: 2px;
   display: block;
+}
+
+.login_section .form-submit {
+  width: 100%;
+  text-align: center;
+}
+
+.login_section .form-submit input[type='submit'] {
+  background: #000;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 20px;
+  font-size: 14px;
+  height: 38px;
+  width: auto;
+  float: none;
+  display: inline-block;
+  -webkit-transition: all ease-in-out .3s;
+  transition: all ease-in-out .3s;
+}
+
+.login_section .form-submit input[type='submit']:hover {
+  background: #1a1a1a;
+}
+
+.login_section .forgot-password {
+  display: block;
+  margin-top: 10px;
+}
+
+.login_section .forgot-password a {
+  -webkit-transition: all ease-in-out .3s;
+  transition: all ease-in-out .3s;
 }
 
 .login_section .form-group input {
@@ -645,10 +713,12 @@ p {
 
 .videos_detail_section .video_detail_content h2 {
   text-transform: uppercase;
+  margin-top: 0;
 }
 
 .videos_detail_section .video_detail_tags ul {
   list-style: none;
+  padding: 0;
 }
 
 .videos_detail_section .video_detail_tags ul li {
@@ -692,6 +762,7 @@ p {
 
 .videos_detail_section .video_detail_sidebar .video_social_link ul {
   list-style: none;
+  padding: 0;
 }
 
 .videos_detail_section .video_detail_sidebar .video_social_link ul li {

@@ -29,6 +29,7 @@ class ThemeDownloadController extends Controller {
 
 	// Add Media Like
 	public function index($id,$type = 'watermark'){
+	    dd($id);
         $authUser = Auth::user();
         if($authUser->role=='client'&&$type=='regular'){
             return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to download this video!', 'note_type' => 'error') );

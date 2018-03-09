@@ -13,11 +13,13 @@
     margin-top:30px;
     h2{
       text-transform:uppercase;
+      margin-top:0;
     }
   }
   .video_detail_tags{
     ul{
       list-style:none;
+      padding:0;
       li{
         display:inline-block;
         a{
@@ -58,6 +60,7 @@
       }
       ul{
         list-style:none;
+        padding:0;
         li{
           display:inline-block;
           a{

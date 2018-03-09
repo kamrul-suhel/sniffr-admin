@@ -66,6 +66,38 @@
     }
   }
 
+  .dropdown{
+    a{
+      img{
+        width: 20px;
+        height: 20px;
+        position: relative;
+        top: -2px;
+      }
+    }
+
+    .dropdown-menu{
+      background:#000;
+      border:none;
+      li{
+        display:block;
+        a{
+          color:#fff;
+          text-align:left;
+          -webkit-transition:all ease-in-out .2s;
+          -o-transition:all ease-in-out .2s;
+          -moz-transition:all ease-in-out .2s;
+          -ms-transition:all ease-in-out .2s;
+          transition:all ease-in-out .2s;
+        }
+        a:hover{
+          color: #fff;
+          background: #1b1b1b;
+        }
+      }
+    }
+  }
+
 }
 @include small-device{
   .navigation{

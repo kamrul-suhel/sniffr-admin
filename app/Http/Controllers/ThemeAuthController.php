@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Illuminate\Auth\Passwords\PasswordBroker;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Validator;
 use Redirect;
 
@@ -107,6 +110,7 @@ class ThemeAuthController extends Controller {
 	        'password' => Input::get('password')
 	    );
 
+
 	    if ( Auth::attempt($email_login) || Auth::attempt($username_login) ){
     		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
@@ -124,7 +128,9 @@ class ThemeAuthController extends Controller {
 	    } else {
 	    	$redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
 	        // auth failure! redirect to login with errors
-	        return Redirect::to('login' . $redirect)->with(array('note' => 'Invalid login, please try again.', 'note_type' => 'error'));
+            $error = array(
+                'note' => 'Invalid login, please try again.', 'note_type' => 'error');
+	        return Redirect::to('login' . $redirect)->with($error);
 	    }
 
 	}
@@ -219,6 +225,7 @@ class ThemeAuthController extends Controller {
 	// ********** RESET PASSWORD ********** //
 	public function password_reset()
 	{
+	    $settings =Setting::first();
 		$data = array(
 			'type' => 'forgot_password',
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -227,8 +234,10 @@ class ThemeAuthController extends Controller {
 			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
+            'settings'  => $settings
 			);
-		return view('Theme::auth', $data);
+//		return view('Theme::auth', $data);
+		return view('frontend.pages.login.reset_password', $data);
 	}
 
 	// ********** RESET REQUEST ********** //
@@ -238,6 +247,8 @@ class ThemeAuthController extends Controller {
 		$response = Password::sendResetLink($credentials, function($message){
 			$message->subject('Password Reset Info');
 		});
+
+
 
 		switch ($response)
 		{
@@ -252,6 +263,13 @@ class ThemeAuthController extends Controller {
 	// ********** RESET PASSWORD TOKEN ********** //
 	public function password_reset_token($token)
 	{
+	    $settings = Setting::first();
+	    $password_reset_link = '';
+	    if($settings->enable_https){
+	        $password_reset_link = url('password/reset',$token);
+        }else{
+            $password_reset_link = url('password/reset',$token);
+        }
 		$data = array(
 			'type' => 'reset_password',
 			'token' => $token,
@@ -261,16 +279,17 @@ class ThemeAuthController extends Controller {
 			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
+            'settings'  => $settings,
+            'password_reset_link'   => $password_reset_link
 			);
-	  return view('Theme::auth', $data);
+//	  return view('Theme::auth', $data);
+	  return view('frontend.pages.login.password_reset_form', $data);
 	}
 
 	// ********** RESET PASSWORD POST ********** //
 	public function password_reset_post(Request $request)
 	{
-
 		$credentials = $credentials = array('email' => Input::get('email'), 'password' => Input::get('password'), 'password_confirmation' => Input::get('password_confirmation'), 'token' => Input::get('token'));
-
 
 
 		$response = Password::reset($credentials, function($user, $password)

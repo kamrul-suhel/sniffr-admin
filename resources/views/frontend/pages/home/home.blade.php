@@ -4,9 +4,9 @@
         <video>
         </video>
         <div class="heading">
-            <div class="position-center">
+            <div class="position-center" style="position:relative;top:-60px;">
                 <h1>Video Licensing Platform</h1>
-                <p>License viral videos viewed by millions around the world from Sniffr Media</p>
+                <p style="font-size:18px;">License viral videos viewed by millions around the world from Sniffr Media</p>
                 <button class="btn btn-primary upload_video_button">Upload you video</button>
             </div>
         </div>
@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg4">
                         <div class="logo">
-                            <a href="#"><img src="{{asset('assets/frontend/assets/images/logo-sniffr-white.png')}}"/></a>
+                            <a href="{!! url('/') !!}"><img src="{{asset('assets/frontend/assets/images/logo-sniffr-white.png')}}"/></a>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg8">

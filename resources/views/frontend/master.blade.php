@@ -55,7 +55,7 @@
     <script type="text/javascript" src="/assets/js/app.js?ver=1.5"></script>
     <!-- end js load -->
 </head>
-<body <?php if(Request::is('/')) echo 'class="home"'; ?>>
+<body @if(Request::is('/')) class="home" @endif>
 
     @extends('frontend.layout.navigation')
 
