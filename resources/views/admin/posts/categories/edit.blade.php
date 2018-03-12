@@ -7,8 +7,6 @@
 	<form id="update-cat-form" accept-charset="UTF-8" action="{{ url('admin/posts/categories/update') }}" method="post">
         <label for="name">Vertical Name</label>
         <input name="name" id="name" placeholder="Vertical Name" class="form-control" value="{{ $category->name }}" /><br />
-        <label for="slug">URL slug (ex. posts/categories/slug-name)</label>
-        <input name="slug" id="slug" placeholder="URL Slug" class="form-control" value="{{ $category->slug }}" />
         <input type="hidden" name="id" id="id" value="{{ $category->id }}" />
         <input type="hidden" name="_token" value="<?= csrf_token() ?>" />
     </form>
