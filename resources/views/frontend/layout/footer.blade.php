@@ -57,10 +57,6 @@
         </div>
     </div>
 </section>
-
-
-
-
 @extends('frontend.layout.login_form')
 
 

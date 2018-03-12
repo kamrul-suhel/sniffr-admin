@@ -6,7 +6,6 @@
     @extends('frontend.layout.head.meta')
 
     <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/bootstrap.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/font-awesome.min.css')}}" />
     <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/hellovideo-fonts.css')}}" />
     <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/intlTelInput.css')}}">
     <?php if(isset($video->id) || isset($episode->id)): ?>
@@ -20,17 +19,17 @@
 
     <?php endif; ?>
     <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/style.css?ver=1.4')}}" />
-    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/spinkit.css')}}" />
-    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/rrssb.css')}}" />
-    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/animate.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/jquery.fileupload.css')}}" />
-    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/jquery.fileupload-ui.css')}}" />
+    {{--<link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/spinkit.css')}}" />--}}
+    {{--<link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/rrssb.css')}}" />--}}
+{{--    <link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/animate.min.css')}}" />--}}
+    {{--<link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/jquery.fileupload.css')}}" />--}}
+    {{--<link rel="stylesheet" href="{{asset('/assets/frontend/theme/css/jquery.fileupload-ui.css')}}" />--}}
     <style type="text/css"><?= \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->custom_css, '') ?></style>
 
 
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
-    <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
-    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
+    @php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; @endphp
+    <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . 'settings/' . $favicon }}" type="image/x-icon">
 
     <!-- If we need to add page specifice style -->
     @yield('page_styles')
@@ -65,72 +64,26 @@
 
 
 <script type="text/javascript">
-
     $('document').ready(function(){
-//        //previous code for right side admin dropdown (if logged in)
-//        $('.dropdown').hover(function(){
-//            $(this).addClass('open');
-//        }, function(){
-//            $(this).removeClass('open');
-//        });
-//
-//        //previous code so looks like something for nav menu
-//        $('#nav-toggle').click(function(){
-//            $(this).toggleClass('active');
-//            $('.navbar-collapse').toggle();
-//            $('body').toggleClass('nav-open');
-//        });
-//
-//        $('#mobile-subnav').click(function(){
-//            if($('.second-nav .navbar-left').css('display') == 'block'){
-//                $('.second-nav .navbar-left').slideUp(function(){
-//                    $(this).addClass('not-visible');
-//                });
-//                $(this).html('<i class="fa fa-bars"></i> Open Submenu');
-//            } else {
-//                $('.second-nav .navbar-left').slideDown(function(){
-//                    $(this).removeClass('not-visible');
-//                });
-//                $(this).html('<i class="fa fa-close"></i> Close Submenu');
-//            }
-//        });
+        //previous code for right side admin dropdown (if logged in)
+        $('.dropdown').hover(function(){
+            $(this).addClass('open');
+        }, function(){
+            $(this).removeClass('open');
+        });
     });
-
-    /********** LOGIN MODAL FUNCTIONALITY **********/
-    var loginSignupModal = $('<div class="modal fade" id="loginSignupModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Login Below</h4></div><div class="modal-body"></div></div></div></div>');
-
-    $(document).ready(function(){
-        // Load the Modal Window for login signup when they are clicked
-//        $('.login-desktop a').click(function(e){
-//            e.preventDefault();
-//            $('body').prepend(loginSignupModal);
-//            $('#loginSignupModal .modal-body').load($(this).attr('href') + '?redirect=' + document.URL + ' .form-signin', function(){
-//                $('#loginSignupModal').show(200, function(){
-//                    setTimeout(function() { $('#email').focus() }, 300);
-//                });
-//
-//                $('#loginSignupModal').modal();
-//            });
-//
-//            // Be sure to remove the modal from the DOM after it is closed
-//            $('#loginSignupModal').on('hidden.bs.modal', function (e) {
-//                $('#loginSignupModal').remove();
-//            });
-//        });
-    });
-    /********** END LOGIN MODAL FUNCTIONALITY **********/
 </script>
 
-<?php if(isset($settings->google_tracking_id) && $settings->google_tracking_id != ''): ?>
+@if(isset($settings->google_tracking_id) && $settings->google_tracking_id != '')
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', '<?= $settings->google_tracking_id ?>', 'auto');
+    ga('create', '{{ $settings->google_tracking_id }}', 'auto');
     ga('send', 'pageview');
 </script>
-<?php endif; ?>
+@endif
 <script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
@@ -142,7 +95,5 @@
 
 <!-- Page specifice script go here -->
 @yield('page_script')
-
 </body>
 </html>
-

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Setting;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Facebook\Facebook;
 
@@ -17,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
+
+        // default setting load every page
+        $settings = Setting::first();
+
+        View::share('settings', $settings);
     }
 
     /**

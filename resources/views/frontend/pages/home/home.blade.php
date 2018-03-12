@@ -7,7 +7,7 @@
             <div class="position-center" style="position:relative;top:-60px;">
                 <h1>Video Licensing Platform</h1>
                 <p style="font-size:18px;">License viral videos viewed by millions around the world from Sniffr Media</p>
-                <button class="btn btn-primary upload_video_button">Upload you video</button>
+                <button onclick="window.location.href='/upload'" class="btn btn-primary upload_video_button">Upload you video</button>
             </div>
         </div>
 

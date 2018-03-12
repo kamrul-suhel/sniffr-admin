@@ -206,7 +206,7 @@ class AdminVideosController extends Controller {
 
         // Process > Move video to Youtube and move video file to folder for analysis
         $fileName_watermark = false;
-        if($video->file&&$video_process==1){
+        if($video->file && $video_process==1){
 
             // set watermark and non-watermark video files for processing
 

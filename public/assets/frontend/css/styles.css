@@ -117,10 +117,10 @@ p {
 }
 
 .heading .position-center h1 {
-  margin-bottom: 15px;
   color: #fff;
   width: 55%;
   margin: 0 auto;
+  margin-top: 90px;
 }
 
 /* ************************* NAV style ******************* */

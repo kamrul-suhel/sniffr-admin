@@ -61,17 +61,55 @@
                     <div class="video_detail_sidebar">
                         <div class="video_detail_vidwer text-right">
                             @if(isset($view_increment) && $view_increment == true ) {{ $video->views + 1 }} Views @else {{ $video->views }} Views @endif
+                                <div class="favorite btn btn-default <?php if(isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-videoid="<?= $video->id ?>"><i class="fa fa-heart"></i> Favorite</div>
+                                <?php if(Auth::user() && Auth::user()->role == 'client' && $video->file): ?><a href="/download/<?php echo $video->alpha_id; ?>" class="download btn btn-primary"><i class="fa fa-download"></i> Download</a><?php endif; ?>
                         </div>
                         <div class="video_detail_social_share">
                             <div class="video_license">License</div>
                             <div class="video_social_link">
                                 <h3>Share</h3>
                                 <ul>
-                                    <li><a href="#"><i class="fab fa-facebook-f fa-1x"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter fa-1x"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-youtube fa-1x"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-vimeo-v"></i></a></li>
+
+
+                                <?php
+
+                                if(isset($video)):
+                                    $media_title = $video->title;
+                                    $url = ($settings->enable_https) ? secure_url('video') : URL::to('video');
+                                    $media_url = $url . '/' . $video->id;
+                                elseif(isset($post)):
+                                    $media_title = $post->title;
+                                    $url = ($settings->enable_https) ? secure_url('post') : URL::to('post');
+                                    $media_url = $url . '/' . $post->slug;
+
+                                else:
+                                    $media_title = '';
+                                    $media_url = '';
+                                endif;
+
+                                $media_subject = $media_title;
+
+                                ?>
+
+                                <!-- Buttons start here. Copy this ul to your document. -->
+                                    <ul class="rrssb-buttons clearfix">
+                                        <li class="rrssb-facebook">
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?= $media_url ?>" class="popup">
+                                                <i class="fab fa-facebook-f fa-1x"></i>
+                                            </a>
+                                        </li>
+                                        <li class="rrssb-twitter">
+                                            <a href="http://twitter.com/home?status=<?= $media_subject ?> : <?= $media_url ?>" class="popup">
+                                                <i class="fab fa-twitter fa-1x"></i>
+                                            </a>
+                                        </li>
+                                        <li class="rrssb-email">
+                                            <a href="mailto:?subject=<?= $media_subject ?>&amp;body=<?= $media_url ?>">
+                                                <i class="fas fa-at"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- Buttons end here -->
                                 </ul>
                             </div>
                         </div>
@@ -86,21 +124,10 @@
 
 
 
-
-
-
-
     <section class="videos_section section_space">
         <article class="container">
             <div class="row">
                 <div class="container video-details">
-                    <h3><span class="pull-right">
-                            <div class="favorite btn btn-default <?php if(isset($favorited->id)): ?>active<?php endif; ?>" data-authenticated="<?= !Auth::guest() ?>" data-videoid="<?= $video->id ?>"><i class="fa fa-heart"></i> Favorite</div>
-                            <?php if(Auth::user() && Auth::user()->role == 'client' && $video->file): ?><a href="/download/<?php echo $video->alpha_id; ?>" class="download btn btn-primary"><i class="fa fa-download"></i> Download</a><?php endif; ?>
-		</span>
-                    </h3>
-
-                    <div class="video-details-container"><?= $video->details ?></div>
 
 
 
@@ -148,7 +175,6 @@
                             jQuery(tweets).each( function( t, tweet ) {
                                 var id = jQuery(this).attr('id');
                                 twttr.widgets.createVideo(id,tweet).then( function( el ) {
-                                    //console.log('Video added.');
                                 });
                             });
                         });

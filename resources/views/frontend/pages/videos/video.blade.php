@@ -5,7 +5,7 @@
         <video></video>
         <div class="heading">
             <div class="position-center">
-                <h1>Videos</h1>
+                <h1 style="margin-top:15px;">Videos</h1>
             </div>
         </div>
 
