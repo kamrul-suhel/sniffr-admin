@@ -78,7 +78,7 @@
 				        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
 				        	@endif
 						@elseif($video->state == 'new')
-							<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success" onclick="disableButton(this.id);">Accept</a>
+							<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success js-state-accept">Accept</a>
 				        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
 						@elseif($video->state == 'accepted')
 							<div class="pull-left">
@@ -97,7 +97,7 @@
 						@endif
 						<a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary" title="Download License" download><i class="fa fa-print"></i></a>
 					</div>
-					
+
 					<div class="clearfix"></div>
 				</div>
 			</div>
@@ -675,20 +675,6 @@
 
 		}
 
-		function disableButton(id) {
-			$(id).removeAttr("href");
-			console.log(id);
-			swal({
-	            title: 'You already clicked this button',
-	            icon: 'error',
-	            buttons: {
-	                cancel: 'Close'
-	            },
-	            closeModal: true,
-	            closeOnClickOutside: false
-	        });
-		}
-
 		(function($){
 			var tagnames = new Bloodhound({
 				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -768,6 +754,37 @@
 			   ],
 			   menubar:false,
 			 });
+
+			 $('.js-state-accept').click(function(e){
+				e.preventDefault();
+ 				var dataUrl = $(this).attr('href');
+ 				var parseUrl = dataUrl.split('/');
+ 				var state = parseUrl[6];
+ 				var videoId = parseUrl[7];
+ 				var alertType;
+
+				$(this).removeAttr("href");
+
+ 				swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+ 				$('.swal-button-container').css('display','none');
+
+				if(dataUrl) {
+					$.ajax({
+					    type: 'GET',
+					    url: dataUrl,
+					    data: { get_param: 'value' },
+					    dataType: 'json',
+					    success: function (data) {
+							if(data.status=='success') {
+								swal({  title: data.message, icon: 'success', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } }).then(() => {
+								  location.reload();
+								});
+								$('.swal-button-container').css('display','inline-block');
+							}
+					    }
+					});
+				}
+		     });
 
 			 //js form validations >> Admin Create edit
 	 		$('#video-form').validate({
