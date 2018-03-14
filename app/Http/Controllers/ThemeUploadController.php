@@ -182,6 +182,7 @@ class ThemeUploadController extends Controller {
         $video->state = 'new';
         $video->rights = 'ex';
         $video->source = Input::get('source');
+        $video->ip = $request->ip(); //$_SERVER["HTTP_CF_CONNECTING_IP"]
         $video->save();
 
         // Slack notifications
