@@ -21,8 +21,6 @@ return [
      */
     'client_secret' => env('GOOGLE_CLIENT_SECRET', 'uG4yNqSAnuvEaOqciMkJmhGg'),
 
-    'developer_key' => env('GOOGLE_DEVELOPER_KEY', 'AIzaSyATCrhO563JeXmXKoxgxPMkPeoxej5vYIg'),
-
     /**
      * Scopes.
      */
