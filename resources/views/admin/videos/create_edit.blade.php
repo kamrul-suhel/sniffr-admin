@@ -14,11 +14,28 @@
 		</div>
 
 		<div class="col-sm-6">
-			<form id="search-form" method="get" role="form" class="search-form-full" action="/admin/videos">
-				<div class="form-group">
-					<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+			<div class="row">
+
+				<div class="col-sm-9">
+					<form id="search-form" method="get" role="form" class="search-form-full" action="/admin/videos">
+						<div class="form-group">
+							<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+						</div>
+					</form>
 				</div>
-			</form>
+
+				<div class="col-sm-3">
+					<div class="form-group pull-right top-padding-micro">
+					@if(isset($previous))
+						<a href="{{ url('admin/videos/edit/'.$previous->alpha_id ) }}" class="btn btn-primary">Previous</a>
+					@endif
+					@if(isset($next))
+						<a href="{{ url('admin/videos/edit/'.$next->alpha_id ) }}" class="btn btn-primary">Next</a>
+					@endif
+					</div>
+			    </div>
+
+			</div>
 		</div>
 	</div>
 

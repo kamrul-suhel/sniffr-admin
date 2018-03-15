@@ -417,12 +417,17 @@ class AdminVideosController extends Controller {
     {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
+        $previous = Video::where('id', '<', $video->id)->where('state', '=', $video->state)->orderBy('id','desc')->first();
+        $next = Video::where('id', '>', $video->id)->where('state', '=', $video->state)->orderBy('id','asc')->first();
+
         if(!empty($video)) {
             $user = User::where('id', $video->user_id)->first();
 
             $data = array(
                 'headline' => '<i class="fa fa-edit"></i> Edit Video',
                 'video' => $video,
+                'previous' => $previous,
+                'next' => $next,
                 'post_route' => url('admin/videos/update'),
                 'button_text' => 'Update Video',
                 'admin_user' => Auth::user(),
