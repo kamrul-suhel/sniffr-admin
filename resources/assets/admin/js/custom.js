@@ -20,7 +20,7 @@ var public_vars = public_vars || {};
 			var videoId = parseUrl[7];
 			var alertType;
 
-			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true });
+			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
 			$('.swal-button-container').css('display','none');
 
 			if(dataUrl) {
@@ -54,7 +54,7 @@ var public_vars = public_vars || {};
 								default:
 									alertType = 'success';
 							}
-							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, buttons: { cancel: false, confirm: true } });
+							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
 							$('.swal-button-container').css('display','inline-block');
 						} else {
 							$('.swal-button-container').css('display','inline-block');
