@@ -11,6 +11,7 @@ use App\Page;
 use App\Menu;
 use App\VideoShotType;
 
+use App\Traits\Slug;
 use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +19,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 
-class AdminVideoShotTypeController extends Controller {
+class AdminVideoShotTypeController extends Controller
+{
+    use Slug;
 
     /**
      * constructor.
@@ -47,6 +50,7 @@ class AdminVideoShotTypeController extends Controller {
             $new_shottype_order = 1;
         }
         $input['order'] = $new_shottype_order;
+        $input['slug'] = $this->slugify($input['name']);
         $video_shottype = VideoShotType::create($input);
         if(isset($video_shottype->id)){
             return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Added Your New Video Shot Type', 'note_type' => 'success') );
@@ -55,6 +59,7 @@ class AdminVideoShotTypeController extends Controller {
 
     public function update(){
         $input = Input::all();
+        $input['slug'] = $this->slugify($input['name']);
         $shottype = VideoShotType::find($input['id'])->update($input);
         if(isset($shottype)){
             return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Updated Shot Type', 'note_type' => 'success') );

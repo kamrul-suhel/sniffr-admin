@@ -47,7 +47,7 @@
 <br />
 
 <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Video Submissions</div>
@@ -57,11 +57,25 @@
                 <div class="tab-content">
                     <canvas id="video-traffic"></canvas>
                 </div>
-            </div><!-- .panel-body -->
-        </div><!-- .panel-primary -->
-    </div><!-- .col-sm-8 -->
+            </div>
+        </div>
+    </div>
 
-	<div class="col-sm-4">
+    <div class="col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                 <div class="panel-title">Submissions Breakdown</div>
+            </div>
+
+            <div class="panel-body">
+                <div class="tab-content">
+                    <canvas id="sub-breakdown-graph"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Submissions State Overview</div>
@@ -74,24 +88,8 @@
     		</div>
     	</div>
     </div>
-</div>
 
-<div class="row">
-	<div class="col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-			     <div class="panel-title">Submissions Breakdown</div>
-            </div>
-
-			<div class="panel-body">
-                <div class="tab-content">
-                    <canvas id="sub-breakdown-graph"></canvas>
-                </div>
-            </div>
-		</div>
-	</div>
-
-	<div class="col-sm-6">
+	<!--div class="col-sm-6">
 		<div class="panel panel-primary" id="charts_env">
 			<div class="panel-heading">
                 <div class="panel-title">Top Countries by Sessions</div>
@@ -108,7 +106,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div-->
 </div>
 
 @section('javascript')
@@ -123,7 +121,7 @@
             "data":{
                 "labels":[
                     <?php foreach($video_traffic as $video){
-                        echo '"'.$video[0]->created_at->format('D j/M').'",';
+                        echo '"'.$video[0]->created_at->format('jS M').'",';
                     }?>
                 ],
                 "datasets":[{
@@ -206,7 +204,7 @@
             "data":{
                 "labels":[
                     <?php foreach($video_traffic as $video){
-                        echo '"'.$video[0]->created_at->format('D jS').'",';
+                        echo '"'.$video[0]->created_at->format('jS M').'",';
                     }?>
                 ],
                 "datasets":[{

@@ -41,8 +41,8 @@ class AdminController extends Controller {
 		$pending_videos = count(Video::where('state', 'pending')->get());
 
 		$date = new Carbon;
-		$video_traffic = Video::get()->where('created_at', '>', $date->create(2018, 02, 15))->groupBy(function($date) {
-	        return Carbon::parse($date->created_at)->format('d'); // grouping by days
+		$video_traffic = Video::get()->where('created_at', '>', $date->now()->subDays(30))->groupBy(function($date) {
+	        return Carbon::parse($date->created_at)->format('m-d'); // grouping by days
 	    });
 
 	    $video_state_count = Video::get()->where('created_at', '>', $date->create(2018, 02, 15))->groupBy('state');

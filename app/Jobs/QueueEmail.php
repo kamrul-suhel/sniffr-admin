@@ -27,6 +27,8 @@ use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
 
+use App\Notifications\SubmissionAlert;
+
 
 class QueueEmail implements ShouldQueue
 {
@@ -91,7 +93,7 @@ class QueueEmail implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed()
     {
         // Send user notification of failure, etc...
         $user = new User();
