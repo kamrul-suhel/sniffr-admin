@@ -10,25 +10,27 @@ class MyYoutube extends Youtube
     public function setStatus($video_id, $status = 'unlisted') {
         $listResponse = $this->youtube->videos->listVideos("status", array('id' => $video_id));
 
+        //$this->client->setAuthConfig(env('GOOGLE_APPLICATION_CREDENTIALS'));
+
         // require_once base_path() . '/vendor/google/apiclient/src/Google/autoload.php';
         //require_once 'Google/Service/YouTubePartner.php';
 
-        $client = $this->client;
+        //$client = $this->client;
         //$client = Google::getClient();
         //$client = new \Google_Client();
         //$client->setApplicationName('Unilad VLP');
         // $client->setDeveloperKey('AIzaSyATCrhO563JeXmXKoxgxPMkPeoxej5vYIg');
-        $asset = new \Google_Service_YouTubePartner_Asset();
-        $metadata = new \Google_Service_YouTubePartner_Metadata();
-        $youtubePartner = new \Google_Service_YouTubePartner($client);
-        $metadata->setTitle("Asset Title");
-        $metadata->setDescription("AssetDescription");
-        $asset->setMetadata($metadata);
-        $asset->setType("web");
-
-        dd($client);
+        // $asset = new \Google_Service_YouTubePartner_Asset();
+        // $metadata = new \Google_Service_YouTubePartner_Metadata();
+        $youtubePartner = new \Google_Service_YouTubePartner($this->client);
+        // $metadata->setTitle("Asset Title");
+        // $metadata->setDescription("AssetDescription");
+        // $asset->setMetadata($metadata);
+        // $asset->setType("web");
 
         $contentOwnersListResponse = $youtubePartner->contentOwners->listContentOwners(array('fetchMine' => true));
+
+        dd($contentOwnersListResponse);
 
         // $assetInsertResponse = $youtubePartner->assets->insert($asset, [
         //     'onBehalfOfContentOwner' => $this->contentOwnerId
