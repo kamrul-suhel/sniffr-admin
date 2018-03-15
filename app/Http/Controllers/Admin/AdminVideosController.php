@@ -361,7 +361,7 @@ class AdminVideosController extends Controller {
         $video->state = 'problem';
         $video->rights = Input::get('rights');
         $video->is_exclusive = 1;
-        $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
+        $video->image = $request->has('image') ? $request->input('image') : '/assets/img/placeholder.png';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');
         $video->video_category_id = Input::get('video_category_id');
@@ -417,10 +417,10 @@ class AdminVideosController extends Controller {
     {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
-        $previous = Video::where('id', '<', $video->id)->where('state', '=', $video->state)->orderBy('id','desc')->first();
-        $next = Video::where('id', '>', $video->id)->where('state', '=', $video->state)->orderBy('id','asc')->first();
-
         if(!empty($video)) {
+            $previous = Video::where('id', '<', $video->id)->where('state', '=', $video->state)->orderBy('id','desc')->first();
+            $next = Video::where('id', '>', $video->id)->where('state', '=', $video->state)->orderBy('id','asc')->first();
+
             $user = User::where('id', $video->user_id)->first();
 
             $data = array(
