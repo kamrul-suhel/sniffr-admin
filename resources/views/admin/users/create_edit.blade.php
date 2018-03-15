@@ -31,8 +31,8 @@
 			<div class="panel-heading">
 				<div class="panel-title">Username</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
 			</div>
 
@@ -45,38 +45,38 @@
 
 				<?php endif; ?>
 				<p>User's Username</p>
-				<input type="text" class="form-control" name="username" id="username" value="<?php if(!empty($user->username)): ?><?= $user->username ?><?php endif; ?>" />
+				<input type="text" class="form-control" name="username" id="username" autocomplete="off" value="<?php if(!empty($user->username)): ?><?= $user->username ?><?php endif; ?>" />
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
-			<div class="panel-heading"> 
-				<div class="panel-title">Email</div> 
+		<div class="panel panel-primary" data-collapsed="0">
+			<div class="panel-heading">
+				<div class="panel-title">Email</div>
 
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
-			</div> 
+			</div>
 
-			<div class="panel-body" style="display: block;"> 
+			<div class="panel-body" style="display: block;">
 				@if($errors->first('email'))
 				<div class="alert alert-danger">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 					<strong>Oh snap!</strong> <?= $errors->first('email'); ?></div>
 				@endif
 
 				<p>User's Email Address</p>
-				<input type="text" class="form-control" name="email" id="email" value="{{ isset($user->email) ? $user->email : old('email') }}" />
+				<input type="text" class="form-control" name="email" id="email" autocomplete="off" value="{{ isset($user->email) ? $user->email : old('email') }}" />
 			</div>
 		</div>
 
-		<div class="panel panel-primary" data-collapsed="0"> 
-			<div class="panel-heading"> 
+		<div class="panel panel-primary" data-collapsed="0">
+			<div class="panel-heading">
 				<div class="panel-title">Password</div>
-				<div class="panel-options"> 
-					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 				</div>
-			</div> 
+			</div>
 
 			<div class="panel-body" style="display: block;">
 				@if(isset($user->password))
@@ -84,44 +84,43 @@
 				@else
 					<p>Enter users password:</p>
 				@endif
-				<input type="password" class="form-control" name="password" id="password" value="" />
+				<input type="password" class="form-control" name="password" id="password" autocomplete="off" value="" />
 			</div>
 		</div>
 
-		<div class="row"> 
-			<div class="col-sm-4"> 
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> 
-						<div class="panel-title">User Role</div> 
-						
-						<div class="panel-options"> 
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">User Role</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
-					<div class="panel-body" style="display: block;"> 
+					<div class="panel-body" style="display: block;">
 						<p>Select the user's role below</p>
 						<select id="role" name="role">
-							<option value="">Please Select</option>
-							<option value="admin"{{ isset($user) && $user->role == 'admin' ? ' selected' : '' }}>Admin</option>
 							<option value="manager"{{ isset($user) && $user->role == 'manager' ? ' selected' : '' }}>Manager</option>
+							<option value="admin"{{ isset($user) && $user->role == 'admin' ? ' selected' : '' }}>Admin</option>
 							<option value="client"{{ isset($user) && $user->role == 'client' ? ' selected' : '' }}>Client</option>
 						</select>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-4" id="client-box"> 
-				<div class="panel panel-primary" data-collapsed="0"> 
-					<div class="panel-heading"> 
-						<div class="panel-title">Client</div> 
-						
-						<div class="panel-options"> 
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+			<div class="col-sm-4" id="client-box">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Client</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
 
-					<div class="panel-body" style="display: block;"> 
+					<div class="panel-body" style="display: block;">
 						<p>Select user client</p>
 						<select id="client_id" name="client_id">
 							@if(isset($clients))
