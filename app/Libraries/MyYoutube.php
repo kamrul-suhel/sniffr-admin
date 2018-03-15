@@ -3,14 +3,48 @@
 namespace App\Libraries;
 
 use Dawson\Youtube\Youtube;
-use Google_Service_YouTube_VideoStatus;
+use Google;
 
 class MyYoutube extends Youtube
 {
     public function setStatus($video_id, $status = 'unlisted') {
         $listResponse = $this->youtube->videos->listVideos("status", array('id' => $video_id));
 
+        // require_once base_path() . '/vendor/google/apiclient/src/Google/autoload.php';
+        //require_once 'Google/Service/YouTubePartner.php';
 
+        $client = $this->client;
+        //$client = Google::getClient();
+        //$client = new \Google_Client();
+        //$client->setApplicationName('Unilad VLP');
+        // $client->setDeveloperKey('AIzaSyATCrhO563JeXmXKoxgxPMkPeoxej5vYIg');
+        $asset = new \Google_Service_YouTubePartner_Asset();
+        $metadata = new \Google_Service_YouTubePartner_Metadata();
+        $youtubePartner = new \Google_Service_YouTubePartner($client);
+        $metadata->setTitle("Asset Title");
+        $metadata->setDescription("AssetDescription");
+        $asset->setMetadata($metadata);
+        $asset->setType("web");
+
+        dd($client);
+
+        $contentOwnersListResponse = $youtubePartner->contentOwners->listContentOwners(array('fetchMine' => true));
+
+        // $assetInsertResponse = $youtubePartner->assets->insert($asset, [
+        //     'onBehalfOfContentOwner' => $this->contentOwnerId
+        // ]);
+        //
+        // $assetId = $assetInsertResponse['id'];
+        //
+        // $ratio = 100;
+        // $type = "exclude";
+        // $territories = [];
+
+        dd($youtubePartner);
+
+        // $contentOwnersListResponse = $youtubePartner->contentOwners->listContentOwners(
+        // array('fetchMine' => true));
+        // $contentOwnerId = $contentOwnersListResponse['items'][0]['id'];
 
         // If $listResponse is empty, the specified video was not found.
         if (!isset($listResponse[0])) {
@@ -18,6 +52,8 @@ class MyYoutube extends Youtube
         } else {
             // Since the request specified a video ID, the response only contains one video resource.
             $video = $listResponse[0];
+
+            dd($video);
 
             $videoStatus = $video['status'];
             $videoStatus->privacyStatus = $status;

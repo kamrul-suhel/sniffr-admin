@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4fedad9e4d5b9e306864fd1295ed51b0",
+    "content-hash": "234d51a8ac91daf9ef233380e011a044",
     "packages": [
         {
             "name": "airbrake/phpbrake",
-            "version": "v0.5.2",
+            "version": "v0.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/airbrake/phpbrake.git",
-                "reference": "64f58a03715e685a7bb3142232381a6dc79035f2"
+                "reference": "3dbef16cab00431e5e957fa513c5920c6765100c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/64f58a03715e685a7bb3142232381a6dc79035f2",
-                "reference": "64f58a03715e685a7bb3142232381a6dc79035f2",
+                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/3dbef16cab00431e5e957fa513c5920c6765100c",
+                "reference": "3dbef16cab00431e5e957fa513c5920c6765100c",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                 "logging",
                 "notifier"
             ],
-            "time": "2018-01-29T11:30:13+00:00"
+            "time": "2018-03-15T11:34:28+00:00"
         },
         {
             "name": "alchemy/binary-driver",
@@ -118,16 +118,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.23",
+            "version": "3.52.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783"
+                "reference": "3aefee935e611e1ce959f0288cd160dc81d233a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3ce95b96c217a699168d937c4ed700e6a27ec783",
-                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3aefee935e611e1ce959f0288cd160dc81d233a0",
+                "reference": "3aefee935e611e1ce959f0288cd160dc81d233a0",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-08T22:51:35+00:00"
+            "time": "2018-03-14T20:20:20+00:00"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -1733,6 +1733,42 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
+        },
+        {
+            "name": "janyksteenbeek/youtubepartner",
+            "version": "v1.1.20170911",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/janyksteenbeek/YouTubePartner.git",
+                "reference": "85a22be5b7152b82b3614ed5a8e30efac319546a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/janyksteenbeek/YouTubePartner/zipball/85a22be5b7152b82b3614ed5a8e30efac319546a",
+                "reference": "85a22be5b7152b82b3614ed5a8e30efac319546a",
+                "shasum": ""
+            },
+            "require": {
+                "google/apiclient": "^2.0"
+            },
+            "type": "package",
+            "autoload": {
+                "files": [
+                    "YouTubePartner.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache License 2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Janyk Steenbeek",
+                    "email": "info@janyksteenbeek.nl"
+                }
+            ],
+            "description": "PHP library for Youtube Content ID API v1",
+            "time": "2017-11-19T16:25:02+00:00"
         },
         {
             "name": "kouz/laravel-airbrake",

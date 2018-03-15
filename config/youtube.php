@@ -21,13 +21,16 @@ return [
      */
     'client_secret' => env('GOOGLE_CLIENT_SECRET', 'uG4yNqSAnuvEaOqciMkJmhGg'),
 
+    'developer_key' => env('GOOGLE_DEVELOPER_KEY', 'AIzaSyATCrhO563JeXmXKoxgxPMkPeoxej5vYIg'),
+
     /**
      * Scopes.
      */
     'scopes' => [
         'https://www.googleapis.com/auth/youtube',
         'https://www.googleapis.com/auth/youtube.upload',
-        'https://www.googleapis.com/auth/youtube.readonly'
+        'https://www.googleapis.com/auth/youtube.readonly',
+        'https://www.googleapis.com/auth/youtubepartner'
     ],
 
     /**
@@ -35,11 +38,11 @@ return [
      */
     'routes' => [
 
-        /** 
+        /**
          * Determine if the Routes should be disabled.
          * Note: We recommend this to be set to "false" immediately after authentication.
          */
-        'enabled' => false,
+        'enabled' => true,
 
         /**
          * The prefix for the below URI's
