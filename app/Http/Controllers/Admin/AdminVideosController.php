@@ -418,8 +418,8 @@ class AdminVideosController extends Controller {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
         if(!empty($video)) {
-            $previous = Video::where('id', '<', $video->id)->where('state', '=', $video->state)->orderBy('id','desc')->first();
-            $next = Video::where('id', '>', $video->id)->where('state', '=', $video->state)->orderBy('id','asc')->first();
+            $next = Video::where('id', '<', $video->id)->where('state', '=', $video->state)->orderBy('id','desc')->first();
+            $previous = Video::where('id', '>', $video->id)->where('state', '=', $video->state)->orderBy('id','asc')->first();
 
             $user = User::where('id', $video->user_id)->first();
 
