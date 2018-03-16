@@ -10,7 +10,7 @@ class MyYoutube extends Youtube
     public function setStatus($video_id, $status = 'unlisted') {
         $listResponse = $this->youtube->videos->listVideos("status", array('id' => $video_id));
 
-        $client = $this->client;
+        // $client = $this->client;
         // ! $client = Google::getClient();
         // ! $client = new \Google_Client();
         // ! $client->setApplicationName('Unilad VLP');
@@ -18,10 +18,12 @@ class MyYoutube extends Youtube
         // $asset = new \Google_Service_YouTubePartner_Asset();
         // $metadata = new \Google_Service_YouTubePartner_Metadata();
         // $youtubePartner = new \Google_Service_YouTubePartner($client);
+
         // $metadata->setTitle("Asset Title");
         // $metadata->setDescription("AssetDescription");
         // $asset->setMetadata($metadata);
         // $asset->setType("web");
+
         // $contentOwnersListResponse = $youtubePartner->contentOwners->listContentOwners(array('fetchMine' => true));
 
         // If $listResponse is empty, the specified video was not found.
