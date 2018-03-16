@@ -130,6 +130,7 @@
                                                             <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
                                                                 <tr>
                                                                     <td style="padding:18px 0px 18px 0px;line-height:22px;text-align:inherit;" height="100%" valign="top" bgcolor="">
+                                                                        <div><span style="margin-top:10px;font-style:italic;color:#999;">powered by Sniffr</span></div>
                                                                         @yield('content')
                                                                     </td>
                                                                 </tr>

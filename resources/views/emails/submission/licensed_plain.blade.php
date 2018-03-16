@@ -9,3 +9,5 @@ Your video is now licensed: check it out here: {{ url('video/' . $video->alpha_i
 Regards,
 
 The UNILAD Team
+
+(powered by Sniffr)

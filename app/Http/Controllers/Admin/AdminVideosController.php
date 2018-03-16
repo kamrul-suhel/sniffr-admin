@@ -185,9 +185,9 @@ class AdminVideosController extends Controller {
             }
 
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
-            if(!empty($video->youtube_id) && $video->file){
+            if(!empty($video->youtube_id) && $video->file && !$video->nsfw){
 
-                // Make youtube video public
+                // Make youtube video public (if not NSFW)
                 MyYoutube::setStatus($video->youtube_id, 'public');
 
             } else {
@@ -875,6 +875,30 @@ class AdminVideosController extends Controller {
         $pdf = PDF::loadView('admin.videos.pdfview', $data);
 
         return (!empty($video) ? $pdf->download($alpha_id.'.pdf') : Redirect::to('admin/videos/')->with(array('note' => 'Sorry, we could not find the video', 'note_type' => 'error')));
+    }
+
+    public function nsfw($alpha_id = null)
+    {
+        $status = 'error';
+        $message = 'This NSFW flag was not added or removed.';
+
+        if($alpha_id) {
+            $video = Video::where('alpha_id', $alpha_id)->first();
+            if($video->id) {
+                if($video->nsfw==1) {
+                    $video->nsfw = NULL;
+                    $message = 'Successfully removed NSFW flag.';
+                } else {
+                    $video->nsfw = 1;
+                    $message = 'Successfully added NSFW flag.';
+                }
+                // Save video
+                $video->save();
+                $status = 'success';
+            }
+        }
+
+        return Redirect::to('admin/videos/edit/'.$alpha_id)->with(array('note' => $message, 'note_type' => $status));
     }
 
 }

@@ -15,6 +15,12 @@ trait VideoHelper{
 
 		$sHTML .= '<div class="video-container'.(  $embed && !$video->youtube_id ? ' embedded' : '').'">';
 
+		if($video->nsfw==1) {
+			$sHTML .= '<div class="nsfw nsfw-active" rel="'.$video->alpha_id.'">
+					<div class="corner-triangle-text text-capitalize"><a href="#"><span class="corner-triangle-firstline">NSFW</span></a></div>
+				</div>';
+		}
+
 		if($video->youtube_id){ // Youtube
 			if($embed){
 				$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0" allowfullscreen></iframe>';

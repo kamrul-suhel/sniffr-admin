@@ -289,6 +289,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('checkyoutube', 'Admin\AdminVideosController@checkYoutube');
     Route::get('checkanalysis', 'Admin\AdminVideosController@checkAnalysis');
     Route::get('pdfview/{id}', 'Admin\AdminVideosController@pdfview');
+    Route::get('nsfw/{id}', 'Admin\AdminVideosController@nsfw');
 });
 
 

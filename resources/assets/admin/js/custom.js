@@ -12,6 +12,17 @@ var public_vars = public_vars || {};
 	        $(this).submit();
 	    });
 
+		// $('.nsfw').click(function(e){
+		// 	e.preventDefault();
+		// 	var videoId = $(this).attr('rel');
+		// 	console.log(videoId);
+		// 	if($(this).hasClass('nsfw-active')) {
+		// 		$(this).removeClass('nsfw-active');
+		// 	} else {
+		// 		$(this).addClass('nsfw-active');
+		// 	}
+		// });
+
 	    $('.js-state').click(function(e){
 			e.preventDefault();
 			var dataUrl = $(this).attr('href');
