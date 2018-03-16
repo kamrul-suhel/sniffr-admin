@@ -123,7 +123,7 @@
                                                                 <tr>
                                                                     <td height="100%" valign="top">
                                                                         <img src="https://sniffrmedia.co.uk/content/uploads/settings/logo-unilad-black.png" style="width:25%;height:auto;" border="0">
-                                                                        <div><span style="margin-top:10px;font-style:italic;color:#999;">powered by Sniffr</span></div>
+                                                                        <div><span style="margin-top:20px;font-style:italic;color:#999;">powered by Sniffr</span></div>
                                                                     </td>
                                                                 </tr>
                                                             </table>
