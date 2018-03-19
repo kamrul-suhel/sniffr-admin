@@ -39,6 +39,9 @@ class ThemeUserController extends Controller{
     	$user = User::where('username', '=', $username)->first();
 
         $authUser = Auth::user();
+        if(isset($authUser->id)) {
+            return redirect()->home()->with(array('note' => 'Sorry but you need to be logged in to access this page!', 'note_type' => 'error') );
+        }
         if($authUser->id!=$user->id&&$authUser->role!='admin'){
             return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to access this page!', 'note_type' => 'error') );
         }

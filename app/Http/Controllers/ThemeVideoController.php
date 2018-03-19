@@ -45,23 +45,23 @@ class ThemeVideoController extends Controller {
      */
     public function index($id)
     {
-        if(Auth::guest()){
+        // if(Auth::guest()){
             $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->where('alpha_id', $id)->first();
-        }else{
-            $video = Video::with('tags')->where('alpha_id', $id)->first();
-        }
+        // }else{
+        //     $video = Video::with('tags')->where('alpha_id', $id)->first();
+        // }
 
         //Make sure video is active
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
             $favorited = false;
-            if(!Auth::guest()):
-                $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
-            endif;
+            // if(!Auth::guest()):
+            //     $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
+            // endif;
 
             $downloaded = false;
-            if(!Auth::guest()):
-                $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
-            endif;
+            // if(!Auth::guest()):
+            //     $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
+            // endif;
 
             $view_increment = $this->handleViewCount($id);
 

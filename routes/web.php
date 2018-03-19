@@ -143,6 +143,9 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
 }); // End if_logged_in_must_be_subscribed route
 
+Route::get('unsubscribe/{email}', 'ThemeContactController@index');
+Route::post('unsubscribe', 'ThemeContactController@edit');
+
 Route::get('user/{username}/renew_subscription', 'ThemeUserController@renew');
 Route::post('user/{username}/update_cc', array('uses' => 'ThemeUserController@update_cc_store'));
 

@@ -12,6 +12,7 @@ class Contact extends Model
   	public static $rules = array();
 
     protected $table = 'contacts';
+    protected $softDelete = true;
 
     protected $fillable = [
         'full_name', 'email', 'tel', 'language', 'location', 'comments', 'facebook', 'youtube', 'instagram', 'twitter', 'other', 'terms'
