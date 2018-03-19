@@ -185,10 +185,12 @@ class AdminVideosController extends Controller {
             }
 
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
-            if(!empty($video->youtube_id) && $video->file && !$video->nsfw){
+            if(!empty($video->youtube_id) && $video->file){
 
                 // Make youtube video public (if not NSFW)
-                MyYoutube::setStatus($video->youtube_id, 'public');
+                if(!$video->nsfw) {
+                    MyYoutube::setStatus($video->youtube_id, 'public');
+                }
 
             } else {
 
