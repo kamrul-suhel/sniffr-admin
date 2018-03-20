@@ -139,7 +139,7 @@
 					<div class="panel-title">User Active Status</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 					<div class="panel-body" style="display: block;">
 						<label>User Active Status </label>
-						<input type="checkbox" id="active" name="active" @if(isset($user->active) && $user->active == 1)checked="checked" value="1" @else value="0" @endif />
+						<input type="checkbox" id="active" name="active" @if(isset($user->active) && $user->active == 1)checked="checked" value="1" @elseif(!isset($user->active)) checked="checked" value="1" @else value="0" @endif />
 					</div>
 				</div>
 			</div>
