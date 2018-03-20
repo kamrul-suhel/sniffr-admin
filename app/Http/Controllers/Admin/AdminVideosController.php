@@ -140,6 +140,7 @@ class AdminVideosController extends Controller {
         $video_process=0;
 
         $video = Video::where('alpha_id', $id)->first();
+        $previous_state = $video->state;
         $video->state = $state;
 
         // Send email
@@ -260,7 +261,7 @@ class AdminVideosController extends Controller {
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
         } else {
-            return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
+            return Redirect::to('admin/videos/edit/'.$id.'/?previous_state='.$previous_state)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
         }
     }
 
@@ -420,8 +421,9 @@ class AdminVideosController extends Controller {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
         if(!empty($video)) {
-            $next = Video::where('id', '<', $video->id)->where('state', '=', $video->state)->orderBy('id','desc')->first();
-            $previous = Video::where('id', '>', $video->id)->where('state', '=', $video->state)->orderBy('id','asc')->first();
+            $video_state = (Input::get('previous_state') ? Input::get('previous_state') : $video->state);
+            $next = Video::where('id', '<', $video->id)->where('state', '=', $video_state)->orderBy('id','desc')->first();
+            $previous = Video::where('id', '>', $video->id)->where('state', '=', $video_state)->orderBy('id','asc')->first();
 
             $user = User::where('id', $video->user_id)->first();
 
