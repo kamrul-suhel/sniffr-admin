@@ -2,9 +2,10 @@
 
 @section('content')
 	<div class="admin-section-title bottom-padding">
+
 		<div class="row">
 			<div class="col-xs-12">
-				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos <a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
+				<h3><i class="fa fa-youtube-play"></i> <a href="/admin/videos/{{ lcfirst($state) }}">{{ ucfirst($state) }} Videos</a> <a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
 		</div>
 

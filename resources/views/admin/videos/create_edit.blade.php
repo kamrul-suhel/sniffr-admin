@@ -2,6 +2,17 @@
 
 @section('content')
 <div id="admin-container">
+
+	<ol class="breadcrumb">
+		<li><a href="/admin/videos">All Videos</a></li>
+		@if(isset($video))
+		<li><a href="/admin/videos/{{ !empty($video->state) ? $video->state : 'new' }}">{{ !empty($video->state) ? ucfirst($video->state) : 'New' }}</a></li>
+		<li class="active"><strong>{!! !empty($video->title) ? '<a href="/admin/videos/edit/'.$video->alpha_id.'">'.$video->title.'</a>' : 'No Title Provided' !!}</strong></li>
+		@else
+		<li class="active"><strong>Add New Video</strong></li>
+		@endif
+	</ol>
+
 	<div class="row bottom-padding">
 		<div class="col-sm-6">
 			<div class="admin-section-title">
