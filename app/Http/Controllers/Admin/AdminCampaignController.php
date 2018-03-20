@@ -11,6 +11,7 @@ use App\Video;
 use App\Client;
 use App\Campaign;
 
+use App\Traits\Slug;
 use App\Libraries\ThemeHelper;
 
 use Illuminate\Http\Request;
@@ -21,9 +22,10 @@ use App\Http\Controllers\Controller;
 
 class AdminCampaignController extends Controller
 {
+    use Slug;
+
     protected $rules = [
         'name' => 'required',
-        'slug' => 'required',
         'client_id' => 'required'
     ];
 
@@ -79,6 +81,8 @@ class AdminCampaignController extends Controller
          {
              return Redirect::back()->withErrors($validator)->withInput();
          }
+
+         $data['slug'] = $this->slugify($data['name']);
 
          $campaign = Campaign::create($data);
 
@@ -155,6 +159,8 @@ class AdminCampaignController extends Controller
          // if(!isset($data['active']) || $data['active'] == ''){
          //     $data['active'] = 0;
          // }
+
+         $data['slug'] = $this->slugify($data['name']);
 
          $campaign->update($data);
 

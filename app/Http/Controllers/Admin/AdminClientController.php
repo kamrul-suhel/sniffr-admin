@@ -10,6 +10,7 @@ use Redirect;
 use App\Client;
 use App\Campaign;
 
+use App\Traits\Slug;
 use App\Libraries\ThemeHelper;
 
 use Illuminate\Http\Request;
@@ -20,10 +21,10 @@ use App\Http\Controllers\Controller;
 
 class AdminClientController extends Controller
 {
-    protected $rules = [
-        'name' => 'required',
-        'slug' => 'required'
+    use Slug;
 
+    protected $rules = [
+        'name' => 'required'
     ];
     //
     public function __construct(Request $request)
@@ -61,7 +62,7 @@ class AdminClientController extends Controller
             'button_text' => 'Add New Client',
             'admin_user' => Auth::user()
         );
-        
+
         return view('admin.clients.create_edit', $data);
     }
 
@@ -80,6 +81,8 @@ class AdminClientController extends Controller
         {
             return Redirect::back()->withErrors($validator)->withInput();
         }
+
+        $data['slug'] = $this->slugify($data['name']);
 
         $client = Client::create($data);
 
@@ -139,6 +142,8 @@ class AdminClientController extends Controller
         {
             return Redirect::back()->withErrors($validator)->withInput();
         }
+
+        $data['slug'] = $this->slugify($data['name']);
 
         // if(!isset($data['active']) || $data['active'] == ''){
         //     $data['active'] = 0;

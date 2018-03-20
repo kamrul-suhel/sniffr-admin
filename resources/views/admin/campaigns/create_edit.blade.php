@@ -28,9 +28,9 @@
 
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
-							<div class="panel-title">Campaign Name</div> 
-							<div class="panel-options"> 
-								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
+							<div class="panel-title">Campaign Name</div>
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 							</div>
 						</div>
 
@@ -47,29 +47,6 @@
 						</div>
 					</div>
 
-				</div>
-
-				<div class="@if(!empty($campaign->created_at)) col-sm-3 @else col-sm-4 @endif">
-					<div class="panel panel-primary" data-collapsed="0"> 
-						<div class="panel-heading">
-							<div class="panel-title">Slug</div> 
-							<div class="panel-options"> 
-								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> 
-							</div>
-						</div>
-
-						<div class="panel-body" style="display: block;">
-							<?php if($errors->first('slug')): ?>
-							<div class="alert alert-danger">
-								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <strong>Oh snap!</strong>
-								<?= $errors->first('slug'); ?>
-							</div>
-							<?php endif; ?>
-
-							<p>(example. slug-name)</p>
-							<input type="text" class="form-control" name="slug" id="slug" placeholder="slug-name" value="@if(!empty($campaign->slug)){{ $campaign->slug }}@endif" />
-						</div>
-					</div>
 				</div>
 
 				@if(!empty($campaign->created_at))
@@ -109,7 +86,7 @@
 								<?= $errors->first('client_id'); ?>
 							</div>
 							<?php endif; ?>
-							
+
 							<select name="client_id" id="client_id" class="form-control">
 								<option value="">Please select</option>
 								@foreach($clients as $client)
@@ -144,19 +121,6 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
-
-		function slugify(text) {
-		  return text.toString().toLowerCase()
-		    .replace(/\s+/g, '-')           // Replace spaces with -
-		    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-		    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-		    .replace(/^-+/, '')             // Trim - from start of text
-		    .replace(/-+$/, '');            // Trim - from end of text
-		}
-
-		$('#name').on('input', function() {
-		    $('#slug').val(slugify($('#name').val()));
-		});
 
 		$('#duration').mask('00:00:00');
 

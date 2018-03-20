@@ -16,13 +16,11 @@
 		<tr class="table-header">
 			<th>Client</th>
 			<th>Name</th>
-			<th>Slug</th>
 			<th>Actions</th>
 			@foreach($campaigns as $campaign)
 			<tr>
 				<td>{{ $campaign->client->name }}</td>
 				<td><a href="{{ url('admin/campaigns/'.$campaign->id ) }}">{{ TextHelper::shorten($campaign->name, 250) }}</a></td>
-				<td valign="bottom"><p>{{ $campaign->slug }}</p></td>
 				<td>
 					<p>
 						<a href="{{ url('admin/campaigns/edit') . '/' . $campaign->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>

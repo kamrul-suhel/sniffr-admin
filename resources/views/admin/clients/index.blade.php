@@ -15,12 +15,10 @@
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
 			<th>Name</th>
-			<th>Slug</th>
 			<th>Actions</th>
 			@foreach($clients as $client)
 			<tr>
 				<td>{{ TextHelper::shorten($client->name, 250) }}</td>
-				<td valign="bottom"><p>{{ $client->slug }}</p></td>
 				<td>
 					<p>
 						<a href="{{ url('admin/clients/edit') . '/' . $client->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
