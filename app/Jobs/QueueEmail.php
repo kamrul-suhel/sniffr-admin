@@ -60,29 +60,36 @@ class QueueEmail implements ShouldQueue
     {
         $video = Video::find($this->video_id);
 
+        //check if email is valid (might not be needed if frontend upload form is doing it)
+
+        //check if contact has unsubcribed (contact_id!=0)
         if(isset($video)) {
-            switch($this->email_type){
-                case 'submission_accepted':
-                    Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
-                    break;
-                case 'submission_licensed':
-                    Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
-                    break;
-                case 'submission_rejected':
-                    Mail::to($video->contact->email)->send(new SubmissionRejected($video));
-                    break;
-                case 'submission_thanks':
-                    Mail::to($video->contact->email)->send(new SubmissionThanks($video));
-                    break;
-                case 'submission_thanks_nonex':
-                    Mail::to($video->contact->email)->send(new SubmissionThanksNonEx($video));
-                    break;
-                case 'details_reminder':
-                    Mail::to($video->contact->email)->send(new DetailsReminder($video));
-                    break;
-                case 'details_thanks':
-                    Mail::to($video->contact->email)->send(new DetailsThanks($video));
-                    break;
+            if($video->contact_id==0) {
+                $video->notify(new SubmissionAlert('a job failed to send an '.$this->email_type.' email due to unsubscribe or no contact email (Id: '.$this->video_id.')'));
+            } else {
+                switch($this->email_type){
+                    case 'submission_accepted':
+                        Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+                        break;
+                    case 'submission_licensed':
+                        Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+                        break;
+                    case 'submission_rejected':
+                        Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+                        break;
+                    case 'submission_thanks':
+                        Mail::to($video->contact->email)->send(new SubmissionThanks($video));
+                        break;
+                    case 'submission_thanks_nonex':
+                        Mail::to($video->contact->email)->send(new SubmissionThanksNonEx($video));
+                        break;
+                    case 'details_reminder':
+                        Mail::to($video->contact->email)->send(new DetailsReminder($video));
+                        break;
+                    case 'details_thanks':
+                        Mail::to($video->contact->email)->send(new DetailsThanks($video));
+                        break;
+                }
             }
         }
     }

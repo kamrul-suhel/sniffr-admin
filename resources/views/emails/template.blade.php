@@ -169,6 +169,12 @@
                                                                             </a>
                                                                         </td>
                                                                     </tr>
+                                                                    <tr>
+                                                                        <td colspan="3"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3"><a href="{{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}"><span style="margin-top:20px;font-style:italic;color:#999;">Click here to unsubscribe</span></a></td>
+                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                         </td>
