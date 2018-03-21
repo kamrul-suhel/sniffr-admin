@@ -259,7 +259,7 @@ class AdminVideosController extends Controller {
         }
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id, 'video_alpha_id' => $video->alpha_id, 'previous_state' => $previous_state]);
         } else {
             return Redirect::to('admin/videos/edit/'.$id.'/?previous_state='.$previous_state)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
         }

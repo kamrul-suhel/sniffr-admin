@@ -807,7 +807,8 @@
 					    success: function (data) {
 							if(data.status=='success') {
 								swal({  title: data.message, icon: 'success', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } }).then(() => {
-								  location.reload();
+									//location.reload();
+									window.location.href = '/admin/videos/edit/'+data.video_alpha_id+'/?previous_state='+data.previous_state;
 								});
 								$('.swal-button-container').css('display','inline-block');
 							}
