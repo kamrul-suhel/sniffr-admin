@@ -13,6 +13,10 @@ use FFMpeg;
 use App\Page;
 use App\Menu;
 use App\Label;
+use App\User;
+use App\Tag;
+use App\Video;
+use App\Contact;
 
 use App\Libraries\ThemeHelper;
 
@@ -22,6 +26,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 
 use App\Http\Controllers\Controller;
@@ -308,5 +313,33 @@ class AdminLabelController extends Controller {
         } else {
             echo 'Not found.';
         }
+    }
+
+    public function reviewFailedJobs() {
+
+        function get_string_between($string, $start, $end){
+            $string = ' ' . $string;
+            $ini = strpos($string, $start);
+            if ($ini == 0) return '';
+            $ini += strlen($start);
+            $len = strpos($string, $end, $ini) - $ini;
+            return substr($string, $ini, $len);
+        }
+
+        $query_value = 'QueueEmail';
+        $fails = DB::table('failed_jobs')->where('payload', 'LIKE' , '%'.$query_value.'%')->get();
+        foreach($fails as $fail) {
+            $payload = json_decode($fail->payload);
+            $payload = get_string_between($payload->data->command, ';i:', ';s:');
+            if($payload) {
+                $video = Video::where('id', $payload)->first();
+                if(isset($video->contact->id)) {
+                    if($video->state=='accepted' || $video->state=='pending' || $video->state=='licensed') {
+                        echo 'full name: '.$video->contact->full_name.' | email: '.$video->contact->email.' | video_alpha_id: '.$video->alpha_id.' <br />';
+                    }
+                }
+            }
+        }
+
     }
 }
