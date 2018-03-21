@@ -85,7 +85,8 @@ var public_vars = public_vars || {};
 				buttons: { cancel: true, confirm: true }
 			})
 			.then((willDelete) => {
-				swal({ title: 'loading..', icon: 'info', buttons: false, closeModal: true });
+				swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+				$('.swal-button-container').css('display','none');
 				if (willDelete) {
 					if(delete_link) {
 						$.ajax({
