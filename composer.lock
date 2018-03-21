@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d90c639ebbab5aa382f83b4366b581a5",
+    "content-hash": "3baed090cccc899fb39afcdc9a7fe212",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -2327,6 +2327,54 @@
             ],
             "description": "An adapter decorator to enable meta-data caching.",
             "time": "2017-03-20T09:59:34+00:00"
+        },
+        {
+            "name": "michaeljwright/aws-rekognition",
+            "version": "v0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michaeljwright/aws-rekognition.git",
+                "reference": "955016828dd3ccae17880923a7f2d0536da2c7a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michaeljwright/aws-rekognition/zipball/955016828dd3ccae17880923a7f2d0536da2c7a0",
+                "reference": "955016828dd3ccae17880923a7f2d0536da2c7a0",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "~3.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "~5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MichaelJWright\\Rekognition\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kaushik Subramaniam Gnanaskandan",
+                    "email": "kaushik.subman@gmail.com"
+                },
+                {
+                    "name": "Alejandro",
+                    "email": "acarste@okstate.edu"
+                },
+                {
+                    "name": "Mike Wright",
+                    "email": "mike.filmworks@gmail.com"
+                }
+            ],
+            "description": "A Laravel package for the AWS Rekognition",
+            "time": "2018-03-21T14:26:30+00:00"
         },
         {
             "name": "monolog/monolog",
