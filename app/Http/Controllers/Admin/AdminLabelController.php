@@ -8,7 +8,7 @@ use Validator;
 use Redirect;
 
 use FFMpeg;
-use MyRekognition;
+// use MyRekognition;
 
 use App\Page;
 use App\Menu;
@@ -134,14 +134,14 @@ class AdminLabelController extends Controller {
                         ],
                     ],
                 ];
-             $job = MyRekognition::startLabelDetection($config);
+             $job = \Rekognition::startLabelDetection($config);
              dd($job['JobId']);
          } elseif($type=='get') {
              $config = [
                     'JobId' => '6333130c01cb42d2659c69d0f233ef6d046eecd7a2fd7fd341b5c3bed3423b3c',
                     'SortBy' => 'NAME',
                 ];
-             $job = MyRekognition::getLabelDetection($config);
+             $job = \Rekognition::getLabelDetection($config);
              dd($job['Labels']);
              // if($job['JobStatus']=='SUCCEEDED'){
              //     $labels = $job['Labels'];
@@ -169,14 +169,14 @@ class AdminLabelController extends Controller {
                         ],
                     ],
                 ];
-             $job = MyRekognition::startContentModeration($config);
+             $job = \Rekognition::startContentModeration($config);
              dd($job['JobId']);
          } elseif ($type=='adult_get') {
              $config = [
                     'JobId' => '32d74b9d5ff1d85bb2f3786f5a0d72529f8f7475813d4cfaaa846ed69e4f36dd',
                     'SortBy' => 'NAME',
                 ];
-             $job = MyRekognition::getContentModeration($config);
+             $job = \Rekognition::getContentModeration($config);
              if($job['JobStatus']=='SUCCEEDED'){
                  $labels = $job['ModerationLabels'];
                  if(count($labels)) {
