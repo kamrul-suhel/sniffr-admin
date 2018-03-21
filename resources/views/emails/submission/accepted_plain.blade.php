@@ -17,3 +17,5 @@ Regards,
 The UNILAD Team
 
 (powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}
