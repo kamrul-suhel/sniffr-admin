@@ -107,6 +107,7 @@ class ThemeUploadController extends Controller {
      */
     public function store(Request $request)
     {
+        return $request->file('file');
         //increase memory limits and upload post size
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');

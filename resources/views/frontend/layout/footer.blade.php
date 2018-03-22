@@ -53,10 +53,3 @@
         </v-layout>
     </v-container>
 </section>
-@extends('frontend.layout.login_form')
-
-<script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
-{{--<script src="{{asset('assets/frontend/scripts/plugin.js')}}"></script>--}}
-
-
-<script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>

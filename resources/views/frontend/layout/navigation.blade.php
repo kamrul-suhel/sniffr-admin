@@ -13,7 +13,11 @@
                         <li><a href="{{ route('videos') }}"><i class="fas fa-video"></i> Videos</a></li>
 
                         @if(Auth::guest())
-                            <li><a href="#" data-toggle="modal" data-target="#loginModal"><i class="fas fa-lock-alt"></i> Login</a></li>
+                            <li>
+                                <a href="#" @click.stop.prevent="login_dialog = true">
+                                    <i class="fas fa-lock-alt"></i> Login
+                                </a>
+                            </li>
                         @else
                             <li class="dropdown">
                                 <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
