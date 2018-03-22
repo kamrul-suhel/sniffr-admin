@@ -4,6 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Comment
+ * @property int $id
+ * @property int $user_id
+ * @property string $comment
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $created_at
+ * @property mixed $contact
+ * @property mixed $video
+ * @property mixed $user
+ * @property int|null video_id
+ */
 class Comment extends Model
 {
     /**
