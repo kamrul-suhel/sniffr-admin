@@ -1,18 +1,19 @@
 <!-- FOOTER SECTION -->
-<section class="footer_section section_space">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+<section class="footer_section section_space" >
+    <v-container grid-list-xl>
+        <v-layout row wrap>
+            <v-flex xs12 sm12 md8 lg8>
                 <div class="footer_left">
                     <div class="footer_logo">
-                        <img src="{{asset('assets/frontend/assets/images/logo-sniffr-white.png')}}"/>
+                        <img src="{{asset('assets/frontend/images/logo-sniffr-white.png')}}"/>
                     </div>
                     <div class="foote_text">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            </v-flex>
+
+            <v-flex xs12 sm12 md4 lg4>
                 <div class="footer_right">
                     <div class="social_section">
                         <ul>
@@ -45,19 +46,17 @@
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            {{--<li><a href="#"><i class="fab fa-facebook-f fa-2x"></i></a></li>--}}
-                            {{--<li><a href="#"><i class="fab fa-twitter fa-2x"></i></a></li>--}}
-                            {{--<li><a href="#"><i class="fab fa-youtube fa-2x"></i></a></li>--}}
-                            {{--<li><a href="#"><i class="fab fa-instagram fa-2x"></i></a></li>--}}
-                            {{--<li><a href="#"><i class="fab fa-vimeo-v fa-2x"></i></a></li>--}}
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </section>
 @extends('frontend.layout.login_form')
 
+<script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
+{{--<script src="{{asset('assets/frontend/scripts/plugin.js')}}"></script>--}}
 
-<script src="{{asset('assets/frontend/assets/scripts/scripts.js')}}"></script>
+
+<script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>

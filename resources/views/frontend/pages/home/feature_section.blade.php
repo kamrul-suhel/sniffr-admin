@@ -1,105 +1,132 @@
 <!-- FEATURE SECTION -->
 <section class="feature-section section_space">
-    <article class="container">
-        <div class="row">
-            <div class="col">
+    <v-container grid-list-xl>
+        <v-layout row wrap>
+            <v-flex xs12 text-center>
                 <div class="featured_section_title">
                     <h1>FEATURES VIDEOS</h1>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <div class="feature_item_conteiner">
-                    <div class="featured_item_img">
+            </v-flex>
+        </v-layout>
 
-                    </div>
-                    <div class="featured_item_content">
-                        <div class="title">
-                            <h2>VIDEO TITLE EXAMPLE</h2>
+        <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                        <div class="paragraph">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <div class="feature_item_conteiner">
-                    <div class="featured_item_img">
+                    </v-card-title>
+                </v-card>
+            </v-flex>
 
-                    </div>
-                    <div class="featured_item_content">
-                        <div class="title">
-                            <h2>VIDEO TITLE EXAMPLE</h2>
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                        <div class="paragraph">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <div class="feature_item_conteiner">
-                    <div class="featured_item_img">
+                    </v-card-title>
+                </v-card>
+            </v-flex>
 
-                    </div>
-                    <div class="featured_item_content">
-                        <div class="title">
-                            <h2>VIDEO TITLE EXAMPLE</h2>
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                        <div class="paragraph">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
 
-            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <div class="feature_item_conteiner">
-                    <div class="featured_item_img">
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+                        </div>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
 
-                    </div>
-                    <div class="featured_item_content">
-                        <div class="title">
-                            <h2>VIDEO TITLE EXAMPLE</h2>
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                        <div class="paragraph">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <div class="feature_item_conteiner">
-                    <div class="featured_item_img">
+                    </v-card-title>
+                </v-card>
+            </v-flex>
 
-                    </div>
-                    <div class="featured_item_content">
-                        <div class="title">
-                            <h2>VIDEO TITLE EXAMPLE</h2>
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                        <div class="paragraph">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <div class="feature_item_conteiner">
-                    <div class="featured_item_img">
+                    </v-card-title>
+                </v-card>
+            </v-flex>
 
-                    </div>
-                    <div class="featured_item_content">
-                        <div class="title">
-                            <h2>VIDEO TITLE EXAMPLE</h2>
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                        <div class="paragraph">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </article>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12 sm6 md4 lg4>
+                <v-card>
+                    <v-card-media src="{{asset('assets/frontend/images/sample_bg.jpg')}}" height="200px">
+                    </v-card-media>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                            <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+                        </div>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
+
+        </v-layout>
+    </v-container>
 </section>
