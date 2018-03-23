@@ -40,7 +40,7 @@ use App\Notifications\SubmissionAlert;
 class ThemeUploadController extends Controller {
 
     protected $rules = [
-        'alpha_id' => 'unique',
+         'alpha_id' => 'unique',
         'full_name' => 'required',
         'email' => 'required|email',
         'title' => 'required',
@@ -107,7 +107,6 @@ class ThemeUploadController extends Controller {
      */
     public function store(Request $request)
     {
-        return $request->file('file');
         //increase memory limits and upload post size
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
@@ -117,9 +116,9 @@ class ThemeUploadController extends Controller {
         // ini_set('max_input_vars', 1800);
         // ini_set('max_input_vars', 1800);
         // ini_set('max_allowed_packet', '1000M');
-//        dd($request);
 
         $isJson = $request->ajax();
+        
 
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
@@ -130,11 +129,13 @@ class ThemeUploadController extends Controller {
             if($isJson) {
                 return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
             } else {
+                 return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
                 return Redirect::back()
                     ->withErrors($validator)
                     ->withInput();
             }
         }
+        
 
         //get additional form data
         $contact = Contact::where('email',Input::get('email'))->first();
@@ -218,6 +219,10 @@ class ThemeUploadController extends Controller {
             }
         }
     }
+
+    public function emailVerify(Request $request){
+        dd($request->all());
+    }   
 
     public function issueAlert(Request $request) {
         $alert = 'File: '.Input::get('file').',

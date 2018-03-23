@@ -7,6 +7,7 @@ Vue.component('upload-video',{
         csrf_token : $('meta[name="csrf-token"]').attr('content'),
         valid: false,
         full_name: '',
+        uplod_progress:false,
         nameRules: [
             v => !!v || 'Name is required'
         ],
@@ -15,15 +16,19 @@ Vue.component('upload-video',{
             v => !!v || 'E-mail is required',
             v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
         ],
-        phone:'',
+        tel:'',
             phoneRules: [
             v => !!v || 'Phone number is required'
         ],
+        title:'',
+        url:'',
+        file:'',
         terms_condition: false,
-            file_name: '',
-            progressbar: 20,
+        file_name: '',
+        progressbar: 0,
+        error:false
     }),
-    created(){
+    created() {
 
     },
 
@@ -45,48 +50,60 @@ Vue.component('upload-video',{
                 console.log('file not upload');
                 return;
             }
+            this.file = event.target.files[0];
+            this.file_name = this.file.name;
 
-            const file = event.target.files[0];
+        },
 
-            let filename = file.name;
-            let size = file.size;
-            this.file_name = filename;
 
-            if(filename.lastIndexOf('.') <= 0){
-                console.log('File not upload');
-                return;
-            }else{
-                var reader = new FileReader();
-                reader.onload = function() {
-                    var media = new Audio(reader.result);
-                    media.onloadedmetadata = function(){
-                    };
-                };
-                reader.readAsDataURL(file);
+        onSubmit() {
+            if(this.url === '' && this.file === ''){
+                this.error = true;
             }
 
-            // uploading via ajax request
-            let form = new FormData();
-            form.append('file', file);
-            form.append('upload', true);
-            //set request
+            // Check the email is valid email or not
+            
 
-            axios.post('/upload', form, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                    onUploadProgress: function( progressEvent ) {
-                        this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-                    }.bind(this)
-                }
-            )
-                .then(function(resopnse){
-                    console.log(resopnse);
-                })
-                .catch(function(){
-                    console.log('FAILURE!!');
-                });
+            // check the form is validate
+            if(this.$refs.form.validate()){
+                // uploading via ajax request
+                let form = new FormData();
+                form.append('file', this.file);
+                form.append('full_name', this.full_name);
+                form.append('email', this.email);
+                form.append('title', this.title);
+                form.append('tel', this.tel);
+                form.append('terms', this.terms_condition);
+                form.append('url', this.url);
+                //set request
+
+                //show the uploading dialog box
+                this.uplod_progress = true;
+                console.log(this.csrf_token);
+
+                axios.post('/upload', form, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN' : this.csrf_token
+                        },
+                        onUploadProgress: function( progressEvent ) {
+                            this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+                            console.log(this.progressbar);
+                        }.bind(this)
+                    }
+                )
+                    .then(function(resopnse){
+                        console.log(resopnse);
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                        console.log('FAILURE!!');
+                    });
+            }
+            
         },
+
 
         // get email if it is valid or not
         emailVerify() {
