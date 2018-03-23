@@ -30,6 +30,11 @@ class AdminMediaController extends Controller {
 		return view('admin.media.index');
 	}
 
+	public function new()
+	{
+		return view('admin.media.new');
+	}
+
 	public function files(){
 		$folder = Input::get('folder');
 		if($folder == '/'){ $folder = ''; }

@@ -24,3 +24,4 @@ mix.copy('node_modules/intl-tel-input/build/js/utils.js', 'public/assets/js/util
 mix.copy('node_modules/intl-tel-input/build/css', 'public/assets/css/intl-tel-input/css');
 mix.copy('node_modules/intl-tel-input/build/img', 'public/assets/css/intl-tel-input/img');
 mix.copy('resources/assets/admin/js/media.js', 'public/assets/admin/js/media.js');
+mix.copy('resources/assets/talvbansal/media-manager/fonts/', 'public/fonts/');

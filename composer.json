@@ -27,6 +27,7 @@
         "nao-pon/flysystem-google-drive": "~1.1",
         "pbmedia/laravel-ffmpeg": "^1.3.0",
         "ralouphie/mimey": "^1.0",
+        "talvbansal/media-manager": "^2.5",
         "thujohn/twitter": "^2.2"
     },
     "require-dev": {

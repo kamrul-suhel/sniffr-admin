@@ -31,7 +31,6 @@ require('sweetalert');
 require('tinymce');
 require('nestable2');
 require('bootstrap-select');
-require('dropzone');
 require('select2');
 require('chart.js');
 

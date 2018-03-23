@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3baed090cccc899fb39afcdc9a7fe212",
+    "content-hash": "809b679988734afd677d7bad6c86761e",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -455,6 +455,61 @@
             ],
             "description": "Upload a video to YouTube with Laravel 5.",
             "time": "2017-09-25T18:26:26+00:00"
+        },
+        {
+            "name": "dflydev/apache-mime-types",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dflydev/dflydev-apache-mime-types.git",
+                "reference": "f30a57e59b7476e4c5270b6a0727d79c9c0eb861"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dflydev/dflydev-apache-mime-types/zipball/f30a57e59b7476e4c5270b6a0727d79c9c0eb861",
+                "reference": "f30a57e59b7476e4c5270b6a0727d79c9c0eb861",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "twig/twig": "1.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Dflydev\\ApacheMimeTypes": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dragonfly Development Inc.",
+                    "email": "info@dflydev.com",
+                    "homepage": "http://dflydev.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau@dflydev.com",
+                    "homepage": "http://beausimensen.com"
+                }
+            ],
+            "description": "Apache MIME Types",
+            "keywords": [
+                "apache",
+                "mime",
+                "mimetypes"
+            ],
+            "time": "2013-05-14T02:02:01+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -4589,6 +4644,72 @@
                 "dump"
             ],
             "time": "2018-02-22T17:29:24+00:00"
+        },
+        {
+            "name": "talvbansal/media-manager",
+            "version": "2.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/talvbansal/media-manager.git",
+                "reference": "94901a14dca99a4a13a71d8f7f3748f5a1ea5062"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/talvbansal/media-manager/zipball/94901a14dca99a4a13a71d8f7f3748f5a1ea5062",
+                "reference": "94901a14dca99a4a13a71d8f7f3748f5a1ea5062",
+                "shasum": ""
+            },
+            "require": {
+                "dflydev/apache-mime-types": "^1.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "illuminate/routing": "5.*",
+                "illuminate/support": "5.*",
+                "mockery/mockery": "^0.9",
+                "orchestra/testbench": "3.*",
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TalvBansal\\MediaManager\\Providers\\MediaManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TalvBansal\\MediaManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Talvinder Bansal",
+                    "email": "talvbansal@hotmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A media browser and uploader for laravel apps written in vue js and bootstrap",
+            "keywords": [
+                "Media Manager",
+                "Vue.js",
+                "blog",
+                "bootstrap",
+                "developers",
+                "easel",
+                "file uploader",
+                "files",
+                "laravel",
+                "media",
+                "minimal",
+                "uploader"
+            ],
+            "time": "2017-11-28T13:35:06+00:00"
         },
         {
             "name": "themattharris/tmhoauth",

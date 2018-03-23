@@ -179,6 +179,7 @@ return [
         Kouz\Providers\AirbrakeServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         MichaelJWright\Rekognition\RekognitionServiceProvider::class,
+        \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
 
         /*
          * Application Service Providers...
