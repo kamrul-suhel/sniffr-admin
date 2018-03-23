@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('css')	
+@section('css')
 	<link rel="stylesheet" href="{{ '/assets/admin/css/media.css' }}" />
 @stop
 
@@ -8,7 +8,7 @@
 
 <div id="admin-container" class="media-section">
 <!-- This is where -->
-	
+
 	<div class="admin-section-title">
 		<h3><i class="fa fa-picture-o"></i> Media</h3>
 	</div>
@@ -29,11 +29,11 @@
 		</div>
 
 		<div id="uploadPreview" style="display:none;"></div>
-		
+
 		<div id="uploadProgress" class="progress active progress-striped">
 			<div class="progress-bar progress-bar-success" style="width: 0%"></div>
 		</div>
-		
+
 		<div class="loader"></div>
 
 		<div id="content">
@@ -54,15 +54,15 @@
 				<div id="left">
 
 					<ul id="files">
-						
+
 						<li v-for="file in files.items">
 							<div class="file_link @{{file.type}}" data-folder="@{{file.name}}" data-index="@{{ $index }}">
 								<div class="link_icon">
 									<i class="icon"></i>
 									<template v-if="file.type == 'image'">
 										<div class="img_icon" style="background-image:url({{ url('/') }}@{{file.path.replace('./', '/')}}); background-position:center center; background-size: auto 50px; background-repeat:no-repeat"></div>
-									</template>	
-									
+									</template>
+
 								</div>
 								<div class="details"><h4>@{{ file.name }}</h4><small><span class="num_items">@{{ file.items }} item(s)</span><span class="file_size">@{{ file.size }}</span></small></div>
 							</div>
@@ -126,19 +126,19 @@
 				<div class="nofiles"></div>
 				<span>No files here.</span>
 			</div>
-		
+
 		</div>
 
 		<!-- Move File Modal -->
 		<div class="modal fade" id="move_file_modal">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					
+
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title"><i class="fa fa-reply"></i> Move File/Folder</h4>
 					</div>
-					
+
 					<div class="modal-body">
 					   <h4>Destination Folder</h4>
 					   <select id="move_folder_dropdown">
@@ -148,7 +148,7 @@
 					   		</template>
 					   </select>
 					</div>
-					
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						<button type="button" class="btn btn-warning" id="move_btn">Move</button>
@@ -156,7 +156,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- End Move File Modal -->			
+		<!-- End Move File Modal -->
 
 	</div><!-- #filemanager -->
 
@@ -164,16 +164,16 @@
 	<div class="modal fade" id="new_folder_modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><i class="fa fa-folder"></i> Add New Folder</h4>
 				</div>
-				
+
 				<div class="modal-body">
 				   <input name="new_folder_name" id="new_folder_name" placeholder="New Folder Name" class="form-control" value="" />
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<button type="button" class="btn btn-info" id="new_folder_submit">Create New Folder</button>
@@ -187,17 +187,17 @@
 	<div class="modal fade" id="confirm_delete_modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><i class="fa fa-warning"></i> Are You Sure</h4>
 				</div>
-				
+
 				<div class="modal-body">
 				   <h4>Are you sure you want to delete '<span class="confirm_delete_name"></span>'</h4>
 				   <h5 class="folder_warning"><i class="fa fa-warning"></i> Deleting a folder will remove all files and folders contained inside</h5>
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<button type="button" class="btn btn-danger" id="confirm_delete">Yes, Delete it!</button>
@@ -212,16 +212,16 @@
 	<div class="modal fade" id="upload_files_modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><i class="fa fa-warning"></i> Drag and drop files or click below to upload</h4>
 				</div>
-				
+
 				<div class="modal-body">
-				   
+
 				</div>
-				
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-success" data-dismiss="modal">All done</button>
 				</div>
@@ -236,6 +236,8 @@
 
 
 	<!-- Include our script files -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="{{ '/assets/admin/js/media.js' }}"></script>
 
 @stop
