@@ -27,7 +27,6 @@
     <section id="sniffr">
         <v-app>
             @include('frontend.layout.navigation')
-
             @yield('content')
             @include('frontend.layout.footer')
             @include('frontend.layout.login_form')
@@ -43,8 +42,6 @@
     <script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>
 
     <!-- End scripts Section -->
-
-
     @if(isset($settings->google_tracking_id) && $settings->google_tracking_id != '')
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
