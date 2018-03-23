@@ -22,13 +22,17 @@ class AdminMediaController extends Controller {
 
 	public function __construct()
     {
-    	$this->middleware('admin');
-        //$this->middleware('isAdmin');
+    	$this->middleware(['admin:admin']);
     }
 
 	public function index()
 	{
 		return view('admin.media.index');
+	}
+
+	public function new()
+	{
+		return view('admin.media.new');
 	}
 
 	public function files(){

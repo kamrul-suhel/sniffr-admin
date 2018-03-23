@@ -177,6 +177,8 @@ return [
         Thujohn\Twitter\TwitterServiceProvider::class,
         Kouz\Providers\AirbrakeServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        MichaelJWright\Rekognition\RekognitionServiceProvider::class,
+        \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -236,7 +238,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
         'Image' => Intervention\Image\Facades\Image::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
@@ -246,6 +247,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Rekognition' => 'MichaelJWright\Rekognition\RekognitionFacade',
     ],
 
 ];

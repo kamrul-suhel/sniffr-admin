@@ -105,7 +105,7 @@ class ThemeAuthController extends Controller {
 	    );
 
 	    if ( Auth::attempt($email_login) || Auth::attempt($username_login) ){
-    		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
+    		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'editorial'){
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
     			return Redirect::to($redirect);
     		} elseif(Auth::user()->role == 'client'){

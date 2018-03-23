@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use Auth;
 use Validator;
 use Redirect;
+use Request;
 
 use App\Page;
 use App\Menu;
@@ -18,6 +19,14 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminMenuController extends Controller {
+
+    /**
+     * constructor.
+     */
+    public function __construct(Request $request)
+    {
+        $this->middleware(['admin:admin']);
+    }
 
     /**
      * Display a listing of videos
@@ -81,9 +90,9 @@ class AdminMenuController extends Controller {
         $menu_item_order = json_decode(Input::get('order'));
         $post_categories = Menu::all();
         $order = 1;
-        
+
         foreach($menu_item_order as $menu_level_1):
-            
+
             $level1 = Menu::find($menu_level_1->id);
             if($level1->id){
                 $level1->order = $order;
@@ -91,9 +100,9 @@ class AdminMenuController extends Controller {
                 $level1->save();
                 $order += 1;
             }
-            
+
             if(isset($menu_level_1->children)):
-            
+
                 $children_level_1 = $menu_level_1->children;
 
                 foreach($children_level_1 as $menu_level_2):

@@ -15,6 +15,7 @@ use App\PostCategory;
 use App\Libraries\ThemeHelper;
 use App\Libraries\ImageHandler;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
@@ -25,7 +26,7 @@ class AdminSettingsController extends Controller {
      */
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin']);
     }
 
 	public function index()

@@ -24,7 +24,7 @@ class AdminUsersController extends Controller {
      */
     public function __construct(Request $request)
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin']);
     }
 
 	/**

@@ -19,3 +19,9 @@ window.Vue = require('vue');
 // const app = new Vue({
 //     el: '#app'
 // });
+
+require('../../talvbansal/media-manager/js/media-manager');
+
+const app = new Vue({
+    el: '#app'
+});

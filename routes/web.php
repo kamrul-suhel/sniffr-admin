@@ -1,5 +1,7 @@
 <?php
 
+\TalvBansal\MediaManager\Routes\MediaRoutes::get();
+
 Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
     /*
@@ -219,7 +221,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('posts/categories/delete/{id}', array('uses' => 'Admin\AdminPostCategoriesController@destroy'));
     Route::post('posts/categories/update', array('uses' => 'Admin\AdminPostCategoriesController@update'));
 
-    Route::get('media', 'Admin\AdminMediaController@index');
+    Route::get('media', 'Admin\AdminMediaController@new');
     Route::post('media/files', 'Admin\AdminMediaController@files');
     Route::post('media/new_folder', 'Admin\AdminMediaController@new_folder');
     Route::post('media/delete_file_folder', 'Admin\AdminMediaController@delete_file_folder');
@@ -294,6 +296,8 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('checkanalysis', 'Admin\AdminVideosController@checkAnalysis');
     Route::get('pdfview/{id}', 'Admin\AdminVideosController@pdfview');
     Route::get('nsfw/{id}', 'Admin\AdminVideosController@nsfw');
+
+    Route::get('reminders', 'Admin\AdminLabelController@automateEmailReminders');
 });
 
 
