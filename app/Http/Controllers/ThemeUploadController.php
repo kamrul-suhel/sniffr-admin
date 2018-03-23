@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use View;
 use Auth;
-use MyYoutube;
 use Redirect;
 use Validator;
 use Carbon\Carbon;

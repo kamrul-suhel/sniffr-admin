@@ -4,11 +4,6 @@ namespace App\Jobs;
 
 use App\Video;
 
-use Youtube;
-use MyYoutube;
-use Google_Client;
-use Google_Service_YouTube;
-
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

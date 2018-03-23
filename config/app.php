@@ -170,8 +170,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        //Dawson\Youtube\YoutubeServiceProvider::class,
-        App\Providers\MyYoutubeServiceProvider::class,
+        Schoooch\Youtube\YoutubeServiceProvider::class,
         BaoPham\DynamoDb\DynamoDbServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -242,13 +241,11 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
-        //'Youtube' => Dawson\Youtube\Facades\Youtube::class,
-        'MyYoutube' => App\Libraries\Facades\MyYoutube::class,
+        'Youtube' => Schoooch\Youtube\Facades\Youtube::class,
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-
     ],
 
 ];

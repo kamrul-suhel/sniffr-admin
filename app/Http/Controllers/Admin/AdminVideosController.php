@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use View;
 use Auth;
 use Youtube;
-use MyYoutube;
 use Redirect;
 use Validator;
 use DateTime;
@@ -165,7 +164,7 @@ class AdminVideosController extends Controller {
             if(!empty($video->youtube_id) && $video->file){
 
                 // Make youtube video unlisted
-                MyYoutube::setStatus($video->youtube_id, 'unlisted');
+                Youtube::setStatus($video->youtube_id, 'unlisted');
 
             }
 
@@ -190,7 +189,7 @@ class AdminVideosController extends Controller {
 
                 // Make youtube video public (if not NSFW)
                 if(!$video->nsfw) {
-                    MyYoutube::setStatus($video->youtube_id, 'public');
+                    Youtube::setStatus($video->youtube_id, 'public');
                 }
 
             } else {
@@ -205,14 +204,13 @@ class AdminVideosController extends Controller {
         }
 
         // Save video data to database
-        $video->save();
+        // IAN: UNDO
+        //$video->save();
 
         // Process > Move video to Youtube and move video file to folder for analysis
         $fileName_watermark = false;
         if($video->file&&$video_process==1){
-
             // set watermark and non-watermark video files for processing
-
             $fileName = basename($video->file);
             if($video->file_watermark_dirty){
                 $file_watermark = file_get_contents($video->file_watermark_dirty);
@@ -223,7 +221,6 @@ class AdminVideosController extends Controller {
             }
 
             // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
-
             $disk = Storage::disk('s3_sourcebucket');
             if($disk->has($fileName)==1){
                 if($disk->exists(basename($fileName))) {
@@ -232,9 +229,7 @@ class AdminVideosController extends Controller {
             }
 
             // Youtube (retrieves video to temporary local and then uploads to youtube)
-
             if($fileName_watermark) {
-
                 file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
 
                 $file_watermark = new UploadedFile (
@@ -248,7 +243,7 @@ class AdminVideosController extends Controller {
 
                 // Upload it to youtube
                 $video_title_temp = str_limit($video->title, $limit = 90, $end = '..');
-                $response = MyYoutube::upload($file_watermark, ['title' => $video_title_temp], 'unlisted');
+                $response = Youtube::upload($file_watermark, ['title' => $video_title_temp], 'unlisted');
                 $youtubeId  = $response->getVideoId();
 
                 $video->youtube_id = $youtubeId;
@@ -473,10 +468,10 @@ class AdminVideosController extends Controller {
         // Youtube integration
         if($video->youtube_id && $video->file && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
             if(!$video->duration){
-                $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
+                $data['duration'] = TimeHelper::convert_seconds_to_HMS(Youtube::getDuration($video->youtube_id));
             }
 
-            MyYoutube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
+            Youtube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
         }
 
         // Duration
@@ -740,7 +735,7 @@ class AdminVideosController extends Controller {
 
         // Hide on youtube
         if($video->youtube_id && $video->file){
-            $response = MyYoutube::setStatus($video->youtube_id, 'private');
+            $response = Youtube::setStatus($video->youtube_id, 'private');
 
             if(!$response){ // There is no youtube video, remove the id
                 $video->youtube_id = '';
@@ -765,7 +760,7 @@ class AdminVideosController extends Controller {
 
         // Hide on youtube
         if($video->youtube_id){
-            $response = MyYoutube::setStatus($video->youtube_id, 'unlisted');
+            $response = Youtube::setStatus($video->youtube_id, 'unlisted');
 
             if(!$response){ // There is no youtube video, remove the id
                 $video->youtube_id = '';

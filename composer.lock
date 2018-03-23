@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d90c639ebbab5aa382f83b4366b581a5",
+    "content-hash": "59564e4b50702842eaa199b8ef9ed424",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -401,60 +401,6 @@
                 "lru"
             ],
             "time": "2013-09-20T18:59:12+00:00"
-        },
-        {
-            "name": "dawson/youtube",
-            "version": "4.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JoeDawson/youtube.git",
-                "reference": "6fc909847bd5e919125b07d863b2fdfe117dd174"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JoeDawson/youtube/zipball/6fc909847bd5e919125b07d863b2fdfe117dd174",
-                "reference": "6fc909847bd5e919125b07d863b2fdfe117dd174",
-                "shasum": ""
-            },
-            "require": {
-                "google/apiclient": "^2.2",
-                "illuminate/support": "^5.4",
-                "nesbot/carbon": "^1.22",
-                "php": "^7.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.2",
-                "phpunit/phpcov": "~3.0",
-                "phpunit/phpunit": "~5.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Dawson\\Youtube\\YoutubeServiceProvider"
-                    ],
-                    "aliases": {
-                        "Youtube": "Dawson\\Youtube\\Facades\\Youtube"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Dawson\\Youtube\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joe Dawson",
-                    "email": "hi@joedawson.me"
-                }
-            ],
-            "description": "Upload a video to YouTube with Laravel 5.",
-            "time": "2017-09-25T18:26:26+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3623,6 +3569,64 @@
                 "stylesheet"
             ],
             "time": "2016-07-19T19:14:21+00:00"
+        },
+        {
+            "name": "schoooch/youtube",
+            "version": "4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/schoooch/youtube.git",
+                "reference": "9a0b8468b8d3bdb54826edf81c979fde6145d148"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/schoooch/youtube/zipball/9a0b8468b8d3bdb54826edf81c979fde6145d148",
+                "reference": "9a0b8468b8d3bdb54826edf81c979fde6145d148",
+                "shasum": ""
+            },
+            "require": {
+                "google/apiclient": "^2.2",
+                "illuminate/support": "^5.4",
+                "nesbot/carbon": "^1.22",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.2",
+                "phpunit/phpcov": "~3.0",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Schoooch\\Youtube\\YoutubeServiceProvider"
+                    ],
+                    "aliases": {
+                        "Youtube": "Schoooch\\Youtube\\Facades\\Youtube"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Schoooch\\Youtube\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joe Dawson",
+                    "email": "hi@joedawson.me"
+                },
+                {
+                    "name": "Ian Lainchbury",
+                    "email": "ianlainchbury@gmail.com"
+                }
+            ],
+            "description": "Upload a video to YouTube with Laravel 5.",
+            "time": "2018-03-21T17:31:21+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

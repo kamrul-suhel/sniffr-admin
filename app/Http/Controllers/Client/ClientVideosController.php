@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Client;
 
 use View;
 use Auth;
-use Youtube;
-use MyYoutube;
 use Redirect;
 use Validator;
 use DateTime;
 use DateInterval;
-
-use Google_Client;
-use Google_Service_YouTube;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
