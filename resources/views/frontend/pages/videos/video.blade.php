@@ -14,11 +14,11 @@
 
     <!-- VIDEOS ITEM SECTION -->
     <section class="videos_section section_space">
-        <article class="container">
-            <div class="row">
+        <v-container grid-list-lg>
+            <v-layout row wrap>
                 @include('frontend.includes.video_loop')
-            </div>
-        </article>
+            </v-layout>
+        </v-container>
     </section>
 
     <!-- PAGINATION SECTION -->

@@ -64,10 +64,10 @@
                                     <v-btn
                                         dark
                                         raised
-                                        class="error" 
+                                        class="{error: error}" 
                                         @click="onPickFile()">
-                                        Upload your video
-                                    </v-btn> <span v-if="error" class="red--text">Upload your file or provide a link pleaes</span> <span>@{{file_name}}</span>
+                                        Upload your video <v-icon dark right>system_update_alt</v-icon>
+                                    </v-btn> <span v-if="error" class="red--text">Upload your file or provide a links pleaes</span> <span>@{{file_name}}</span>
                                     <p class="small-italic">Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
                                     <input
                                         color="dark"
@@ -84,8 +84,7 @@
                                             color="dark"
                                             label="Video link/URL"
                                             v-model="url"
-                                            :rules="[error || 'Video or link required']"
-                                    ></v-text-field>
+                                    ></v-text-field> <span v-if="error" class="red--text">Upload your file or provide a links pleaes</span>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -144,8 +143,15 @@
                                     ></v-checkbox>
                                 </v-flex>
 
-                                <v-flex xs12>
+                                <v-flex xs12 sm3 md3 lg2 xl2>
                                     <v-btn dark @click="onSubmit()">Submit your file</v-btn>
+                                </v-flex>
+                                <v-flex xs12 sm3 md6 lg6 xl6 align-content-start>
+                                    <p class="red-text" v-if="validate_email_error">Look your email is not valid plese try again</p>
+                                    <v-progress-circular 
+                                    indeterminate 
+                                    color="dark" 
+                                    v-if="validete_email_progress"></v-progress-circular>
                                 </v-flex>
                             </v-layout>
                         </v-container>

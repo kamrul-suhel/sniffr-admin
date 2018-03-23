@@ -23,7 +23,11 @@ mix.js(['resources/assets/js/app.js','resources/assets/js/custom.js'], 'public/a
        'public/assets/css/admin.css'
    );
 
-/* Frontend script and scss */
+/*
+* *********************************************
+* Frontend script and scss
+* *********************************************
+*/
 mix.sass(
     'resources/assets/frontend/scss/styles.scss',
     'public/assets/frontend/css/styles.css')
@@ -50,7 +54,11 @@ mix.copy(
     'public/assets/frontend/css/plugin/vuetify.css'
 );
 
-/* End frontend script and scss */
+/*
+* ******************************************
+    End frontend script and scss
+  ******************************************
+*/
 
 mix.copy(
     'node_modules/tinymce/themes',

@@ -1,8 +1,8 @@
 <div class="videos_filter_section">
     <form action="/search" method="get" class="videos_filter_form">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg4">
+        <v-container grid-list-lg>
+            <v-layout row wrap>
+                <v-flex xs12 sm12 md4 lg4>
                     <div class="form-group">
                         <input type="text"
                                class="form-control"
@@ -15,8 +15,9 @@
 
                                placeholder="Filter">
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg4">
+                </v-flex>
+
+                <v-flex xs12 sm12 md4 lg4>
                     <div class="form-group">
                         <input type="text"
                                class="form-control"
@@ -24,13 +25,15 @@
                                aria-describedby="sort_by"
                                placeholder="Sort">
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg4">
+                </v-flex>
+
+                <v-flex xs12 sm12 md4 lg4>
                     <div class="form-group">
                         <input type="submit" class="form-control" id="filter_search" value="Search">
                     </div>
-                </div>
-            </div>
-        </div>
+                </v-flex>
+
+            </v-layout>
+        </v-container>
     </form>
 </div>

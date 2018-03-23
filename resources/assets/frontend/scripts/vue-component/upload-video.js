@@ -7,7 +7,10 @@ Vue.component('upload-video',{
         csrf_token : $('meta[name="csrf-token"]').attr('content'),
         valid: false,
         full_name: '',
-        uplod_progress:false,
+        title:'',
+        url:'',
+        file:'',
+        terms_condition: false,
         nameRules: [
             v => !!v || 'Name is required'
         ],
@@ -20,13 +23,12 @@ Vue.component('upload-video',{
             phoneRules: [
             v => !!v || 'Phone number is required'
         ],
-        title:'',
-        url:'',
-        file:'',
-        terms_condition: false,
+        uplod_progress:false,
         file_name: '',
         progressbar: 0,
-        error:false
+        error:false,
+        validete_email_progress:false,
+        validate_email_error:false
     }),
     created() {
 
@@ -39,7 +41,6 @@ Vue.component('upload-video',{
         },
 
         onPickFile() {
-            console.log(this.csrf_token);
             this.progressbar = 0;
             this.$refs.inputfile.click();
         },
@@ -47,9 +48,9 @@ Vue.component('upload-video',{
         onFilechange(event) {
             // check is file choose or not
             if(!event.target.files[0]){
-                console.log('file not upload');
                 return;
             }
+            this.error = false;
             this.file = event.target.files[0];
             this.file_name = this.file.name;
 
@@ -59,49 +60,96 @@ Vue.component('upload-video',{
         onSubmit() {
             if(this.url === '' && this.file === ''){
                 this.error = true;
+            }else{
+                this.error = false;
             }
 
-            // Check the email is valid email or not
-            
-
-            // check the form is validate
             if(this.$refs.form.validate()){
-                // uploading via ajax request
-                let form = new FormData();
-                form.append('file', this.file);
-                form.append('full_name', this.full_name);
-                form.append('email', this.email);
-                form.append('title', this.title);
-                form.append('tel', this.tel);
-                form.append('terms', this.terms_condition);
-                form.append('url', this.url);
-                //set request
+                if(this.error){
+                    return;
+                }
 
-                //show the uploading dialog box
-                this.uplod_progress = true;
-                console.log(this.csrf_token);
+                // Email verify progress on
+                this.validete_email_progress = true;
 
-                axios.post('/upload', form, {
-                        headers: {
+                // Check the email is valid email or not
+                let form_email = new FormData();
+                form_email.append('email', this.email);
+                axios.post('/upload/emailverify', form_email, {
+                    headers:
+                        {
                             'Content-Type': 'multipart/form-data',
                             'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN' : this.csrf_token
-                        },
-                        onUploadProgress: function( progressEvent ) {
-                            this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-                            console.log(this.progressbar);
-                        }.bind(this)
-                    }
-                )
-                    .then(function(resopnse){
-                        console.log(resopnse);
-                    })
-                    .catch(function(error){
-                        console.log(error);
-                        console.log('FAILURE!!');
-                    });
+                        }
+                })
+                .then(response => {
+                    // email verify done turn off spinner
+                    console.log('done');
+                    this.validete_email_progress = false;
+
+                    let data = response.data;
+                    if(data.found_email === 1){
+                        this.uploadFormData();
+                    }else{
+                        // mean email is not verify
+                        this.validate_email_error = true;
+
+                    }   
+                })
+                .catch(error => {
+                    // console.log(error);
+                });
             }
             
+        },
+
+        uploadFormData() {
+            // uploading via ajax request
+            let form = new FormData();
+            form.append('file', this.file);
+            form.append('full_name', this.full_name);
+            form.append('email', this.email);
+            form.append('title', this.title);
+            form.append('tel', this.tel);
+            form.append('terms', this.terms_condition);
+            form.append('url', this.url);
+            //set request
+
+            //show the uploading dialog box
+            this.uplod_progress = true;
+
+            axios.post('/upload', form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN' : this.csrf_token
+                    },
+                    onUploadProgress: function( progressEvent ) {
+                        this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+                        console.log(this.progressbar);
+                    }.bind(this)
+                }
+            )
+            .then(resopnse => {
+                //data uploaded succes
+                let data = response.data;
+                if(data.status == 'success'){
+                    // set all default
+                    this.upload_progress = false;
+                    this.progressbar = 0;
+
+                    //Email progress 
+                    this.uplod_progress = false;
+
+                    // clear form data
+                    this.$refs.form.reset();
+                }
+            })
+            .catch(function(error){
+                console.log(error);
+                console.log('FAILURE!!');
+            });
         },
 
 

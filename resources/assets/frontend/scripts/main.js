@@ -27,17 +27,30 @@ require('./vue-component/login-component');
 
 new Vue({
     el:'#sniffr',
-    data(){
+    data() {
         return {
             login_dialog: false,
             showpassword:true,
+            valid:false,
             user:{
                 email:'',
                 password:''
-            }
+            },
+            emailRules: [
+                v => !!v || 'E-mail is required',
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+            ],
+            passwordRules: [
+                v => !!v || 'Password is required'
+            ]
         }
     },
     methods: {
+        onSubmit() {
+            if(this.$refs.login_form.validate()){
+                
+            }
+        }
     }
 });
 

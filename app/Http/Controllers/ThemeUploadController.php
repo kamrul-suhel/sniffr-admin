@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\EmailVerifyHelper;
 use App\Setting;
 use View;
 use Auth;
@@ -124,8 +125,12 @@ class ThemeUploadController extends Controller {
         $validator = Validator::make(Input::all(), $this->rules);
         if ($validator->fails())
         {
-            $file_temp = $request->file('file');
-            $mime_temp = $file_temp->getMimeType();
+            $mime_temp = '';
+            if($request->hasFile('file')){
+                $file_temp = $request->file('file');
+                $mime_temp = $file_temp->getMimeType();
+            }
+
             if($isJson) {
                 return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
             } else {
@@ -220,8 +225,24 @@ class ThemeUploadController extends Controller {
         }
     }
 
+    /* Email verification */
     public function emailVerify(Request $request){
-        dd($request->all());
+        $email = $request->input('email');
+        $verify_email = 'kamrul@unilad.co.uk';
+
+        //First look into our database is exists
+        $email = Contact::where('email', $email)->first();
+
+        if($email){
+            return response()->json(['found_email' => 1]);
+        }else{
+            $verify = new EmailVerifyHelper($email,$verify_email);
+            if($verify->verify()){
+                return response()->json(['found_email' => 1]);
+            }else{
+                return response()->json(['found_email' => 0]);
+            }
+        }
     }   
 
     public function issueAlert(Request $request) {

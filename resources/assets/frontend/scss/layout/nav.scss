@@ -15,7 +15,7 @@
   @include small-device{
     .logo {
       margin-bottom:10px;
-      text-align:left;
+      text-align:center;
       img{
         width:110px;
       }
@@ -24,7 +24,7 @@
 
   @include medium-device{
     .logo {
-      text-align:left;
+      text-align:center;
       margin-bottom:0;
     }
   }
@@ -126,7 +126,7 @@
   bottom:0;
   width:100%;
   background:rgba(0,0,0,1);
-  padding:20px;
+  padding:20px 0px;
   z-index:100;
   .logo {
     text-align:center;
@@ -144,7 +144,7 @@
 
   @include medium-device{
     .logo{
-      text-align:left;
+      text-align:center;
     }
   }
   @include large-device{

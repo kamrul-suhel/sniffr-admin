@@ -4,9 +4,9 @@
         <video>
         </video>
         <div class="heading">
-            <div class="position-center" style="position:relative;top:-60px;">
+            <div class="position-center">
                 <h1>Video Licensing Platform</h1>
-                <p style="font-size:18px;">License viral videos viewed by millions around the world from Sniffr Media</p>
+                <p>License viral videos viewed by millions around the world from Sniffr Media</p>
                 <button onclick="window.location.href='/upload'" class="btn btn-primary upload_video_button">Upload you video</button>
             </div>
         </div>
@@ -28,7 +28,7 @@
                             </ul>
                         </nav>
                     </v-flex>
-                </div>
+                </v-layout>
             </v-container>
         </div>
     </section>
