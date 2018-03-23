@@ -14,17 +14,18 @@ use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminPostController extends Controller {
-    
+
     /**
      * constructor.
      */
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin,manager']);
     }
 
     /**

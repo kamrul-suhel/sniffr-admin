@@ -29,7 +29,7 @@ class AdminClientController extends Controller
     //
     public function __construct(Request $request)
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin,manager']);
     }
     /**
      * Display a listing of the resource.

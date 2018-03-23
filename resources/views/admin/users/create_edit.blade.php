@@ -102,6 +102,7 @@
 					<div class="panel-body" style="display: block;">
 						<p>Select the user's role below</p>
 						<select id="role" name="role">
+							<option value="editorial"{{ isset($user) && $user->role == 'editorial' ? ' selected' : '' }}>Editorial</option>
 							<option value="manager"{{ isset($user) && $user->role == 'manager' ? ' selected' : '' }}>Manager</option>
 							<option value="admin"{{ isset($user) && $user->role == 'admin' ? ' selected' : '' }}>Admin</option>
 							<option value="client"{{ isset($user) && $user->role == 'client' ? ' selected' : '' }}>Client</option>
