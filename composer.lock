@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "809b679988734afd677d7bad6c86761e",
+    "content-hash": "5259d67a67d45350746031ebe3e71ae0",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -118,16 +118,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.29",
+            "version": "3.52.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "51efd3a7cda92f245ccf39fea03227e0eb473c93"
+                "reference": "c10b8f60a5da9ad4d7fa9f890186632a4c025d1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/51efd3a7cda92f245ccf39fea03227e0eb473c93",
-                "reference": "51efd3a7cda92f245ccf39fea03227e0eb473c93",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c10b8f60a5da9ad4d7fa9f890186632a4c025d1b",
+                "reference": "c10b8f60a5da9ad4d7fa9f890186632a4c025d1b",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-20T21:15:39+00:00"
+            "time": "2018-03-23T18:04:27+00:00"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -403,62 +403,6 @@
             "time": "2013-09-20T18:59:12+00:00"
         },
         {
-<<<<<<< HEAD
-=======
-            "name": "dawson/youtube",
-            "version": "4.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JoeDawson/youtube.git",
-                "reference": "6fc909847bd5e919125b07d863b2fdfe117dd174"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JoeDawson/youtube/zipball/6fc909847bd5e919125b07d863b2fdfe117dd174",
-                "reference": "6fc909847bd5e919125b07d863b2fdfe117dd174",
-                "shasum": ""
-            },
-            "require": {
-                "google/apiclient": "^2.2",
-                "illuminate/support": "^5.4",
-                "nesbot/carbon": "^1.22",
-                "php": "^7.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.2",
-                "phpunit/phpcov": "~3.0",
-                "phpunit/phpunit": "~5.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Dawson\\Youtube\\YoutubeServiceProvider"
-                    ],
-                    "aliases": {
-                        "Youtube": "Dawson\\Youtube\\Facades\\Youtube"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Dawson\\Youtube\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joe Dawson",
-                    "email": "hi@joedawson.me"
-                }
-            ],
-            "description": "Upload a video to YouTube with Laravel 5.",
-            "time": "2017-09-25T18:26:26+00:00"
-        },
-        {
             "name": "dflydev/apache-mime-types",
             "version": "v1.0.1",
             "source": {
@@ -514,7 +458,6 @@
             "time": "2013-05-14T02:02:01+00:00"
         },
         {
->>>>>>> 61744e546de4adb20fbcbf039eec85ed9e9cf924
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
             "source": {
@@ -1279,16 +1222,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.51",
+            "version": "v0.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "c3d936baf3eacc002f6183530355fe4fba19b0fb"
+                "reference": "0241c1f3fde173a8c08c4ba23d6078b21c129fe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/c3d936baf3eacc002f6183530355fe4fba19b0fb",
-                "reference": "c3d936baf3eacc002f6183530355fe4fba19b0fb",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/0241c1f3fde173a8c08c4ba23d6078b21c129fe2",
+                "reference": "0241c1f3fde173a8c08c4ba23d6078b21c129fe2",
                 "shasum": ""
             },
             "require": {
@@ -1312,7 +1255,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-03-18T00:23:20+00:00"
+            "time": "2018-03-24T00:23:04+00:00"
         },
         {
             "name": "google/auth",
