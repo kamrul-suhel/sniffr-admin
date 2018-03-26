@@ -29,12 +29,14 @@ new Vue({
     el:'#sniffr',
     data() {
         return {
+            csrf_token : $('meta[name="csrf-token"]').attr('content'),
             login_dialog: false,
             showpassword:true,
             valid:false,
+            login_progress:false,
             user:{
-                email:'',
-                password:''
+                email:'kamrul@unilad.co.uk',
+                password:'somepass'
             },
             emailRules: [
                 v => !!v || 'E-mail is required',
@@ -42,13 +44,48 @@ new Vue({
             ],
             passwordRules: [
                 v => !!v || 'Password is required'
-            ]
+            ],
+            validation:{
+                error: false,
+                message:''
+            }
         }
     },
     methods: {
         onSubmit() {
             if(this.$refs.login_form.validate()){
-                
+                // make spinner visible
+                this.login_progress = true;
+
+                // prepare submitting data
+                let form_data = new FormData();
+                form_data.append('email', this.user.email);
+                form_data.append('password', this.user.password);
+                // submit data with ajax request
+                axios.post('login', form_data, {
+                    headers:
+                        {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN' : this.csrf_token
+                        }
+                })
+                .then(response => {
+                    this.login_progress = true;
+
+                    let data = response.data;
+                    if(data.error){
+                        this.login_progress = false;
+                        this.validation.error = true;
+                        this.validation.message = data.error_message;
+                        return;
+                    }
+
+                    window.location.href = data.redirect_url;
+
+                })
+                .catch(error => {
+                    
+                });
             }
         }
     }

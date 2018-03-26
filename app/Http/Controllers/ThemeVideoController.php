@@ -93,7 +93,6 @@ class ThemeVideoController extends Controller {
      */
     public function videos()
     {
-        $settings = Setting::first();
         $page = Input::get('page');
         if( !empty($page) ){
             $page = Input::get('page');
@@ -112,7 +111,6 @@ class ThemeVideoController extends Controller {
             'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
-            'settings' => $settings
             );
 //        return view('Theme::video-list',$data);
         return view('frontend.pages.videos.video', $data);

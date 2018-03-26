@@ -98,9 +98,15 @@ class ThemeAuthController extends Controller {
 		return view('Theme::auth', $data);
 	}
 
-	public function login(){
+	public function login(Request $request){
+	    $response_data = array(
+	        'redirect_url' => '',
+            'is_dailymail' => false,
+            'error'         => true,
+            'error_message'    => ''
+        );
 	    // get login POST data
-	    $email_login = array(
+        $email_login = array(
 	        'email' => Input::get('email'),
 	        'password' => Input::get('password')
 	    );
@@ -113,25 +119,53 @@ class ThemeAuthController extends Controller {
 
 	    if ( Auth::attempt($email_login) || Auth::attempt($username_login) ){
     		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
-    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
-    			return Redirect::to($redirect);
+    			$redirect = (Input::get('redirect')) ? Input::get('redirect') : '/admin';
+                if($request->ajax()){
+                    $response_data['redirect_url'] = $redirect;
+                    $response_data['error'] = false;
+                    return $response_data;
+                }else{
+    			    return Redirect::to($redirect);
+                }
+
     		} elseif(Auth::user()->role == 'client'){
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client/videos';
     			if(Auth::user()->username == 'dailymail'){
     				$redirect = '/client/dashboard';
     			}
-    			return Redirect::to($redirect);
+    			// check if ajax request
+                if($request->ajax()){
+    			     $response_data['redirect_url'] = $redirect;
+    			     $response_data['error'] = false;
+    			     return $response_data;
+                }else{
+                    return Redirect::to($redirect);
+                }
     		} else {
     			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
-    			return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
+    			if($request->ajax()){
+                    $response_data['redirect_url'] = $redirect;
+                    $response_data['error'] = false;
+                    return $response_data;
+                }else{
+                    return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
+                }
     		}
 	    } else {
 	    	$redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
 	        // auth failure! redirect to login with errors
             $error = array(
                 'note' => 'Invalid login, please try again.', 'note_type' => 'error');
-	        return Redirect::to('login' . $redirect)->with($error);
-	    }
+
+            if($request->ajax()){
+                $response_data['redirect_url'] = $redirect;
+                $response_data['error'] = true;
+                $response_data['error_message'] = 'Invalid login, please try again.';
+                return $response_data;
+            }else{
+                return Redirect::to('login' . $redirect)->with($error);
+            }
+        }
 
 	}
 

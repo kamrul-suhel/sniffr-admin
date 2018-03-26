@@ -2,7 +2,7 @@
     <form action="/search" method="get" class="videos_filter_form">
         <v-container grid-list-lg>
             <v-layout row wrap>
-                <v-flex xs12 sm12 md4 lg4>
+                <v-flex xs12 sm4 md4 lg4>
                     <div class="form-group">
                         <input type="text"
                                class="form-control"
@@ -17,7 +17,7 @@
                     </div>
                 </v-flex>
 
-                <v-flex xs12 sm12 md4 lg4>
+                <v-flex xs12 sm4 md4 lg4>
                     <div class="form-group">
                         <input type="text"
                                class="form-control"
@@ -27,7 +27,7 @@
                     </div>
                 </v-flex>
 
-                <v-flex xs12 sm12 md4 lg4>
+                <v-flex xs12 sm4 md4 lg4>
                     <div class="form-group">
                         <input type="submit" class="form-control" id="filter_search" value="Search">
                     </div>

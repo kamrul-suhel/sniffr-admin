@@ -12,6 +12,7 @@
   .login_title:after{
     @include heading_border(50px, 2px, 0px);
   }
+
   .form-submit{
     width:100%;
     text-align:center;
@@ -36,6 +37,7 @@
       background:#1a1a1a;
     }
   }
+
   .forgot-password{
     display:block;
     margin-top:10px;
@@ -70,6 +72,18 @@
       box-shadow:0px 0px 2px rgba(0,0,0,.2);
     }
   }
+
+  .login-button{
+    position:relative;
+
+    .login-progress{
+      position:absolute;
+      right:-20px;
+      top:6px;
+    }
+  }
+
+
   a.forgot_password{
     color: #000;
     display: block;

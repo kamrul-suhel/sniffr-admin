@@ -12,11 +12,12 @@
 
                     <v-flex xs12>
                           <v-text-field
-                                  color="primary"
+                                  color="dark"
                                   label="Full Name:"
                                   v-model="user.email"
                                   :rules="emailRules"
                                   required
+                                  :error="validation.error"
                           >
                           </v-text-field>
                     </v-flex>
@@ -30,25 +31,37 @@
                               :append-icon-cb="() => (showpassword = !showpassword)"
                               :type="showpassword ? 'password' : 'text'"
                               :rules="passwordRules"
+                              :error="validation.error"
                               required
                       ></v-text-field>
                     </v-flex>
                 </v-layout>
 
-                  <v-layout row justify-center>
-                      <v-flex xs3>
-                          <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                          <v-btn raised dark @click="onSubmit()">
-                              LOGIN
-                          </v-btn>
-                      </v-flex>
-                  </v-layout>
+                <v-layout row justify-center>
+                  <v-flex>
+                    <div v-if="validation.error" class="red--text text-xs-center">@{{validation.message}}</div>
+                  </v-flex>
+                </v-layout>
 
-                  <v-layout row justify-center>
-                      <v-flex xs3>
-                          <a href="{{route('password.remind')}}" class="forgot_password">Forgot password</a>
-                      </v-flex>
-                  </v-layout>
+                <v-layout row justify-center>
+                    <v-flex xs3>
+                        <div class="login-button">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                            <v-btn raised dark @click="onSubmit()">
+                                LOGIN
+                            </v-btn>
+                            <div class="login-progress">
+                                <v-progress-circular v-if="login_progress" indeterminate color="dark"></v-progress-circular>
+                            </div>
+                        </div>
+                    </v-flex>
+                </v-layout>
+
+                <v-layout row justify-center>
+                    <v-flex xs3>
+                        <a href="{{route('password.remind')}}" class="forgot_password">Forgot password</a>
+                    </v-flex>
+                </v-layout>
           </v-form>
       </v-card-text>
     </v-card>

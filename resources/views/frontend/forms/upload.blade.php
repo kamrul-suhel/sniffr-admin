@@ -55,12 +55,14 @@
                                 </v-flex>
                             </v-layout>
 
-                            <v-flex xs12>
-                                <h3 class="text-xs-center">Your video details</h3>
-                            </v-flex>
-
                             <v-layout row wrap>
                                 <v-flex xs12>
+                                    <h3 class="text-xs-center">Your video details</h3>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                                <v-flex xs12 p-0>
                                     <v-btn
                                         dark
                                         raised
