@@ -204,8 +204,7 @@ class AdminVideosController extends Controller {
         }
 
         // Save video data to database
-        // IAN: UNDO
-        //$video->save();
+        $video->save();
 
         // Process > Move video to Youtube and move video file to folder for analysis
         $fileName_watermark = false;
