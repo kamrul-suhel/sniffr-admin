@@ -9,6 +9,7 @@
 		    <br />
 		    <input type="hidden" id="redirect" name="redirect" value="" />
 			<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
+            <a href="<?= ($settings->enable_https) ? secure_url('password.remind') : route('password.remind') ?>">I forgot my password</a>
 		</form>
 
 	<?php elseif($type == 'signup'): ?>
