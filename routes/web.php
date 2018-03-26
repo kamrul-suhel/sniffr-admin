@@ -173,7 +173,7 @@ Route::group(array('prefix' => 'admin'), function(){
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index');
-    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit');
+    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin.video.edit');
     Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
     Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
     Route::get('videos/restore/{id}', array('uses' => 'Admin\AdminVideosController@restore'));
@@ -206,7 +206,9 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
-    Route::post('videos/comment/{id}', array('uses' => 'Admin\AdminVideosController@comment'));
+
+    // comments
+    Route::resource('comment', 'CommentController');
 
     Route::get('posts', 'Admin\AdminPostController@index');
     Route::get('posts/create', 'Admin\AdminPostController@create');
