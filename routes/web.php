@@ -221,13 +221,13 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('posts/categories/delete/{id}', array('uses' => 'Admin\AdminPostCategoriesController@destroy'));
     Route::post('posts/categories/update', array('uses' => 'Admin\AdminPostCategoriesController@update'));
 
-    Route::get('media', 'Admin\AdminMediaController@new');
-    Route::post('media/files', 'Admin\AdminMediaController@files');
-    Route::post('media/new_folder', 'Admin\AdminMediaController@new_folder');
-    Route::post('media/delete_file_folder', 'Admin\AdminMediaController@delete_file_folder');
-    Route::get('media/directories', 'Admin\AdminMediaController@get_all_dirs');
-    Route::post('media/move_file', 'Admin\AdminMediaController@move_file');
-    Route::post('media/upload', 'Admin\AdminMediaController@upload');
+    Route::get('media', 'Admin\AdminMediaController@index');
+    // Route::post('media/files', 'Admin\AdminMediaController@files');
+    // Route::post('media/new_folder', 'Admin\AdminMediaController@new_folder');
+    // Route::post('media/delete_file_folder', 'Admin\AdminMediaController@delete_file_folder');
+    // Route::get('media/directories', 'Admin\AdminMediaController@get_all_dirs');
+    // Route::post('media/move_file', 'Admin\AdminMediaController@move_file');
+    // Route::post('media/upload', 'Admin\AdminMediaController@upload');
 
     Route::get('pages', 'Admin\AdminPageController@index');
     Route::get('pages/create', 'Admin\AdminPageController@create');
