@@ -22,6 +22,32 @@ window.Vue = require('vue');
 
 require('../../talvbansal/media-manager/js/media-manager');
 
+// Vue.component('NewPostModal', {
+//   template: `<div class="modal-body">
+//         <label class="form-label">
+//             Title
+//             <input v-model="title" class="form-control">
+//         </label>
+//         <label class="form-label">
+//             Body
+//         </label>
+//     </div>`,
+// });
+
 const app = new Vue({
-    el: '#app'
-});
+        el: '#app',
+        data:{
+            showMediaManager: false,
+            showModal: false,
+            selectedEventName: 'editor'
+        },
+        mounted(){
+            window.eventHub.$on('media-manager-selected-editor', (file) => {
+                console.log(file.name);
+                console.log(file.mimeType);
+                console.log(file.relativePath);
+                console.log(file.webPath);
+                this.showMediaManager = false;
+            });
+        }
+    });
