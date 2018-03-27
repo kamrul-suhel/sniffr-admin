@@ -25,10 +25,6 @@ class VideoCategory extends Model
 
     public function hasChildren()
     {
-        if (DB::table('video_categories')->where('parent_id', '=', $this->id)->count() >= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return (DB::table('video_categories')->where('parent_id', '=', $this->id)->count() >= 1);
     }
 }

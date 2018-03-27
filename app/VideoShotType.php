@@ -31,9 +31,6 @@ class VideoShotType extends Model
      */
     public function hasChildren()
     {
-        if (DB::table('video_shot_types')->where('parent_id', '=', $this->id)->count() >= 1) {
-            return true;
-        }
-        return false;
+        return (DB::table('video_shot_types')->where('parent_id', '=', $this->id)->count() >= 1);
     }
 }

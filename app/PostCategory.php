@@ -25,9 +25,6 @@ class PostCategory extends Model
 
     public function hasChildren()
     {
-        if (DB::table('post_categories')->where('parent_id', '=', $this->id)->count() >= 1) {
-            return true;
-        }
-        return false;
+        return (DB::table('post_categories')->where('parent_id', '=', $this->id)->count() >= 1);
     }
 }
