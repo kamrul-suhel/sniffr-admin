@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Video;
 use Illuminate\Support\ServiceProvider;
 use Facebook\Facebook;
 
@@ -14,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Video::updated(function ($video) {
+            \Cache::tags('licensed.paginated')->flush();
+            \Log::info('Licensed Paginated Videos Cache flushed');
+        });
     }
 
     /**
