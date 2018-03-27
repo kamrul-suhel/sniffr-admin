@@ -3,21 +3,33 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Database\Eloquent\SoftDeletes;
-// use Conner\Tagging\Taggable;
 
+/**
+ * App\Campaign
+ *
+ * @property int $id
+ * @property int|null $client_id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $deleted_at
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Client|null $client
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Video[] $videos
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereClientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Campaign whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Campaign extends Model
 {
-    // use SoftDeletes;
-    // use Taggable;
-
     protected $guarded = [];
-
   	public static $rules = array();
-
     protected $table = 'campaigns';
-
-  	//protected $fillable = array('user_id', 'title', 'slug', 'image', 'body', 'active', 'created_at');
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -27,7 +39,7 @@ class Campaign extends Model
         return $this->belongsTo(Client::class);
     }
 
-      public function videos()
+    public function videos()
     {
         return $this->belongsToMany(Video::class);
     }
