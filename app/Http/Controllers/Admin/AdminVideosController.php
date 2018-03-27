@@ -778,68 +778,58 @@ class AdminVideosController extends Controller {
         return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Restored Video', 'note_type' => 'success') );
     }
 
-    private function addUpdateVideoTags($video, $tags){
+    /**
+     * @param Video $video
+     * @param $tags []
+     */
+    private function addUpdateVideoTags(Video $video, array $tags)
+    {
         $tags = array_map('trim', explode(',', $tags));
 
-
-        foreach($tags as $tag){
-
+        foreach ($tags as $tag) {
             $tag_id = $this->addTag($tag);
             $this->attachTagToVideo($video, $tag_id);
         }
 
         // Remove any tags that were removed from video
-        foreach($video->tags as $tag){
-            if(!in_array($tag->name, $tags)){
+        foreach ($video->tags as $tag) {
+            if (!in_array($tag->name, $tags)) {
                 $this->detachTagFromVideo($video, $tag->id);
-                if(!$this->isTagContainedInAnyVideos($tag->name)){
+                if (!$this->isTagContainedInAnyVideos($tag->name)) {
                     $tag->delete();
                 }
             }
         }
     }
 
-    /**************************************************
-    /*
-    /*  PRIVATE FUNCTION
-    /*  addTag( tag_name )
-    /*
-    /*  ADD NEW TAG if Tag does not exist
-    /*  returns tag id
-    /*
-    /**************************************************/
-
-    private function addTag($tag){
-        $tag_exists = Tag::where('name', '=', $tag)->first();
-
-        if($tag_exists){
-            return $tag_exists->id;
-        } else {
-            $new_tag = new Tag;
-            $new_tag->name = strtolower($tag);
-            $new_tag->save();
-            return $new_tag->id;
-        }
+    /**
+     * @param string $tag_string
+     * @return int
+     */
+    private function addTag(string $tag_string)
+    {
+        $tag = Tag::firstOrCreate(['name', '=', $tag_string]);
+        return $tag->id;
     }
 
-    /**************************************************
-    /*
-    /*  PRIVATE FUNCTION
-    /*  attachTagToVideo( video object, tag id )
-    /*
-    /*  Attach a Tag to a Video
-    /*
-    /**************************************************/
-
-    private function attachTagToVideo($video, $tag_id){
+    /**
+     * @param $video
+     * @param $tag_id
+     */
+    private function attachTagToVideo($video, $tag_id)
+    {
         // Add New Tags to video
         if (!$video->tags->contains($tag_id)) {
             $video->tags()->attach($tag_id);
         }
     }
 
-    private function detachTagFromVideo($video, $tag_id){
-        // Detach the pivot table
+    /**
+     * @param $video
+     * @param $tag_id
+     */
+    private function detachTagFromVideo(Video $video, int $tag_id)
+    {
         $video->tags()->detach($tag_id);
     }
 
