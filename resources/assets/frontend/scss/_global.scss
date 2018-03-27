@@ -1,7 +1,6 @@
 /* ************************* Global style ******************* */
 
-// all section seperator height
-section.section_space{
+section.section-space{
   padding:$section_spacing 0px;
 }
 
@@ -14,11 +13,18 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 h1{
   font-family:JosefinSansbold;
   @include headingstyle;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+h1.heading{
+  font-size:40px;
+}
+.sub-heading{
+  font-size:20px;
 }
 
 h2{
@@ -37,4 +43,14 @@ p{
 
 .text-center{
   text-align:center;
+}
+
+
+/* ************************* Login style ******************* */
+.forgot-password{
+  color:#000;
+
+  &:hover{
+    color:#777;
+  }
 }

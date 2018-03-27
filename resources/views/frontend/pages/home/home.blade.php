@@ -1,13 +1,13 @@
 @extends('frontend.master')
 @section('content')
-    <section id="video">
-        <video>
-        </video>
-        <div class="heading">
+    <section id="header-home">
+        <div class="header-bg"></div>
+
+        <div class="header-content">
             <div class="position-center">
-                <h1>Video Licensing Platform</h1>
-                <p>License viral videos viewed by millions around the world from Sniffr Media</p>
-                <button onclick="window.location.href='/upload'" class="btn btn-primary upload_video_button">Upload you video</button>
+                <h1 class="heading">Video Licensing Platform</h1>
+                <p class="sub-heading">License viral videos viewed by millions around the world from Sniffr Media</p>
+                <button onclick="window.location.href='/upload'" class="btn btn-primary upload-video-button">Upload you video</button>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
     </section>
 
     <!-- partial template -->
-   @include('frontend.pages.home.feature_section')
-   @include('frontend.pages.home.countdown')
+   @include('frontend.pages.home.partials.feature_section')
+   @include('frontend.pages.home.partials.countdown')
    @include('frontend.forms.upload')
 @endsection

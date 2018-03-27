@@ -1,0 +1,185 @@
+/* ************************* Video header section style ******************* */
+
+#header{
+  position:relative;
+  display:table;
+  width:100%;
+  height:450px;
+  .header-bg{
+    background:url('../images/sample_bg.jpg') no-repeat;
+    background-size:cover;
+    background-position:center center;
+    width:100%;
+    height:100%;
+  }
+
+  .heading{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: table;
+    width: 100%;
+    height: 100%;
+    .position-center{
+      display:table-cell;
+      vertical-align: middle;
+      text-align:center;
+      color:$home_textcolor;
+
+      h1{
+        font-size:50px;
+        color:#fff;
+        text-transform:uppercase;
+      }
+      h1:after{
+        @include heading_border(100px,$color:#fff);
+      }
+    }
+  }
+}
+
+
+/* ************************* Video filter section style ******************* */
+
+.videos_filter_section{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  background:rgba(0,0,0,1);
+  padding:20px;
+  z-index:10;
+  .logo img{
+    width:110px;
+  }
+}
+
+.videos_filter_form {
+  .form-group{
+    margin:0;
+  }
+  input{
+    width:100%;
+    padding:15px;
+    margin-bottom:10px;
+    text-transform:uppercase;
+    background:transparent;
+    border:1px solid #777;
+    border-radius:0;
+    color:#fff;
+  }
+  input::placeholder{
+    color:#fff;
+  }
+
+  @include small-device{
+    input{
+      margin-bottom:10px;
+    }
+  }
+
+  @include medium-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+  @include large-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+  @include extra-large-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+}
+
+
+/* ************************* Video section style ******************* */
+
+.videos_section{
+
+  .video_section_title{
+    margin-bottom: $section_title_after_space;
+    h1{
+      @include headingstyle();
+    }
+
+  }
+  .video_section_title::after{
+    @include heading_border;
+  }
+
+  .card__media__content {
+    a{
+      background-size:cover;
+      backgorund-position:center center;
+      &:hover{
+        .thumbnail-overlay{
+          opacity:.5;
+        }
+        .play-button{
+          opacity:.8;
+          transform:scale(1);
+        }
+      }
+      position:absolute;
+      top:0;
+      bottom:0;
+      right:0;
+      left:0;
+
+      .thumbnail-overlay{
+        position:absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+        z-index:2;
+        background:rgba(0,0,0,.5);
+        opacity:0;
+        transition:all ease-in-out .3s;
+      }
+      .play-button{
+        position:absolute;
+        z-index:3;
+        color:#fff;
+        opacity:0;
+        top:50%;
+        left:50%;
+        margin-left: -25px;
+        margin-top: -25px;
+        transform:scale(0);
+        transition:all ease-in-out .3s;
+      }
+
+      .label-success{
+        position:absolute;
+        top:0;
+        right:0;
+        background:#5cb85c;
+        color:#fff;
+        padding:5px 10px;
+        z-index:3
+      }
+    }
+  }
+
+  .card__title{
+    height:115px;
+    position:relative;
+    .video-duration{
+      position:absolute;
+      top:5px;
+      right:10px;
+      font-weight:bold;
+    }
+  }
+
+  .video_item_container:hover .video_item_link{
+    bottom:20px;
+  }
+
+}

@@ -167,7 +167,9 @@ Vue.component('upload-video',{
             form.append('user_email', this.email);
             let headers = {
                 headers : {
-                    "Content-type":"multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2)
+                    "Content-type":"multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN' : this.csrf_token
                 }
             };
             axios.post('http://localhost/vuetify/vuetify-1/email_verify.php',

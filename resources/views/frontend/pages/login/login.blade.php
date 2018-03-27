@@ -3,50 +3,60 @@
     <section id="video">
         <video>
         </video>
-        <div class="heading">
+        <v-container grid-list-lg align-content-center justify-center class="heading">
             <div class="position-center">
-                <div class="table">
-                    <div class="table-cell">
-                        <div class="modal-dialog modal-sm" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <!-- LOGIN SECTION -->
 
-                                    <section id="login_section" class="login_section">
-                                        <h2 class="login_title">LOGIN</h2>
-                                        @if (session()->has('note'))
-                                            <div class="alert
-                                                @if(session('note_type') == 'success')
-                                                    alert-success
-                                                @else
-                                                    alert-danger
-                                                @endif">
-                                                {{ session('note') }}
-                                            </div>
-                                        @endif
-                                        <form method="post" action="@if($settings->enable_https) {{ secure_url('login') }} @else {{ route('login') }} @endif">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="email" id="login_email" aria-describedby="emailhelp" placeholder="Enter Email">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="password" class="form-control" name="password" id="login_password" aria-describedby="passwordhelp" placeholder="Enter password">
-                                            </div>
-                                            <div class="form-submit">
-                                                <input type="hidden" id="redirect" name="redirect" value="" />
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                                                <input type="submit" class="btn btn-block"  id="login_submit" value="LOGIN">
-                                            </div>
-                                            <div class="forgot-password">
-                                                <a href="{{route('password.remind')}}" class="">Forgot password</a>
-                                            </div>
-                                        </form>
-                                    </section>
-                                </div>
-                            </div>
+
+
+
+                <!-- LOGIN SECTION -->
+                <section class="login_section">
+                    <h2 class="login_title">LOGIN</h2>
+
+                    <v-form method="post" action="@if($settings->enable_https) {{ secure_url('login') }} @else {{ route('login') }} @endif">
+                        <v-flex xs12>
+                          <v-text-field
+                            label="Email"
+                            v-model="user.email"
+                            :rules="emailRules"
+                            required
+                            :error="validation.error">
+                            </v-text-field>
+                        </v-flex>
+
+                        <v-flex xs12>
+                            
+                          <v-text-field
+                                  name="password"
+                                  label="Enter your password"
+                                  v-model="user.password"
+                                  :append-icon="showpassword ? 'visibility' : 'visibility_off'"
+                                  :append-icon-cb="() => (showpassword = !showpassword)"
+                                  :type="showpassword ? 'password' : 'text'"
+                                  :rules="passwordRules"
+                                  :error="validation.error"
+                                  required
+                          ></v-text-field>
+                        </v-flex>                        
+
+                        <v-flex xs12>
+                            @if (session()->has('note'))
+                                <v-flex xs12 text-align-center>
+                                    <p class="red--text">{{ session('note') }}</p>
+                                </v-flex>
+                            @endif
+                        </v-flex>
+                        <div class="form-submit">
+                            <input type="hidden" id="redirect" name="redirect" value="" />
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                            <v-btn raised type="submit" dark>LOGIN</v-btn>
                         </div>
-                    </div>
-                </div>
+                        <div class="forgot-password">
+                            <a href="{{route('password.remind')}}" class="">Forgot password</a>
+                        </div>
+                    </v-form>
+                </section>
             </div>
-        </div>
+        </v-container>
     </section>
 @endsection

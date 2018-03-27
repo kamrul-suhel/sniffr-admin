@@ -65,22 +65,24 @@
                 </v-flex>
 
                 <v-flex xs12 sm12 md4 lg4>
-                    <v-layout  row wrap class="video_detail_sidebar">
-                        <v-flex class="video_detail_viewer" align-content-end>
-                            @if(isset($view_increment) && $view_increment == true )
-                                {{ $video->views + 1 }} Views
-                            @else
-                                {{ $video->views }} Views
-                            @endif
-
-                            <div class="favorite btn btn-default @if(isset($favorited->id)) active @endif"
+                    <v-layout  column wrap align-content-center="true" class="video_detail_sidebar">
+                        <v-flex xs12 class="video_detail_viewer" text-xs-center text-md-center text-lg-right text-xl-right>
+                            <v-btn raised class="favorite @if(isset($favorited->id)) active @endif"
                                  data-authenticated="{{ !Auth::guest() }}"
                                  data-videoid="{{$video->id}}">
-                                <i class="fa fa-heart"></i> Favorite</div>
+                                Favorite <v-icon right dark>favorite</v-icon>
+                            </v-btn>
+                            
                             @if(Auth::user() && Auth::user()->role == 'client' && $video->file)
                                 <a href="/download/{{$video->alpha_id}}" class="download btn btn-primary">
                                     <i class="fa fa-download"></i> Download
                                 </a>
+                            @endif
+
+                            @if(isset($view_increment) && $view_increment == true )
+                                {{ $video->views + 1 }} Views
+                            @else
+                                {{ $video->views }} Views
                             @endif
                         </v-flex>
 

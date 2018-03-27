@@ -116,7 +116,6 @@ class ThemeAuthController extends Controller {
 	        'password' => Input::get('password')
 	    );
 
-
 	    if ( Auth::attempt($email_login) || Auth::attempt($username_login) ){
     		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
     			$redirect = (Input::get('redirect')) ? Input::get('redirect') : '/admin';

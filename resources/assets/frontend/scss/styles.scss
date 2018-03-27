@@ -1,7 +1,8 @@
-@import "./_variables";
+@import "./basic-reset";
+@import "./variables";
 @import "./fonts";
-@import "./_mixin";
-@import "./_global";
+@import "./mixin";
+@import "./global";
 @import "./plugin";
 
 
@@ -15,18 +16,18 @@
 @import "./layout/nav";
 
 /* ************************* Home Page style ******************* */
-@import "pages/home/main";
+@import "pages/home/home";
 
 /* ************************* Login Page style ******************* */
 @import "pages/login/login";
 
 
 /* ************************* Videos Page style ******************* */
-@import "pages/videos/main";
+@import "pages/videos/videos";
 
 
 /* ************************* Video detail style ******************* */
-@import "pages/video_detail/main";
+@import "pages/video_detail/video-detail";
 
 /* ************************* Footer style ******************* */
 @import "layout/footer";

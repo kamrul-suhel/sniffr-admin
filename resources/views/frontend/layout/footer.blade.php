@@ -1,21 +1,23 @@
 <!-- FOOTER SECTION -->
-<section class="footer_section section_space" >
-    <v-container grid-list-xl>
+<section class="footer-section section-space" >
+    <v-container grid-list-xs>
         <v-layout row wrap>
             <v-flex xs12 sm12 md8 lg8>
-                <div class="footer_left">
-                    <div class="footer_logo">
+                <div class="footer-left">
+                    <div class="footer-logo">
                         <img src="{{asset('assets/frontend/images/logo-sniffr-white.png')}}"/>
                     </div>
-                    <div class="foote_text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                    </div>
+                    <v-flex xs12 sm9 md9 lg9>
+                        <div class="footer-text">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                        </div>
+                    </v-flex>
                 </div>
             </v-flex>
 
             <v-flex xs12 sm12 md4 lg4>
-                <div class="footer_right">
-                    <div class="social_section">
+                <div class="footer-right">
+                    <div class="social-section">
                         <ul>
                             <?php if($settings->facebook_page_id): ?>
                                 <li>

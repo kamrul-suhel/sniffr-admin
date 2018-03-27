@@ -1,7 +1,7 @@
 @extends('frontend.master')
 @section('content')
 
-    <section id="videos" class="page_videos">
+    <v-layout row wrap id="videos" class="page_videos">
         <video></video>
         <div class="heading">
             <div class="position-center">
@@ -9,24 +9,29 @@
             </div>
         </div>
         @include('frontend.includes.search_form')
-    </section>
+    </v-layout>
 
     <!-- VIDEOS ITEM SECTION -->
-    <section class="videos_section section_space">
-        <article class="container">
-            <div class="row">
+    <v-layout row wrap class="videos_section section_space">
+        <v-container grid-list-lg >
+            <v-layout row wrap>
 
-                <?php if(count($videos) < 1): ?>
-                    <h4>No Video Search results found for <?= $search_value ?></h4>
-                <?php else: ?>
-                    <h3>Video Search Results for: <?= $search_value ?></h3>
-                    <hr/>
+                @if(count($videos) < 1)
+                    <v-flex xs12>
+                        <h4>No Video Search results found for <?= $search_value ?></h4>
+                    </v-flex>
+                @else
+                    <v-flex xs12>
+                        <h3>Video Search Results for: {{$search_value}}</h3>
+                        <hr/>
+                    </v-flex>
                     @include('frontend.includes.video_loop')
-                <?php endif; ?>
+                    
+                @endif
 
             </div>
-        </article>
-    </section>
+        </v-container>
+    </v-layout>
 
 
 

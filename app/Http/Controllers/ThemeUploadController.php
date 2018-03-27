@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\EmailVerifyHelper;
 use App\Setting;
+use Aws\S3\S3Client;
 use View;
 use Auth;
 use MyYoutube;
@@ -119,7 +120,6 @@ class ThemeUploadController extends Controller {
         // ini_set('max_allowed_packet', '1000M');
 
         $isJson = $request->ajax();
-        
 
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
@@ -140,6 +140,21 @@ class ThemeUploadController extends Controller {
                     ->withInput();
             }
         }
+
+
+        //New amazon S3 client integration
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => 'eu-west-1',
+            'credentials' => [
+                'key'    => 'AKIAIZZM46V2ELD4YHDQ',
+                'secret' => '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'
+            ]
+        ]);
+
+
+
+
         
 
         //get additional form data
@@ -169,9 +184,52 @@ class ThemeUploadController extends Controller {
             $fileMimeType = $file->getMimeType();
             $fileSize = $file->getClientSize();
 
+
+
+
+
+
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
+
+            dd($filePath);
+
+
+            $result = $client->putObject([
+                'Bucket'     => 'vlp-storage-links',
+                'Key'        => 'bucket-name/file.ext',
+                'SourceFile' => 'local-file.ext',
+                'ContentType' => 'application/pdf',
+                '@http' => [
+                    'progress' => function ($downloadTotalSize, $downloadSizeSoFar, $uploadTotalSize, $uploadSizeSoFar) {
+                        printf(
+                            "%s of %s downloaded, %s of %s uploaded.\n",
+                            $downloadSizeSoFar,
+                            $downloadTotalSize,
+                            $uploadSizeSoFar,
+                            $uploadTotalSize
+                        );
+                    }
+                ]
+            ]);
+
+            // $result = $client->getObject([
+            //     'Bucket' => 'vlp-storage-links',
+            //     'Key'    => $filePath,
+            //     '@http' => [
+            //         'progress' => function ($expectedDl, $dl, $expectedUl, $ul) {
+            //             printf(
+            //                 "%s of %s downloaded, %s of %s uploaded.\n",
+            //                 $expectedDl,
+            //                 $dl,
+            //                 $expectedUl,
+            //                 $ul
+            //             );
+            //         }
+            //     ]
+            // ]);
+            // return $result;
 
             $video->url = Input::get('url');
             $video->file = $filePath;

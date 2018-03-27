@@ -157,7 +157,8 @@ class ThemeVideoController extends Controller {
             'pages' => Page::where('active', '=', 1)->get(),
             );
 
-        return view('Theme::video-list', $data);
+        return view('frontend.pages.videos.video_tag', $data);
+        // return view('Theme::video-list', $data);
     }
 
     public function category($category)

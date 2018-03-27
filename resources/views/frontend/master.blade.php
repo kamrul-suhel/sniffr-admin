@@ -4,10 +4,6 @@
     <!-- All meta tags -->
     @include('frontend.layout.head.meta')
 
-    @if(isset($video->id) || isset($episode->id))
-        <link href="{{asset('/assets/frontend/theme/css/video-js.css')}}" rel="stylesheet">
-    @endif
-
     @php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; @endphp
     <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . 'settings/' . $favicon }}" type="image/x-icon">
 
@@ -15,11 +11,8 @@
     @yield('page_styles')
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
-
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/frontend/css/plugin/vuetify.css')}}" />
-
-
     <link rel="stylesheet" href="{{asset('assets/frontend/css/styles.css')}}" />
 </head>
 <body @if(Request::is('/')) class="home" @endif>
@@ -52,7 +45,9 @@
             ga('send', 'pageview');
         </script>
     @endif
-    <script>(function(d, s, id) {
+
+    <script>
+        (function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s); js.id = id;

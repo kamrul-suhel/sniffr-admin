@@ -1,5 +1,4 @@
-<section id="nav" class="section_space @if(!Request::is('/')) nav_background @endif">
-
+<section id="nav" class="section-space @if(!Request::is('/')) nav_background @endif">
     <v-container grid-list-md>
         <v-layout row wrap>
             <v-flex xs12 sm6 md4 lg4>
@@ -41,5 +40,4 @@
             </v-flex>
         </v-layout>
     </v-container>
-
 </section>

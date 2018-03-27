@@ -5,7 +5,7 @@
             <v-layout row wrap>
                 <v-flex xs12>
                     <div class="upload_video_title">
-                        <h1>UPLOAD YOUR VIDEO</h1>
+                        <h1 class="heading">UPLOAD YOUR VIDEO</h1>
                     </div>
                     <div>
                         <h3 class="text-center">Your Contact Details</h3>

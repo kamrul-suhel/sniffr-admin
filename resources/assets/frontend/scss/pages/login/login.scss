@@ -1,116 +1,37 @@
-
+.login-dialog{
+  display:none;
+}
 .login_section{
   margin:0 auto;
   padding:20px;
   background:#fff;
+  width:450px;
 
   .login_title{
     color: $title_color;
     text-align:center;
     margin-top:0;
   }
+  
   .login_title:after{
     @include heading_border(50px, 2px, 0px);
   }
 
   .form-submit{
-    width:100%;
-    text-align:center;
-    input[type='submit']{
-      background: #000;
-      padding: 10px 20px;
-      color: #fff;
-      font-weight: bold;
-      line-height: 20px;
-      font-size: 14px;
-      height: 38px;
-      width:auto;
-      float:none;
-      display:inline-block;
-      -webkit-transition:all ease-in-out .3s;
-      -o-transition:all ease-in-out .3s;
-      -moz-transition:all ease-in-out .3s;
-      -ms-transition:all ease-in-out .3s;
-      transition:all ease-in-out .3s;
-    }
-    input[type='submit']:hover{
-      background:#1a1a1a;
-    }
+    
   }
 
   .forgot-password{
     display:block;
     margin-top:10px;
+
     a{
-      -webkit-transition:all ease-in-out .3s;
-      -o-transition:all ease-in-out .3s;
-      -moz-transition:all ease-in-out .3s;
-      -ms-transition:all ease-in-out .3s;
-      transition:all ease-in-out .3s;
+      color:#000;
+      text-decoration:none;
+
+      &:hover{
+        text-decoration:underline;
+      }
     }
   }
-
-
-  .form-group {
-    input{
-      background: #fafafa;
-      padding: 10px;
-      border:none;
-      border-radius: 0;
-      color: #000;
-    }
-    input[type="submit"]{
-      background:#000;
-      color:#fff;
-      font-weight:bold;
-      width:150px;
-      margin:0 auto;
-    }
-    input:focus{
-      border:none;
-      outline:none;
-      box-shadow:0px 0px 2px rgba(0,0,0,.2);
-    }
-  }
-
-  .login-button{
-    position:relative;
-
-    .login-progress{
-      position:absolute;
-      right:-20px;
-      top:6px;
-    }
-  }
-
-
-  a.forgot_password{
-    color: #000;
-    display: block;
-    margin: 0 auto;
-    text-align:center;
-  }
-
-}
-
-.modal-body{
-  position:relative;
-}
-.modal a.modal_close{
-  color:#000;
-  position:absolute;
-  top:10px;
-  right:20px;
-}
-.modal a.modal_close:focus{
-  outline:none;
-}
-
-.table {
-  display: table;
-  height:100%;
-}
-.table-cell {
-  display: table-cell;
-  vertical-align: middle;
 }

@@ -1,11 +1,12 @@
 @extends('frontend.master')
 @section('content')
 
-    <section id="videos" class="page_videos">
-        <video></video>
+    <section id="header" class="page_videos">
+        <div class="header-bg"></div>
+
         <div class="heading">
             <div class="position-center">
-                <h1 style="margin-top:15px;">Videos</h1>
+                <h1>Videos</h1>
             </div>
         </div>
 

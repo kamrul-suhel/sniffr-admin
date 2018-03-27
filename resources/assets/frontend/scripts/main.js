@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var browserheight = window.innerHeight;
-    $('#video').css('height', browserheight+'px');
+    $('#header-home').css('height', browserheight+'px');
 
     var first_nav_pos = $('#nav').position();
     var second_nav_pos = $('.second-navigation').position();
@@ -19,6 +19,7 @@ $(document).ready(function(){
 //Vue packages
 require('vue');
 window.axios = require('axios');
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
 // Vue component
@@ -56,19 +57,16 @@ new Vue({
             if(this.$refs.login_form.validate()){
                 // make spinner visible
                 this.login_progress = true;
+                var header = {
+                    'X-CSRF-TOKEN' : this.csrf_token
+                };
 
                 // prepare submitting data
                 let form_data = new FormData();
                 form_data.append('email', this.user.email);
                 form_data.append('password', this.user.password);
                 // submit data with ajax request
-                axios.post('login', form_data, {
-                    headers:
-                        {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN' : this.csrf_token
-                        }
-                })
+                axios.post('/login', form_data, header)
                 .then(response => {
                     this.login_progress = true;
 
@@ -80,11 +78,15 @@ new Vue({
                         return;
                     }
 
-                    window.location.href = data.redirect_url;
+                    console.log(response);
+
+                    if(data.redirect_url){
+                        window.location.href = data.redirect_url;
+                    }
 
                 })
                 .catch(error => {
-                    
+                    console.log(error);
                 });
             }
         }
