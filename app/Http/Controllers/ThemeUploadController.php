@@ -41,7 +41,6 @@ class ThemeUploadController extends Controller {
         'alpha_id' => 'unique',
         'full_name' => 'required',
         'email' => 'required|email',
-        'title' => 'required',
         // 'url' => 'required_without_all:url,file',
         'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
         'terms' => 'required'
@@ -144,7 +143,7 @@ class ThemeUploadController extends Controller {
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
-        $video->title = Input::get('title');
+        $video->title = (!empty(Input::get('title')) ? Input::get('title') : 'Untitled '.$video->alpha_id);
 
         //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';
