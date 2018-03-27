@@ -90,9 +90,9 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Post Page Routes
     |--------------------------------------------------------------------------
     */
-    Route::get( 'posts', array('uses' => 'ThemePostController@posts', 'as' => 'posts') );
-    Route::get( 'posts/category/{category}', 'ThemePostController@category' );
-    Route::get( 'post/{slug}', 'ThemePostController@index' );
+    Route::get('posts', 'ThemePostController@index');
+    Route::get('posts/category/{category}', 'ThemePostController@category' );
+    Route::get('post/{slug}', 'ThemePostController@show');
 
     /*
     |--------------------------------------------------------------------------
