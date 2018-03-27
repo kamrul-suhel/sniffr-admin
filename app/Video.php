@@ -5,15 +5,20 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @property int $id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
+ * @property Comment[] $cached_comments
+ * @property Campaign[] $cached_campaigns
+ * @property Download[] $cached_downloads
  * @property-read \App\Tag|null $tags
  * @property-read \App\Contact|null $contact
  * @property-read \App\Comment|null $comments
+ * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
  * @mixin \Eloquent
  */
@@ -21,6 +26,7 @@ class Video extends Model
 {
     use SoftDeletes, Notifiable;
 
+    const CACHE_EXPIRATION = 720;
     protected $guarded = [];
     protected $table = 'videos';
     protected $hidden = ["deleted_at"];
@@ -89,5 +95,80 @@ class Video extends Model
     public function routeNotificationForSlack()
     {
         return 'https://hooks.slack.com/services/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';
+    }
+
+    /**
+     * @param int $page
+     * @return string
+     */
+    public function cacheKey(int $page = 0)
+    {
+        return sprintf(
+            "%s-%s",
+            $this->getTable(),
+            $page
+        );
+    }
+
+    /**
+     * @param int $videos_per_page
+     * @param $page
+     * @return mixed
+     */
+    public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
+    {
+        return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
+            return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+        });
+    }
+
+    /**
+     * @return Comment[]
+     */
+    public function getCachedComments()
+    {
+        return Cache::remember($this->cacheKey() . ':comments', self::CACHE_EXPIRATION, function () {
+            return $this->comments->toArray();
+        });
+    }
+
+    /**
+     * @return Campaign[]
+     */
+    public function getCachedCampaigns()
+    {
+        return Cache::remember($this->cacheKey() . ':campaigns', self::CACHE_EXPIRATION, function () {
+            return $this->campaigns->toArray();
+        });
+    }
+
+    /**
+     * @return Download[]
+     */
+    public function getCachedDownloads()
+    {
+        return Cache::remember($this->cacheKey() . ':downloads', self::CACHE_EXPIRATION, function () {
+            return $this->downloads->toArray();
+        });
+    }
+
+    /**
+     * @return Contact[]
+     */
+    public function getCachedContact()
+    {
+        return Cache::remember($this->cacheKey() . ':contact', self::CACHE_EXPIRATION, function () {
+            return $this->contact->toArray();
+        });
+    }
+
+    /**
+     * @return Tag[]
+     */
+    public function getCachedTags()
+    {
+        return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
+            return $this->tags->toArray();
+        });
     }
 }
