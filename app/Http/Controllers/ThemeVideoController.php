@@ -80,6 +80,7 @@ class ThemeVideoController extends Controller {
                 );
 //            return view('Theme::video', $data);
 //            return view('Theme::video', $data);
+
             return view('frontend.pages.videos.video_detail', $data);
 
         } else {

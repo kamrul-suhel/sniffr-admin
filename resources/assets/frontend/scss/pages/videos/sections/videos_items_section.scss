@@ -17,6 +17,17 @@
 
   .card__media__content {
     a{
+      background-size:cover;
+      backgorund-position:center center;
+      &:hover{
+        .thumbnail-overlay{
+          opacity:.5;
+        }
+        .play-button{
+          opacity:.8;
+          transform:scale(1);
+        }
+      }
       position:absolute;
       top:0;
       bottom:0;
@@ -34,6 +45,18 @@
         opacity:0;
         transition:all ease-in-out .3s;
       }
+      .play-button{
+        position:absolute;
+        z-index:3;
+        color:#fff;
+        opacity:0;
+        top:50%;
+        left:50%;
+        margin-left: -25px;
+        margin-top: -25px;
+        transform:scale(0);
+        transition:all ease-in-out .3s;
+      }
 
       .label-success{
         position:absolute;
@@ -44,7 +67,6 @@
         padding:5px 10px;
         z-index:3
       }
-
     }
   }
 

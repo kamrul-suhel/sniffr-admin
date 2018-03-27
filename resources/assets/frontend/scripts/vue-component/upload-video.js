@@ -84,18 +84,20 @@ Vue.component('upload-video',{
                         }
                 })
                 .then(response => {
-                    // email verify done turn off spinner
-                    console.log('done');
-                    this.validete_email_progress = false;
+                    //Delay for one second
+                    setTimeout( () => {
+                        // email verify done turn off spinner
+                        this.validete_email_progress = false;
 
-                    let data = response.data;
-                    if(data.found_email === 1){
-                        this.uploadFormData();
-                    }else{
-                        // mean email is not verify
-                        this.validate_email_error = true;
+                        let data = response.data;
+                        if(data.found_email === 1){
+                            this.uploadFormData();
+                        }else{
+                            // mean email is not verify
+                            this.validate_email_error = true;
 
-                    }   
+                        }
+                    }, 1000)
                 })
                 .catch(error => {
                     // console.log(error);
@@ -131,12 +133,13 @@ Vue.component('upload-video',{
                     }.bind(this)
                 }
             )
-            .then(resopnse => {
+            .then(response => {
                 //data uploaded succes
                 let data = response.data;
+                console.log(data);
+
                 if(data.status == 'success'){
                     // set all default
-                    this.upload_progress = false;
                     this.progressbar = 0;
 
                     //Email progress 

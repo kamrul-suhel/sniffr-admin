@@ -1,8 +1,8 @@
 @if ($paginator->hasPages())
     <section class="pagination_section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
+        <v-container fill-height>
+            <v-layout row wrap align-center>
+                <v-flex text-xs-center>
                     <ul class="pagination">
                         {{-- Previous Page Link --}}
                         @if ($paginator->onFirstPage())
@@ -37,8 +37,8 @@
                             <li class="disabled"><i class="fas fa-angle-right"></i></li>
                         @endif
                     </ul>
-                </div>
-            </div>
-        </div>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </section>
 @endif

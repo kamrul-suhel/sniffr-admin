@@ -13,7 +13,7 @@ if(isset($day_sort) && $currentDay != $date){
         <v-card-media src="{{ $video->image }}" height="200px">
             <a class="block-thumbnail" href="<?= url('video') ?><?= '/' . $video->alpha_id ?>" style="background-image:url('<?= $video->image; ?>')">
                 <div class="thumbnail-overlay"></div>
-                <span class="play-button"></span>
+                <span class="play-button"><i class="far fa-play-circle fa-4x"></i></span>
                 <span class="label label-<?php echo $video->state == 'licensed' ? 'success' : 'danger'; ?>"><?php echo ucfirst($video->state); ?></span>
 
             </a>
