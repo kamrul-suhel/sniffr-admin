@@ -29,6 +29,8 @@
         "thujohn/twitter": "^2.2"
     },
     "require-dev": {
+        "doctrine/dbal": "^2.6",
+        "barryvdh/laravel-ide-helper": "^2.4",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "google/cloud-tools": "^0.6",
