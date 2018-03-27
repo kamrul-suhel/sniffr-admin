@@ -203,6 +203,9 @@ class AdminVideosController extends Controller {
 
         }
 
+        // Set user so we know who last changed the state of a video (helpful for youtube duplications)
+        $video->user_id = (!empty(Auth::id()) ? Auth::id() : NULL);
+
         // Save video data to database
         $video->save();
 
