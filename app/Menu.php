@@ -18,11 +18,12 @@ class Menu extends Model
     protected $table = 'menu';
     public static $rules = [];
 
+    /**
+     * @return bool
+     */
     public function hasChildren()
     {
-        if (DB::table('menu')->where('parent_id', '=', $this->id)->count() >= 1) {
-            return true;
-        }
+        return (DB::table('menu')->where('parent_id', '=', $this->id)->count() >= 1);
     }
 
 }
