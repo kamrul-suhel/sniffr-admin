@@ -14,10 +14,10 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Video Page Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('videos', array('uses' => 'ThemeVideoController@videos', 'as' => 'videos') );
+    Route::get('videos', 'ThemeVideoController@index');
     Route::get('videos/category/{category}', 'ThemeVideoController@category' );
     Route::get('videos/tag/{tag}', 'ThemeVideoController@tag' );
-    Route::get('video/{id}', 'ThemeVideoController@index');
+    Route::get('video/{id}', 'ThemeVideoController@show');
 
     /*
     |--------------------------------------------------------------------------
@@ -116,9 +116,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
 
     Route::get('login', 'ThemeAuthController@login_form')->name('login');
-    //Route::get('signup', 'ThemeAuthController@signup_form');
     Route::post('login', 'ThemeAuthController@login');
-    //Route::post('signup', 'ThemeAuthController@signup');
 
     Route::get('password/reset', array('uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind'));
     Route::post('password/reset', array('uses' => 'ThemeAuthController@password_request', 'as' => 'password.request'));
