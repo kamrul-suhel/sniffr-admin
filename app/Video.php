@@ -6,17 +6,56 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Video extends Model {
+/**
+ * @property int $id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property-read \App\Tag|null $tags
+ * @property-read \App\Contact|null $contact
+ * @property-read \App\Comment|null $comments
+ * @property-read \App\Download|null $downloads
+ * @mixin \Eloquent
+ */
+class Video extends Model
+{
     use SoftDeletes, Notifiable;
 
+    protected $guarded = [];
     protected $table = 'videos';
-	protected $guarded = [];
     protected $hidden = ["deleted_at"];
-	protected $fillable = array('user_id', 'video_category_id', 'video_collection_id', 'video_shottype_id', 'title', 'rights', 'access', 'details', 'description', 'date_filmed', 'vertical', 'notes', 'referrer', 'credit', 'active', 'featured', 'duration', 'image', 'embed_code', 'url', 'created_at', 'source');
+    protected $fillable = [
+        'user_id',
+        'video_category_id',
+        'video_collection_id',
+        'video_shottype_id',
+        'title',
+        'rights',
+        'access',
+        'details',
+        'description',
+        'date_filmed',
+        'vertical',
+        'notes',
+        'referrer',
+        'credit',
+        'active',
+        'featured',
+        'duration',
+        'image',
+        'embed_code',
+        'url',
+        'created_at',
+        'source'
+    ];
 
-	public function tags(){
-		return $this->belongsToMany(Tag::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

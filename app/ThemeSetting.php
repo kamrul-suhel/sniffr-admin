@@ -4,10 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ThemeSetting extends Model {
-	protected $guarded = array();
-
-	public static $rules = array();
-
-	protected $fillable = array('theme_slug', 'key', 'value');
+/**
+ * @property int $id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @mixin \Eloquent
+ */
+class ThemeSetting extends Model
+{
+    protected $guarded = [];
+    public static $rules = [];
+    protected $fillable = ['theme_slug', 'key', 'value'];
 }

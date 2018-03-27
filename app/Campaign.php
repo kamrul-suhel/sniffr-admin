@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 class Campaign extends Model
 {
     protected $guarded = [];
-  	public static $rules = array();
+    public static $rules = [];
     protected $table = 'campaigns';
 
     /**
@@ -39,6 +39,9 @@ class Campaign extends Model
         return $this->belongsTo(Client::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function videos()
     {
         return $this->belongsToMany(Video::class);

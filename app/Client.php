@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Client
@@ -30,12 +29,8 @@ class Client extends Model
     use Notifiable;
 
     protected $guarded = [];
-
-  	public static $rules = array();
-
+    public static $rules = [];
     protected $table = 'clients';
-
-  	//protected $fillable = array('user_id', 'title', 'slug', 'image', 'body', 'active', 'created_at');
 
     public function campaigns()
     {

@@ -50,16 +50,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contact extends Model
 {
     use SoftDeletes;
-
-  	public static $rules = array();
-
+    public static $rules = [];
     protected $table = 'contacts';
     protected $softDelete = true;
 
     protected $fillable = [
-        'full_name', 'email', 'tel', 'language', 'location', 'comments', 'facebook', 'youtube', 'instagram', 'twitter', 'other', 'terms'
+        'full_name',
+        'email',
+        'tel',
+        'language',
+        'location',
+        'comments',
+        'facebook',
+        'youtube',
+        'instagram',
+        'twitter',
+        'other',
+        'terms'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function videos()
     {
         return $this->hasMany(Video::class);
