@@ -2,130 +2,129 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Auth;
 use Validator;
 use Redirect;
-
 use App\Page;
 use App\Menu;
-use App\Setting;
 use App\VideoCategory;
 use App\PostCategory;
 use App\PaymentSetting;
-
 use Illuminate\Support\Facades\Input;
-
 use App\Libraries\ThemeHelper;
 
-class ThemeAuthController extends Controller {
+class ThemeAuthController extends Controller
+{
+    /**
+     * @param  $data []
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:6',
+        ]);
+    }
 
-	public function __construct()
-	{
-		//$this->middleware('secure');
-	}
+    /**
+     * @param  $data []
+     * @return User
+     */
+    public function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
 
-	/*
-	|--------------------------------------------------------------------------
-	| Auth Controller
-	|--------------------------------------------------------------------------
-	*/
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function login_form()
+    {
+        if (!Auth::guest()) {
+            return Redirect::to('/');
+        }
 
-	/**
-	 * Get a validator for an incoming registration request.
-	 *
-	 * @param  array  $data
-	 * @return \Illuminate\Contracts\Validation\Validator
-	 */
-	public function validator(array $data)
-	{
-		return Validator::make($data, [
-			'name' => 'required|max:255',
-			'email' => 'required|email|max:255|unique:users',
-			'password' => 'required|confirmed|min:6',
-		]);
-	}
+        $data = [
+            'type' => 'login',
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'video_categories' => VideoCategory::all(),
+            'post_categories' => PostCategory::all(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        ];
 
-	/**
-	 * Create a new user instance after a valid registration.
-	 *
-	 * @param  array  $data
-	 * @return User
-	 */
-	public function create(array $data)
-	{
-		return User::create([
-			'name' => $data['name'],
-			'email' => $data['email'],
-			'password' => bcrypt($data['password']),
-		]);
-	}
+        return view('Theme::auth', $data);
+    }
 
-	public function login_form(){
-		if(!Auth::guest()){
-			return Redirect::to('/');
-		}
-		$data = array(
-			'type' => 'login',
-			'menu' => Menu::orderBy('order', 'ASC')->get(),
-			'video_categories' => VideoCategory::all(),
-			'post_categories' => PostCategory::all(),
-			'theme_settings' => ThemeHelper::getThemeSettings(),
-			'pages' => Page::where('active', '=', 1)->get(),
-			);
-		return view('Theme::auth', $data);
-	}
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function signup_form()
+    {
 
-	public function signup_form(){
+        if (!Auth::guest()) {
+            return Redirect::to('/');
+        }
 
-		if(!Auth::guest()){
-			return Redirect::to('/');
-		}
-		$data = array(
-			'type' => 'signup',
-			'menu' => Menu::orderBy('order', 'ASC')->get(),
-			'payment_settings' => PaymentSetting::first(),
-			'video_categories' => VideoCategory::all(),
-			'post_categories' => PostCategory::all(),
-			'theme_settings' => ThemeHelper::getThemeSettings(),
-			'pages' => Page::where('active', '=', 1)->get(),
-			);
-		return view('Theme::auth', $data);
-	}
+        $data = [
+            'type' => 'signup',
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'payment_settings' => PaymentSetting::first(),
+            'video_categories' => VideoCategory::all(),
+            'post_categories' => PostCategory::all(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        ];
 
+        return view('Theme::auth', $data);
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
 	public function login(){
-	    // get login POST data
-	    $email_login = array(
+	    $email_login = [
 	        'email' => Input::get('email'),
 	        'password' => Input::get('password')
-	    );
+	    ];
 
-	    $username_login = array(
+	    $username_login = [
 	        'username' => Input::get('email'),
 	        'password' => Input::get('password')
-	    );
+	    ];
 
-	    if ( Auth::attempt($email_login) || Auth::attempt($username_login) ){
-    		if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager'){
-    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
-    			return Redirect::to($redirect);
-    		} elseif(Auth::user()->role == 'client'){
-    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client/videos';
-    			if(Auth::user()->username == 'dailymail'){
-    				$redirect = '/client/dashboard';
-    			}
-    			return Redirect::to($redirect);
-    		} else {
-    			$redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
-    			return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
-    		}
-	    } else {
-	    	$redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
-	        // auth failure! redirect to login with errors
-	        return Redirect::to('login' . $redirect)->with(array('note' => 'Invalid login, please try again.', 'note_type' => 'error'));
-	    }
+        if (Auth::attempt($email_login) || Auth::attempt($username_login)) {
+            if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager') {
+                $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
+                return Redirect::to($redirect);
+            } elseif (Auth::user()->role == 'client') {
+                $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client/videos';
+                if (Auth::user()->username == 'dailymail') {
+                    $redirect = '/client/dashboard';
+                }
+                return Redirect::to($redirect);
+            } else {
+                $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
+                return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
+            }
+        }
 
+        $redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
+        // auth failure! redirect to login with errors
+        return Redirect::to('login' . $redirect)->with(array('note' => 'Invalid login, please try again.', 'note_type' => 'error'));
 	}
 
+    /**
+     * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
 	public function signup(){
 
 		$input = Input::all();
