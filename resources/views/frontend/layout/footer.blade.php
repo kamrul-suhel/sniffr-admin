@@ -1,13 +1,13 @@
 <!-- FOOTER SECTION -->
 <section class="footer-section section-space" >
-    <v-container grid-list-xs>
+    <v-container grid-list-lg>
         <v-layout row wrap>
-            <v-flex xs12 sm12 md8 lg8>
+            <v-flex xs12 sm8 md8 lg8>
                 <div class="footer-left">
                     <div class="footer-logo">
                         <img src="{{asset('assets/frontend/images/logo-sniffr-white.png')}}"/>
                     </div>
-                    <v-flex xs12 sm9 md9 lg9>
+                    <v-flex xs12 sm12 md9 lg9>
                         <div class="footer-text">
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                         </div>
@@ -15,7 +15,7 @@
                 </div>
             </v-flex>
 
-            <v-flex xs12 sm12 md4 lg4>
+            <v-flex xs12 sm4 md4 lg4>
                 <div class="footer-right">
                     <div class="social-section">
                         <ul>

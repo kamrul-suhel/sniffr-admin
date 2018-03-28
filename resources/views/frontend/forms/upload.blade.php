@@ -94,12 +94,10 @@
                             </v-layout>
                         </v-container>
 
-                        <v-container grid-list-lg
-                                     style="max-height: 250px"
-                                     class="scroll-y term-condition"
-                                     id="scroll-target">
+                        <v-container grid-list-lg>
 
-                            <div class="term-condition-content">
+                            <div class="term-condition-content scroll-y term-condition"
+                                 id="scroll-target" style="max-height: 250px">
                                 <v-layout row wrap text-center>
                                     <h2>Terms & Conditions</h2>
                                 </v-layout>

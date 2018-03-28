@@ -17,8 +17,14 @@ $(document).ready(function(){
 });
 
 //Vue packages
-require('vue');
+window.Vue = require('vue');
+import Vuetify from 'Vuetify';
+Vue.use(Vuetify);
+
+
+// Http ajax package
 window.axios = require('axios');
+
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
@@ -27,6 +33,7 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
 require('./vue-component/upload-video');
 require('./vue-component/submission-form');
 require('./vue-component/login-component');
+require('./vue-component/detail-form');
 
 new Vue({
     el:'#sniffr',

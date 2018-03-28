@@ -65,7 +65,6 @@ class ThemeSubmissionController extends Controller {
     public function index()
     {
         return view('frontend.pages.submission.submission', $this->data);
-//        return view('Theme::submission', $this->data);
     }
 
     /**
@@ -88,7 +87,7 @@ class ThemeSubmissionController extends Controller {
      */
     public function thanks()
     {
-        return view('Theme::thanks', $this->data);
+        return view('frontend.layout.thanks', $this->data);
     }
 
     /**

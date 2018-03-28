@@ -64,8 +64,8 @@ class ThemeDetailsController extends Controller
     public function index($code)
     {
         $this->data['video'] = Video::where('more_details_code', $code)->first();
-
-        return view('Theme::details', $this->data);
+        return view('frontend.pages.submission.detail', $this->data);
+//        return view('Theme::details', $this->data);
     }
 
     /**

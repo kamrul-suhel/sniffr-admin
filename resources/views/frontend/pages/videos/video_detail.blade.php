@@ -64,10 +64,14 @@
                 <v-flex xs12 sm12 md4 lg4>
                     <v-layout  column wrap align-content-center="true" class="video-detail-sidebar">
                         <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right text-xl-right>
-                            <v-btn raised class="favorite @if(isset($favorited->id)) active @endif"
-                                 data-authenticated="{{ !Auth::guest() }}"
-                                 data-videoid="{{$video->id}}">
-                                Favorite <v-icon right dark>favorite</v-icon>
+                            <v-btn
+                                fab
+                                dark
+                                small
+                                color="pink favorite @if(isset($favorited->id)) active @endif"
+                                data-authenticated="{{ !Auth::guest() }}"
+                                data-videoid="{{$video->id}}">
+                                <v-icon dark>favorite</v-icon>
                             </v-btn>
                             
                             @if(Auth::user() && Auth::user()->role == 'client' && $video->file)
