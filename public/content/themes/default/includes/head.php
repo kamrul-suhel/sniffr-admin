@@ -121,5 +121,5 @@ h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
 })(window,document.documentElement,'async-hide','dataLayer',4000,
 {'GTM-P4P3PWK':true});</script>
 <!-- load app.js in header else it won't work -->
-<script type="text/javascript" src="/assets/js/app.js?ver=1.5"></script>
+<script type="text/javascript" src="<?= mix('/assets/js/app.js') ?>"></script>
 <!-- end js load -->
