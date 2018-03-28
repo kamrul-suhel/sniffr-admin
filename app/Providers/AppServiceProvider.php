@@ -16,10 +16,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Video::updated(function () {
-            FlushCacheTag::dispatch('licensed.paginated');
-            \Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
-        });
+        if ($this->app->environment() !== 'production') {
+            Video::updated(function () {
+                FlushCacheTag::dispatch('licensed.paginated');
+                \Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
+            });
+        }
     }
 
     /**
