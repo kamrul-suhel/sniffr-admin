@@ -34,7 +34,7 @@ class AdminCampaignController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin,manager']);
     }
 
     /**

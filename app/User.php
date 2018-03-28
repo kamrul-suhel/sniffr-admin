@@ -39,20 +39,12 @@ class User extends Authenticatable
 
     public function canAccessAdmin()
     {
-        if ($this->role == 'admin' || $this->role == 'manager') {
-            return true;
-        }
-
-        return false;
+        return ($this->role == 'admin' || $this->role == 'manager' || $this->role == 'editorial');
     }
 
     public function canAccessClient()
     {
-        if ($this->role == 'client' || $this->role == 'admin') {
-            return true;
-        }
-
-        return false;
+        return ($this->role == 'client' || $this->role == 'admin');
     }
 
     public function isAdmin()

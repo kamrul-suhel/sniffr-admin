@@ -5,11 +5,21 @@ namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Redirect;
+use Request;
 use App\Menu;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminMenuController extends Controller {
+
+    /**
+     * AdminMenuController constructor.
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->middleware(['admin:admin']);
+    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -79,9 +89,9 @@ class AdminMenuController extends Controller {
     public function order(){
         $menu_item_order = json_decode(Input::get('order'));
         $order = 1;
-        
+
         foreach($menu_item_order as $menu_level_1):
-            
+
             $level1 = Menu::find($menu_level_1->id);
             if($level1->id){
                 $level1->order = $order;

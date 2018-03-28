@@ -1,5 +1,7 @@
 <?php
 
+\TalvBansal\MediaManager\Routes\MediaRoutes::get();
+
 Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
     /*
@@ -160,7 +162,7 @@ Route::group(array('prefix' => 'admin'), function(){
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index');
-    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit');
+    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin.video.edit');
     Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
     Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
     Route::get('videos/restore/{id}', array('uses' => 'Admin\AdminVideosController@restore'));
@@ -193,15 +195,17 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
-    Route::post('videos/comment/{id}', array('uses' => 'Admin\AdminVideosController@comment'));
+
+    // comments
+    Route::resource('comment', 'CommentController');
 
     Route::get('media', 'Admin\AdminMediaController@index');
-    Route::post('media/files', 'Admin\AdminMediaController@files');
-    Route::post('media/new_folder', 'Admin\AdminMediaController@new_folder');
-    Route::post('media/delete_file_folder', 'Admin\AdminMediaController@delete_file_folder');
-    Route::get('media/directories', 'Admin\AdminMediaController@get_all_dirs');
-    Route::post('media/move_file', 'Admin\AdminMediaController@move_file');
-    Route::post('media/upload', 'Admin\AdminMediaController@upload');
+    // Route::post('media/files', 'Admin\AdminMediaController@files');
+    // Route::post('media/new_folder', 'Admin\AdminMediaController@new_folder');
+    // Route::post('media/delete_file_folder', 'Admin\AdminMediaController@delete_file_folder');
+    // Route::get('media/directories', 'Admin\AdminMediaController@get_all_dirs');
+    // Route::post('media/move_file', 'Admin\AdminMediaController@move_file');
+    // Route::post('media/upload', 'Admin\AdminMediaController@upload');
 
     Route::get('pages', 'Admin\AdminPageController@index');
     Route::get('pages/create', 'Admin\AdminPageController@create');
@@ -270,6 +274,8 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('checkanalysis', 'Admin\AdminVideosController@checkAnalysis');
     Route::get('pdfview/{id}', 'Admin\AdminVideosController@pdfview');
     Route::get('nsfw/{id}', 'Admin\AdminVideosController@nsfw');
+
+    Route::get('reminders', 'Admin\AdminLabelController@automateEmailReminders');
 });
 
 

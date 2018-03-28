@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d90c639ebbab5aa382f83b4366b581a5",
+    "content-hash": "f7188a48470bd34ddfe30f16220c7e0b",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -118,16 +118,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.29",
+            "version": "3.52.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "51efd3a7cda92f245ccf39fea03227e0eb473c93"
+                "reference": "c10b8f60a5da9ad4d7fa9f890186632a4c025d1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/51efd3a7cda92f245ccf39fea03227e0eb473c93",
-                "reference": "51efd3a7cda92f245ccf39fea03227e0eb473c93",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c10b8f60a5da9ad4d7fa9f890186632a4c025d1b",
+                "reference": "c10b8f60a5da9ad4d7fa9f890186632a4c025d1b",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-20T21:15:39+00:00"
+            "time": "2018-03-23T18:04:27+00:00"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -403,44 +403,34 @@
             "time": "2013-09-20T18:59:12+00:00"
         },
         {
-            "name": "dawson/youtube",
-            "version": "4.1.0",
+            "name": "dflydev/apache-mime-types",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/JoeDawson/youtube.git",
-                "reference": "6fc909847bd5e919125b07d863b2fdfe117dd174"
+                "url": "https://github.com/dflydev/dflydev-apache-mime-types.git",
+                "reference": "f30a57e59b7476e4c5270b6a0727d79c9c0eb861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JoeDawson/youtube/zipball/6fc909847bd5e919125b07d863b2fdfe117dd174",
-                "reference": "6fc909847bd5e919125b07d863b2fdfe117dd174",
+                "url": "https://api.github.com/repos/dflydev/dflydev-apache-mime-types/zipball/f30a57e59b7476e4c5270b6a0727d79c9c0eb861",
+                "reference": "f30a57e59b7476e4c5270b6a0727d79c9c0eb861",
                 "shasum": ""
             },
             "require": {
-                "google/apiclient": "^2.2",
-                "illuminate/support": "^5.4",
-                "nesbot/carbon": "^1.22",
-                "php": "^7.0"
+                "php": ">=5.3"
             },
             "require-dev": {
-                "orchestra/testbench": "~3.2",
-                "phpunit/phpcov": "~3.0",
-                "phpunit/phpunit": "~5.0"
+                "twig/twig": "1.*"
             },
             "type": "library",
             "extra": {
-                "laravel": {
-                    "providers": [
-                        "Dawson\\Youtube\\YoutubeServiceProvider"
-                    ],
-                    "aliases": {
-                        "Youtube": "Dawson\\Youtube\\Facades\\Youtube"
-                    }
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Dawson\\Youtube\\": "src/"
+                "psr-0": {
+                    "Dflydev\\ApacheMimeTypes": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -449,12 +439,23 @@
             ],
             "authors": [
                 {
-                    "name": "Joe Dawson",
-                    "email": "hi@joedawson.me"
+                    "name": "Dragonfly Development Inc.",
+                    "email": "info@dflydev.com",
+                    "homepage": "http://dflydev.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau@dflydev.com",
+                    "homepage": "http://beausimensen.com"
                 }
             ],
-            "description": "Upload a video to YouTube with Laravel 5.",
-            "time": "2017-09-25T18:26:26+00:00"
+            "description": "Apache MIME Types",
+            "keywords": [
+                "apache",
+                "mime",
+                "mimetypes"
+            ],
+            "time": "2013-05-14T02:02:01+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1221,16 +1222,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.51",
+            "version": "v0.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "c3d936baf3eacc002f6183530355fe4fba19b0fb"
+                "reference": "0241c1f3fde173a8c08c4ba23d6078b21c129fe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/c3d936baf3eacc002f6183530355fe4fba19b0fb",
-                "reference": "c3d936baf3eacc002f6183530355fe4fba19b0fb",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/0241c1f3fde173a8c08c4ba23d6078b21c129fe2",
+                "reference": "0241c1f3fde173a8c08c4ba23d6078b21c129fe2",
                 "shasum": ""
             },
             "require": {
@@ -1254,7 +1255,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-03-18T00:23:20+00:00"
+            "time": "2018-03-24T00:23:04+00:00"
         },
         {
             "name": "google/auth",
@@ -1398,16 +1399,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.3.0",
+            "version": "6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
+                "reference": "49e42e6539f775e80c74086a710a882e1d5a8111"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699",
-                "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/49e42e6539f775e80c74086a710a882e1d5a8111",
+                "reference": "49e42e6539f775e80c74086a710a882e1d5a8111",
                 "shasum": ""
             },
             "require": {
@@ -1417,7 +1418,7 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "^4.0 || ^5.0",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4",
                 "psr/log": "^1.0"
             },
             "suggest": {
@@ -1426,7 +1427,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.2-dev"
+                    "dev-master": "6.3-dev"
                 }
             },
             "autoload": {
@@ -1459,7 +1460,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-06-22T18:50:49+00:00"
+            "time": "2018-03-26T12:06:26+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -2327,6 +2328,54 @@
             ],
             "description": "An adapter decorator to enable meta-data caching.",
             "time": "2017-03-20T09:59:34+00:00"
+        },
+        {
+            "name": "michaeljwright/aws-rekognition",
+            "version": "v0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michaeljwright/aws-rekognition.git",
+                "reference": "955016828dd3ccae17880923a7f2d0536da2c7a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michaeljwright/aws-rekognition/zipball/955016828dd3ccae17880923a7f2d0536da2c7a0",
+                "reference": "955016828dd3ccae17880923a7f2d0536da2c7a0",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "~3.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "~5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MichaelJWright\\Rekognition\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kaushik Subramaniam Gnanaskandan",
+                    "email": "kaushik.subman@gmail.com"
+                },
+                {
+                    "name": "Alejandro",
+                    "email": "acarste@okstate.edu"
+                },
+                {
+                    "name": "Mike Wright",
+                    "email": "mike.filmworks@gmail.com"
+                }
+            ],
+            "description": "A Laravel package for the AWS Rekognition",
+            "time": "2018-03-21T14:26:30+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3625,6 +3674,64 @@
             "time": "2016-07-19T19:14:21+00:00"
         },
         {
+            "name": "schoooch/youtube",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/schoooch/youtube.git",
+                "reference": "507f53d4dbbf0575441201d1b46254939fc6f219"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/schoooch/youtube/zipball/507f53d4dbbf0575441201d1b46254939fc6f219",
+                "reference": "507f53d4dbbf0575441201d1b46254939fc6f219",
+                "shasum": ""
+            },
+            "require": {
+                "google/apiclient": "^2.2",
+                "illuminate/support": "^5.4",
+                "nesbot/carbon": "^1.22",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.2",
+                "phpunit/phpcov": "~3.0",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Schoooch\\Youtube\\YoutubeServiceProvider"
+                    ],
+                    "aliases": {
+                        "Youtube": "Schoooch\\Youtube\\Facades\\Youtube"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Schoooch\\Youtube\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joe Dawson",
+                    "email": "hi@joedawson.me"
+                },
+                {
+                    "name": "Ian Lainchbury",
+                    "email": "ianlainchbury@gmail.com"
+                }
+            ],
+            "description": "Upload a video to YouTube with Laravel 5.",
+            "time": "2018-03-26T10:49:11+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.0.2",
             "source": {
@@ -4541,6 +4648,72 @@
                 "dump"
             ],
             "time": "2018-02-22T17:29:24+00:00"
+        },
+        {
+            "name": "talvbansal/media-manager",
+            "version": "2.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/talvbansal/media-manager.git",
+                "reference": "94901a14dca99a4a13a71d8f7f3748f5a1ea5062"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/talvbansal/media-manager/zipball/94901a14dca99a4a13a71d8f7f3748f5a1ea5062",
+                "reference": "94901a14dca99a4a13a71d8f7f3748f5a1ea5062",
+                "shasum": ""
+            },
+            "require": {
+                "dflydev/apache-mime-types": "^1.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "illuminate/routing": "5.*",
+                "illuminate/support": "5.*",
+                "mockery/mockery": "^0.9",
+                "orchestra/testbench": "3.*",
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TalvBansal\\MediaManager\\Providers\\MediaManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TalvBansal\\MediaManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Talvinder Bansal",
+                    "email": "talvbansal@hotmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A media browser and uploader for laravel apps written in vue js and bootstrap",
+            "keywords": [
+                "Media Manager",
+                "Vue.js",
+                "blog",
+                "bootstrap",
+                "developers",
+                "easel",
+                "file uploader",
+                "files",
+                "laravel",
+                "media",
+                "minimal",
+                "uploader"
+            ],
+            "time": "2017-11-28T13:35:06+00:00"
         },
         {
             "name": "themattharris/tmhoauth",

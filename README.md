@@ -1,4 +1,40 @@
 
+## ERROR FIX FOR WHEN AWS CREDENTIALS AND WATERMARKING FAIL
+
+Aws\Exception\CredentialsException: Error retrieving credentials from the instance profile metadata server. (cURL error 28: Connection timed out after 3002 milliseconds (see http://curl.haxx.se/libcurl/c/libcurl-errors.html))
+
+>>> #1 Check file in /vendor/dumpk/elastcoder/src/config.php is like this:
+
+<?php
+
+return [
+    'encodings' => [
+        'example' => [
+            'type' => 1,
+            'PresetId' => '1516201655942-vaq9mu',
+            'width' => 1920,
+            'height' => 1080,
+            'aspect' => '16:9',
+            'ext' => 'mp4',
+            'PipelineId' => '1515757750300-4fybrt',
+            'Watermarks' => [[
+                    'PresetWatermarkId' => 'TopRight',
+                    'InputKey' => 'logo-sniffr-white.png',
+            ]],
+        ],
+    ],
+
+];
+
+>>> #2 RUN: php artisan config:cache
+
+>>> #3 RUN: php artisan config:clear
+
+>>> #4 RUN: php artisan queue:work (see if that works)
+
+>>> #5 SWITCH BETWEEN RUNNING: php artisan queue:work AND php artisan queue:listen
+
+
 ## MySQL too many connections issue
 
 - Kill mysql processes with Activity Monitor (maybe restart computer too, or at least local MAMP server)
@@ -72,4 +108,3 @@ if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
 $ok = ($memory_limit >= 640 * 1024 * 1024); // at least 64M?
 
 dd($memory_limit);
-

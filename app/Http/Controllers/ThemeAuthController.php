@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Auth;
+use Session;
 use Illuminate\Http\Request;
 use Validator;
 use Redirect;
@@ -111,7 +112,8 @@ class ThemeAuthController extends Controller
      */
 	public function logout(){
 		Auth::logout();
-		return Redirect::to('/')->with(['note' => 'You have been successfully logged out', 'note_type' => 'success']);
+        Session::flush();
+		return Redirect::to('/')->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
 	}
 
     /**

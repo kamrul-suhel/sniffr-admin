@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'logo' => env('APP_LOGO', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -170,14 +171,15 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        //Dawson\Youtube\YoutubeServiceProvider::class,
-        App\Providers\MyYoutubeServiceProvider::class,
+        Schoooch\Youtube\YoutubeServiceProvider::class,
         BaoPham\DynamoDb\DynamoDbServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Thujohn\Twitter\TwitterServiceProvider::class,
         Kouz\Providers\AirbrakeServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        MichaelJWright\Rekognition\RekognitionServiceProvider::class,
+        \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -237,18 +239,16 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
         'Image' => Intervention\Image\Facades\Image::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
-        //'Youtube' => Dawson\Youtube\Facades\Youtube::class,
-        'MyYoutube' => App\Libraries\Facades\MyYoutube::class,
+        'Youtube' => Schoooch\Youtube\Facades\Youtube::class,
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-
+        'Rekognition' => 'MichaelJWright\Rekognition\RekognitionFacade',
     ],
 
 ];

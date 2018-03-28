@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Video;
 
 use Youtube;
-use MyYoutube;
 use Google_Client;
 use Google_Service_YouTube;
 
@@ -91,7 +90,7 @@ class QueueVideoYoutubeUpload implements ShouldQueue
                 );
 
                 // Upload it to youtube
-                $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'public');
+                $response = Youtube::upload($file_watermark, ['title' => $video->title], 'public');
                 $youtubeId  = $response->getVideoId();
 
                 // Anaylsis (copies file over to another folder for analysis and suggested tag creation)

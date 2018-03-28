@@ -7,7 +7,6 @@ use App\User;
 
 use FFMpeg;
 use Youtube;
-use MyYoutube;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -152,7 +151,7 @@ class QueueVideoCheck implements ShouldQueue
                                     );
 
                                     // Upload it to youtube
-                                    $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+                                    $response = Youtube::upload($file_watermark, ['title' => $video->title], 'unlisted');
                                     $youtubeId  = $response->getVideoId();
 
                                     $video->youtube_id = $youtubeId;

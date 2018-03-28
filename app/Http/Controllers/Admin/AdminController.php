@@ -42,9 +42,9 @@ class AdminController extends Controller {
 			'video_state_count' => $video_state_count,
 			'total_videos' => $videos->count(),
 			'video_traffic' => $video_traffic,
-			'new_videos' => $videos_by_state['new']->count(),
-			'licensed_videos' => $videos_by_state['licensed']->count(),
-			'pending_videos' => $videos_by_state['pending']->count(),
+			'new_videos' => (empty($videos_by_state['new']) ? 0 : $videos_by_state['new']->count()),
+			'licensed_videos' => (empty($videos_by_state['licensed']) ? 0 : $videos_by_state['licensed']->count()),
+			'pending_videos' => (empty($videos_by_state['pending']) ? 0 : $videos_by_state['pending']->count()),
 			'settings' => $settings
         ];
 

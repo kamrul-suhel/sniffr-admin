@@ -63,7 +63,7 @@ class QueueEmail implements ShouldQueue
         //check if email is valid (might not be needed if frontend upload form is doing it)
 
         //check if contact has unsubcribed (contact_id!=0)
-        if(isset($video)) {
+        if(isset($video->id)) {
             if($video->contact_id==0) {
                 $video->notify(new SubmissionAlert('a job failed to send an '.$this->email_type.' email due to unsubscribe or no contact email (Id: '.$this->video_id.')'));
             } else {

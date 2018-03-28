@@ -129,7 +129,7 @@ class ThemeUploadController extends Controller
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
-        $video->title = Input::get('title');
+        $video->title = Input::get('title', 'Untitled '.$video->alpha_id);
 
         //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';

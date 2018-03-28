@@ -18,6 +18,9 @@ use App\Tag;
 use App\Video;
 use App\Contact;
 
+use Carbon\Carbon as Carbon;
+use App\Jobs\QueueEmail;
+
 use App\Libraries\ThemeHelper;
 
 use Illuminate\Http\File;
@@ -122,76 +125,76 @@ class AdminLabelController extends Controller {
          }
      }
 
-     // public function analyseVideo() {
-     //     $type = Input::get('type');
-     //     if($type=='start') {
-     //         $config = [
-     //                'MinConfidence' => 80,
-     //                'Video' => [
-     //                    'S3Object' => [
-     //                        'Bucket' => 'vlp-storage',
-     //                        'Name' => '1-hfcqy4pz2fnub4txlp9aof1rwpwcnff.mp4',
-     //                    ],
-     //                ],
-     //            ];
-     //         $job = \Rekognition::startLabelDetection($config);
-     //         dd($job['JobId']);
-     //     } elseif($type=='get') {
-     //         $config = [
-     //                'JobId' => '6333130c01cb42d2659c69d0f233ef6d046eecd7a2fd7fd341b5c3bed3423b3c',
-     //                'SortBy' => 'NAME',
-     //            ];
-     //         $job = \Rekognition::getLabelDetection($config);
-     //         dd($job['Labels']);
-     //         // if($job['JobStatus']=='SUCCEEDED'){
-     //         //     $labels = $job['Labels'];
-     //         //     $blacklist = array('Human', 'Person', 'People', 'Furniture', 'Chair');
-     //         //     if(count($labels)) {
-     //         //         usort($labels, function($a, $b) {
-     //         //             return $b['Label']['Confidence'] <=> $a['Label']['Confidence'];
-     //         //         });
-     //         //
-     //         //         foreach ($labels as $label){
-     //         //             if (!in_array($label['Label']['Name'], $blacklist)) {
-     //         //                 if(round($label['Label']['Confidence'],0)>85){
-     //         //                     echo $label['Label']['Name'].'['.round($label['Label']['Confidence'],0).']<br />';
-     //         //                 }
-     //         //             }
-     //         //         }
-     //         //     }
-     //         // }
-     //     } elseif ($type=='adult_start') {
-     //         $config = [
-     //                'Video' => [
-     //                    'S3Object' => [
-     //                        'Bucket' => 'vlp-storage',
-     //                        'Name' => '11dtbg-ys3jw8j8kqq2nt_evx4w6ilhg7.mp4',
-     //                    ],
-     //                ],
-     //            ];
-     //         $job = \Rekognition::startContentModeration($config);
-     //         dd($job['JobId']);
-     //     } elseif ($type=='adult_get') {
-     //         $config = [
-     //                'JobId' => '32d74b9d5ff1d85bb2f3786f5a0d72529f8f7475813d4cfaaa846ed69e4f36dd',
-     //                'SortBy' => 'NAME',
-     //            ];
-     //         $job = \Rekognition::getContentModeration($config);
-     //         if($job['JobStatus']=='SUCCEEDED'){
-     //             $labels = $job['ModerationLabels'];
-     //             if(count($labels)) {
-     //                 foreach($labels as $label){
-     //                     foreach($label as $l){
-     //                         $uniques[$l['Name']] = ['Confidence' => $l['Confidence']];
-     //                     }
-     //                 }
-     //                 dd($uniques);
-     //             }
-     //         } else {
-     //             echo $job['JobStatus'];
-     //         }
-     //     }
-     // }
+     public function analyseVideo() {
+         $type = Input::get('type');
+         if($type=='start') {
+             $config = [
+                    'MinConfidence' => 80,
+                    'Video' => [
+                        'S3Object' => [
+                            'Bucket' => 'vlp-storage',
+                            'Name' => '1-hfcqy4pz2fnub4txlp9aof1rwpwcnff.mp4',
+                        ],
+                    ],
+                ];
+             $job = \Rekognition::startLabelDetection($config);
+             dd($job['JobId']);
+         } elseif($type=='get') {
+             $config = [
+                    'JobId' => '1c5e8249508ea97368d5e0dc5381d1e839470880d34db42466c30cd349c19cf5',
+                    'SortBy' => 'NAME',
+                ];
+             $job = \Rekognition::getLabelDetection($config);
+             dd($job['Labels']);
+             // if($job['JobStatus']=='SUCCEEDED'){
+             //     $labels = $job['Labels'];
+             //     $blacklist = array('Human', 'Person', 'People', 'Furniture', 'Chair');
+             //     if(count($labels)) {
+             //         usort($labels, function($a, $b) {
+             //             return $b['Label']['Confidence'] <=> $a['Label']['Confidence'];
+             //         });
+             //
+             //         foreach ($labels as $label){
+             //             if (!in_array($label['Label']['Name'], $blacklist)) {
+             //                 if(round($label['Label']['Confidence'],0)>85){
+             //                     echo $label['Label']['Name'].'['.round($label['Label']['Confidence'],0).']<br />';
+             //                 }
+             //             }
+             //         }
+             //     }
+             // }
+         } elseif ($type=='adult_start') {
+             $config = [
+                    'Video' => [
+                        'S3Object' => [
+                            'Bucket' => 'vlp-storage',
+                            'Name' => '11dtbg-ys3jw8j8kqq2nt_evx4w6ilhg7.mp4',
+                        ],
+                    ],
+                ];
+             $job = \Rekognition::startContentModeration($config);
+             dd($job['JobId']);
+         } elseif ($type=='adult_get') {
+             $config = [
+                    'JobId' => '32d74b9d5ff1d85bb2f3786f5a0d72529f8f7475813d4cfaaa846ed69e4f36dd',
+                    'SortBy' => 'NAME',
+                ];
+             $job = \Rekognition::getContentModeration($config);
+             if($job['JobStatus']=='SUCCEEDED'){
+                 $labels = $job['ModerationLabels'];
+                 if(count($labels)) {
+                     foreach($labels as $label){
+                         foreach($label as $l){
+                             $uniques[$l['Name']] = ['Confidence' => $l['Confidence']];
+                         }
+                     }
+                     dd($uniques);
+                 }
+             } else {
+                 echo $job['JobStatus'];
+             }
+         }
+     }
 
      public function analyseVideo_2() {
 
@@ -337,6 +340,53 @@ class AdminLabelController extends Controller {
                     if($video->state=='accepted' || $video->state=='pending' || $video->state=='licensed') {
                         echo 'full name: '.$video->contact->full_name.' | email: '.$video->contact->email.' | video_alpha_id: '.$video->alpha_id.' <br />';
                     }
+                }
+            }
+        }
+
+    }
+
+    public function automateEmailReminders() {
+
+        $videos = Video::where([['state', 'accepted'], ['contact_id', '!=', 0], ['more_details', NULL], ['more_details_code', '!=', NULL], ['more_details_sent', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
+        ->where(function ($query) {
+            $query->where('reminders', '<', 4)
+                ->orWhereNull('reminders');
+        })
+        ->orderBy('more_details_sent', 'DESC')
+        ->get();
+
+        if(count($videos)>0) {
+            // Loop through videos
+            foreach ($videos as $video) {
+                // Check previous reminders and whether the video fits within the range: 24 hours, 72 hours, 1 week
+                $send_ok = false;
+                switch (true) {
+                    case ($video->reminders == NULL && $video->more_details_sent < Carbon::now()->subDays(1)->toDateTimeString()): // no reminders sent, this will be the first to be sent
+                        $type = '24 hours';
+                        $send_ok = true; //24 hours
+                        break;
+                    case ($video->reminders == 1 && $video->more_details_sent < Carbon::now()->subDays(1)->toDateTimeString() && $video->more_details_sent > Carbon::now()->subDays(3)->toDateTimeString()): // this will be the second to be sent
+                        $type = '72 hours';
+                        $send_ok = true; //72 hours
+                        break;
+                    case ($video->reminders == 2 && $video->more_details_sent < Carbon::now()->subDays(7)->toDateTimeString() && $video->more_details_sent > Carbon::now()->subDays(15)->toDateTimeString()): // this will be the third to be sent
+                        $type = '1 week';
+                        $send_ok = true; //1 week
+                        break;
+                }
+
+                // Only send email reminder if within above range plus if video has a contact/email
+                if(isset($video->contact) && $video->contact->email!=NULL && $send_ok == true){
+                    echo $type.' : '.$video->alpha_id.' : '.$video->title.' : '.$video->more_details_sent.' : '.$video->reminders.'<br />';
+                    // Need to update video reminder count and more details sent timestamp
+                    // $video->more_details_sent = now();
+                    // $video->reminders = $video->reminders ? $video->reminders+1 : 1;
+                    // $video->save();
+
+                    // Schedule email reminder to be sent via queue/job
+                    // QueueEmail::dispatch($video->id, 'details_reminder')
+                    //     ->delay(now()->addSeconds(10));
                 }
             }
         }

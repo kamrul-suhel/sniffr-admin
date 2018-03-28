@@ -68203,9 +68203,6 @@ $('document').ready(function () {
                 required: true,
                 email: true
             },
-            title: {
-                required: true
-            },
             file: {
                 require_from_group: [1, '.files'],
                 extension: "flv|ogg|mp4|qt|avi|wmv|m4v|webm|mov"
@@ -68221,7 +68218,6 @@ $('document').ready(function () {
         messages: {
             full_name: 'You must enter your full name',
             email: 'You must enter a valid email address',
-            title: 'You must enter your video title',
             terms: 'You must check the box agreeing to our terms'
         },
         errorPlacement: function errorPlacement(error, element) {
@@ -68401,6 +68397,23 @@ $('document').ready(function () {
         if (target.is('#file')) {
             $('#filename').html($('#file').prop('files')[0].name);
         }
+    });
+
+    $('#email').on('change', function (e) {
+        var target = $(e.target).val();
+        if (target.toLowerCase().indexOf(".con") >= 0 || target.toLowerCase().indexOf(".conuk") >= 0) {
+            if ($('#areyousure').length) {
+                $('#areyousure').show();
+            } else {
+                $("label[for='email']").append('<div id="areyousure" class="error" style="display:inline-block;margin-left:5px;">Are you sure this is correct?</div>');
+            }
+        } else {
+            $('#areyousure').hide();
+        }
+    });
+
+    $('#email').on('focus', function (e) {
+        $('#areyousure').hide();
     });
 });
 
