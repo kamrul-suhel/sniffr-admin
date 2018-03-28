@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var browserheight = window.innerHeight;
-    $('#header-home').css('height', browserheight+'px');
+    $('.js-fullheight').css('height', browserheight+'px');
 
     var first_nav_pos = $('#nav').position();
     var second_nav_pos = $('.second-navigation').position();
@@ -20,10 +20,12 @@ $(document).ready(function(){
 require('vue');
 window.axios = require('axios');
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
 
 // Vue component
 require('./vue-component/upload-video');
+require('./vue-component/submission-form');
 require('./vue-component/login-component');
 
 new Vue({
@@ -36,8 +38,8 @@ new Vue({
             valid:false,
             login_progress:false,
             user:{
-                email:'kamrul@unilad.co.uk',
-                password:'somepass'
+                email:'',
+                password:''
             },
             emailRules: [
                 v => !!v || 'E-mail is required',
@@ -57,14 +59,12 @@ new Vue({
             if(this.$refs.login_form.validate()){
                 // make spinner visible
                 this.login_progress = true;
-                var header = {
-                    'X-CSRF-TOKEN' : this.csrf_token
-                };
 
                 // prepare submitting data
                 let form_data = new FormData();
                 form_data.append('email', this.user.email);
                 form_data.append('password', this.user.password);
+
                 // submit data with ajax request
                 axios.post('/login', form_data, header)
                 .then(response => {

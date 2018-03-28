@@ -1,4 +1,4 @@
-<section id="nav" class="section-space @if(!Request::is('/')) nav_background @endif">
+<section id="nav" class="section-space @if(!Request::is('/')) nav-background @endif">
     <v-container grid-list-md>
         <v-layout row wrap>
             <v-flex xs12 sm6 md4 lg4>
@@ -20,7 +20,7 @@
                             </li>
                         @else
                             <li class="dropdown">
-                                <a href="#_" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
+                                <a href="#" class="user-link-desktop dropdown-toggle" data-toggle="dropdown"><img src="<?= Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar ?>" class="img-circle" /> <?= ucwords(Auth::user()->username) ?> <i class="fa fa-chevron-down"></i></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="<?= url('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></li>
                                     <?php if(Auth::user()->role == 'client' && Auth::user()->username == 'dailymail'): ?>
@@ -31,7 +31,7 @@
                                     <li><a href="<?= url('admin') ?>"> Admin</a></li>
                                     <?php endif; ?>
                                     <li class="divider"></li>
-                                    <li><a href="<?= url('logout') ?>" id="user_logout_mobile"><i class="fa fa-power-off"></i> Logout</a></li>
+                                    <li><a href="<?= url('logout') ?>" id="user-logout-mobile"><i class="fa fa-power-off"></i> Logout</a></li>
                                 </ul>
                             </li>
                         @endif

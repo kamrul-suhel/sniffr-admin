@@ -1,15 +1,17 @@
 <!-- UPLODA VIDEO SECTION -->
 <upload-video inline-template>
-    <section class="upload_video_section section_space">
+    <section class="upload-video-section section-space">
         <v-container grid-list-xl>
             <v-layout row wrap>
                 <v-flex xs12>
-                    <div class="upload_video_title">
+                    <div class="upload-video-title">
                         <h1 class="heading">UPLOAD YOUR VIDEO</h1>
                     </div>
+
                     <div>
-                        <h3 class="text-center">Your Contact Details</h3>
+                        <h2 class="text-center">Your Contact Details</h2>
                     </div>
+
                     <v-form v-model="valid" ref="form">
                         <v-container grid-list-lg>
                             <v-layout row wrap>
@@ -32,6 +34,7 @@
                                             required
                                     ></v-text-field>
                                 </v-flex>
+
                             </v-layout>
 
                             <v-layout row wrap>
@@ -40,7 +43,6 @@
                                             label="Phone Number"
                                             v-model="tel"
                                             color="dark"
-                                            :rules="phoneRules"
                                     ></v-text-field>
                                 </v-flex>
 
@@ -57,7 +59,7 @@
 
                             <v-layout row wrap>
                                 <v-flex xs12>
-                                    <h3 class="text-xs-center">Your video details</h3>
+                                    <h2 class="text-xs-center">Your video details</h2>
                                 </v-flex>
                             </v-layout>
 
@@ -69,8 +71,10 @@
                                         class="{error: error}" 
                                         @click="onPickFile()">
                                         Upload your video <v-icon dark right>system_update_alt</v-icon>
-                                    </v-btn> <span v-if="error" class="red--text">Upload your file or provide a links pleaes</span> <span>@{{file_name}}</span>
+                                    </v-btn> <span v-if="error" class="red--text">Upload your file or provide a links please</span> <span>@{{file_name}}</span>
+
                                     <p class="small-italic">Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
+
                                     <input
                                         color="dark"
                                         type="file"
@@ -78,7 +82,6 @@
                                         ref="inputfile"
                                         accept="video/mp4,video/x-m4v,video/*"
                                         @change="onFilechange($event)"/>
-
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -86,24 +89,27 @@
                                             color="dark"
                                             label="Video link/URL"
                                             v-model="url"
-                                    ></v-text-field> <span v-if="error" class="red--text">Upload your file or provide a links pleaes</span>
+                                    ></v-text-field> <span v-if="error" class="red--text">Upload your file or provide a links please</span>
                                 </v-flex>
                             </v-layout>
                         </v-container>
 
                         <v-container grid-list-lg
                                      style="max-height: 250px"
-                                     class="scroll-y term_condition"
+                                     class="scroll-y term-condition"
                                      id="scroll-target">
-                            <div class="term_condition_content">
+
+                            <div class="term-condition-content">
                                 <v-layout row wrap text-center>
                                     <h2>Terms & Conditions</h2>
                                 </v-layout>
+
                                 <v-layout row wrap
                                           column
                                           align-center
                                           justify-center
                                           v-scroll:#scroll-target="onScroll">
+
                                     <v-flex xs12>
                                         
                                             <h4>Ownership</h4>
@@ -131,11 +137,12 @@
                                     </v-flex>
                                 </v-layout>
                             </div>
-                        </v-container>
+                        </v-container> <!-- End container -->
 
                         <v-container grid-list-lg>
                             <v-layout row wrap>
-                                <v-flex xs12>
+
+                                <v-flex xs12 pb-0>
                                     <v-checkbox
                                             label="I agree to the above terms and conditions"
                                             v-model="terms_condition"
@@ -145,36 +152,37 @@
                                     ></v-checkbox>
                                 </v-flex>
 
-                                <v-flex xs12 sm3 md3 lg2 xl2>
-                                    <v-btn dark @click="onSubmit()">Submit your file</v-btn>
-                                </v-flex>
-                                <v-flex xs12 sm3 md6 lg6 xl6 align-content-start>
+                                <v-flex xl2 text-xs-right pa-0>
                                     <p class="red-text" v-if="validate_email_error">Look your email is not valid plese try again</p>
-                                    <v-progress-circular 
-                                    indeterminate 
-                                    color="dark" 
-                                    v-if="validete_email_progress"></v-progress-circular>
+
+                                    <v-progress-circular
+                                            indeterminate
+                                            color="dark"
+                                            v-if="validete_email_progress"></v-progress-circular>
+
+                                    <v-btn dark @click="onSubmit()">Submit your file</v-btn>
+
                                 </v-flex>
                             </v-layout>
                         </v-container>
-
                     </v-form>
                 </v-flex>
             </v-layout>
         </v-container>
 
         <v-dialog v-model="uplod_progress" max-width="500px" >
-            <v-card class="upload_dialog">
+            <v-card class="upload-dialog">
               <v-card-title>
                 <v-container >
                     <v-layout row justify-center>
                         <v-flex>
-                            <h2 class="text-xs-center">Your file is uploading</h2>
+                            <h2 class="text-xs-center sub-heading">Your file is uploading</h2>
                         </v-flex>
                     </v-layout>
                 </v-container>
               </v-card-title>
-              <v-card-text>
+
+                <v-card-text>
                     <v-container grid-list-xl>
                         <v-layout>
                             <v-flex>
@@ -194,12 +202,10 @@
                             </v-flex>
                         </v-layout>
                     </v-container>
-              </v-card-text>
+                </v-card-text>
               <v-card-actions>
               </v-card-actions>
             </v-card>
         </v-dialog>
     </section>
-
-
 </upload-video>

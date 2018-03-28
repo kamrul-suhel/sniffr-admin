@@ -1,10 +1,10 @@
 /* ************************* Global style ******************* */
 
 section.section-space{
-  padding:$section_spacing 0px;
+  padding:$section-spacing 0px;
 }
 
-.nav_background{
+.nav-background{
   background:#000;
 }
 
@@ -14,13 +14,15 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ************************* Font and size ******************* */
+
 h1{
   font-family:JosefinSansbold;
   @include headingstyle;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-h1.heading{
+.heading{
   font-size:40px;
 }
 .sub-heading{
@@ -40,6 +42,9 @@ p{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.card{
+  font-family:JosefinSansregular;
+}
 
 .text-center{
   text-align:center;
@@ -52,5 +57,68 @@ p{
 
   &:hover{
     color:#777;
+  }
+}
+
+/* ************************* Setup From font ******************* */
+.input, label{
+  font-family:JosefinSansregular;
+}
+
+/* ************************* Countdown section style ******************* */
+
+.countdown{
+  background: $countdown-background-color;
+  color:$countdown-text-color;
+
+  .countdown-container{
+    text-align:center;
+
+    .countdown-number h2{
+      font-size: $countdown-number-font-size;
+    }
+
+    .countdown-subtitle{
+      font-weight:bold;
+      font-size:20px;
+    }
+
+  }
+}
+
+
+/* ************************* Upload video Section style ******************* */
+
+.upload-video-section{
+  .upload-video-title{
+    margin-bottom:$section-title-after-space;
+
+    h1{
+      margin:0 0 $featured-title-space 0;
+      color:$upload-video-title-color;
+    }
+  }
+
+  .upload-video-title::after{
+    content: '';
+    width: 200px;
+    background: #000;
+    margin: 0px auto;
+    height: 5px;
+    display: block;
+  }
+
+  .video-upload-box{
+    width:100%;
+  }
+  .input-group--details:before{
+    background:#000;
+  }
+
+  .term-condition{
+    border:1px solid #000;
+  }
+  .term-condition-content{
+    padding:10px;
   }
 }

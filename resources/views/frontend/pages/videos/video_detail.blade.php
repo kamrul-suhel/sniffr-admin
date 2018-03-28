@@ -1,21 +1,18 @@
 @extends('frontend.master')
 @section('content')
 
-    <section id="videos" class="page_videos">
+    <section id="videos" class="page-videos">
         <video></video>
         <div class="heading">
-            <div class="position-center">
-                <h1>{{ $video->title }}</h1>
-            </div>
         </div>
     </section>
 
     <!-- VIDEOS DETAIL SECTION -->
-    <section class="videos_detail_section section_space">
+    <section class="videos-detail-section section-space">
         <v-container grid-list-lg pt-0>
             <v-layout row wrap>
                 <v-flex pt-0>
-                    <div id="video_bg">
+                    <div id="video-bg">
                         @if($video->access == 'guest' ||
                             ( ($video->access == 'subscriber' || $video->access == 'registered') &&
                             !Auth::guest() ) || (!Auth::guest() &&
@@ -26,7 +23,7 @@
                             Auth::user()->role == 'registered') )
                             {!! \App\Libraries\VideoHelper::getVideoHTML($video, true) !!}
                         @else
-                            <div id="subscribers_only">
+                            <div id="subscribers-only">
                                 <h2>Sorry, this video is only available to @if($video->access == 'subscriber') Subscribers @elseif($video->access == 'registered') Registered Users @endif</h2>
                                 <div class="clear"></div>
                                 @if(!Auth::guest() && $video->access == 'subscriber')
@@ -44,11 +41,11 @@
                 </v-flex>
             </v-layout>
 
-            <v-layout row wrap class="video_detail_content">
+            <v-layout row wrap class="video-detail-content">
                 <v-flex xs12 sm12 md8 lg8>
                     <h2>{{ $video->title }}</h2>
                     <p>{{ $video->description }}</p>
-                    <div class="video_detail_tags">
+                    <div class="video-detail-tags">
                         @if(count($video->tags))
                             <h3 id="tags">Tags:</h3>
                             <ul>
@@ -65,8 +62,8 @@
                 </v-flex>
 
                 <v-flex xs12 sm12 md4 lg4>
-                    <v-layout  column wrap align-content-center="true" class="video_detail_sidebar">
-                        <v-flex xs12 class="video_detail_viewer" text-xs-center text-md-center text-lg-right text-xl-right>
+                    <v-layout  column wrap align-content-center="true" class="video-detail-sidebar">
+                        <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right text-xl-right>
                             <v-btn raised class="favorite @if(isset($favorited->id)) active @endif"
                                  data-authenticated="{{ !Auth::guest() }}"
                                  data-videoid="{{$video->id}}">
@@ -86,9 +83,9 @@
                             @endif
                         </v-flex>
 
-                        <div class="video_detail_social_share">
-                            <div class="video_license">License</div>
-                            <div class="video_social_link">
+                        <div class="video-detail-social-share">
+                            <div class="video-license">License</div>
+                            <div class="video-social-link">
                                 <h3>Share</h3>
 
                                 @php

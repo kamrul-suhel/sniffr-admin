@@ -20,9 +20,6 @@ Vue.component('upload-video',{
             v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
         ],
         tel:'',
-            phoneRules: [
-            v => !!v || 'Phone number is required'
-        ],
         uplod_progress:false,
         file_name: '',
         progressbar: 0,

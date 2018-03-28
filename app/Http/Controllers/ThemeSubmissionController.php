@@ -64,7 +64,8 @@ class ThemeSubmissionController extends Controller {
      */
     public function index()
     {
-        return view('Theme::submission', $this->data);
+        return view('frontend.pages.submission.submission', $this->data);
+//        return view('Theme::submission', $this->data);
     }
 
     /**
@@ -103,6 +104,7 @@ class ThemeSubmissionController extends Controller {
         ini_set('post_max_size', '512M');
 
         $isJson = $request->ajax();
+
 
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);

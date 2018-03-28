@@ -1,14 +1,14 @@
 <section class="login-dialog">
-    <v-dialog v-model="login_dialog" max-width="500px" class="login_section">
+    <v-dialog v-model="login_dialog" max-width="500px" class="login-section">
         <v-card>
-            <v-card-text class="login_section">
+            <v-card-text class="login-section">
                 <v-form method="post" v-model="valid" ref="login_form"
                         action="@if($settings->enable_https) {{ secure_url('login') }}
                         @else {{ route('login') }}@endif">
-                    <v-layout row wrap id="login_section">
+                    <v-layout row wrap id="login-section">
 
                         <v-flex xs12>
-                            <h2 class="login_title">LOGIN</h2>
+                            <h2 class="login-title">LOGIN</h2>
                         </v-flex>
 
                         <v-flex xs12>

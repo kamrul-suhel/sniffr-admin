@@ -1,0 +1,37 @@
+.login-dialog{
+  display:none;
+}
+.login-section{
+  margin:0 auto;
+  padding:20px;
+  background:#fff;
+  width:450px;
+
+  .login-title{
+    color: $title-color;
+    text-align:center;
+    margin-top:0;
+  }
+  
+  .login-title:after{
+    @include heading-border(50px, 2px, 0px);
+  }
+
+  .form-submit{
+    
+  }
+
+  .forgot-password{
+    display:block;
+    margin-top:10px;
+
+    a{
+      color:#000;
+      text-decoration:none;
+
+      &:hover{
+        text-decoration:underline;
+      }
+    }
+  }
+}

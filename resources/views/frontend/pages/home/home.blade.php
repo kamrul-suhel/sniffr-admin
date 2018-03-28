@@ -1,14 +1,10 @@
 @extends('frontend.master')
 @section('content')
-    <section id="header-home">
-        <div class="header-bg"></div>
-
+    <section id="header" class="js-fullheight">
         <div class="header-content">
-            <div class="position-center">
-                <h1 class="heading">Video Licensing Platform</h1>
-                <p class="sub-heading">License viral videos viewed by millions around the world from Sniffr Media</p>
-                <button onclick="window.location.href='/upload'" class="btn btn-primary upload-video-button">Upload you video</button>
-            </div>
+            <h1 class="heading">Video Licensing Platform</h1>
+            <p class="sub-heading">License viral videos viewed by millions around the world from Sniffr Media</p>
+            <button onclick="window.location.href='/upload'" class="btn btn-primary upload-video-button">Upload you video</button>
         </div>
 
         <div class="second-navigation">

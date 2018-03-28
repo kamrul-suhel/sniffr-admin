@@ -1,9 +1,9 @@
 <!-- FEATURE SECTION -->
-<section class="feature-section section_space">
+<section class="feature-section section-space">
     <v-container grid-list-xl>
         <v-layout row wrap>
             <v-flex xs12 text-center>
-                <div class="featured_section_title">
+                <div class="featured-section-title">
                     <h1 class="heading">FEATURES VIDEOS</h1>
                 </div>
             </v-flex>

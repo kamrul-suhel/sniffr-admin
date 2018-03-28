@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <section class="pagination_section">
+    <section class="pagination-section">
         <v-container fill-height>
             <v-layout row wrap align-center>
                 <v-flex text-xs-center>
@@ -8,7 +8,7 @@
                         @if ($paginator->onFirstPage())
                             <li class="disabled default"><i class="fas fa-angle-left"></i></li>
                         @else
-                            <li><a href="{{ $paginator->previousPageUrl() }}" class="pagination_preview" rel="prev"><i class="fas fa-angle-left"></i></a></li>
+                            <li><a href="{{ $paginator->previousPageUrl() }}" class="pagination-preview" rel="prev"><i class="fas fa-angle-left"></i></a></li>
                         @endif
 
                         {{-- Pagination Elements --}}
@@ -32,7 +32,7 @@
 
                         {{-- Next Page Link --}}
                         @if ($paginator->hasMorePages())
-                            <li><a href="{{ $paginator->nextPageUrl() }}" class="pagination_next" rel="next"><i class="fas fa-angle-right"></i></a></li>
+                            <li><a href="{{ $paginator->nextPageUrl() }}" class="pagination-next" rel="next"><i class="fas fa-angle-right"></i></a></li>
                         @else
                             <li class="disabled default"><i class="fas fa-angle-right"></i></li>
                         @endif

@@ -99,7 +99,7 @@ class ThemeUploadController extends Controller {
      */
     public function thanks()
     {
-        return view('Theme::thanks', $this->data);
+        return view('frontend.pages.upload_video.thanks', $this->data);
     }
 
     /**
@@ -142,17 +142,6 @@ class ThemeUploadController extends Controller {
         }
 
 
-        //New amazon S3 client integration
-        $client = new S3Client([
-            'version'     => 'latest',
-            'region'      => 'eu-west-1',
-            'credentials' => [
-                'key'    => 'AKIAIZZM46V2ELD4YHDQ',
-                'secret' => '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'
-            ]
-        ]);
-
-
 
 
         
@@ -192,44 +181,6 @@ class ThemeUploadController extends Controller {
             // Upload to S3
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $filePath = Storage::disk('s3')->url($fileName);
-
-            dd($filePath);
-
-
-            $result = $client->putObject([
-                'Bucket'     => 'vlp-storage-links',
-                'Key'        => 'bucket-name/file.ext',
-                'SourceFile' => 'local-file.ext',
-                'ContentType' => 'application/pdf',
-                '@http' => [
-                    'progress' => function ($downloadTotalSize, $downloadSizeSoFar, $uploadTotalSize, $uploadSizeSoFar) {
-                        printf(
-                            "%s of %s downloaded, %s of %s uploaded.\n",
-                            $downloadSizeSoFar,
-                            $downloadTotalSize,
-                            $uploadSizeSoFar,
-                            $uploadTotalSize
-                        );
-                    }
-                ]
-            ]);
-
-            // $result = $client->getObject([
-            //     'Bucket' => 'vlp-storage-links',
-            //     'Key'    => $filePath,
-            //     '@http' => [
-            //         'progress' => function ($expectedDl, $dl, $expectedUl, $ul) {
-            //             printf(
-            //                 "%s of %s downloaded, %s of %s uploaded.\n",
-            //                 $expectedDl,
-            //                 $dl,
-            //                 $expectedUl,
-            //                 $ul
-            //             );
-            //         }
-            //     ]
-            // ]);
-            // return $result;
 
             $video->url = Input::get('url');
             $video->file = $filePath;

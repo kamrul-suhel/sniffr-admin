@@ -1,0 +1,164 @@
+/* ************************* Video header section style ******************* */
+
+#header{
+  height:450px;
+}
+
+
+/* ************************* Video search section style ******************* */
+
+.videos-filter-section{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  background:rgba(0,0,0,1);
+  padding:0;
+  z-index:10;
+  .logo img{
+    width:110px;
+  }
+}
+
+.videos-filter-form {
+  .form-group{
+    margin:0;
+  }
+
+  .input-group input{
+    margin-bottom:0;
+    color:#fff;
+  }
+  .input-group:not(.input-group--error) label,
+  .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled) .input-group__input .input-group__append-icon:not(:hover)
+  {
+    color:rgba(255,255,255,0.54);
+  }
+  .input-group:not(.input-group--error) .input-group__details:before,
+  .application .theme--light.input-group:not(.input-group--error) .input-group__details:before,
+  .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled):not(.input-group--disabled):not(.input-group--overflow):not(.input-group--segmented):not(.input-group--editable):hover .input-group__details:before,
+  .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled):not(.input-group--disabled):not(.input-group--overflow):not(.input-group--segmented):not(.input-group--editable):hover .input-group__details:before{
+    background-color:rgba(255,255,255,0.54);
+  }
+
+
+
+
+
+  @include small-device{
+    input{
+      margin-bottom:10px;
+    }
+  }
+
+  @include medium-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+  @include large-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+  @include extra-large-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+}
+
+
+/* ************************* Video section style ******************* */
+
+.videos-section{
+
+  .video-section-title{
+    margin-bottom: $section-title-after-space;
+    h1{
+      @include headingstyle();
+    }
+
+  }
+  .video-section-title::after{
+    @include heading-border;
+  }
+
+  .card__media__content {
+    a{
+      background-size:cover;
+      backgorund-position:center center;
+
+      &:hover{
+        .thumbnail-overlay{
+          opacity:.5;
+        }
+        .play-button{
+          opacity:.8;
+          transform:scale(1);
+        }
+      }
+
+      position:absolute;
+      top:0;
+      bottom:0;
+      right:0;
+      left:0;
+
+      .thumbnail-overlay{
+        position:absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+        z-index:2;
+        background:rgba(0,0,0,.5);
+        opacity:0;
+        transition:all ease-in-out .3s;
+      }
+
+      .video-duration{
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        font-weight: bold;
+        padding: 1px 10px;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+      }
+
+      .play-button{
+        position:absolute;
+        z-index:3;
+        color:#fff;
+        opacity:0;
+        top:50%;
+        left:50%;
+        margin-left: -25px;
+        margin-top: -25px;
+        transform:scale(0);
+        transition:all ease-in-out .3s;
+      }
+
+      .label-success{
+        position:absolute;
+        top:0;
+        right:0;
+        background:#5cb85c;
+        color:#fff;
+        padding:5px 10px;
+        z-index:3
+      }
+    }
+  }
+
+  .card__title{
+    height:140px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .video-item-container:hover .video-item-link{
+    bottom:20px;
+  }
+
+}

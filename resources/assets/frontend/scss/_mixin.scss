@@ -1,14 +1,14 @@
-@mixin headingstyle($color:$featured_title_color){
+@mixin headingstyle($color:$featured-title-color){
   color: $color;
   text-align:center;
-  margin:0 0 $featured_title_space 0;
+  margin:0 0 $featured-title-space 0;
 }
 
-@mixin heading_border($heading_border_width: 200px, $height: 5px, $margin_bottom: 10px, $color:#000) {
+@mixin heading-border($heading-border-width: 200px, $height: 5px, $margin-bottom: 10px, $color:#000) {
   content: '';
-  width: $heading_border_width;
+  width: $heading-border-width;
   background: $color;
-  margin: 0px auto $margin_bottom auto;
+  margin: 0px auto $margin-bottom auto;
   height: $height;
   display: block;
 }
