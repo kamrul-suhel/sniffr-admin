@@ -2,28 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Auth;
-use Validator;
-use Redirect;
 use Response;
-
-use App\Page;
-use App\Menu;
-use App\VideoCategory;
-use App\PostCategory;
-
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
-
-use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
 
-class AdminMediaController extends Controller {
-
+class AdminMediaController extends Controller
+{
 	public function __construct()
     {
     	$this->middleware('admin');
-        //$this->middleware('isAdmin');
     }
 
 	public function index()
@@ -31,33 +19,30 @@ class AdminMediaController extends Controller {
 		return view('admin.media.index');
 	}
 
-	public function files(){
+    public function files()
+    {
 		$folder = Input::get('folder');
 		if($folder == '/'){ $folder = ''; }
 		$dir = "./content/uploads" . $folder;
 
 		$response = $this->getFiles($dir);
 
-		return response()->json(array(
-			"name" => "files",
-			"type" => "folder",
-			"path" => $dir,
-			"folder" => $folder,
-			"items" => $response,
-			"last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir))
-		));
+        return response()->json([
+            "name" => "files",
+            "type" => "folder",
+            "path" => $dir,
+            "folder" => $folder,
+            "items" => $response,
+            "last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir))
+        ]);
 	}
 
-	private function getFiles($dir){
-
-
+    private function getFiles($dir)
+    {
 		$files = array();
 
-		// Is there actually such a folder/file?
-
-		if(file_exists($dir)){
-
-			foreach(scandir($dir) as $f) {
+        if (file_exists($dir)) {
+            foreach (scandir($dir) as $f) {
 
 				if(!$f || $f[0] == '.') {
 					continue; // Ignore hidden files
@@ -67,65 +52,62 @@ class AdminMediaController extends Controller {
 
 					// The path is a folder
 
-					$files[] = array(
+					$files[] = [
 						"name" => $f,
 						"type" => "folder",
 						"path" => $dir . '/' . $f,
 						"items" => $this->getNumberOfFilesInDir($dir . '/' . $f),
 						"last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir . '/' . $f))
-					);
+					];
 				}
 
 				else if( $this->is_image($dir . '/' . $f) ) {
 
-					$files[] = array(
+					$files[] = [
 						"name" => $f,
 						"type" => "image",
 						"path" => $dir . '/' . $f,
 						"size" => filesize($dir . '/' . $f), // Gets the size of this file
 						"last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir . '/' . $f))
-					);
+					];
 
 				}
 
 				else if( strstr(mime_content_type($dir . '/' . $f), "video/") ) {
-					$files[] = array(
+					$files[] = [
 						"name" => $f,
 						"type" => "video",
 						"path" => $dir . '/' . $f,
 						"size" => filesize($dir . '/' . $f), // Gets the size of this file
 						"last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir . '/' . $f))
-					);
+					];
 				}
 
 				else if( strstr(mime_content_type($dir . '/' . $f), "audio/") ) {
-					$files[] = array(
+					$files[] = [
 						"name" => $f,
 						"type" => "audio",
 						"path" => $dir . '/' . $f,
 						"size" => filesize($dir . '/' . $f), // Gets the size of this file
 						"last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir . '/' . $f))
-					);
+					];
 				}
 
 				else {
 
 					// It is a file
 
-					$files[] = array(
+					$files[] = [
 						"name" => $f,
 						"type" => "file",
 						"path" => $dir . '/' . $f,
 						"size" => filesize($dir . '/' . $f), // Gets the size of this file
 						"last_modified" => date('F jS, Y \a\t h:i:s A', filemtime($dir . '/' . $f))
-					);
+					];
 				}
 			}
-
 		}
-
 		return $files;
-
 	}
 
 	private function is_image($path)
@@ -159,7 +141,6 @@ class AdminMediaController extends Controller {
 		$new_folder = Input::get('new_folder');
 		$success = false;
 		$error = '';
-
 
 		if(file_exists($new_folder)){
 			$error = 'Sorry that folder already exists, please delete that folder if you wish to re-create it';

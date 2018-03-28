@@ -10,7 +10,6 @@ use Redirect;
 use App\Page;
 use App\Menu;
 use App\VideoCategory;
-use App\PostCategory;
 use App\PaymentSetting;
 use Illuminate\Support\Facades\Input;
 use App\Libraries\ThemeHelper;
@@ -60,7 +59,6 @@ class ThemeAuthController extends Controller
             'type' => 'login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
@@ -126,7 +124,6 @@ class ThemeAuthController extends Controller
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
 			'payment_settings' => PaymentSetting::first(),
 			'video_categories' => VideoCategory::all(),
-			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
         ];
@@ -165,7 +162,6 @@ class ThemeAuthController extends Controller
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
 			'payment_settings' => PaymentSetting::first(),
 			'video_categories' => VideoCategory::all(),
-			'post_categories' => PostCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
         ];

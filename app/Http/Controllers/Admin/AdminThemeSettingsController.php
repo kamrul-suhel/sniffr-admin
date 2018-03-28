@@ -3,22 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
-use Validator;
 use Redirect;
-
-use App\Page;
-use App\Menu;
 use App\Setting;
-use App\VideoCategory;
-use App\PostCategory;
-
 use App\Libraries\ThemeHelper;
-
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
-class AdminThemeSettingsController extends Controller {
-
+class AdminThemeSettingsController extends Controller
+{
 	/**
      * constructor.
      */

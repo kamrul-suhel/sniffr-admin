@@ -4,26 +4,15 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Validator;
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
-
-use Carbon\Carbon as Carbon;
-
 use App\Page;
 use App\Menu;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
-use App\PostCategory;
-
 use App\Jobs\QueueEmail;
-
-use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
-
 use App\Notifications\DetailsReview;
 
 class ThemeDetailsController extends Controller
@@ -46,14 +35,13 @@ class ThemeDetailsController extends Controller
     {
         $user = Auth::user();
 
-        $this->data = array(
+        $this->data = [
             'user' => $user,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
-        );
+        ];
     }
 
     /**

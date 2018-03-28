@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 use Auth;
 use Redirect;
 use App\Tag;
@@ -12,11 +10,8 @@ use App\Page;
 use App\Menu;
 use App\Video;
 use App\VideoTag;
-use App\Download;
 use App\Setting;
-use App\Favorite;
 use App\VideoCategory;
-use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
 
@@ -48,7 +43,6 @@ class ThemeVideoController extends Controller {
             'menu' => $menu->orderBy('order', 'ASC')->get(),
             'pagination_url' => '/videos',
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => (new Page)->where('active', '=', 1)->get(),
         ];
@@ -88,7 +82,6 @@ class ThemeVideoController extends Controller {
                 'favorited' => $favorited,
                 'downloaded' => $downloaded,
                 'video_categories' => VideoCategory::all(),
-                'post_categories' => PostCategory::all(),
                 'theme_settings' => ThemeHelper::getThemeSettings(),
                 'pages' => Page::where('active', '=', 1)->get(),
                 );
@@ -133,7 +126,6 @@ class ThemeVideoController extends Controller {
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'pagination_url' => '/videos/tags/' . $tag_name,
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
             );
@@ -175,7 +167,6 @@ class ThemeVideoController extends Controller {
             'pagination_url' => '/videos/category/' . $category,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
         );

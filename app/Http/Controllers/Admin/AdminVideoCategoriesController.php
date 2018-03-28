@@ -2,20 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
-use Validator;
 use Redirect;
-
-use App\Page;
-use App\Menu;
 use App\VideoCategory;
-use App\PostCategory;
-
 use App\Traits\Slug;
-use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
