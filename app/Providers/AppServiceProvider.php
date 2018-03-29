@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->environment() !== 'production') {
+        if (\App::environment() !== 'production') {
             Video::updated(function () {
                 FlushCacheTag::dispatch('licensed.paginated');
                 \Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
