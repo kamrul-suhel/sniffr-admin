@@ -2,46 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use View;
 use Auth;
 use Redirect;
 use Validator;
-use Carbon\Carbon;
-
-use FFMpeg;
-
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
-use App\Tag;
 use App\Page;
 use App\Menu;
 use App\User;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
-use App\PostCategory;
-
-use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
-
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
 
-class ThemeUploadController extends Controller {
-
+class ThemeUploadController extends Controller
+{
     protected $rules = [
         'alpha_id' => 'unique',
         'full_name' => 'required',
         'email' => 'required|email',
-        // 'url' => 'required_without_all:url,file',
+        'title' => 'required',
         'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
         'terms' => 'required'
     ];
@@ -50,14 +37,13 @@ class ThemeUploadController extends Controller {
     {
         $user = Auth::user();
 
-        $this->data = array(
+        $this->data = [
             'user' => $user,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
-        );
+        ];
     }
 
 
@@ -143,7 +129,7 @@ class ThemeUploadController extends Controller {
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
-        $video->title = (!empty(Input::get('title')) ? Input::get('title') : 'Untitled '.$video->alpha_id);
+        $video->title = Input::get('title', 'Untitled '.$video->alpha_id);
 
         //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';

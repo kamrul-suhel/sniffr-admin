@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 use Auth;
 use Redirect;
-
 use App\Tag;
 use App\Page;
 use App\Menu;
 use App\Video;
 use App\VideoTag;
-use App\Download;
 use App\Setting;
-use App\Favorite;
 use App\VideoCategory;
-use App\PostCategory;
 
 use App\Libraries\ThemeHelper;
 
 class ThemeVideoController extends Controller {
 
     private $videos_per_page = 24;
-
-    public static $rules = array(
-        // 'username' => 'required|unique:users',
-        // 'email' => 'required|email|unique:users',
-        // 'password' => 'required|confirmed'
-    );
 
     public function __construct()
     {
@@ -38,18 +26,40 @@ class ThemeVideoController extends Controller {
     }
 
     /**
-     * Display the specified video.
-     *
-     * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id)
+    public function index()
     {
-        // if(Auth::guest()){
-            $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->where('alpha_id', $id)->first();
-        // }else{
-        //     $video = Video::with('tags')->where('alpha_id', $id)->first();
-        // }
+        $video = new Video;
+        $menu = new Menu;
+        $page = Input::get('page', 1);
+        $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+
+        $data = [
+            'videos' => $videos,
+            'page_title' => 'All Videos',
+            'page_description' => 'Page ' . $page,
+            'current_page' => $page,
+            'menu' => $menu->orderBy('order', 'ASC')->get(),
+            'pagination_url' => '/videos',
+            'video_categories' => VideoCategory::all(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'pages' => (new Page)->where('active', '=', 1)->get(),
+        ];
+        return view('Theme::video-list', $data);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $video = (new \App\Video)->where('state', 'licensed')
+            ->with('tags')
+            ->orderBy('licensed_at', 'DESC')
+            ->where('alpha_id', $id)
+            ->first();
 
         //Make sure video is active
         if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
@@ -72,7 +82,6 @@ class ThemeVideoController extends Controller {
                 'favorited' => $favorited,
                 'downloaded' => $downloaded,
                 'video_categories' => VideoCategory::all(),
-                'post_categories' => PostCategory::all(),
                 'theme_settings' => ThemeHelper::getThemeSettings(),
                 'pages' => Page::where('active', '=', 1)->get(),
                 );
@@ -82,35 +91,6 @@ class ThemeVideoController extends Controller {
             return Redirect::to('videos')->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
         }
     }
-
-    /*
-     * Page That shows the latest video list
-     *
-     */
-    public function videos()
-    {
-        $page = Input::get('page');
-        if( !empty($page) ){
-            $page = Input::get('page');
-        } else {
-            $page = 1;
-        }
-
-        $data = array(
-            'videos' => Video::where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($this->videos_per_page),
-            'page_title' => 'All Videos',
-            'page_description' => 'Page ' . $page,
-            'current_page' => $page,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/videos',
-            'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
-            'pages' => Page::where('active', '=', 1)->get(),
-            );
-        return view('Theme::video-list', $data);
-    }
-
 
     public function tag($tag)
     {
@@ -146,7 +126,6 @@ class ThemeVideoController extends Controller {
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'pagination_url' => '/videos/tags/' . $tag_name,
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
             );
@@ -188,7 +167,6 @@ class ThemeVideoController extends Controller {
             'pagination_url' => '/videos/category/' . $category,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
         );

@@ -6,66 +6,61 @@ namespace App\Http\Controllers;
 use Hash;
 use Auth;
 use Redirect;
-
 use App\User;
 use App\Favorite;
 use App\Page;
 use App\Menu;
 use App\Video;
-use App\Setting;
 use App\PaymentSetting;
 use App\VideoCategory;
-use App\PostCategory;
-
 use App\Libraries\ThemeHelper;
 use App\Libraries\Imagehandler;
-
 use Illuminate\Support\Facades\Input;
 
-class ThemeUserController extends Controller{
-
-    public static $rules = array(
+class ThemeUserController extends Controller
+{
+    public static $rules = [
         'username' => 'required|unique:users',
         'email' => 'required|email|unique:users',
         'password' => 'required|confirmed'
-    );
+    ];
 
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    public function index($username){
-    	$user = User::where('username', '=', $username)->first();
+    public function index($username)
+    {
+        $user = User::where('username', '=', $username)->first();
 
         $authUser = Auth::user();
-        if(isset($authUser->id)) {
-            return redirect()->home()->with(array('note' => 'Sorry but you need to be logged in to access this page!', 'note_type' => 'error') );
+        if (isset($authUser->id)) {
+            return redirect()->home()->with(array('note' => 'Sorry but you need to be logged in to access this page!', 'note_type' => 'error'));
         }
-        if($authUser->id!=$user->id&&$authUser->role!='admin'){
-            return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to access this page!', 'note_type' => 'error') );
+        if ($authUser->id != $user->id && $authUser->role != 'admin') {
+            return redirect()->home()->with(array('note' => 'Sorry but you do not have permission to access this page!', 'note_type' => 'error'));
         }
 
         $favorites = Favorite::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get();
 
         $favorite_array = array();
-        foreach($favorites as $key => $fave){
+        foreach ($favorites as $key => $fave) {
             array_push($favorite_array, $fave->video_id);
         }
 
         $videos = Video::where('active', '=', '1')->whereIn('id', $favorite_array)->take(9)->get();
 
-    	$data = array(
-                    'user' => $user,
-                    'type' => 'profile',
-                    'videos' => $videos,
-                    'menu' => Menu::orderBy('order', 'ASC')->get(),
-                    'video_categories' => VideoCategory::all(),
-                    'post_categories' => PostCategory::all(),
-                    'theme_settings' => ThemeHelper::getThemeSettings(),
-                    'pages' => Page::where('active', '=', 1)->get(),
-    	);
-    	return view('Theme::user', $data);
+        $data = [
+            'user' => $user,
+            'type' => 'profile',
+            'videos' => $videos,
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'video_categories' => VideoCategory::all(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        ];
+        return view('Theme::user', $data);
     }
 
     public function edit($username){
@@ -78,7 +73,6 @@ class ThemeUserController extends Controller{
                     'type' => 'edit',
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'video_categories' => VideoCategory::all(),
-                    'post_categories' => PostCategory::all(),
                     'theme_settings' => ThemeHelper::getThemeSettings(),
                     'pages' => Page::where('active', '=', 1)->get(),
 	    		);
@@ -153,7 +147,6 @@ class ThemeUserController extends Controller{
                     'type' => 'billing',
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'video_categories' => VideoCategory::all(),
-                    'post_categories' => PostCategory::all(),
                     'theme_settings' => ThemeHelper::getThemeSettings(),
                     'payment_settings' => $payment_settings,
                     'invoices' => $invoices,
@@ -188,17 +181,18 @@ class ThemeUserController extends Controller{
         }
     }
 
-    public function resume_account($username){
-        if(Auth::guest()):
+    public function resume_account($username)
+    {
+        if (Auth::guest()):
             return Redirect::to('/');
         endif;
 
-        if(Auth::user()->username == $username){
+        if (Auth::user()->username == $username) {
 
             $payment_settings = PaymentSetting::first();
 
-            if($payment_settings->live_mode){
-                User::setStripeKey( $payment_settings->live_secret_key );
+            if ($payment_settings->live_mode) {
+                User::setStripeKey($payment_settings->live_secret_key);
             } else {
                 User::setStripeKey( $payment_settings->test_secret_key );
             }
@@ -208,17 +202,16 @@ class ThemeUserController extends Controller{
 
             return Redirect::to('user/' . $username . '/billing')->with(array('note' => 'Welcome back, your account has been successfully re-activated.', 'note_type' => 'success') );
         }
-
     }
 
-    public function update_cc_store($username){
+    public function update_cc_store($username) {
         if(Auth::guest()):
             return Redirect::to('/');
         endif;
 
         $payment_settings = PaymentSetting::first();
 
-        if($payment_settings->live_mode){
+        if($payment_settings->live_mode) {
             User::setStripeKey( $payment_settings->live_secret_key );
         } else {
             User::setStripeKey( $payment_settings->test_secret_key );
@@ -226,27 +219,23 @@ class ThemeUserController extends Controller{
 
         $user = Auth::user();
 
-        if(Auth::user()->username == $username){
-
+        if(Auth::user()->username == $username) {
             $token = Input::get('stripeToken');
 
-            try{
-
+            try {
                 $user->subscription('monthly')->resume($token);
                 return Redirect::to('user/' . $username . '/billing')->with(array('note' => 'Your Credit Card Info has been successfully updated.', 'note_type' => 'success'));
-
             } catch(Exception $e){
                 return Redirect::to('/user/' . $username . '/update_cc')->with(array('note' => 'Sorry, there was an error with your card: ' . $e->getMessage(), 'note_type' => 'error'));
             }
 
-        } else {
-            return Redirect::to('user/' . $username);
         }
-
+        return Redirect::to('user/' . $username);
     }
 
-    public function update_cc($username){
-        if(Auth::guest()):
+    public function update_cc($username)
+    {
+        if (Auth::guest()):
             return Redirect::to('/');
         endif;
 
@@ -260,19 +249,17 @@ class ThemeUserController extends Controller{
 
         $user = Auth::user();
 
-        if(Auth::user()->username == $username){
-
-            $data = array(
+        if (Auth::user()->username == $username) {
+            $data = [
                 'user' => $user,
                 'post_route' => url('user') . '/' . $user->username . '/update',
                 'type' => 'update_credit_card',
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'payment_settings' => $payment_settings,
                 'video_categories' => VideoCategory::all(),
-                'post_categories' => PostCategory::all(),
                 'theme_settings' => ThemeHelper::getThemeSettings(),
                 'pages' => Page::where('active', '=', 1)->get(),
-                );
+            ];
 
             return view('Theme::user', $data);
         } else {
@@ -281,8 +268,9 @@ class ThemeUserController extends Controller{
 
     }
 
-    public function renew($username){
-        if(Auth::guest()):
+    public function renew($username)
+    {
+        if (Auth::guest()):
             return Redirect::to('/');
         endif;
 
@@ -290,33 +278,25 @@ class ThemeUserController extends Controller{
 
         $payment_settings = PaymentSetting::first();
 
-        // if($payment_settings->live_mode){
-        //     User::setStripeKey( $payment_settings->live_secret_key );
-        // } else {
-        //     User::setStripeKey( $payment_settings->test_secret_key );
-        // }
-
-        if(Auth::user()->username == $username){
-
-            $data = array(
+        if (Auth::user()->username == $username) {
+            $data = [
                     'user' => $user,
                     'post_route' => url('user') . '/' . $user->username . '/update',
                     'type' => 'renew_subscription',
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'payment_settings' => $payment_settings,
                     'video_categories' => VideoCategory::all(),
-                    'post_categories' => PostCategory::all(),
                     'theme_settings' => ThemeHelper::getThemeSettings(),
                     'pages' => Page::where('active', '=', 1)->get(),
-                );
+            ];
 
             return view('Theme::user', $data);
-        } else {
-            return Redirect::to('/');
         }
+        return Redirect::to('/');
     }
 
-    public function upgrade($username){
+    public function upgrade($username)
+    {
         if(Auth::guest()):
             return Redirect::to('/');
         endif;
@@ -325,25 +305,23 @@ class ThemeUserController extends Controller{
 
         $payment_settings = PaymentSetting::first();
 
-        if($payment_settings->live_mode){
-            User::setStripeKey( $payment_settings->live_secret_key );
+        if ($payment_settings->live_mode) {
+            User::setStripeKey($payment_settings->live_secret_key);
         } else {
-            User::setStripeKey( $payment_settings->test_secret_key );
+            User::setStripeKey($payment_settings->test_secret_key);
         }
 
-        if(Auth::user()->username == $username){
-
-            $data = array(
+        if (Auth::user()->username == $username) {
+            $data = [
                     'user' => $user,
                     'post_route' => url('user') . '/' . $user->username . '/update',
                     'type' => 'upgrade_subscription',
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'payment_settings' => $payment_settings,
                     'video_categories' => VideoCategory::all(),
-                    'post_categories' => PostCategory::all(),
                     'theme_settings' => ThemeHelper::getThemeSettings(),
                     'pages' => Page::where('active', '=', 1)->get(),
-                );
+            ];
 
             return view('Theme::user', $data);
         } else {

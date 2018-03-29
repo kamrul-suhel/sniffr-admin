@@ -68,25 +68,6 @@ if(!function_exists('generate_menu')):
 				continue; 
 			endif;
 
-			if($menu_item->type == 'posts'):
-
-				$active = '';
-				if(Request::is('posts')){
-					$active = ' active';
-				}
-
-				$output .= '<li class="dropdown' . $active . '">';
-					$output .= '<a href="/posts" class="dropdown-toggle">' . $menu_item->name . ' <span class="caret"></span></a>';
-					
-						$output .= '<ul class="dropdown-menu multi-level" role="menu">';
-						$output .= generate_video_post_menu(\App\PostCategory::orderBy('order', 'ASC')->get(), '/posts/category/');
-					
-					$output .= '</li></ul>';
-				
-				$output .= '</li>';
-				continue; 
-			endif;
-
 
 				$li_class = '';
 				$caret = '';

@@ -1,7 +1,6 @@
 <?php
 
 $sidebar_videos = \App\Video::where('active', '=', '1')->orderByRaw("RAND()")->take(6)->get();
-$sidebar_posts = \App\Post::where('active', '=', '1')->orderByRaw("RAND()")->take(6)->get();
 
 ?>
 
@@ -11,7 +10,7 @@ $sidebar_posts = \App\Post::where('active', '=', '1')->orderByRaw("RAND()")->tak
 
 	<div class="row">
 		<?php foreach($sidebar_videos as $video): ?>
-			
+
 			<div class="col-md-6 col-sm-6 col-xs-12">
 				<article class="block">
 					<a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('video') : URL::to('video') ?><?= '/' . $video->id ?>">
@@ -27,38 +26,4 @@ $sidebar_posts = \App\Post::where('active', '=', '1')->orderByRaw("RAND()")->tak
 
 		<?php endforeach; ?>
 	</div>
-
-
-	<h3>Posts You May Like</h3>
-
-	<div class="row">
-		<?php foreach($sidebar_posts as $post): ?>
-			
-			<?php $post_description = preg_replace('/^\s+|\n|\r|\s+$/m', '', strip_tags($post->body)); ?>
-
-			<div class="col-md-12">
-				<article class="block list">
-				<div class="row">
-					<div class="col-md-6">
-					<a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('post') : URL::to('post') ?><?= '/' . $post->slug ?>">
-						<div class="thumbnail-overlay"></div>
-						<img src="<?= \App\Libraries\ImageHandler::getImage($post->image, 'medium')  ?>">
-					</a>
-					</div>
-					<div class="block-contents col-md-6">
-						<h2><a href="<?= ($settings->enable_https) ? secure_url('post') : URL::to('post') ?><?= '/' . $post->slug ?>"><?= $post->title; ?></a></h2>
-						<p class="date"><?= date("F jS, Y", strtotime($post->created_at)); ?></p>
-						<div class="clear"></div>
-						<?php if(!empty($post->category)): ?>
-							<p class="category"><span>in </span> <a href="/posts/category/<?= $post->category->slug; ?>"><?= $post->category->name; ?></a></p>
-						<?php endif; ?>
-					</div>
-				</div>
-				</article>
-			</div>
-
-		<?php endforeach; ?>
-	</div>
-
-
 </div>

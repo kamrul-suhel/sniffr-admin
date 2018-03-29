@@ -16,10 +16,10 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Video Page Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('videos', array('uses' => 'ThemeVideoController@videos', 'as' => 'videos') );
+    Route::get('videos', 'ThemeVideoController@index');
     Route::get('videos/category/{category}', 'ThemeVideoController@category' );
     Route::get('videos/tag/{tag}', 'ThemeVideoController@tag' );
-    Route::get('video/{id}', 'ThemeVideoController@index');
+    Route::get('video/{id}', 'ThemeVideoController@show');
 
     /*
     |--------------------------------------------------------------------------
@@ -89,15 +89,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
     /*
     |--------------------------------------------------------------------------
-    | Post Page Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get( 'posts', array('uses' => 'ThemePostController@posts', 'as' => 'posts') );
-    Route::get( 'posts/category/{category}', 'ThemePostController@category' );
-    Route::get( 'post/{slug}', 'ThemePostController@index' );
-
-    /*
-    |--------------------------------------------------------------------------
     | Page Routes
     |--------------------------------------------------------------------------
     */
@@ -118,9 +109,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
 
     Route::get('login', 'ThemeAuthController@login_form')->name('login');
-    //Route::get('signup', 'ThemeAuthController@signup_form');
     Route::post('login', 'ThemeAuthController@login');
-    //Route::post('signup', 'ThemeAuthController@signup');
 
     Route::get('password/reset', array('uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind'));
     Route::post('password/reset', array('uses' => 'ThemeAuthController@password_request', 'as' => 'password.request'));
@@ -209,19 +198,6 @@ Route::group(array('prefix' => 'admin'), function(){
 
     // comments
     Route::resource('comment', 'CommentController');
-
-    Route::get('posts', 'Admin\AdminPostController@index');
-    Route::get('posts/create', 'Admin\AdminPostController@create');
-    Route::post('posts/store', array('uses' => 'Admin\AdminPostController@store'));
-    Route::get('posts/edit/{id}', 'Admin\AdminPostController@edit');
-    Route::post('posts/update', array('uses' => 'Admin\AdminPostController@update'));
-    Route::get('posts/delete/{id}', array('uses' => 'Admin\AdminPostController@destroy'));
-    Route::get('posts/categories', 'Admin\AdminPostCategoriesController@index');
-    Route::post('posts/categories/store', array('uses' => 'Admin\AdminPostCategoriesController@store'));
-    Route::post('posts/categories/order', array('uses' => 'Admin\AdminPostCategoriesController@order'));
-    Route::get('posts/categories/edit/{id}', 'Admin\AdminPostCategoriesController@edit');
-    Route::get('posts/categories/delete/{id}', array('uses' => 'Admin\AdminPostCategoriesController@destroy'));
-    Route::post('posts/categories/update', array('uses' => 'Admin\AdminPostCategoriesController@update'));
 
     Route::get('media', 'Admin\AdminMediaController@index');
     // Route::post('media/files', 'Admin\AdminMediaController@files');
@@ -348,9 +324,4 @@ Route::group(array('prefix' => 'api/v1'), function()
     Route::get('video/{id}', 'Api\v1\VideoController@video');
     Route::get('video_categories', 'Api\v1\VideoController@video_categories');
     Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
-
-    Route::get('posts', 'Api\v1\PostController@index');
-    Route::get('post/{id}', 'Api\v1\PostController@post');
-    Route::get('post_categories', 'Api\v1\PostController@post_categories');
-    Route::get('post_category/{id}', 'Api\v1\PostController@post_category');
 });

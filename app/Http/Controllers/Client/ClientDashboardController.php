@@ -3,29 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use Auth;
-use Validator;
-use Redirect;
-
-use App\User;
-use App\Page;
-use App\Menu;
-use App\Post;
 use App\Video;
-use App\Setting;
 use App\Campaign;
-use App\VideoCategory;
-use App\PostCategory;
-
-use App\Libraries\ThemeHelper;
-
-use Carbon\Carbon as Carbon;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
-class ClientDashboardController extends Controller {
-
+class ClientDashboardController extends Controller
+{
     public function __construct()
     {
         $this->middleware('client');

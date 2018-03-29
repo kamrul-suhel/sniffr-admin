@@ -4,24 +4,17 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
-use Validator;
 use Redirect;
 use Request;
-
-use App\Page;
 use App\Menu;
-use App\VideoCategory;
-use App\PostCategory;
-
-use App\Libraries\ThemeHelper;
-
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminMenuController extends Controller {
 
     /**
-     * constructor.
+     * AdminMenuController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -29,66 +22,72 @@ class AdminMenuController extends Controller {
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         $menu = json_decode(Menu::orderBy('order', 'ASC')->get()->toJson());
         $user = Auth::user();
 
-        $data = array(
+        $data = [
             'menu' => $menu,
             'user' => $user,
             'admin_user' => Auth::user()
-            );
+        ];
 
         return view('admin.menu.index', $data);
     }
 
-    public function store(){
+    public function store()
+    {
         $input = Input::all();
         $last_menu_item = Menu::orderBy('order', 'DESC')->first();
 
-        if(isset($last_menu_item->order)){
+        if (isset($last_menu_item->order)) {
             $new_menu_order = intval($last_menu_item->order) + 1;
         } else {
             $new_menu_order = 1;
         }
+
         $input['order'] = $new_menu_order;
-        $menu= Menu::create($input);
-        if(isset($menu->id)){
-            return Redirect::to('admin/menu')->with(array('note' => 'Successfully Added New Menu Item', 'note_type' => 'success') );
+        $menu = Menu::create($input);
+        if (isset($menu->id)) {
+            return Redirect::to('admin/menu')->with(array('note' => 'Successfully Added New Menu Item', 'note_type' => 'success'));
         }
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         return view('admin.menu.edit', array('menu' => Menu::find($id)));
     }
 
-
-    public function destroy($id){
+    public function destroy($id)
+    {
         Menu::destroy($id);
         $child_menu_items = Menu::where('parent_id', '=', $id)->get();
-        foreach($child_menu_items as $menu_items){
+        foreach ($child_menu_items as $menu_items) {
             $menu_items->parent_id = NULL;
             $menu_items->save();
         }
-        return Redirect::to('admin/menu')->with(array('note' => 'Successfully Deleted Menu Item', 'note_type' => 'success') );
+        return Redirect::to('admin/menu')->with([
+            'note' => 'Successfully Deleted Menu Item',
+            'note_type' => 'success'
+        ]);
     }
 
-    public function update(){
+    public function update()
+    {
         $input = Input::all();
         $menu = Menu::find($input['id'])->update($input);
-        if(isset($menu)){
-            return Redirect::to('admin/menu')->with(array('note' => 'Successfully Updated Category', 'note_type' => 'success') );
+        if (isset($menu)) {
+            return Redirect::to('admin/menu')->with([
+                'note' => 'Successfully Updated Category', 'note_type' => 'success'
+            ]);
         }
     }
 
     public function order(){
         $menu_item_order = json_decode(Input::get('order'));
-        $post_categories = Menu::all();
         $order = 1;
 
         foreach($menu_item_order as $menu_level_1):
@@ -100,9 +99,9 @@ class AdminMenuController extends Controller {
                 $level1->save();
                 $order += 1;
             }
-
+            
             if(isset($menu_level_1->children)):
-
+            
                 $children_level_1 = $menu_level_1->children;
 
                 foreach($children_level_1 as $menu_level_2):
@@ -143,6 +142,4 @@ class AdminMenuController extends Controller {
 
         return 1;
     }
-
-
 }
