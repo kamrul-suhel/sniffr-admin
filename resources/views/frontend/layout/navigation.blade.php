@@ -31,8 +31,6 @@
                                     </v-list>
                                 </v-menu>
                             </li>
-
-
                         @endif
                     </ul>
                 </nav>

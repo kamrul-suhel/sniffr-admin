@@ -89,11 +89,14 @@ class ThemeDetailsController extends Controller
      */
     public function store(Request $request, $code)
     {
+
         $video = Video::where('more_details_code', $code)->first();
 
         $validator = Validator::make(Input::all(), $this->rules);
 
+
         $this->validate($request, $this->rules);
+
 
         if ($validator->fails()) {
             return Redirect::back()
@@ -133,7 +136,12 @@ class ThemeDetailsController extends Controller
 
             $this->data['video'] = $video;
 
-            return view('Theme::details', $this->data);
+            if($request->ajax()){
+                return response()->json(['success', '1');
+            }else{
+                return view('Theme::details', $this->data);
+            }
+
         }
     }
 }

@@ -71,14 +71,14 @@
 /* ************************* Video section style ******************* */
 
 .videos-section{
-
   .video-section-title{
     margin-bottom: $section-title-after-space;
+
     h1{
       @include headingstyle();
     }
-
   }
+
   .video-section-title::after{
     @include heading-border;
   }
@@ -87,6 +87,11 @@
     a{
       background-size:cover;
       backgorund-position:center center;
+      position:absolute;
+      top:0;
+      bottom:0;
+      right:0;
+      left:0;
 
       &:hover{
         .thumbnail-overlay{
@@ -97,12 +102,6 @@
           transform:scale(1);
         }
       }
-
-      position:absolute;
-      top:0;
-      bottom:0;
-      right:0;
-      left:0;
 
       .thumbnail-overlay{
         position:absolute;

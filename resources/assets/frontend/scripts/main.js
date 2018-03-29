@@ -19,7 +19,11 @@ $(document).ready(function(){
 //Vue packages
 window.Vue = require('vue');
 import Vuetify from 'Vuetify';
+import Vuerouter from 'vue-router';
+
+
 Vue.use(Vuetify);
+Vue.use(Vuerouter);
 
 
 // Http ajax package
@@ -30,13 +34,22 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
 
 
 // Vue component
-require('./vue-component/upload-video');
 require('./vue-component/submission-form');
 require('./vue-component/login-component');
 require('./vue-component/detail-form');
 
+
+import { routes } from './routes';
+
+const router = new Vuerouter({
+    mode:'history',
+    routes
+});
+
+
 new Vue({
     el:'#sniffr',
+    router,
     data() {
         return {
             csrf_token : $('meta[name="csrf-token"]').attr('content'),

@@ -19,7 +19,8 @@
     <section id="sniffr">
         <v-app>
             @include('frontend.layout.navigation')
-            @yield('content')
+            {{--@yield('content')--}}
+            <router-view></router-view>
             @include('frontend.layout.footer')
             @include('frontend.layout.login_form')
         </v-app>

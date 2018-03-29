@@ -5,18 +5,18 @@ require('axios');
 Vue.component('detail-form',{
     data: () => ({
         valid: false,
-        full_name: '',
-        email: '',
-        tel:'',
-        location:'',
-        description:'',
-        filmed_by_me:'yes',
+        full_name: 'somename',
+        email: 'email',
+        tel:'0239480',
+        location:'london',
+        description:'some description',
+        filmed_by_me:'filmed_by me',
         permission:'yes',
-        submitted_elsewhere:'yes no radio',
-        submitted_where:'',
-        contact_is_owner:'',
-        allow_publish:'checkbox',
-        is_exclusive:'checkbox',
+        submitted_elsewhere:'no',
+        submitted_where:'youtube',
+        contact_is_owner:'yes',
+        allow_publish:'yes',
+        is_exclusive:'no',
 
         // date picker setting
         date_filmed:null,
@@ -25,107 +25,52 @@ Vue.component('detail-form',{
 
         uplod_progress:false,
         progressbar: 0,
-        error:false,
+
+        //Loading process
+        loading: false,
     }),
     created() {
 
     },
+    watch: {
+      
+    },
 
 
     methods: {
-        onScroll (e) {
-            this.offsetTop = e.target.scrollTop
-        },
-
-        onPickFile() {
-            this.progressbar = 0;
-            this.$refs.inputfile.click();
-        },
-
-        onFilechange(event) {
-            // check is file choose or not
-            if(!event.target.files[0]){
-                return;
-            }
-            this.error = false;
-            this.file = event.target.files[0];
-            this.file_name = this.file.name;
-
-        },
-
-
         onSubmit() {
-            if(this.url === '' && this.file === ''){
-                this.error = true;
-            }else{
-                this.error = false;
+            if(this.$refs.detail_form.validate()){
+                this.loading=true;
+                this.uploadFormData();
             }
-
-            if(this.$refs.form.validate()){
-                if(this.error){
-                    return;
-                }
-
-                // Email verify progress on
-                this.validete_email_progress = true;
-
-                setTimeout( () => {
-                    // email verify done turn off spinner
-                    this.validete_email_progress = false;
-
-                    // Send data to server
-                    this.uploadFormData();
-                    
-                }, 1000);
-            }
-            
         },
 
         uploadFormData() {
             // uploading via ajax request
             let form = new FormData();
-            form.append('file', this.file);
             form.append('full_name', this.full_name);
             form.append('email', this.email);
-            form.append('title', this.title);
             form.append('tel', this.tel);
-            form.append('terms', this.terms_condition);
-            form.append('url', this.url);
-            form.append('notes', this.notes);
-            form.append('credit', this.credit);
-            form.append('referrer', this.referrer);
+            form.append('location', this.location);
+            form.append('description', this.description);
+            form.append('filmed_by_me', this.filmed_by_me);
+            form.append('permission', this.permission);
+            form.append('submitted_elsewhere', this.submitted_elsewhere);
+            form.append('submitted_where', this.submitted_where);
+            form.append('contact_is_owner', this.contact_is_owner);
+            form.append('allow_publish', this.allow_publish);
+            form.append('is_exclusive', this.is_exclusive);
+            form.append('date_filmed', this.date_filmed);
 
-            //show the uploading dialog box
-            this.uplod_progress = true;
-
-            axios.post('/submission', form, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    onUploadProgress: function( progressEvent ) {
-                        this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-                        console.log(this.progressbar);
-                    }.bind(this)
-                }
-            )
+            axios.post('/details/ZZTlVk8jdz3jRB6v9xbl99dtXhCIQa', form)
             .then(response => {
                 //data uploaded succes
                 let data = response.data;
-                console.log(data);
-
-                if(data.status == 'success'){
-                    // set all default
-                    this.progressbar = 0;
-
-                    //Email progress 
-                    this.uplod_progress = false;
-
-                    // clear form data
-                    this.$refs.form.reset();
-
-                    setTimeout(()=>{
-                        window.location.href = '/thanks';
-                    }, 1000)
+                if(data.success === 1){
+                        setTimeout( () => {
+                        // this.uploadFormData();
+                        this.loading=false;
+                    }, 1000);
                 }
             })
             .catch(function(error){

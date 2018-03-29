@@ -1,4 +1,9 @@
 /* ************************* Global style ******************* */
+body{
+  font-family:JosefinSansregular;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 section.section-space{
   padding:$section-spacing 0px;
@@ -6,12 +11,6 @@ section.section-space{
 
 .nav-background{
   background:#000;
-}
-
-body{
-  font-family:JosefinSansregular;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ************************* Font and size ******************* */
@@ -22,12 +21,6 @@ h1{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.heading{
-  font-size:40px;
-}
-.sub-heading{
-  font-size:20px;
-}
 
 h2{
   font-family:JosefinSansbold;
@@ -35,6 +28,7 @@ h2{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 p{
   font-size:16px;
   font-weight:lighter;
@@ -42,6 +36,15 @@ p{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.heading{
+  font-size:40px;
+}
+
+.sub-heading{
+  font-size:20px;
+}
+
 .card{
   font-family:JosefinSansregular;
 }
@@ -113,6 +116,7 @@ p{
   .video-upload-box{
     width:100%;
   }
+
   .input-group--details:before{
     background:#000;
   }
@@ -120,6 +124,7 @@ p{
   .term-condition{
     border:1px solid #000;
   }
+
   .term-condition-content{
     padding:20px;
   }
