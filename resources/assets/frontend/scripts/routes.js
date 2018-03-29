@@ -1,5 +1,6 @@
 import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
+import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
 
 export const routes = [
     {
@@ -12,5 +13,11 @@ export const routes = [
         path:'/videos',
         name: 'videos',
         component: VideoComponent
+    },
+
+    {
+        path: '/videos/:id',
+        name: 'videos_detail',
+        component: VideoDetailComponent
     }
 ];

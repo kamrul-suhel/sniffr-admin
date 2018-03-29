@@ -18,7 +18,8 @@
 
     <section id="sniffr">
         <v-app>
-            @include('frontend.layout.navigation')
+            {{--@include('frontend.layout.navigation')--}}
+            <navigation-component></navigation-component>
             {{--@yield('content')--}}
             <router-view></router-view>
             @include('frontend.layout.footer')

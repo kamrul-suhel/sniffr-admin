@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section id="header" class="js-fullheight">
+        <section id="header" class="js-fullheight" :style="{height: fullwidth_height}" ref="js_fullheight">
             <div class="header-content">
                 <h1 class="heading">Video Licensing Platform</h1>
                 <p class="sub-heading">License viral videos viewed by millions around the world from Sniffr Media</p>
@@ -28,10 +28,10 @@
                 </v-container>
             </div>
         </section>
-        <!-- Feature Component section -->
+        <!-- Feature Component -->
         <feature-component></feature-component>
 
-        <!-- Countdown Component section -->
+        <!-- Countdown Component -->
         <count-down></count-down>
 
         <!-- Upload video component -->
@@ -51,7 +51,7 @@
         },
         data() {
             return {
-
+                fullwidth_height:0
             }
         },
         methods: {
@@ -59,8 +59,25 @@
         },
 
         created(){
-
+            var browserheight = window.innerHeight;
+            this.fullwidth_height = browserheight+'px';
         },
+
+        mounted(){
+            var browserheight = window.innerHeight;
+            var first_nav_pos = $('#nav').position();
+            var second_nav_pos = $('.second-navigation').position();
+            var second_nav_height = $('.second-navigation').outerHeight();
+            var hide_nav_position = browserheight - second_nav_height;
+
+            $(window).scroll(function(e){
+                if(window.pageYOffset > hide_nav_position){
+                    $('#nav').hide();
+                }else{
+                    $('#nav').show();
+                }
+            });
+        }
 
     }
 </script>
