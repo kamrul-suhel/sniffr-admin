@@ -28,9 +28,9 @@
         "ralouphie/mimey": "^1.0",
         "schoooch/youtube": "^5.0",
         "talvbansal/media-manager": "^2.5",
-        "thujohn/twitter": "^2.2"
+        "thujohn/twitter": "^2.2",
         "predis/predis": "^1.1",
-        "doctrine/dbal": "^2.6",
+        "doctrine/dbal": "^2.6"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
