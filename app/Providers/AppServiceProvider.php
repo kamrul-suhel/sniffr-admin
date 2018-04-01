@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Observers\VideoObserver;
+use App\Video;
 use Illuminate\Support\ServiceProvider;
 use Facebook\Facebook;
 
@@ -14,7 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if (\App::environment() !== 'production') {
+            Video::observe(VideoObserver::class);
+        }
     }
 
     /**
