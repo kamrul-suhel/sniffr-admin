@@ -2,21 +2,13 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class VideoUploadTest extends TestCase
 {
-    //use RefreshDatabase;
-    use DatabaseMigrations;
-    /**
-     *
-     */
-    /*public function test_user_can_see_upload_form()
-    {
-    }*/
+    use RefreshDatabase;
 
     public function test_user_can_upload_a_video()
     {
@@ -32,7 +24,7 @@ class VideoUploadTest extends TestCase
         $email = $faker->email;
         $name = $faker->name();
 
-        $response = $this->json('POST', '/upload', [
+        $this->json('POST', '/upload', [
             'email' => $email,
             'full_name' => $name,
             'file' => $file,
