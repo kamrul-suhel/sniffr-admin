@@ -80,7 +80,6 @@ class ThemeVideoController extends Controller {
                 );
 //            return view('Theme::video', $data);
 //            return view('Theme::video', $data);
-
             return view('frontend.pages.videos.video_detail', $data);
 
         } else {
@@ -92,7 +91,7 @@ class ThemeVideoController extends Controller {
      * Page That shows the latest video list
      *
      */
-    public function videos()
+    public function videos(Request $request)
     {
         $page = Input::get('page');
         if( !empty($page) ){
@@ -114,6 +113,9 @@ class ThemeVideoController extends Controller {
             'pages' => Page::where('active', '=', 1)->get(),
             );
 //        return view('Theme::video-list',$data);
+        if($request->ajax()){
+            return $data;
+        }
         return view('frontend.pages.videos.videos', $data);
     }
 

@@ -25,6 +25,9 @@ import NavigationComponent from './vue-component/layouts/NavigationComponent.vue
 
 import { routes } from './routes';
 
+// Implement Vuex 
+import { store } from './store/store';
+
 const router = new Vuerouter({
     mode:'history',
     routes
@@ -34,6 +37,7 @@ const router = new Vuerouter({
 
 new Vue({
     el:'#sniffr',
+    store: store,
     components: {
         navigationComponent: NavigationComponent
     },

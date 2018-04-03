@@ -10,10 +10,7 @@
                                 color="white"
                                 label="Search"
                                 append-icon="search"
-                                aria-describedby="filterhelp"
-                                @if(isset($search_value))
-                                    value="{{$search_value}}"
-                                @endif>
+                                aria-describedby="filterhelp">
                         </v-text-field>
                     </div>
                 </v-flex>
