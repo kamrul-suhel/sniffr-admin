@@ -5,7 +5,8 @@
                 <v-flex xs8>
                     <v-card>
                         <v-card-text>
-                            <v-pagination 
+                            <v-pagination
+                                class="dark"
                                 :length="pagination.last_page" 
                                 v-model="page" 
                                 :total-visible="10"

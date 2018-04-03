@@ -18,20 +18,15 @@
 
     <section id="sniffr">
         <v-app>
-            {{--@include('frontend.layout.navigation')--}}
             <navigation-component></navigation-component>
-            {{--@yield('content')--}}
             <router-view></router-view>
             @include('frontend.layout.footer')
-            @include('frontend.layout.login_form')
         </v-app>
     </section>
 
     <!-- Scripts Section -->
     <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
-
     <script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>
-
     <!-- End scripts Section -->
     
     @if(isset($settings->google_tracking_id) && $settings->google_tracking_id != '')

@@ -41,12 +41,20 @@
                 data: '',
                 videos: '',
                 paginate: '',
+                current_page: 0,
             }
+        },
+        watch: {
         },
         beforeCreate(){
         },
         created(){
-            this.$store.dispatch('getVideoData').then(() => {
+            console.log(this.$route.query.page);
+            if(this.$route.query.page){
+                this.current_page = this.$route.query.page;
+            }
+            
+            this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                 this.videos = this.$store.getters.getVideoData;
                 this.paginate = this.$store.getters.getPaginateObject;
             });

@@ -28,6 +28,9 @@ import { routes } from './routes';
 // Implement Vuex 
 import { store } from './store/store';
 
+// Implement Filters
+require('./filters/filters');
+
 const router = new Vuerouter({
     mode:'history',
     routes
