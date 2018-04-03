@@ -10,7 +10,13 @@ trait ThemeHelper{
 	public static function getThemeSettings() {
 
 		// Get the Active Theme and the Theme Settings
-		$active_theme = Setting::first()->theme;
+		$settings = Setting::first();
+
+		if (!$settings) {
+		    return null;
+        }
+
+		$active_theme = $settings->theme;
 		$theme_settings = ThemeSetting::where('theme_slug', '=', $active_theme)->get();
 
 		// Create an empty array to fill with theme settings

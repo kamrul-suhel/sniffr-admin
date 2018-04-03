@@ -55,7 +55,6 @@ class ThemeUploadController extends Controller {
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
         );
     }
@@ -118,7 +117,10 @@ class ThemeUploadController extends Controller {
         if ($validator->fails())
         {
             $file_temp = $request->file('file');
-            $mime_temp = $file_temp->getMimeType();
+            if ($file_temp) {
+                $mime_temp = $file_temp->getMimeType();
+            }
+
             if($isJson) {
                 return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
             } else {
@@ -127,7 +129,6 @@ class ThemeUploadController extends Controller {
                     ->withInput();
             }
         }
-
         //get additional form data
         $contact = Contact::where('email',Input::get('email'))->first();
         //if contact exists
@@ -199,7 +200,6 @@ class ThemeUploadController extends Controller {
         }
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
-
         if($isJson) {
             return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
