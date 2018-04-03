@@ -15,24 +15,29 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg>
                 <v-layout row wrap>
-                    <v-flex xs12>
-                        <h2>Some vlad</h2>
-                        <v-btn raised @click="getData">get data</v-btn>
-                    </v-flex>
+
+                    <videoloop-component v-for="video in videos" :video="video"></videoloop-component>
+
                 </v-layout>
+
             </v-container>
         </section>
     </section>
 </template>
+
 <script>
     import SearchComponent from '../../includes/SearchComponent';
+    import VideoLoopComponent from '../../includes/VideoLoopComponent.vue';
+
     export default{
         components:{
-            searchComponent: SearchComponent
+            searchComponent: SearchComponent,
+            videoloopComponent: VideoLoopComponent
         },
         data(){
             return {
-                data: null
+                data: '',
+                videos: '',
             }
         },
         beforeCreate(){
@@ -41,13 +46,10 @@
         created(){
             this.$store.dispatch('getVideoData').then(() => {
                 this.data = this.$store.getters.getVideoData;
-                console.log(this.data);
+                this.videos = this.data.videos.data;
             });
         },
         methods: {
-            getData(){
-                console.log(this.$store.getters.getVideoData);
-            }
         }
     }
 </script>

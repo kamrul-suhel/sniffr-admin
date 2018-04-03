@@ -137,7 +137,7 @@ class ThemeDetailsController extends Controller
             $this->data['video'] = $video;
 
             if($request->ajax()){
-                return response()->json(['success', '1');
+                return response()->json('success', '1');
             }else{
                 return view('Theme::details', $this->data);
             }
