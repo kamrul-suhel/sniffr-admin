@@ -5,25 +5,40 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state: {
-		data: null
+		videos: null,
+		paginate:''
 	},
 	mutations: {
 		setVideoData(state, data){
-			state.data = data;
+			state.videos = data.videos.data;
+		},
+
+		setPaginationObject(state, paginate){
+			state.paginate = paginate;
 		}
 	},
 	getters: {
 		getVideoData(state){
-			return state.data;
+			return state.videos;
+		},
+
+		getPaginateObject(state){
+			return state.paginate;
 		}
 	},
 	actions: {
-		getVideoData({ commit }){
+		getVideoData({ commit }, payload= {}){
 			return new Promise(function(resovle, reject){
-                axios.get('/videos')
+				let url = '/videos';
+				if(payload.page && payload.page != 0){
+					url = url +'?page=' +payload.page;
+				}
+				console.log(url);
+                axios.get(url)
                     .then((response) => {
                     let data = response.data;
 					commit('setVideoData', data);
+					commit('setPaginationObject', data.videos);
 					resovle();
             })
                 .catch((error) => {

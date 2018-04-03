@@ -14,6 +14,11 @@ export const routes = [
         name: 'videos',
         component: VideoComponent
     },
+    {
+        path:'/videos:page',
+        name: 'videos_page',
+        component: VideoComponent
+    },
 
     {
         path: '/videos/:id',

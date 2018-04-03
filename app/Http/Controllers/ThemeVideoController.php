@@ -112,10 +112,11 @@ class ThemeVideoController extends Controller {
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
             );
-//        return view('Theme::video-list',$data);
+
         if($request->ajax()){
             return $data;
         }
+
         return view('frontend.pages.videos.videos', $data);
     }
 

@@ -155,7 +155,6 @@
             $route(to, from, next){
                 if(to.name != 'home'){
                     this.nav_background = true;
-                    console.log(to);
                 }else{
                     this.nav_background = false;
                 }
