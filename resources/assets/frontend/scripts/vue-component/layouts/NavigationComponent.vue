@@ -1,5 +1,5 @@
 <template>
-    <section id="nav" class="section-space" :class="{ nav_background :'nav-background'}">
+    <section id="nav" class="section-space" :class="{ 'nav-background' : nav_background}">
         <v-container grid-list-md>
             <v-layout row wrap>
                 <v-flex xs12 sm6 md4 lg4>
@@ -147,6 +147,16 @@
                 validation:{
                     error: false,
                     message:''
+                }
+            }
+        },
+        watch: {
+            // Detach which page and set navigation background
+            $route(to, from, next){
+                if(to.name != 'home'){
+                    this.nav_background = true;
+                }else{
+                    this.nav_background = false;
                 }
             }
         },

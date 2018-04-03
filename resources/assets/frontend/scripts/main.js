@@ -31,6 +31,7 @@ const router = new Vuerouter({
 });
 
 
+
 new Vue({
     el:'#sniffr',
     components: {

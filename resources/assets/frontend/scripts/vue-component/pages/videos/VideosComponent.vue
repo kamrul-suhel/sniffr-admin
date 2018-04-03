@@ -1,11 +1,24 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <section class="videos-section section-space">
-        <v-container grid-list-lg>
-            <v-layout row wrap>
-                <h2>Video page</h2>
-            </v-layout>
-        </v-container>
+    <section class="videos-section">
+        <section id="header" class="page-videos">
+            <div class="header-content">
+                <div class="position-center">
+                    <h1 class="heading">Videos</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIDEOS ITEM SECTION -->
+        <section class="videos-section section-space">
+            <v-container grid-list-lg>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <h2>Some vlad</h2>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </section>
     </section>
 </template>
 <script>
