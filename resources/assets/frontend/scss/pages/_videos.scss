@@ -65,7 +65,7 @@
 }
 
 
-/* ************************* Video section style ******************* */
+/* ************************* Videos section style ******************* */
 
 .videos-section{
   .video-section-title{
@@ -148,9 +148,12 @@
   }
 
   .card__title{
-    height:140px;
+    height:50px;
     position:relative;
     overflow:hidden;
+  }
+  .card__text{
+    height:80px;
   }
 
   .video-item-container:hover .video-item-link{

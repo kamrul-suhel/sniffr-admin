@@ -62,7 +62,6 @@
         methods: {
             changeVidowdata(){
                 this.videos = this.$store.getters.getVideoData;
-                console.log(this.$store.getters.getVideoData);
             }
         }
     }

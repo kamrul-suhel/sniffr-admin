@@ -33,7 +33,6 @@ export const store = new Vuex.Store({
 				if(payload.page && payload.page != 0){
 					url = url +'?page=' +payload.page;
 				}
-				console.log(url);
                 axios.get(url)
                     .then((response) => {
                     let data = response.data;

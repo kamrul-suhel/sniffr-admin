@@ -1,18 +1,14 @@
 <template>
     <div class="text-xs-center">
-        <v-container>
+        <v-container grid-list-lg>
             <v-layout justify-center>
                 <v-flex xs8>
-                    <v-card>
-                        <v-card-text>
-                            <v-pagination
-                                class="dark"
-                                :length="pagination.last_page" 
-                                v-model="page" 
-                                :total-visible="10"
-                                ></v-pagination>
-                        </v-card-text>
-                    </v-card>
+                    <v-pagination
+                        class="dark"
+                        :length="pagination.last_page"
+                        v-model="page"
+                        :total-visible="10"
+                        ></v-pagination>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -32,6 +28,7 @@
         ],
         watch: {
             pagination(){
+                this.page = this.pagination.current_page;
                 return this.pagination;
             },
             '$route'(to, from){
