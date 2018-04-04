@@ -15,7 +15,7 @@ class CreateVideosTable extends Migration {
 		Schema::create('videos', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('alpha_id', 10)->nullable()->default('')->index('alpha_id');
+			$table->string('alpha_id', 10)->nullable()->index('alpha_id');
 			$table->enum('state', array('new','accepted','rejected','inprogress','pending','licensed','restricted','problem','noresponse'))->nullable();
 			$table->boolean('maybe')->nullable();
 			$table->integer('user_id')->unsigned()->nullable();
@@ -24,7 +24,7 @@ class CreateVideosTable extends Migration {
 			$table->integer('video_collection_id')->default(0);
 			$table->integer('video_shottype_id')->default(0);
 			$table->text('title', 65535)->nullable();
-			$table->string('rights')->nullable()->default('');
+			$table->string('rights')->nullable();
 			$table->string('access', 20)->default('guest');
 			$table->text('details', 65535)->nullable();
 			$table->text('description', 65535)->nullable();
