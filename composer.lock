@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "468fb4c99b6a4366f5d629a208137d7b",
+    "content-hash": "e264bfef68cbb8831430c09f53ad9594",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1030,16 +1030,16 @@
         },
         {
             "name": "dumpk/elastcoder",
-            "version": "0.9.0",
+            "version": "0.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dumpk/elastcoder.git",
-                "reference": "277a959b42de828a2b758254967db2682812c4e7"
+                "reference": "65fe1485d54e5f80016dc8cb568b12309f1fd2b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dumpk/elastcoder/zipball/277a959b42de828a2b758254967db2682812c4e7",
-                "reference": "277a959b42de828a2b758254967db2682812c4e7",
+                "url": "https://api.github.com/repos/dumpk/elastcoder/zipball/65fe1485d54e5f80016dc8cb568b12309f1fd2b5",
+                "reference": "65fe1485d54e5f80016dc8cb568b12309f1fd2b5",
                 "shasum": ""
             },
             "require": {
@@ -1075,7 +1075,7 @@
                 "laravel",
                 "transcoder"
             ],
-            "time": "2015-11-05T14:34:36+00:00"
+            "time": "2018-03-29T15:17:26+00:00"
         },
         {
             "name": "dumpk/esetres",

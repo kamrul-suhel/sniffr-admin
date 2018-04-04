@@ -75,12 +75,34 @@ return [
     |
     */
 
+    // 'redis' => [
+    //     'client' => 'predis',
+    //     'cluster' => 'redis',
+    //     'clusters' => [
+    //         'default' => [
+    //             [
+    //                 'host' => env('REDIS_HOST', 'localhost'),
+    //                 'password' => env('REDIS_PASSWORD', null),
+    //                 'port' => env('REDIS_PORT', 6379),
+    //                 'database' => 0,
+    //                 'read_write_timeout' => 60,
+    //             ],
+    //             'options' => [
+    //                 'cluster' => 'redis',
+    //                 'parameters' => [ // Parameters provide defaults for the Connection Factory
+    //                     'password' => env('REDIS_PASSWORD', null), // Redirects needs PW for the other nodes
+    //                     'scheme'   => env('REDIS_SCHEME', 'tcp'),  // Redirects also must match scheme
+    //                 ],
+    //                 'ssl'    => ['verify_peer' => false], // Since we dont have TLS cert to verify
+    //             ],
+    //         ],
+    //     ],
+    // ],
+
     'redis' => [
-
-        'client' => 'predis',
-
+        'cluster' => false,
         'default' => [
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', 'localhost'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
