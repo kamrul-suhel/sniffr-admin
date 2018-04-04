@@ -1,6 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <section class="videos-section">
+    <div class="videos-section">
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
@@ -9,7 +9,7 @@
             </div>
         </section>
         
-        <search-component></search-component>
+        <search-component @searchOption="searchOption($event)"></search-component>
 
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
@@ -21,8 +21,8 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" @changediveodata="changeVidowdata()"></pagination-component>
-    </section>
+        <pagination-component :pagination="paginate" :page="'video'"></pagination-component>
+    </div>
 </template>
 
 <script>
@@ -45,6 +45,10 @@
             }
         },
         watch: {
+            '$route'(to, from, next){
+                this.current_page = to.query.page;
+                this.updateVideodata();
+            }
         },
         beforeCreate(){
         },
@@ -52,15 +56,22 @@
             if(this.$route.query.page){
                 this.current_page = this.$route.query.page;
             }
-            
-            this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
-                this.videos = this.$store.getters.getVideoData;
-                this.paginate = this.$store.getters.getPaginateObject;
-            });
+            this.setAlldata();
+
         },
         methods: {
-            changeVidowdata(){
-                this.videos = this.$store.getters.getVideoData;
+
+            setAlldata(){
+                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
+                    this.videos = this.$store.getters.getVideoData;
+                    this.paginate = this.$store.getters.getPaginateObject;
+                });
+            },
+
+            updateVideodata(){
+                this.$store.dispatch('getVideoData', {page: this.current_page}).then( () => {
+                    this.videos = this.$store.getters.getVideoData;
+                });
             }
         }
     }

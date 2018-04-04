@@ -55,6 +55,7 @@ class ThemeSearchController extends Controller {
             $videos = $videos->appends($request->input());
         }
 
+
 		$data = array(
 			'videos' => $videos,
 			'search_value' => $search_value,
@@ -66,7 +67,11 @@ class ThemeSearchController extends Controller {
             'settings' => $settings
 		);
 
-		return view('frontend.pages.search.search', $data);
+        if($request->ajax()){
+            return response($data);
+        }else{
+            return view('frontend.pages.search.search', $data);
+        }
 	}
 
 }

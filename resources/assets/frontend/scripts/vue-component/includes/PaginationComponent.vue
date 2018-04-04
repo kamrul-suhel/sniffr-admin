@@ -6,7 +6,7 @@
                     <v-pagination
                         class="dark"
                         :length="pagination.last_page"
-                        v-model="page"
+                        v-model="current_page"
                         :total-visible="10"
                         ></v-pagination>
                 </v-flex>
@@ -19,34 +19,39 @@
     export default {
         data() {
             return {
-                page: 1,
-                current_page: 0,
+                current_page: 1,
             }
         },
+
         props:[
-            'pagination'
+            'pagination',
+            'page'
         ],
+
         watch: {
             pagination(){
-                this.page = this.pagination.current_page;
+                this.current_page = this.pagination.current_page;
                 return this.pagination;
             },
-            '$route'(to, from){
-                this.current_page = to.query.page;
-                this.updateVideodata();
-            },
-            page(){
-                this.$router.push({path: '/videos', query: {page: this.page}});
+
+            current_page(){
+                if(this.page === 'video'){
+                    this.$router.push({path: '/videos', query: {page: this.current_page}});
+                }
+
+                if(this.page === 'search'){
+                    let value = this.$route.query.value;
+                    let page =  this.current_page;
+                    this.$router.push({name: 'videos_search', query:{value: value, page: page}});
+                }
             }
         },
+
         created(){
         },
+
         methods: {
-            updateVideodata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then( () => {
-                    this.$emit('changediveodata');
-                });
-            }
+
         }
     }
 </script>

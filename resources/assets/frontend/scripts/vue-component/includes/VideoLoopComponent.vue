@@ -44,8 +44,6 @@
         },
         methods:{
             imageLoad(ref){
-                console.log(ref);
-                console.log('Not load do some action');
             }
         }
     }
