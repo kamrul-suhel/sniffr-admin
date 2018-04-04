@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -22,6 +23,7 @@ use App\PostCategory;
 use App\Libraries\ThemeHelper;
 
 class ThemeVideoController extends Controller {
+    use VideoHelper;
 
     private $videos_per_page = 24;
     private $settings;
@@ -44,8 +46,10 @@ class ThemeVideoController extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function index($id)
+    public function index(Request $request, $id)
     {
+
+
         if(Auth::guest()){
             $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->where('alpha_id', $id)->first();
         }else{
@@ -65,9 +69,11 @@ class ThemeVideoController extends Controller {
             endif;
 
             $view_increment = $this->handleViewCount($id);
+            $iframe = $this->getVideoHtml($video, true);
 
             $data = array(
                 'video' => $video,
+                'iframe' => $iframe,
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'view_increment' => $view_increment,
                 'favorited' => $favorited,
@@ -80,9 +86,16 @@ class ThemeVideoController extends Controller {
                 );
 //            return view('Theme::video', $data);
 //            return view('Theme::video', $data);
-            return view('frontend.pages.videos.video_detail', $data);
+            if($request->ajax()){
+                return $data;
+            }else{
+                return view('frontend.pages.videos.video_detail', $data);
+            }
 
         } else {
+            if($request->ajax()){
+                return response(['note' => 'Sorry, this video is no longer active.', 'note_type' => 'error']);
+            }
             return Redirect::to('videos')->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
         }
     }

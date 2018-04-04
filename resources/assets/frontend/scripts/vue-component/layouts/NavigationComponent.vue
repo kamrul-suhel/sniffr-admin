@@ -5,7 +5,7 @@
                 <v-flex xs12 sm6 md4 lg4>
                     <div class="logo">
                         <router-link to="/">
-                            <img src="assets/frontend/images/logo-sniffr-white.png"/>
+                            <img src="/assets/frontend/images/logo-sniffr-white.png"/>
                         </router-link>
                     </div>
                 </v-flex>
@@ -161,6 +161,11 @@
             }
         },
         created(){
+            if(this.$route.name != 'home'){
+                this.nav_background = true;
+            }else{
+                this.nav_background = false;
+            }
         },
         methods: {
             onSubmit() {

@@ -141,11 +141,6 @@ class ThemeUploadController extends Controller {
             }
         }
 
-
-
-
-        
-
         //get additional form data
         $contact = Contact::where('email',Input::get('email'))->first();
         //if contact exists

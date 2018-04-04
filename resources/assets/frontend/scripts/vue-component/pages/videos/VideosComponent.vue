@@ -49,7 +49,6 @@
         beforeCreate(){
         },
         created(){
-            console.log(this.$route.query.page);
             if(this.$route.query.page){
                 this.current_page = this.$route.query.page;
             }

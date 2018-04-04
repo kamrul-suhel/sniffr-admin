@@ -11,7 +11,7 @@
                     <span class="label" :class="video.state == 'licensed' ? 'label-success': 'label-danger'">
                         {{video.state}}
                     </span>
-
+                    <img :src="video.image" @error="imageLoad"/>
                     <div class="video-duration">
                         {{video.duration | convertTime}}
                     </div>
@@ -43,7 +43,10 @@
         created(){
         },
         methods:{
-
+            imageLoad(ref){
+                console.log(ref);
+                console.log('Not load do some action');
+            }
         }
     }
 </script>
