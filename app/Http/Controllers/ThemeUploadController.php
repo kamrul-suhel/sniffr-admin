@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\VideoService;
 use Auth;
 use Redirect;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
 use App\Page;
 use App\Menu;
 use App\User;
@@ -33,7 +33,21 @@ class ThemeUploadController extends Controller
         'terms' => 'required'
     ];
 
-    public function __construct()
+    /**
+     * @var VideoService
+     */
+    private $videoService;
+
+    /**
+     * @var []
+     */
+    private $data;
+
+    /**
+     * ThemeUploadController constructor.
+     * @param \App\Services\VideoService $videoService
+     */
+    public function __construct(VideoService $videoService)
     {
         $user = Auth::user();
 
@@ -44,8 +58,8 @@ class ThemeUploadController extends Controller
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
+        $this->videoService = $videoService;
     }
-
 
     /**
      * Display a listing of videos
@@ -81,45 +95,34 @@ class ThemeUploadController extends Controller
     }
 
     /**
-     * Store a newly created video in storage.
-     *
-     * @return Response
+     * @param Request $request
+     * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //increase memory limits and upload post size
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
-        // ini_set('max_input_time', 1800);
-        // ini_set('memory_limit', '1000M');
-        // ini_set('max_input_vars', 1800);
-        // ini_set('max_input_vars', 1800);
-        // ini_set('max_allowed_packet', '1000M');
 
         $isJson = $request->ajax() || $request->isJson();
 
-        //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails())
-        {
-            $file_temp = $request->file('file');
-            if ($file_temp) {
-                $mime_temp = $file_temp->getMimeType();
+        if ($validator->fails()) {
+            if ($isJson) {
+                return response()->json([
+                    'status' => 'error, file did not pass validation check '
+                ]);
             }
 
-            if($isJson) {
-                return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
-            } else {
-                return Redirect::back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+            return Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
         }
-        //get additional form data
-        $contact = Contact::where('email',Input::get('email'))->first();
-        //if contact exists
-        if(!$contact){
+
+        //save Contact
+        $contact = Contact::where('email', Input::get('email'))->first();
+
+        if (!$contact) {
             $contact = new Contact();
             $contact->full_name = Input::get('full_name');
             $contact->email = Input::get('email');
@@ -127,74 +130,56 @@ class ThemeUploadController extends Controller
             $contact->save();
         }
 
-        //add additional form data to db (with video file info)
+        // save Video
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
-        $video->title = Input::get('title', 'Untitled '.$video->alpha_id);
-
-        //handle file upload to S3 and Youtube ingestion
-        $fileSize = $filePath = '';
-        if($request->hasFile('file')){
-            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
-            $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
-
-            $file = $request->file('file');
-            $fileMimeType = $file->getMimeType();
-            $fileSize = $file->getClientSize();
-
-            // Upload to S3
-            $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-            $filePath = Storage::disk('s3')->url($fileName);
-
-            $video->url = Input::get('url');
-            $video->file = $filePath;
-            $video->mime = $fileMimeType;
-        }else{
-            //Check link details
-            $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
-
-            $video->youtube_id = $linkDetails['youtube_id'];
-            //$video->youtube_time = $linkDetails['youtube_time'];
-            $video->image = $linkDetails['image'];
-            $video->thumb = $linkDetails['thumb'];
-            $video->embed_code = $linkDetails['embed_code'];
-            $video->url = $linkDetails['url'];
-            $video->vertical = $linkDetails['vertical'];
-
-            $filePath = $video->url;
-        }
+        $video->title = Input::get('title', 'Untitled ' . $video->alpha_id);
 
         $video->state = 'new';
         $video->rights = 'ex';
         $video->source = Input::get('source');
-        $video->ip = $request->ip(); //$_SERVER["HTTP_CF_CONNECTING_IP"]
+        $video->ip = $request->ip();
         $video->user_agent = $request->header('User-Agent');
         $video->save();
 
+        //handle file upload to S3 and Youtube ingestion
+        $fileSize = $filePath = '';
+
+        $filePath = $request->hasFile('file')
+            ? $this->videoService->saveUploadedVideoFile($video, $request->file)
+            : $this->videoService->saveVideoLink($video, Input::get('url'));
+
         // Slack notifications
-        if(env('APP_ENV') != 'local'){
+        if (env('APP_ENV') != 'local') {
             $video->notify(new SubmissionNew($video));
         }
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');
 
-        if($request->hasFile('file')){
-            // Send video to queue for watermarking
-            QueueVideo::dispatch($video->id)
-                ->delay(now()->addSeconds(5));
+        $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
+        if ($isJson) {
+            return response()->json([
+                'status' => 'success',
+                'iframe' => $iframe,
+                'href' => 'https://www.unilad.co.uk/submit/thanks',
+                'message' => 'Video Successfully Added!',
+                'files' => [
+                    'name' => Input::get('title'),
+                    'size' => $fileSize,
+                    'url' => $filePath
+                ]
+            ]);
         }
 
-        $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
-        if($isJson) {
-            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
-        } else {
-            if($iframe == 'true'){
-                return Redirect::to('https://www.unilad.co.uk');
-            }else{
-                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
-            }
+        if ($iframe == 'true') {
+            return Redirect::to('https://www.unilad.co.uk');
         }
+
+        return view('Theme::thanks', $this->data)->with([
+            'note' => 'Video Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 
     public function issueAlert(Request $request) {

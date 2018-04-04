@@ -20,6 +20,22 @@ use Illuminate\Support\Facades\Cache;
  * @property-read \App\Comment|null $comments
  * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
+ * @property string alpha_id
+ * @property int contact_id
+ * @property string title
+ * @property string state
+ * @property string rights
+ * @property string source
+ * @property string ip
+ * @property string user_agent
+ * @property string url
+ * @property string file
+ * @property null|string mime
+ * @property string youtube_id
+ * @property string image
+ * @property string thumb
+ * @property string embed_code
+ * @property int vertical
  * @mixin \Eloquent
  */
 class Video extends Model
