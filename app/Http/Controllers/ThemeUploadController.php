@@ -97,14 +97,17 @@ class ThemeUploadController extends Controller
         // ini_set('max_input_vars', 1800);
         // ini_set('max_allowed_packet', '1000M');
 
-        $isJson = $request->ajax();
+        $isJson = $request->ajax() || $request->isJson();
 
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
         if ($validator->fails())
         {
             $file_temp = $request->file('file');
-            $mime_temp = $file_temp->getMimeType();
+            if ($file_temp) {
+                $mime_temp = $file_temp->getMimeType();
+            }
+
             if($isJson) {
                 return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
             } else {
@@ -113,7 +116,6 @@ class ThemeUploadController extends Controller
                     ->withInput();
             }
         }
-
         //get additional form data
         $contact = Contact::where('email',Input::get('email'))->first();
         //if contact exists
@@ -174,7 +176,6 @@ class ThemeUploadController extends Controller
         if(env('APP_ENV') != 'local'){
             $video->notify(new SubmissionNew($video));
         }
-
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');
 
@@ -185,7 +186,6 @@ class ThemeUploadController extends Controller
         }
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
-
         if($isJson) {
             return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
         } else {
