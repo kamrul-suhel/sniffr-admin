@@ -16,10 +16,10 @@ class CreatePaymentSettingsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->boolean('live_mode')->default(0);
-			$table->string('test_secret_key', 100)->default('\'\'');
-			$table->string('test_publishable_key', 100)->default('\'\'');
-			$table->string('live_secret_key', 100)->default('\'\'');
-			$table->string('live_publishable_key', 100)->default('\'\'');
+			$table->string('test_secret_key', 100)->nullable();
+			$table->string('test_publishable_key', 100)->nullable();
+			$table->string('live_secret_key', 100)->nullable();
+			$table->string('live_publishable_key', 100)->nullable();
 		});
 	}
 

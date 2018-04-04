@@ -16,8 +16,8 @@ class CreatePagesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('user_id')->default(0);
-			$table->string('title')->default('\'\'');
-			$table->string('slug')->default('\'\'');
+			$table->string('title')->nullable();
+			$table->string('slug')->nullable();
 			$table->text('body', 65535);
 			$table->boolean('active')->default(1);
 			$table->timestamps();

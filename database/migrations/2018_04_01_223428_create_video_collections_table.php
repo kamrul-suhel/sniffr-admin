@@ -18,7 +18,7 @@ class CreateVideoCollectionsTable extends Migration {
 			$table->integer('parent_id')->nullable();
 			$table->integer('order')->default(1);
 			$table->string('name');
-			$table->string('slug')->default('\'\'');
+			$table->string('slug')->nullable();
 			$table->timestamps();
 		});
 	}

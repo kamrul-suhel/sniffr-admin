@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration {
 			$table->boolean('active')->default(1);
 			$table->timestamps();
 			$table->string('activation_code')->nullable();
-			$table->string('remember_token')->default('');
+			$table->string('remember_token')->nullable();
 			$table->boolean('stripe_active')->default(0);
 			$table->string('stripe_id')->nullable();
 			$table->string('stripe_subscription')->nullable();

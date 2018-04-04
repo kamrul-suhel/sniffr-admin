@@ -15,7 +15,7 @@ class CreateThemeSettingsTable extends Migration {
 		Schema::create('theme_settings', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('theme_slug')->default('\'\'');
+			$table->string('theme_slug')->nullable();
 			$table->string('key');
 			$table->text('value', 65535);
 			$table->timestamps();
