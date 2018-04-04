@@ -23,16 +23,28 @@ class VideoUploadTest extends TestCase
         $faker = \Faker\Factory::create();
         $email = $faker->email;
         $name = $faker->name();
+        $title = $faker->title();
 
-        $this->json('POST', '/upload', [
+        $response = $this->json('POST', '/upload', [
             'email' => $email,
             'full_name' => $name,
+            'title' => $title,
             'file' => $file,
             'terms' => '1'
         ]);
 
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'status' => 'success'
+        ]);
+
         $this->assertDatabaseHas('contacts', [
             'email' => $email,
+        ]);
+
+        $this->assertDatabaseHas('videos', [
+            'title' => $title,
         ]);
     }
 }
