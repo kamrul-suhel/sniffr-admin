@@ -33,14 +33,21 @@ class CommentController extends Controller
      */
     public function destroy(DeleteComment $request, $id)
     {
-        $comment = Comment::where('id', $id)->first();
+        $note = 'Not Authorized to delete this comment!';
+        $note_type = 'error';
 
-        if($comment) {
+        $comment = Comment::find($id);
+
+        if(($comment) && ($request->authorize())) {
             $comment->delete();
+
+            $note = 'Comment Deleted';
+            $note_type = 'success';
         }
 
-        return redirect()->route('admin.video.edit', [
-            'id' => $request->get('alpha_id')
+        return redirect()->route('admin.video.edit', ['id' => $request->get('alpha_id')])->with([
+            'note' => $note,
+            'note_type' => $note_type
         ]);
     }
 }
