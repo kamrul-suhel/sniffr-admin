@@ -180,6 +180,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         MichaelJWright\Rekognition\RekognitionServiceProvider::class,
         \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
+        ComoCode\LaravelAb\LaravelAbServiceProvider::class,
 
         /*
          * Application Service Providers...
