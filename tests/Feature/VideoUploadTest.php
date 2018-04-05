@@ -24,8 +24,8 @@ class VideoUploadTest extends TestCase
         $file = new UploadedFile($path, $file_name, filesize($path), $mimeType, null, true);
 
         $faker = \Faker\Factory::create();
-        $email = $faker->email;
-        $name = $faker->name();
+        $email = 'frank@unilad.co.uk';
+        $name = 'Daniela Pérez';
         $title = $faker->sentence;
 
         $response = $this->json('POST', '/upload', [
@@ -53,21 +53,22 @@ class VideoUploadTest extends TestCase
     }
 
     /**
+     * Fails validation because file is an image
      * @group uploadVideo
      */
     public function test_user_fails_to_upload_a_video()
     {
-        $mimeType = 'video/x-m4v';
-        $stub = __DIR__ . '/../fixtures/sample.m4v';
-        $file_name = str_random(8) . '.m4v';
+        $mimeType = 'image/jpg';
+        $stub = __DIR__ . '/../fixtures/sample.png';
+        $file_name = str_random(8) . '.jpg';
         $path = sys_get_temp_dir() . '/' . $file_name;
         copy($stub, $path);
 
         $file = new UploadedFile($path, $file_name, filesize($path), $mimeType, null, true);
 
         $faker = \Faker\Factory::create();
-        $email = $faker->email;
-        $name = $faker->name();
+        $email = 'frank@unilad.co.uk';
+        $name = 'Daniela Pérez';
         $title = $faker->sentence;
 
         $response = $this->json('POST', '/upload', [
@@ -81,16 +82,15 @@ class VideoUploadTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson([
-            'status' => 'success'
+            'status' => 'error, file did not pass validation check'
         ]);
 
-        $this->assertDatabaseHas('contacts', [
+        $this->assertDatabaseMissing('contacts', [
             'email' => $email,
         ]);
 
-        $this->assertDatabaseHas('videos', [
+        $this->assertDatabaseMissing('videos', [
             'title' => $title,
-            'mime' => $mimeType,
         ]);
     }
 
@@ -100,8 +100,8 @@ class VideoUploadTest extends TestCase
     public function test_user_can_send_a_video_url()
     {
         $faker = \Faker\Factory::create();
-        $email = $faker->email;
-        $name = $faker->name();
+        $email = 'frank@unilad.co.uk';
+        $name = 'Daniela Pérez';
         $title = $faker->sentence;
         $url = $faker->url;
 
@@ -135,8 +135,8 @@ class VideoUploadTest extends TestCase
     public function test_user_fails_to_send_video_url()
     {
         $faker = \Faker\Factory::create();
-        $email = $faker->email;
-        $name = $faker->name();
+        $email = 'frank@unilad.co.uk';
+        $name = 'Daniela Pérez';
         $title = $faker->sentence;
         $url = 'bad link';
 
