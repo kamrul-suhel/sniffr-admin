@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Cache;
  * @property string thumb
  * @property string embed_code
  * @property int vertical
+ * @property string description
  * @mixin \Eloquent
  */
 class Video extends Model

@@ -128,10 +128,10 @@ class AdminVideosController extends Controller {
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param $state
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function status(Request $request, $state, $id)
     {
@@ -222,7 +222,7 @@ class AdminVideosController extends Controller {
                 $fileName_watermark = basename($video->file_watermark);
             }
 
-            // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
+            // Analysis (copies file over to another folder for analysis and suggested tag creation)
             $disk = Storage::disk('s3_sourcebucket');
             if($disk->has($fileName)==1){
                 if($disk->exists(basename($fileName))) {
@@ -249,24 +249,32 @@ class AdminVideosController extends Controller {
                 $youtubeId  = $response->getVideoId();
 
                 $video->youtube_id = $youtubeId;
-
             }
-
             $video->save();
         }
 
-        if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id, 'video_alpha_id' => $video->alpha_id, 'previous_state' => $previous_state]);
-        } else {
-            return Redirect::to('admin/videos/edit/'.$id.'/?previous_state='.$previous_state)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
+        if ($isJson) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Successfully ' . ucfirst($state) . ' Video',
+                'state' => $state,
+                'remove' => 'yes',
+                'video_id' => $video->id,
+                'video_alpha_id' => $video->alpha_id,
+                'previous_state' => $previous_state
+            ]);
         }
+
+        return Redirect::to('admin/videos/edit/' . $id . '/?previous_state=' . $previous_state)
+            ->with([
+                'note' => 'Successfully Updated Video',
+                'note_type' => 'success'
+            ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function remind($id)
     {
@@ -304,9 +312,8 @@ class AdminVideosController extends Controller {
     }
 
     /**
-     * Store a newly created video in storage.
-     *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -379,32 +386,16 @@ class AdminVideosController extends Controller {
                 ->delay(now()->addSeconds(15));
         }
 
-        //add to campaign (need to get this working)
-        // $campaign = new Campaign();
-        // $campaign->Input::get('campaigns');
-        // $campaign->save();
-
         //adds tags
         $tags = trim(Input::get('tags'));
         if($tags) {
             $this->addUpdateVideoTags($video, $tags);
         }
 
-        // $image = (isset($data['image'])) ? $data['image'] : '';
-        // if(!empty($image)){
-        //     $fileName = time().'.'.$request->file->getClientOriginalExtension();
-        //     $file = $request->file('file');
-        //     $fileMimeType = $file->getMimeType();
-        //     $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-        //     $data['image'] = Storage::disk('s3')->url($fileName);
-        //
-        //     //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
-        // } else {
-        //     $data['image'] = 'placeholder.gif';
-        // }
-        //$video = Video::create($data);
-
-        return Redirect::to('admin/videos')->with(array('note' => 'New Video Successfully Added!', 'note_type' => 'success') );
+        return Redirect::to('admin/videos')->with([
+            'note' => 'New Video Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**

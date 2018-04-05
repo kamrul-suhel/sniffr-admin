@@ -18,7 +18,6 @@ use App\VideoCategory;
 use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
-use App\Jobs\QueueVideo;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
 
