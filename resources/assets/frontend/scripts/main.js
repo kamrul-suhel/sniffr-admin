@@ -11,6 +11,7 @@ Vue.use(Vuerouter);
 // Http ajax package
 window.axios = require('axios');
 
+// Setup axio default headers
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
@@ -20,8 +21,9 @@ require('./vue-component/submission-form');
 require('./vue-component/login-component');
 require('./vue-component/detail-form');
 
-import NavigationComponent from './vue-component/layouts/NavigationComponent.vue';
 
+import NavigationComponent from './vue-component/layouts/NavigationComponent.vue';
+import FooterComonent from './vue-component/layouts/FooterComponent.vue';
 
 import { routes } from './routes';
 
@@ -42,7 +44,8 @@ new Vue({
     el:'#sniffr',
     store: store,
     components: {
-        navigationComponent: NavigationComponent
+        navigationComponent: NavigationComponent,
+        footerComponent: FooterComonent
     },
     router,
     data() {

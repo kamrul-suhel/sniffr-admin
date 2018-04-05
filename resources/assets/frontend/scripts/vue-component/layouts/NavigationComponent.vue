@@ -111,7 +111,7 @@
 
                             <v-layout row justify-center>
                                 <v-flex xs12 text-xs-center>
-                                    <a href="password.remind" class="forgot-password">Forgot password</a>
+                                    <a @click.prevent="forgotpassword()" class="forgot-password">Forgot password</a>
                                 </v-flex>
                             </v-layout>
 
@@ -168,6 +168,12 @@
             }
         },
         methods: {
+
+            forgotpassword() {
+                this.login_dialog = false;
+                this.$router.push({name: 'reset_password'});
+            },
+
             onSubmit() {
                 console.log("Process");
                 if(this.$refs.login_form.validate()){

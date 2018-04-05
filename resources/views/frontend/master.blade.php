@@ -20,7 +20,7 @@
         <v-app>
             <navigation-component></navigation-component>
             <router-view></router-view>
-            @include('frontend.layout.footer')
+            <footer-component></footer-component>
         </v-app>
     </section>
 

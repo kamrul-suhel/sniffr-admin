@@ -152,6 +152,10 @@
     position:relative;
     overflow:hidden;
   }
+
+  .card__media__background{
+    background: url("/assets/img/default.jpg") center center / cover no-repeat;
+  }
   .card__text{
     height:80px;
   }

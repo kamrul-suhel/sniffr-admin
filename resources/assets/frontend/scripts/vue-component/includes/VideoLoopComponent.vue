@@ -1,17 +1,18 @@
 <template>
     <v-flex xs12 sm6 md4 lg4 xl4>
         <v-card class="block">
-            <v-card-media :src="video.image" height="200px">
+            <v-card-media height="200px"
+                :src="video.image">
                 <router-link 
                 :to="{name:'videos_detail', params:{id: video.alpha_id}}"
                 class="block-thumbnail"  
-                :style="{'background-image': video.image}">
+                >
                     <div class="thumbnail-overlay"></div>
                     <span class="play-button"><i class="far fa-play-circle fa-4x"></i></span>
                     <span class="label" :class="video.state == 'licensed' ? 'label-success': 'label-danger'">
                         {{video.state}}
                     </span>
-                    <img :src="video.image" @error="imageLoad"/>
+
                     <div class="video-duration">
                         {{video.duration | convertTime}}
                     </div>
@@ -36,14 +37,38 @@
     export default {
         data() {
             return {
-
+                video_image: ''
             }
         },
         props:['video'],
         created(){
         },
         methods:{
-            imageLoad(ref){
+            defaultImage(){
+                this.video_image = '/assets/img/default.jpg';
+            }
+        },
+        directives: {
+            checkimage: {
+                inserted: function (el, binding) {
+                    console.log(el);
+                    let img_src = binding.value;
+                    let image = new Image();
+                    image.src = img_src;
+                    image.onload = function(){
+                        let img_tag = document.createElement('img');
+                        img_tag.src = img_src;
+                        el.appendChild(img_tag);
+                    }
+
+                    image.onerror = function(){
+                        let default_img = '/assets/img/default.jpg';
+
+                        let img_tag = document.createElement('img');
+                        img_tag.src = default_img;
+                        el.appendChild(img_tag);
+                    }
+                }
             }
         }
     }
