@@ -24,6 +24,9 @@ use App\Notifications\SubmissionAlert;
 
 class ThemeUploadController extends Controller
 {
+    const HOME_URL = 'https://www.unilad.co.uk';
+    const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
+
     protected $rules = [
         'alpha_id' => 'unique',
         'full_name' => 'required',
@@ -135,7 +138,6 @@ class ThemeUploadController extends Controller
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title', 'Untitled ' . $video->alpha_id);
-
         $video->state = 'new';
         $video->rights = 'ex';
         $video->source = Input::get('source');
@@ -143,26 +145,27 @@ class ThemeUploadController extends Controller
         $video->user_agent = $request->header('User-Agent');
         $video->save();
 
-        //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';
 
+        //handle file upload to S3 and Youtube ingestion
         $filePath = $request->hasFile('file')
             ? $this->videoService->saveUploadedVideoFile($video, $request->file)
             : $this->videoService->saveVideoLink($video, Input::get('url'));
 
-        // Slack notifications
+        // Slack notification
         if (env('APP_ENV') != 'local') {
             $video->notify(new SubmissionNew($video));
         }
-        // Send thanks notification email (via queue after 2mins)
+
+        // thanks notification email
         QueueEmail::dispatch($video->id, 'submission_thanks');
 
-        $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
+        $iFrame = Input::get('iframe', 'false');
         if ($isJson) {
             return response()->json([
                 'status' => 'success',
-                'iframe' => $iframe,
-                'href' => 'https://www.unilad.co.uk/submit/thanks',
+                'iframe' => $iFrame,
+                'href' => self::THANKS_URL,
                 'message' => 'Video Successfully Added!',
                 'files' => [
                     'name' => Input::get('title'),
@@ -172,8 +175,8 @@ class ThemeUploadController extends Controller
             ]);
         }
 
-        if ($iframe == 'true') {
-            return Redirect::to('https://www.unilad.co.uk');
+        if ($iFrame == 'true') {
+            return Redirect::to(self::HOME_URL);
         }
 
         return view('Theme::thanks', $this->data)->with([
@@ -200,9 +203,10 @@ class ThemeUploadController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 
-    public function videoCheck(Request $request) {
+    public function videoCheck(Request $request)
+    {
         $postHeader = $request->header('x-amz-sns-message-type');
-        if($postHeader) {
+        if ($postHeader) {
             $postBody = $request->file();
             $postBody = array_values($postBody)[0];
             $postFile = file_get_contents($postBody->getRealPath());
@@ -211,15 +215,9 @@ class ThemeUploadController extends Controller
             $postFile = str_replace(')', '}', $postFile);
             $postFile = json_decode($postFile);
 
-            // echo $postFile->jobId.'<br />';
-            // echo $postFile->input->key.'<br />';
-            // echo $postFile->outputs->key.'<br />';
-            // echo $postFile->outputs->duration.'<br />';
-
-            $youtube_ingest = false;
-            if($postFile->jobId){
+            if ($postFile->jobId) {
                 $user = new User();
-                $user->notify(new SubmissionAlert('watermark test '.$postHeader.' (jobId: '.$postFile->jobId.', input: '.$postFile->input->key.', output: '.$postFile->outputs->key.')'));
+                $user->notify(new SubmissionAlert('watermark test ' . $postHeader . ' (jobId: ' . $postFile->jobId . ', input: ' . $postFile->input->key . ', output: ' . $postFile->outputs->key . ')'));
             }
         }
 

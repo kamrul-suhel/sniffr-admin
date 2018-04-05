@@ -19,7 +19,6 @@ class VideoService
         $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', pathinfo($uploadedVideoFile->getClientOriginalName(), PATHINFO_FILENAME)));
         $fileName = time() . '-' . $fileOriginalName . '.' . $uploadedVideoFile->getClientOriginalExtension();
         $fileMimeType = $uploadedVideoFile->getMimeType();
-        $fileSize = $uploadedVideoFile->getClientSize();
 
         // Upload to S3
         \Storage::disk('s3')->put($fileName, file_get_contents($uploadedVideoFile), 'public');
