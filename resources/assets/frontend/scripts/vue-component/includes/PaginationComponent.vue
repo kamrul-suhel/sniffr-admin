@@ -44,6 +44,12 @@
                     let page =  this.current_page;
                     this.$router.push({name: 'videos_search', query:{value: value, page: page}});
                 }
+
+                if(this.page === 'tagsearch'){
+                    let value = this.$route.params.value;
+                    let page =  this.current_page;
+                    this.$router.push({name: 'videos_tag', params:{value: value}, query:{ page: page}});
+                }
             }
         },
 

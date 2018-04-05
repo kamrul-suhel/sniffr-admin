@@ -35,7 +35,6 @@ const actions = {
                 url = url +'&page='+payload.page;
             }
 
-
             axios.get(url)
                 .then((response) => {
                     let data = response.data;

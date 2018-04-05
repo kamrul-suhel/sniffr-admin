@@ -134,7 +134,7 @@ class ThemeVideoController extends Controller {
     }
 
 
-    public function tag($tag)
+    public function tag(Request $request, $tag)
     {
         $page = Input::get('page');
         if( !empty($page) ){
@@ -173,8 +173,11 @@ class ThemeVideoController extends Controller {
             'pages' => Page::where('active', '=', 1)->get(),
             );
 
-        return view('frontend.pages.videos.video_tag', $data);
-        // return view('Theme::video-list', $data);
+        if($request->ajax()){
+            return response($data);
+        }else{
+            return view('frontend.pages.videos.video_tag', $data);
+        }
     }
 
     public function category($category)

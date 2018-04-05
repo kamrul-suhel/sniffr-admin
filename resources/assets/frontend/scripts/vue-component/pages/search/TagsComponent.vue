@@ -3,7 +3,7 @@
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
-                    <h1 class="heading">{{ search_title }}</h1>
+                    <h1 class="heading">{{ tag_title }}</h1>
                 </div>
             </div>
 
@@ -26,7 +26,7 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'search'" v-if="videos.length > 0"></pagination-component>
+        <pagination-component :pagination="paginate" :page="'tagsearch'" v-if="videos.length > 0"></pagination-component>
     </div>
 </template>
 <script>
@@ -40,27 +40,24 @@
             videoloopComponent: VideoLoopComponent,
             paginationComponent: PaginationComponent
         },
-
         data(){
             return {
-                data: '',
+                tag_title: '',
                 videos: '',
                 paginate: '',
-                current_page: 1,
-                search_title: '',
+                current_page: 0,
             }
         },
-
         watch: {
             '$route'(to, from , next){
-                this.search_title = to.query.value;
+                this.tag_title = to.params.value;
                 this.current_page = to.query.page;
                 this.updateSearch();
             }
         },
 
         created(){
-            this.search_title = this.$route.query.value;
+            this.tag_title = this.$route.params.value;
             this.current_page = this.$route.query.page ? this.$route.query.page : this.current_page;
             this.updateSearch();
         },
@@ -69,11 +66,11 @@
             updateSearch(){
                 let data = {
                     page : this.current_page,
-                    value: this.search_title
+                    value: this.tag_title
                 };
-                this.$store.dispatch('getSearchVideoData', data).then(() => {
-                    this.videos = this.$store.getters.getSearchData;
-                    this.paginate = this.$store.getters.getSearchPaginateObject;
+                this.$store.dispatch('getTagSearchVideoData', data).then(() => {
+                    this.videos = this.$store.getters.getTagSearchData;
+                    this.paginate = this.$store.getters.getTagSearchPaginateObject;
                 });
             }
         }

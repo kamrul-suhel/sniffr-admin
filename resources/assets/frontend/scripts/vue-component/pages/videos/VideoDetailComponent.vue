@@ -85,9 +85,9 @@
                 </v-layout>
             </v-container>
         </div>
-
     </section>
 </template>
+
 <script>
     export default {
         data(){
@@ -101,28 +101,42 @@
             }
         },
         watch:{
-            '$route'() {
+            '$route'(to, from, next) {
 
             }
         },
         created(){
+
+        },
+        mounted() {
+
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
+
                 if(this.video_detail.video.tags.length > 0){
                     this.tags.push(...this.video_detail.video.tags);
                 }
-                console.log(this.video_detail);
-                // Load script
-                let recaptchaScript = document.createElement('script');
-                recaptchaScript.setAttribute('src', 'https://www.instagram.com/static/bundles/base/EmbedSDK.js/e46f41123c91.js');
-                document.head.appendChild(recaptchaScript)
-
+                this.reloadJs('//platform.instagram.com/en_US/embeds.js');
             });
 
         },
         methods: {
+            reloadJs(src) {
+                var s = document.createElement("script");
+                s.type = "text/javascript";
+                s.src = src;
+                s.async = true;
 
+                $('body').append(s);
+                setTimeout(function(){
+                    if ( typeof window.instgrm !== 'undefined' ) {
+                        window.instgrm.Embeds.process();
+                    }
+                }, 30);
+            }
+        },
+        destroyed(){
         }
     }
 </script>
