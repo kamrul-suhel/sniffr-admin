@@ -113,7 +113,7 @@ class ThemeUploadController extends Controller
         if ($validator->fails()) {
             if ($isJson) {
                 return response()->json([
-                    'status' => 'error, file did not pass validation check '
+                    'status' => 'error, file did not pass validation check'
                 ]);
             }
 
@@ -185,24 +185,36 @@ class ThemeUploadController extends Controller
         ]);
     }
 
-    public function issueAlert(Request $request) {
-        $alert = 'File: '.Input::get('file').',
-        Line: '.Input::get('line').',
-        Message: '.Input::get('message').',
-        Exception: '.Input::get('exception').',
-        Title: '.Input::get('user_title').',
-        Email: '.Input::get('user_email').',
-        File: '.Input::get('user_file').',
-        Url: '.Input::get('user_url').',
-        UserAgent: '.$_SERVER['HTTP_USER_AGENT'].'';
-        //$all = Input::all();
-        // Slack notifications
+    /**
+    /**
+     * TODO: Finish it or delete it
+     *
+     * @codeCoverageIgnore
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function issueAlert(Request $request)
+    {
+        $alert = 'File: ' . Input::get('file') . ',
+        Line: ' . Input::get('line') . ',
+        Message: ' . Input::get('message') . ',
+        Exception: ' . Input::get('exception') . ',
+        Title: ' . Input::get('user_title') . ',
+        Email: ' . Input::get('user_email') . ',
+        File: ' . Input::get('user_file') . ',
+        Url: ' . Input::get('user_url') . ',
+        UserAgent: ' . $_SERVER['HTTP_USER_AGENT'] . '';
         $user = new User();
         $user->notify(new SubmissionAlert($alert));
-        //return success
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 
+    /**
+     * TODO: Finish it or delete it
+     *
+     * @codeCoverageIgnore
+     * @param Request $request
+     */
     public function videoCheck(Request $request)
     {
         $postHeader = $request->header('x-amz-sns-message-type');
@@ -215,10 +227,17 @@ class ThemeUploadController extends Controller
             $postFile = str_replace(')', '}', $postFile);
             $postFile = json_decode($postFile);
 
-            if ($postFile->jobId) {
-                $user = new User();
-                $user->notify(new SubmissionAlert('watermark test ' . $postHeader . ' (jobId: ' . $postFile->jobId . ', input: ' . $postFile->input->key . ', output: ' . $postFile->outputs->key . ')'));
+            if (!$postFile->jobId) {
+                abort('404');
             }
+
+            $user = new User();
+            $user->notify(new SubmissionAlert(
+                'watermark test ' . $postHeader .
+                ' (jobId: ' . $postFile->jobId .
+                ', input: ' . $postFile->input->key .
+                ', output: ' . $postFile->outputs->key . ')'
+            ));
         }
 
         response()->json(['jobId' => $postFile->jobId, 'input' => $postFile->input->key, 'output' => $postFile->outputs->key, 'duration' => $postFile->outputs->duration]);
