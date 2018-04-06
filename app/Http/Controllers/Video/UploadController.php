@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Video;
 
+use App\Http\Controllers\Controller;
 use App\Services\VideoService;
 use Auth;
 use Redirect;
@@ -21,7 +22,7 @@ use App\Jobs\QueueEmail;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
 
-class ThemeUploadController extends Controller
+class UploadController extends Controller
 {
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
@@ -46,7 +47,7 @@ class ThemeUploadController extends Controller
     private $data;
 
     /**
-     * ThemeUploadController constructor.
+     * UploadController constructor.
      * @param \App\Services\VideoService $videoService
      */
     public function __construct(VideoService $videoService)

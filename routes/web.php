@@ -33,11 +33,12 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Upload Routes
     |--------------------------------------------------------------------------
     */
-    Route::post('upload', 'ThemeUploadController@store');
-    Route::get('upload', 'ThemeUploadController@index');
-    Route::get('upload/form', 'ThemeUploadController@form');
-    Route::post('issue', 'ThemeUploadController@issueAlert');
-    Route::post('videocheck', 'ThemeUploadController@videoCheck');
+    Route::post('upload', 'UploadController@store');
+    Route::get('upload', 'UploadController@index');
+    Route::get('upload/form', 'UploadController@form');
+    Route::post('issue', 'UploadController@issueAlert');
+    Route::post('videocheck', 'UploadController@videoCheck');
+    Route::get('thanks', 'UploadController@thanks');
 
     /*
     |--------------------------------------------------------------------------
@@ -47,13 +48,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::post('submission', 'ThemeSubmissionController@store');
     Route::get('submission', 'ThemeSubmissionController@index');
     Route::get('submission/form', 'ThemeSubmissionController@form');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Thanks Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('thanks', 'ThemeUploadController@thanks');
 
     /*
     |--------------------------------------------------------------------------

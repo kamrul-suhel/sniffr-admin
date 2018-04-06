@@ -47,7 +47,8 @@ use App\Http\Controllers\Controller;
 
 class AdminVideosController extends Controller {
 
-    protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
+    // TODO WE SHOULD PROBABLY ADD RULES TO THIS
+    protected $rules = [];
 
     /**
      * constructor.
