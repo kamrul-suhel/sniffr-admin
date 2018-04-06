@@ -437,10 +437,8 @@ class AdminVideosController extends Controller {
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
     {
@@ -457,7 +455,10 @@ class AdminVideosController extends Controller {
 
         $tags = $data['tags'];
         unset($data['tags']);
-        $this->addUpdateVideoTags($video, $tags);
+
+        if($tags) {
+            $this->addUpdateVideoTags($video, $tags);
+        }
 
         // Youtube integration
         if($video->youtube_id && $video->file && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
@@ -769,9 +770,9 @@ class AdminVideosController extends Controller {
 
     /**
      * @param Video $video
-     * @param $tags []
+     * @param string $tags
      */
-    private function addUpdateVideoTags(Video $video, array $tags)
+    private function addUpdateVideoTags(Video $video, string $tags)
     {
         $tags = array_map('trim', explode(',', $tags));
 
@@ -797,7 +798,7 @@ class AdminVideosController extends Controller {
      */
     private function addTag(string $tag_string)
     {
-        $tag = Tag::firstOrCreate(['name', '=', $tag_string]);
+        $tag = Tag::firstOrCreate(['name' => $tag_string]);
         return $tag->id;
     }
 
