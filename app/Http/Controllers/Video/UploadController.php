@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Video;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
-use Auth;
-use Redirect;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
@@ -26,15 +26,6 @@ class UploadController extends Controller
 {
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
-
-    protected $rules = [
-        'alpha_id' => 'unique',
-        'full_name' => 'required',
-        'email' => 'required|email',
-        'title' => 'required',
-        'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
-        'terms' => 'required'
-    ];
 
     /**
      * @var VideoService
@@ -98,29 +89,17 @@ class UploadController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param CreateVideoRequest $request
      * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CreateVideoRequest $request)
     {
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
+        // TODO remove when frontend 3 is completed?
         $isJson = $request->ajax() || $request->isJson();
-
-        $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails()) {
-            if ($isJson) {
-                return response()->json([
-                    'status' => 'error, file did not pass validation check'
-                ]);
-            }
-
-            return Redirect::back()
-                ->withErrors($validator)
-                ->withInput();
-        }
 
         //save Contact
         $contact = Contact::where('email', Input::get('email'))->first();
@@ -160,6 +139,7 @@ class UploadController extends Controller
         // thanks notification email
         QueueEmail::dispatch($video->id, 'submission_thanks');
 
+        //TODO remove when frontend 3 is completed?
         $iFrame = Input::get('iframe', 'false');
         if ($isJson) {
             return response()->json([
@@ -179,6 +159,7 @@ class UploadController extends Controller
             return Redirect::to(self::HOME_URL);
         }
 
+        //TODO remove when frontend 3 is completed
         return view('Theme::thanks', $this->data)->with([
             'note' => 'Video Successfully Added!',
             'note_type' => 'success'

@@ -33,12 +33,12 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Upload Routes
     |--------------------------------------------------------------------------
     */
-    Route::post('upload', 'UploadController@store');
-    Route::get('upload', 'UploadController@index');
-    Route::get('upload/form', 'UploadController@form');
-    Route::post('issue', 'UploadController@issueAlert');
-    Route::post('videocheck', 'UploadController@videoCheck');
-    Route::get('thanks', 'UploadController@thanks');
+    Route::post('upload', 'Video\UploadController@store');
+    Route::get('upload', 'Video\UploadController@index');
+    Route::get('upload/form', 'Video\UploadController@form');
+    Route::post('issue', 'Video\UploadController@issueAlert');
+    Route::post('videocheck', 'Video\UploadController@videoCheck');
+    Route::get('thanks', 'Video\UploadController@thanks');
 
     /*
     |--------------------------------------------------------------------------
