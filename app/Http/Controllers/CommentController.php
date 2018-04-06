@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
-use App\Http\Requests\CreateComment;
-use App\Http\Requests\DeleteComment;
+use App\Http\Requests\Comment\CreateComment;
+use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -30,6 +30,7 @@ class CommentController extends Controller
      * @param DeleteComment $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy(DeleteComment $request, $id)
     {

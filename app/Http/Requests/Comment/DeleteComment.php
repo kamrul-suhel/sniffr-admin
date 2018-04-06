@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Comment;
 
 use App\Comment;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,11 +17,11 @@ class DeleteComment extends FormRequest
     {
         $comment = Comment::find($this->comment);
 
-        if (Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id)){
+        if (Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id)) {
             return true;
         }
 
-        abort(401, 'Not Authorized to delete this comment');
+        return false;
     }
 
     /**
@@ -39,5 +39,10 @@ class DeleteComment extends FormRequest
         return [
             'alpha_id.required' => 'Id is required',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        return false;
     }
 }
