@@ -30,19 +30,6 @@
                                     <i class="fas fa-lock-alt"></i> Login
                                 </a>
                             </li>
-
-                            <!--<li>-->
-                                <!--<v-menu open-on-hover offset-y>-->
-                                    <!--<v-btn color="white" outline slot="activator">-->
-                                        <!--<v-icon left>keyboard_arrow_down</v-icon>{{Auth::user()->username}}-->
-                                    <!--</v-btn>-->
-                                    <!--<v-list>-->
-                                        <!--<v-list-tile-title><a href="<?= url('user') ?><?= '/' . Auth::user()->username; ?>">My Profile</a></v-list-tile-title>-->
-                                        <!--<v-list-tile-title><a href="<?= url('client/dashboard') ?>">Dailies</a></v-list-tile-title>-->
-                                        <!--<v-list-title-title><a href="<?= url('logout') ?>" id="user-logout-mobile"><i class="fa fa-power-off"></i> Logout</a></v-list-title-title>-->
-                                    <!--</v-list>-->
-                                <!--</v-menu>-->
-                            <!--</li>-->
                         </ul>
                     </nav>
                 </v-flex>
@@ -50,7 +37,7 @@
         </v-container>
 
         <!-- Login form -->
-        <section class="login-dialog">
+        <div class="login-dialog">
             <v-dialog v-model="login_dialog" max-width="500px" class="login-section">
                 <v-card>
                     <v-card-text class="login-section">
@@ -111,7 +98,7 @@
 
                             <v-layout row justify-center>
                                 <v-flex xs12 text-xs-center>
-                                    <a @click.prevent="forgotpassword()" class="forgot-password">Forgot password</a>
+                                    <a @click.stop="password_reset_dialog = !password_reset_dialog" class="forgot-password">Forgot password</a>
                                 </v-flex>
                             </v-layout>
 
@@ -119,8 +106,62 @@
                     </v-card-text>
                 </v-card>
             </v-dialog>
-        </section>
 
+
+            <!-- Password reset dialog box -->
+            <v-dialog v-model="password_reset_dialog" max-width="500px">
+                <v-card>
+                    <v-card-text class="login-section">
+                        <v-form v-model="valid" ref="forgot_password_form" @submit.prevent="onForgotPassword()">
+                            <v-container grid-list-xs>
+                                <v-layout row wrap id="login-section">
+
+                                    <v-flex xs12>
+                                        <h2 class="login-title">FORGOT PASSWORD</h2>
+                                    </v-flex>
+
+                                    <v-flex xs12>
+                                        <v-text-field
+                                                color="dark"
+                                                label="Email:"
+                                                v-model="user.email"
+                                                :rules="emailRules"
+                                                required
+                                                :error="validation.error"
+                                                autofucus
+                                        >
+                                        </v-text-field>
+                                    </v-flex>
+
+                                    <v-flex xs12 v-if="active_password_reset">
+                                        <p :class="{'red--text': password_reset_error, 'green--text': password_reset_success}">{{ password_reset_text }}</p>
+                                    </v-flex>
+
+                                </v-layout>
+
+                                <v-layout row wrap>
+                                    <v-flex xs12 class="text-xs-center">
+                                        <v-btn
+                                                raised
+                                                dark
+                                                @click="onForgotPassword()"
+                                                :loading="loading"
+                                                :disabled="loading"
+                                        >
+                                            SEND EMAIL
+                                        </v-btn>
+                                    </v-flex>
+
+                                    <v-flex xs12 class="text-xs-center">
+                                        <v-btn color="dark" flat @click.stop="password_reset_dialog=false">Close</v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-dialog><!-- End password reset -->
+        </div>
     </section>
 </template>
 <script>
@@ -147,9 +188,22 @@
                 validation:{
                     error: false,
                     message:''
-                }
+                },
+
+                //Loading button
+                loading: false,
+                loader: null,
+
+                //Password reset section
+                password_reset_dialog: false,
+                active_password_reset: false,
+                password_reset_error: false,
+                password_reset_success: false,
+                password_reset_text:''
+
             }
         },
+
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
@@ -160,6 +214,7 @@
                 }
             }
         },
+
         created(){
             if(this.$route.name != 'home'){
                 this.nav_background = true;
@@ -167,15 +222,63 @@
                 this.nav_background = false;
             }
         },
-        methods: {
 
-            forgotpassword() {
-                this.login_dialog = false;
-                this.$router.push({name: 'reset_password'});
+        methods: {
+            onForgotPassword() {
+                if(this.$refs.forgot_password_form.validate()){
+                    this.loading = true;
+                    this.password_reset_success = false;
+                    this.password_reset_error = false;   
+                    this.active_password_reset = false;
+                    
+                    let password_reset_form = new FormData();
+                    password_reset_form.append('email', this.user.email);
+
+                    axios.post('/password/reset', password_reset_form)
+                        .then(response => {
+                            let result = response.data;
+
+                            if(!result.error){
+                                // success to send email
+                                setTimeout(() => {
+                                    this.loading = false;
+
+                                    this.password_reset_success = true;
+                                    this.password_reset_text = result.success;
+                                    this.active_password_reset = true;
+                                    this.$refs.forgot_password_form.reset();
+
+                                    setTimeout( ()=>{
+                                        this.password_reset_dialog = false;
+                                        
+                                        //Clear all for next time use
+                                        setTimeout(() => {
+                                            this.password_reset_dialog= false,
+                                            this.active_password_reset= false,
+                                            this.password_reset_error= false,
+                                            this.password_reset_success= false,
+                                            this.password_reset_text= ''
+                                        }, 2000);
+
+                                    }, 3000);
+                                }, 1000)
+                            }else{
+                                setTimeout(() => {
+                                    this.loading = false;
+                                    this.password_reset_error = true;
+                                    this.password_reset_text = result.error;
+                                    this.active_password_reset = true;
+                                }, 1000);        
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+
             },
 
             onSubmit() {
-                console.log("Process");
                 if(this.$refs.login_form.validate()){
                     // make spinner visible
                     this.login_progress = true;
@@ -199,8 +302,6 @@
                                 return;
                             }
 
-                            console.log(response);
-
                             if(data.redirect_url){
                                 window.location.href = data.redirect_url;
                             }
@@ -210,7 +311,7 @@
                             console.log(error);
                         });
                 }else{
-                    console.log('not valid');
+                
                 }
             }
         }

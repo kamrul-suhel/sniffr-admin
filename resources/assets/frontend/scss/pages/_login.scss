@@ -32,3 +32,8 @@
     }
   }
 }
+
+.application .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat),
+.theme--dark .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
+  background-color:rgba(0,0,0,.8) !important;
+}

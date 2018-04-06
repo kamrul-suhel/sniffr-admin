@@ -46,13 +46,13 @@ export const routes = [
     },
 
     {
-        path: 'password/reset',
+        path: '/password/reset',
         name: 'reset_password',
         component: PasswordResetComponent
     },
 
     {
-        path: 'password/reset/:token',
+        path: '/password/reset/:token',
         name: 'password_reset_token',
         component: PasswordResetTokenComponent
     }

@@ -38,8 +38,6 @@ const router = new Vuerouter({
     routes
 });
 
-
-
 new Vue({
     el:'#sniffr',
     store: store,

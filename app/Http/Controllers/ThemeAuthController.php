@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\FrontendResponser;
+use App\User;
 use Auth;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Http\Request;
@@ -21,6 +23,8 @@ use Illuminate\Support\Facades\Input;
 use App\Libraries\ThemeHelper;
 
 class ThemeAuthController extends Controller {
+
+    use FrontendResponser;
 
 	public function __construct()
 	{
@@ -77,7 +81,6 @@ class ThemeAuthController extends Controller {
 			'pages' => Page::where('active', '=', 1)->get(),
             'settings'=> $settings
 			);
-//		return view('Theme::auth', $data);
 		return view('frontend.pages.login.login', $data);
 	}
 
@@ -274,9 +277,11 @@ class ThemeAuthController extends Controller {
 	}
 
 	// ********** RESET REQUEST ********** //
-	public function password_request()
+	public function password_request(Request $request)
 	{
+
 		$credentials = array('email' => Input::get('email'));
+
 		$response = Password::sendResetLink($credentials, function($message){
 			$message->subject('Password Reset Info');
 		});
@@ -286,9 +291,16 @@ class ThemeAuthController extends Controller {
 		switch ($response)
 		{
 			case PasswordBroker::RESET_LINK_SENT:
+			    if($request->ajax()){
+                    $data = array('success' => 'Reset link was sent to your email please check');
+                    return $this->successResponse($data);
+                }
 				return Redirect::to('login')->with(array('note' => trans($response), 'note_type' => 'success'));
 
 			case PasswordBroker::INVALID_USER:
+                if($request->ajax()){
+                    return $this->errorResponse('User is not found in our database');
+                }
 				return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
 		}
 	}
@@ -297,6 +309,7 @@ class ThemeAuthController extends Controller {
 	public function password_reset_token($token)
 	{
 	    $settings = Setting::first();
+
 	    $password_reset_link = '';
 	    if($settings->enable_https){
 	        $password_reset_link = url('password/reset',$token);
@@ -315,14 +328,20 @@ class ThemeAuthController extends Controller {
             'settings'  => $settings,
             'password_reset_link'   => $password_reset_link
 			);
-//	  return view('Theme::auth', $data);
-	  return view('frontend.pages.login.password_reset_form', $data);
+
+	  return view('frontend.master', $data);
 	}
 
 	// ********** RESET PASSWORD POST ********** //
 	public function password_reset_post(Request $request)
 	{
-		$credentials = $credentials = array('email' => Input::get('email'), 'password' => Input::get('password'), 'password_confirmation' => Input::get('password_confirmation'), 'token' => Input::get('token'));
+	    return $request->all();
+		$credentials = $credentials = array(
+		    'email' => Input::get('email'),
+            'password' => Input::get('password'),
+            'password_confirmation' => Input::get('password_confirmation'),
+            'token' => Input::get('token')
+        );
 
 
 		$response = Password::reset($credentials, function($user, $password)
