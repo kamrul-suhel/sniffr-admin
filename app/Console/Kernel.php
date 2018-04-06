@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //This is the line of code added, at the end, we the have class name of AutomateEmailReminders.php inside app\console\commands
-        // '\App\Console\Commands\AutomateEmailReminders',
+        '\App\Console\Commands\AutomateEmailReminders',
     ];
 
     /**
@@ -31,11 +31,11 @@ class Kernel extends ConsoleKernel
         // }
 
         // this is for running commands in scheduler (uncomment if needed to run daily)
-        // $filePath = 'storage/logs/scheduler.log';
-        // $schedule->command('AutomateEmailReminders:sendReminders')
-        //     ->hourly()
-        //     ->between('8:00', '21:00')
-        //     ->appendOutputTo($filePath);
+        $filePath = 'storage/logs/scheduler.log';
+        $schedule->command('AutomateEmailReminders:sendReminders')
+            ->hourly()
+            ->between('8:00', '21:00')
+            ->appendOutputTo($filePath);
     }
 
     /**

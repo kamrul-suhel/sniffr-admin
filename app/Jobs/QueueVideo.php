@@ -6,8 +6,6 @@ use App\Video;
 use App\User;
 use App\Jobs\QueueVideoCheck;
 
-use FFMpeg;
-
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -66,93 +64,64 @@ class QueueVideo implements ShouldQueue
         $video = Video::find($this->video_id);
         $fileName = (isset($video->file) ? basename($video->file) : '');
 
-        $route = 'aws';
-
         if($fileName){
             // resolve original file, extension and watermark file
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
             $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
             $watermark__dirty_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark-dirty.'.$ext;
 
-            if($route=='aws') {
-                // AWS Elastic Transcoder (new cloud route)
+            // set config array for watermark
+            $config = NULL;
+            $config_dirty = NULL;
+            $config = [
+                   'PresetId' => '1516201655942-vaq9mu',
+                   'width'  => 480,
+                   'height' => 270,
+                   'aspect' => '16:9',
+               	'ext'	 => 'mp4',
+               	'PipelineId' => '1515757750300-4fybrt',
+                   'Watermarks' => [[
+                           'PresetWatermarkId' => 'TopRight',
+                           'InputKey'          => 'logo-sniffr-white.png'
+                   ]],
+               ];
+            // set config array for dirty watermark
+            $config_dirty = [
+                  'PresetId' => '1516280708485-t5gxbr',
+                  'width'  => 480,
+                  'height' => 270,
+                  'aspect' => '16:9',
+              	'ext'	 => 'mp4',
+              	'PipelineId' => '1515757750300-4fybrt',
+                  'Watermarks' => [[
+                          'PresetWatermarkId' => 'Centered',
+                          'InputKey'          => 'logo-sniffr-white.png'
+                  ]],
+              ];
 
-                //still need to work out the width/height of the video to use correct size watermark (via preset) > maybe using getID3
+            // set config array for thumbnail creation
+            $config_thumbs = substr($fileName, 0, strrpos($fileName, '.')).'-{count}';
 
-                $config = NULL;
-                $config_dirty = NULL;
-                $config = [
-                       'PresetId' => '1516201655942-vaq9mu',
-                       'width'  => 480,
-                       'height' => 270,
-                       'aspect' => '16:9',
-                   	'ext'	 => 'mp4',
-                   	'PipelineId' => '1515757750300-4fybrt',
-                       'Watermarks' => [[
-                               'PresetWatermarkId' => 'TopRight',
-                               'InputKey'          => 'logo-sniffr-white.png'
-                       ]],
-                   ];
-                $config_dirty = [
-                      'PresetId' => '1516280708485-t5gxbr',
-                      'width'  => 480,
-                      'height' => 270,
-                      'aspect' => '16:9',
-                  	'ext'	 => 'mp4',
-                  	'PipelineId' => '1515757750300-4fybrt',
-                      'Watermarks' => [[
-                              'PresetWatermarkId' => 'Centered',
-                              'InputKey'          => 'logo-sniffr-white.png'
-                      ]],
-                  ];
+            // Creates a job to create watermark and thumbnail
+            $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
+            $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config, $config_thumbs);
 
-                $config_thumbs = substr($fileName, 0, strrpos($fileName, '.')).'-{count}';
+            if($job['Id']) {
+                // Queues a laravel job to check if watermark was created uccessfully
+                QueueVideoCheck::dispatch($job['Id'], $video->id, 'watermark', 1)
+                    ->delay(now()->addSeconds(30));
+                // Queues a laravel job to check if thumbnail was created uccessfully
+                QueueVideoCheck::dispatch($job['Id'], $video->id, 'thumbnail', 1)
+                    ->delay(now()->addSeconds(35));
+            }
 
-                // Creates a job to create watermark and thumbnail
-                $elastcoder = new \Dumpk\Elastcoder\ElastcoderAWS();
-                $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config, $config_thumbs);
+            // Creates a job to create dirty watermark
+            $job2 = $elastcoder->transcodeVideo($fileName, $watermark__dirty_file, $config_dirty);
 
-                if($job['Id']) {
-                    // Queues a laravel job to check if watermark was created uccessfully
-                    QueueVideoCheck::dispatch($job['Id'], $video->id, 'watermark', 1)
-                        ->delay(now()->addSeconds(30));
-                    // Queues a laravel job to check if thumbnail was created uccessfully
-                    QueueVideoCheck::dispatch($job['Id'], $video->id, 'thumbnail', 1)
-                        ->delay(now()->addSeconds(35));
-                }
-
-                // Creates a job to create dirty watermark
-                $job2 = $elastcoder->transcodeVideo($fileName, $watermark__dirty_file, $config_dirty);
-
-                if($job2['Id']) {
-                    // Queues a laravel job to check if watermark was created uccessfully
-                    QueueVideoCheck::dispatch($job2['Id'], $video->id, 'watermark_dirty', 1, $this->youtube_ingest)
-                        ->delay(now()->addSeconds(40));
-                }
-
-            } else {
-                // FFMPEG (old local server route), Save logo to right size
-                $logo_width = floor($video_width/10);
-                $logo_padding_width = floor($video_width/100);
-                $logo_file = public_path('content/uploads/settings/logo-sniffr-white-'.$logo_width .'.png');
-
-                if(!file_exists($logo_file)){
-                    Image::make(public_path('content/uploads/settings/logo-sniffr-white.png'))->opacity(70)->resize($logo_width, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($logo_file);
-                }
-
-                $watermark_filter = new \FFMpeg\Filters\Video\WatermarkFilter($logo_file, array(
-                   'position' => 'relative',
-                   'right' => $logo_padding_width,
-                   'top' => $logo_padding_width,
-                ));
-
-                $watermark->addFilter($watermark_filter)
-                    ->export()
-                    ->inFormat(new \FFMpeg\Format\Video\X264('libmp3lame'))
-                    ->save($watermark_file);
-
+            if($job2['Id']) {
+                // Queues a laravel job to check if watermark was created uccessfully
+                QueueVideoCheck::dispatch($job2['Id'], $video->id, 'watermark_dirty', 1, $this->youtube_ingest)
+                    ->delay(now()->addSeconds(40));
             }
 
             if(Storage::disk('s3')->exists($watermark_file)) {

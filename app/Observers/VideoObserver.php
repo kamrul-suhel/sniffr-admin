@@ -16,8 +16,8 @@ class VideoObserver
     public function updated()
     {
         Video::updated(function () {
-            FlushCacheTag::dispatch('licensed.paginated');
-            Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
+            //FlushCacheTag::dispatch('licensed.paginated');
+            //Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
         });
     }
 }
