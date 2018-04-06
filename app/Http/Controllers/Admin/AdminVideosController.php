@@ -45,6 +45,8 @@ use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
 
+use Carbon\Carbon as Carbon;
+
 class AdminVideosController extends Controller {
 
     protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
@@ -136,7 +138,6 @@ class AdminVideosController extends Controller {
     public function status(Request $request, $state, $id)
     {
         $isJson = $request->ajax();
-        $video_process=0;
 
         $video = Video::where('alpha_id', $id)->first();
         $previous_state = $video->state;
@@ -149,7 +150,10 @@ class AdminVideosController extends Controller {
             $video->more_details_sent = now();
 
             // Set to process for youtube and analysis
-            $video_process=1;
+            if(empty($video->youtube_id) && $video->file){
+                QueueVideoYoutubeUpload::dispatch($video->id)
+                    ->delay(now()->addSeconds(5));
+            }
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
@@ -194,8 +198,11 @@ class AdminVideosController extends Controller {
 
             } else {
 
-                // Set to process for youtube and analysis
-                $video_process=1;
+                // Set to process for youtube and analysis (if video not already on youtube)
+                if(empty($video->youtube_id) && $video->file){
+                    QueueVideoYoutubeUpload::dispatch($video->id)
+                        ->delay(now()->addSeconds(5));
+                }
 
             }
 
@@ -208,52 +215,6 @@ class AdminVideosController extends Controller {
 
         // Save video data to database
         $video->save();
-
-        // Process > Move video to Youtube and move video file to folder for analysis
-        $fileName_watermark = false;
-        if($video->file&&$video_process==1){
-            // set watermark and non-watermark video files for processing
-            $fileName = basename($video->file);
-            if($video->file_watermark_dirty){
-                $file_watermark = file_get_contents($video->file_watermark_dirty);
-                $fileName_watermark = basename($video->file_watermark_dirty);
-            }else if($video->file_watermark){
-                $file_watermark = file_get_contents($video->file_watermark);
-                $fileName_watermark = basename($video->file_watermark);
-            }
-
-            // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
-            $disk = Storage::disk('s3_sourcebucket');
-            if($disk->has($fileName)==1){
-                if($disk->exists(basename($fileName))) {
-                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
-                }
-            }
-
-            // Youtube (retrieves video to temporary local and then uploads to youtube)
-            if($fileName_watermark) {
-                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
-
-                $file_watermark = new UploadedFile (
-                    '/tmp/'.$fileName_watermark,
-                    $fileName_watermark,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName_watermark),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $video_title_temp = str_limit($video->title, $limit = 90, $end = '..');
-                $response = Youtube::upload($file_watermark, ['title' => $video_title_temp], 'unlisted');
-                $youtubeId  = $response->getVideoId();
-
-                $video->youtube_id = $youtubeId;
-
-            }
-
-            $video->save();
-        }
 
         if($isJson) {
             return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id, 'video_alpha_id' => $video->alpha_id, 'previous_state' => $previous_state]);
@@ -310,6 +271,12 @@ class AdminVideosController extends Controller {
      */
     public function store(Request $request)
     {
+        ini_set('memory_limit', '1024M'); // Increase memory limit for larger video files
+        ini_set('max_execution_time', 1800);
+        ini_set('upload_max_filesize', '1024M');
+        ini_set('post_max_size', '1024M');
+        set_time_limit(1800); // Longer timeout
+
         $validator = Validator::make($data = Input::all(), $this->rules);
 
         if ($validator->fails())
@@ -379,30 +346,11 @@ class AdminVideosController extends Controller {
                 ->delay(now()->addSeconds(15));
         }
 
-        //add to campaign (need to get this working)
-        // $campaign = new Campaign();
-        // $campaign->Input::get('campaigns');
-        // $campaign->save();
-
         //adds tags
         $tags = trim(Input::get('tags'));
         if($tags) {
             $this->addUpdateVideoTags($video, $tags);
         }
-
-        // $image = (isset($data['image'])) ? $data['image'] : '';
-        // if(!empty($image)){
-        //     $fileName = time().'.'.$request->file->getClientOriginalExtension();
-        //     $file = $request->file('file');
-        //     $fileMimeType = $file->getMimeType();
-        //     $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-        //     $data['image'] = Storage::disk('s3')->url($fileName);
-        //
-        //     //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
-        // } else {
-        //     $data['image'] = 'placeholder.gif';
-        // }
-        //$video = Video::create($data);
 
         return Redirect::to('admin/videos')->with(array('note' => 'New Video Successfully Added!', 'note_type' => 'success') );
     }
@@ -666,12 +614,24 @@ class AdminVideosController extends Controller {
 
     public function checkYoutube()
     {
-        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL]])->limit(300)->get();
+        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(300)->get();
         echo 'Total Count: '.count($videos).'<br /><br />';
         foreach ($videos as $video) {
             echo $video->id.' : '.$video->title.'<br />';
             QueueVideoYoutubeUpload::dispatch($video->id)
                 ->delay(now()->addSeconds(5));
+        }
+
+    }
+
+    public function checkWatermark()
+    {
+        $videos = Video::where([['file', '!=', NULL], ['file_watermark', NULL], ['file_watermark_dirty', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(100)->get();
+        echo 'Total Count: '.count($videos).'<br /><br />';
+        foreach ($videos as $video) {
+            echo $video->id.' : '.$video->title.' : '.basename($video->file).' : '.$video->created_at.'<br />';
+            // QueueVideo::dispatch($video->id)
+            //     ->delay(now()->addSeconds(5));
         }
 
     }

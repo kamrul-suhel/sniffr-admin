@@ -12,6 +12,9 @@ class FlushCacheTag implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 1;
+    public $timeout = 120;
+
     /**
      * Create a new job instance.
      *
