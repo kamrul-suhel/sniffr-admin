@@ -13,8 +13,6 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-
-            
         </div>
     </section>
 @endsection

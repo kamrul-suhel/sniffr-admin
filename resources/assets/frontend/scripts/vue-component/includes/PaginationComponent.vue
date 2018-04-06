@@ -4,10 +4,11 @@
             <v-layout justify-center>
                 <v-flex xs8>
                     <v-pagination
-                        class="dark"
-                        :length="pagination.last_page"
-                        v-model="current_page"
-                        :total-visible="10"
+                            color="black"
+                            class="dark"
+                            :length="pagination.last_page"
+                            v-model="current_page"
+                            :total-visible="10"
                         ></v-pagination>
                 </v-flex>
             </v-layout>
