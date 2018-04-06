@@ -35,7 +35,7 @@ class QueueVideoYoutubeUpload implements ShouldQueue
 
     protected $video_id;
 
-    public $tries = 2;
+    public $tries = 1;
     public $timeout = 3600;
 
     /**
