@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Observers\VideoObserver;
+use App\Setting;
 use App\Video;
 use Illuminate\Support\ServiceProvider;
 use Facebook\Facebook;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
         if (\App::environment() !== 'production') {
             Video::observe(VideoObserver::class);
         }
+
+        $settings = Setting::first();
+//        dd($settings);
+        View::share('settings', $settings);
     }
 
     /**

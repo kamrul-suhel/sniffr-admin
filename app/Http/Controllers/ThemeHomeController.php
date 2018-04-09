@@ -7,6 +7,7 @@ use App\Menu;
 use App\Video;
 use App\Setting;
 use App\VideoCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Libraries\ThemeHelper;
@@ -46,6 +47,6 @@ class ThemeHomeController extends Controller
             'pages' => Page::where('active', '=', 1)->get(),
         ];
 
-		return view('frontend.pages.home.home',$data);
+		return view('frontend.master',$data);
 	}
 }
