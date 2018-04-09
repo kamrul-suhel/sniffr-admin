@@ -123,12 +123,12 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<button data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></button>
-		                    	<button data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></button>
+								<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></a>
+		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<button data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></button>
-		                    	<button data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></button>
-		                    	<button data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></button>
+								<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></a>
+		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check" title="Licensed"></i> Licensed
 								@elseif($video->state == 'accepted')
