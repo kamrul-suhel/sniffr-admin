@@ -19,7 +19,11 @@
     <section id="sniffr">
         <v-app>
             <navigation-component></navigation-component>
-            <router-view></router-view>
+
+            <transition name="slide-fade" appear>
+                <router-view></router-view>
+            </transition>
+
             <footer-component></footer-component>
         </v-app>
     </section>

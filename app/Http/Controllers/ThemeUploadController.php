@@ -69,14 +69,11 @@ class ThemeUploadController extends Controller {
 
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        return view('frontend.pages.upload_video.upload_video', $this->data);
-//        return view('Theme::upload', $this->data);
+        return view('frontend.master', $this->data);
     }
 
     /**
