@@ -14,6 +14,12 @@
 
     <link rel="stylesheet" href="{{ '/assets/css/admin.css' }}">
 
+    <script>
+        window.Laravel = <?php echo json_encode([
+           'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
+
     <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
 
@@ -82,8 +88,10 @@
     </div>
 </div>
 
-<script src="/assets/admin/js/app.js"></script>
-    
+<script src="{{ mix('/assets/admin/js/app.js') }}"></script>
+<script src="/assets/admin/js/video.js"></script>
+<script src="/assets/admin/js/videojs-vimeo.js"></script>
+
 <!-- Notifications -->
 <script>
     (function($){
