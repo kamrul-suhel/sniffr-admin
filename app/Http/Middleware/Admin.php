@@ -9,7 +9,7 @@ class Admin {
 
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->canAccessAdmin()) {
+        if (Auth::check() && Auth::user()->canAccessAdmin() && Auth::user()->active == 1) {
             $roles = array_slice(func_get_args(), 2);
             if(count($roles )) {
                 $hasRole = false;
