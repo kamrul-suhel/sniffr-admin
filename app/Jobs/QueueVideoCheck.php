@@ -5,9 +5,7 @@ namespace App\Jobs;
 use App\Video;
 use App\User;
 
-use FFMpeg;
 use Youtube;
-use MyYoutube;
 
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -96,8 +94,18 @@ class QueueVideoCheck implements ShouldQueue
                             Storage::disk('s3')->setVisibility(basename($check_file), 'public');
                             //$elastcoder->setPublicObject(basename($thumbnail_file), 'vlp-storage');
                             $video->file_watermark = $check_file;
+                            // get video duration
                             if(!empty($job['Output']['Duration'])) {
                                 $video->duration = $job['Output']['Duration'];
+                            }
+                            if(!empty($job['Output']['Width'])) {
+                                $video->dimension_width = $job['Output']['Width'];
+                                if(!empty($job['Output']['Height'])) {
+                                    $video->dimension_height = $job['Output']['Height'];
+                                    if($video->dimension_width<$video->dimension_height) {
+                                        $video->vertical = 1;
+                                    }
+                                }
                             }
                             $video->save();
                         } else {
@@ -152,7 +160,7 @@ class QueueVideoCheck implements ShouldQueue
                                     );
 
                                     // Upload it to youtube
-                                    $response = MyYoutube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+                                    $response = Youtube::upload($file_watermark, ['title' => $video->title], 'unlisted');
                                     $youtubeId  = $response->getVideoId();
 
                                     $video->youtube_id = $youtubeId;

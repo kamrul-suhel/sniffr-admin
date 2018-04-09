@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'noreply@sniffrmedia.co.uk'),
-        'name' => env('MAIL_FROM_NAME', 'SniffrMedia'),
+        'name' => env('MAIL_FROM_NAME', 'UNILAD'),
     ],
 
     /*

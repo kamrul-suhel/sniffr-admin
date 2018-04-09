@@ -11,6 +11,7 @@ use App\Page;
 use App\Menu;
 use App\VideoCollection;
 
+use App\Traits\Slug;
 use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
 
@@ -18,8 +19,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 
-class AdminVideoCollectionsController extends Controller {
-
+class AdminVideoCollectionsController extends Controller 
+{
+    use Slug;
     /**
      * constructor.
      */
@@ -47,6 +49,7 @@ class AdminVideoCollectionsController extends Controller {
             $new_collection_order = 1;
         }
         $input['order'] = $new_collection_order;
+        $input['slug'] = $this->slugify($input['name']);
         $video_collection = VideoCollection::create($input);
         if(isset($video_collection->id)){
             return Redirect::to('admin/videos/collections')->with(array('note' => 'Successfully Added Your New Video Collectio', 'note_type' => 'success') );
@@ -55,6 +58,7 @@ class AdminVideoCollectionsController extends Controller {
 
     public function update(){
         $input = Input::all();
+        $input['slug'] = $this->slugify($input['name']);
         $collection = VideoCollection::find($input['id'])->update($input);
         if(isset($collection)){
             return Redirect::to('admin/videos/collections')->with(array('note' => 'Successfully Updated Collection', 'note_type' => 'success') );
@@ -72,7 +76,7 @@ class AdminVideoCollectionsController extends Controller {
     }
 
     public function edit($id){
-        return view('admin.videos.collections.edit', array('collections' => VideoCollection::find($id)));
+        return view('admin.videos.collections.edit', array('collection' => VideoCollection::find($id)));
     }
 
     public function order(){

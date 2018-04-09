@@ -9,4 +9,8 @@ A video now has additional details provided. Please click the link below to revi
 
 Regards,
 
-The UNILAD Team.
+The UNILAD Team
+
+(powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}

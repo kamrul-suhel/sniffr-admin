@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use View;
 use Auth;
 use Youtube;
-use MyYoutube;
 use Redirect;
 use Validator;
 use DateTime;
@@ -45,6 +44,8 @@ use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
+
+use Carbon\Carbon as Carbon;
 
 class AdminVideosController extends Controller {
 
@@ -137,9 +138,9 @@ class AdminVideosController extends Controller {
     public function status(Request $request, $state, $id)
     {
         $isJson = $request->ajax();
-        $video_process=0;
 
         $video = Video::where('alpha_id', $id)->first();
+        $previous_state = $video->state;
         $video->state = $state;
 
         // Send email
@@ -149,7 +150,10 @@ class AdminVideosController extends Controller {
             $video->more_details_sent = now();
 
             // Set to process for youtube and analysis
-            $video_process=1;
+            if(empty($video->youtube_id) && $video->file){
+                QueueVideoYoutubeUpload::dispatch($video->id)
+                    ->delay(now()->addSeconds(5));
+            }
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
@@ -164,7 +168,7 @@ class AdminVideosController extends Controller {
             if(!empty($video->youtube_id) && $video->file){
 
                 // Make youtube video unlisted
-                MyYoutube::setStatus($video->youtube_id, 'unlisted');
+                Youtube::setStatus($video->youtube_id, 'unlisted');
 
             }
 
@@ -187,13 +191,18 @@ class AdminVideosController extends Controller {
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
             if(!empty($video->youtube_id) && $video->file){
 
-                // Make youtube video public
-                MyYoutube::setStatus($video->youtube_id, 'public');
+                // Make youtube video public (if not NSFW)
+                if(!$video->nsfw) {
+                    Youtube::setStatus($video->youtube_id, 'public');
+                }
 
             } else {
 
-                // Set to process for youtube and analysis
-                $video_process=1;
+                // Set to process for youtube and analysis (if video not already on youtube)
+                if(empty($video->youtube_id) && $video->file){
+                    QueueVideoYoutubeUpload::dispatch($video->id)
+                        ->delay(now()->addSeconds(5));
+                }
 
             }
 
@@ -201,64 +210,16 @@ class AdminVideosController extends Controller {
 
         }
 
+        // Set user so we know who last changed the state of a video (helpful for youtube duplications)
+        $video->user_id = (!empty(Auth::id()) ? Auth::id() : NULL);
+
         // Save video data to database
         $video->save();
 
-        // Process > Move video to Youtube and move video file to folder for analysis
-        $fileName_watermark = false;
-        if($video->file && $video_process==1){
-
-            // set watermark and non-watermark video files for processing
-
-            $fileName = basename($video->file);
-            if($video->file_watermark_dirty){
-                $file_watermark = file_get_contents($video->file_watermark_dirty);
-                $fileName_watermark = basename($video->file_watermark_dirty);
-            }else if($video->file_watermark){
-                $file_watermark = file_get_contents($video->file_watermark);
-                $fileName_watermark = basename($video->file_watermark);
-            }
-
-            // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
-
-            $disk = Storage::disk('s3_sourcebucket');
-            if($disk->has($fileName)==1){
-                if($disk->exists(basename($fileName))) {
-                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
-                }
-            }
-
-            // Youtube (retrieves video to temporary local and then uploads to youtube)
-
-            if($fileName_watermark) {
-
-                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
-
-                $file_watermark = new UploadedFile (
-                    '/tmp/'.$fileName_watermark,
-                    $fileName_watermark,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName_watermark),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $video_title_temp = str_limit($video->title, $limit = 90, $end = '..');
-                $response = MyYoutube::upload($file_watermark, ['title' => $video_title_temp], 'unlisted');
-                $youtubeId  = $response->getVideoId();
-
-                $video->youtube_id = $youtubeId;
-
-            }
-
-            $video->save();
-        }
-
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
+            return response()->json(['status' => 'success', 'message' => 'Successfully '.ucfirst($state).' Video', 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id, 'video_alpha_id' => $video->alpha_id, 'previous_state' => $previous_state]);
         } else {
-            return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
+            return Redirect::to('admin/videos/edit/'.$id.'/?previous_state='.$previous_state)->with(array('note' => 'Successfully Updated Video', 'note_type' => 'success') );
         }
     }
 
@@ -310,6 +271,12 @@ class AdminVideosController extends Controller {
      */
     public function store(Request $request)
     {
+        ini_set('memory_limit', '1024M'); // Increase memory limit for larger video files
+        ini_set('max_execution_time', 1800);
+        ini_set('upload_max_filesize', '1024M');
+        ini_set('post_max_size', '1024M');
+        set_time_limit(1800); // Longer timeout
+
         $validator = Validator::make($data = Input::all(), $this->rules);
 
         if ($validator->fails())
@@ -361,7 +328,7 @@ class AdminVideosController extends Controller {
         $video->state = 'problem';
         $video->rights = Input::get('rights');
         $video->is_exclusive = 1;
-        $video->image = $request->has('image') ? $request->input('image') : 'placeholder.gif';
+        $video->image = $request->has('image') ? $request->input('image') : '/assets/img/placeholder.png';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');
         $video->video_category_id = Input::get('video_category_id');
@@ -379,30 +346,11 @@ class AdminVideosController extends Controller {
                 ->delay(now()->addSeconds(15));
         }
 
-        //add to campaign (need to get this working)
-        // $campaign = new Campaign();
-        // $campaign->Input::get('campaigns');
-        // $campaign->save();
-
         //adds tags
         $tags = trim(Input::get('tags'));
         if($tags) {
             $this->addUpdateVideoTags($video, $tags);
         }
-
-        // $image = (isset($data['image'])) ? $data['image'] : '';
-        // if(!empty($image)){
-        //     $fileName = time().'.'.$request->file->getClientOriginalExtension();
-        //     $file = $request->file('file');
-        //     $fileMimeType = $file->getMimeType();
-        //     $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
-        //     $data['image'] = Storage::disk('s3')->url($fileName);
-        //
-        //     //$data['image'] = ImageHandler::uploadImage($data['image'], 'images');
-        // } else {
-        //     $data['image'] = 'placeholder.gif';
-        // }
-        //$video = Video::create($data);
 
         return Redirect::to('admin/videos')->with(array('note' => 'New Video Successfully Added!', 'note_type' => 'success') );
     }
@@ -418,11 +366,17 @@ class AdminVideosController extends Controller {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
         if(!empty($video)) {
+            $video_state = (Input::get('previous_state') ? Input::get('previous_state') : $video->state);
+            $next = Video::where('id', '<', $video->id)->where('state', '=', $video_state)->orderBy('id','desc')->first();
+            $previous = Video::where('id', '>', $video->id)->where('state', '=', $video_state)->orderBy('id','asc')->first();
+
             $user = User::where('id', $video->user_id)->first();
 
             $data = array(
                 'headline' => '<i class="fa fa-edit"></i> Edit Video',
                 'video' => $video,
+                'previous' => $previous,
+                'next' => $next,
                 'post_route' => url('admin/videos/update'),
                 'button_text' => 'Update Video',
                 'admin_user' => Auth::user(),
@@ -439,10 +393,8 @@ class AdminVideosController extends Controller {
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
     {
@@ -459,15 +411,18 @@ class AdminVideosController extends Controller {
 
         $tags = $data['tags'];
         unset($data['tags']);
-        $this->addUpdateVideoTags($video, $tags);
+
+        if($tags) {
+            $this->addUpdateVideoTags($video, $tags);
+        }
 
         // Youtube integration
         if($video->youtube_id && $video->file && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
             if(!$video->duration){
-                $data['duration'] = TimeHelper::convert_seconds_to_HMS(MyYoutube::getDuration($video->youtube_id));
+                $data['duration'] = TimeHelper::convert_seconds_to_HMS(Youtube::getDuration($video->youtube_id));
             }
 
-            MyYoutube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
+            Youtube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',',$tags));
         }
 
         // Duration
@@ -660,12 +615,24 @@ class AdminVideosController extends Controller {
 
     public function checkYoutube()
     {
-        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL]])->limit(300)->get();
+        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(300)->get();
         echo 'Total Count: '.count($videos).'<br /><br />';
         foreach ($videos as $video) {
             echo $video->id.' : '.$video->title.'<br />';
             QueueVideoYoutubeUpload::dispatch($video->id)
                 ->delay(now()->addSeconds(5));
+        }
+
+    }
+
+    public function checkWatermark()
+    {
+        $videos = Video::where([['file', '!=', NULL], ['file_watermark', NULL], ['file_watermark_dirty', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(100)->get();
+        echo 'Total Count: '.count($videos).'<br /><br />';
+        foreach ($videos as $video) {
+            echo $video->id.' : '.$video->title.' : '.basename($video->file).' : '.$video->created_at.'<br />';
+            // QueueVideo::dispatch($video->id)
+            //     ->delay(now()->addSeconds(5));
         }
 
     }
@@ -731,7 +698,7 @@ class AdminVideosController extends Controller {
 
         // Hide on youtube
         if($video->youtube_id && $video->file){
-            $response = MyYoutube::setStatus($video->youtube_id, 'private');
+            $response = Youtube::setStatus($video->youtube_id, 'private');
 
             if(!$response){ // There is no youtube video, remove the id
                 $video->youtube_id = '';
@@ -756,7 +723,7 @@ class AdminVideosController extends Controller {
 
         // Hide on youtube
         if($video->youtube_id){
-            $response = MyYoutube::setStatus($video->youtube_id, 'unlisted');
+            $response = Youtube::setStatus($video->youtube_id, 'unlisted');
 
             if(!$response){ // There is no youtube video, remove the id
                 $video->youtube_id = '';
@@ -769,68 +736,58 @@ class AdminVideosController extends Controller {
         return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Successfully Restored Video', 'note_type' => 'success') );
     }
 
-    private function addUpdateVideoTags($video, $tags){
+    /**
+     * @param Video $video
+     * @param string $tags
+     */
+    private function addUpdateVideoTags(Video $video, string $tags)
+    {
         $tags = array_map('trim', explode(',', $tags));
 
-
-        foreach($tags as $tag){
-
+        foreach ($tags as $tag) {
             $tag_id = $this->addTag($tag);
             $this->attachTagToVideo($video, $tag_id);
         }
 
         // Remove any tags that were removed from video
-        foreach($video->tags as $tag){
-            if(!in_array($tag->name, $tags)){
+        foreach ($video->tags as $tag) {
+            if (!in_array($tag->name, $tags)) {
                 $this->detachTagFromVideo($video, $tag->id);
-                if(!$this->isTagContainedInAnyVideos($tag->name)){
+                if (!$this->isTagContainedInAnyVideos($tag->name)) {
                     $tag->delete();
                 }
             }
         }
     }
 
-    /**************************************************
-    /*
-    /*  PRIVATE FUNCTION
-    /*  addTag( tag_name )
-    /*
-    /*  ADD NEW TAG if Tag does not exist
-    /*  returns tag id
-    /*
-    /**************************************************/
-
-    private function addTag($tag){
-        $tag_exists = Tag::where('name', '=', $tag)->first();
-
-        if($tag_exists){
-            return $tag_exists->id;
-        } else {
-            $new_tag = new Tag;
-            $new_tag->name = strtolower($tag);
-            $new_tag->save();
-            return $new_tag->id;
-        }
+    /**
+     * @param string $tag_string
+     * @return int
+     */
+    private function addTag(string $tag_string)
+    {
+        $tag = Tag::firstOrCreate(['name' => $tag_string]);
+        return $tag->id;
     }
 
-    /**************************************************
-    /*
-    /*  PRIVATE FUNCTION
-    /*  attachTagToVideo( video object, tag id )
-    /*
-    /*  Attach a Tag to a Video
-    /*
-    /**************************************************/
-
-    private function attachTagToVideo($video, $tag_id){
+    /**
+     * @param $video
+     * @param $tag_id
+     */
+    private function attachTagToVideo($video, $tag_id)
+    {
         // Add New Tags to video
         if (!$video->tags->contains($tag_id)) {
             $video->tags()->attach($tag_id);
         }
     }
 
-    private function detachTagFromVideo($video, $tag_id){
-        // Detach the pivot table
+    /**
+     * @param $video
+     * @param $tag_id
+     */
+    private function detachTagFromVideo(Video $video, int $tag_id)
+    {
         $video->tags()->detach($tag_id);
     }
 
@@ -870,6 +827,30 @@ class AdminVideosController extends Controller {
         $pdf = PDF::loadView('admin.videos.pdfview', $data);
 
         return (!empty($video) ? $pdf->download($alpha_id.'.pdf') : Redirect::to('admin/videos/')->with(array('note' => 'Sorry, we could not find the video', 'note_type' => 'error')));
+    }
+
+    public function nsfw($alpha_id = null)
+    {
+        $status = 'error';
+        $message = 'This NSFW flag was not added or removed.';
+
+        if($alpha_id) {
+            $video = Video::where('alpha_id', $alpha_id)->first();
+            if($video->id) {
+                if($video->nsfw==1) {
+                    $video->nsfw = NULL;
+                    $message = 'Successfully removed NSFW flag.';
+                } else {
+                    $video->nsfw = 1;
+                    $message = 'Successfully added NSFW flag.';
+                }
+                // Save video
+                $video->save();
+                $status = 'success';
+            }
+        }
+
+        return Redirect::to('admin/videos/edit/'.$alpha_id)->with(array('note' => $message, 'note_type' => $status));
     }
 
 }

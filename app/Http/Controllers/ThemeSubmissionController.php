@@ -2,34 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use View;
 use Auth;
-use MyYoutube;
 use Redirect;
 use Validator;
-use Carbon\Carbon;
-
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
-use App\Tag;
 use App\Page;
 use App\Menu;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
-use App\PostCategory;
-
-use App\Libraries\ImageHandler;
 use App\Libraries\ThemeHelper;
 use App\Libraries\VideoHelper;
-
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
-
 use App\Notifications\SubmissionNewNonEx;
 
 class ThemeSubmissionController extends Controller {
@@ -38,7 +25,6 @@ class ThemeSubmissionController extends Controller {
         'full_name' => 'required',
         'email' => 'required|email',
         'title' => 'required',
-        // 'url' => 'required_without_all:url,file',
         'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
         'terms' => 'required'
     ];
@@ -47,14 +33,13 @@ class ThemeSubmissionController extends Controller {
     {
         $user = Auth::user();
 
-        $this->data = array(
+        $this->data = [
             'user' => $user,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
-        );
+        ];
     }
 
     /**

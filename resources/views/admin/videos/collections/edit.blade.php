@@ -7,8 +7,6 @@
 	<form id="update-cat-form" accept-charset="UTF-8" action="{{ url('admin/videos/collections/update') }}" method="post">
         <label for="name">Collection Name</label>
         <input name="name" id="name" placeholder="Collection Name" class="form-control" value="{{ $collection->name }}" /><br />
-        <label for="slug">URL slug (ex. videos/collections/slug-name)</label>
-        <input name="slug" id="slug" placeholder="URL Slug" class="form-control" value="{{ $collection->slug }}" />
         <input type="hidden" name="id" id="id" value="{{ $collection->id }}" />
         <input type="hidden" name="_token" value="<?= csrf_token() ?>" />
     </form>

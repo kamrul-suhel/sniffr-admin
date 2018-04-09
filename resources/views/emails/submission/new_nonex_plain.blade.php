@@ -9,4 +9,8 @@ A new video has been submitted from the non-exclusive video form. It is currentl
 
 Regards,
 
-The UNILAD Team.
+The UNILAD Team
+
+(powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}

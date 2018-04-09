@@ -122,7 +122,8 @@
                                                             <table class="module" role="module" data-type="code" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
                                                                 <tr>
                                                                     <td height="100%" valign="top">
-                                                                        <img src="https://sniffrmedia.co.uk/content/uploads/settings/logo-sniffr-black.png" style="width:25%;height:auto;" border="0">
+                                                                        <img src="https://sniffrmedia.co.uk/content/uploads/settings/logo-unilad-black.png" style="width:25%;height:auto;" border="0">
+                                                                        <div><span style="margin-top:20px;font-style:italic;color:#999;">powered by Sniffr</span></div>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -167,6 +168,12 @@
                                                                                 <img role="social-icon" alt="Instagram" title="Instagram" height="30" width="30" style="height: 30px, width: 30px" src="https://marketing-image-production.s3.amazonaws.com/social/white/instagram.png" />
                                                                             </a>
                                                                         </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3"><a href="{{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}"><span style="margin-top:20px;font-style:italic;color:#999;">Click here to unsubscribe</span></a></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>

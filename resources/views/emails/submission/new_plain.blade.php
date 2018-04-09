@@ -9,4 +9,8 @@ A new video has been submitted. You need to review it in order to start the acce
 
 Regards,
 
-The UNILAD Team.
+The UNILAD Team
+
+(powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}

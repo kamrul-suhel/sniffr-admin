@@ -63,6 +63,15 @@ return [
             'bucket' => 'vlp-storage',
         ],
 
+        's3_mediamanager' => [
+            'driver' => 's3',
+            'key' => 'AKIAJLBUIX4YJQYGUWTQ',
+            'secret' => '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',
+            'region' => 'eu-west-1',
+            'bucket' => 'vlp-storage-media',
+            'visibility' => 'public',
+        ],
+
         's3_sourcebucket' => [
             'driver' => 's3',
             'key' => 'AKIAJLBUIX4YJQYGUWTQ',
@@ -77,6 +86,15 @@ return [
             'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
             'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
             'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+        ],
+
+        'google_mediamanager' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => '1vIHaL0yga2XWnN-z722ifQDdkTEfoQkI',
+            'visibility' => 'public',
         ],
 
     ],

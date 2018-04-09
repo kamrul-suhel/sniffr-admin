@@ -4,12 +4,20 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model {
-	protected $guarded = array();
+/**
+ * @property int $id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property mixed $videos
+ * @mixin \Eloquent
+ */
+class Tag extends Model
+{
+    protected $guarded = [];
+    public static $rules = [];
 
-	public static $rules = array();
-
-	public function videos(){
-		return $this->belongsToMany(Video::class);
-	}
+    public function videos()
+    {
+        return $this->belongsToMany(Video::class);
+    }
 }

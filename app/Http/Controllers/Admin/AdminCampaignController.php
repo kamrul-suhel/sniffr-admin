@@ -11,6 +11,7 @@ use App\Video;
 use App\Client;
 use App\Campaign;
 
+use App\Traits\Slug;
 use App\Libraries\ThemeHelper;
 
 use Illuminate\Http\Request;
@@ -21,8 +22,11 @@ use App\Http\Controllers\Controller;
 
 class AdminCampaignController extends Controller
 {
+    use Slug;
+
     protected $rules = [
-        'name' => 'required'
+        'name' => 'required',
+        'client_id' => 'required'
     ];
 
     /**
@@ -30,7 +34,7 @@ class AdminCampaignController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin,manager']);
     }
 
     /**
@@ -71,12 +75,14 @@ class AdminCampaignController extends Controller
 
      public function store()
      {
-         $validator = Validator::make($data = Input::all(), Campaign::$rules);
+         $validator = Validator::make($data = Input::all(), $this->rules);
 
          if ($validator->fails())
          {
              return Redirect::back()->withErrors($validator)->withInput();
          }
+
+         $data['slug'] = $this->slugify($data['name']);
 
          $campaign = Campaign::create($data);
 
@@ -143,7 +149,7 @@ class AdminCampaignController extends Controller
          $id = $data['id'];
          $campaign = Campaign::findOrFail($id);
 
-         $validator = Validator::make($data, Campaign::$rules);
+         $validator = Validator::make($data, $this->rules);
 
          if ($validator->fails())
          {
@@ -153,6 +159,8 @@ class AdminCampaignController extends Controller
          // if(!isset($data['active']) || $data['active'] == ''){
          //     $data['active'] = 0;
          // }
+
+         $data['slug'] = $this->slugify($data['name']);
 
          $campaign->update($data);
 

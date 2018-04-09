@@ -21,7 +21,7 @@ mix.js(['resources/assets/js/app.js','resources/assets/js/custom.js'], 'public/a
    .sass(
        'resources/assets/sass/admin.scss',
        'public/assets/css/admin.css'
-   );
+   ).version();
 
 /*
 * *********************************************
@@ -83,4 +83,8 @@ mix.copy(
 mix.copy(
     'node_modules/intl-tel-input/build/img',
     'public/assets/css/intl-tel-input/img'
+);
+mix.copy(
+    'resources/assets/talvbansal/media-manager/fonts/',
+    'public/fonts/'
 );

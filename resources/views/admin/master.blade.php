@@ -5,6 +5,7 @@
 
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="description" content="HelloVideo Admin Panel" />
@@ -12,7 +13,7 @@
 
 	<title>{{ $settings->website_name . ' - ' . $settings->website_description }}</title>
 
-	<link rel="stylesheet" href="{{ '/assets/css/admin.css' }}">
+	<link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
 
 	<?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
@@ -92,7 +93,7 @@
 	</div>
 </div>
 
-<script src="/assets/admin/js/app.js?ver=1.0"></script>
+<script src="{{ mix('/assets/admin/js/app.js') }}"></script>
 <script src="/assets/admin/js/video.js"></script>
 <script src="/assets/admin/js/videojs-vimeo.js"></script>
 

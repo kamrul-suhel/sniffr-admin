@@ -7,7 +7,7 @@
 			<div class="col-md-8">
 				<h3><i class="fa fa-user-circle"></i> Users<a href="{{ url('admin/user/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
-			<div class="col-md-4">	
+			<div class="col-md-4">
 				<?php $search = old('s'); ?>
 				<form method="get" role="form" class="search-form-full"> <div class="form-group"> <input type="text" class="form-control" name="s" id="search-input" value="@if(!empty($search)){{ $search }}@endif" placeholder="Search..."> <i class="fa fa-search"></i> </div> </form>
 			</div>
@@ -42,11 +42,14 @@
 					@elseif($user->role == 'manager')
 						<div class="label label-info"><i class="fa fa-envelope"></i>
 						Manager</div>
+					@elseif($user->role == 'editorial')
+						<div class="label label-info"><i class="fa fa-pencil"></i>
+						Editorial</div>
 					@elseif($user->role == 'admin')
 						<div class="label label-primary"><i class="fa fa-star"></i>
 						<?= ucfirst($user->role) ?> User</div>
 					@endif
-					 
+
 				</td>
 				<td>{{ $user->active }}</td>
 				<td>
@@ -72,4 +75,3 @@
 	</script>
 	@stop
 @stop
-

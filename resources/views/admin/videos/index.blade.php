@@ -2,9 +2,10 @@
 
 @section('content')
 	<div class="admin-section-title bottom-padding">
+
 		<div class="row">
 			<div class="col-xs-12">
-				<h3><i class="fa fa-youtube-play"></i> {{ ucfirst($state) }} Videos <a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
+				<h3><i class="fa fa-youtube-play"></i> <a href="/admin/videos/{{ lcfirst($state) }}">{{ ucfirst($state) }} Videos</a> <a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
 			</div>
 		</div>
 
@@ -122,12 +123,12 @@
 						<div class="album-images-count">
 							@if(!$video->trashed())
 								@if($video->state == 'new')
-								<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="text-success js-state" title="Accept Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="text-danger js-state" title="Reject Video"><i class="fa fa-times"></i></a>
+								<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></a>
+		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'pending')
-								<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="text-success js-state" title="License Video"><i class="fa fa-check"></i></a>
-		                    	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="text-warning js-state" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-		                    	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="text-danger js-state" title="Problem Video"><i class="fa fa-times"></i></a>
+								<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></a>
+		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
 								@elseif($video->state == 'licensed')
 								<i class="fa fa-check" title="Licensed"></i> Licensed
 								@elseif($video->state == 'accepted')
@@ -180,11 +181,11 @@
 								<i class="fa fa-upload"></i>
 							</a>
 							@else
-								@if($video->state == 'licensed' && $video->file_watermark)
+								@if($video->file_watermark)
 								<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="js-download">
 									<i class="fa fa-download"></i>
 								</a>
-								@elseif($video->state == 'licensed' && $video->file)
+								@elseif($video->file)
 								<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
 									<i class="fa fa-download"></i>
 								</a>

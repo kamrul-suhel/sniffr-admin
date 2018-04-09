@@ -13,8 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //This is the line of code added, at the end, we the have class name of DeleteInActiveUsers.php inside app\console\commands
-        //'\App\Console\Commands\DailyYoutubeUpload',
+        //This is the line of code added, at the end, we the have class name of AutomateEmailReminders.php inside app\console\commands
+        '\App\Console\Commands\AutomateEmailReminders',
     ];
 
     /**
@@ -31,8 +31,11 @@ class Kernel extends ConsoleKernel
         // }
 
         // this is for running commands in scheduler (uncomment if needed to run daily)
-        // $schedule->command('DailyYoutubeUpload:checkVideos')
-        //         ->daily();
+        $filePath = 'storage/logs/scheduler.log';
+        $schedule->command('AutomateEmailReminders:sendReminders')
+            ->hourly()
+            ->between('8:00', '21:00')
+            ->appendOutputTo($filePath);
     }
 
     /**

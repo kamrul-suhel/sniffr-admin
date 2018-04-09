@@ -50,11 +50,11 @@ return [
 
         'sqs' => [
             'driver' => 'sqs',
-            'key' => 'your-public-key',
-            'secret' => 'your-secret-key',
-            'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
-            'queue' => 'your-queue-name',
-            'region' => 'us-east-1',
+            'key' => 'AKIAIA3CTCSL4DDB5ZIQ',
+            'secret' => 'ceEdmBUtjanczIZYrIjgy8wBEQP/ZBeHBiZG/h28',
+            'prefix' => 'https://sqs.eu-west-1.amazonaws.com/298472066366/',
+            'queue' => 'vlp-queue',
+            'region' => 'eu-west-1',
         ],
 
         'redis' => [

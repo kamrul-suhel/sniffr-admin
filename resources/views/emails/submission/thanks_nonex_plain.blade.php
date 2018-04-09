@@ -8,4 +8,8 @@ They will email you with an update on this process ASAP.
 
 Regards,
 
-The UNILAD Team.
+The UNILAD Team
+
+(powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}

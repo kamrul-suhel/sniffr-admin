@@ -15,3 +15,7 @@ We’re really keen to use your video so please fill this in as soon as possible
 Regards,
 
 The UNILAD Team
+
+(powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}

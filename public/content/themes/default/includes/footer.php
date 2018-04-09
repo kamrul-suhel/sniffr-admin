@@ -86,7 +86,9 @@
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 		ga('create', '<?= $settings->google_tracking_id ?>', 'auto');
+		ga('require', 'GTM-P4P3PWK');
 		ga('send', 'pageview');
+
 	</script>
 	<?php endif; ?>
 	<script>(function(d, s, id) {

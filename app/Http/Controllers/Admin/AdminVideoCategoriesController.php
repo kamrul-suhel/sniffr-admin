@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
-use Validator;
 use Redirect;
-
-use App\Page;
-use App\Menu;
 use App\VideoCategory;
-use App\PostCategory;
-
-use App\Libraries\ThemeHelper;
+use App\Traits\Slug;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 
-class AdminVideoCategoriesController extends Controller {
-
+class AdminVideoCategoriesController extends Controller
+{
+    use Slug;
     /**
      * constructor.
      */
@@ -48,6 +41,7 @@ class AdminVideoCategoriesController extends Controller {
             $new_category_order = 1;
         }
         $input['order'] = $new_category_order;
+        $input['slug'] = $this->slugify($input['name']);
         $video_category = VideoCategory::create($input);
         if(isset($video_category->id)){
             return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Added Your New Video Category', 'note_type' => 'success') );
@@ -56,6 +50,7 @@ class AdminVideoCategoriesController extends Controller {
 
     public function update(){
         $input = Input::all();
+        $input['slug'] = $this->slugify($input['name']);
         $category = VideoCategory::find($input['id'])->update($input);
         if(isset($category)){
             return Redirect::to('admin/videos/categories')->with(array('note' => 'Successfully Updated Category', 'note_type' => 'success') );

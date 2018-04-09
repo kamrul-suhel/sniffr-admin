@@ -2,6 +2,17 @@
 
 @section('content')
 <div id="admin-container">
+
+	<ol class="breadcrumb">
+		<li><a href="/admin/videos">All Videos</a></li>
+		@if(isset($video))
+		<li><a href="/admin/videos/{{ !empty($video->state) ? $video->state : 'new' }}">{{ !empty($video->state) ? ucfirst($video->state) : 'New' }}</a></li>
+		<li class="active"><strong>{!! !empty($video->title) ? '<a href="/admin/videos/edit/'.$video->alpha_id.'">'.$video->title.'</a>' : 'No Title Provided' !!}</strong></li>
+		@else
+		<li class="active"><strong>Add New Video</strong></li>
+		@endif
+	</ol>
+
 	<div class="row bottom-padding">
 		<div class="col-sm-6">
 			<div class="admin-section-title">
@@ -14,11 +25,28 @@
 		</div>
 
 		<div class="col-sm-6">
-			<form id="search-form" method="get" role="form" class="search-form-full" action="/admin/videos">
-				<div class="form-group">
-					<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+			<div class="row">
+
+				<div class="col-sm-9">
+					<form id="search-form" method="get" role="form" class="search-form-full" action="/admin/videos">
+						<div class="form-group">
+							<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+						</div>
+					</form>
 				</div>
-			</form>
+
+				<div class="col-sm-3">
+					<div class="form-group pull-right top-padding-micro">
+					@if(isset($previous))
+						<a href="{{ url('admin/videos/edit/'.$previous->alpha_id ) }}" class="btn btn-primary">Previous</a>
+					@endif
+					@if(isset($next))
+						<a href="{{ url('admin/videos/edit/'.$next->alpha_id ) }}" class="btn btn-primary">Next</a>
+					@endif
+					</div>
+			    </div>
+
+			</div>
 		</div>
 	</div>
 
@@ -66,43 +94,41 @@
 				</div>
 
 				<div class="panel-footer">
-					@if($video->state == 'pending'||$video->state == 'problem'||$video->state == 'licensed'||$video->state=='restricted')
 					<div class="text-right">
-						@if($video->state != 'licensed')
-						<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
+						@if($video->state == 'pending'||$video->state == 'problem'||$video->state == 'licensed'||$video->state=='restricted')
+							@if($video->state != 'licensed')
+							<a href="{{ url('admin/videos/status/licensed/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">License</a>
+							@endif
+				        	@if($video->state != 'restricted')
+				        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>
+				        	@endif
+				        	@if($video->state != 'problem')
+				        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
+				        	@endif
+						@elseif($video->state == 'new')
+							<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success js-state-accept">Accept</a>
+				        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
+						@elseif($video->state == 'accepted')
+							<div class="pull-left">
+							@if($video->reminders)
+							Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Send Reminder</a>
+							@else
+							More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Send Reminder</a>
+							@endif
+							</div>
+							<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
+						@elseif($video->state == 'rejected')
+							<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
 						@endif
-			        	@if($video->state != 'restricted')
-			        	<a href="{{ url('admin/videos/status/restricted/'.$video->alpha_id ) }}" class="btn btn-primary btn-warning">Restricted</a>
-			        	@endif
-			        	@if($video->state != 'problem')
-			        	<a href="{{ url('admin/videos/status/problem/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Problem</a>
-			        	@endif
-						@if($video->state == 'licensed' && $video->file)
-						&nbsp;&nbsp; <a href="{{ url('/download/'.$video->alpha_id) }}" class="btn btn-primary{{ $video->file_watermark ? ' js-download' : '' }}" download><i class="fa fa-download"></i> Download Video</a>
-						@else
-						&nbsp;&nbsp;
+
+						@if($video->file)
+							<a href="{{ url('/download/'.$video->alpha_id) }}" class="btn btn-primary{{ $video->file_watermark ? ' js-download' : '' }}" title="Download Video" download><i class="fa fa-download"></i></a>
 						@endif
-						<a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary" download><i class="fa fa-print"></i> Download License</a>
+						<a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary" title="Download License" download><i class="fa fa-print"></i></a>
+						<a href="{{ url('/admin/nsfw/'.$video->alpha_id) }}" class="btn btn-primary" title="Flag NSFW"><i class="fa fa-flag"></i></a>
 					</div>
-					@elseif($video->state == 'new')
-					<div class="text-right">
-						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success" onclick="disableButton(this.id);">Accept</a>
-			        	<a href="{{ url('admin/videos/status/rejected/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger">Reject</a>
-					</div>
-					@elseif($video->state == 'accepted')
-					@if($video->reminders)
-						&nbsp;&nbsp; Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
-					@else
-						&nbsp;&nbsp; More Details Requested: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }} <a href="{{ url('admin/videos/remind/'.$video->alpha_id ) }}" class="btn btn-primary btn-danger pull-right">Send Reminder</a>
-					@endif
-					<a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary pull-right" download><i class="fa fa-print"></i> Download License</a>
+
 					<div class="clearfix"></div>
-					@elseif($video->state == 'rejected')
-					<div class="text-right">
-						<a href="{{ url('admin/videos/status/accepted/'.$video->alpha_id ) }}" class="btn btn-primary btn-success">Accept</a>
-						&nbsp;&nbsp; <a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary pull-right" download><i class="fa fa-print"></i> Download License</a>
-					</div>
-					@endif
 				</div>
 			</div>
 		</div>
@@ -130,32 +156,52 @@
 					<div class="panel-options"><a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a></div>
 				</div>
 
-				<div class="panel-body" style="display: block;">
-					@if(count($video->comments))
-						@foreach($video->comments as $comment)
-	                    <p>{{ $comment->comment }}<br><br><strong class="pull-right">{{ $comment->user->username }} | {{ $comment->created_at->diffForHumans() }}</strong></p>
-	                    <br>
-	                    <hr>
-	                    @endforeach
-                    @else
-                    	<p>No Comments</p>
-                	@endif
-				</div>
+                <div class="panel-body" style="display: block;">
+                    @if(!count($video->comments))
+                        <p>No Comments</p>
+                    @endif
 
-				<div class="panel-footer">
-					<form method="POST" action="{{ url('/admin/videos/comment/'.$video->alpha_id) }}" id="comment-form" name="comment-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-						<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
+                    @foreach($video->comments as $comment)
+                        <p>
+                            {{ $comment->comment }}
+                        </p>
+                        <div class="text-right">
+                            {{ $comment->user->username }} |
+                            {{ $comment->created_at->diffForHumans() }}
+                            @if($admin_user->isAdmin() || $comment->user_id == $admin_user->id)
+                                &nbsp
+                                {!! Form::open([
+                                    'route' => ['comment.destroy', $comment->id],
+                                    'class' => 'pull-right',
+                                    'method' => 'DELETE'
+                                ]) !!}
+                                <button class="fa fa-trash-o"></button>
+                                {{ Form::hidden('alpha_id', $video->alpha_id) }}
+                                {{ Form::hidden('video_id', $video->id) }}
+                                {!! Form::close() !!}
+                            @endif
+                        </div>
+                        <hr>
+                    @endforeach
+                </div>
 
-						<div class="form-group">
-	                        <label for="comment">Add a comment</label>
-	                        <textarea class="form-control" id="comment" name="comment">{{ old('comment') }}</textarea>
-	                    </div>
+                <div class="panel-footer">
+                    <form method="POST" action="{{ route('comment.store') }}" id="comment-form"
+                          name="comment-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                        <input type="hidden" name="video_id" value="{{ $video->id }}"/>
+                        <input type="hidden" name="alpha_id" value="{{ $video->alpha_id }}"/>
+                        <div class="form-group">
+                            <label for="comment">Add a comment</label>
+                            <textarea class="form-control" id="comment"
+                                      name="comment">{{ old('comment') }}</textarea>
+                        </div>
 
-	                    <input type="submit" value="Add Comment" class="btn btn-success pull-right" />
+                        <input type="submit" value="Add Comment" class="btn btn-success pull-right"/>
                     </form>
                     <span class="clearfix"></span>
                 </div>
-			</div>
+            </div>
 
 
 			@if($video->more_details)
@@ -679,20 +725,6 @@
 
 		}
 
-		function disableButton(id) {
-			$(id).removeAttr("href");
-			console.log(id);
-			swal({
-	            title: 'You already clicked this button',
-	            icon: 'error',
-	            buttons: {
-	                cancel: 'Close'
-	            },
-	            closeModal: true,
-	            closeOnClickOutside: false
-	        });
-		}
-
 		(function($){
 			var tagnames = new Bloodhound({
 				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -772,6 +804,38 @@
 			   ],
 			   menubar:false,
 			 });
+
+			 $('.js-state-accept').click(function(e){
+				e.preventDefault();
+ 				var dataUrl = $(this).attr('href');
+ 				var parseUrl = dataUrl.split('/');
+ 				var state = parseUrl[6];
+ 				var videoId = parseUrl[7];
+ 				var alertType;
+
+				$(this).removeAttr("href");
+
+ 				swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+ 				$('.swal-button-container').css('display','none');
+
+				if(dataUrl) {
+					$.ajax({
+					    type: 'GET',
+					    url: dataUrl,
+					    data: { get_param: 'value' },
+					    dataType: 'json',
+					    success: function (data) {
+							if(data.status=='success') {
+								swal({  title: data.message, icon: 'success', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } }).then(() => {
+									//location.reload();
+									window.location.href = '/admin/videos/edit/'+data.video_alpha_id+'/?previous_state='+data.previous_state;
+								});
+								$('.swal-button-container').css('display','inline-block');
+							}
+					    }
+					});
+				}
+		     });
 
 			 //js form validations >> Admin Create edit
 	 		$('#video-form').validate({

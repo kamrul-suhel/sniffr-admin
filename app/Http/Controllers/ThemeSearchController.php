@@ -4,23 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Setting;
 use Redirect;
-
 use App\Video;
-use App\Post;
 use App\Page;
 use App\Menu;
 use App\VideoCategory;
-use App\PostCategory;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-
 use App\Libraries\ThemeHelper;
 
 class ThemeSearchController extends Controller {
-
-    private $videos_per_page = 24;
 
 	public function __construct()
 	{
@@ -33,11 +24,8 @@ class ThemeSearchController extends Controller {
 	|--------------------------------------------------------------------------
 	*/
 
-	public function index(Request $request)
+	public function index()
 	{
-        $settings = Setting::first();
-        $this->videos_per_page = $settings->videos_per_page;
-
 		$search_value = Input::get('value');
 
 		if(empty($search_value)){
@@ -74,4 +62,31 @@ class ThemeSearchController extends Controller {
         }
 	}
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function cacheIndex()
+    {
+        $search_value = Input::get('value');
+
+        if (empty($search_value)) {
+            return Redirect::to('/');
+        }
+
+        $videos = Video::where(function($query) use($search_value){
+            $query->where('state', '=', 'licensed')->where('title', 'LIKE', '%'.$search_value.'%');
+        })->orWhereHas('tags', function ($q) use($search_value){
+            $q->where('state', '=', 'licensed')->where('name', 'LIKE', '%'.$search_value.'%');
+        })->orderBy('licensed_at', 'DESC')->get();
+
+        $data = [
+            'videos' => $videos,
+            'search_value' => $search_value,
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'video_categories' => VideoCategory::all(),
+            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'pages' => Page::where('active', '=', 1)->get(),
+        ];
+        return view('Theme::search-list', $data);
+    }
 }

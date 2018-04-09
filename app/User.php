@@ -5,52 +5,51 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @property int $id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property mixed role
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $table = 'users';
+
     /**
-     * The attributes that are mass assignable.
-     *
      * @var array
      */
     protected $fillable = [
         'client_id', 'username', 'email', 'password', 'avatar', 'role', 'active',
     ];
 
-    protected $table = 'users';
-
     /**
-     * The attributes that should be hidden for arrays.
-     *
      * @var array
      */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function client() {
+    public function client()
+    {
         return $this->belongsTo(Client::class)->first();
     }
 
-    public function canAccessAdmin() {
-        if($this->role=='admin' || $this->role=='manager' ){
-            return true;
-        }
-
-        return false;
+    public function canAccessAdmin()
+    {
+        return ($this->role == 'admin' || $this->role == 'manager' || $this->role == 'editorial');
     }
 
-    public function canAccessClient() {
-        if($this->role=='client' || $this->role=='admin'){
-            return true;
-        }
-
-        return false;
+    public function canAccessClient()
+    {
+        return ($this->role == 'client' || $this->role == 'admin');
     }
 
-    public function isAdmin() {
-        return $this->role=='admin';
+    public function isAdmin()
+    {
+        return $this->role == 'admin';
     }
 
     public function routeNotificationForSlack()

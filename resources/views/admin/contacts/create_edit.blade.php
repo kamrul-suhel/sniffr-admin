@@ -113,7 +113,7 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						@if(count($contact->comments))
+						@if(isset($contact->comments) && count($contact->comments))
 							@foreach($contact->comments as $comment)
 		                    <p>{{ $comment->comment }}<br><br><strong class="pull-right">{{ $comment->user->username }} | {{ $comment->created_at->diffForHumans() }}</strong></p>
 		                    <br>

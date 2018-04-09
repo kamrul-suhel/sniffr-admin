@@ -8,11 +8,18 @@ use Validator;
 use Redirect;
 
 use FFMpeg;
-//
+// use MyRekognition;
 
 use App\Page;
 use App\Menu;
 use App\Label;
+use App\User;
+use App\Tag;
+use App\Video;
+use App\Contact;
+
+use Carbon\Carbon as Carbon;
+use App\Jobs\QueueEmail;
 
 use App\Libraries\ThemeHelper;
 
@@ -22,6 +29,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 
 use App\Http\Controllers\Controller;
@@ -133,7 +141,7 @@ class AdminLabelController extends Controller {
              dd($job['JobId']);
          } elseif($type=='get') {
              $config = [
-                    'JobId' => '6333130c01cb42d2659c69d0f233ef6d046eecd7a2fd7fd341b5c3bed3423b3c',
+                    'JobId' => '1c5e8249508ea97368d5e0dc5381d1e839470880d34db42466c30cd349c19cf5',
                     'SortBy' => 'NAME',
                 ];
              $job = \Rekognition::getLabelDetection($config);
@@ -308,5 +316,80 @@ class AdminLabelController extends Controller {
         } else {
             echo 'Not found.';
         }
+    }
+
+    public function reviewFailedJobs() {
+
+        function get_string_between($string, $start, $end){
+            $string = ' ' . $string;
+            $ini = strpos($string, $start);
+            if ($ini == 0) return '';
+            $ini += strlen($start);
+            $len = strpos($string, $end, $ini) - $ini;
+            return substr($string, $ini, $len);
+        }
+
+        $query_value = 'QueueEmail';
+        $fails = DB::table('failed_jobs')->where('payload', 'LIKE' , '%'.$query_value.'%')->get();
+        foreach($fails as $fail) {
+            $payload = json_decode($fail->payload);
+            $payload = get_string_between($payload->data->command, ';i:', ';s:');
+            if($payload) {
+                $video = Video::where('id', $payload)->first();
+                if(isset($video->contact->id)) {
+                    if($video->state=='accepted' || $video->state=='pending' || $video->state=='licensed') {
+                        echo 'full name: '.$video->contact->full_name.' | email: '.$video->contact->email.' | video_alpha_id: '.$video->alpha_id.' <br />';
+                    }
+                }
+            }
+        }
+
+    }
+
+    public function automateEmailReminders() {
+
+        $videos = Video::where([['state', 'accepted'], ['contact_id', '!=', 0], ['more_details', NULL], ['more_details_code', '!=', NULL], ['more_details_sent', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
+        ->where(function ($query) {
+            $query->where('reminders', '<', 4)
+                ->orWhereNull('reminders');
+        })
+        ->orderBy('more_details_sent', 'DESC')
+        ->get();
+
+        if(count($videos)>0) {
+            // Loop through videos
+            foreach ($videos as $video) {
+                // Check previous reminders and whether the video fits within the range: 24 hours, 72 hours, 1 week
+                $send_ok = false;
+                switch (true) {
+                    case ($video->reminders == NULL && $video->more_details_sent < Carbon::now()->subDays(1)->toDateTimeString()): // no reminders sent, this will be the first to be sent
+                        $type = '24 hours';
+                        $send_ok = true; //24 hours
+                        break;
+                    case ($video->reminders == 1 && $video->more_details_sent < Carbon::now()->subDays(1)->toDateTimeString() && $video->more_details_sent > Carbon::now()->subDays(3)->toDateTimeString()): // this will be the second to be sent
+                        $type = '72 hours';
+                        $send_ok = true; //72 hours
+                        break;
+                    case ($video->reminders == 2 && $video->more_details_sent < Carbon::now()->subDays(7)->toDateTimeString() && $video->more_details_sent > Carbon::now()->subDays(15)->toDateTimeString()): // this will be the third to be sent
+                        $type = '1 week';
+                        $send_ok = true; //1 week
+                        break;
+                }
+
+                // Only send email reminder if within above range plus if video has a contact/email
+                if(isset($video->contact) && $video->contact->email!=NULL && $send_ok == true){
+                    echo $type.' : '.$video->alpha_id.' : '.$video->title.' : '.$video->more_details_sent.' : '.$video->reminders.'<br />';
+                    // Need to update video reminder count and more details sent timestamp
+                    // $video->more_details_sent = now();
+                    // $video->reminders = $video->reminders ? $video->reminders+1 : 1;
+                    // $video->save();
+
+                    // Schedule email reminder to be sent via queue/job
+                    // QueueEmail::dispatch($video->id, 'details_reminder')
+                    //     ->delay(now()->addSeconds(10));
+                }
+            }
+        }
+
     }
 }

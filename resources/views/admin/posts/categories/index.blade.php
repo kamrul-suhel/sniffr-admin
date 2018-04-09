@@ -24,8 +24,6 @@
 					<form id="new-cat-form" accept-charset="UTF-8" action="{{ url('admin/posts/categories/store') }}" method="post">
 				        <label for="name">Enter the new vertical below</label>
 				        <input name="name" id="name" placeholder="Vertical Name" class="form-control" value="" /><br />
-				        <label for="slug">URL slug (ex. posts/categories/slug-name)</label>
-				        <input name="slug" id="slug" placeholder="URL Slug" class="form-control" value="" />
 				        <input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 				    </form>
 				</div>

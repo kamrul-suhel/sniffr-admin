@@ -3,18 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
-use Validator;
 use Redirect;
-
-use App\Page;
-use App\Menu;
 use App\Setting;
-use App\VideoCategory;
-use App\PostCategory;
-
-use App\Libraries\ThemeHelper;
 use App\Libraries\ImageHandler;
-
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
@@ -25,7 +16,7 @@ class AdminSettingsController extends Controller {
      */
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware(['admin:admin']);
     }
 
 	public function index()

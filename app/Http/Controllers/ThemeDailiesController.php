@@ -4,18 +4,11 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Redirect;
-
 use App\Page;
 use App\Menu;
 use App\Video;
-use App\Setting;
-use App\Favorite;
-use App\Campaign;
 use App\VideoCategory;
-use App\PostCategory;
-
 use App\Libraries\ThemeHelper;
-
 use Illuminate\Support\Facades\Input;
 
 class ThemeDailiesController extends Controller {
@@ -52,7 +45,6 @@ class ThemeDailiesController extends Controller {
 	            'menu' => Menu::orderBy('order', 'ASC')->get(),
 	            'pagination_url' => '/favorites',
 	            'video_categories' => VideoCategory::all(),
-				'post_categories' => PostCategory::all(),
 				'theme_settings' => ThemeHelper::getThemeSettings(),
 				'pages' => Page::where('active', '=', 1)->get(),
             );

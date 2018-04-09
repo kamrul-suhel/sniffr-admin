@@ -15,3 +15,7 @@ If you have any questions you’re more than welcome to contact the team here: s
 Regards,
 
 The UNILAD Team
+
+(powered by Sniffr)
+
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}
