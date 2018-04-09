@@ -36,9 +36,9 @@ trait TimeHelper{
 	    $minutes = isset($minutes[1]) ? $minutes[1] : 0;
 	    $seconds = isset($seconds[1]) ? $seconds[1] : 0;
 
-	    $toltalSeconds = ($hours * 60 * 60) + ($minutes * 60) + $seconds;
+	    $totalSeconds = ($hours * 60 * 60) + ($minutes * 60) + $seconds;
 
-	    return $toltalSeconds;
+	    return $totalSeconds;
 	}
 
 }
