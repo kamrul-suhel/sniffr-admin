@@ -79,10 +79,10 @@ class VideoUploadTest extends TestCase
             'terms' => '1'
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(422);
 
         $response->assertJson([
-            'status' => 'error, file did not pass validation check'
+            'message' => 'The given data was invalid.'
         ]);
 
         $this->assertDatabaseMissing('contacts', [

@@ -20,6 +20,12 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::get('videos/category/{category}', 'ThemeVideoController@category' );
     Route::get('videos/tag/{tag}', 'ThemeVideoController@tag' );
     Route::get('video/{id}', 'ThemeVideoController@show');
+    Route::post('upload', 'Video\UploadController@store');
+    Route::get('upload', 'Video\UploadController@index');
+    Route::get('upload/form', 'Video\UploadController@form');
+    Route::post('issue', 'Video\UploadController@issueAlert');
+    Route::post('videocheck', 'Video\UploadController@videoCheck');
+    Route::get('thanks', 'Video\UploadController@thanks');
 
     /*
     |--------------------------------------------------------------------------
@@ -27,18 +33,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     |--------------------------------------------------------------------------
     */
     Route::get('tags', 'ThemeTagController@index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Upload Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('upload', 'Video\UploadController@store');
-    Route::get('upload', 'Video\UploadController@index');
-    Route::get('upload/form', 'Video\UploadController@form');
-    Route::post('issue', 'Video\UploadController@issueAlert');
-    Route::post('videocheck', 'Video\UploadController@videoCheck');
-    Route::get('thanks', 'Video\UploadController@thanks');
 
     /*
     |--------------------------------------------------------------------------

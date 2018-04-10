@@ -38,11 +38,19 @@ class UploadController extends Controller
     private $data;
 
     /**
+     * @var int
+     */
+    private $videos_per_page;
+
+    /**
      * UploadController constructor.
      * @param \App\Services\VideoService $videoService
      */
     public function __construct(VideoService $videoService)
     {
+        $settings = Setting::first();
+        $this->videos_per_page = $settings->videos_per_page ?: 24;
+
         $user = Auth::user();
 
         $this->data = [
@@ -60,7 +68,7 @@ class UploadController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function uploadForm()
     {
         return view('Theme::upload', $this->data);
     }
@@ -166,7 +174,6 @@ class UploadController extends Controller
         ]);
     }
 
-    /**
     /**
      * TODO: Finish it or delete it
      *
