@@ -15,4 +15,16 @@ return array(
     'uploads_dir' => '/content/uploads/',
     'media_upload_function' => 'ImageHandler::upload',
     'num_results_per_page' => 15,
+
+    'states' => [
+        'new',
+        'accepted',
+        'rejected',
+        'inprogress',
+        'pending',
+        'licensed',
+        'restricted',
+        'problem',
+        'noresponse'
+    ],
 );
