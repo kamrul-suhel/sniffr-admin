@@ -16,7 +16,7 @@ const mutations = {
 const actions = {
 	getVideoDetailData({ commit }, payload= {}){
 		return new Promise(function(resovle, reject){
-			let url = '/video';
+			let url = '/videos';
 
 			if(payload.alpha_id && payload.alpha_id != 0){
 				url = url + '/' +payload.alpha_id;

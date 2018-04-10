@@ -1,11 +1,11 @@
 {
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/frontend/scripts/plugin.js": "/assets/frontend/scripts/plugin.js",
-    "/assets/frontend/sripts/jquery.js": "/assets/frontend/sripts/jquery.js",
-    "/assets/frontend/css/plugin/vuetify.css": "/assets/frontend/css/plugin/vuetify.css",
-    "/assets/js/utils.js": "/assets/js/utils.js"
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=58481e166044fad43d25",
+    "/assets/js/app.js": "/assets/js/app.js?id=a9174299eb00189442ff",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=278d36d8cc0a843cf294",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=55554f75992b4c86c0a8",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=6c668683f076b3e7d6e8",
+    "/assets/frontend/scripts/plugin.js": "/assets/frontend/scripts/plugin.js?id=0cbfd5acab35cb6af217",
+    "/assets/frontend/sripts/jquery.js": "/assets/frontend/sripts/jquery.js?id=6a07da9fae934baf3f74",
+    "/assets/frontend/css/plugin/vuetify.css": "/assets/frontend/css/plugin/vuetify.css?id=701782414b3e1125ed6c",
+    "/assets/js/utils.js": "/assets/js/utils.js?id=121feeeb49b503fd9e7f"
 }

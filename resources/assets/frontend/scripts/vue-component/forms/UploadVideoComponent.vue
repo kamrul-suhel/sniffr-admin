@@ -158,7 +158,11 @@
                                             color="dark"
                                             v-if="validete_email_progress"></v-progress-circular>
 
-                                    <v-btn dark @click="onSubmit()">Submit your file</v-btn>
+                                    <v-btn dark
+                                           :loading="validete_email_progress"
+                                           :disabled="validete_email_progress"
+                                           @click="onSubmit()">
+                                        Submit your file</v-btn>
 
                                 </v-flex>
                             </v-layout>
@@ -189,15 +193,17 @@
                         </v-layout>
                         <v-layout>
                             <v-flex xs10>
-                                <v-progress-linear
-                                        :value="progressbar"
-                                        color="warning"
-                                ></v-progress-linear>
+                                <div v-if="upload_error_msg">{{ upload_error_msg }}</div>
+                                <!--<v-progress-linear-->
+                                        <!--v-if="!upload_error_msg"-->
+                                        <!--:value="progressbar"-->
+                                        <!--color="warning"-->
+                                <!--&gt;</v-progress-linear>-->
                             </v-flex>
 
-                            <v-flex xs2>
-                                {{progressbar}}
-                            </v-flex>
+                            <!--<v-flex xs2>-->
+                                <!--{{progressbar}}-->
+                            <!--</v-flex>-->
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -205,6 +211,23 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+
+        <!-- Thank you dialog box -->
+        <v-dialog v-model="thank_you_dialog" max-width="500px" persistent>
+            <v-card
+                    dark
+                    color="dark">
+                <v-card-text class="text-xs-center pb-0">
+                    <h2>Thanks for the video.. You rock!</h2>
+                </v-card-text>
+                <v-card-actions class="text-xs-center">
+                    <v-spacer></v-spacer>
+                    <v-btn color="dark" raised flat @click.stop="thank_you_dialog=false">Close</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </section>
 </template>
 
@@ -213,15 +236,15 @@
         data: () => ({
             csrf_token : $('meta[name="csrf-token"]').attr('content'),
             valid: false,
-            full_name: '',
-            title:'',
+            full_name: 'kamrul',
+            title:'video',
             url:'',
-            file:'',
-            terms_condition: false,
+            file:'file.mp4',
+            terms_condition: true,
             nameRules: [
                 v => !!v || 'Name is required'
             ],
-            email: '',
+            email: 'kamrul@unilad.co.uk',
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
@@ -230,9 +253,13 @@
             uplod_progress:false,
             file_name: '',
             progressbar: 0,
+
             error:false,
             validete_email_progress:false,
-            validate_email_error:false
+            loader: null,
+            validate_email_error:false,
+            upload_error_msg: '',
+            thank_you_dialog: false,
         }),
         created() {
 
@@ -275,43 +302,21 @@
 
                     // Email verify progress on
                     this.validete_email_progress = true;
+                    this.loader = 'loading';
 
-                    // Check the email is valid email or not
-                    let form_email = new FormData();
-                    form_email.append('email', this.email);
-                    axios.post('/upload/emailverify', form_email, {
-                        headers:
-                            {
-                                'Content-Type': 'multipart/form-data',
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN' : this.csrf_token
-                            }
-                    })
-                        .then(response => {
-                            //Delay for one second
-                            setTimeout( () => {
-                                // email verify done turn off spinner
-                                this.validete_email_progress = false;
+                    setTimeout( () => {
+                        // email verify done turn off spinner
+                        this.loader = null;
+                        this.validete_email_progress = false;
+                        this.uploadFormData();
+                    }, 1000)
 
-                                let data = response.data;
-                                if(data.found_email === 1){
-                                    this.uploadFormData();
-                                }else{
-                                    // mean email is not verify
-                                    this.validate_email_error = true;
-
-                                }
-                            }, 1000)
-                        })
-                        .catch(error => {
-                            // console.log(error);
-                        });
                 }
 
             },
 
             uploadFormData() {
-                // uploading via ajax request
+                // uploading via Http request
                 let form = new FormData();
                 form.append('file', this.file);
                 form.append('full_name', this.full_name);
@@ -324,7 +329,6 @@
 
                 //show the uploading dialog box
                 this.uplod_progress = true;
-
                 axios.post('/upload', form, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
@@ -340,8 +344,6 @@
                     .then(response => {
                         //data uploaded succes
                         let data = response.data;
-                        console.log(data);
-
                         if(data.status == 'success'){
                             // set all default
                             this.progressbar = 0;
@@ -351,6 +353,13 @@
 
                             // clear form data
                             this.$refs.form.reset();
+                            setTimeout(() => {
+                                this.thank_you_dialog = true;
+                            }, 1000)
+                        }
+
+                        if(data.error){
+                            this.upload_error_msg = data.error;
                         }
                     })
                     .catch(function(error){

@@ -262,8 +262,8 @@
             loading: false,
         }),
         created() {
-            let code = this.$route.query.code;
-            console.log(this.$route.query.code);
+            let code = this.$route.params.code;
+            console.log(this.$route.params.code);
             if(code){
                 console.log('yes');
             }else{

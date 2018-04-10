@@ -59,8 +59,8 @@ export const routes = [
     },
 
     {
-        path: '/details:code',
-        name: 'video_more_details',
+        path: '/details/:code',
+        name: 'video_more_details_code',
         component: VideoMoreDetail
     },
 

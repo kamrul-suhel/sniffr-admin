@@ -33,6 +33,8 @@ import { store } from './store/store';
 // Implement Filters
 require('./filters/filters');
 
+// Plugins
+
 const router = new Vuerouter({
     mode:'history',
     routes

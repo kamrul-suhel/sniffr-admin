@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Auth;
@@ -19,23 +20,46 @@ use App\Libraries\ThemeHelper;
 
 class ThemeVideoController extends Controller {
     use VideoHelper;
+    use FrontendResponser;
 
-    private $videos_per_page = 24;
     private $settings;
 
     public function __construct()
     {
         $this->settings = Setting::first();
-        $this->videos_per_page = $this->settings->videos_per_page;
+    }
+
+
+    public function index(Request $request)
+    {
+        $video = new Video;
+        $page = Input::get('page', 1);
+        $videos = $video->getCachedVideosLicensedPaginated($this->settings->videos_per_page, $page);
+
+        $data = [
+            'videos' => $videos,
+        ];
+
+        if($request->ajax()){
+            return $data;
+        }
+        return view('frontend.master', $data);
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index(Request $request, $id)
+    public function show(Request $request, $id)
     {
+
         if(Auth::guest()){
-            $video = Video::where('state', 'licensed')->with('tags')->orderBy('licensed_at', 'DESC')->where('alpha_id', $id)->first();
+            $video = Video::where('state', 'licensed')
+                ->with('tags')
+                ->orderBy('licensed_at', 'DESC')
+                ->where('alpha_id', $id)
+                ->first();
         }else{
             $video = Video::with('tags')->where('alpha_id', $id)->first();
         }
@@ -64,122 +88,21 @@ class ThemeVideoController extends Controller {
                 'downloaded' => $downloaded,
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => ThemeHelper::getThemeSettings(),
-                'pages' => Page::where('active', '=', 1)->get(),
-                'settings'  => $this->settings
-                );
-//            return view('Theme::video', $data);
-//            return view('Theme::video', $data);
+            );
+
             if($request->ajax()){
-                return $data;
+                return $this->successResponse($data);
             }else{
-                return view('frontend.pages.videos.video_detail', $data);
+                return view('frontend.master', $data);
             }
 
         } else {
             if($request->ajax()){
-                return response(['note' => 'Sorry, this video is no longer active.', 'note_type' => 'error']);
+                return $this->errorResponse('Sorry, this video is no longer active.');
             }
-            return Redirect::to('videos')->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
+            return Redirect::to('videos')
+                ->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
         }
-    }
-
-    public function cachedIndex()
-    {
-        $video = new Video;
-        $menu = new Menu;
-        $page = Input::get('page', 1);
-        $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
-
-        $data = [
-            'videos' => $videos,
-            'page_title' => 'All Videos',
-            'page_description' => 'Page ' . $page,
-            'current_page' => $page,
-            'menu' => $menu->orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/videos',
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
-            'pages' => (new Page)->where('active', '=', 1)->get(),
-        ];
-        return view('Theme::video-list', $data);
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $video = (new \App\Video)->where('state', 'licensed')
-            ->with('tags')
-            ->orderBy('licensed_at', 'DESC')
-            ->where('alpha_id', $id)
-            ->first();
-
-        //Make sure video is active
-        if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
-            $favorited = false;
-            // if(!Auth::guest()):
-            //     $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
-            // endif;
-
-            $downloaded = false;
-            // if(!Auth::guest()):
-            //     $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
-            // endif;
-
-            $view_increment = $this->handleViewCount($id);
-
-            $data = array(
-                'video' => $video,
-                'menu' => Menu::orderBy('order', 'ASC')->get(),
-                'view_increment' => $view_increment,
-                'favorited' => $favorited,
-                'downloaded' => $downloaded,
-                'video_categories' => VideoCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
-                'pages' => Page::where('active', '=', 1)->get(),
-            );
-            return view('Theme::video', $data);
-
-        } else {
-            return Redirect::to('videos')->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
-        }
-    }
-
-    /*
-     * Page That shows the latest video list
-     *
-     */
-    public function videos(Request $request)
-    {
-        $page = Input::get('page');
-        if( !empty($page) ){
-            $page = Input::get('page');
-        } else {
-            $page = 1;
-        }
-
-        $videos = Video::where('state', 'licensed')->orderBy('id', 'DESC')->paginate($this->videos_per_page);
-
-        $data = array(
-            'videos' => $videos,
-            'page_title' => 'All Videos',
-            'page_description' => 'Page ' . $page,
-            'current_page' => $page,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/videos',
-            'video_categories' => VideoCategory::all(),
-            'post_categories' => PostCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
-            'pages' => Page::where('active', '=', 1)->get(),
-            );
-
-        if($request->ajax()){
-            return $data;
-        }
-
-        return view('frontend.pages.videos.videos', $data);
     }
 
 
@@ -207,7 +130,7 @@ class ThemeVideoController extends Controller {
             array_push($tag_array, $tag->video_id);
         }
 
-        $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->videos_per_page);
+        $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->settings->videos_per_page);
 
         $data = array(
             'videos' => $videos,

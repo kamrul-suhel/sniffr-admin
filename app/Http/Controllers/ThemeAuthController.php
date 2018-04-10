@@ -124,7 +124,9 @@ class ThemeAuthController extends Controller
         $redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
         // auth failure! redirect to login with errors
         $error = array(
-            'note' => 'Invalid login, please try again.', 'note_type' => 'error');
+            'note' => 'Invalid login, please try again.',
+            'note_type' => 'error'
+        );
 
         if($request->ajax()){
             $response_data['redirect_url'] = $redirect;

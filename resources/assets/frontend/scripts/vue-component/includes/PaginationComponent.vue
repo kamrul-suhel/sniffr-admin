@@ -2,7 +2,7 @@
     <div class="text-xs-center">
         <v-container grid-list-lg>
             <v-layout justify-center>
-                <v-flex xs8>
+                <v-flex xs12>
                     <v-pagination
                             color="black"
                             class="dark"

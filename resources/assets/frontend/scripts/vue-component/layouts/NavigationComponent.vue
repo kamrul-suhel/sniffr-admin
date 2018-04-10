@@ -175,8 +175,8 @@
                 valid:false,
                 login_progress:false,
                 user:{
-                    email:'',
-                    password:''
+                    email:'kamrul@unilad.co.uk',
+                    password:'killer'
                 },
                 emailRules: [
                     v => !!v || 'E-mail is required',
@@ -293,7 +293,7 @@
                     axios.post('/login', form_data)
                         .then(response => {
                             this.login_progress = true;
-
+                            console.log(response);
                             let data = response.data;
                             if(data.error){
                                 this.login_progress = false;

@@ -109,7 +109,7 @@
 
         },
         mounted() {
-
+            window.addEventListener('fb-sdk-ready', this.onFBReady)
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
@@ -117,12 +117,14 @@
                 if(this.video_detail.video.tags.length > 0){
                     this.tags.push(...this.video_detail.video.tags);
                 }
-                this.reloadJs('//platform.instagram.com/en_US/embeds.js');
+                this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
+
+                this.reloadFacebook();
             });
 
         },
         methods: {
-            reloadJs(src) {
+            reloadInstagrm(src) {
                 var s = document.createElement("script");
                 s.type = "text/javascript";
                 s.src = src;
@@ -134,6 +136,31 @@
                         window.instgrm.Embeds.process();
                     }
                 }, 30);
+            },
+
+            onFBReady: function () {
+               console.log('facebook loaded');
+            },
+
+            reloadFacebook(){
+                if (!document.getElementById('facebook-jssdk')) {
+                    console.log('created');
+                    (function (d, s, id) {
+                        console.log(d, s, id);
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+
+                }else{
+                    setTimeout(() => {
+                        window.FB.XFBML.parse();
+                    }, 30);
+
+                }
             }
         },
         destroyed(){

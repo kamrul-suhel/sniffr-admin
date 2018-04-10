@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\EmailVerifyHelper;
 use App\Setting;
+use App\Traits\FrontendResponser;
 use Aws\S3\S3Client;
 use View;
 use Auth;
@@ -28,6 +29,9 @@ use App\Notifications\SubmissionAlert;
 
 class ThemeUploadController extends Controller
 {
+
+    use FrontendResponser;
+
     protected $rules = [
         'alpha_id' => 'unique',
         'full_name' => 'required',
@@ -95,11 +99,6 @@ class ThemeUploadController extends Controller
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
-        // ini_set('max_input_time', 1800);
-        // ini_set('memory_limit', '1000M');
-        // ini_set('max_input_vars', 1800);
-        // ini_set('max_input_vars', 1800);
-        // ini_set('max_allowed_packet', '1000M');
 
         $isJson = $request->ajax() || $request->isJson();
 
@@ -115,13 +114,14 @@ class ThemeUploadController extends Controller
             }
 
             if($isJson) {
-                return response()->json(['status' => 'error, file did not pass validation check '.$mime_temp]);
+                return $this->errorResponse('error, file did not pass validation check ');
             } else {
                 return Redirect::back()
                     ->withErrors($validator)
                     ->withInput();
             }
         }
+
         //get additional form data
         $contact = Contact::where('email',Input::get('email'))->first();
         //if contact exists
@@ -138,6 +138,7 @@ class ThemeUploadController extends Controller
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
         $video->title = Input::get('title', 'Untitled '.$video->alpha_id);
+
 
         //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';
@@ -171,12 +172,14 @@ class ThemeUploadController extends Controller
             $filePath = $video->url;
         }
 
+
         $video->state = 'new';
         $video->rights = 'ex';
         $video->source = Input::get('source');
         $video->ip = $request->ip(); //$_SERVER["HTTP_CF_CONNECTING_IP"]
         $video->user_agent = $request->header('User-Agent');
         $video->save();
+
 
         // Slack notifications
         if(env('APP_ENV') != 'local'){
@@ -193,7 +196,16 @@ class ThemeUploadController extends Controller
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
         if($isJson) {
-            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+            $data = [
+                'status' => 'success',
+                'iframe' => $iframe,
+                'href' => 'https://www.unilad.co.uk/submit/thanks',
+                'message' => 'Video Successfully Added!',
+                'files' => ['name' => Input::get('title'),
+                    'size' => $fileSize,
+                    'url' => $filePath]
+            ];
+            return $this->successResponse($data);
         } else {
             if($iframe == 'true'){
                 return Redirect::to('https://www.unilad.co.uk');

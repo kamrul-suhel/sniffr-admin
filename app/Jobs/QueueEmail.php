@@ -29,7 +29,6 @@ use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
 
-use App\Notifications\SubmissionAlert;
 
 
 class QueueEmail implements ShouldQueue

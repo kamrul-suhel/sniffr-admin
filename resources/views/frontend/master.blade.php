@@ -20,9 +20,7 @@
         <v-app>
             <navigation-component></navigation-component>
 
-            <transition name="slide-fade" appear>
-                <router-view></router-view>
-            </transition>
+            <router-view></router-view>
 
             <footer-component></footer-component>
         </v-app>
@@ -45,16 +43,6 @@
             ga('send', 'pageview');
         </script>
     @endif
-
-    <script>
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
 
     <!-- Page specifice script go here -->
     @yield('page_script')
