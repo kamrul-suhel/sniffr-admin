@@ -7,7 +7,6 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         \DB::table('users')->insert([
-            0 => 
             [
                 'client_id' => NULL,
                 'username' => 'ianlainchbury',
@@ -24,7 +23,6 @@ class UsersTableSeeder extends Seeder
                 'trial_ends_at' => NULL,
                 'subscription_ends_at' => NULL,
             ],
-            1 => 
             [
                 'client_id' => NULL,
                 'username' => 'mikewright',
@@ -41,7 +39,6 @@ class UsersTableSeeder extends Seeder
                 'trial_ends_at' => NULL,
                 'subscription_ends_at' => NULL,
             ],
-            2 => 
             [
                 'client_id' => 1,
                 'username' => 'dailymail',
@@ -58,7 +55,6 @@ class UsersTableSeeder extends Seeder
                 'trial_ends_at' => NULL,
                 'subscription_ends_at' => NULL,
             ],
-            3 => 
             [
                 'client_id' => NULL,
                 'username' => 'kahmed',
@@ -75,7 +71,6 @@ class UsersTableSeeder extends Seeder
                 'trial_ends_at' => NULL,
                 'subscription_ends_at' => NULL,
             ],
-            4 => 
             [
                 'client_id' => NULL,
                 'username' => 'frank',

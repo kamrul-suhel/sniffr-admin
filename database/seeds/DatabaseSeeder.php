@@ -20,16 +20,9 @@ class DatabaseSeeder extends Seeder
             FavoritesTableSeeder::class,
             MenuTableSeeder::class,
             PagesTableSeeder::class,
-            PaymentSettingsTableSeeder::class,
-            Plugin_dataTableSeeder::class,
-            PluginsTableSeeder::class,
-            SessionsTableSeeder::class,
-            SettingsTableSeeder::class,
+            LegalTermsTableSeeder::class,
             TagVideoTableSeeder::class,
             TagsTableSeeder::class,
-            ThemeSettingsTableSeeder::class,
-            ThemesTableSeeder::class,
-            YoutubeAccessTokensTableSeeder::class,
         ]);
     }
 }
