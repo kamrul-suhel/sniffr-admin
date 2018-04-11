@@ -20,6 +20,7 @@ class CampaignVideoTableSeeder extends Seeder
             $newVideoId = $faker->randomElement($videoIds);
             $newCampaignId = $faker->randomElement($campaignIds);
             $new_composite_id = $newVideoId . $newCampaignId;
+
             if (key_exists($new_composite_id, $unique_ids)) {
                 continue;
             }

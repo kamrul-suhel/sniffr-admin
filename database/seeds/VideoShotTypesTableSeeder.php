@@ -2,6 +2,10 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class VideoShotTypesTableSeeder
+ * TODO maybe this should be moved to an config file because it doesn't change that often
+ */
 class VideoShotTypesTableSeeder extends Seeder
 {
     public function run()
