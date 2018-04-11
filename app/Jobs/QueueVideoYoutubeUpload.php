@@ -81,7 +81,7 @@ class QueueVideoYoutubeUpload implements ShouldQueue
             if($fileName_watermark) {
 
                 // Upload it to youtube
-                if(empty($video->youtube_id)){
+                if(!$video->youtube_id){
                     file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
 
                     $file_watermark = new UploadedFile (
