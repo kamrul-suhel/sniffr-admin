@@ -2,7 +2,7 @@
     <v-flex xs12 sm6 md4 lg4 xl4>
         <v-card class="block">
             <v-card-media height="200px"
-                :src="video.image">
+                :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <router-link 
                 :to="{name:'videos_detail', params:{id: video.alpha_id}}"
                 class="block-thumbnail"  
@@ -37,7 +37,7 @@
     export default {
         data() {
             return {
-                video_image: ''
+                video_image: '/assets/img/default.jpg'
             }
         },
         props:['video'],
@@ -46,6 +46,13 @@
         methods:{
             defaultImage(){
                 this.video_image = '/assets/img/default.jpg';
+            },
+            getInstagramImage(){
+                axios.get('https://api.instagram.com/oembed/?url=https://www.instagram.com/p/BYzFX1dDVMn/')
+                    .then((response) => {
+                    console.log(response);
+                });
+                return '/assets/img/default.jpg';
             }
         },
         directives: {
