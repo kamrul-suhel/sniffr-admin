@@ -17,7 +17,7 @@ class VideosTableSeeder extends Seeder
         $videoCategoryIds = VideoCategory::lists('id');
         $videoCollectionIds = VideoCollection::lists('id');
         $videoShotTypeIds = VideoShotType::lists('id');
-        $states = env('sites.states');
+        $states = env('site.states');
 
         foreach (range(1, 30) as $index) {
             Video::create([

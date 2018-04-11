@@ -6,25 +6,28 @@ use App\Video;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 
-/**
- * Class DownloadsTableSeeder
- * TODO maybe move downloads logs outside the database, might get super big
- */
-class DownloadsTableSeeder extends Seeder
+class FavoritesTableSeeder extends Seeder
 {
     public function run()
     {
         $faker = Faker::create();
         $userIds = User::lists('id');
         $videoIds = Video::lists('id');
-        $downloadTypes = config('site.downloads.types');
+        $unique_ids = [];
 
         foreach (range(1, 30) as $index) {
+            // check composite id is unique
+            $newVideoId = $faker->randomElement($videoIds);
+            $newUserId = $faker->randomElement($userIds);
+            $new_composite_id = $newVideoId . $newUserId;
+            if (key_exists($new_composite_id, $unique_ids)) {
+                continue;
+            }
+            $unique_ids[$new_composite_id] = 1;
+
             Download::create([
                 'user_id' => $faker->randomElement($userIds),
-                'client_id' => NULL,
                 'video_id' => $faker->randomElement($videoIds),
-                'type' => $faker->randomElement($downloadTypes),
             ]);
         }
     }
