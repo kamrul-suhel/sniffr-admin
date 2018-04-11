@@ -27,4 +27,11 @@ return array(
         'problem',
         'noresponse'
     ],
+
+    'downloads' => [
+        'types' => [
+            'regular',
+            'watermark'
+        ],
+    ],
 );
