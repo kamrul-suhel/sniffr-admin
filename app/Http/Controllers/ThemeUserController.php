@@ -11,9 +11,7 @@ use App\Favorite;
 use App\Page;
 use App\Menu;
 use App\Video;
-use App\PaymentSetting;
 use App\VideoCategory;
-use App\Libraries\ThemeHelper;
 use App\Libraries\Imagehandler;
 use Illuminate\Support\Facades\Input;
 
@@ -57,7 +55,7 @@ class ThemeUserController extends Controller
             'videos' => $videos,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
         return view('Theme::user', $data);
@@ -73,7 +71,7 @@ class ThemeUserController extends Controller
                     'type' => 'edit',
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'video_categories' => VideoCategory::all(),
-                    'theme_settings' => ThemeHelper::getThemeSettings(),
+                    'theme_settings' => config('settings.theme'),
                     'pages' => Page::where('active', '=', 1)->get(),
 	    		);
 	    	return view('Theme::user', $data);
@@ -131,25 +129,13 @@ class ThemeUserController extends Controller
 
             $user = User::where('username', '=', $username)->first();
 
-            // $payment_settings = PaymentSetting::first();
-
-            // if($payment_settings->live_mode){
-            //     User::setStripeKey( $payment_settings->live_secret_key );
-            // } else {
-            //     User::setStripeKey( $payment_settings->test_secret_key );
-            // }
-
-            // $invoices = $user->invoices();
-
             $data = array(
                     'user' => $user,
                     'post_route' => url('user') . '/' . $user->username . '/update',
                     'type' => 'billing',
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'video_categories' => VideoCategory::all(),
-                    'theme_settings' => ThemeHelper::getThemeSettings(),
-                    'payment_settings' => $payment_settings,
-                    'invoices' => $invoices,
+                    'theme_settings' => config('settings.theme'),
                     'pages' => Page::where('active', '=', 1)->get(),
                 );
             return view('Theme::user', $data);
@@ -166,7 +152,7 @@ class ThemeUserController extends Controller
 
         if(Auth::user()->username == $username){
 
-            $payment_settings = PaymentSetting::first();
+            $payment_settings = config('settings.payments');
 
             if($payment_settings->live_mode){
                 User::setStripeKey( $payment_settings->live_secret_key );
@@ -189,7 +175,7 @@ class ThemeUserController extends Controller
 
         if (Auth::user()->username == $username) {
 
-            $payment_settings = PaymentSetting::first();
+            $payment_settings = config('settings.payments');
 
             if ($payment_settings->live_mode) {
                 User::setStripeKey($payment_settings->live_secret_key);
@@ -209,7 +195,7 @@ class ThemeUserController extends Controller
             return Redirect::to('/');
         endif;
 
-        $payment_settings = PaymentSetting::first();
+        $payment_settings = config('settings.payments');
 
         if($payment_settings->live_mode) {
             User::setStripeKey( $payment_settings->live_secret_key );
@@ -239,7 +225,7 @@ class ThemeUserController extends Controller
             return Redirect::to('/');
         endif;
 
-        $payment_settings = PaymentSetting::first();
+        $payment_settings = config('settings.payments');
 
         if($payment_settings->live_mode){
             User::setStripeKey( $payment_settings->live_secret_key );
@@ -257,7 +243,7 @@ class ThemeUserController extends Controller
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'payment_settings' => $payment_settings,
                 'video_categories' => VideoCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
+                'theme_settings' => config('settings.theme'),
                 'pages' => Page::where('active', '=', 1)->get(),
             ];
 
@@ -276,7 +262,7 @@ class ThemeUserController extends Controller
 
         $user = User::where('username', '=', $username)->first();
 
-        $payment_settings = PaymentSetting::first();
+        $payment_settings = config('settings.payments');
 
         if (Auth::user()->username == $username) {
             $data = [
@@ -286,7 +272,7 @@ class ThemeUserController extends Controller
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'payment_settings' => $payment_settings,
                     'video_categories' => VideoCategory::all(),
-                    'theme_settings' => ThemeHelper::getThemeSettings(),
+                    'theme_settings' => config('settings.theme'),
                     'pages' => Page::where('active', '=', 1)->get(),
             ];
 
@@ -303,7 +289,7 @@ class ThemeUserController extends Controller
 
         $user = User::where('username', '=', $username)->first();
 
-        $payment_settings = PaymentSetting::first();
+        $payment_settings = config('settings.payments');
 
         if ($payment_settings->live_mode) {
             User::setStripeKey($payment_settings->live_secret_key);
@@ -319,7 +305,7 @@ class ThemeUserController extends Controller
                     'menu' => Menu::orderBy('order', 'ASC')->get(),
                     'payment_settings' => $payment_settings,
                     'video_categories' => VideoCategory::all(),
-                    'theme_settings' => ThemeHelper::getThemeSettings(),
+                    'theme_settings' => config('settings.theme'),
                     'pages' => Page::where('active', '=', 1)->get(),
             ];
 
@@ -334,7 +320,7 @@ class ThemeUserController extends Controller
             return Redirect::to('/');
         endif;
 
-        $payment_settings = PaymentSetting::first();
+        $payment_settings = config('settings.payments');
 
         if($payment_settings->live_mode){
             User::setStripeKey( $payment_settings->live_secret_key );

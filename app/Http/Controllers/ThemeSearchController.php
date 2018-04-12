@@ -8,7 +8,7 @@ use App\Page;
 use App\Menu;
 use App\VideoCategory;
 use Illuminate\Support\Facades\Input;
-use App\Libraries\ThemeHelper;
+
 
 class ThemeSearchController extends Controller
 {
@@ -34,7 +34,7 @@ class ThemeSearchController extends Controller
 			'search_value' => $search_value,
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
 			'video_categories' => VideoCategory::all(),
-			'theme_settings' => ThemeHelper::getThemeSettings(),
+			'theme_settings' => config('settings.theme'),
 			'pages' => Page::where('active', '=', 1)->get(),
 		];
 		return view('Theme::search-list', $data);

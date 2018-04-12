@@ -5,21 +5,16 @@ namespace App\Http\Controllers;
 use App\Page;
 use App\Menu;
 use App\Video;
-use App\Setting;
 use App\VideoCategory;
-
-use App\Libraries\ThemeHelper;
 
 class ThemeHomeController extends Controller
 {
-    use ThemeHelper;
-
     private $videos_per_page = 12;
 
     public function __construct()
     {
-        $settings = Setting::first();
-        $this->videos_per_page = $settings->videos_per_page;
+        $settings = config('settings.site');
+        $this->videos_per_page = $settings['videos_per_page'];
     }
 
     public function index()
@@ -30,7 +25,7 @@ class ThemeHomeController extends Controller
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'pagination_url' => '/videos',
             'video_categories' => VideoCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
 

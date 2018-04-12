@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Input;
 
 use App\Tag;
 
-use App\Libraries\ThemeHelper;
+
 
 class ThemeTagController extends Controller {
 
@@ -20,7 +20,7 @@ class ThemeTagController extends Controller {
     public function __construct()
     {
         //$this->middleware('secure');
-        // $settings = Setting::first();
+        // $settings = config('settings.site');
         // $this->videos_per_page = $settings->videos_per_page;
     }
 

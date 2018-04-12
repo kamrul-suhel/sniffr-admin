@@ -8,7 +8,6 @@ use App\Page;
 use App\Menu;
 use App\Video;
 use App\VideoCategory;
-use App\Libraries\ThemeHelper;
 use Illuminate\Support\Facades\Input;
 
 class ThemeDailiesController extends Controller {
@@ -45,7 +44,7 @@ class ThemeDailiesController extends Controller {
 	            'menu' => Menu::orderBy('order', 'ASC')->get(),
 	            'pagination_url' => '/favorites',
 	            'video_categories' => VideoCategory::all(),
-				'theme_settings' => ThemeHelper::getThemeSettings(),
+				'theme_settings' => config('settings.theme'),
 				'pages' => Page::where('active', '=', 1)->get(),
             );
 
