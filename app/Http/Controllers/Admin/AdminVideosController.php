@@ -22,6 +22,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Mail\Mailable;
 
 use App\User;
 use App\Tag;
@@ -44,6 +45,8 @@ use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
+
+use App\Notifications\SubmissionAlert;
 
 use Carbon\Carbon as Carbon;
 
@@ -175,7 +178,7 @@ class AdminVideosController extends Controller {
         } else if($video->state == 'licensed'){
 
             // Check if licensed_at has already been set so we don't send contact/user another email
-            if(empty($video->licensed_at)) {
+            if(!$video->licensed_at) {
 
                 // Check if there is a contact for the video
                 if(isset($video->contact->id)) {
@@ -189,17 +192,18 @@ class AdminVideosController extends Controller {
             }
 
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
-            if(!empty($video->youtube_id) && $video->file){
+            if($video->youtube_id && $video->file){
 
                 // Make youtube video public (if not NSFW)
                 if(!$video->nsfw) {
-                    Youtube::setStatus($video->youtube_id, 'public');
+                    //Youtube::setStatus($video->youtube_id, 'public');
                 }
 
             } else {
 
                 // Set to process for youtube and analysis (if video not already on youtube)
-                if(empty($video->youtube_id) && $video->file){
+                if(!$video->youtube_id && $video->file){
+                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: '.$this->video_id.')'));
                     QueueVideoYoutubeUpload::dispatch($video->id)
                         ->delay(now()->addSeconds(5));
                 }

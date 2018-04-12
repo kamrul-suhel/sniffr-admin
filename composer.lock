@@ -118,16 +118,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.54.3",
+            "version": "3.54.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "00496aa6d1672347c774770b045f6b569faff495"
+                "reference": "6642a13df7ddcccf19e66c744c5bfae5b61e9e85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/00496aa6d1672347c774770b045f6b569faff495",
-                "reference": "00496aa6d1672347c774770b045f6b569faff495",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6642a13df7ddcccf19e66c744c5bfae5b61e9e85",
+                "reference": "6642a13df7ddcccf19e66c744c5bfae5b61e9e85",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-04-09T22:18:00+00:00"
+            "time": "2018-04-10T22:11:31+00:00"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -4067,16 +4067,16 @@
         },
         {
             "name": "schoooch/youtube",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schoooch/youtube.git",
-                "reference": "55fe65e1d006506227babc028205ffdc3f5d0542"
+                "reference": "0861dc63f2790de607cade47659e82a1c322cfbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schoooch/youtube/zipball/55fe65e1d006506227babc028205ffdc3f5d0542",
-                "reference": "55fe65e1d006506227babc028205ffdc3f5d0542",
+                "url": "https://api.github.com/repos/schoooch/youtube/zipball/0861dc63f2790de607cade47659e82a1c322cfbf",
+                "reference": "0861dc63f2790de607cade47659e82a1c322cfbf",
                 "shasum": ""
             },
             "require": {
@@ -4121,7 +4121,7 @@
                 }
             ],
             "description": "Upload a video to YouTube with Laravel 5.",
-            "time": "2018-04-04T15:31:30+00:00"
+            "time": "2018-04-11T08:10:12+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -6471,16 +6471,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.7",
+            "version": "6.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6bd77b57707c236833d2b57b968e403df060c9d9"
+                "reference": "4f21a3c6b97c42952fd5c2837bb354ec0199b97b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6bd77b57707c236833d2b57b968e403df060c9d9",
-                "reference": "6bd77b57707c236833d2b57b968e403df060c9d9",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4f21a3c6b97c42952fd5c2837bb354ec0199b97b",
+                "reference": "4f21a3c6b97c42952fd5c2837bb354ec0199b97b",
                 "shasum": ""
             },
             "require": {
@@ -6551,7 +6551,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-02-26T07:01:09+00:00"
+            "time": "2018-04-10T11:38:34+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
