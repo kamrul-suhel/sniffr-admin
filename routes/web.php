@@ -16,16 +16,16 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Video Page Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('videos', 'ThemeVideoController@index');
-    Route::get('videos/category/{category}', 'ThemeVideoController@category' );
-    Route::get('videos/tag/{tag}', 'ThemeVideoController@tag' );
-    Route::get('video/{id}', 'ThemeVideoController@show');
-    Route::post('upload', 'Video\UploadController@store');
-    Route::get('upload', 'Video\UploadController@index');
-    Route::get('upload/form', 'Video\UploadController@form');
-    Route::post('issue', 'Video\UploadController@issueAlert');
-    Route::post('videocheck', 'Video\UploadController@videoCheck');
-    Route::get('thanks', 'Video\UploadController@thanks');
+    Route::get('videos', 'Video\VideoController@index');
+    Route::get('videos/category/{category}', 'Video\VideoController@category' );
+    Route::get('videos/tag/{tag}', 'Video\VideoController@tag' );
+    Route::get('video/{id}', 'Video\VideoController@show');
+    Route::post('upload', 'Video\VideoController@store');
+    Route::get('upload', 'Video\VideoController@index');
+    Route::get('upload/form', 'Video\VideoController@form');
+    Route::post('issue', 'Video\VideoController@issueAlert');
+    Route::post('videocheck', 'Video\VideoController@videoCheck');
+    Route::get('thanks', 'Video\VideoController@thanks');
 
     /*
     |--------------------------------------------------------------------------
@@ -131,8 +131,6 @@ Route::get('user/{username}/upgrade_subscription', 'ThemeUserController@upgrade'
 Route::post('user/{username}/upgrade_cc', array('uses' => 'ThemeUserController@upgrade_cc_store'));
 
 Route::get('logout', 'ThemeAuthController@logout');
-
-Route::get('upgrade', 'UpgradeController@upgrade');
 
 Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
@@ -240,19 +238,6 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('plugins', 'Admin\AdminPluginsController@index');
     Route::get('plugin/deactivate/{plugin_name}', 'Admin\AdminPluginsController@deactivate');
     Route::get('plugin/activate/{plugin_name}', 'Admin\AdminPluginsController@activate');
-
-    Route::get('themes', 'Admin\AdminThemesController@index');
-    Route::get('theme/activate/{slug}', array('uses' => 'Admin\AdminThemesController@activate'));
-
-    Route::get('settings', 'Admin\AdminSettingsController@index');
-    Route::post('settings', array('uses' => 'Admin\AdminSettingsController@save_settings'));
-
-    Route::get('payment_settings', 'Admin\AdminPaymentSettingsController@index');
-    Route::post('payment_settings', array('uses' => 'Admin\AdminPaymentSettingsController@save_payment_settings'));
-
-    Route::get('theme_settings_form', 'Admin\AdminThemeSettingsController@theme_settings_form');
-    Route::get('theme_settings', 'Admin\AdminThemeSettingsController@theme_settings');
-    Route::post('theme_settings', array('uses' => 'Admin\AdminThemeSettingsController@update_theme_settings'));
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
