@@ -25,5 +25,4 @@ class Menu extends Model
     {
         return (DB::table('menu')->where('parent_id', '=', $this->id)->count() >= 1);
     }
-
 }
