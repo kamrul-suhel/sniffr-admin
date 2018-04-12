@@ -22,6 +22,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Mail\Mailable;
 
 use App\User;
 use App\Tag;
@@ -44,6 +45,10 @@ use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
+
+use App\Notifications\SubmissionAlert;
+
+use Carbon\Carbon as Carbon;
 
 class AdminVideosController extends Controller {
 
@@ -137,7 +142,6 @@ class AdminVideosController extends Controller {
     public function status(Request $request, $state, $id)
     {
         $isJson = $request->ajax();
-        $video_process=0;
 
         $video = Video::where('alpha_id', $id)->first();
         $previous_state = $video->state;
@@ -150,7 +154,10 @@ class AdminVideosController extends Controller {
             $video->more_details_sent = now();
 
             // Set to process for youtube and analysis
-            $video_process=1;
+            if(empty($video->youtube_id) && $video->file){
+                QueueVideoYoutubeUpload::dispatch($video->id)
+                    ->delay(now()->addSeconds(5));
+            }
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
@@ -172,7 +179,7 @@ class AdminVideosController extends Controller {
         } else if($video->state == 'licensed'){
 
             // Check if licensed_at has already been set so we don't send contact/user another email
-            if(empty($video->licensed_at)) {
+            if(!$video->licensed_at) {
 
                 // Check if there is a contact for the video
                 if(isset($video->contact->id)) {
@@ -186,17 +193,21 @@ class AdminVideosController extends Controller {
             }
 
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
-            if(!empty($video->youtube_id) && $video->file){
+            if($video->youtube_id && $video->file){
 
                 // Make youtube video public (if not NSFW)
                 if(!$video->nsfw) {
-                    Youtube::setStatus($video->youtube_id, 'public');
+                    //Youtube::setStatus($video->youtube_id, 'public');
                 }
 
             } else {
 
-                // Set to process for youtube and analysis
-                $video_process=1;
+                // Set to process for youtube and analysis (if video not already on youtube)
+                if(!$video->youtube_id && $video->file){
+                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: '.$this->video_id.')'));
+                    QueueVideoYoutubeUpload::dispatch($video->id)
+                        ->delay(now()->addSeconds(5));
+                }
 
             }
 
@@ -318,6 +329,12 @@ class AdminVideosController extends Controller {
      */
     public function store(Request $request)
     {
+        ini_set('memory_limit', '1024M'); // Increase memory limit for larger video files
+        ini_set('max_execution_time', 1800);
+        ini_set('upload_max_filesize', '1024M');
+        ini_set('post_max_size', '1024M');
+        set_time_limit(1800); // Longer timeout
+
         $validator = Validator::make($data = Input::all(), $this->rules);
 
         if ($validator->fails())
@@ -659,12 +676,24 @@ class AdminVideosController extends Controller {
 
     public function checkYoutube()
     {
-        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL]])->limit(300)->get();
+        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(300)->get();
         echo 'Total Count: '.count($videos).'<br /><br />';
         foreach ($videos as $video) {
             echo $video->id.' : '.$video->title.'<br />';
             QueueVideoYoutubeUpload::dispatch($video->id)
                 ->delay(now()->addSeconds(5));
+        }
+
+    }
+
+    public function checkWatermark()
+    {
+        $videos = Video::where([['file', '!=', NULL], ['file_watermark', NULL], ['file_watermark_dirty', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(100)->get();
+        echo 'Total Count: '.count($videos).'<br /><br />';
+        foreach ($videos as $video) {
+            echo $video->id.' : '.$video->title.' : '.basename($video->file).' : '.$video->created_at.'<br />';
+            // QueueVideo::dispatch($video->id)
+            //     ->delay(now()->addSeconds(5));
         }
 
     }

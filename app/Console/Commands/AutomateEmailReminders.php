@@ -65,6 +65,10 @@ class AutomateEmailReminders extends Command
         ->get();
 
         if(count($videos)>0) {
+
+            // Set incremental queue delay
+            $queue_delay = 10;
+
             // Loop through videos
             foreach ($videos as $video) {
                 // Check previous reminders and whether the video fits within the range: 24 hours, 72 hours, 1 week
@@ -89,6 +93,7 @@ class AutomateEmailReminders extends Command
 
                     // Output to schedule log
                     echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$video->alpha_id.' : '.$video->title.' : '.$video->more_details_sent.' : '.($video->reminders ? $video->reminders : '0').' : '.$video->contact->email. PHP_EOL;
+
                     // Need to update video reminder count and more details sent timestamp
                     $video->more_details_sent = now();
                     $video->reminders = $video->reminders ? $video->reminders+1 : 1;
@@ -96,7 +101,10 @@ class AutomateEmailReminders extends Command
 
                     // Schedule email reminder to be sent via queue/job
                     QueueEmail::dispatch($video->id, 'details_reminder')
-                        ->delay(now()->addSeconds(10));
+                        ->delay(now()->addSeconds($queue_delay));
+
+                    // Increment queue delay
+                    $queue_delay = $queue_delay + 10;
                 }
             }
         }

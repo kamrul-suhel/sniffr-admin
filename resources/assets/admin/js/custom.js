@@ -25,45 +25,50 @@ var public_vars = public_vars || {};
 
 	    $('.js-state').click(function(e){
 			e.preventDefault();
-			var dataUrl = $(this).attr('href');
-			var parseUrl = dataUrl.split('/');
-			var state = parseUrl[6];
-			var videoId = parseUrl[7];
-			var alertType;
+			var state, alertType;
+			var videoId = $(this).attr("data-id");
+			var myClass = $(this).attr("class");
+
+			switch (true) {
+				case /accepted/.test(myClass):
+					state = 'accepted';
+					alertType = 'success';
+					break;
+				case /licensed/.test(myClass):
+					state = 'licensed';
+					alertType = 'success';
+					break;
+				case /licensed/.test(myClass):
+					state = 'restricted';
+					alertType = 'warning';
+					break;
+				case /licensed/.test(myClass):
+					state = 'problem';
+					alertType = 'error';
+					break;
+				case /rejected/.test(myClass):
+					state = 'rejected';
+					alertType = 'error';
+					break;
+			}
+
+			$(this).removeClass('js-state');
 
 			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
 			$('.swal-button-container').css('display','none');
 
-			if(dataUrl) {
+			if(state&&videoId) {
+				console.log(state);
 				$.ajax({
 				    type: 'GET',
-				    url: dataUrl,
-				    data: { get_param: 'value' },
+				    url: '/admin/videos/status/'+state+'/'+videoId,
+				    data: {},
 				    dataType: 'json',
 				    success: function (data) {
 						if(data.status=='success') {
 							if(data.remove=='yes'){
 								$('#video-'+videoId).fadeOut();
 								$('#video-'+videoId).remove();
-							}
-							switch(state) {
-								case 'accepted':
-								case 'licensed':
-								case 'yes':
-									alertType = 'success';
-									break;
-								case 'rejected':
-								case 'problem':
-								case 'no':
-									alertType = 'error';
-									break;
-								case 'restricted':
-								case 'maybe':
-
-									alertType = 'warning';
-									break;
-								default:
-									alertType = 'success';
 							}
 							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
 							$('.swal-button-container').css('display','inline-block');
