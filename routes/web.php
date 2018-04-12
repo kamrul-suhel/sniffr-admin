@@ -11,7 +11,24 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
 
     Route::get('/settings_object', function(){
-        $settings = \App\Setting::first();
+        $fields = [
+            'website_name',
+            'website_description',
+            'logo',
+            'favicon',
+            'theme',
+            'facebook_page_id',
+            'twitter_page_id',
+            'youtube_page_id',
+            'videos_per_page',
+            'posts_per_page',
+            'terms_ex',
+            'terms_ex_contact_is_owner',
+            'terms_ex_allow_publish',
+            'terms_ex_is_exclusive',
+            'terms_non_ex'
+        ];
+        $settings = \App\Setting::select($fields)->first();
         return response($settings);
     });
 

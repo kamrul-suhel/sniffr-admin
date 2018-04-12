@@ -3,12 +3,16 @@
         <v-form v-model="valid" ref="detail_form">
 
             <v-container grid-list-lg>
-                <v-layout row wrap>
+
+                <v-layout row wrap v-if="http_error">
                     <v-flex xs12>
                         <div class="panel panel-primary" data-collapsed="0">
                             <div class="panel-heading">Sorry, we can't seem to find your video with the code you provided. Please contact <u>submissions@unilad.co.uk</u></div>
                         </div>
                     </v-flex>
+                </v-layout>
+
+                <v-layout row wrap v-else>
                     <v-flex xs12>
                         <h1 class="heading text-xs-center">Your Video Details</h1>
                     </v-flex>
@@ -34,7 +38,8 @@
                                 v-model="full_name"
                                 value=""
                                 label="Name"
-                                hint="Please type your full name">
+                                hint="Please type your full name"
+                            disabled>
                         </v-text-field>
                     </v-flex>
 
@@ -43,8 +48,7 @@
                                 v-model="email"
                                 label="Email"
                                 color="dark"
-                                value=""
-                                hint=""
+                                disabled
                         ></v-text-field>
                     </v-flex>
 
@@ -53,6 +57,7 @@
                                 v-model="tel"
                                 value=""
                                 color="dark"
+                                disabled
                                 label="Phone Number:"></v-text-field>
                     </v-flex>
 
@@ -62,7 +67,7 @@
 
                     <v-flex xs12>
                         <v-dialog
-                                color="dark"
+                                color="light"
                                 ref="dialog"
                                 persistent
                                 v-model="date_picker_modal"
@@ -75,15 +80,17 @@
                                     v-model="date_filmed"
                                     label="When was the video filmed?"
                                     prepend-icon="event"
-                                    value=""
-                                    readonly>
+                                    readonly
+                                    class="dark">
                             </v-text-field>
 
                             <v-date-picker
-                                    color="dark"
-                                    dark
+                                    color="light"
+                                    light
+                                    min="2000-04"
+                                    :max="max_date"
                                     v-model="date_filmed"
-                                    scrollable>
+                                    >
                                 <v-spacer></v-spacer>
 
                                 <v-btn flat color="dark" @click="date_picker_modal = false">Cancel</v-btn>
@@ -97,7 +104,6 @@
                         <v-text-field
                                 v-model="description"
                                 label="Please provide us with any other information (what's the story behind your video?)"
-                                value=""
                                 color="dark"
                                 multi-line
                         ></v-text-field>
@@ -106,7 +112,9 @@
                     <v-flex xs12>
                         <v-radio-group
                                 label="Who filmed the video?"
-                                v-model="filmed_by_me">
+                                v-model="filmed_by_me"
+                                :rules="[v => !!v || 'Field is required']"
+                                required>
                             <v-layout row wrap>
                                 <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
@@ -128,9 +136,14 @@
                     </v-flex>
 
                     <v-flex xs12>
+                        <v-flex xs12 class="pl-0 pb-0">
+                            <p class="gray-text mb-0">Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</p>
+                        </v-flex>
                         <v-radio-group
                                 v-model="permission"
-                                label="Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)">
+                                :rules="[v => !!v || 'Field is required']"
+                                required>
+
                             <v-layout row wrap>
                                 <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
@@ -194,33 +207,40 @@
                     <v-flex xs12>
                         <v-checkbox
                                 color="dark"
-                                label=""
                                 v-model="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 :value="contact_is_owner"
                                 required
-                        ></v-checkbox>
+                        >
+                            <div slot="label">
+                                {{ settings.terms_ex_contact_is_owner }}
+                            </div>
+                        </v-checkbox>
                     </v-flex>
 
                     <v-flex xs12>
                         <v-checkbox
                                 color="dark"
-                                label=""
                                 v-model="allow_publish"
                                 :rules="[v => !!v || 'You must agree to continue']"
-                                required></v-checkbox>
+                                required>
+                            <div slot="label">
+                                {{ settings.terms_ex_allow_publish }}
+                            </div>
+                        </v-checkbox>
                     </v-flex>
 
                     <v-flex xs12>
                         <v-checkbox
                                 color="dark"
-                                label=""
+                                :label="settings.terms_ex_is_exclusive"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
                                 required></v-checkbox>
                     </v-flex>
 
                     <v-flex xs12 class="text-xs-right">
+                        <span class="red--text" v-if="error">Sorry currently we are not processing your request. please try again.</span>
                         <v-btn
                                 dark
                                 :loading="loading"
@@ -231,24 +251,48 @@
                 </v-layout>
             </v-container>
         </v-form>
+
+
+        <!-- submit Success dialog box -->
+        <v-dialog
+                v-model="submit_success_dialog"
+                max-width="500px"
+                dark
+                persistent>
+            <v-card dark>
+                <v-card-text>
+                    <h2 class="text-xs-center">Thank you for your detail. we will contact you soon</h2>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="dark" flat @click.stop="submit_success_dialog = false">Close</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 <script>
     export default {
         data: () => ({
+            settings:'',
+            video: '',
             valid: false,
-            full_name: 'somename',
-            email: 'email',
-            tel:'0239480',
-            location:'london',
-            description:'some description',
-            filmed_by_me:'filmed_by me',
-            permission:'yes',
-            submitted_elsewhere:'no',
-            submitted_where:'youtube',
-            contact_is_owner:'yes',
-            allow_publish:'yes',
-            is_exclusive:'no',
+
+            //form data
+            full_name: '',
+            email: '',
+            tel:'',
+            location:'',
+            description:'',
+            filmed_by_me:'',
+            permission:'',
+            submitted_elsewhere:'',
+            submitted_where:'',
+            contact_is_owner:'',
+            allow_publish:'',
+            is_exclusive:'',
 
             // date picker setting
             date_filmed:null,
@@ -260,15 +304,64 @@
 
             //Loading process
             loading: false,
+
+            //route params
+            code : '',
+            max_date: new Date().toISOString().split('T')[0],
+
+            // not found error
+            http_error: false,
+
+            // Dialog model
+            submit_success_dialog: true,
+
+            // After submit error
+            error: false,
+
         }),
         created() {
-            let code = this.$route.params.code;
-            console.log(this.$route.params.code);
-            if(code){
-                console.log('yes');
-            }else{
+            this.code = this.$route.params.code;
+            if(!this.code){
                 this.$router.push({name: 'home'});
             }
+
+            // check if this code is exists in our database
+            let url = '/details/'+this.code;
+            axios.get(url)
+                .then( (response) => {
+                    let data = response.data;
+
+                    if(!data.error){
+                        // process data
+                        console.log(data);
+                        this.video = data;
+
+                        this.full_name =  data.contact.full_name;
+                        this.email = data.contact.email;
+                        this.tel = data.contact.tel;
+                        this.location = data.location;
+                        this.description = data.description;
+                        this.filmed_by_me = data.filmed_by_me;
+                        this.permission = data.permission;
+                        this.submitted_elsewhere = data.submitted_elsewhere;
+                        this.submitted_where = data.submitted_where;
+                        this.submitted_where = data.submitted_where;
+                        this.contact_is_owner = data.contact_is_owner;
+                        this.allow_publish = data.allow_publish;
+                        this.is_exclusive = data.is_exclusive;
+
+                    }else{
+                        //error return to 404 page
+                        this.$router.push({name: 'notfound'});
+                    }
+                })
+                .catch((error) => {
+                    this.http_error = true;
+                });
+
+            this.$store.dispatch('setSettingObjectFromServer').then(() => {
+                this.settings = this.$store.getters.getSettingsObject;
+            });
         },
         watch: {
         },
@@ -277,7 +370,8 @@
         methods: {
             onSubmit() {
                 if(this.$refs.detail_form.validate()){
-                    this.loading=true;
+//                    this.loading=true;
+                    console.log('yes');
                     this.uploadFormData();
                 }
             },
@@ -299,20 +393,22 @@
                 form.append('is_exclusive', this.is_exclusive);
                 form.append('date_filmed', this.date_filmed);
 
-                axios.post('/details/ZZTlVk8jdz3jRB6v9xbl99dtXhCIQa', form)
+                //url
+                let url = '/details/' + this.code;
+                axios.post(url, form)
                     .then(response => {
                         //data uploaded succes
                         let data = response.data;
-                        if(data.success === 1){
+                        if(!data.error){
                             setTimeout( () => {
-                                // this.uploadFormData();
                                 this.loading=false;
+                                this.$refs.detail_form.reset();
+                                this.submit_success_dialog = true;
                             }, 1000);
                         }
                     })
-                    .catch(function(error){
-                        console.log(error);
-                        console.log('FAILURE!!');
+                    .catch((error) => {
+                        this.error = true;
                     });
             }
         }

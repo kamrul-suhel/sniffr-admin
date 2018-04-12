@@ -146,7 +146,6 @@
                 if (!document.getElementById('facebook-jssdk')) {
                     console.log('created');
                     (function (d, s, id) {
-                        console.log(d, s, id);
                         var js, fjs = d.getElementsByTagName(s)[0];
                         if (d.getElementById(id)) return;
                         js = d.createElement(s);

@@ -15,20 +15,22 @@ const getters = {
 }
 
 const actions = {
-    getSettingObject({ commit }){
-        return new Promise(function(resolve, reject){
-            let url = '/settings_object';
-            axios.get(url)
-                .then((response) => {
-                    let data = response.data;
-                    console.log(response);
-                    commit('setSettingsObject', data);
-                    resolve();
-                })
-                .catch((error) => {
-                    reject();
-                });
-        });
+    setSettingObjectFromServer({ commit, state }){
+        // check if settings data is load or not
+        if(typeof state.settings != 'object'){
+            return new Promise(function(resolve, reject){
+                let url = '/settings_object';
+                axios.get(url)
+                    .then((response) => {
+                        let data = response.data;
+                        commit('setSettingsObject', data);
+                        resolve();
+                    })
+                    .catch((error) => {
+                        reject();
+                    });
+            });
+        }
     }
 }
 

@@ -150,7 +150,7 @@
                                     ></v-checkbox>
                                 </v-flex>
 
-                                <v-flex xl2 text-xs-right pa-0>
+                                <v-flex xsl2 text-xs-right pa-0>
                                     <p class="red-text" v-if="validate_email_error">Look your email is not valid plese try again</p>
 
                                     <v-progress-circular

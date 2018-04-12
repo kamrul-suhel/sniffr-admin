@@ -2,11 +2,51 @@
     namespace App\Traits;
 
 trait FrontendResponser {
-    protected function successResponse($data){
+    protected function successResponse($data = array()){
+        $data['success'] = '1';
         return response()->json($data);
     }
 
     protected function errorResponse($message){
         return response()->json(['error' => $message]);
+    }
+
+    protected function getVideoFieldsForFrontend(){
+        $fields = [
+            'id',
+            'alpha_id',
+            'state',
+            'user_id',
+            'contact_id',
+            'title',
+            'active',
+            'image',
+            'thumb',
+            'mime',
+            'file',
+            'file_watermark',
+            'file_watermark_dirty',
+            'link',
+            'vertical',
+            'youtube_id',
+            'embed_code',
+            'duration',
+            'description',
+            'dimension_width',
+            'dimension_height',
+            'date_filmed',
+            'location',
+            'source',
+            'contact_is_owner',
+            'submitted_elsewhere',
+            'submitted_where',
+            'allow_publish',
+            'filmed_by_me',
+            'permission',
+            'is_exclusive',
+            'terms'
+        ];
+
+        return $fields;
     }
 }

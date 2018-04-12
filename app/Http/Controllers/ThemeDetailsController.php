@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\FrontendResponser;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use App\Notifications\DetailsReview;
 
 class ThemeDetailsController extends Controller
 {
+    use FrontendResponser;
+
     protected $rules = [
         'description' => 'required',
         'permission' => 'required',
@@ -49,11 +52,22 @@ class ThemeDetailsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($code)
+    public function index(Request $request, $code)
     {
-        $this->data['video'] = Video::where('more_details_code', $code)->first();
+        $video = Video::select($this->getVideoFieldsForFrontend())
+            ->where('more_details_code', $code)
+            ->with('contact')
+            ->first();
+
+        if($request->ajax()){
+            if($video){
+                return $this->successResponse($video);
+            }else{
+                return $this->errorResponse("Not found");
+            }
+        }
+
         return view('frontend.master', $this->data);
-//        return view('Theme::details', $this->data);
     }
 
     /**
@@ -77,16 +91,17 @@ class ThemeDetailsController extends Controller
      */
     public function store(Request $request, $code)
     {
-
         $video = Video::where('more_details_code', $code)->first();
 
         $validator = Validator::make(Input::all(), $this->rules);
-
-
         $this->validate($request, $this->rules);
 
-
         if ($validator->fails()) {
+
+            if($request->ajax()){
+                return $this->errorResponse('Sorry there is something wrong please review the form and submit again');
+            }
+
             return Redirect::back()
                 ->withErrors($validator)
                 ->withInput();
@@ -125,9 +140,9 @@ class ThemeDetailsController extends Controller
             $this->data['video'] = $video;
 
             if($request->ajax()){
-                return response()->json('success', '1');
+                return $this->successResponse();
             }else{
-                return view('Theme::details', $this->data);
+                return view('frontend.master', $this->data);
             }
 
         }

@@ -42,6 +42,8 @@
     import CountdownComponent from './_partials/CountdownComponent.vue';
     import FeatureComponent from './_partials/FeatureComponent.vue';
     import UploadVideoComponent from '../../forms/UploadVideoComponent.vue';
+    import mapAction from 'vuex';
+    import mapGetters from 'vuex';
 
     export default{
         components:{
@@ -51,7 +53,8 @@
         },
         data() {
             return {
-                fullwidth_height:0
+                fullwidth_height:0,
+                settings: ''
             }
         },
         methods: {
@@ -61,6 +64,10 @@
         created(){
             var browserheight = window.innerHeight;
             this.fullwidth_height = browserheight+'px';
+
+            this.$store.dispatch('setSettingObjectFromServer').then(() => {
+                this.settings = this.$store.getters.getSettingsObject;
+            });
         },
 
         mounted(){

@@ -9,6 +9,9 @@ import VideoTagSearch from './modules/videos_tag_search';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
+    beforeCreate: function() {
+        console.log('it run');
+    },
 	state: {
 	},
 	mutations: {
@@ -18,7 +21,6 @@ export const store = new Vuex.Store({
 		
 	},
 	actions: {
-		
 	},
 	modules: {
 		Settings,

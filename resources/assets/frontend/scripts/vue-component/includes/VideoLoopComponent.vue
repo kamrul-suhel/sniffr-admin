@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12 sm6 md4 lg4 xl4>
-        <v-card class="block">
+        <v-card flat class="block">
             <v-card-media height="200px"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <router-link 
