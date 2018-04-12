@@ -19,8 +19,11 @@ p.gray-text{
 
 /* ************************* Font and size ******************* */
 
-h1, h2, h3, h4, h5, p, form, form input{
+h1, h2, h3, h4, h5{
   font-family:JosefinSansbold;
+}
+p, form, form input, a, span {
+  font-family:JosefinSansregular;
 }
 
 h1{

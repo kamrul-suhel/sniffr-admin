@@ -106,9 +106,10 @@
             }
         },
         created(){
-
         },
         mounted() {
+            this.$vuetify.goTo('#scroll_to');
+
             window.addEventListener('fb-sdk-ready', this.onFBReady)
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {

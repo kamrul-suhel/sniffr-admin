@@ -98,7 +98,7 @@
 
                             <v-layout row justify-center>
                                 <v-flex xs12 text-xs-center>
-                                    <a @click.stop="password_reset_dialog = !password_reset_dialog" class="forgot-password">Forgot password</a>
+                                    <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
                                 </v-flex>
                             </v-layout>
 
@@ -224,6 +224,13 @@
         },
 
         methods: {
+            onForgotforgotDialog(){
+                this.login_dialog = false;
+                setTimeout(()=> {
+                    this.password_reset_dialog = true;
+                }, 500);
+            },
+
             onForgotPassword() {
                 if(this.$refs.forgot_password_form.validate()){
                     this.loading = true;

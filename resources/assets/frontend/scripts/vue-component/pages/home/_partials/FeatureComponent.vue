@@ -5,7 +5,7 @@
             <v-layout row wrap>
                 <v-flex xs12 text-center>
                     <div class="featured-section-title">
-                        <h1 class="heading">FEATURES VIDEOS</h1>
+                        <h1 class="heading">FEATURED VIDEOS</h1>
                     </div>
                 </v-flex>
             </v-layout>
