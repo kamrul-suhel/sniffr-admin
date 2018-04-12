@@ -60,7 +60,6 @@
     deployment_start
     deployment_links
     deployment_composer
-    deployment_migrate
     deployment_cache
     deployment_optimize
     deployment_finish
@@ -71,7 +70,6 @@
     deployment_start
     deployment_links
     deployment_composer
-    deployment_migrate
     deployment_cache
     deployment_optimize
     deployment_finish
