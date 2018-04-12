@@ -203,7 +203,7 @@ class AdminVideosController extends Controller {
 
                 // Set to process for youtube and analysis (if video not already on youtube)
                 if(!$video->youtube_id && $video->file){
-                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: '.$this->video_id.')'));
+                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: '.$video->alpha_id.')'));
                     QueueVideoYoutubeUpload::dispatch($video->id)
                         ->delay(now()->addSeconds(5));
                 }
