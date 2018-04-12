@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration {
 			$table->integer('video_id')->unsigned();
 			$table->integer('contact_id')->unsigned()->nullable();
 			$table->integer('user_id')->unsigned();
-			$table->text('comment', 65535);
+			$table->text('comment');
 			$table->boolean('moderated')->default(0);
 			$table->timestamps();
 		});

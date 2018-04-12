@@ -15,7 +15,7 @@ class CreateYoutubeAccessTokensTable extends Migration {
 		Schema::create('youtube_access_tokens', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->text('access_token', 65535);
+			$table->text('access_token');
 			$table->dateTime('created_at')->useCurrent();
 		});
 	}

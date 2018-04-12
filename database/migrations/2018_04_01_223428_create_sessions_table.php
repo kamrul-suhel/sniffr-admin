@@ -17,8 +17,8 @@ class CreateSessionsTable extends Migration {
 			$table->string('id')->unique();
 			$table->integer('user_id')->unsigned()->nullable();
 			$table->string('ip_address', 45)->nullable();
-			$table->text('user_agent', 65535)->nullable();
-			$table->text('payload', 65535);
+			$table->text('user_agent')->nullable();
+			$table->text('payload');
 			$table->integer('last_activity');
 		});
 	}

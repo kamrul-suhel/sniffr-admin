@@ -17,7 +17,7 @@ class CreateThemeSettingsTable extends Migration {
 			$table->increments('id');
 			$table->string('theme_slug')->nullable();
 			$table->string('key');
-			$table->text('value', 65535);
+			$table->text('value');
 			$table->timestamps();
 		});
 	}

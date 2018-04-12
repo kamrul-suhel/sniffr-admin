@@ -16,7 +16,7 @@ class CreateThemesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('name');
-			$table->text('description', 65535);
+			$table->text('description');
 			$table->string('version');
 			$table->string('slug');
 			$table->boolean('active')->default(0);

@@ -35,11 +35,11 @@ class CreateSettingsTable extends Migration {
 			$table->boolean('free_registration')->default(0);
 			$table->boolean('activation_email')->default(0);
 			$table->boolean('premium_upgrade')->default(1);
-			$table->text('terms_ex', 65535)->nullable();
-			$table->text('terms_ex_contact_is_owner', 65535)->nullable();
-			$table->text('terms_ex_allow_publish', 65535)->nullable();
-			$table->text('terms_ex_is_exclusive', 65535)->nullable();
-			$table->text('terms_non_ex', 65535)->nullable();
+			$table->text('terms_ex')->nullable();
+			$table->text('terms_ex_contact_is_owner')->nullable();
+			$table->text('terms_ex_allow_publish')->nullable();
+			$table->text('terms_ex_is_exclusive')->nullable();
+			$table->text('terms_non_ex')->nullable();
 		});
 	}
 
