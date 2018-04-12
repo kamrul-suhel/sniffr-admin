@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
 use Validator;
 use Redirect;
-
 use App\Video;
 use App\Client;
 use App\Campaign;
-
 use App\Traits\Slug;
-use App\Libraries\ThemeHelper;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-
 use App\Http\Controllers\Controller;
 
 class AdminCampaignController extends Controller
@@ -30,7 +23,8 @@ class AdminCampaignController extends Controller
     ];
 
     /**
-     * AdminController constructor.
+     * AdminCampaignController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -38,9 +32,7 @@ class AdminCampaignController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -57,9 +49,7 @@ class AdminCampaignController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
@@ -73,6 +63,9 @@ class AdminCampaignController extends Controller
         return view('admin.campaigns.create_edit', $data);
     }
 
+    /**
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
      public function store()
      {
          $validator = Validator::make($data = Input::all(), $this->rules);
@@ -84,17 +77,18 @@ class AdminCampaignController extends Controller
 
          $data['slug'] = $this->slugify($data['name']);
 
-         $campaign = Campaign::create($data);
+         Campaign::create($data);
 
-         return Redirect::to('admin/campaigns')->with(array('note' => 'New Campaign Successfully Added!', 'note_type' => 'success') );
+         return Redirect::to('admin/campaigns')->with([
+             'note' => 'New Campaign Successfully Added!',
+             'note_type' => 'success'
+         ]);
      }
 
-     /**
-      * Display the specified resource.
-      *
-      * @param  \App\Campaign  $campaign
-      * @return \Illuminate\Http\Response
-      */
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
      public function show($id)
      {
         $campaign = Campaign::find($id);
@@ -112,13 +106,10 @@ class AdminCampaignController extends Controller
         return view('admin.campaigns.show', $data);
      }
 
-     /**
-      * Show the form for editing the specified resource.
-      *
-      * @param  \App\Campaign  $campaign
-      * @return \Illuminate\Http\Response
-      */
-
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
      public function edit($id)
      {
          $campaign = Campaign::find($id);
@@ -135,14 +126,9 @@ class AdminCampaignController extends Controller
          return view('admin.campaigns.create_edit', $data);
      }
 
-     /**
-      * Update the specified resource in storage.
-      *
-      * @param  \Illuminate\Http\Request  $request
-      * @param  \App\Campaign  $campaign
-      * @return \Illuminate\Http\Response
-      */
-
+    /**
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
      public function update()
      {
          $data = Input::all();
@@ -156,30 +142,31 @@ class AdminCampaignController extends Controller
              return Redirect::back()->withErrors($validator)->withInput();
          }
 
-         // if(!isset($data['active']) || $data['active'] == ''){
-         //     $data['active'] = 0;
-         // }
-
          $data['slug'] = $this->slugify($data['name']);
 
          $campaign->update($data);
 
-         return Redirect::to('admin/campaigns/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Campaign!', 'note_type' => 'success') );
+         return Redirect::to('admin/campaigns/edit' . '/' . $id)->with([
+             'note' => 'Successfully Updated Campaign!',
+             'note_type' => 'success'
+         ]);
      }
 
-     /**
-      * Remove the specified resource from storage.
-      *
-      * @param  \App\Campaign  $campaign
-      * @return \Illuminate\Http\Response
-      */
-
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
      public function destroy($id)
      {
          $campaign = Campaign::find($id);
+         if (!$campaign) {
+             abort(404);
+         }
+         $campaign->destroy($id);
 
-         Campaign::destroy($id);
-
-         return Redirect::to('admin/campaigns')->with(array('note' => 'Successfully Deleted Campaign', 'note_type' => 'success') );
+         return Redirect::to('admin/campaigns')->with([
+             'note' => 'Successfully Deleted Campaign',
+             'note_type' => 'success'
+         ]);
      }
 }
