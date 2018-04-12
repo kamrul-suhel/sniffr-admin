@@ -1,34 +1,44 @@
 <?php
 
 return [
-    0 => [
+    [
+        'id' => 1,
         'name' => 'UNILAD',
     ],
-    1 => [
+    [
+        'id' => 2,
         'name' => 'Gaming',
     ],
-    2 => [
+    [
+        'id' => 3,
         'name' => 'Adventure',
     ],
-    3 => [
+    [
+        'id' => 4,
         'name' => 'Fitness',
     ],
-    4 => [
+    [
+        'id' => 5,
         'name' => 'Grub',
     ],
-    5 => [
+    [
+        'id' => 6,
         'name' => 'Film',
     ],
-    6 => [
+    [
+        'id' => 7,
         'name' => 'Tech',
     ],
-    7 => [
+    [
+        'id' => 8,
         'name' => 'Sound',
     ],
-    8 => [
+    [
+        'id' => 9,
         'name' => 'Sensitive',
     ],
-    9 => [
+    [
+        'id' => 10,
         'name' => 'Editorial',
     ],
 ];
