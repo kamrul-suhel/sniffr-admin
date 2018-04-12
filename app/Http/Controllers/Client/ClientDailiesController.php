@@ -2,55 +2,37 @@
 
 namespace App\Http\Controllers\Client;
 
-use View;
 use Auth;
 use Redirect;
-use Validator;
-use DateTime;
-use DateInterval;
-
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
-
-use App\User;
-use App\Tag;
-use App\Menu;
 use App\Video;
 use App\Client;
-use App\Comment;
 use App\Campaign;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
-
-use App\Jobs\QueueEmail;
-
-use App\Libraries\ImageHandler;
-use App\Libraries\TimeHelper;
-use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
-
 use App\Notifications\ClientAction;
 
 class ClientDailiesController extends Controller {
 
-    protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
+    // TODO: WE SHOULD PROBABLY ADD RULES TO THIS
+    protected $rules = [];
 
     /**
-     * constructor.
+     * ClientDailiesController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->middleware('client');
     }
+
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @param Request $request
+     * @param string $state
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request, $state = 'all')
     {
@@ -70,34 +52,34 @@ class ClientDailiesController extends Controller {
         // Video list
         $videos = new Video;
 
-        if($campaign_id){
+        if ($campaign_id) {
             $request->session()->put('campaign_id', $campaign_id);
-            $videos = $videos->whereHas('campaigns', function ($q) use($campaign_id) {
+            $videos = $videos->whereHas('campaigns', function ($q) use ($campaign_id) {
                 $q->where('id', $campaign_id);
             });
-        }else{
-            $videos = $videos->whereHas('campaigns', function ($q) use($campaigns) {
+        } else {
+            $videos = $videos->whereHas('campaigns', function ($q) use ($campaigns) {
                 $q->whereIn('id', $campaigns->pluck('id'));
             });
         }
 
-        if(!empty($search_value)){
-            $videos = Video::where(function($query) use($search_value){
-                $query->where('title', 'LIKE', '%'.$search_value.'%');
-            })->orWhereHas('tags', function ($q) use($search_value){
-                $q->where('name', 'LIKE', '%'.$search_value.'%');
+        if (!empty($search_value)) {
+            $videos = Video::where(function ($query) use ($search_value) {
+                $query->where('title', 'LIKE', '%' . $search_value . '%');
+            })->orWhereHas('tags', function ($q) use ($search_value) {
+                $q->where('name', 'LIKE', '%' . $search_value . '%');
             });
         }
 
-        if($state != 'all'){
-            $videos = $videos->whereHas('campaigns', function ($q) use($state) {
+        if ($state != 'all') {
+            $videos = $videos->whereHas('campaigns', function ($q) use ($state) {
                 $q->where('state', $state);
             });
         }
 
         $videos = $videos->paginate(9);
 
-        $data = array(
+        $data = [
             'state' => $state,
             'videos' => $videos,
             'user' => $user,
@@ -107,16 +89,14 @@ class ClientDailiesController extends Controller {
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
-        );
+        ];
 
         return view('client.dailies.index', $data);
     }
 
-     /**
-     * View the specified video.
-     *
-     * @param  int  $id
-     * @return Response
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function view($id)
     {
@@ -124,7 +104,7 @@ class ClientDailiesController extends Controller {
 
         $user = Auth::user();
 
-        $data = array(
+        $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
             'admin_user' => Auth::user(),
@@ -133,16 +113,16 @@ class ClientDailiesController extends Controller {
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
             'user' => $user
-        );
+        ];
 
         return view('client.dailies.create_edit', $data);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param $state
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function status(Request $request, $state, $id)
     {
@@ -155,28 +135,40 @@ class ClientDailiesController extends Controller {
         $video->campaigns()->sync($campaigns);
 
         // Send email
-        if($state == 'yes'){
-            $message = 'Thanks for choosing this video';
-        }else if($state == 'maybe'){
-            $message = 'You might use this video';
-        }else if($state == 'no'){
-            $message = 'We\'ll continue searching for suitable videos';
+        switch ($state) {
+            case 'yes':
+                $message = 'Thanks for choosing this video';
+                break;
+            case 'maybe':
+                $message = 'You might use this video';
+                break;
+            case 'no':
+                $message = 'We\'ll continue searching for suitable videos';
+                break;
         }
 
         $client->notify(new ClientAction($video, $state, $client->name));
 
-        if($isJson) {
-            return response()->json(['status' => 'success', 'message' => $message, 'state' => $state, 'remove' => 'yes', 'video_id' => $video->id]);
-        } else {
-            return Redirect::to('client/dailies/'.session('state'))->with(array('note' => 'Successfully '.ucfirst($state).' Video', 'note_type' => 'success') );
+        if ($isJson) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $message,
+                'state' => $state,
+                'remove' => 'yes',
+                'video_id' => $video->id
+            ]);
         }
+
+        return Redirect::to('client/dailies/'.session('state'))->with([
+            'note' => 'Successfully '.ucfirst($state).' Video',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function request(Request $request, $id)
     {
@@ -188,9 +180,17 @@ class ClientDailiesController extends Controller {
         $client->notify(new ClientAction($video, 'request', $client->name));
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'We\'ll do our best to get the video file ASAP', 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
-        } else {
-            return Redirect::to('client/dailies/'.session('state'))->with(array('note' => 'We\'ll do our best to get the video file ASAP', 'note_type' => 'success') );
+            return response()->json([
+                'status' => 'success',
+                'message' => 'We\'ll do our best to get the video file ASAP',
+                'state' => 'request',
+                'current_state' => session('current_state'),
+                'video_id' => $video->id]);
         }
+
+        return Redirect::to('client/dailies/'.session('state'))->with([
+            'note' => 'We\'ll do our best to get the video file ASAP',
+            'note_type' => 'success'
+        ]);
     }
 }
