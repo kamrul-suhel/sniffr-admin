@@ -209,7 +209,7 @@
                                 color="dark"
                                 v-model="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
-                                :value="contact_is_owner"
+                                value="1"
                                 required
                         >
                             <div slot="label">
@@ -222,6 +222,7 @@
                         <v-checkbox
                                 color="dark"
                                 v-model="allow_publish"
+                                value="1"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required>
                             <div slot="label">
@@ -236,6 +237,7 @@
                                 :label="settings.terms_ex_is_exclusive"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
+                                value="1"
                                 required></v-checkbox>
                     </v-flex>
 
@@ -313,7 +315,7 @@
             http_error: false,
 
             // Dialog model
-            submit_success_dialog: true,
+            submit_success_dialog: false,
 
             // After submit error
             error: false,
@@ -344,11 +346,6 @@
                         this.filmed_by_me = data.filmed_by_me;
                         this.permission = data.permission;
                         this.submitted_elsewhere = data.submitted_elsewhere;
-                        this.submitted_where = data.submitted_where;
-                        this.submitted_where = data.submitted_where;
-                        this.contact_is_owner = data.contact_is_owner;
-                        this.allow_publish = data.allow_publish;
-                        this.is_exclusive = data.is_exclusive;
 
                     }else{
                         //error return to 404 page
@@ -370,8 +367,7 @@
         methods: {
             onSubmit() {
                 if(this.$refs.detail_form.validate()){
-//                    this.loading=true;
-                    console.log('yes');
+                    this.loading=true;
                     this.uploadFormData();
                 }
             },

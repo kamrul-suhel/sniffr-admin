@@ -19,15 +19,17 @@ p.gray-text{
 
 /* ************************* Font and size ******************* */
 
-h1{
+h1, h2, h3, h4, h5, p, form, form input{
   font-family:JosefinSansbold;
+}
+
+h1{
   @include headingstyle;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h2{
-  font-family:JosefinSansbold;
   font-size:24px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,7 +38,6 @@ h2{
 p{
   font-size:16px;
   font-weight:lighter;
-  font-family:JosefinSansregular;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
