@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
             FavoritesTableSeeder::class,
             MenuTableSeeder::class,
             PagesTableSeeder::class,
-            LegalTermsTableSeeder::class,
-            TagVideoTableSeeder::class,
+            LegalTermsSeeder::class,
             TagsTableSeeder::class,
+            TagVideoTableSeeder::class,
         ]);
     }
 }

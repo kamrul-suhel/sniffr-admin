@@ -13,14 +13,14 @@ class TagsTableSeeder extends Seeder
 
         foreach (range(1, 300) as $index) {
             $word = $faker->word;
-            $tags[$word] = 1;
-
+            // check if keyword already exists in the table
             if (key_exists($word, $tags)) {
                 continue;
             }
+            $tags[$word] = $word;
 
             Tag::create([
-                'name' => $faker->word,
+                'name' => $word,
             ]);
         }
     }

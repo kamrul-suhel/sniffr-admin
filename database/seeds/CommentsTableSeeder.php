@@ -11,8 +11,8 @@ class CommentsTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $videoIds = Video::lists('id');
-        $userIds = User::lists('id');
+        $videoIds = Video::pluck('id')->toArray();
+        $userIds = User::pluck('id')->toArray();
         foreach (range(1, 30) as $index) {
             Comment::create([
                 'video_id' => $faker->randomElement($videoIds),

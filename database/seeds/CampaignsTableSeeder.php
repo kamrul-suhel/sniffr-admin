@@ -12,7 +12,7 @@ class CampaignsTableSeeder extends Seeder
 {
     public function run()
     {
-        $clientIds = Client::lists('id');
+        $clientIds = Client::pluck('id')->toArray();
         $faker = Faker::create();
         foreach (range(1, 30) as $index) {
             Campaign::create([

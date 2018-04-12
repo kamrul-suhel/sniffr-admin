@@ -15,14 +15,15 @@ class DownloadsTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $userIds = User::lists('id');
-        $videoIds = Video::lists('id');
+        $userIds = User::pluck('id')->toArray();
+        $clientIds = User::pluck('id')->toArray();
+        $videoIds = Video::pluck('id')->toArray();
         $downloadTypes = config('site.downloads.types');
 
         foreach (range(1, 30) as $index) {
             Download::create([
                 'user_id' => $faker->randomElement($userIds),
-                'client_id' => NULL,
+                'client_id' => $faker->randomElement($clientIds),
                 'video_id' => $faker->randomElement($videoIds),
                 'type' => $faker->randomElement($downloadTypes),
             ]);

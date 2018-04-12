@@ -10,8 +10,8 @@ class TagVideoTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $tagIds = Tag::lists('id');
-        $videoIds = Video::lists('id');
+        $tagIds = Tag::pluck('id')->toArray();
+        $videoIds = Video::pluck('id')->toArray();
         $unique_ids = [];
 
         foreach (range(1, 300) as $index) {
@@ -19,7 +19,6 @@ class TagVideoTableSeeder extends Seeder
             $newVideoId = $faker->randomElement($videoIds);
             $newTagId = $faker->randomElement($tagIds);
             $new_composite_id = $newVideoId . $newTagId;
-
             if (key_exists($new_composite_id, $unique_ids)) {
                 continue;
             }

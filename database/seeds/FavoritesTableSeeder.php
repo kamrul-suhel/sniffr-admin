@@ -1,6 +1,7 @@
 <?php
 
 use App\Download;
+use App\Favorite;
 use App\User;
 use App\Video;
 use Illuminate\Database\Seeder;
@@ -11,8 +12,8 @@ class FavoritesTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $userIds = User::lists('id');
-        $videoIds = Video::lists('id');
+        $userIds = User::pluck('id')->toArray();
+        $videoIds = Video::pluck('id')->toArray();
         $unique_ids = [];
 
         foreach (range(1, 30) as $index) {
@@ -25,7 +26,7 @@ class FavoritesTableSeeder extends Seeder
             }
             $unique_ids[$new_composite_id] = 1;
 
-            Download::create([
+            Favorite::create([
                 'user_id' => $faker->randomElement($userIds),
                 'video_id' => $faker->randomElement($videoIds),
             ]);

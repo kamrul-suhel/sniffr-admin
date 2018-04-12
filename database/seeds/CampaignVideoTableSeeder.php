@@ -10,10 +10,10 @@ class CampaignVideoTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $campaignIds = Contact::lists('id');
-        $videoIds = Video::lists('id');
+        $campaignIds = Contact::pluck('id')->toArray();
+        $videoIds = Video::pluck('id')->toArray();
         $unique_ids = [];
-        $states = env('site.states');
+        $states = config('videos.states');
 
         foreach (range(1, 30) as $index) {
             // check composite id is unique
