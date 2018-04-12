@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use Response;
-use Video;
+use App\Video;
 use Auth;
-use App\Setting as Setting;
 use App\VideoCategory;
 
 use App\Http\Controllers\Controller;
@@ -46,7 +45,7 @@ class VideoController extends Controller {
 
 	public function video($id)
 	{
-		$settings = Setting::first();
+		$settings = config('settings.site');
 		$video = Video::find($id);
 		
 		// If user has access to all the content

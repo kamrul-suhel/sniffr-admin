@@ -1,4 +1,4 @@
-<?php $settings = App\Setting::first(); ?>
+<?php $settings = config('settings.site'); ?>
 <style type="text/css">
 body {
     font-family: Arial;
