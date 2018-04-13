@@ -8,7 +8,7 @@ class UsersTableSeeder extends Seeder
     {
         \DB::table('users')->insert([
             [
-                'client_id' => NULL,
+                'client_id' => 1,
                 'username' => 'ianlainchbury',
                 'email' => 'ian@unilad.co.uk',
                 'avatar' => 'default.jpg',

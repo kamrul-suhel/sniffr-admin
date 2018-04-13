@@ -7,6 +7,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            ClientsTableSeeder::class,
             UsersTableSeeder::class,
             ContactsTableSeeder::class,
             VideoCategoriesTableSeeder::class,
@@ -15,7 +16,6 @@ class DatabaseSeeder extends Seeder
             VideosTableSeeder::class,
             CampaignsTableSeeder::class,
             CampaignVideoTableSeeder::class,
-            ClientsTableSeeder::class,
             CommentsTableSeeder::class,
             DownloadsTableSeeder::class,
             FavoritesTableSeeder::class,
