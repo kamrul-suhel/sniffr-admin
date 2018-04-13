@@ -1,6 +1,6 @@
 <?php
 
-use App\Contact;
+use App\Campaign;
 use App\Video;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
@@ -10,12 +10,12 @@ class CampaignVideoTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $campaignIds = Contact::pluck('id')->toArray();
+        $campaignIds = Campaign::pluck('id')->toArray();
         $videoIds = Video::pluck('id')->toArray();
         $unique_ids = [];
         $states = config('videos.states');
 
-        foreach (range(1, 30) as $index) {
+        foreach (range(1, 300) as $index) {
             // check composite id is unique
             $newVideoId = $faker->randomElement($videoIds);
             $newCampaignId = $faker->randomElement($campaignIds);

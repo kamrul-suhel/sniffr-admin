@@ -20,7 +20,7 @@ class DownloadsTableSeeder extends Seeder
         $videoIds = Video::pluck('id')->toArray();
         $downloadTypes = config('site.downloads.types');
 
-        foreach (range(1, 30) as $index) {
+        foreach (range(1, 500) as $index) {
             Download::create([
                 'user_id' => $faker->randomElement($userIds),
                 'client_id' => $faker->randomElement($clientIds),
