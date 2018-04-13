@@ -15,12 +15,12 @@ class CreateVideoCategoriesTable extends Migration {
 		Schema::create('video_categories', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('parent_id')->nullable();
+			$table->integer('parent_id')->unsigned()->nullable();
 			$table->integer('order')->default(1);
 			$table->string('name');
 			$table->string('slug')->nullable();
 			$table->timestamps();
-            $table->foreign('parent_id')->references('id')->on('video_categories');
+            $table->softDeletes()->nullable();
 		});
 	}
 

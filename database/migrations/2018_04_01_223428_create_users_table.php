@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration {
 		Schema::create('users', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('client_id')->unsigned()->nullable();
+			$table->integer('client_id')->nullable()->unsigned();
 			$table->string('username')->unique('unique');
 			$table->string('email')->index('uniuqe_email');
 			$table->string('avatar')->default('default.jpg');
@@ -32,10 +32,9 @@ class CreateUsersTable extends Migration {
 			$table->string('last_four', 4)->nullable();
 			$table->dateTime('trial_ends_at')->nullable();
 			$table->dateTime('subscription_ends_at')->nullable();
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->softDeletes()->nullable();
 		});
 	}
-
 
 	/**
 	 * Reverse the migrations.

@@ -17,8 +17,6 @@ class CreateCampaignVideoTable extends Migration {
 			$table->integer('video_id')->unsigned();
 			$table->integer('campaign_id')->unsigned();
 			$table->string('state');
-            $table->foreign('video_id')->references('id')->on('videos');
-            $table->foreign('campaign_id')->references('id')->on('campaigns');
 			$table->timestamps();
 		});
 	}

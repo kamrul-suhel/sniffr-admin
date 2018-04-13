@@ -16,7 +16,6 @@ class CreateCampaignsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('client_id')->unsigned()->nullable();
-            $table->foreign('client_id')->references('id')->on('clients');
 			$table->string('name');
 			$table->string('slug');
 			$table->softDeletes()->nullable();

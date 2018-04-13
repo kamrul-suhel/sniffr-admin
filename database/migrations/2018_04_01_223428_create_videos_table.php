@@ -21,15 +21,9 @@ class CreateVideosTable extends Migration {
 			$table->boolean('maybe')->nullable();
 			$table->integer('user_id')->unsigned()->nullable();
 			$table->integer('contact_id')->unsigned()->nullable();
-			$table->integer('video_category_id')->default(0);
-			$table->integer('video_collection_id')->default(0);
-			$table->integer('video_shottype_id')->default(0);
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('contact_id')->references('id')->on('contacts');
-            $table->foreign('video_id')->references('id')->on('videos');
-            $table->foreign('video_category_id')->references('id')->on('video_categories');
-            $table->foreign('video_collection_id')->references('id')->on('video_collections');
-            $table->foreign('video_shottype_id')->references('id')->on('video_shot_types');
+			$table->integer('video_category_id')->unsigned()->nullable();
+			$table->integer('video_collection_id')->unsigned()->nullable();
+			$table->integer('video_shottype_id')->unsigned()->nullable();
 			$table->text('title')->nullable();
 			$table->string('rights')->nullable();
 			$table->string('access', 20)->default('guest');

@@ -17,13 +17,13 @@ class CreateLegalTermsTable extends Migration
     {
         Schema::create('legal_terms', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->text('body');
             $table->boolean('active')->default(1);
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes()->nullable();
         });
     }
 

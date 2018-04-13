@@ -17,8 +17,6 @@ class CreateTagVideoTable extends Migration {
 			$table->increments('id');
 			$table->integer('video_id')->unsigned()->index();
 			$table->integer('tag_id')->unsigned()->index();
-            $table->foreign('video_id')->references('id')->on('videos');
-            $table->foreign('tag_id')->references('id')->on('tags');
 		});
 	}
 

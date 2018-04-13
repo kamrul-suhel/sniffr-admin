@@ -15,12 +15,12 @@ class CreateVideoShotTypesTable extends Migration {
 		Schema::create('video_shot_types', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('parent_id')->nullable();
+			$table->integer('parent_id')->unsigned()->nullable();
 			$table->integer('order')->default(1);
 			$table->string('name');
 			$table->string('slug')->nullable();
-            $table->foreign('parent_id')->references('id')->on('video_shot_types');
 			$table->timestamps();
+            $table->softDeletes()->nullable();
 		});
 	}
 
