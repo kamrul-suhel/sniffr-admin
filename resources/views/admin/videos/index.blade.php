@@ -77,7 +77,6 @@
 				if($video->created_at->isToday()) {
 					$date = 'Today';
 				} else {
-					// $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->created_at)->diffForHumans();
 					$date = date('jS M',strtotime($video->created_at));
 				}
 				if($currentDay != $date){

@@ -99,7 +99,7 @@
             <h2>Terms &amp; Conditions</h2>
 
             <div class="scroll-box">
-                <?php echo $settings->terms_non_ex; ?>
+                <?php echo $settings['terms_non_ex']; ?>
             </div>
 
             <div class="styled-checkbox">

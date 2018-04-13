@@ -2,7 +2,7 @@
 
 <div class="row" id="signup-form">
 
-  <form method="POST" action="<?= ($settings->enable_https) ? secure_url('signup') : URL::to('signup') ?>" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="payment-form">
+  <form method="POST" action="<?= ($settings['enable_https']) ? secure_url('signup') : URL::to('signup') ?>" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="payment-form">
     
     <input name="_token" type="hidden" value="<?php echo csrf_token(); ?>">
       
@@ -12,7 +12,7 @@
           
           <div class="row">
 
-              <?php if(!$settings->free_registration): ?>
+              <?php if(!$settings['free_registration']): ?>
                 <h1 class="panel-title col-lg-7 col-md-8 col-sm-6"><?= \App\Libraries\ThemeHelper::getThemeSetting(@$theme_settings->signup_message, 'Signup to Gain access to all content on the site for $7 a month.') ?></h1>
                 <div class="cc-icons col-lg-5 col-md-4">
                     <img src="<?= THEME_URL ?>/assets/img/credit-cards.png" alt="All Credit Cards Supported" />
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <?php if(!$settings->free_registration): ?>
+            <?php if(!$settings['free_registration']): ?>
 
               <hr />
 
@@ -135,7 +135,7 @@
 
     </div><!-- .panel -->
 
-    <?php if($settings->demo_mode == 1 && !$settings->free_registration): ?>
+    <?php if($settings['demo_mode'] == 1 && !$settings['free_registration']): ?>
       <div class="alert alert-info demo-info" role="alert">
         <p class="title">Demo Credit Card Info</p>
         <p><strong>Credit Card Number:</strong> <span>4242 4242 4242 4242</span></p>
@@ -150,7 +150,7 @@
 </div><!-- #signup-form -->
 
 
-<?php if(!$settings->free_registration): ?>
+<?php if(!$settings['free_registration']): ?>
   
   <script type="text/javascript" src="<?= THEME_URL ?>/assets/js/jquery.payment.js"></script>
   <script type="text/javascript">

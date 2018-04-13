@@ -126,19 +126,19 @@
             <div class="styled-checkbox">
                 <input id="contact_is_owner" name="contact_is_owner" type="checkbox" value="1">
                 <label class="form-check-label-left" for="contact_is_owner"></label>
-                <p class="terms-copy" data-attr="contact_is_owner"><?php echo $settings->terms_ex_contact_is_owner; ?> <span>* </span></p>
+                <p class="terms-copy" data-attr="contact_is_owner"><?php echo $settings['terms_ex_contact_is_owner']; ?> <span>* </span></p>
             </div>
 
             <div class="styled-checkbox">
                 <input id="allow_publish" name="allow_publish" type="checkbox" value="1">
                 <label class="form-check-label-left" for="allow_publish"></label>
-                <p class="terms-copy" data-attr="allow_publish"><?php echo $settings->terms_ex_allow_publish; ?> <span>* </span></p>
+                <p class="terms-copy" data-attr="allow_publish"><?php echo $settings['terms_ex_allow_publish']; ?> <span>* </span></p>
             </div>
 
             <div class="styled-checkbox">
                 <input id="is_exclusive" name="is_exclusive" type="checkbox" value="1">
                 <label class="form-check-label-left" for="is_exclusive"></label>
-                <p class="terms-copy" data-attr="is_exclusive"><?php echo $settings->terms_ex_is_exclusive; ?> <span>* </span></p>
+                <p class="terms-copy" data-attr="is_exclusive"><?php echo $settings['terms_ex_is_exclusive']; ?> <span>* </span></p>
             </div>
 
             <div class="form-group">
