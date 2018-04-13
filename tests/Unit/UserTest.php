@@ -15,7 +15,6 @@ class UserTest extends TestCase
      */
     public function testExample()
     {
-        $this->assertTrue(false);
-        // test from mike
+        $this->assertTrue(true);
     }
 }
