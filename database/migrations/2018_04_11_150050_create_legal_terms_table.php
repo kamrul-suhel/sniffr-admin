@@ -8,7 +8,9 @@ class CreateLegalTermsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
+     * TODO: Is the user_id column used to log who created the legal_term?
+     * TODO: Maybe a log system can give us better results
+     * TODO: this should be an immutable object
      * @return void
      */
     public function up()
@@ -20,6 +22,7 @@ class CreateLegalTermsTable extends Migration
             $table->string('slug')->nullable();
             $table->text('body');
             $table->boolean('active')->default(1);
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

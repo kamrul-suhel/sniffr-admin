@@ -14,15 +14,22 @@ class CreateVideosTable extends Migration {
 	{
 		Schema::create('videos', function(Blueprint $table)
 		{
+            $video_states = config('videos.states');
 			$table->increments('id');
 			$table->string('alpha_id', 10)->nullable()->index('alpha_id');
-			$table->enum('state', array('new','accepted','rejected','inprogress','pending','licensed','restricted','problem','noresponse'))->nullable();
+			$table->enum('state', $video_states)->nullable();
 			$table->boolean('maybe')->nullable();
 			$table->integer('user_id')->unsigned()->nullable();
 			$table->integer('contact_id')->unsigned()->nullable();
 			$table->integer('video_category_id')->default(0);
 			$table->integer('video_collection_id')->default(0);
 			$table->integer('video_shottype_id')->default(0);
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('contact_id')->references('id')->on('contacts');
+            $table->foreign('video_id')->references('id')->on('videos');
+            $table->foreign('video_category_id')->references('id')->on('video_categories');
+            $table->foreign('video_collection_id')->references('id')->on('video_collections');
+            $table->foreign('video_shottype_id')->references('id')->on('video_shot_types');
 			$table->text('title')->nullable();
 			$table->string('rights')->nullable();
 			$table->string('access', 20)->default('guest');
@@ -70,7 +77,6 @@ class CreateVideosTable extends Migration {
 			$table->timestamps();
 		});
 	}
-
 
 	/**
 	 * Reverse the migrations.

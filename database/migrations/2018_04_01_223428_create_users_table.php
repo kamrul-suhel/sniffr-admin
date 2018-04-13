@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration {
 			$table->string('last_four', 4)->nullable();
 			$table->dateTime('trial_ends_at')->nullable();
 			$table->dateTime('subscription_ends_at')->nullable();
+            $table->foreign('client_id')->references('id')->on('clients');
 		});
 	}
 

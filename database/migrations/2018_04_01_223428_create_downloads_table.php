@@ -18,6 +18,9 @@ class CreateDownloadsTable extends Migration {
 			$table->integer('user_id')->unsigned();
 			$table->integer('client_id')->unsigned();
 			$table->integer('video_id');
+            $table->foreign('video_id')->references('id')->on('videos');
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('user_id')->references('id')->on('users');
 			$table->string('type')->nullable();
 			$table->timestamps();
 		});

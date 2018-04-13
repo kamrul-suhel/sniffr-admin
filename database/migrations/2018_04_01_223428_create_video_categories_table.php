@@ -20,6 +20,7 @@ class CreateVideoCategoriesTable extends Migration {
 			$table->string('name');
 			$table->string('slug')->nullable();
 			$table->timestamps();
+            $table->foreign('parent_id')->references('id')->on('video_categories');
 		});
 	}
 

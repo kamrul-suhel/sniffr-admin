@@ -19,6 +19,7 @@ class CreateVideoShotTypesTable extends Migration {
 			$table->integer('order')->default(1);
 			$table->string('name');
 			$table->string('slug')->nullable();
+            $table->foreign('parent_id')->references('id')->on('video_shot_types');
 			$table->timestamps();
 		});
 	}

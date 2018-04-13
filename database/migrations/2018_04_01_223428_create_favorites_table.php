@@ -17,6 +17,8 @@ class CreateFavoritesTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id');
 			$table->integer('video_id');
+            $table->foreign('video_id')->references('id')->on('videos');
+            $table->foreign('user_id')->references('id')->on('users');
 			$table->timestamps();
 		});
 	}
