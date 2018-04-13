@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class LegalTerm
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LegalTerm extends Model
 {
+    use SoftDeletes;
     protected $guarded = [];
     public static $rules = [];
     protected $fillable = ['user_id', 'title', 'slug', 'image', 'body', 'active', 'created_at'];
