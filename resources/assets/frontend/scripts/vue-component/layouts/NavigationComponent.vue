@@ -38,7 +38,11 @@
 
         <!-- Login form -->
         <div class="login-dialog">
-            <v-dialog v-model="login_dialog" max-width="500px" class="login-section">
+            <v-dialog
+                    v-model="login_dialog"
+                    max-width="500px"
+                    class="login-section"
+                    @keydown.esc="onLoginDialogClose()">
                 <v-card>
                     <v-card-text class="login-section">
                         <v-form method="post" v-model="valid" ref="login_form">
@@ -86,12 +90,17 @@
                                 <v-flex xs3>
                                     <div class="login-button">
                                         <input type="hidden" name="_token"/>
-                                        <v-btn raised dark @click="onSubmit()">
+                                        <v-btn
+                                            raised
+                                            dark
+                                            :loading="loading"
+                                            :disabled="loading"
+                                            @click="onSubmit()">
                                             LOGIN
                                         </v-btn>
-                                        <div class="login-progress">
-                                            <v-progress-circular v-if="login_progress" indeterminate color="dark"></v-progress-circular>
-                                        </div>
+                                        <!--<div class="login-progress">-->
+                                            <!--<v-progress-circular v-if="login_progress" indeterminate color="dark"></v-progress-circular>-->
+                                        <!--</div>-->
                                     </div>
                                 </v-flex>
                             </v-layout>
@@ -175,8 +184,8 @@
                 valid:false,
                 login_progress:false,
                 user:{
-                    email:'kamrul@unilad.co.uk',
-                    password:'killer'
+                    email:'',
+                    password:''
                 },
                 emailRules: [
                     v => !!v || 'E-mail is required',
@@ -285,10 +294,17 @@
 
             },
 
+            onLoginDialogClose() {
+              this.login_dialog = false;
+              this.loading = false;
+              this.$refs.login_form.reset();
+            },
+
             onSubmit() {
                 if(this.$refs.login_form.validate()){
                     // make spinner visible
                     this.login_progress = true;
+                    this.loading = true;
                     console.log("process login");
 
                     // prepare submitting data
@@ -300,10 +316,12 @@
                     axios.post('/login', form_data)
                         .then(response => {
                             this.login_progress = true;
+                            this.loading = false;
                             console.log(response);
                             let data = response.data;
                             if(data.error){
                                 this.login_progress = false;
+                                this.loading = false;
                                 this.validation.error = true;
                                 this.validation.message = data.error_message;
                                 return;

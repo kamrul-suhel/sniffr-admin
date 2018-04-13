@@ -17,6 +17,10 @@
                         <h1 class="heading text-xs-center">Your Video Details</h1>
                     </v-flex>
 
+                    <v-flex xs12 class="text-xs-center">
+                        <div v-html="video.iframe"></div>
+                    </v-flex>
+
                     <v-flex xs12>
                         <div class="item-video text-xs-center">
                         </div>
@@ -120,7 +124,7 @@
                                     <v-radio
                                             color="dark"
                                             label="I filmed the video"
-                                            value="yes"
+                                            value="1"
                                     ></v-radio>
                                 </v-flex>
 
@@ -128,7 +132,7 @@
                                     <v-radio
                                             color="dark"
                                             label="Someone else filmed it"
-                                            value="no"
+                                            value="0"
                                     ></v-radio>
                                 </v-flex>
                             </v-layout>
@@ -149,7 +153,7 @@
                                     <v-radio
                                             label="Yes"
                                             color="dark"
-                                            value="yes"
+                                            value="1"
                                     ></v-radio>
                                 </v-flex>
 
@@ -157,7 +161,7 @@
                                     <v-radio
                                             label="No"
                                             color="dark"
-                                            value="no"
+                                            value="0"
                                     ></v-radio>
                                 </v-flex>
                             </v-layout>
@@ -175,7 +179,7 @@
                                     <v-radio
                                             label="Yes"
                                             color="dark"
-                                            value="yes"
+                                            value="1"
                                     ></v-radio>
                                 </v-flex>
 
@@ -183,7 +187,7 @@
                                     <v-radio
                                             label="No"
                                             color="dark"
-                                            value="no"></v-radio>
+                                            value="0"></v-radio>
                                 </v-flex>
                             </v-layout>
                         </v-radio-group>
@@ -194,9 +198,7 @@
                                 label="Where else have you submitted this video?"
                                 v-model="submitted_where"
                                 color="dark"
-                                multi-line
-                                value="">
-
+                                multi-line>
                         </v-text-field>
                     </v-flex>
 
@@ -209,7 +211,6 @@
                                 color="dark"
                                 v-model="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
-                                value="1"
                                 required
                         >
                             <div slot="label">
@@ -222,7 +223,6 @@
                         <v-checkbox
                                 color="dark"
                                 v-model="allow_publish"
-                                value="1"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required>
                             <div slot="label">
@@ -237,7 +237,6 @@
                                 :label="settings.terms_ex_is_exclusive"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
-                                value="1"
                                 required></v-checkbox>
                     </v-flex>
 
@@ -268,7 +267,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="dark" flat @click.stop="submit_success_dialog = false">Close</v-btn>
+                    <v-btn color="dark" flat @click.stop="onRedirectHome()">Close</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -331,11 +330,11 @@
             let url = '/details/'+this.code;
             axios.get(url)
                 .then( (response) => {
+                    console.log(response.data);
                     let data = response.data;
 
                     if(!data.error){
                         // process data
-                        console.log(data);
                         this.video = data;
 
                         this.full_name =  data.contact.full_name;
@@ -343,9 +342,8 @@
                         this.tel = data.contact.tel;
                         this.location = data.location;
                         this.description = data.description;
-                        this.filmed_by_me = data.filmed_by_me;
-                        this.permission = data.permission;
-                        this.submitted_elsewhere = data.submitted_elsewhere;
+
+                        console.log(this.permission);
 
                     }else{
                         //error return to 404 page
@@ -406,6 +404,14 @@
                     .catch((error) => {
                         this.error = true;
                     });
+            },
+
+            onRedirectHome() {
+                this.submit_success_dialog = false;
+                setTimeout(() => {
+                    this.$route.push({name: 'home'});
+                }, 700);
+
             }
         }
     }

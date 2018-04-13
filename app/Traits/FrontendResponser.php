@@ -8,7 +8,7 @@ trait FrontendResponser {
     }
 
     protected function errorResponse($message){
-        return response()->json(['error' => $message]);
+        return response()->json(['error' => 'true', 'error_message' => $message ]);
     }
 
     protected function getVideoFieldsForFrontend(){

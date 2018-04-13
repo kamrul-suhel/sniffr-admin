@@ -33,6 +33,7 @@
                                 </li>
                             </ul>
                         </div>
+                        <v-btn flat raised @click="onGoback()" class="ml-0">Go Back</v-btn>
                     </v-flex>
 
                     <v-flex xs12 sm12 md4 lg4>
@@ -97,19 +98,24 @@
                         title: ''
                     }
                 },
-                tags: []
+                tags: [],
+
+                previousPageUrl: ''
             }
         },
+
         watch:{
             '$route'(to, from, next) {
-
+                console.log(from);
             }
         },
+
         created(){
+
         },
+
         mounted() {
             this.$vuetify.goTo('#scroll_to');
-
             window.addEventListener('fb-sdk-ready', this.onFBReady)
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
@@ -124,7 +130,13 @@
             });
 
         },
+
         methods: {
+            onGoback() {
+                console.log('go back');
+                this.$router.go(-1);
+            },
+
             reloadInstagrm(src) {
                 var s = document.createElement("script");
                 s.type = "text/javascript";
@@ -139,13 +151,8 @@
                 }, 30);
             },
 
-            onFBReady: function () {
-               console.log('facebook loaded');
-            },
-
             reloadFacebook(){
                 if (!document.getElementById('facebook-jssdk')) {
-                    console.log('created');
                     (function (d, s, id) {
                         var js, fjs = d.getElementsByTagName(s)[0];
                         if (d.getElementById(id)) return;
@@ -163,6 +170,7 @@
                 }
             }
         },
+
         destroyed(){
         }
     }

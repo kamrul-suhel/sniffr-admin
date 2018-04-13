@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\VideoHelper;
 use App\Traits\FrontendResponser;
 use Auth;
 use Validator;
@@ -19,6 +20,7 @@ use App\Notifications\DetailsReview;
 class ThemeDetailsController extends Controller
 {
     use FrontendResponser;
+    use VideoHelper;
 
     protected $rules = [
         'description' => 'required',
@@ -59,6 +61,8 @@ class ThemeDetailsController extends Controller
             ->with('contact')
             ->first();
 
+        $iframe = $this->getVideoHtml($video, true);
+        $video['iframe'] = $iframe;
         if($request->ajax()){
             if($video){
                 return $this->successResponse($video);
@@ -118,6 +122,7 @@ class ThemeDetailsController extends Controller
             
             $video->location = Input::get('location');
             $video->description = Input::get('description');
+            $video->filmed_by_me = Input::get('filmed_by_me');
             $video->permission = Input::get('permission') == 'yes' ? 1 : 0;
             $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' ? 1 : 0;
             $video->submitted_where = Input::get('submitted_where');

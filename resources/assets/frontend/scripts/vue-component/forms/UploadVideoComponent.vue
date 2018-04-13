@@ -153,11 +153,6 @@
                                 <v-flex xsl2 text-xs-right pa-0>
                                     <p class="red-text" v-if="validate_email_error">Look your email is not valid plese try again</p>
 
-                                    <v-progress-circular
-                                            indeterminate
-                                            color="dark"
-                                            v-if="validete_email_progress"></v-progress-circular>
-
                                     <v-btn dark
                                            :loading="validete_email_progress"
                                            :disabled="validete_email_progress"
@@ -236,15 +231,15 @@
         data: () => ({
             csrf_token : $('meta[name="csrf-token"]').attr('content'),
             valid: false,
-            full_name: 'kamrul',
-            title:'video',
+            full_name: '',
+            title:'',
             url:'',
-            file:'file.mp4',
-            terms_condition: true,
+            file:'',
+            terms_condition: false,
             nameRules: [
                 v => !!v || 'Name is required'
             ],
-            email: 'kamrul@unilad.co.uk',
+            email: '',
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
@@ -353,6 +348,7 @@
 
                             // clear form data
                             this.$refs.form.reset();
+                            this.file_name = '';
                             setTimeout(() => {
                                 this.thank_you_dialog = true;
                             }, 1000)

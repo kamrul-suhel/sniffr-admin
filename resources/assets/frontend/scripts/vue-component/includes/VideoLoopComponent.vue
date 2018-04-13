@@ -3,9 +3,9 @@
         <v-card flat class="block">
             <v-card-media height="200px"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
-                <router-link 
-                :to="{name:'videos_detail', params:{id: video.alpha_id}}"
-                class="block-thumbnail"  
+                <a
+                @click.stop="goToDetail(video)"
+                class="block-thumbnail"
                 >
                     <div class="thumbnail-overlay"></div>
                     <span class="play-button"><i class="far fa-play-circle fa-4x"></i></span>
@@ -16,7 +16,7 @@
                     <div class="video-duration">
                         {{video.duration | convertTime}}
                     </div>
-                </router-link>
+                </a>
             </v-card-media>
 
             <v-card-title class="pb-0">
@@ -24,12 +24,12 @@
                     {{ video.title | readmore(20, '...') }}
                 </h3>
             </v-card-title>
+
             <v-card-text class="pt-0">
                 <div class="video-content">
                     {{ video.description | readmore(100, '...') }}
                 </div>
             </v-card-text>
-
         </v-card>
     </v-flex>
 </template>
@@ -47,12 +47,22 @@
             defaultImage(){
                 this.video_image = '/assets/img/default.jpg';
             },
+
             getInstagramImage(){
                 axios.get('https://api.instagram.com/oembed/?url=https://www.instagram.com/p/BYzFX1dDVMn/')
                     .then((response) => {
                     console.log(response);
                 });
                 return '/assets/img/default.jpg';
+            },
+
+            goToDetail(video) {
+//                console.log(video);
+                this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
+                setTimeout(() => {
+                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
+                }, 800);
+
             }
         },
         directives: {
