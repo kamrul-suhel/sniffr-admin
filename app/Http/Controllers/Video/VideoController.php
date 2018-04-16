@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
+use App\Tag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
@@ -174,7 +175,7 @@ class VideoController extends Controller
     }
 
     /**
-     * TODO: Finish it or delete it
+     * TODO: Methods is not being used
      *
      * @codeCoverageIgnore
      * @param Request $request
@@ -262,32 +263,25 @@ class VideoController extends Controller
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(integer $id)
     {
-        $video = (new \App\Video)->where('state', 'licensed')
+        $video = Video::where('state', 'licensed')
             ->with('tags')
             ->orderBy('licensed_at', 'DESC')
             ->where('alpha_id', $id)
             ->first();
 
         //Make sure video is active
-        if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
+        if ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed') {
             $favorited = false;
-            // if(!Auth::guest()):
-            //     $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
-            // endif;
-
             $downloaded = false;
-            // if(!Auth::guest()):
-            //     $downloaded = Download::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->count();
-            // endif;
 
             $view_increment = $this->handleViewCount($id);
 
-            $data = array(
+            $data = [
                 'video' => $video,
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'view_increment' => $view_increment,
@@ -296,24 +290,31 @@ class VideoController extends Controller
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => config('settings.theme'),
                 'pages' => Page::where('active', '=', 1)->get(),
-            );
+            ];
             return view('Theme::video', $data);
-
-        } else {
-            return Redirect::to('videos')->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
         }
+
+        return Redirect::to('videos')->with([
+            'note' => 'Sorry, this video is no longer active.',
+            'note_type' => 'error'
+        ]);
     }
 
-    public function tag($tag)
+    /**
+     * TODO: so, this method is called Tag, alright, alright, alright
+     * @param Tag $tag
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function tag(Tag $tag)
     {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
         }
 
-        if(!isset($tag)){
+        if (!isset($tag)) {
             return Redirect::to('videos');
         }
 
@@ -323,14 +324,14 @@ class VideoController extends Controller
 
         $tags = VideoTag::where('tag_id', '=', $tag->id)->get();
 
-        $tag_array = array();
-        foreach($tags as $key => $tag){
+        $tag_array = [];
+        foreach ($tags as $key => $tag) {
             array_push($tag_array, $tag->video_id);
         }
 
         $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->videos_per_page);
 
-        $data = array(
+        $data = [
             'videos' => $videos,
             'current_page' => $page,
             'page_title' => 'Videos tagged with "' . $tag_name . '"',
@@ -340,71 +341,85 @@ class VideoController extends Controller
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
-        );
+        ];
 
         return view('Theme::video-list', $data);
     }
 
-    public function category($category)
+    /**
+     * @param VideoCategory $videoCategory
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function category(VideoCategory $videoCategory)
     {
-        $page = Input::get('page');
-        if( !empty($page) ){
-            $page = Input::get('page');
-        } else {
-            $page = 1;
-        }
+        $page = Input::get('page', 1);
 
-        $cat = VideoCategory::where('slug', '=', $category)->first();
+        $cat = VideoCategory::where('slug', '=', $videoCategory)->first();
 
         $parent_cat = VideoCategory::where('parent_id', '=', $cat->id)->first();
 
-        if(!empty($parent_cat->id)){
+        if (!empty($parent_cat->id)) {
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
-            if(!empty($parent_cat2->id)){
-                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
+            if (!empty($parent_cat2->id)) {
+                $videos = Video::where('state', 'licensed')
+                    ->where('video_category_id', '=', $cat->id)
+                    ->orWhere('video_category_id', '=', $parent_cat->id)
+                    ->orWhere('video_category_id', '=', $parent_cat2->id)
+                    ->orderBy('licensed_at', 'DESC')
+                    ->simplePaginate(9);
             } else {
-                $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
+                $videos = Video::where('state', 'licensed')
+                    ->where('video_category_id', '=', $cat->id)
+                    ->orWhere('video_category_id', '=', $parent_cat->id)
+                    ->orderBy('licensed_at', 'DESC')
+                    ->simplePaginate(9);
             }
         } else {
-            $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
+            $videos = Video::where('state', 'licensed')
+                ->where('video_category_id', '=', $cat->id)
+                ->orderBy('licensed_at', 'DESC')
+                ->simplePaginate(9);
         }
 
-
-        $data = array(
+        $data = [
             'videos' => $videos,
             'current_page' => $page,
             'category' => $cat,
             'page_title' => 'Videos - ' . $cat->name,
             'page_description' => 'Page ' . $page,
-            'pagination_url' => '/videos/category/' . $category,
+            'pagination_url' => '/videos/category/' . $videoCategory,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
-        );
+        ];
 
         return view('Theme::video-list', $data);
     }
 
-    public function handleViewCount($id){
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function handleViewCount($id)
+    {
         // check if this key already exists in the view_media session
-        $blank_array = array();
-        if (! array_key_exists($id, session('viewed_video', $blank_array) ) ) {
+        $blank_array = [];
+        if (!array_key_exists($id, session('viewed_video', $blank_array))) {
 
-            try{
+            try {
                 // increment view
                 $video = Video::where('alpha_id', $id)->first();
                 $video->views = $video->views + 1;
                 $video->save();
                 // Add key to the view_media session
-                session('viewed_video.'.$id);
+                session('viewed_video.' . $id);
                 return true;
-            } catch (Exception $e){
+            } catch (\Exception $e) {
                 return false;
             }
-        } else {
-            return false;
         }
-    }
 
+        return false;
+    }
 }
