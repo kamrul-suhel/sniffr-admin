@@ -14,14 +14,15 @@
     @yield('page_styles')
 </head>
 <body @if(Request::is('/')) class="home" @endif>
-
     <section id="sniffr">
         <v-app>
             <navigation-component></navigation-component>
 
             <v-content>
                 <div id="scroll_to"></div>
-                <router-view></router-view>
+                <transition name="slide-fade" mode="out-in">
+                    <router-view></router-view>
+                </transition>
             </v-content>
 
             <footer-component></footer-component>
@@ -31,8 +32,6 @@
     <!-- Scripts Section -->
     <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
     <script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>
-
-
     <!-- End scripts Section -->
     
     @if(isset($settings->google_tracking_id) && $settings->google_tracking_id != '')

@@ -39,7 +39,6 @@
 		},
 		methods:{
             onSearchaActive(){
-                console.log(this.value);
                 this.$router.push({name: 'videos_search', query: { value: this.value}});
 			}
 		}

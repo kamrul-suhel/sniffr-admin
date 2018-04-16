@@ -14,9 +14,9 @@
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg>
-                <v-layout row wrap>
-                    <videoloop-component v-for="video in videos" :video="video"></videoloop-component>
-                </v-layout>
+                <transition-group name="slide-fade" tag="div" class="layout row wrap">
+                        <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
+                </transition-group>
             </v-container>
         </section>
 

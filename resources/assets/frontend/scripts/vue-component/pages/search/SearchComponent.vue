@@ -14,9 +14,9 @@
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg>
-                <v-layout row wrap v-if="videos.length > 0">
-                    <videoloop-component v-for="video in videos" :video="video"></videoloop-component>
-                </v-layout>
+                <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
+                        <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
+                </transition-group>
 
                 <v-layout row wrap v-else align-content-center>
                     <v-flex >No video found</v-flex>
@@ -26,7 +26,7 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'search'" v-if="videos.length > 0"></pagination-component>
+        <pagination-component :pagination="paginate" :page="'search'" v-if="videos.length > 12"></pagination-component>
     </div>
 </template>
 <script>

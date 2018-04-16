@@ -1,45 +1,16 @@
 .slide-fade-enter-active {
-  transition: all .4s ease;
+  transition:all 1s ease-in-out;
+}
+.slide-fade-enter-to {
+  opacity:1;
 }
 
 .slide-fade-leave-active {
-  transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .4s ease-in-out;
   opacity:0;
 }
 
 .slide-fade-enter, .slide-fade-leave-to
   /* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
   opacity: 0;
-}
-
-@keyframes unilad-animation-from-in {
-  from{
-    transform:scale(0);
-  }
-  to{
-    transform:scale(1);
-  }
-}
-
-@keyframes unilad-animation-from-right-side {
-  from{
-    transform:translateX(200px);
-    opacity:0;
-  }
-  to{
-    transform:translateX(0);
-    opacity:1
-  }
-}
-
-@keyframes unilad-animation-from-left-side {
-  from{
-    transform:translateX(-200px);
-    opacity:0;
-  }
-  to{
-    transform:translateX(0);
-    opacity:1
-  }
 }

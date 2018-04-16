@@ -18,9 +18,7 @@ const mutations = {
 
     checkUserState(state, data){
         let user = data.data;
-        console.log(user);
         if (user.success) {
-            console.log(user);
             state.username = user.username;
             state.email = user.email;
             state.avatar = user.avatar;

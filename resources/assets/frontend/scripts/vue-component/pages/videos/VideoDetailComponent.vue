@@ -106,7 +106,6 @@
 
         watch:{
             '$route'(to, from, next) {
-                console.log(from);
             }
         },
 
@@ -133,7 +132,6 @@
 
         methods: {
             onGoback() {
-                console.log('go back');
                 this.$router.go(-1);
             },
 

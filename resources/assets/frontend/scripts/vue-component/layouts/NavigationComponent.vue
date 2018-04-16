@@ -245,21 +245,17 @@
 
                 // see user status
                 this.$store.dispatch('getLoginStatus').then((response) => {
-                    console.log(response);
                     this.is_login = this.$store.getters.isUserLogin;
-                    console.log(this.is_login);
                 });
             },
-
+            
             is_login(){
-                console.log('login call');
             }
         },
 
         created(){
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;
-                console.log(this.is_login);
             });
 
             if(this.$route.name != 'home'){

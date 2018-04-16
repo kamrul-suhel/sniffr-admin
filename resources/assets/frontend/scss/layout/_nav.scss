@@ -2,12 +2,18 @@
   width:100%;
   padding:20px 0;
   z-index:2000;
+  transition:all ease-in-out .4s;
 
   .logo {
     margin-bottom:20px;
     text-align:center;
+
     img{
       width:110px;
+    }
+
+    .router-link-exact-active{
+      opacity:1;
     }
   }
   @include small-device{
@@ -39,6 +45,11 @@
 
     }
   }
+
+  .router-link-exact-active{
+    opacity:.5;
+  }
+
 }
 
 .navigation{

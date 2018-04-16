@@ -21,7 +21,12 @@ mix.js(['resources/assets/js/app.js','resources/assets/js/custom.js'], 'public/a
    .sass(
        'resources/assets/sass/admin.scss',
        'public/assets/css/admin.css'
-   ).version();
+   );
+
+    if (mix.inProduction()) {
+        mix.version();
+    }
+
 
 /*
 * *********************************************
@@ -37,8 +42,8 @@ mix.sass(
     .sourceMaps();
 
 mix.js([
-    'node_modules/vue/dist/vue.js',
-    'node_modules/vuetify/dist/vuetify.js',
+    'node_modules/vue/dist/vue.min.js',
+    'node_modules/vuetify/dist/vuetify.min.js',
 ],  'public/assets/frontend/scripts/plugin.js');
 
 mix.js([
@@ -53,6 +58,7 @@ mix.copy(
     'node_modules/vuetify/dist/vuetify.css',
     'public/assets/frontend/css/plugin/vuetify.css'
 );
+
 
 /*
 * ******************************************
