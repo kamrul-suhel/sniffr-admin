@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\FrontendResponser;
 use Auth;
 use Redirect;
 use Validator;
@@ -20,6 +21,8 @@ use App\Jobs\QueueVideo;
 use App\Notifications\SubmissionNewNonEx;
 
 class ThemeSubmissionController extends Controller {
+
+    use FrontendResponser;
 
     protected $rules = [
         'full_name' => 'required',
@@ -49,6 +52,7 @@ class ThemeSubmissionController extends Controller {
      */
     public function index()
     {
+//        return View('Theme::submission');
         return view('frontend.pages.submission.submission', $this->data);
     }
 
@@ -95,7 +99,7 @@ class ThemeSubmissionController extends Controller {
         if ($validator->fails())
         {
             if($isJson) {
-                return response()->json(['status' => 'error']);
+                return $this->errorResponse('Something is wrong pelase review the from and submit again.');
             } else {
                 return Redirect::back()
                     ->withErrors($validator)
@@ -179,7 +183,16 @@ class ThemeSubmissionController extends Controller {
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
         if($isJson) {
-            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
+            $data = [
+                'status' => 'success',
+                'iframe' => $iframe,
+                'href' => 'https://www.unilad.co.uk/submit/thanks',
+                'message' => 'Video Successfully Added!',
+                'files' => ['name' => Input::get('title'),
+                    'size' => $fileSize, 'url' => $filePath]
+            ];
+            return $this->successResponse($data);
+
         } else {
             if($iframe == 'true'){
                 return Redirect::to('https://www.unilad.co.uk');

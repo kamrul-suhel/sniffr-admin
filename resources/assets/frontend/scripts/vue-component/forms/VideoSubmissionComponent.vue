@@ -1,5 +1,4 @@
-<!-- UPLODA VIDEO SECTION -->
-<submission-form inline-template>
+<template>
     <section class="upload-video-section section-space">
         <v-container grid-list-xl>
             <v-layout row wrap>
@@ -34,9 +33,9 @@
                             </v-layout>
 
                             <v-layout row wrap>
-                               <v-flex xs12 text-xs-center>
-                                   <h2 class="text-xs-center">Your video details</h2>
-                               </v-flex>
+                                <v-flex xs12 text-xs-center>
+                                    <h2 class="text-xs-center">Your video details</h2>
+                                </v-flex>
 
                                 <v-flex xs12>
                                     <v-text-field
@@ -71,7 +70,7 @@
 
                                     <span v-if="error" class="red--text">Upload your file or provide a links please</span>
 
-                                    <span>@{{file_name}}</span>
+                                    <span>{{file_name}}</span>
 
                                     <p class="small-italic">Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
 
@@ -87,15 +86,15 @@
                             </v-layout>
                         </v-container>
 
-                        <v-container grid-list-lg
-                                     >
+                        <v-container grid-list-lg>
 
                             <div class="term-condition-content scroll-y term-condition"
                                  style="max-height: 250px"
-                                 class=""
                                  id="scroll-target">
-                                <v-layout row wrap text-center>
-                                    <h2>Terms & Conditions</h2>
+                                <v-layout row wrap>
+                                    <v-flex class="text-xs-center">
+                                        <h2>Terms & Conditions</h2>
+                                    </v-flex>
                                 </v-layout>
 
                                 <v-layout row wrap
@@ -131,35 +130,35 @@
                                     </v-flex>
                                 </v-layout>
                             </div>
-                        </v-container> <!-- End container -->
+                        </v-container>
 
 
                         <v-container grid-list-lg>
                             <v-layout row wrap>
                                 <v-flex xs12>
                                     <v-text-field
-                                    label="Notes"
-                                    name="notes"
-                                    color="dark"
-                                    hint="If we need to know anything about the video, let us know here"
-                                    multi-line></v-text-field>
+                                            label="Notes"
+                                            name="notes"
+                                            color="dark"
+                                            hint="If we need to know anything about the video, let us know here"
+                                            multi-line></v-text-field>
                                 </v-flex>
 
                                 <v-flex xs12>
                                     <v-text-field
-                                    label="Credit link"
-                                    name="credit"
-                                    hint="Credits are placed in the pinned comment (unless alternative method is agreed)"
-                                    color="dark"
+                                            label="Credit link"
+                                            name="credit"
+                                            hint="Credits are placed in the pinned comment (unless alternative method is agreed)"
+                                            color="dark"
                                     ></v-text-field>
                                 </v-flex>
 
                                 <v-flex xs12>
                                     <v-text-field
-                                    label="Unilad Referrer"
-                                    name="referrer"
-                                    hint="Who at UNILAD asked you to fill in this form?"
-                                    color="dark">
+                                            label="Unilad Referrer"
+                                            name="referrer"
+                                            hint="Who at UNILAD asked you to fill in this form?"
+                                            color="dark">
 
                                     </v-text-field>
                                 </v-flex>
@@ -215,7 +214,7 @@
                     <v-container grid-list-xl>
                         <v-layout>
                             <v-flex>
-                                <img src="{{ asset('assets/frontend/images/hamster_wheel.gif')}}"/>
+                                <img src="assets/frontend/images/hamster_wheel.gif"/>
                             </v-flex>
                         </v-layout>
 
@@ -228,7 +227,7 @@
                             </v-flex>
 
                             <v-flex xs2>
-                                @{{progressbar}}
+                                {{progressbar}}
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -236,4 +235,134 @@
             </v-card>
         </v-dialog>
     </section>
-</submission-form>
+</template>
+
+<script>
+    export default {
+        data: () => ({
+            valid: false,
+            full_name: '',
+            title:'',
+            url:'',
+            file:'',
+            file_name: '',
+            tel:'',
+            notes:'',
+            credit:'',
+            referrer:'',
+            terms_condition:'',
+            nameRules: [
+                v => !!v || 'Name is required'
+            ],
+            email: 'test@unilad.co.uk',
+            emailRules: [
+                v => !!v || 'E-mail is required',
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+            ],
+
+            uplod_progress:false,
+            progressbar: 0,
+            error:false,
+            validete_email_progress:false,
+            validate_email_error:false
+        }),
+        created() {
+
+        },
+
+
+        methods: {
+            onScroll (e) {
+                this.offsetTop = e.target.scrollTop
+            },
+
+            onPickFile() {
+                this.progressbar = 0;
+                this.$refs.inputfile.click();
+            },
+
+            onFilechange(event) {
+                // check is file choose or not
+                if(!event.target.files[0]){
+                    return;
+                }
+                this.error = false;
+                this.file = event.target.files[0];
+                this.file_name = this.file.name;
+
+            },
+
+
+            onSubmit() {
+                if(this.url === '' && this.file === ''){
+                    this.error = true;
+                }else{
+                    this.error = false;
+                }
+
+                if(this.$refs.form.validate()){
+                    if(this.error){
+                        return;
+                    }
+
+                    setTimeout( () => {
+                        // Send data to server
+                        this.uploadFormData();
+
+                    }, 1000);
+                }
+
+            },
+
+            uploadFormData() {
+                // uploading via ajax request
+                let form = new FormData();
+                form.append('file', this.file);
+                form.append('full_name', this.full_name);
+                form.append('email', this.email);
+                form.append('title', this.title);
+                form.append('tel', this.tel);
+                form.append('terms', this.terms_condition);
+                form.append('url', this.url);
+                form.append('notes', this.notes);
+                form.append('credit', this.credit);
+                form.append('referrer', this.referrer);
+
+                //show the uploading dialog box
+                this.uplod_progress = true;
+
+                axios.post('/submission', form, {
+                        onUploadProgress: function( progressEvent ) {
+                            this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+                            console.log(this.progressbar);
+                        }.bind(this)
+                    }
+                )
+                    .then(response => {
+                        //data uploaded succes
+                        let data = response.data;
+                        console.log(data);
+
+                        if(data.status == 'success'){
+                            // set all default
+                            this.progressbar = 0;
+
+                            //Email progress
+                            this.uplod_progress = false;
+
+                            // clear form data
+                            this.$refs.form.reset();
+
+                            setTimeout(()=>{
+                                window.location.href = '/thanks';
+                            }, 1000)
+                        }
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                        console.log('FAILURE!!');
+                    });
+            }
+        }
+    }
+</script>

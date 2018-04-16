@@ -19,9 +19,9 @@
     <section id="sniffr">
         <v-app>
             <navigation-component></navigation-component>
-            <div id="scroll_to"></div>
 
             <v-content>
+                <div id="scroll_to"></div>
                 <router-view></router-view>
             </v-content>
 

@@ -19,6 +19,18 @@ const mutations = {
     setUser(state, user){
         state.username = user.name;
         state.password = user.password;
+    },
+
+    checkUserState(state, user){
+        console.log(user);
+    }
+}
+
+const actions = {
+    getLoginStatus({commit}) {
+        axios.get('/islogin').then((response) => {
+            commit('checkUserState', response);
+        });
     }
 }
 
@@ -33,9 +45,6 @@ const getters = {
             password : state.password
         }
     }
-}
-
-const actions = {
 }
 
 export default {

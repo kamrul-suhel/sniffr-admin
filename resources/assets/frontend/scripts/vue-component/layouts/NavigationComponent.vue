@@ -175,16 +175,15 @@
             </v-dialog><!-- End password reset -->
         </div>
 
-        <!-- Log out snackbars -->
+        <!-- Logout snackbars -->
         <v-snackbar
                 top="top"
                 :timeout="logoutTime"
-                v-model="logout"
-        >
+                v-model="logout">
             {{ logout_text }}
             <v-btn flat color="light" @click.native="logout = false">Close</v-btn>
         </v-snackbar>
-        <!-- End password -->
+        <!-- End logout -->
     </section>
 </template>
 <script>
@@ -225,7 +224,7 @@
                 password_reset_text:'',
 
                 //user auth
-                is_login: true,
+                is_login: false,
 
                 //logout
                 logout: true,
@@ -251,6 +250,7 @@
         },
 
         created(){
+            this.$store.dispatch('getLoginStatus');
             if(this.$route.name != 'home'){
                 this.nav_background = true;
             }else{
