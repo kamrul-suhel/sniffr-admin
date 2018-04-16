@@ -8,7 +8,9 @@
                 class="block-thumbnail"
                 >
                     <div class="thumbnail-overlay"></div>
-                    <span class="play-button"><i class="far fa-play-circle fa-4x"></i></span>
+                    <span class="play-button">
+                        <v-icon color="white" size="60px">play_circle_outline</v-icon>
+                    </span>
                     <span class="label" :class="video.state == 'licensed' ? 'label-success': 'label-danger'">
                         {{video.state}}
                     </span>

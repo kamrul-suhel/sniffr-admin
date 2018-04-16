@@ -2,9 +2,9 @@
     <div>
         <section id="header" class="js-fullheight" :style="{height: fullwidth_height}" ref="js_fullheight">
             <div class="header-content">
-                <h1 class="heading">Video Licensing Platform</h1>
+                <h1 class="heading home">Video Licensing Platform</h1>
                 <p class="sub-heading">License viral videos viewed by millions around the world from Sniffr Media</p>
-                <button onclick="window.location.href='/upload'" class="btn btn-primary upload-video-button">Upload you video</button>
+                <button @click="onUploadVideo()" class="btn btn-primary upload-video-button">Upload your video</button>
             </div>
 
             <div class="second-navigation">
@@ -18,9 +18,26 @@
                         <v-flex xs12 sm6 md8 lg8>
                             <nav class="navigation">
                                 <ul>
-                                    <li><a href="#"><i class="fas fa-upload"></i> Upload</a></li>
-                                    <li><a href="#"><i class="fas fa-video"></i> Videos</a></li>
-                                    <li><a href="#" @click.stop.prevent="login_dialog = true"><i class="fas fa-lock-alt"></i> Login</a></li>
+                                    <li>
+                                        <router-link to="/upload">
+                                            <v-icon color="white" left>file_upload</v-icon> Upload
+                                        </router-link>
+                                    </li>
+
+                                    <li>
+                                        <router-link to="/videos">
+                                            <v-icon color="white" left>videocam</v-icon> Videos
+                                        </router-link>
+                                    </li>
+
+                                    <li>
+                                        <a  @click.stop.prevent="">
+                                            <v-icon color="white" left>lock_open</v-icon> Login
+                                        </a>
+                                        <!--<a href="#">-->
+                                            <!--<v-icon color="white" left>lock out</v-icon> Logout-->
+                                        <!--</a>-->
+                                    </li>
                                 </ul>
                             </nav>
                         </v-flex>
@@ -59,7 +76,12 @@
             }
         },
         methods: {
-
+            onUploadVideo(){
+                this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
+                setTimeout(() => {
+                    this.$router.push({name: 'upload_video'});
+                }, 500);
+            }
         },
 
         created(){

@@ -15,22 +15,22 @@
                         <ul>
                             <li>
                                 <router-link to="/upload">
-                                    <i class="fas fa-upload"></i> Upload
+                                    <v-icon color="white" left>file_upload</v-icon> Upload
                                 </router-link>
                             </li>
 
                             <li>
                                 <router-link to="/videos">
-                                    <i class="fas fa-video"></i> Videos
+                                    <v-icon color="white" left>videocam</v-icon> Videos
                                 </router-link>
                             </li>
 
                             <li>
-                                <a href="#" @click.stop.prevent="login_dialog = true" v-if="!is_login">
-                                    <i class="fas fa-lock-alt"></i> Login
+                                <a  @click.stop.prevent="login_dialog = true" v-if="!is_login">
+                                    <v-icon color="white" left>lock_open</v-icon> Login
                                 </a>
                                 <a href="#" v-else @click.stop.prevent="onLogout()">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                    <v-icon color="white" left>lock_out</v-icon> Logout
                                 </a>
                             </li>
                         </ul>
@@ -227,7 +227,7 @@
                 is_login: false,
 
                 //logout
-                logout: true,
+                logout: false,
                 logoutTime: 3000,
                 logout_text: 'you are successfully logout',
 
@@ -242,6 +242,13 @@
                 }else{
                     this.nav_background = false;
                 }
+
+                // see user status
+                this.$store.dispatch('getLoginStatus').then((response) => {
+                    console.log(response);
+                    this.is_login = this.$store.getters.isUserLogin;
+                    console.log(this.is_login);
+                });
             },
 
             is_login(){
@@ -250,7 +257,11 @@
         },
 
         created(){
-            this.$store.dispatch('getLoginStatus');
+            this.$store.dispatch('getLoginStatus').then((response) => {
+                this.is_login = this.$store.getters.isUserLogin;
+                console.log(this.is_login);
+            });
+
             if(this.$route.name != 'home'){
                 this.nav_background = true;
             }else{
@@ -267,9 +278,14 @@
             },
 
             onLogout(){
-                axios.get('/islogin')
-                    .then(response => {
-                        console.log(response);
+                this.$store.dispatch('userLogout')
+                    .then((response) => {
+                        this.logout = true;
+                        this.is_login = this.$store.getters.isUserLogin;
+
+                        setTimeout(() => {
+                            this.logout = false;
+                        }, 3500);
                     });
             },
 
@@ -360,6 +376,11 @@
                                 this.validation.message = data.error_message;
                                 return;
                             }
+
+                            // Set the user store
+                            this.$store.dispatch('getLoginStatus').then((response) => {
+                                this.is_login = this.$store.getters.is_login;
+                            });
 
                             if(data.redirect_url){
                                 window.location.href = data.redirect_url;

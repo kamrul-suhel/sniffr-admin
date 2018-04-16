@@ -202,7 +202,7 @@ class ThemeAuthController extends Controller
      */
     public function isLogin(){
        if(Auth::user()){
-           return Auth::user();
+           return $this->successResponse(Auth::user());
        }else{
            return $this->errorResponse('Your are not login');
        }
