@@ -313,7 +313,12 @@
             uploadFormData() {
                 // uploading via Http request
                 let form = new FormData();
-                form.append('file', this.file);
+
+                //check if file upload or not
+                if(this.file){
+                    form.append('file', this.file);
+                }
+
                 form.append('full_name', this.full_name);
                 form.append('email', this.email);
                 form.append('title', this.title);
@@ -355,39 +360,12 @@
                         }
 
                         if(data.error){
-                            this.upload_error_msg = data.error;
+                            this.upload_error_msg = data.error_message;
                         }
                     })
                     .catch(function(error){
                         console.log(error);
                         console.log('FAILURE!!');
-                    });
-            },
-
-
-            // get email if it is valid or not
-            emailVerify() {
-                let data = {
-                    verify_email:true,
-                    user_email : this.email,
-                };
-                let form = new FormData();
-                form.append('verify_email', true);
-                form.append('user_email', this.email);
-                let headers = {
-                    headers : {
-                        "Content-type":"multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2),
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN' : this.csrf_token
-                    }
-                };
-                axios.post('http://localhost/vuetify/vuetify-1/email_verify.php',
-                    form, headers)
-                    .then(function (response) {
-                        console.log(response.data);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
                     });
             }
         }

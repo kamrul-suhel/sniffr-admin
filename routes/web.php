@@ -137,6 +137,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
 
     Route::get('login', 'ThemeAuthController@login_form')->name('login');
+    Route::get('islogin', 'ThemeAuthController@isLogin')->name('islogin');
     Route::post('login', 'ThemeAuthController@login');
 
     Route::get('password/reset', array('uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind'));

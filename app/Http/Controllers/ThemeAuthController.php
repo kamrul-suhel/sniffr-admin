@@ -138,11 +138,17 @@ class ThemeAuthController extends Controller
 	}
 
     /**
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-	public function logout(){
+	public function logout(Request $request){
 		Auth::logout();
         Session::flush();
+
+        if($request->ajax()){
+            $data = ['success' => 'You are successfully logout'];
+            return $this->successResponse($data);
+        }
 		return Redirect::to('/')->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
 	}
 
@@ -167,7 +173,7 @@ class ThemeAuthController extends Controller
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password_request()
+    public function password_request(Request $request)
     {
         $credentials = ['email' => Input::get('email')];
         $response = Password::sendResetLink($credentials, function($message){
@@ -190,6 +196,13 @@ class ThemeAuthController extends Controller
 				return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
 		}
 	}
+
+    /**
+     *
+     */
+    public function isLogin(){
+       return Auth::user();
+    }
 
     /**
      * @param $token

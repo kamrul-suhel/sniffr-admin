@@ -7,6 +7,7 @@ import UploadVideoComponent from './vue-component/pages/upload/UploadVideoCompon
 import PasswordResetComponent from './vue-component/pages/loging/PasswordResetComponent.vue';
 import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
 import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
+import Notfound from './vue-component/pages/404Component.vue';
 
 
 export const routes = [
@@ -73,6 +74,6 @@ export const routes = [
     {
         path: '*',
         name: 'notfound',
-        component: HomeComponent
+        component: Notfound
     },
 ];

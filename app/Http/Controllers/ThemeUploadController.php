@@ -114,6 +114,7 @@ class ThemeUploadController extends Controller
             }
 
             if($isJson) {
+                return $validator->errors();
                 return $this->errorResponse('error, file did not pass validation check ');
             } else {
                 return Redirect::back()

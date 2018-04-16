@@ -26,8 +26,11 @@
                             </li>
 
                             <li>
-                                <a href="#" @click.stop.prevent="login_dialog = true">
+                                <a href="#" @click.stop.prevent="login_dialog = true" v-if="!is_login">
                                     <i class="fas fa-lock-alt"></i> Login
+                                </a>
+                                <a href="#" v-else @click.stop.prevent="onLogout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
                                 </a>
                             </li>
                         </ul>
@@ -171,6 +174,17 @@
                 </v-card>
             </v-dialog><!-- End password reset -->
         </div>
+
+        <!-- Log out snackbars -->
+        <v-snackbar
+                top="top"
+                :timeout="logoutTime"
+                v-model="logout"
+        >
+            {{ logout_text }}
+            <v-btn flat color="light" @click.native="logout = false">Close</v-btn>
+        </v-snackbar>
+        <!-- End password -->
     </section>
 </template>
 <script>
@@ -208,7 +222,15 @@
                 active_password_reset: false,
                 password_reset_error: false,
                 password_reset_success: false,
-                password_reset_text:''
+                password_reset_text:'',
+
+                //user auth
+                is_login: true,
+
+                //logout
+                logout: true,
+                logoutTime: 3000,
+                logout_text: 'you are successfully logout',
 
             }
         },
@@ -221,6 +243,10 @@
                 }else{
                     this.nav_background = false;
                 }
+            },
+
+            is_login(){
+                console.log('login call');
             }
         },
 
@@ -238,6 +264,13 @@
                 setTimeout(()=> {
                     this.password_reset_dialog = true;
                 }, 500);
+            },
+
+            onLogout(){
+                axios.get('/islogin')
+                    .then(response => {
+                        console.log(response);
+                    });
             },
 
             onForgotPassword() {
@@ -302,6 +335,7 @@
 
             onSubmit() {
                 if(this.$refs.login_form.validate()){
+
                     // make spinner visible
                     this.login_progress = true;
                     this.loading = true;
@@ -335,8 +369,6 @@
                         .catch(error => {
                             console.log(error);
                         });
-                }else{
-                
                 }
             }
         }

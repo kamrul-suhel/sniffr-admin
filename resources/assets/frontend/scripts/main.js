@@ -1,23 +1,40 @@
-//Vue packages
+/*
+ ********************************************************
+ * Glabal package
+ ********************************************************
+ */
+
 window.Vue = require('vue');
 import Vuetify from 'Vuetify';
 import Vuerouter from 'vue-router';
 
-// Implement Vuex
-import { store } from './store/store';
 
+/*
+ ********************************************************
+ * Vuex package (store)
+ ********************************************************
+ */
+import { store } from './store/store';
 Vue.use(Vuetify);
 Vue.use(Vuerouter);
 
 
-// Http ajax package
-window.axios = require('axios');
+/*
+ ********************************************************
+ * axios package & header setup
+ ********************************************************
+ */
 
-// Setup axio default headers
+window.axios = require('axios');
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
 
+/*
+  ********************************************************
+  * Root component
+  ********************************************************
+ */
 
 import NavigationComponent from './vue-component/layouts/NavigationComponent.vue';
 import FooterComonent from './vue-component/layouts/FooterComponent.vue';
@@ -25,11 +42,21 @@ import FooterComonent from './vue-component/layouts/FooterComponent.vue';
 import { routes } from './routes';
 
 
+/*
+ ********************************************************
+ * Global Filters
+ ********************************************************
+ */
 
-// Implement Filters
 require('./filters/filters');
 
-// Plugins
+
+/*
+ ********************************************************
+ * Plugins & root Vue init
+ ********************************************************
+ */
+
 const router = new Vuerouter({
     mode:'history',
     routes
@@ -51,5 +78,3 @@ new Vue({
 
     }
 });
-
-

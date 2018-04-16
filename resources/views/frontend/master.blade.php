@@ -20,7 +20,10 @@
         <v-app>
             <navigation-component></navigation-component>
             <div id="scroll_to"></div>
-            <router-view></router-view>
+
+            <v-content>
+                <router-view></router-view>
+            </v-content>
 
             <footer-component></footer-component>
         </v-app>
