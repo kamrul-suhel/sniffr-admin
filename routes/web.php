@@ -18,7 +18,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     */
     Route::get('videos', 'Video\VideoController@index');
     Route::get('videos/category/{category}', 'Video\VideoController@category' );
-    Route::get('videos/tag/{tag}', 'Video\VideoController@tag' );
+    Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' );
     Route::get('video/{id}', 'Video\VideoController@show');
     Route::post('upload', 'Video\VideoController@store');
     Route::get('upload', 'Video\VideoController@index');

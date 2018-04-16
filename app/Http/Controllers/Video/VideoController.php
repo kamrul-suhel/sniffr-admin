@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
 use App\Tag;
+use App\VideoTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
@@ -301,18 +302,13 @@ class VideoController extends Controller
     }
 
     /**
-     * TODO: so, this method is called Tag, alright, alright, alright
+     * TODO: rename this method
      * @param Tag $tag
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function tag(Tag $tag)
+    public function findByTag(Tag $tag)
     {
-        $page = Input::get('page');
-        if (!empty($page)) {
-            $page = Input::get('page');
-        } else {
-            $page = 1;
-        }
+        $page = Input::get('page', 1);
 
         if (!isset($tag)) {
             return Redirect::to('videos');
@@ -329,7 +325,9 @@ class VideoController extends Controller
             array_push($tag_array, $tag->video_id);
         }
 
-        $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->videos_per_page);
+        $videos = Video::where('state', 'licensed')
+            ->whereIn('id', $tag_array)
+            ->paginate($this->videos_per_page);
 
         $data = [
             'videos' => $videos,
