@@ -191,4 +191,15 @@ class Video extends Model
             return $this->tags->toArray();
         });
     }
+
+    /**
+     * @param $client
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function clientVideos(Client $client)
+    {
+        return Video::whereHas('campaigns', function ($q) use ($client) {
+            $q->where('id', $client->id);
+        })->orderBy('licensed_at', 'desc')->paginate(12);
+    }
 }

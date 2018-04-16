@@ -17,11 +17,12 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     |--------------------------------------------------------------------------
     */
     Route::get('videos', 'Video\VideoController@index');
+    Route::get('videos', 'Video\VideoController@dailiesIndex');
     Route::get('videos/category/{category}', 'Video\VideoController@category' );
     Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' );
     Route::get('video/{id}', 'Video\VideoController@show');
     Route::post('upload', 'Video\VideoController@store');
-    Route::get('upload', 'Video\VideoController@index');
+    Route::get('upload', 'Video\VideoController@upload')->name('upload');
     Route::get('upload/form', 'Video\VideoController@form');
     Route::post('issue', 'Video\VideoController@issueAlert');
     Route::post('videocheck', 'Video\VideoController@videoCheck');
@@ -66,13 +67,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     |--------------------------------------------------------------------------
     */
     Route::get('download/{id}/{type}', 'ThemeDownloadController@index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Dailies Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('dailies', 'ThemeDailiesController@index');
 
     /*
     |--------------------------------------------------------------------------

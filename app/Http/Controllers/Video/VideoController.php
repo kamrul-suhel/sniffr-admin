@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Video;
 
+use App\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
@@ -65,11 +66,9 @@ class VideoController extends Controller
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function uploadForm()
+    public function upload()
     {
         return view('Theme::upload', $this->data);
     }
@@ -419,5 +418,41 @@ class VideoController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function dailiesIndex()
+    {
+        if (\Auth::guest()) {
+            return \Redirect::to('videos');
+        }
+
+        $page = Input::get('page', 1);
+        $user = \Auth::user();
+        $client = Client::first($user->client()->id);
+
+        if (!$client) {
+            return \Redirect::to('videos');
+        }
+
+        $videos = $this->video->clientVideos($client);
+
+        // TODO: ADD Client name to the title
+        $data = [
+            'day_sort' => true,
+            'videos' => $videos,
+            'page_title' => ucfirst(\Auth::user()->username) . '\'s Daily Videos',
+            'current_page' => $page,
+            'page_description' => 'Page ' . $page,
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'pagination_url' => '/favorites',
+            'video_categories' => VideoCategory::all(),
+            'theme_settings' => config('settings.theme'),
+            'pages' => Page::where('active', '=', 1)->get(),
+        ];
+
+        return view('Theme::video-list', $data);
     }
 }

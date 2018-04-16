@@ -34,6 +34,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Model|null|object|static
+     */
     public function client()
     {
         return $this->belongsTo(Client::class)->first();
