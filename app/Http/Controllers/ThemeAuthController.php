@@ -118,9 +118,8 @@ class ThemeAuthController extends Controller
                 $response_data['redirect_url'] = $redirect;
                 $response_data['error'] = false;
                 return $this->successResponse($response_data);
-            }else {
-                return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
             }
+            return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
         }
 
         $redirect = (Input::get('redirect')) ? '?redirect=' . Input::get('redirect') : '';
@@ -132,9 +131,8 @@ class ThemeAuthController extends Controller
 
         if($request->ajax()){
             return $this->errorResponse('Invalid login, please try again.');
-        }else{
-            return Redirect::to('login' . $redirect)->with($error);
         }
+        return Redirect::to('login' . $redirect)->with($error);
 	}
 
     /**
@@ -171,6 +169,7 @@ class ThemeAuthController extends Controller
 	}
 
     /**
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function password_request(Request $request)
@@ -203,9 +202,8 @@ class ThemeAuthController extends Controller
     public function isLogin(){
        if(Auth::user()){
            return $this->successResponse(Auth::user());
-       }else{
-           return $this->errorResponse('Your are not login');
        }
+        return $this->errorResponse('Your are not login');
     }
 
     /**
@@ -222,8 +220,6 @@ class ThemeAuthController extends Controller
 			'video_categories' => VideoCategory::all(),
 			'theme_settings' => ThemeHelper::getThemeSettings(),
 			'pages' => Page::where('active', '=', 1)->get(),
-            'settings'  => $settings,
-            'password_reset_link'   => $password_reset_link
         ];
 
 	  return view('frontend.master', $data);

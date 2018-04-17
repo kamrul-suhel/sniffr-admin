@@ -137,6 +137,7 @@
                             <v-layout row wrap>
                                 <v-flex xs12>
                                     <v-text-field
+                                            v-model="notes"
                                             label="Notes"
                                             name="notes"
                                             color="dark"
@@ -146,6 +147,7 @@
 
                                 <v-flex xs12>
                                     <v-text-field
+                                            v-model="credit"
                                             label="Credit link"
                                             name="credit"
                                             hint="Credits are placed in the pinned comment (unless alternative method is agreed)"
@@ -155,6 +157,7 @@
 
                                 <v-flex xs12>
                                     <v-text-field
+                                            v-model="referrer"
                                             label="Unilad Referrer"
                                             name="referrer"
                                             hint="Who at UNILAD asked you to fill in this form?"
@@ -198,7 +201,7 @@
             </v-layout>
         </v-container>
 
-        <v-dialog v-model="uplod_progress" max-width="500px" >
+        <v-dialog v-model="uplod_progress" max-width="500px">
             <v-card class="upload-dialog">
                 <v-card-title>
                     <v-container >
@@ -214,24 +217,26 @@
                     <v-container grid-list-xl>
                         <v-layout>
                             <v-flex>
-                                <img src="assets/frontend/images/hamster_wheel.gif"/>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout>
-                            <v-flex xs10>
-                                <v-progress-linear
-                                        :value="progressbar"
-                                        color="warning"
-                                ></v-progress-linear>
-                            </v-flex>
-
-                            <v-flex xs2>
-                                {{progressbar}}
+                                <img src="/assets/frontend/images/hamster_wheel.gif"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
                 </v-card-text>
+            </v-card>
+        </v-dialog>
+
+        <!-- Thank you dialog box -->
+        <v-dialog v-model="thank_you_dialog" max-width="500px" persistent>
+            <v-card
+                    dark
+                    color="dark">
+                <v-card-text class="text-xs-center pb-0">
+                    <h2>Thanks for the video.. You rock!</h2>
+                </v-card-text>
+                <v-card-actions class="text-xs-center">
+                    <v-spacer></v-spacer>
+                    <v-btn color="dark" raised flat @click.stop="thank_you_dialog=false">Close</v-btn>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </section>
@@ -264,7 +269,9 @@
             progressbar: 0,
             error:false,
             validete_email_progress:false,
-            validate_email_error:false
+            validate_email_error:false,
+
+            thank_you_dialog: false,
         }),
         created() {
 
@@ -317,7 +324,12 @@
             uploadFormData() {
                 // uploading via ajax request
                 let form = new FormData();
-                form.append('file', this.file);
+
+                //check if file upload or not
+                if (this.file) {
+                    form.append('file', this.file);
+                }
+                
                 form.append('full_name', this.full_name);
                 form.append('email', this.email);
                 form.append('title', this.title);
@@ -352,9 +364,9 @@
 
                             // clear form data
                             this.$refs.form.reset();
-
+                            this.file_name = '';
                             setTimeout(()=>{
-                                window.location.href = '/thanks';
+                               this.thank_you_dialog = true;
                             }, 1000)
                         }
                     })

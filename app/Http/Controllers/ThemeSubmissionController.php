@@ -66,7 +66,8 @@ class ThemeSubmissionController extends Controller {
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'submission';
 
-        return view('Theme::templates/iframe', $this->data);
+        return view('frontend.iframe', $this->data);
+        // return view('Theme::templates/iframe', $this->data);
     }
 
     /**

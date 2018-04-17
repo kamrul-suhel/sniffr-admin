@@ -55,7 +55,7 @@ export const routes = [
     },
 
     {
-        path: '/submission',
+        path: '/submission/form',
         name: 'video_submission',
         component: VideoSubmissionComponent
     },

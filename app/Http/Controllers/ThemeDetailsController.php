@@ -31,11 +31,6 @@ class ThemeDetailsController extends Controller
         'is_exclusive' => 'required'
     ];
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $user = Auth::user();
@@ -52,6 +47,8 @@ class ThemeDetailsController extends Controller
     /**
      * Show the upload form
      *
+     * @param Request $request
+     * @param $code
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $code)
@@ -77,6 +74,7 @@ class ThemeDetailsController extends Controller
     /**
      * Returns the details form with no page wrapper
      *
+     * @param $code
      * @return Response
      */
     public function form($code)
