@@ -4,46 +4,12 @@
 
 Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
-    /*
-    |--------------------------------------------------------------------------
-    | Settings object
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/settings_object', function(){
-        $fields = [
-            'website_name',
-            'website_description',
-            'logo',
-            'favicon',
-            'theme',
-            'facebook_page_id',
-            'twitter_page_id',
-            'youtube_page_id',
-            'videos_per_page',
-            'posts_per_page',
-            'terms_ex',
-            'terms_ex_contact_is_owner',
-            'terms_ex_allow_publish',
-            'terms_ex_is_exclusive',
-            'terms_non_ex'
-        ];
-        $settings = \App\Setting::select($fields)->first();
-        return response($settings);
+    Route::get('/settings_object', function () {
+        return response(config('settings.site'));
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Home Page Routes
-    |--------------------------------------------------------------------------
-    */
     Route::get('/', 'ThemeHomeController@index')->name('home');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Video Page Routes
-    |--------------------------------------------------------------------------
-    */
     Route::get('videos', 'Video\VideoController@index');
     Route::get('videos', 'Video\VideoController@dailiesIndex');
     Route::get('videos/category/{category}', 'Video\VideoController@category' );
@@ -56,11 +22,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::post('videocheck', 'Video\VideoController@videoCheck');
     Route::get('thanks', 'Video\VideoController@thanks');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Tag Routes
-    |--------------------------------------------------------------------------
-    */
     Route::get('tags', 'ThemeTagController@index');
 
     /*
