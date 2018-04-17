@@ -1,6 +1,11 @@
 {
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=58481e166044fad43d25",
-    "/assets/js/app.js": "/assets/js/app.js?id=18552636e25e9475b58e",
-    "/assets/css/admin.css": "/assets/css/admin.css?id=7b9fab87e2e1a36a148c",
-    "/assets/js/utils.js": "/assets/js/utils.js?id=bd55019544df71610d7c"
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
+    "/assets/js/app.js": "/assets/js/app.js",
+    "/assets/css/admin.css": "/assets/css/admin.css",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
+    "/assets/frontend/scripts/plugin.js": "/assets/frontend/scripts/plugin.js",
+    "/assets/frontend/sripts/jquery.js": "/assets/frontend/sripts/jquery.js",
+    "/assets/frontend/css/plugin/vuetify.css": "/assets/frontend/css/plugin/vuetify.css",
+    "/assets/js/utils.js": "/assets/js/utils.js"
 }

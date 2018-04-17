@@ -60,7 +60,8 @@ class ThemeFavoriteController extends Controller
                 'pages' => Page::where('active', '=', 1)->get(),
             ];
 
-	        return view('Theme::video-list', $data);
+//	        return view('Theme::video-list', $data);
+	        return view('frontend.pages.favorites.favorites', $data);
 
 	    else:
 

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponser;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Auth;
 use Redirect;
@@ -15,54 +18,54 @@ use App\VideoCategory;
 
 use App\Libraries\ThemeHelper;
 
-class ThemeVideoController extends Controller {
+class ThemeVideoController extends Controller
+{
+    use VideoHelper;
+    use FrontendResponser;
 
-    private $videos_per_page = 24;
+    private $settings;
 
     public function __construct()
     {
-        $settings = Setting::first();
-        $this->videos_per_page = $settings->videos_per_page;
+        $this->settings = Setting::first();
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+
+    public function index(Request $request)
     {
         $video = new Video;
-        $menu = new Menu;
         $page = Input::get('page', 1);
-        $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+        $videos = $video->getCachedVideosLicensedPaginated($this->settings->videos_per_page, $page);
 
         $data = [
             'videos' => $videos,
-            'page_title' => 'All Videos',
-            'page_description' => 'Page ' . $page,
-            'current_page' => $page,
-            'menu' => $menu->orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/videos',
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
-            'pages' => (new Page)->where('active', '=', 1)->get(),
         ];
-        return view('Theme::video-list', $data);
+        if ($request->ajax()) {
+            return $data;
+        }
+        return view('frontend.master', $data);
     }
 
     /**
+     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $video = (new \App\Video)->where('state', 'licensed')
-            ->with('tags')
-            ->orderBy('licensed_at', 'DESC')
-            ->where('alpha_id', $id)
-            ->first();
+
+        if (Auth::guest()) {
+            $video = Video::where('state', 'licensed')
+                ->with('tags')
+                ->orderBy('licensed_at', 'DESC')
+                ->where('alpha_id', $id)
+                ->first();
+        } else {
+            $video = Video::with('tags')->where('alpha_id', $id)->first();
+        }
 
         //Make sure video is active
-        if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
+        if ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed') {
             $favorited = false;
             // if(!Auth::guest()):
             //     $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
@@ -74,34 +77,45 @@ class ThemeVideoController extends Controller {
             // endif;
 
             $view_increment = $this->handleViewCount($id);
+            $iframe = $this->getVideoHtml($video, true);
 
             $data = array(
                 'video' => $video,
+                'iframe' => $iframe,
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'view_increment' => $view_increment,
                 'favorited' => $favorited,
                 'downloaded' => $downloaded,
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => ThemeHelper::getThemeSettings(),
-                'pages' => Page::where('active', '=', 1)->get(),
-                );
-            return view('Theme::video', $data);
+            );
+
+            if ($request->ajax()) {
+                return $this->successResponse($data);
+            } else {
+                return view('frontend.master', $data);
+            }
 
         } else {
-            return Redirect::to('videos')->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
+            if ($request->ajax()) {
+                return $this->errorResponse('Sorry, this video is no longer active.');
+            }
+            return Redirect::to('videos')
+                ->with(array('note' => 'Sorry, this video is no longer active.', 'note_type' => 'error'));
         }
     }
 
-    public function tag($tag)
+
+    public function tag(Request $request, $tag)
     {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
         }
 
-        if(!isset($tag)){
+        if (!isset($tag)) {
             return Redirect::to('videos');
         }
 
@@ -112,11 +126,11 @@ class ThemeVideoController extends Controller {
         $tags = VideoTag::where('tag_id', '=', $tag->id)->get();
 
         $tag_array = array();
-        foreach($tags as $key => $tag){
+        foreach ($tags as $key => $tag) {
             array_push($tag_array, $tag->video_id);
         }
 
-        $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->videos_per_page);
+        $videos = Video::where('state', 'licensed')->whereIn('id', $tag_array)->paginate($this->settings->videos_per_page);
 
         $data = array(
             'videos' => $videos,
@@ -128,27 +142,30 @@ class ThemeVideoController extends Controller {
             'video_categories' => VideoCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
-            );
+        );
 
-        return view('Theme::video-list', $data);
+        if ($request->ajax()) {
+            return $this->successResponse($data);
+        }
+
+        return view('frontend.pages.videos.video_tag', $data);
     }
 
     public function category($category)
     {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
         }
 
         $cat = VideoCategory::where('slug', '=', $category)->first();
-
         $parent_cat = VideoCategory::where('parent_id', '=', $cat->id)->first();
 
-        if(!empty($parent_cat->id)){
+        if (!empty($parent_cat->id)) {
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
-            if(!empty($parent_cat2->id)){
+            if (!empty($parent_cat2->id)) {
                 $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
             } else {
                 $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
@@ -174,20 +191,21 @@ class ThemeVideoController extends Controller {
         return view('Theme::video-list', $data);
     }
 
-    public function handleViewCount($id){
+    public function handleViewCount($id)
+    {
         // check if this key already exists in the view_media session
         $blank_array = array();
-        if (! array_key_exists($id, session('viewed_video', $blank_array) ) ) {
+        if (!array_key_exists($id, session('viewed_video', $blank_array))) {
 
-            try{
+            try {
                 // increment view
                 $video = Video::where('alpha_id', $id)->first();
                 $video->views = $video->views + 1;
                 $video->save();
                 // Add key to the view_media session
-                session('viewed_video.'.$id);
+                session('viewed_video.' . $id);
                 return true;
-            } catch (Exception $e){
+            } catch (Exception $e) {
                 return false;
             }
         } else {
