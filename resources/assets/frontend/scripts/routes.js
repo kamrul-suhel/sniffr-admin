@@ -56,8 +56,14 @@ export const routes = [
 
     {
         path: '/submission/form',
-        name: 'video_submission',
+        name: 'iframe_video_submission',
         component: VideoSubmissionComponent
+    },
+
+    {
+        path: '/upload/form',
+        name: 'iframe_video_upload',
+        component: UploadVideoComponent
     },
 
     {
