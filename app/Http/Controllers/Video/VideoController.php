@@ -431,13 +431,14 @@ class VideoController extends Controller
 
         $page = Input::get('page', 1);
         $user = \Auth::user();
-        $client = Client::first($user->client()->id);
+        $client = $user->client;
 
         if (!$client) {
             return \Redirect::to('videos');
         }
 
-        $videos = $this->video->clientVideos($client);
+        $video = new Video();
+        $videos = $video->clientVideos($client);
 
         // TODO: ADD Client name to the title
         $data = [

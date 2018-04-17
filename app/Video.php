@@ -193,7 +193,7 @@ class Video extends Model
     }
 
     /**
-     * @param $client
+     * @param Client $client
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function clientVideos(Client $client)
