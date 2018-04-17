@@ -52,7 +52,7 @@ class ThemeUploadController extends Controller
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
-            'settings'  => $settings
+            'settings' => $settings
         ];
     }
 
@@ -104,8 +104,7 @@ class ThemeUploadController extends Controller
 
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             $mime_temp = '';
 
             $file_temp = $request->file('file');
@@ -113,20 +112,19 @@ class ThemeUploadController extends Controller
                 $mime_temp = $file_temp->getMimeType();
             }
 
-            if($isJson) {
-                return $validator->errors();
+            if ($isJson) {
                 return $this->errorResponse('error, file did not pass validation check ');
-            } else {
-                return Redirect::back()
-                    ->withErrors($validator)
-                    ->withInput();
             }
+
+            return Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
         //get additional form data
-        $contact = Contact::where('email',Input::get('email'))->first();
+        $contact = Contact::where('email', Input::get('email'))->first();
         //if contact exists
-        if(!$contact){
+        if (!$contact) {
             $contact = new Contact();
             $contact->full_name = Input::get('full_name');
             $contact->email = Input::get('email');
@@ -138,14 +136,14 @@ class ThemeUploadController extends Controller
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
-        $video->title = Input::get('title', 'Untitled '.$video->alpha_id);
+        $video->title = Input::get('title', 'Untitled ' . $video->alpha_id);
 
 
         //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';
-        if($request->hasFile('file')){
-            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
-            $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
+        if ($request->hasFile('file')) {
+            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
+            $fileName = time() . '-' . $fileOriginalName . '.' . $request->file->getClientOriginalExtension();
 
             $file = $request->file('file');
             $fileMimeType = $file->getMimeType();
@@ -158,7 +156,7 @@ class ThemeUploadController extends Controller
             $video->url = Input::get('url');
             $video->file = $filePath;
             $video->mime = $fileMimeType;
-        }else{
+        } else {
             //Check link details
             $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
 
@@ -183,20 +181,20 @@ class ThemeUploadController extends Controller
 
 
         // Slack notifications
-        if(env('APP_ENV') != 'local'){
+        if (env('APP_ENV') != 'local') {
             $video->notify(new SubmissionNew($video));
         }
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'submission_thanks');
 
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             // Send video to queue for watermarking
             QueueVideo::dispatch($video->id)
                 ->delay(now()->addSeconds(5));
         }
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
-        if($isJson) {
+        if ($isJson) {
             $data = [
                 'status' => 'success',
                 'iframe' => $iframe,
@@ -207,25 +205,26 @@ class ThemeUploadController extends Controller
                     'url' => $filePath]
             ];
             return $this->successResponse($data);
+        }
+
+        if ($iframe == 'true') {
+            return Redirect::to('https://www.unilad.co.uk');
         } else {
-            if($iframe == 'true'){
-                return Redirect::to('https://www.unilad.co.uk');
-            }else{
-                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
-            }
+            return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success'));
         }
     }
 
-    public function issueAlert(Request $request) {
-        $alert = 'File: '.Input::get('file').',
-        Line: '.Input::get('line').',
-        Message: '.Input::get('message').',
-        Exception: '.Input::get('exception').',
-        Title: '.Input::get('user_title').',
-        Email: '.Input::get('user_email').',
-        File: '.Input::get('user_file').',
-        Url: '.Input::get('user_url').',
-        UserAgent: '.$_SERVER['HTTP_USER_AGENT'].'';
+    public function issueAlert(Request $request)
+    {
+        $alert = 'File: ' . Input::get('file') . ',
+        Line: ' . Input::get('line') . ',
+        Message: ' . Input::get('message') . ',
+        Exception: ' . Input::get('exception') . ',
+        Title: ' . Input::get('user_title') . ',
+        Email: ' . Input::get('user_email') . ',
+        File: ' . Input::get('user_file') . ',
+        Url: ' . Input::get('user_url') . ',
+        UserAgent: ' . $_SERVER['HTTP_USER_AGENT'] . '';
         //$all = Input::all();
         // Slack notifications
         $user = new User();
@@ -234,9 +233,10 @@ class ThemeUploadController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 
-    public function videoCheck(Request $request) {
+    public function videoCheck(Request $request)
+    {
         $postHeader = $request->header('x-amz-sns-message-type');
-        if($postHeader) {
+        if ($postHeader) {
             $postBody = $request->file();
             $postBody = array_values($postBody)[0];
             $postFile = file_get_contents($postBody->getRealPath());
@@ -245,15 +245,10 @@ class ThemeUploadController extends Controller
             $postFile = str_replace(')', '}', $postFile);
             $postFile = json_decode($postFile);
 
-            // echo $postFile->jobId.'<br />';
-            // echo $postFile->input->key.'<br />';
-            // echo $postFile->outputs->key.'<br />';
-            // echo $postFile->outputs->duration.'<br />';
-
             $youtube_ingest = false;
-            if($postFile->jobId){
+            if ($postFile->jobId) {
                 $user = new User();
-                $user->notify(new SubmissionAlert('watermark test '.$postHeader.' (jobId: '.$postFile->jobId.', input: '.$postFile->input->key.', output: '.$postFile->outputs->key.')'));
+                $user->notify(new SubmissionAlert('watermark test ' . $postHeader . ' (jobId: ' . $postFile->jobId . ', input: ' . $postFile->input->key . ', output: ' . $postFile->outputs->key . ')'));
             }
         }
 

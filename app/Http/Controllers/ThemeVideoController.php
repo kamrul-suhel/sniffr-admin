@@ -18,7 +18,8 @@ use App\VideoCategory;
 
 use App\Libraries\ThemeHelper;
 
-class ThemeVideoController extends Controller {
+class ThemeVideoController extends Controller
+{
     use VideoHelper;
     use FrontendResponser;
 
@@ -39,8 +40,7 @@ class ThemeVideoController extends Controller {
         $data = [
             'videos' => $videos,
         ];
-
-        if($request->ajax()){
+        if ($request->ajax()) {
             return $data;
         }
         return view('frontend.master', $data);
@@ -54,18 +54,18 @@ class ThemeVideoController extends Controller {
     public function show(Request $request, $id)
     {
 
-        if(Auth::guest()){
+        if (Auth::guest()) {
             $video = Video::where('state', 'licensed')
                 ->with('tags')
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
                 ->first();
-        }else{
+        } else {
             $video = Video::with('tags')->where('alpha_id', $id)->first();
         }
 
         //Make sure video is active
-        if((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed'){
+        if ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed') {
             $favorited = false;
             // if(!Auth::guest()):
             //     $favorited = Favorite::where('user_id', '=', Auth::user()->id)->where('video_id', '=', $video->id)->first();
@@ -90,14 +90,14 @@ class ThemeVideoController extends Controller {
                 'theme_settings' => ThemeHelper::getThemeSettings(),
             );
 
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->successResponse($data);
-            }else{
+            } else {
                 return view('frontend.master', $data);
             }
 
         } else {
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->errorResponse('Sorry, this video is no longer active.');
             }
             return Redirect::to('videos')
@@ -109,13 +109,13 @@ class ThemeVideoController extends Controller {
     public function tag(Request $request, $tag)
     {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
         }
 
-        if(!isset($tag)){
+        if (!isset($tag)) {
             return Redirect::to('videos');
         }
 
@@ -126,7 +126,7 @@ class ThemeVideoController extends Controller {
         $tags = VideoTag::where('tag_id', '=', $tag->id)->get();
 
         $tag_array = array();
-        foreach($tags as $key => $tag){
+        foreach ($tags as $key => $tag) {
             array_push($tag_array, $tag->video_id);
         }
 
@@ -142,31 +142,30 @@ class ThemeVideoController extends Controller {
             'video_categories' => VideoCategory::all(),
             'theme_settings' => ThemeHelper::getThemeSettings(),
             'pages' => Page::where('active', '=', 1)->get(),
-            );
+        );
 
-        if($request->ajax()){
-            return response($data);
-        }else{
-            return view('frontend.pages.videos.video_tag', $data);
+        if ($request->ajax()) {
+            return $this->successResponse($data);
         }
+
+        return view('frontend.pages.videos.video_tag', $data);
     }
 
     public function category($category)
     {
         $page = Input::get('page');
-        if( !empty($page) ){
+        if (!empty($page)) {
             $page = Input::get('page');
         } else {
             $page = 1;
         }
 
         $cat = VideoCategory::where('slug', '=', $category)->first();
-
         $parent_cat = VideoCategory::where('parent_id', '=', $cat->id)->first();
 
-        if(!empty($parent_cat->id)){
+        if (!empty($parent_cat->id)) {
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
-            if(!empty($parent_cat2->id)){
+            if (!empty($parent_cat2->id)) {
                 $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orWhere('video_category_id', '=', $parent_cat2->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
             } else {
                 $videos = Video::where('state', 'licensed')->where('video_category_id', '=', $cat->id)->orWhere('video_category_id', '=', $parent_cat->id)->orderBy('licensed_at', 'DESC')->simplePaginate(9);
@@ -192,20 +191,21 @@ class ThemeVideoController extends Controller {
         return view('Theme::video-list', $data);
     }
 
-    public function handleViewCount($id){
+    public function handleViewCount($id)
+    {
         // check if this key already exists in the view_media session
         $blank_array = array();
-        if (! array_key_exists($id, session('viewed_video', $blank_array) ) ) {
+        if (!array_key_exists($id, session('viewed_video', $blank_array))) {
 
-            try{
+            try {
                 // increment view
                 $video = Video::where('alpha_id', $id)->first();
                 $video->views = $video->views + 1;
                 $video->save();
                 // Add key to the view_media session
-                session('viewed_video.'.$id);
+                session('viewed_video.' . $id);
                 return true;
-            } catch (Exception $e){
+            } catch (Exception $e) {
                 return false;
             }
         } else {
