@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Traits\FrontendResponser;
 use Auth;
 use Session;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Input;
  */
 class ThemeAuthController extends Controller
 {
+    use FrontendResponser;
     /**
      * @param  $data []
      * @return \Illuminate\Contracts\Validation\Validator
@@ -53,6 +55,7 @@ class ThemeAuthController extends Controller
         if (!Auth::guest()) {
             return Redirect::to('/');
         }
+        $settings = Setting::first();
 
         $data = [
             'type' => 'login',
@@ -60,15 +63,17 @@ class ThemeAuthController extends Controller
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
+            'settings'=> $settings
         ];
 
-        return view('Theme::auth', $data);
+        return view('frontend.pages.login.login', $data);
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function login()
+    public function login(Request $request)
     {
         $email_login = [
             'email' => Input::get('email'),
@@ -82,35 +87,64 @@ class ThemeAuthController extends Controller
 
         if (Auth::attempt($email_login) || Auth::attempt($username_login)) {
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'editorial') {
-                $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/admin';
-                return Redirect::to($redirect);
+                $redirect = (Input::get('redirect')) ? Input::get('redirect') : '/admin';
+
+                if($request->ajax()){
+                    $response_data['redirect_url'] = $redirect;
+                    $response_data['error'] = false;
+                    $response_data['data'] = 'This is admin';
+                    return $this->successResponse($response_data);
+                }else{
+                    return Redirect::to($redirect);
+                }
             } elseif (Auth::user()->role == 'client') {
                 $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/client/videos';
                 if (Auth::user()->username == 'dailymail') {
                     $redirect = '/client/dashboard';
                 }
-                return Redirect::to($redirect);
+                if($request->ajax()){
+                    $response_data['redirect_url'] = $redirect;
+                    $response_data['error'] = false;
+                    return $this->successResponse($response_data);
+                }else{
+                    return Redirect::to($redirect);
+                }
             }
 
-            $redirect = (Input::get('redirect', 'false')) ? Input::get('redirect') : '/';
-            return Redirect::to($redirect)->with([
-                'note' => 'You have been successfully logged in.', 'note_type' => 'success'
-            ]);
+            $redirect = (Input::get('redirect')) ? Input::get('redirect') : '/';
+            if($request->ajax()){
+                $response_data['redirect_url'] = $redirect;
+                $response_data['error'] = false;
+                return $this->successResponse($response_data);
+            }
+            return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
         }
 
-        $redirect = (Input::get('redirect', false)) ? '?redirect=' . Input::get('redirect') : '';
+        $redirect = (Input::get('redirect')) ? '?redirect=' . Input::get('redirect') : '';
         // auth failure! redirect to login with errors
-        return Redirect::to('login' . $redirect)->with([
-            'note' => 'Invalid login, please try again.', 'note_type' => 'error'
-        ]);
+        $error = array(
+            'note' => 'Invalid login, please try again.',
+            'note_type' => 'error'
+        );
+
+        if($request->ajax()){
+            return $this->errorResponse('Invalid login, please try again.');
+        }
+        return Redirect::to('login' . $redirect)->with($error);
 	}
 
     /**
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-	public function logout(){
+	public function logout(Request $request){
 		Auth::logout();
         Session::flush();
+
+        if($request->ajax()){
+            $data = ['success' => 'You are successfully logout'];
+            return $this->successResponse($data);
+        }
 		return Redirect::to('/')->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
 	}
 
@@ -119,6 +153,7 @@ class ThemeAuthController extends Controller
      */
 	public function password_reset()
 	{
+        $settings =Setting::first();
 		$data = [
 		    'type' => 'forgot_password',
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -126,29 +161,48 @@ class ThemeAuthController extends Controller
 			'video_categories' => VideoCategory::all(),
 			'theme_settings' => config('settings.theme'),
 			'pages' => Page::where('active', '=', 1)->get(),
+            'settings'  => $settings
         ];
-		return view('Theme::auth', $data);
+        return view('frontend.pages.login.reset_password', $data);
 	}
 
     /**
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-	public function password_request()
-	{
-		$credentials = ['email' => Input::get('email')];
-		$response = Password::sendResetLink($credentials, function($message){
-			$message->subject('Password Reset Info');
-		});
+    public function password_request(Request $request)
+    {
+        $credentials = ['email' => Input::get('email')];
+        $response = Password::sendResetLink($credentials, function($message){
+            $message->subject('Password Reset Info');
+        });
 
 		switch ($response)
 		{
 			case PasswordBroker::RESET_LINK_SENT:
+			    if($request->ajax()){
+                    $data = array('success' => 'Reset link was sent to your email please check');
+                    return $this->successResponse($data);
+                }
 				return Redirect::to('login')->with(array('note' => trans($response), 'note_type' => 'success'));
 
 			case PasswordBroker::INVALID_USER:
+                if($request->ajax()){
+                    return $this->errorResponse('User is not found in our database');
+                }
 				return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
 		}
 	}
+
+    /**
+     *
+     */
+    public function isLogin(){
+       if(Auth::user()){
+           return $this->successResponse(Auth::user());
+       }
+        return $this->errorResponse('Your are not login');
+    }
 
     /**
      * @param $token
@@ -165,7 +219,8 @@ class ThemeAuthController extends Controller
 			'theme_settings' => config('settings.theme'),
 			'pages' => Page::where('active', '=', 1)->get(),
         ];
-	  return view('Theme::auth', $data);
+
+	  return view('frontend.master', $data);
 	}
 
     /**
@@ -174,7 +229,12 @@ class ThemeAuthController extends Controller
      */
     public function password_reset_post(Request $request)
     {
-        $credentials = $credentials = array('email' => Input::get('email'), 'password' => Input::get('password'), 'password_confirmation' => Input::get('password_confirmation'), 'token' => Input::get('token'));
+        $credentials = $credentials = array(
+            'email' => Input::get('email'),
+            'password' => Input::get('password'),
+            'password_confirmation' => Input::get('password_confirmation'),
+            'token' => Input::get('token')
+        );
 
         $response = Password::reset($credentials, function ($user, $password) {
             $user->password = \Hash::make($password);

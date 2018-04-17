@@ -134,12 +134,13 @@ class Video extends Model
      */
     public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
     {
-        if (\App::environment() == 'forge') {
+        if (config('site.cache_enabled')) {
             return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
-                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
             });
         }
-        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+
+        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
     }
 
     /**

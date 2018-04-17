@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponser;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;
@@ -17,6 +19,9 @@ use App\Notifications\DetailsReview;
 
 class ThemeDetailsController extends Controller
 {
+    use FrontendResponser;
+    use VideoHelper;
+
     protected $rules = [
         'description' => 'required',
         'permission' => 'required',
@@ -26,11 +31,6 @@ class ThemeDetailsController extends Controller
         'is_exclusive' => 'required'
     ];
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $user = Auth::user();
@@ -47,18 +47,34 @@ class ThemeDetailsController extends Controller
     /**
      * Show the upload form
      *
+     * @param Request $request
+     * @param $code
      * @return \Illuminate\Http\Response
      */
-    public function index($code)
+    public function index(Request $request, $code)
     {
-        $this->data['video'] = Video::where('more_details_code', $code)->first();
+        $video = Video::select($this->getVideoFieldsForFrontend())
+            ->where('more_details_code', $code)
+            ->with('contact')
+            ->first();
 
-        return view('Theme::details', $this->data);
+        $iframe = $this->getVideoHtml($video, true);
+        $video['iframe'] = $iframe;
+        if($request->ajax()){
+            if($video){
+                return $this->successResponse($video);
+            }else{
+                return $this->errorResponse("Not found");
+            }
+        }
+
+        return view('frontend.master', $this->data);
     }
 
     /**
      * Returns the details form with no page wrapper
      *
+     * @param $code
      * @return Response
      */
     public function form($code)
@@ -80,10 +96,14 @@ class ThemeDetailsController extends Controller
         $video = Video::where('more_details_code', $code)->first();
 
         $validator = Validator::make(Input::all(), $this->rules);
-
         $this->validate($request, $this->rules);
 
         if ($validator->fails()) {
+
+            if($request->ajax()){
+                return $this->errorResponse('Sorry there is something wrong please review the form and submit again');
+            }
+
             return Redirect::back()
                 ->withErrors($validator)
                 ->withInput();
@@ -100,6 +120,7 @@ class ThemeDetailsController extends Controller
             
             $video->location = Input::get('location');
             $video->description = Input::get('description');
+            $video->filmed_by_me = Input::get('filmed_by_me');
             $video->permission = Input::get('permission') == 'yes' ? 1 : 0;
             $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' ? 1 : 0;
             $video->submitted_where = Input::get('submitted_where');
@@ -121,7 +142,12 @@ class ThemeDetailsController extends Controller
 
             $this->data['video'] = $video;
 
-            return view('Theme::details', $this->data);
+            if($request->ajax()){
+                return $this->successResponse();
+            }else{
+                return view('frontend.master', $this->data);
+            }
+
         }
     }
 }

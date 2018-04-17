@@ -8,6 +8,7 @@ foreach($videos as $video):
 
 		echo '<div class="col-xs-12"><h1>'.$date.'</h1></div>';
 	}
+	var_dump($video);
 ?>
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 	<article class="block">

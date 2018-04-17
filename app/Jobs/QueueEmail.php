@@ -4,21 +4,13 @@ namespace App\Jobs;
 
 use App\Video;
 use App\User;
-// use App\Contact;
-
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
+use App\Notifications\SubmissionAlert;
 use App\Mail\DetailsReminder;
 use App\Mail\DetailsThanks;
 use App\Mail\SubmissionAccepted;
@@ -26,8 +18,6 @@ use App\Mail\SubmissionLicensed;
 use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
-
-use App\Notifications\SubmissionAlert;
 
 
 class QueueEmail implements ShouldQueue
@@ -63,11 +53,11 @@ class QueueEmail implements ShouldQueue
         //check if email is valid (might not be needed if frontend upload form is doing it)
 
         //check if contact has unsubcribed (contact_id!=0)
-        if(isset($video->id)) {
-            if($video->contact_id==0) {
-                $video->notify(new SubmissionAlert('a job failed to send an '.$this->email_type.' email due to unsubscribe or no contact email (Id: '.$this->video_id.')'));
+        if (isset($video->id)) {
+            if ($video->contact_id == 0) {
+                $video->notify(new SubmissionAlert('a job failed to send an ' . $this->email_type . ' email due to unsubscribe or no contact email (Id: ' . $this->video_id . ')'));
             } else {
-                switch($this->email_type){
+                switch ($this->email_type) {
                     case 'submission_accepted':
                         Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
                         break;
@@ -97,13 +87,13 @@ class QueueEmail implements ShouldQueue
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param  Exception $exception
      * @return void
      */
     public function failed()
     {
         // Send user notification of failure, etc...
         $user = new User();
-        $user->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: '.$this->video_id.')'));
+        $user->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: ' . $this->video_id . ')'));
     }
 }

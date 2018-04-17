@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         'admin/media/*',
         'issue',
         'upload',
+        'upload/form',
         'videocheck'
     ];
 }

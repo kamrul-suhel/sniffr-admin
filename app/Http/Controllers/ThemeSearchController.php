@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Setting;
+use Illuminate\Http\Request;
 use Redirect;
 use App\Video;
 use App\Page;
@@ -15,7 +17,7 @@ class ThemeSearchController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $search_value = Input::get('value');
 
@@ -37,6 +39,10 @@ class ThemeSearchController extends Controller
 			'theme_settings' => config('settings.theme'),
 			'pages' => Page::where('active', '=', 1)->get(),
 		];
-		return view('Theme::search-list', $data);
-	}
+
+        if ($request->ajax()) {
+            return response($data);
+        }
+        return view('frontend.master', $data);
+    }
 }

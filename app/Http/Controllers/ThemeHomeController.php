@@ -6,6 +6,8 @@ use App\Page;
 use App\Menu;
 use App\Video;
 use App\VideoCategory;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ThemeHomeController extends Controller
 {
@@ -19,7 +21,15 @@ class ThemeHomeController extends Controller
 
     public function index()
     {
+        $total_video = Video::all()->count();
+
+        $current_month_upload_video = Video::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
+        $active_video = Video::where('active', 1)->count();
+
         $data = [
+            'total_video' => $total_video,
+            'current_month_upload_video' => $current_month_upload_video,
+            'active_video'  => $active_video,
             'videos' => Video::where('state', 'licensed')->orderBy('created_at', 'DESC')->simplePaginate($this->videos_per_page),
             'current_page' => 1,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
@@ -29,6 +39,6 @@ class ThemeHomeController extends Controller
             'pages' => Page::where('active', '=', 1)->get(),
         ];
 
-        return view('Theme::home', $data);
-    }
+		return view('frontend.master',$data);
+	}
 }
