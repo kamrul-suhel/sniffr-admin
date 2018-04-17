@@ -56,7 +56,6 @@
             "app/Libraries/ImageHandler.php",
             "app/Libraries/NestedHelper.php",
             "app/Libraries/TextHelper.php",
-            "app/Libraries/ThemeHelper.php",
             "app/Libraries/TimeHelper.php"
         ]
     },
