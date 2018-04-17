@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Observers\VideoObserver;
-use App\Setting;
 use App\Video;
 use Illuminate\Support\ServiceProvider;
 use Facebook\Facebook;
@@ -18,12 +17,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (\App::environment() !== 'production') {
+        if (config('settings.cache.cache_enabled')) {
             Video::observe(VideoObserver::class);
         }
 
-        $settings = Setting::first();
-//        dd($settings);
+        $settings = config('settings.site');
         View::share('settings', $settings);
     }
 
