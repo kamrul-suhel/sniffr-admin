@@ -130,8 +130,8 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('', 'Admin\AdminController@index');
 
     // Admin Video Functionality
-    Route::get('videos', 'Admin\AdminVideosController@index');
-    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin.video.edit');
+    Route::get('videos', 'Admin\AdminVideosController@index')->name('admin_videos_index');
+    Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');
     Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
     Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
     Route::get('videos/restore/{id}', array('uses' => 'Admin\AdminVideosController@restore'));

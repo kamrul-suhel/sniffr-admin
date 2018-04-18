@@ -21,7 +21,7 @@ class CommentController extends Controller
         $comment->user_id = Auth::id();
         $comment->save();
 
-        return redirect()->route('admin.video.edit', [
+        return redirect()->route('admin_video_edit', [
             'id' => $request->get('alpha_id')
         ]);
     }
@@ -46,7 +46,7 @@ class CommentController extends Controller
             $note_type = 'success';
         }
 
-        return redirect()->route('admin.video.edit', ['id' => $request->get('alpha_id')])->with([
+        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')])->with([
             'note' => $note,
             'note_type' => $note_type
         ]);

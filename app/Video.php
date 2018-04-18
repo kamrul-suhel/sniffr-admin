@@ -37,6 +37,15 @@ use Illuminate\Support\Facades\Cache;
  * @property string embed_code
  * @property int vertical
  * @property string description
+ * @property int video_category_id
+ * @property int video_collection_id
+ * @property int video_shottype_id
+ * @property int user_id
+ * @property int featured
+ * @property int active
+ * @property mixed details
+ * @property mixed date_filmed
+ * @property int is_exclusive
  * @mixin \Eloquent
  */
 class Video extends Model

@@ -15,8 +15,8 @@ use App\VideoShotType;
 use App\Http\Controllers\Controller;
 use App\Notifications\ClientAction;
 
-class ClientDailiesController extends Controller {
-
+class ClientDailiesController extends Controller
+{
     /**
      * ClientDailiesController constructor.
      * @param Request $request
