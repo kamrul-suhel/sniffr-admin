@@ -59,18 +59,6 @@ class VideoCategoriesTableSeeder extends Seeder
                 'name' => 'Sound',
                 'slug' => 'sound',
             ],
-            [
-                'parent_id' => NULL,
-                'order' => 9,
-                'name' => 'Sensitive',
-                'slug' => 'sensitive',
-            ],
-            [
-                'parent_id' => NULL,
-                'order' => 10,
-                'name' => 'Editorial',
-                'slug' => 'editorial',
-            ],
         ]);
     }
 }
