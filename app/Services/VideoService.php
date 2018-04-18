@@ -16,6 +16,7 @@ class VideoService
      */
     public function saveUploadedVideoFile(Video $video, UploadedFile $uploadedVideoFile)
     {
+        // TODO: avoid user input in the file name
         $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', pathinfo($uploadedVideoFile->getClientOriginalName(), PATHINFO_FILENAME)));
         $fileName = time() . '-' . $fileOriginalName . '.' . $uploadedVideoFile->getClientOriginalExtension();
         $fileMimeType = $uploadedVideoFile->getMimeType();

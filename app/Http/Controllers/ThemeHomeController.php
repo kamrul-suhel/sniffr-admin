@@ -7,11 +7,13 @@ use App\Menu;
 use App\Video;
 use App\VideoCategory;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class ThemeHomeController extends Controller
 {
-    private $videos_per_page = 12;
+    /**
+     * @var int
+     */
+    private $videos_per_page;
 
     public function __construct()
     {
