@@ -39,13 +39,6 @@ class MenuTableSeeder extends Seeder
                 'url' => '',
                 'type' => 'videos',
             ],
-            [
-                'parent_id' => NULL,
-                'order' => 3,
-                'name' => 'Posts',
-                'url' => '',
-                'type' => 'posts',
-            ],
         ]);
 
 

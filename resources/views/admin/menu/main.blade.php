@@ -88,20 +88,6 @@
         </a>
     </li>
 
-    <li class="{{ Request::segment(2) == 'posts' ? 'active' : '' }}">
-        <a href="{{ url('admin/posts') }}" class="tlink">
-            <i class="fa fa-file-text-o"></i>
-            <span class="title">Posts</span>
-        </a>
-        <ul>
-            <li>
-                <a href="{{ url('admin/posts/categories') }}">
-                    <span class="title">Post Categories</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-
     <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
         <a href="{{ url('admin/media') }}">
             <i class="fa fa-picture-o"></i>
