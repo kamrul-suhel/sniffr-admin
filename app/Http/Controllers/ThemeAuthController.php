@@ -55,7 +55,7 @@ class ThemeAuthController extends Controller
         if (!Auth::guest()) {
             return Redirect::to('/');
         }
-        $settings = Setting::first();
+        $settings = config('settings.site');
 
         $data = [
             'type' => 'login',

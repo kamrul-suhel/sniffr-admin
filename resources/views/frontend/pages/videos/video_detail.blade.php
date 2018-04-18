@@ -19,7 +19,7 @@
                             (Auth::user()->role == 'demo' ||
                             Auth::user()->role == 'admin')) ||
                             (!Auth::guest() && $video->access == 'registered' &&
-                            $settings->free_registration &&
+                            $settings['free_registration'] &&
                             Auth::user()->role == 'registered') )
                             {!! \App\Libraries\VideoHelper::getVideoHTML($video, true) !!}
                         @else
@@ -95,11 +95,11 @@
                                 @php
                                     if(isset($video)):
                                     $media_title = $video->title;
-                                    $url = ($settings->enable_https) ? secure_url('video') : URL::to('video');
+                                    $url = ($settings['enable_https']) ? secure_url('video') : URL::to('video');
                                     $media_url = $url . '/' . $video->id;
                                 elseif(isset($post)):
                                     $media_title = $post->title;
-                                    $url = ($settings->enable_https) ? secure_url('post') : URL::to('post');
+                                    $url = ($settings['enable_https']) ? secure_url('post') : URL::to('post');
                                     $media_url = $url . '/' . $post->slug;
                                 else:
                                     $media_title = '';
