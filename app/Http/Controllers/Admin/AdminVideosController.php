@@ -2,31 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
 use Youtube;
 use Redirect;
 use Validator;
-use DateTime;
-use DateInterval;
 use PDF;
-
-use Google_Client;
-use Google_Service_YouTube;
-
 use League\Csv\Reader;
-
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Mail\Mailable;
-
 use App\User;
 use App\Tag;
-use App\Menu;
 use App\Video;
 use App\Contact;
 use App\Comment;
@@ -34,42 +20,39 @@ use App\Campaign;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
-
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
 use App\Jobs\QueueVideoImport;
 use App\Jobs\QueueVideoYoutubeUpload;
 use App\Jobs\QueueVideoAnalysis;
-
-use App\Libraries\ImageHandler;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
-
 use App\Notifications\SubmissionAlert;
-
 use Carbon\Carbon as Carbon;
 
-class AdminVideosController extends Controller {
-
+class AdminVideosController extends Controller
+{
     // TODO WE SHOULD PROBABLY ADD RULES TO THIS
     protected $rules = [];
 
     /**
-     * constructor.
+     * AdminVideosController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->middleware('admin');
     }
+
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @param Request $request
+     * @param string $state
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request, $state = 'all')
     {
-        $search_value = Input::get('s');
+        $search_value = Input::get('s', false);
         $category_value = Input::get('category');
         $collection_value = Input::get('collection');
         $shot_value = Input::get('shot_type');
@@ -77,41 +60,40 @@ class AdminVideosController extends Controller {
 
         $videos = new Video;
 
-        if(!empty($search_value)){
-            $videos = $videos->where(function($query) use($search_value){
-                $query->where('title', 'LIKE', '%'.$search_value.'%')
-                ->orWhereHas('tags', function ($q) use($search_value){
-                    $q->where('name', 'LIKE', '%'.$search_value.'%');
-                })
-                ->orWhereHas('contact', function ($q) use($search_value){
-                    $q->where('email', 'LIKE', '%'.$search_value.'%');
-                })
-                ->orWhere('alpha_id', $search_value);
+        if (!$search_value) {
+            $videos = $videos->where(function ($query) use ($search_value) {
+                $query->where('title', 'LIKE', '%' . $search_value . '%')
+                    ->orWhereHas('tags', function ($q) use ($search_value) {
+                        $q->where('name', 'LIKE', '%' . $search_value . '%');
+                    })
+                    ->orWhereHas('contact', function ($q) use ($search_value) {
+                        $q->where('email', 'LIKE', '%' . $search_value . '%');
+                    })
+                    ->orWhere('alpha_id', $search_value);
             });
         }
 
-        if(!empty($category_value)){
+        if (!empty($category_value)) {
             $videos = $videos->where('video_category_id', $category_value);
         }
 
-        if(!empty($collection_value)){
+        if (!empty($collection_value)) {
             $videos = $videos->where('video_collection_id', $collection_value);
         }
 
-        if(!empty($shot_value)){
+        if (!empty($shot_value)) {
             $videos = $videos->where('video_shottype_id', $shot_value);
         }
 
-        if(!empty($rights)){
+        if (!empty($rights)) {
             $videos = $videos->where('rights', $rights);
         }
 
-        if($state != 'all'){
-            if($state == 'deleted'){
+        if ($state != 'all') {
+            if ($state == 'deleted') {
                 $videos = $videos->onlyTrashed();
-            }else{
-                $videos = $videos->where('state', $state);
             }
+            $videos = $videos->where('state', $state);
 
             session(['state' => $state]);
         }
@@ -120,7 +102,7 @@ class AdminVideosController extends Controller {
 
         $user = Auth::user();
 
-        $data = array(
+        $data = [
             'state' => $state,
             'videos' => $videos,
             'user' => $user,
@@ -128,7 +110,7 @@ class AdminVideosController extends Controller {
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
-        );
+        ];
 
         return view('admin.videos.index', $data);
     }
@@ -148,71 +130,53 @@ class AdminVideosController extends Controller {
         $video->state = $state;
 
         // Send email
-        if ($video->state == 'accepted'){
+        if ($video->state == 'accepted') {
 
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
 
             // Set to process for youtube and analysis
-            if(empty($video->youtube_id) && $video->file){
+            if (empty($video->youtube_id) && $video->file) {
                 QueueVideoYoutubeUpload::dispatch($video->id)
                     ->delay(now()->addSeconds(5));
             }
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
-
-        } else if($video->state == 'rejected'){
-
+        } elseif ($video->state == 'rejected') {
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_rejected');
-
-        } else if($video->state == 'restricted'||$video->state == 'problem'){
-
-            if(!empty($video->youtube_id) && $video->file){
-
+        } elseif ($video->state == 'restricted' || $video->state == 'problem') {
+            if (!empty($video->youtube_id) && $video->file) {
                 // Make youtube video unlisted
                 Youtube::setStatus($video->youtube_id, 'unlisted');
-
             }
-
-        } else if($video->state == 'licensed'){
-
+        } elseif ($video->state == 'licensed') {
             // Check if licensed_at has already been set so we don't send contact/user another email
-            if(!$video->licensed_at) {
-
+            if (!$video->licensed_at) {
                 // Check if there is a contact for the video
-                if(isset($video->contact->id)) {
-
+                if (isset($video->contact->id)) {
                     // Send thanks notification email (via queue after 2mins)
                     QueueEmail::dispatch($video->id, 'submission_licensed')
                         ->delay(now()->addMinutes(2));
-                        // added delay, just in case the youtube encoding needs to process
+                    // added delay, just in case the youtube encoding needs to process
                 }
-
             }
-
             // Also, need to check if video file has been moved for analysis + youtube (on licensed state only)
-            if($video->youtube_id && $video->file){
-
+            if ($video->youtube_id && $video->file) {
                 // Make youtube video public (if not NSFW)
-                if(!$video->nsfw) {
+                if (!$video->nsfw) {
                     //Youtube::setStatus($video->youtube_id, 'public');
                 }
-
             } else {
-
                 // Set to process for youtube and analysis (if video not already on youtube)
-                if(!$video->youtube_id && $video->file){
-                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: '.$video->alpha_id.')'));
+                if (!$video->youtube_id && $video->file) {
+                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
                     QueueVideoYoutubeUpload::dispatch($video->id)
                         ->delay(now()->addSeconds(5));
                 }
-
             }
-
             $video->licensed_at = now();
-
         }
 
         // Set user so we know who last changed the state of a video (helpful for youtube duplications)
@@ -220,50 +184,6 @@ class AdminVideosController extends Controller {
 
         // Save video data to database
         $video->save();
-
-        // Process > Move video to Youtube and move video file to folder for analysis
-        $fileName_watermark = false;
-        if($video->file&&$video_process==1){
-            // set watermark and non-watermark video files for processing
-            $fileName = basename($video->file);
-            if($video->file_watermark_dirty){
-                $file_watermark = file_get_contents($video->file_watermark_dirty);
-                $fileName_watermark = basename($video->file_watermark_dirty);
-            }else if($video->file_watermark){
-                $file_watermark = file_get_contents($video->file_watermark);
-                $fileName_watermark = basename($video->file_watermark);
-            }
-
-            // Analysis (copies file over to another folder for analysis and suggested tag creation)
-            $disk = Storage::disk('s3_sourcebucket');
-            if($disk->has($fileName)==1){
-                if($disk->exists(basename($fileName))) {
-                    $disk->move(''.$fileName, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$fileName);
-                }
-            }
-
-            // Youtube (retrieves video to temporary local and then uploads to youtube)
-            if($fileName_watermark) {
-                file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
-
-                $file_watermark = new UploadedFile (
-                    '/tmp/'.$fileName_watermark,
-                    $fileName_watermark,
-                    $video->mime,
-                    filesize('/tmp/'.$fileName_watermark),
-                    null,
-                    false
-                );
-
-                // Upload it to youtube
-                $video_title_temp = str_limit($video->title, $limit = 90, $end = '..');
-                $response = Youtube::upload($file_watermark, ['title' => $video_title_temp], 'unlisted');
-                $youtubeId  = $response->getVideoId();
-
-                $video->youtube_id = $youtubeId;
-            }
-            $video->save();
-        }
 
         if ($isJson) {
             return response()->json([
