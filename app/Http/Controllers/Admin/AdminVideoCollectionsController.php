@@ -43,7 +43,7 @@ class AdminVideoCollectionsController extends Controller
         $input = Input::all();
         $last_collection = VideoCollection::orderBy('order', 'DESC')->first();
 
-        if (isset($last_collectiony->order)) {
+        if (isset($last_collection->order)) {
             $new_collection_order = intval($last_collection->order) + 1;
         } else {
             $new_collection_order = 1;
