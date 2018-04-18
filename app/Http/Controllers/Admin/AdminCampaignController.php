@@ -79,7 +79,7 @@ class AdminCampaignController extends Controller
 
          Campaign::create($data);
 
-         return Redirect::to('admin/campaigns')->with([
+         return redirect()->route('admin_campaigns')->with([
              'note' => 'New Campaign Successfully Added!',
              'note_type' => 'success'
          ]);

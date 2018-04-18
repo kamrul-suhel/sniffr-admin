@@ -197,7 +197,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('contacts/update', array('uses' => 'Admin\AdminContactController@update'));
     Route::get('contacts/delete/{id}', array('uses' => 'Admin\AdminContactController@destroy'));
 
-    Route::get('campaigns', 'Admin\AdminCampaignController@index');
+    Route::get('campaigns', 'Admin\AdminCampaignController@index')->name('admin_campaigns');
     Route::get('campaigns/create', 'Admin\AdminCampaignController@create');
     Route::post('campaigns/store', array('uses' => 'Admin\AdminCampaignController@store'));
     Route::get('campaigns/edit/{id}', 'Admin\AdminCampaignController@edit');
