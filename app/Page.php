@@ -14,8 +14,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Page extends Model
 {
     use SoftDeletes;
-    protected $guarded = [];
-    public static $rules = [];
     protected $table = 'pages';
     protected $fillable = ['user_id', 'title', 'slug', 'image', 'body', 'active', 'created_at'];
 }
