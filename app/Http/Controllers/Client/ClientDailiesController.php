@@ -17,9 +17,6 @@ use App\Notifications\ClientAction;
 
 class ClientDailiesController extends Controller {
 
-    // TODO: WE SHOULD PROBABLY ADD RULES TO THIS
-    protected $rules = [];
-
     /**
      * ClientDailiesController constructor.
      * @param Request $request
