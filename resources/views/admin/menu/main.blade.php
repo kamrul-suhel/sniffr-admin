@@ -126,53 +126,12 @@
             <span class="title">Campaigns</span>
         </a>
     </li>
-    <!-- <li>
-        <a href="{{ url('admin/themes') }}">
-            <i class="fa fa-desktop"></i>
-            <span class="title">Themes</span>
-        </a>
-    </li> -->
-    <!-- <li>
-        <a href="{{ url('admin/plugins') }}">
-            <i class="fa fa-plug"></i>
-            <span class="title">Plugins</span>
-        </a>
-        <ul>
-            <li>
-                <a href="{{ url('admin/plugins') }}">All Plugins</a>
-            </li>
-        </ul>
-    </li> -->
 
     <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
         <a href="{{ url('admin/users') }}" class="tlink">
             <i class="fa fa-user-circle"></i>
             <span class="title">Users</span>
         </a>
-    </li>
-
-    <li class="{{ Request::segment(2) == 'settings' ? 'active' : '' }}">
-        <a href="{{ url('admin/settings') }}" class="tlink">
-            <i class="fa fa-cog"></i>
-            <span class="title">Settings</span>
-        </a>
-        <ul>
-            <li>
-                <a href="{{ url('admin/settings') }}">
-                    <span class="title">Site Settings</span>
-                </a>
-            </li>
-            <!--<li>
-                <a href="{{ url('admin/payment_settings') }}">
-                    <span class="title">Payment Settings</span>
-                </a>
-            </li>-->
-            <li>
-                <a href="{{ url('admin/theme_settings') }}">
-                    <span class="title">Theme Settings</span>
-                </a>
-            </li>
-        </ul>
     </li>
     @endif
 </ul>
