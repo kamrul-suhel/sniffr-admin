@@ -12,7 +12,7 @@ class TrustProxies extends Middleware
      *
      * @var array
      */
-    protected $proxies = explode(',', env('APP_TRUSTED_PROXIES'), '10.0.1.32,10.0.1.179');
+    protected $proxies = ['10.0.1.32', '10.0.1.179'];
 
     /**
      * The current proxy header mappings.
