@@ -2,21 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
 use Validator;
 use Redirect;
-
 use App\Client;
-use App\Campaign;
-
 use App\Traits\Slug;
-use App\Libraries\ThemeHelper;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-
 use App\Http\Controllers\Controller;
 
 class AdminClientController extends Controller
@@ -26,53 +18,46 @@ class AdminClientController extends Controller
     protected $rules = [
         'name' => 'required'
     ];
-    //
+
     public function __construct(Request $request)
     {
         $this->middleware(['admin:admin,manager']);
     }
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
         $user = Auth::user();
 
-        $data = array(
+        $data = [
             'clients' => $clients,
             'user' => $user,
             'admin_user' => Auth::user()
-        );
+        ];
 
          return view('admin.clients.index', $data);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        $data = array(
+        $data = [
             'post_route' => url('admin/clients/store'),
             'button_text' => 'Add New Client',
             'admin_user' => Auth::user()
-        );
+        ];
 
         return view('admin.clients.create_edit', $data);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return $this|\Illuminate\Http\RedirectResponse
      */
-
     public function store()
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
@@ -84,52 +69,36 @@ class AdminClientController extends Controller
 
         $data['slug'] = $this->slugify($data['name']);
 
-        $client = Client::create($data);
+        Client::create($data);
 
-        return Redirect::to('admin/clients')->with(array('note' => 'New Client Successfully Added!', 'note_type' => 'success') );
+        return Redirect::to('admin/clients')->with([
+            'note' => 'New Client Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Client $client)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-
     public function edit($id)
     {
         $client = Client::find($id);
 
-        $data = array(
+        $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Client',
             'client' => $client,
             'post_route' => url('admin/clients/update'),
             'button_text' => 'Update Client',
             'admin_user' => Auth::user()
-        );
+        ];
 
         return view('admin.clients.create_edit', $data);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @return $this|\Illuminate\Http\RedirectResponse
      */
-
     public function update()
     {
         $data = Input::all();
@@ -145,28 +114,31 @@ class AdminClientController extends Controller
 
         $data['slug'] = $this->slugify($data['name']);
 
-        // if(!isset($data['active']) || $data['active'] == ''){
-        //     $data['active'] = 0;
-        // }
-
         $client->update($data);
 
-        return Redirect::to('admin/clients/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Client!', 'note_type' => 'success') );
+        return Redirect::to('admin/clients/edit' . '/' . $id)->with([
+            'note' => 'Successfully Updated Client!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-
     public function destroy($id)
     {
         $client = Client::find($id);
 
-        Client::destroy($id);
+        if(!$client){
+            abort(404);
+        }
 
-        return Redirect::to('admin/clients')->with(array('note' => 'Successfully Deleted Client', 'note_type' => 'success') );
+        $client->destroy($id);
+
+        return Redirect::to('admin/clients')->with([
+            'note' => 'Successfully Deleted Client',
+            'note_type' => 'success'
+        ]);
     }
 }

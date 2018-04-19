@@ -4,7 +4,7 @@
 
 <p>Enter your credit card info to upgrade your account to a subscriber membership</p>
 
-<form method="POST" action="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?>/<?= $user->username ?>/upgrade_cc" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="payment-form">
+<form method="POST" action="<?= ($settings['enable_https']) ? secure_url('user') : URL::to('user') ?>/<?= $user->username ?>/upgrade_cc" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="payment-form">
     
     <input name="_token" type="hidden" value="<?php echo csrf_token(); ?>">
       
@@ -64,7 +64,7 @@
         <div class="pull-left col-md-7 terms" style="padding-left: 0;"></div>
       
           <div class="pull-right sign-up-buttons">
-          	<a href="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?>/<?= $user->username ?>" class="btn">Cancel</a>
+          	<a href="<?= ($settings['enable_https']) ? secure_url('user') : URL::to('user') ?>/<?= $user->username ?>" class="btn">Cancel</a>
             <button class="btn btn-primary" type="submit" name="create-account">Upgrade to Subscriber</button>
             
           </div>

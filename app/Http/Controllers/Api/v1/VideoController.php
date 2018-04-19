@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use Response;
-use Video;
+use App\Video;
 use Auth;
-use App\Setting as Setting;
 use App\VideoCategory;
 
 use App\Http\Controllers\Controller;
@@ -46,12 +45,12 @@ class VideoController extends Controller {
 
 	public function video($id)
 	{
-		$settings = Setting::first();
+		$settings = config('settings.site');
 		$video = Video::find($id);
 		
 		// If user has access to all the content
-		//if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ){
-		if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ){
+		//if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings['free_registration'] && Auth::user()->role == 'registered') ){
+		if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings['free_registration'] && Auth::user()->role == 'registered') ){
 			$columns = null;
 		// Else we need to restrict the columns we return
 		} else {

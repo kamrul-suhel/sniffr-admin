@@ -72,7 +72,7 @@
 
 	</form>
 
-	<script src="<?= ($settings->enable_https) ? secure_url('/') : URL::to('/') ?><?= THEME_URL ?>/assets/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script src="<?= ($settings['enable_https']) ? secure_url('/') : URL::to('/') ?><?= THEME_URL ?>/assets/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 	    var editor = ace.edit("custom_css");
 	    editor.setTheme("ace/theme/textmate");

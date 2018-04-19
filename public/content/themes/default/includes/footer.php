@@ -4,20 +4,20 @@
 			<div class="container">
 				<div class="footer-wrapper">
 					<div class="footer-copy">
-						<h3><?php echo $settings->website_name; ?></h3>
+						<h3><?php echo $settings['website_name']; ?></h3>
 						<p>Sniffr is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
 					</div>
 
 					<div class="icons-social">
-						<?php if($settings->facebook_page_id): ?><a href="http://facebook.com/<?php echo $settings->facebook_page_id; ?>" target="_blank" class="facebook social-link"><i class="fa fa-facebook"></i></a><?php endif; ?>
-						<?php if($settings->twitter_page_id): ?><a href="http://twitter.com/<?php echo $settings->twitter_page_id; ?>" target="_blank" class="twitter social-link"><i class="fa fa-twitter"></i></a><?php endif; ?>
-						<?php if($settings->google_page_id): ?><a href="http://plus.google.com/<?php echo $settings->google_page_id; ?>" target="_blank" class="google social-link"><i class="fa fa-google-plus"></i></a><?php endif; ?>
-						<?php if($settings->youtube_page_id): ?><a href="http://youtube.com/<?php echo $settings->youtube_page_id; ?>" target="_blank" class="youtube social-link"><i class="fa fa-youtube"></i></a><?php endif; ?>
+						<?php if($settings['facebook_page_id']): ?><a href="http://facebook.com/<?php echo $settings['facebook_page_id']; ?>" target="_blank" class="facebook social-link"><i class="fa fa-facebook"></i></a><?php endif; ?>
+						<?php if($settings['twitter_page_id']): ?><a href="http://twitter.com/<?php echo $settings['twitter_page_id']; ?>" target="_blank" class="twitter social-link"><i class="fa fa-twitter"></i></a><?php endif; ?>
+						<?php if($settings['google_page_id']): ?><a href="http://plus.google.com/<?php echo $settings['google_page_id']; ?>" target="_blank" class="google social-link"><i class="fa fa-google-plus"></i></a><?php endif; ?>
+						<?php if($settings['youtube_page_id']): ?><a href="http://youtube.com/<?php echo $settings['youtube_page_id']; ?>" target="_blank" class="youtube social-link"><i class="fa fa-youtube"></i></a><?php endif; ?>
 					</div>
 				</div>
 
 				<hr />
-				<p class="copyright">Copyright &copy; <?= date('Y'); ?> <?= $settings->website_name; ?></p>
+				<p class="copyright">Copyright &copy; <?= date('Y'); ?> <?= $settings['website_name']; ?></p>
 			</div>
 		</footer>
 	</div>
@@ -79,13 +79,13 @@
 	/********** END LOGIN MODAL FUNCTIONALITY **********/
 	</script>
 
-	<?php if(isset($settings->google_tracking_id) && $settings->google_tracking_id != ''): ?>
+	<?php if(isset($settings['google_tracking_id']) && $settings['google_tracking_id'] != ''): ?>
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-		ga('create', '<?= $settings->google_tracking_id ?>', 'auto');
+		ga('create', '<?= $settings['google_tracking_id'] ?>', 'auto');
 		ga('require', 'GTM-P4P3PWK');
 		ga('send', 'pageview');
 

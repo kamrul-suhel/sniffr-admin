@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Auth;
 use App\Video;
-use App\Setting;
 use Carbon\Carbon as Carbon;
 use App\Http\Controllers\Controller;
 
@@ -35,7 +34,7 @@ class AdminController extends Controller {
 
 	    $video_state_count = Video::get()->where('created_at', '>', $date->create(self::BASE_YEAR, self::BASE_MONTH, self::BASE_DAY))->groupBy('state');
 
-		$settings = Setting::first();
+		$settings = config('settings.site');
 
 		$data = [
 			'admin_user' => Auth::user(),
@@ -53,7 +52,7 @@ class AdminController extends Controller {
 
 
 	public function settings_form(){
-		$settings = Setting::first();
+		$settings = config('settings.site');
 		$user = Auth::user();
 		$data = array(
 			'settings' => $settings,

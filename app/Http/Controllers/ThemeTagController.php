@@ -2,43 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-
 use App\Tag;
 
-use App\Libraries\ThemeHelper;
-
-class ThemeTagController extends Controller {
-
-    public static $rules = array(
-        // 'username' => 'required|unique:users',
-        // 'email' => 'required|email|unique:users',
-        // 'password' => 'required|confirmed'
-    );
-
-    public function __construct()
-    {
-        //$this->middleware('secure');
-        // $settings = Setting::first();
-        // $this->videos_per_page = $settings->videos_per_page;
-    }
-
+class ThemeTagController extends Controller
+{
     /**
-     * Display the specified video.
-     *
-     * @param  int  $id
-     * @return Response
+     * @return mixed
      */
     public function index()
     {
-
         $tags = Tag::latest()->get()->pluck('name')->toJson();
 
         return response($tags, 200)
-        ->header('Access-Control-Allow-Origin', '*')
-        ->header('Content-Type', 'application/json');
-
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Content-Type', 'application/json');
     }
-
 }

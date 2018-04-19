@@ -40,7 +40,7 @@
 			<div class="row">
 				<div class="col-md-8" id="left_column" style="padding-right:0px;">
 					<div id="video_left">
-						<?php if(($series->youtube == 1) || $episode->access == 'guest' || ( ($episode->access == 'subscriber' || $episode->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $episode->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
+						<?php if(($series->youtube == 1) || $episode->access == 'guest' || ( ($episode->access == 'subscriber' || $episode->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $episode->access == 'registered' && $settings['free_registration'] && Auth::user()->role == 'registered') ): ?>
 							<div class="video-container">
 								<?php if(($series->youtube == 1) || $episode->type == 'embed'): ?>
 									<?php if($series->youtube): ?>

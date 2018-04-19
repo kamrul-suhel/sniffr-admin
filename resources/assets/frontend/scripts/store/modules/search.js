@@ -14,7 +14,7 @@ const getters = {
 }
 const mutations = {
     setSearchVideoData(state, data){
-        state.search_videos = data.videos.data;
+        state.search_videos = data.videos;
     },
 
     setSearchPaginationObject(state, paginate){

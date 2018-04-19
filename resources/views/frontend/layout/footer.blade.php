@@ -19,31 +19,31 @@
                 <div class="footer-right">
                     <div class="social-section">
                         <ul>
-                            <?php if($settings->facebook_page_id): ?>
+                            <?php if($settings['facebook_page_id']): ?>
                                 <li>
-                                    <a href="http://facebook.com/<?php echo $settings->facebook_page_id; ?>" target="_blank" class="facebook social-link">
+                                    <a href="http://facebook.com/<?php echo $settings['facebook_page_id']; ?>" target="_blank" class="facebook social-link">
                                         <i class="fab fa-facebook-f fa-2x"></i>
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <?php if($settings->twitter_page_id): ?>
+                            <?php if($settings['twitter_page_id']): ?>
                                 <li>
-                                    <a href="http://twitter.com/<?php echo $settings->twitter_page_id; ?>" target="_blank" class="twitter social-link">
+                                    <a href="http://twitter.com/<?php echo $settings['twitter_page_id']; ?>" target="_blank" class="twitter social-link">
                                         <i class="fab fa-twitter fa-2x"></i>
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <?php if($settings->google_page_id): ?>
+                            <?php if($settings['google_page_id']): ?>
 
                                 <li>
-                                    <a href="http://plus.google.com/<?php echo $settings->google_page_id; ?>" target="_blank" class="google social-link">
+                                    <a href="http://plus.google.com/<?php echo $settings['google_page_id']; ?>" target="_blank" class="google social-link">
                                         <i class="fa fa-google-plus"></i>
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <?php if($settings->youtube_page_id): ?>
+                            <?php if($settings['youtube_page_id']): ?>
                                 <li>
-                                    <a href="http://youtube.com/<?php echo $settings->youtube_page_id; ?>" target="_blank" class="youtube social-link">
+                                    <a href="http://youtube.com/<?php echo $settings['youtube_page_id']; ?>" target="_blank" class="youtube social-link">
                                         <i class="fab fa-youtube fa-2x"></i>
                                     </a>
                                 </li>

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Favorite
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Favorite extends Model
 {
+    use SoftDeletes;
     protected $table = 'favorites';
     protected $guarded = array();
     public static $rules = array();

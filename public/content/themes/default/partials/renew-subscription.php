@@ -4,7 +4,7 @@
 
 <p>Sorry, it looks like your account is no longer active...</p>
 
-<form method="POST" action="<?= ($settings->enable_https) ? secure_url('user') : URL::to('user') ?>/<?= $user->username ?>/update_cc" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="payment-form">
+<form method="POST" action="<?= ($settings['enable_https']) ? secure_url('user') : URL::to('user') ?>/<?= $user->username ?>/update_cc" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" id="payment-form">
     
     <input name="_token" type="hidden" value="<?php echo csrf_token(); ?>">
       
@@ -64,7 +64,7 @@
         <div class="pull-left col-md-7 terms" style="padding-left: 0;"></div>
       
           <div class="pull-right sign-up-buttons">
-          	<a href="<?= ($settings->enable_https) ? secure_url('logout') : URL::to('logout') ?>" class="btn">Logout</a>
+          	<a href="<?= ($settings['enable_https']) ? secure_url('logout') : URL::to('logout') ?>" class="btn">Logout</a>
             <button class="btn btn-primary" type="submit" name="create-account">Renew My Subscription</button>
             
           </div>

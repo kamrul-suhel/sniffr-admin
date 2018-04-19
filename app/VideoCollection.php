@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
  */
 class VideoCollection extends Model
 {
+    use SoftDeletes;
     protected $guarded = [];
     public static $rules = [];
     protected $table = 'video_collections';

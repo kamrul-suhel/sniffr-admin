@@ -4,7 +4,7 @@
 
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 	<article class="block">
-		<a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('post') : URL::to('post') ?><?= '/' . $post->slug ?>">
+		<a class="block-thumbnail" href="<?= ($settings['enable_https']) ? secure_url('post') : URL::to('post') ?><?= '/' . $post->slug ?>">
 			<div class="thumbnail-overlay"></div>
 			<img src="<?= \App\Libraries\ImageHandler::getImage($post->image, 'medium')  ?>">
 			<div class="details">
