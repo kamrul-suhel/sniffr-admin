@@ -62,9 +62,6 @@
                                         @click="onSubmit()">
                                         LOGIN
                                     </v-btn>
-                                    <!--<div class="login-progress">-->
-                                        <!--<v-progress-circular v-if="login_progress" indeterminate color="dark"></v-progress-circular>-->
-                                    <!--</div>-->
                                 </div>
                             </v-flex>
                         </v-layout>
@@ -97,8 +94,8 @@
                     password:''
                 },
                 emailRules: [
-                    v => !!v || 'E-mail is required',
-                    v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                    v => !!v || 'Email is required',
+                    v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email must be valid'
                 ],
                 passwordRules: [
                     v => !!v || 'Password is required'

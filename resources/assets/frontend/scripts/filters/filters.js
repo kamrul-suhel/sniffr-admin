@@ -15,7 +15,7 @@ export const checkImage = Vue.filter('checkimage', function(value){
 
 export const readmore = Vue.filter('readmore', function(text, length, suffix){
     if(text){
-        if(text.length > 100){
+        if(text.length > length){
             return text.substring(0, length) + suffix;
         }
         return text.substring(0, length);

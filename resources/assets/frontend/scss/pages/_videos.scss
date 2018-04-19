@@ -87,12 +87,19 @@
 /* ************************* Videos section style ******************* */
 
 .videos-section{
+
   .video-section-title{
     margin-bottom: $section-title-after-space;
 
     h1{
       @include headingstyle();
     }
+  }
+
+  .headline {
+    overflow: hidden;
+    height: 32px;
+    width:100%;
   }
 
   .video-section-title::after{

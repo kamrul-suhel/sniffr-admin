@@ -101,13 +101,15 @@
                             </v-layout>
                         </v-container>
 
-                        <v-container grid-list-xs>
+                        <v-container grid-list-lg>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <h2 class="text-xs-center text-uppercase">Terms & Conditions</h2>
+                                </v-flex>
+                            </v-layout>
 
                             <div class="term-condition-content scroll-y term-condition"
                                  id="scroll-target" style="max-height: 250px">
-                                <v-layout row wrap text-center>
-                                    <h2>Terms & Conditions</h2>
-                                </v-layout>
 
                                 <v-layout row wrap
                                           column
@@ -177,7 +179,7 @@
                                            :disabled="validete_email_progress"
                                            @click="onSubmit()"
                                            >
-                                        Submit your file
+                                        Submit your video
                                     </v-btn>
 
                                 </v-flex>

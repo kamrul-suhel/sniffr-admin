@@ -49,7 +49,7 @@ class VideosTableSeeder extends Seeder
                 'image' => 'https://vlp-storage.s3.eu-west-1.amazonaws.com/1523079805-vid-20180406-wa0006-00001.jpg',
                 'thumb' => 'https://vlp-storage.s3.eu-west-1.amazonaws.com/1523079805-vid-20180406-wa0006-00001.jpg',
                 'ext' => NULL,
-                'url' => $faker->url,
+                'url' => $faker->randomElement(['https://vimeo.com/170275830','https://vimeo.com/237214329','https://vimeo.com/246950354']),
                 'file' => 'https://vlp-storage.s3.eu-west-1.amazonaws.com/1519859326-20180228_133851.mp4',
                 'file_watermark' => 'https://vlp-storage.s3.eu-west-1.amazonaws.com/1519859326-20180228_133851-watermark.mp4',
                 'file_watermark_dirty' => 'https://vlp-storage.s3.eu-west-1.amazonaws.com/1519859326-20180228_133851-watermark-dirty.mp4',
