@@ -1,20 +1,34 @@
 <?php
 
 // DEFINE THE THEME_URL
-if( ! defined ( "THEME_URL" ) ):
-	
+/*if( ! defined ( "THEME_URL" ) ):
+
 	define("THEME_URL", URL::to('/') . '/content/themes/' . basename(__DIR__) );
 
-endif;
+endif;*/
+
+if(env('APP_ENV')!=='local'){
+	define("THEME_URL", url('/content/themes/default'));
+} else {
+	define("THEME_URL", secure_url('/content/themes/default'));
+}
 
 // DEFINE SPECIFIC UPLOAD URL AND DIRECTORIES
 
 if( substr(Config::get('site.uploads_dir'), 0, 1) == '/' ){
-	Config::set('site.uploads_dir', URL::to('/') . '/content/uploads/' );
+	if(env('APP_ENV')!='local'){
+		Config::set('site.uploads_dir', URL::to('/') . '/content/uploads/' );
+	} else {
+		Config::set('site.uploads_dir', secure_url('/') . '/content/uploads/' );
+	}
 }
 
 if( substr(Config::get('site.uploads_url'), 0, 1) == '/' ){
-	Config::set('site.uploads_url', URL::to('/') . '/content/uploads/' );
+	if(env('APP_ENV')!='local'){
+		Config::set('site.uploads_url', URL::to('/') . '/content/uploads/' );
+	} else {
+		Config::set('site.uploads_url', secure_url('/') . '/content/uploads/' );
+	}
 }
 
 /********** FUNCTION FOR GENERATING THE MENU **********/
@@ -26,7 +40,7 @@ if(!function_exists('generate_menu')):
 		$first_parent_id = 0;
 		$depth = 0;
 		$output = '';
-		
+
 		foreach($menu as $menu_item):
 
 			$hasChildren = $menu_item->hasChildren();
@@ -40,14 +54,14 @@ if(!function_exists('generate_menu')):
 					$output .=	'</li></ul>';
 					$depth -= 1;
 				endif;
-			
+
 				if($depth == 1 && $menu_item->parent_id == $first_parent_id):
 					$output .= '</li></ul>';
 					$depth -= 1;
 				endif;
-			
+
 			endif;
-			
+
 
 			if($menu_item->type == 'videos'):
 
@@ -58,14 +72,14 @@ if(!function_exists('generate_menu')):
 
 				$output .= '<li class="dropdown' . $active . '">';
 					$output .= '<a href="/videos" class="dropdown-toggle">' . $menu_item->name . ' <span class="caret"></span></a>';
-					
+
 						$output .= '<ul class="dropdown-menu multi-level" role="menu">';
 						$output .= generate_video_post_menu(\App\VideoCategory::orderBy('order', 'ASC')->get(), '/videos/category/');
-					
+
 					$output .= '</li></ul>';
-				
+
 				$output .= '</li>';
-				continue; 
+				continue;
 			endif;
 
 
@@ -104,9 +118,9 @@ if(!function_exists('generate_menu')):
 				$previous_item = $menu_item;
 
 			endforeach;
-			
+
 			$output .= '</li></ul>';
-		
+
 		return $output;
 
 	}
@@ -123,7 +137,7 @@ if(!function_exists('generate_video_post_menu')):
 		$first_parent_id = 0;
 		$depth = 0;
 		$output = '';
-		
+
 		foreach($menu as $menu_item):
 
 				$hasChildren = $menu_item->hasChildren();
@@ -137,12 +151,12 @@ if(!function_exists('generate_video_post_menu')):
 						$output .=	'</li></ul>';
 						$depth -= 1;
 					endif;
-				
+
 					if($depth == 1 && $menu_item->parent_id == $first_parent_id):
 						$output .= '</li></ul>';
 						$depth -= 1;
 					endif;
-				
+
 				endif;
 
 				$li_class = '';
@@ -151,7 +165,7 @@ if(!function_exists('generate_video_post_menu')):
 					$dropdown_toggle = ' class="dropdown-toggle"';
 					$li_class .= ' class="dropdown-submenu"';
 				endif;
-		
+
 
 				$output .= '<li'. $li_class . '>';
 
@@ -169,9 +183,9 @@ if(!function_exists('generate_video_post_menu')):
 			if( (isset($previous_item->id) && $menu_item->parent_id == $previous_item->parent_id) ):
 				if( $menu_item->parent_id != NULL ):
 					$output .= '</ul>';
-				endif; 
-			endif; 
-		
+				endif;
+			endif;
+
 		return $output;
 
 	}
@@ -197,13 +211,13 @@ if(!function_exists ( 'adjustBrightness' )):
         $b = hexdec(substr($hex,4,2));
         // Adjust number of steps and keep it inside 0 to 255
         $r = max(0,min(255,$r + $steps));
-        $g = max(0,min(255,$g + $steps));  
+        $g = max(0,min(255,$g + $steps));
         $b = max(0,min(255,$b + $steps));
         $r_hex = str_pad(dechex($r), 2, '0', STR_PAD_LEFT);
         $g_hex = str_pad(dechex($g), 2, '0', STR_PAD_LEFT);
         $b_hex = str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
         return '#'.$r_hex.$g_hex.$b_hex;
-    } 
+    }
 endif;
 
 if(!function_exists ( 'dynamic_styles' )):
@@ -215,7 +229,7 @@ if(!function_exists ( 'dynamic_styles' )):
 
 		$color = $hex_color;
 		$lighter_color = adjustBrightness($hex_color, 20);
-		
+
 		$style = "";
 		$style .= ".theme_color_background, #signup-form .panel-heading, .post .post-img h3, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a, #home-hero button, .block .block-contents p.date .label.label-success, .btn.btn-primary, .navbar-nav.navbar-right li.signup-desktop a, .second-nav.navbar-default .navbar-nav li.active a, .second-nav.navbar-default .navbar-nav li a:hover, .vjs-default-skin .vjs-play-progress, .vjs-default-skin .vjs-volume-level{ background: $color; }";
 		$style .= ".btn.btn-primary, .form-control:focus, .second-nav.navbar-default .navbar-nav li:hover, .second-nav.navbar-default .navbar-nav li.active{ border-color:$color; }";
