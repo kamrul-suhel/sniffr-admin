@@ -69,7 +69,7 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     | Search Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('search', 'ThemeSearchController@index');
+    Route::get('search', 'SearchController@index')->name('search');
 
     /*
     |--------------------------------------------------------------------------
