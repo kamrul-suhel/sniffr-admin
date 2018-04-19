@@ -16,7 +16,7 @@ class AddForeignKeysCampaigns extends Migration
     public function down()
     {
         Schema::table('campaigns', function (Blueprint $table) {
-            $table->dropForeign('client_id');
+            $table->dropForeign('campaigns_client_id_foreign');
         });
     }
 }

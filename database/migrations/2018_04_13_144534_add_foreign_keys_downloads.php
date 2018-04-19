@@ -18,9 +18,9 @@ class AddForeignKeysDownloads extends Migration
     public function down()
     {
         Schema::table('downloads', function (Blueprint $table) {
-            $table->dropForeign('video_id');
-            $table->dropForeign('client_id');
-            $table->dropForeign('user_id');
+            $table->dropForeign('downloads_video_id_foreign');
+            $table->dropForeign('downloads_client_id_foreign');
+            $table->dropForeign('downloads_user_id_foreign');
         });
     }
 }

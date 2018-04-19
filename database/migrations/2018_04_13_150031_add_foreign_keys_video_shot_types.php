@@ -16,7 +16,7 @@ class AddForeignKeysVideoShotTypes extends Migration
     public function down()
     {
         Schema::table('video_shot_types', function (Blueprint $table) {
-            $table->dropForeign('parent_id');
+            $table->dropForeign('video_shot_types_parent_id_foreign');
         });
     }
 }

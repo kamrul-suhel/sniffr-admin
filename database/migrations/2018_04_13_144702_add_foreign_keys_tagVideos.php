@@ -17,8 +17,8 @@ class AddForeignKeysTagVideos extends Migration
     public function down()
     {
         Schema::table('tag_video', function (Blueprint $table) {
-            $table->dropForeign('video_id');
-            $table->dropForeign('tag_id');
+            $table->dropForeign('tag_video_video_id_foreign');
+            $table->dropForeign('tag_video_tag_id_foreign');
         });
     }
 }

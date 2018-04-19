@@ -16,7 +16,7 @@ class AddForeignKeysLegalTerms extends Migration
     public function down()
     {
         Schema::table('legal_terms', function (Blueprint $table) {
-            $table->dropForeign('user_id');
+            $table->dropForeign('legal_terms_user_id_foreign');
         });
     }
 }

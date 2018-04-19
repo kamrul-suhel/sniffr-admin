@@ -17,8 +17,8 @@ class AddForeignKeysCampaignVideo extends Migration
     public function down()
     {
         Schema::table('campaign_video', function (Blueprint $table) {
-            $table->dropForeign('video_id');
-            $table->dropForeign('campaign_id');
+            $table->dropForeign('campaign_video_video_id_foreign');
+            $table->dropForeign('campaign_video_campaign_id_foreign');
         });
     }
 }

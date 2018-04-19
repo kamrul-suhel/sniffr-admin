@@ -16,7 +16,7 @@ class AddForeignKeysVideoCategories extends Migration
     public function down()
     {
         Schema::table('video_categories', function (Blueprint $table) {
-            $table->dropForeign('parent_id');
+            $table->dropForeign('video_categories_parent_id_foreign');
         });
     }
 }
