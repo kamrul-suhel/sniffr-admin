@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests\Video;
 
+use App\Traits\FrontendResponser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
 class CreateVideoRequest extends FormRequest
 {
+    use FrontendResponser;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -43,9 +46,7 @@ class CreateVideoRequest extends FormRequest
         $isJson = $this->ajax() || $this->isJson();
 
         if ($isJson) {
-            return response()->json([
-                'status' => 'error, file did not pass validation check'
-            ]);
+            return $this->errorResponse('error, file did not pass validation check');
         }
         $routeName = Request::route()->getName();
 
