@@ -3,37 +3,24 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePagesTable extends Migration {
+class CreatePagesTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('pages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->string('title')->nullable();
+            $table->string('slug')->nullable();
+            $table->text('body');
+            $table->boolean('active')->default(1);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::create('pages', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('user_id')->unsigned()->nullable();
-			$table->string('title')->nullable();
-			$table->string('slug')->nullable();
-			$table->text('body');
-			$table->boolean('active')->default(1);
-            $table->softDeletes()->nullable();
-			$table->timestamps();
-		});
-	}
-
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('pages');
-	}
-
+    public function down()
+    {
+        Schema::drop('pages');
+    }
 }

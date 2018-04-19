@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysDownloads extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('downloads', function (Blueprint $table) {
@@ -20,15 +15,12 @@ class AddForeignKeysDownloads extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('downloads', function (Blueprint $table) {
-            //
+            $table->dropForeign('video_id');
+            $table->dropForeign('client_id');
+            $table->dropForeign('user_id');
         });
     }
 }

@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysCampaigns extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('campaigns', function (Blueprint $table) {
@@ -18,15 +13,10 @@ class AddForeignKeysCampaigns extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('campaigns', function (Blueprint $table) {
-            //
+            $table->dropForeign('client_id');
         });
     }
 }

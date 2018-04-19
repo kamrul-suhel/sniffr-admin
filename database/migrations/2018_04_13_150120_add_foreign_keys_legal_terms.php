@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysLegalTerms extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('legal_terms', function (Blueprint $table) {
@@ -18,15 +13,10 @@ class AddForeignKeysLegalTerms extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('legal_terms', function (Blueprint $table) {
-            //
+            $table->dropForeign('user_id');
         });
     }
 }

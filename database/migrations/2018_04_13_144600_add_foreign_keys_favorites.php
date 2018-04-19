@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysFavorites extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('favorites', function (Blueprint $table) {
@@ -19,15 +14,11 @@ class AddForeignKeysFavorites extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('favorites', function (Blueprint $table) {
-            //
+            $table->dropForeign('video_id');
+            $table->dropForeign('user_id');
         });
     }
 }

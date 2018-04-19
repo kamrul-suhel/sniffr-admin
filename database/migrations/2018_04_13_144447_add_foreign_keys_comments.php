@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysComments extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
@@ -20,15 +15,12 @@ class AddForeignKeysComments extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('comments', function (Blueprint $table) {
-            //
+            $table->dropForeign('video_id');
+            $table->dropForeign('contact_id');
+            $table->dropForeign('user_id');
         });
     }
 }

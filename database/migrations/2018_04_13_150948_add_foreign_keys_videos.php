@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysVideos extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('videos', function (Blueprint $table) {
@@ -22,15 +17,14 @@ class AddForeignKeysVideos extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('videos', function (Blueprint $table) {
-            //
+            $table->dropForeign('video_category_id');
+            $table->dropForeign('video_collection_id');
+            $table->dropForeign('video_shottype_id');
+            $table->dropForeign('user_id');
+            $table->dropForeign('contact_id');
         });
     }
 }
