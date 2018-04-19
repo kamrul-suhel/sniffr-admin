@@ -26,9 +26,10 @@ class AdminVideoCollectionsController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
+    public function index()
+    {
         $data = [
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_collections' => json_decode(VideoCollection::orderBy('order', 'ASC')->get()->toJson()),
         ];
 

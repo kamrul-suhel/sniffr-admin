@@ -100,13 +100,10 @@ class AdminVideosController extends Controller
 
         $videos = $videos->orderBy('id', 'DESC')->paginate(24);
 
-        $user = Auth::user();
-
         $data = [
             'state' => $state,
             'videos' => $videos,
-            'user' => $user,
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
@@ -219,27 +216,28 @@ class AdminVideosController extends Controller
         // Send thanks notification email (via queue after 2mins)
         QueueEmail::dispatch($video->id, 'details_reminder');
 
-        return Redirect::to('admin/videos/edit/'.$id)->with(array('note' => 'Reminder sent', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/edit/'.$id)->with([
+            'note' => 'Reminder sent',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Show the form for creating a new video
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        $data = array(
+        $data = [
             'headline' => '<i class="fa fa-plus-circle"></i> New Video',
             'post_route' => url('admin/videos/store'),
             'button_text' => 'Add New Video',
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
             'users' => User::all(),
-        );
+        ];
         return view('admin.videos.create_edit', $data);
     }
 
@@ -362,8 +360,6 @@ class AdminVideosController extends Controller
             $next = Video::where('id', '<', $video->id)->where('state', '=', $video_state)->orderBy('id','desc')->first();
             $previous = Video::where('id', '>', $video->id)->where('state', '=', $video_state)->orderBy('id','asc')->first();
 
-            $user = User::where('id', $video->user_id)->first();
-
             $data = [
                 'headline' => '<i class="fa fa-edit"></i> Edit Video',
                 'video' => $video,
@@ -371,13 +367,12 @@ class AdminVideosController extends Controller
                 'next' => $next,
                 'post_route' => url('admin/videos/update'),
                 'button_text' => 'Update Video',
-                'admin_user' => Auth::user(),
+                'user' => Auth::user(),
                 'video_categories' => VideoCategory::all(),
                 'video_collections' => VideoCollection::all(),
                 'video_shottypes' => VideoShotType::all(),
                 'video_campaigns' => Campaign::all(),
                 'users' => User::all(),
-                'user' => $user
             ];
         }
 
@@ -453,7 +448,7 @@ class AdminVideosController extends Controller
         }
 
         $selected_campaigns = $video->campaigns->pluck('id')->all();
-        $campaigns = array();
+        $campaigns = [];
 
         if(Input::get('campaigns')){
             // IAN:  Hmm, tough one, only want to set their state to new if their new.
@@ -512,7 +507,7 @@ class AdminVideosController extends Controller
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
-        $brokenLinks = $problemLinks = $note =array();
+        $brokenLinks = $problemLinks = $note = [];
 
         if($request->hasFile('csv')) {
             //load the CSV document from a file path
@@ -600,38 +595,48 @@ class AdminVideosController extends Controller
             }
         }
 
-        $data = array(
+        $data = [
             'post_route' => url('admin/videos/ingest'),
             'button_text' => 'Upload Video CSV',
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'broken_links' => $brokenLinks,
             'problem_links' => $problemLinks
-        );
+        ];
 
         return view('admin.videos.ingest', $data);
     }
 
     /**
-     *
+     * TODO: where are we using this method
      */
     public function checkYoutube()
     {
-        $videos = Video::where([['state', 'licensed'], ['file_watermark_dirty', '!=', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(300)->get();
+        $videos = Video::where([
+            ['state', 'licensed'],
+            ['file_watermark_dirty', '!=', NULL],
+            ['youtube_id', NULL],
+            ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]
+        ])->limit(300)->get();
         echo 'Total Count: '.count($videos).'<br /><br />';
         foreach ($videos as $video) {
             echo $video->id.' : '.$video->title.'<br />';
             QueueVideoYoutubeUpload::dispatch($video->id)
                 ->delay(now()->addSeconds(5));
         }
-
     }
 
     /**
-     *
+     * TODO: where are we using this method
      */
     public function checkWatermark()
     {
-        $videos = Video::where([['file', '!=', NULL], ['file_watermark', NULL], ['file_watermark_dirty', NULL], ['youtube_id', NULL], ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])->limit(100)->get();
+        $videos = Video::where([
+            ['file', '!=', NULL],
+            ['file_watermark', NULL],
+            ['file_watermark_dirty', NULL],
+            ['youtube_id', NULL],
+            ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]
+        ])->limit(100)->get();
         echo 'Total Count: '.count($videos).'<br /><br />';
         foreach ($videos as $video) {
             echo $video->id.' : '.$video->title.' : '.basename($video->file).' : '.$video->created_at.'<br />';
@@ -639,11 +644,18 @@ class AdminVideosController extends Controller
 
     }
 
+    /**
+     * TODO: where are we using this method
+     */
     public function checkAnalysis()
     {
         set_time_limit(3200); // Unlimited timeout
 
-        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['file_watermark_dirty', '!=', NULL]])->get();
+        $videos = Video::where([
+            ['state', 'licensed'],
+            ['file', '!=', NULL],
+            ['file_watermark_dirty', '!=', NULL]
+        ])->get();
         $disk = Storage::disk('s3_sourcebucket');
         $count = 0;
 
@@ -654,9 +666,8 @@ class AdminVideosController extends Controller
                 echo 'SUCCESS: '.$video->alpha_id.' : '.$video->file.'<br />';
                 QueueVideoAnalysis::dispatch($video->id)
                     ->delay(now()->addSeconds(5));
-            } else {
-                echo 'ALREADY DONE: '.$video->alpha_id.' : '.$video->file.'<br />';
             }
+            echo 'ALREADY DONE: '.$video->alpha_id.' : '.$video->file.'<br />';
         }
         echo 'Total Count: '.$count.'<br /><br />';
     }

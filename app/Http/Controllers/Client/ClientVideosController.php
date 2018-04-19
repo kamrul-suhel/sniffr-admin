@@ -2,57 +2,34 @@
 
 namespace App\Http\Controllers\Client;
 
-use View;
 use Auth;
 use Redirect;
-use Validator;
-use DateTime;
-use DateInterval;
-
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
-
-use App\User;
-use App\Tag;
-use App\Menu;
 use App\Video;
 use App\Client;
-use App\Comment;
 use App\Campaign;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
-
-use App\Jobs\QueueEmail;
-
-use App\Libraries\ImageHandler;
-use App\Libraries\TimeHelper;
-use App\Libraries\VideoHelper;
 use App\Http\Controllers\Controller;
-
 use Carbon\Carbon as Carbon;
-
 use App\Notifications\ClientAction;
 
-class ClientVideosController extends Controller {
-
-    protected $rules = []; //WE SHOULD PROBABLY ADD RULES TO THIS
-
+class ClientVideosController extends Controller
+{
     /**
-     * constructor.
+     * ClientVideosController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->middleware('client');
     }
+
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -72,23 +49,22 @@ class ClientVideosController extends Controller {
             });
         }
 
-        if(!empty($collection_value)){
+        if (!empty($collection_value)) {
             $videos = $videos->where('video_collection_id', $collection_value);
         }
 
         // This strips out exclusive videos (for 48 hours) unless not being used.
         $videos = $videos->whereDoesntHave('campaigns', function ($q) {
-            $q->where('campaign_video.created_at', '>', Carbon::now()->subDays(2))->where('campaign_video.state', '!=', 'no');
+            $q->where('campaign_video.created_at', '>', Carbon::now()
+                ->subDays(2))
+                ->where('campaign_video.state', '!=', 'no');
         });
 
         $videos = $videos->orderBy('id', 'DESC')->paginate(24);
 
-        $user = Auth::user();
-
         $data = array(
             'videos' => $videos,
-            'user' => $user,
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
@@ -97,51 +73,54 @@ class ClientVideosController extends Controller {
         return view('client.videos.index', $data);
     }
 
-     /**
-     * View the specified video.
-     *
-     * @param  int  $id
-     * @return Response
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function view($id)
     {
         $video = Video::where('alpha_id', $id)->where('state', 'licensed')->first();
 
-        $user = Auth::user();
-
-        $data = array(
+        $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
-            'user' => $user
-        );
+        ];
 
         return view('client.videos.create_edit', $data);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function interest(Request $request, $id)
     {
-        $isJson = $request->ajax();
+        $isJson = $request->ajax() || $request->isJson();
 
         $video = Video::where('alpha_id', $id)->first();
         $client = Client::find(Auth::user()->client_id);
         
         $client->notify(new ClientAction($video, 'interested', $client->name));
 
-        if($isJson) {
-            return response()->json(['status' => 'success', 'message' => 'Our team have been notified of your interest in this video, we\'ll be in touch' , 'state' => 'request', 'current_state' => session('current_state'), 'video_id' => $video->id]);
-        } else {
-            return Redirect::to('admin/videos/'.session('state'))->with(array('note' => 'Our team have been notified of your interest in this video, we\'ll be in touch', 'note_type' => 'success') );
+        if ($isJson) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Our team have been notified of your interest in this video, we\'ll be in touch',
+                'state' => 'request',
+                'current_state' => session('current_state'),
+                'video_id' => $video->id
+            ]);
         }
+
+        return Redirect::to('admin/videos/' . session('state'))->with([
+            'note' => 'Our team have been notified of your interest in this video, we\'ll be in touch',
+            'note_type' => 'success'
+        ]);
     }
 }

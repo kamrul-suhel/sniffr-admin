@@ -53,7 +53,7 @@ class AdminUsersController extends Controller
 
         $data = [
             'post_route' => url('admin/user/store'),
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'button_text' => 'Create User',
             'clients' => $clients
         ];
@@ -90,13 +90,10 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-
         $data = [
-            'user' => $user,
             'clients' => Client::get(),
             'post_route' => url('admin/user/update'),
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'button_text' => 'Update User',
         ];
 

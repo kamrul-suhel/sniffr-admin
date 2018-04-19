@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 class AdminPageController extends Controller {
 
     /**
-     * constructor.
+     * AdminPageController constructor.
      */
     public function __construct()
     {
@@ -20,43 +20,35 @@ class AdminPageController extends Controller {
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         $pages = Page::orderBy('created_at', 'DESC')->paginate(10);
-        $user = Auth::user();
 
         $data = array(
             'pages' => $pages,
-            'user' => $user,
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
             );
 
         return view('admin.pages.index', $data);
     }
 
     /**
-     * Show the form for creating a new video
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
         $data = array(
             'post_route' => url('admin/pages/store'),
             'button_text' => 'Add New Page',
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
             );
         return view('admin.pages.create_edit', $data);
     }
 
     /**
-     * Store a newly created video in storage.
-     *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
     {
@@ -67,37 +59,35 @@ class AdminPageController extends Controller {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        $page = Page::create($data);
+        Page::create($data);
 
-        return Redirect::to('admin/pages')->with(array('note' => 'New Page Successfully Added!', 'note_type' => 'success') );
+        return Redirect::to('admin/pages')->with([
+            'note' => 'New Page Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Show the form for editing the specified video.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
         $page = Page::find($id);
 
-        $data = array(
+        $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Page',
             'page' => $page,
             'post_route' => url('admin/pages/update'),
             'button_text' => 'Update Page',
-            'admin_user' => Auth::user()
-            );
+            'user' => Auth::user()
+        ];
 
         return view('admin.pages.create_edit', $data);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update()
     {
@@ -107,33 +97,36 @@ class AdminPageController extends Controller {
 
         $validator = Validator::make($data, Page::$rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        if(!isset($data['active']) || $data['active'] == ''){
+        if (!isset($data['active']) || $data['active'] == '') {
             $data['active'] = 0;
         }
 
         $page->update($data);
 
-        return Redirect::to('admin/pages/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Page!', 'note_type' => 'success') );
+        return Redirect::to('admin/pages/edit' . '/' . $id)->with([
+            'note' => 'Successfully Updated Page!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         $page = Page::find($id);
 
-        Page::destroy($id);
+        $page->destroy($id);
 
-        return Redirect::to('admin/pages')->with(array('note' => 'Successfully Deleted Page', 'note_type' => 'success') );
+        return Redirect::to('admin/pages')->with([
+            'note' => 'Successfully Deleted Page',
+            'note_type' => 'success'
+        ]);
     }
 
 

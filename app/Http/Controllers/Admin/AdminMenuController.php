@@ -27,12 +27,10 @@ class AdminMenuController extends Controller {
     public function index()
     {
         $menu = json_decode(Menu::orderBy('order', 'ASC')->get()->toJson());
-        $user = Auth::user();
 
         $data = [
             'menu' => $menu,
-            'user' => $user,
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
         ];
 
         return view('admin.menu.index', $data);
@@ -52,7 +50,10 @@ class AdminMenuController extends Controller {
         $input['order'] = $new_menu_order;
         $menu = Menu::create($input);
         if (isset($menu->id)) {
-            return Redirect::to('admin/menu')->with(array('note' => 'Successfully Added New Menu Item', 'note_type' => 'success'));
+            return Redirect::to('admin/menu')->with([
+                'note' => 'Successfully Added New Menu Item',
+                'note_type' => 'success'
+            ]);
         }
     }
 

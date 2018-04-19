@@ -33,10 +33,8 @@ class ThemeDetailsController extends Controller
 
     public function __construct()
     {
-        $user = Auth::user();
-
         $this->data = [
-            'user' => $user,
+            'user' => Auth::user(),
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
