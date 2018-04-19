@@ -62,13 +62,13 @@ class ClientVideosController extends Controller
 
         $videos = $videos->orderBy('id', 'DESC')->paginate(24);
 
-        $data = array(
+        $data = [
             'videos' => $videos,
             'user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
-        );
+        ];
 
         return view('client.videos.index', $data);
     }

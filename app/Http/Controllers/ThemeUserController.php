@@ -108,7 +108,10 @@ class ThemeUserController extends Controller
             if ($user->username != $input['username']) {
                 $username_exist = User::where('username', '=', $input['username'])->first();
                 if ($username_exist) {
-                    return Redirect::to('user/' . $user->username . '/edit')->with(array('note' => 'Sorry That Username is already in Use', 'note_type' => 'error'));
+                    return Redirect::to('user/' . $user->username . '/edit')->with([
+                        'note' => 'Sorry That Username is already in Use',
+                        'note_type' => 'error'
+                    ]);
                 }
             }
 
@@ -134,7 +137,10 @@ class ThemeUserController extends Controller
 
         if (Auth::user()->username == $username) {
             if (Auth::user()->role == 'admin') {
-                return Redirect::to('/user/' . $username . '/edit')->with(array('note' => 'This user type does not have billing info associated with their account.', 'note_type' => 'warning'));
+                return Redirect::to('/user/' . $username . '/edit')->with([
+                    'note' => 'This user type does not have billing info associated with their account.',
+                    'note_type' => 'warning'
+                ]);
             }
 
             $user = User::where('username', '=', $username)->first();

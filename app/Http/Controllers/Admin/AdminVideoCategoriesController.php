@@ -10,7 +10,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-
+/**
+ * Class AdminVideoCategoriesController
+ * @package App\Http\Controllers\Admin
+ */
 class AdminVideoCategoriesController extends Controller
 {
     use Slug;
@@ -38,6 +41,7 @@ class AdminVideoCategoriesController extends Controller
     }
 
     /**
+     * TODO: fix this input and custom request, validation, custom error response, model binding
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
@@ -65,6 +69,7 @@ class AdminVideoCategoriesController extends Controller
     }
 
     /**
+     * TODO: fix this input and custom request, validation, custom error response, model binding
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update()
@@ -82,6 +87,7 @@ class AdminVideoCategoriesController extends Controller
     }
 
     /**
+     * TODO: fix this input and custom request, validation, custom error response, model binding
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */

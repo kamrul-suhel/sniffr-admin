@@ -59,7 +59,7 @@ class AdminMenuController extends Controller {
 
     public function edit($id)
     {
-        return view('admin.menu.edit', array('menu' => Menu::find($id)));
+        return view('admin.menu.edit', ['menu' => Menu::find($id)]);
     }
 
     public function destroy($id)
