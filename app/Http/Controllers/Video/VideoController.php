@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
 use App\Tag;
+use App\Traits\FrontendResponser;
 use App\VideoTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -26,6 +27,8 @@ use App\Notifications\SubmissionAlert;
 
 class VideoController extends Controller
 {
+    use FrontendResponser;
+    use VideoHelper;
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
 
@@ -50,18 +53,16 @@ class VideoController extends Controller
      */
     public function __construct(VideoService $videoService)
     {
+        //TODO: Remove pages?
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
-
-        $user = Auth::user();
-
         $this->data = [
-            'user' => $user,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'user' => Auth::user(),
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
+
         $this->videoService = $videoService;
     }
 
@@ -70,7 +71,7 @@ class VideoController extends Controller
      */
     public function upload()
     {
-        return view('Theme::upload', $this->data);
+        return view('frontend.master', $this->data);
     }
 
     /**
@@ -83,22 +84,12 @@ class VideoController extends Controller
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'upload';
 
-        return view('Theme::templates/iframe', $this->data);
-    }
-
-    /**
-     * Display a listing of videos
-     *
-     * @return Response
-     */
-    public function thanks()
-    {
-        return view('Theme::thanks', $this->data);
+        return view('frontend.iframe', $this->data);
     }
 
     /**
      * @param CreateVideoRequest $request
-     * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(CreateVideoRequest $request)
     {
@@ -149,33 +140,22 @@ class VideoController extends Controller
 
         //TODO remove when frontend 3 is completed?
         $iFrame = Input::get('iframe', 'false');
-        if ($isJson) {
-            return response()->json([
-                'status' => 'success',
-                'iframe' => $iFrame,
-                'href' => self::THANKS_URL,
-                'message' => 'Video Successfully Added!',
-                'files' => [
-                    'name' => Input::get('title'),
-                    'size' => $fileSize,
-                    'url' => $filePath
-                ]
-            ]);
-        }
 
-        if ($iFrame == 'true') {
-            return Redirect::to(self::HOME_URL);
-        }
-
-        //TODO remove when frontend 3 is completed
-        return view('Theme::thanks', $this->data)->with([
-            'note' => 'Video Successfully Added!',
-            'note_type' => 'success'
+        return $this->successResponse([
+            'status' => 'success',
+            'iframe' => $iFrame,
+            'href' => self::THANKS_URL,
+            'message' => 'Video Successfully Added!',
+            'files' => [
+                'name' => Input::get('title'),
+                'size' => $fileSize,
+                'url' => $filePath
+            ]
         ]);
     }
 
     /**
-     * TODO: Methods is not being used
+     * TODO: Method is not being used
      *
      * @codeCoverageIgnore
      * @param Request $request
@@ -198,7 +178,7 @@ class VideoController extends Controller
     }
 
     /**
-     * TODO: Finish it or delete it
+     * TODO: Method is not being used
      *
      * @codeCoverageIgnore
      * @param Request $request
@@ -239,34 +219,37 @@ class VideoController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $video = new Video;
-        $menu = new Menu;
         $page = Input::get('page', 1);
         $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
 
         $data = [
             'videos' => $videos,
-            'page_title' => 'All Videos',
-            'page_description' => 'Page ' . $page,
-            'current_page' => $page,
-            'menu' => $menu->orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/videos',
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => (new Page)->where('active', '=', 1)->get(),
         ];
-        return view('Theme::video-list', $data);
+
+        $isJson = $request->ajax() || $request->isJson();
+
+        if ($isJson) {
+            return $this->successResponse($data);
+        }
+
+        return view('frontend.master', $data);
     }
 
     /**
-     * @param integer $id
+     * @param Request $request
+     * @param string $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function show(integer $id)
+    public function show(Request $request, string $id)
     {
         $video = Video::where('state', 'licensed')
             ->with('tags')
@@ -274,16 +257,19 @@ class VideoController extends Controller
             ->where('alpha_id', $id)
             ->first();
 
+        $isJson = $request->ajax() || $request->isJson();
+
         //Make sure video is active
         if ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed') {
             $favorited = false;
             $downloaded = false;
+            $iFrame = $this->getVideoHtml($video, true);
 
             $view_increment = $this->handleViewCount($id);
 
             $data = [
                 'video' => $video,
-                'menu' => Menu::orderBy('order', 'ASC')->get(),
+                'iframe' => $iFrame,
                 'view_increment' => $view_increment,
                 'favorited' => $favorited,
                 'downloaded' => $downloaded,
@@ -291,7 +277,16 @@ class VideoController extends Controller
                 'theme_settings' => config('settings.theme'),
                 'pages' => Page::where('active', '=', 1)->get(),
             ];
-            return view('Theme::video', $data);
+
+            if ($isJson) {
+                return $this->successResponse($data);
+            }
+
+            return view('frontend.master', $data);
+        }
+
+        if ($isJson) {
+            return $this->errorResponse('Sorry, this video is no longer active');
         }
 
         return Redirect::to('videos')->with([
@@ -301,11 +296,11 @@ class VideoController extends Controller
     }
 
     /**
-     * TODO: rename this method
+     * @param Request $request
      * @param Tag $tag
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function findByTag(Tag $tag)
+    public function findByTag(Request $request, Tag $tag)
     {
         $page = Input::get('page', 1);
 
@@ -333,17 +328,23 @@ class VideoController extends Controller
             'current_page' => $page,
             'page_title' => 'Videos tagged with "' . $tag_name . '"',
             'page_description' => 'Page ' . $page,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
             'pagination_url' => '/videos/tags/' . $tag_name,
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
 
-        return view('Theme::video-list', $data);
+        $isJson = $request->ajax() || $request->isJson();
+
+        if ($isJson) {
+            return $this->successResponse($data);
+        }
+
+        return view('frontend.master', $data);
     }
 
     /**
+     * TODO: are we using this method?
      * @param VideoCategory $videoCategory
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -397,6 +398,9 @@ class VideoController extends Controller
     /**
      * @param $id
      * @return bool
+     * TODO: Method is not being used?
+     *
+     * @codeCoverageIgnore
      */
     public function handleViewCount($id)
     {
@@ -421,6 +425,9 @@ class VideoController extends Controller
     }
 
     /**
+     * TODO: where are we using this?
+     *
+     * @codeCoverageIgnore
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function dailiesIndex()
@@ -431,7 +438,7 @@ class VideoController extends Controller
 
         $page = Input::get('page', 1);
         $user = \Auth::user();
-        $client = $user->client;
+        $client = $user->client();
 
         if (!$client) {
             return \Redirect::to('videos');
