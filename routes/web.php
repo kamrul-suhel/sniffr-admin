@@ -11,16 +11,15 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::get('/', 'ThemeHomeController@index')->name('home');
 
     Route::get('videos', 'Video\VideoController@index');
-    Route::get('videos', 'Video\VideoController@dailiesIndex');
+    Route::get('dailies', 'Video\VideoController@dailiesIndex');
     Route::get('videos/category/{category}', 'Video\VideoController@category' );
     Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' );
-    Route::get('video/{id}', 'Video\VideoController@show');
+    Route::get('videos/{id}', 'Video\VideoController@show');
     Route::post('upload', 'Video\VideoController@store');
     Route::get('upload', 'Video\VideoController@upload')->name('upload');
     Route::get('upload/form', 'Video\VideoController@form');
     Route::post('issue', 'Video\VideoController@issueAlert');
     Route::post('videocheck', 'Video\VideoController@videoCheck');
-    Route::get('thanks', 'Video\VideoController@thanks');
 
     Route::get('tags', 'ThemeTagController@index');
 
