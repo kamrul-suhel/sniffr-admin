@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Download
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Download extends Model
 {
+    use SoftDeletes;
     protected $table = 'downloads';
     protected $guarded = [];
     public static $rules = [];

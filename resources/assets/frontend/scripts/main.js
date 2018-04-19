@@ -14,7 +14,7 @@ import Vuerouter from 'vue-router';
  * Vuex package (store)
  ********************************************************
  */
-import { store } from './store/store';
+import {store} from './store/store';
 Vue.use(Vuetify);
 Vue.use(Vuerouter);
 
@@ -31,15 +31,15 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
 
 
 /*
-  ********************************************************
-  * Root component
-  ********************************************************
+ ********************************************************
+ * Root component
+ ********************************************************
  */
 
 import NavigationComponent from './vue-component/layouts/NavigationComponent.vue';
 import FooterComonent from './vue-component/layouts/FooterComponent.vue';
 
-import { routes } from './routes';
+import {routes} from './routes';
 
 
 /*
@@ -53,17 +53,26 @@ require('./filters/filters');
 
 /*
  ********************************************************
+ * Login event bus
+ ********************************************************
+ */
+
+import {LoginEventBus} from './event-bus/login-event-bus.js';
+
+
+/*
+ ********************************************************
  * Plugins & root Vue init
  ********************************************************
  */
 
 const router = new Vuerouter({
-    mode:'history',
+    mode: 'history',
     routes
 });
 
 new Vue({
-    el:'#sniffr',
+    el: '#sniffr',
     store: store,
     components: {
         navigationComponent: NavigationComponent,
@@ -71,10 +80,7 @@ new Vue({
     },
     router,
     data() {
-        return {
-        }
+        return {}
     },
-    methods: {
-
-    }
+    methods: {}
 });

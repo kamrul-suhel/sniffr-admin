@@ -31,12 +31,30 @@
                                     </li>
 
                                     <li>
-                                        <a  @click.stop.prevent="">
+                                        <a  @click.stop.prevent="onLoginClick()" v-if="!is_login">
                                             <v-icon color="white" left>lock_open</v-icon> Login
                                         </a>
-                                        <!--<a href="#">-->
-                                            <!--<v-icon color="white" left>lock out</v-icon> Logout-->
-                                        <!--</a>-->
+
+                                        <v-menu top open-on-hover offset-y v-else min-width="140px">
+                                            <a slot="activator"><v-icon color="white">face</v-icon> {{ user.name }}</a>
+                                            <v-list>
+                                                <v-list-tile>
+                                                    <v-list-tile-title>
+                                                        <a href="/admin">
+                                                            <v-icon color="white" left size="20px">settings</v-icon> Admin
+                                                        </a>
+                                                    </v-list-tile-title>
+                                                </v-list-tile>
+
+                                                <v-list-tile>
+                                                    <v-list-tile-title>
+                                                        <a @click.prevent.stop="onLogout()">
+                                                            <v-icon color="white" left size="20px">lock_out</v-icon> Logout
+                                                        </a>
+                                                    </v-list-tile-title>
+                                                </v-list-tile>
+                                            </v-list>
+                                        </v-menu>
                                     </li>
                                 </ul>
                             </nav>
@@ -60,8 +78,8 @@
     import CountdownComponent from './_partials/CountdownComponent.vue';
     import FeatureComponent from './_partials/FeatureComponent.vue';
     import UploadVideoComponent from '../../forms/UploadVideoComponent.vue';
-    import mapAction from 'vuex';
-    import mapGetters from 'vuex';
+
+    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components:{
@@ -69,22 +87,43 @@
             featureComponent: FeatureComponent,
             uploadVideoComponent: UploadVideoComponent
         },
+
         data() {
             return {
                 fullwidth_height:0,
-                settings: ''
+                settings: '',
+
+                //user auth
+                is_login: false,
+
+                //if user login all data
+                user: '',
             }
         },
+
         methods: {
             onUploadVideo(){
                 this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
                 setTimeout(() => {
                     this.$router.push({name: 'upload_video'});
                 }, 500);
+            },
+
+            onLoginClick() {
+                LoginEventBus.openLoginDialog();
             }
         },
 
         created(){
+            //Get user data
+            this.$store.dispatch('getLoginStatus').then((response) => {
+                this.is_login = this.$store.getters.isUserLogin;
+                if(this.is_login){
+                    this.user = this.$store.getters.getUser;
+                    console.log(this.user);
+                }
+            });
+
             var browserheight = window.innerHeight;
             this.fullwidth_height = browserheight+'px';
 
@@ -93,7 +132,7 @@
             });
         },
 
-        mounted(){
+        mounted() {
             var browserheight = window.innerHeight;
             var first_nav_pos = $('#nav').position();
             var second_nav_pos = $('.second-navigation').position();

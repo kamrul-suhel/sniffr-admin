@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php $settings = App\Setting::first(); ?>
+    <?php $settings = config('settings.site'); ?>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,11 +11,11 @@
     <meta name="description" content="Client Panel" />
     <meta name="author" content="" />
 
-    <title>{{ $settings->website_name . ' - ' . $settings->website_description }}</title>
+    <title>{{ $settings['website_name'] . ' - ' . $settings['website_description'] }}</title>
 
     <link rel="stylesheet" href="{{ '/assets/css/admin.css' }}">
 
-    <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
+    <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
 
     @yield('css')

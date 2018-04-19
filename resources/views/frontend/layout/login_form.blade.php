@@ -3,7 +3,7 @@
         <v-card>
             <v-card-text class="login-section">
                 <v-form method="post" v-model="valid" ref="login_form"
-                        action="@if($settings->enable_https) {{ secure_url('login') }}
+                        action="@if($settings['enable_https']) {{ secure_url('login') }}
                         @else {{ route('login') }}@endif">
                     <v-layout row wrap id="login-section">
 

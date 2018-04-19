@@ -2,14 +2,14 @@
 	<?php if($type == 'login'): ?>
 
 		<h2 class="form-signin-heading">Please Login</h2>
-		<form method="post" action="<?= ($settings->enable_https) ? secure_url('login') : route('login') ?>" class="form-signin">
+		<form method="post" action="<?= ($settings['enable_https']) ? secure_url('login') : route('login') ?>" class="form-signin">
 		    <input type="text" class="form-control" placeholder="Email address or Username" tabindex="0" id="email" name="email" value="">
 		    <input type="password" class="form-control" placeholder="Password" id="password" name="password" value="">
 		    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 		    <br />
 		    <input type="hidden" id="redirect" name="redirect" value="" />
 			<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
-            <a href="<?= ($settings->enable_https) ? secure_url('password.remind') : route('password.remind') ?>">I forgot my password</a>
+            <a href="<?= ($settings['enable_https']) ? secure_url('password.remind') : route('password.remind') ?>">I forgot my password</a>
 		</form>
 
 	<?php elseif($type == 'signup'): ?>

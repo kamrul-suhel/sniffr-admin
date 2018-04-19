@@ -26,7 +26,7 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'tagsearch'" v-if="videos.length > 12"></pagination-component>
+        <pagination-component :pagination="paginate" :page="'tagsearch'" v-if="paginate.last_page > 1"></pagination-component>
     </div>
 </template>
 <script>

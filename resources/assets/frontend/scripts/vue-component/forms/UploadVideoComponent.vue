@@ -9,7 +9,7 @@
                     </div>
 
                     <div>
-                        <h2 class="text-center">Your Contact Details</h2>
+                        <h2 class="text-center text-uppercase">Your Contact Details</h2>
                     </div>
 
                     <v-form v-model="valid" ref="form">
@@ -59,7 +59,7 @@
 
                             <v-layout row wrap>
                                 <v-flex xs12>
-                                    <h2 class="text-xs-center">Your video details</h2>
+                                    <h2 class="text-xs-center text-uppercase">Your video details</h2>
                                 </v-flex>
                             </v-layout>
 
@@ -75,7 +75,7 @@
                                         <v-icon dark right>system_update_alt</v-icon>
                                     </v-btn>
                                     <span v-if="error"
-                                          class="red--text">Upload your file or provide a links please</span> <span>{{file_name}}</span>
+                                          class="red--text">Upload your file OR provide a link please</span> <span>{{file_name}}</span>
 
                                     <p class="small-italic">
                                         Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv, wmv, 3gp.</p>
@@ -101,7 +101,7 @@
                             </v-layout>
                         </v-container>
 
-                        <v-container grid-list-lg>
+                        <v-container grid-list-xs>
 
                             <div class="term-condition-content scroll-y term-condition"
                                  id="scroll-target" style="max-height: 250px">
@@ -248,11 +248,11 @@
             file: '',
             terms_condition: false,
             nameRules: [
-                v => !!v || 'Name is required'
+                v => !!v || 'Full name is required'
             ],
             email: '',
             emailRules: [
-                v => !!v || 'E-mail is required',
+                v => !!v || 'Email is required',
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
             ],
             tel: '',

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Libraries;
-use Rekognition;
+use MichaelJWright\Rekognition\Rekognition;
 
 class MyRekognition extends Rekognition
 {

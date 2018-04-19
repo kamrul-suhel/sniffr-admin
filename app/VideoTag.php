@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class VideoTag extends Model
 {
+    use SoftDeletes;
     protected $table = 'tag_video';
     protected $guarded = [];
     public static $rules = [];
