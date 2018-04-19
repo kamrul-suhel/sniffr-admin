@@ -19,7 +19,7 @@
                                                 {{ session('note') }}
                                             </div>
                                         @endif
-                                        <form method="post" action="@if($settings->enable_https) {{ secure_url('password/reset') }} @else {{ URL::to('password/reset') }} @endif" accept-charset="UTF-8">
+                                        <form method="post" action="@if($settings['enable_https']) {{ secure_url('password/reset') }} @else {{ URL::to('password/reset') }} @endif" accept-charset="UTF-8">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" name="email" id="login_email" aria-describedby="emailhelp" placeholder="Enter Email">
                                             </div>

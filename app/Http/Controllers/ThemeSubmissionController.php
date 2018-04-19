@@ -14,7 +14,7 @@ use App\Menu;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
-use App\Libraries\ThemeHelper;
+
 use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
@@ -40,7 +40,7 @@ class ThemeSubmissionController extends Controller
         $this->data = [
             'user' => $user,
             'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
         ];

@@ -13,7 +13,7 @@
                 <section class="login_section">
                     <h2 class="login_title">LOGIN</h2>
 
-                    <v-form method="post" action="@if($settings->enable_https) {{ secure_url('login') }} @else {{ route('login') }} @endif">
+                    <v-form method="post" action="@if($settings['enable_https']) {{ secure_url('login') }} @else {{ route('login') }} @endif">
                         <v-flex xs12>
                           <v-text-field
                             label="Email"

@@ -2,31 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
-use Auth;
-use Validator;
-use Redirect;
-
-use FFMpeg;
-// use MyRekognition;
-
-use App\Page;
-use App\Menu;
 use App\Label;
-use App\User;
-use App\Tag;
 use App\Video;
-use App\Contact;
-
 use Carbon\Carbon as Carbon;
-use App\Jobs\QueueEmail;
-
-use App\Libraries\ThemeHelper;
-
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +16,7 @@ use Dumpk\Elastcoder\ElastcoderAWS;
 class AdminLabelController extends Controller {
 
     /**
-     * constructor.
+     * AdminLabelController constructor.
      */
     public function __construct()
     {
@@ -46,9 +24,7 @@ class AdminLabelController extends Controller {
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
      public function index() {
 
@@ -145,24 +121,6 @@ class AdminLabelController extends Controller {
                     'SortBy' => 'NAME',
                 ];
              $job = \Rekognition::getLabelDetection($config);
-             dd($job['Labels']);
-             // if($job['JobStatus']=='SUCCEEDED'){
-             //     $labels = $job['Labels'];
-             //     $blacklist = array('Human', 'Person', 'People', 'Furniture', 'Chair');
-             //     if(count($labels)) {
-             //         usort($labels, function($a, $b) {
-             //             return $b['Label']['Confidence'] <=> $a['Label']['Confidence'];
-             //         });
-             //
-             //         foreach ($labels as $label){
-             //             if (!in_array($label['Label']['Name'], $blacklist)) {
-             //                 if(round($label['Label']['Confidence'],0)>85){
-             //                     echo $label['Label']['Name'].'['.round($label['Label']['Confidence'],0).']<br />';
-             //                 }
-             //             }
-             //         }
-             //     }
-             // }
          } elseif ($type=='adult_start') {
              $config = [
                     'Video' => [
@@ -173,7 +131,6 @@ class AdminLabelController extends Controller {
                     ],
                 ];
              $job = \Rekognition::startContentModeration($config);
-             dd($job['JobId']);
          } elseif ($type=='adult_get') {
              $config = [
                     'JobId' => '32d74b9d5ff1d85bb2f3786f5a0d72529f8f7475813d4cfaaa846ed69e4f36dd',
@@ -188,7 +145,6 @@ class AdminLabelController extends Controller {
                              $uniques[$l['Name']] = ['Confidence' => $l['Confidence']];
                          }
                      }
-                     dd($uniques);
                  }
              } else {
                  echo $job['JobStatus'];
@@ -196,76 +152,38 @@ class AdminLabelController extends Controller {
          }
      }
 
-     public function analyseVideo_2() {
+    public function analyseVideo_2()
+    {
+        $thumbnail_file = Input::get('f');
 
-         //NOT CURRENTLY USED (moves video file to folder for analysis)
-         // $video_value = Input::get('f');
-         // $disk = Storage::disk('s3_sourcebucket');
-         // if($disk->has($video_value)==1){
-         //     $disk->move(''.$video_value, 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.$video_value);
-         //     return response()->json(['status' => 'success', 'message' => 'Successfully copied the file.']);
-         // } else {
-         //     return response()->json(['status' => 'fail', 'message' => 'No file found.']);
-         // }
+        if (Storage::disk('s3')->exists(basename($thumbnail_file))) {
+            Storage::disk('s3')->setVisibility(basename($thumbnail_file), 'public');
+        }
+    }
 
-         $found = 0;
+    public function checkWatermark()
+    {
+        $fileName = '1514976319-new-video.mp4';
+        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+        $watermark_file = substr($fileName, 0, strrpos($fileName, '.')) . '-watermark.' . $ext;
 
-         $thumbnail_file = Input::get('f');
-         $thumbnail_file_alt = substr($thumbnail_file, 0, strrpos($thumbnail_file, '.')).'.png';
+        $config = [
+            'PresetId' => '1516201655942-vaq9mu',
+            'width' => 1920,
+            'height' => 1080,
+            'aspect' => '16:9',
+            'ext' => 'mp4',
+            'PipelineId' => '1515757750300-4fybrt',
+            'Watermarks' => [[
+                'PresetWatermarkId' => 'TopRight',
+                'InputKey' => 'logo-sniffr-white.png'
+            ]],
+        ];
 
-         if(Storage::disk('s3')->exists(basename($thumbnail_file))) {
-             Storage::disk('s3')->setVisibility(basename($thumbnail_file), 'public');
-             $found = 1;
-         }
-
-         if(Storage::disk('s3')->exists(basename($thumbnail_file_alt))) {
-             //Storage::disk('s3')->setVisibility(basename($thumbnail_file_alt), 'public');
-             $found = 2;
-         }
-
-         dd($found);
-
-     }
-
-     public function checkWatermark() {
         $elastcoder = new ElastcoderAWS();
-
-         // $job = $elastcoder->getJob('1515772266459-6vkk7l');
-         //
-         // if(strtolower($job['Status']) == 'complete') {
-         //     echo "complete";
-         // } else {
-         //     echo "error";
-         // }
-
-         $fileName = '1514976319-new-video.mp4';
-         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-         $watermark_file = substr($fileName, 0, strrpos($fileName, '.')).'-watermark.'.$ext;
-
-         $config = [
-                'PresetId' => '1516201655942-vaq9mu', //'1515758587625-jyon3x',
-                'width'  => 1920,
-                'height' => 1080,
-                'aspect' => '16:9',
-             'ext'	 => 'mp4',
-             'PipelineId' => '1515757750300-4fybrt',
-                'Watermarks' => [[
-                        'PresetWatermarkId' => 'TopRight',
-                        'InputKey'          => 'logo-sniffr-white.png'
-                ]],
-            ];
-
-         $elastcoder = new ElastcoderAWS();
-         $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
-
-         echo $job['Id'];
-
-         // if($job['Id']) {
-         //     QueueVideoCheck::dispatch($job['Id'], $video->id);
-         //         ->delay(now()->addMinutes(2));
-         // }
-
-     }
+        $job = $elastcoder->transcodeVideo($fileName, $watermark_file, $config);
+        echo $job['Id'];
+    }
 
      public function makeWatermark() {
 

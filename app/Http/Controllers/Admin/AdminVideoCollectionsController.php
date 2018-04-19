@@ -2,48 +2,48 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
-use Validator;
 use Redirect;
-
-use App\Page;
-use App\Menu;
 use App\VideoCollection;
-
 use App\Traits\Slug;
-use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 
 class AdminVideoCollectionsController extends Controller 
 {
     use Slug;
+
     /**
-     * constructor.
+     * AdminVideoCollectionsController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->middleware('admin');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(){
-        $data = array(
+        $data = [
             'admin_user' => Auth::user(),
             'video_collections' => json_decode(VideoCollection::orderBy('order', 'ASC')->get()->toJson()),
-        );
+        ];
 
         return view('admin.videos.collections.index', $data);
     }
 
-    public function store(){
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store()
+    {
         $input = Input::all();
         $last_collection = VideoCollection::orderBy('order', 'DESC')->first();
 
-        if(isset($last_collectiony->order)){
+        if (isset($last_collection->order)) {
             $new_collection_order = intval($last_collection->order) + 1;
         } else {
             $new_collection_order = 1;
@@ -51,20 +51,36 @@ class AdminVideoCollectionsController extends Controller
         $input['order'] = $new_collection_order;
         $input['slug'] = $this->slugify($input['name']);
         $video_collection = VideoCollection::create($input);
-        if(isset($video_collection->id)){
-            return Redirect::to('admin/videos/collections')->with(array('note' => 'Successfully Added Your New Video Collectio', 'note_type' => 'success') );
+        if (!$video_collection) {
+            abort(404);
         }
+        return Redirect::to('admin/videos/collections')->with([
+            'note' => 'Successfully Added Your New Video Collectio',
+            'note_type' => 'success'
+        ]);
     }
 
-    public function update(){
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update()
+    {
         $input = Input::all();
         $input['slug'] = $this->slugify($input['name']);
         $collection = VideoCollection::find($input['id'])->update($input);
-        if(isset($collection)){
-            return Redirect::to('admin/videos/collections')->with(array('note' => 'Successfully Updated Collection', 'note_type' => 'success') );
+        if (!$collection) {
+            abort('404');
         }
+        return Redirect::to('admin/videos/collections')->with([
+            'note' => 'Successfully Updated Collection',
+            'note_type' => 'success'
+        ]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id){
         VideoCollection::destroy($id);
         $child_collections = VideoCollection::where('parent_id', '=', $id)->get();
@@ -72,16 +88,19 @@ class AdminVideoCollectionsController extends Controller
             $collection->parent_id = NULL;
             $collection->save();
         }
-        return Redirect::to('admin/videos/collections')->with(array('note' => 'Successfully Deleted Collection', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/collections')->with([
+            'note' => 'Successfully Deleted Collection',
+            'note_type' => 'success'
+        ]);
     }
 
-    public function edit($id){
-        return view('admin.videos.collections.edit', array('collection' => VideoCollection::find($id)));
+    public function edit($id)
+    {
+        return view('admin.videos.collections.edit', ['collection' => VideoCollection::find($id)]);
     }
 
     public function order(){
         $collection_order = json_decode(Input::get('order'));
-        $video_collections = VideoCollection::all();
         $order = 1;
 
         foreach($collection_order as $collection_level_1):

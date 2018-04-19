@@ -12,9 +12,7 @@ use Redirect;
 use App\Page;
 use App\Menu;
 use App\VideoCategory;
-use App\PaymentSetting;
 use Illuminate\Support\Facades\Input;
-use App\Libraries\ThemeHelper;
 
 /**
  * Class ThemeAuthController
@@ -57,13 +55,13 @@ class ThemeAuthController extends Controller
         if (!Auth::guest()) {
             return Redirect::to('/');
         }
-        $settings = Setting::first();
+        $settings = config('settings.site');
 
         $data = [
             'type' => 'login',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
             'settings'=> $settings
         ];
@@ -159,9 +157,9 @@ class ThemeAuthController extends Controller
 		$data = [
 		    'type' => 'forgot_password',
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
-			'payment_settings' => PaymentSetting::first(),
+			'payment_settings' => config('settings.payments'),
 			'video_categories' => VideoCategory::all(),
-			'theme_settings' => ThemeHelper::getThemeSettings(),
+			'theme_settings' => config('settings.theme'),
 			'pages' => Page::where('active', '=', 1)->get(),
             'settings'  => $settings
         ];
@@ -216,9 +214,9 @@ class ThemeAuthController extends Controller
 			'type' => 'reset_password',
 			'token' => $token,
 			'menu' => Menu::orderBy('order', 'ASC')->get(),
-			'payment_settings' => PaymentSetting::first(),
+			'payment_settings' => config('settings.payments'),
 			'video_categories' => VideoCategory::all(),
-			'theme_settings' => ThemeHelper::getThemeSettings(),
+			'theme_settings' => config('settings.theme'),
 			'pages' => Page::where('active', '=', 1)->get(),
         ];
 

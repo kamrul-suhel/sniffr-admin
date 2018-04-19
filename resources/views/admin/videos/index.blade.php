@@ -2,10 +2,16 @@
 
 @section('content')
 	<div class="admin-section-title bottom-padding">
-
 		<div class="row">
 			<div class="col-xs-12">
-				<h3><i class="fa fa-youtube-play"></i> <a href="/admin/videos/{{ lcfirst($state) }}">{{ ucfirst($state) }} Videos</a> <a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
+				<h3>
+					<i class="fa fa-youtube-play"></i>
+					<a href="/admin/videos/{{ lcfirst($state) }}">{{ ucfirst($state) }} Videos</a>
+					<a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right">
+						<i class="fa fa-plus-circle"></i>
+						Add New
+					</a>
+				</h3>
 			</div>
 		</div>
 
@@ -71,144 +77,159 @@
 
 	<div class="gallery-env">
 		<div class="row">
-			<?php
-			$currentDay = '';
-			foreach($videos as $video):
-				if($video->created_at->isToday()) {
-					$date = 'Today';
-				} else {
-					// $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->created_at)->diffForHumans();
-					$date = date('jS M',strtotime($video->created_at));
-				}
-				if($currentDay != $date){
-					$currentDay = $date;
-					echo '<div class="col-xs-12 date-header"><h2>'.$date.'</h2></div>';
-				}
-			?>
+			@php
+				$currentDay = '';
+			@endphp
 
-			<div class="col-sm-6 col-md-4" id="video-{{ $video->alpha_id }}">
-				<?php
-				switch($video->state){
-					case 'rejected':
-					case 'problem':
-						$panelColour = 'danger';
-						break;
-					case 'licensed':
-						$panelColour = 'success';
-						break;
-					case 'restricted':
-						$panelColour = 'warning';
-						break;
-					default:
-						$panelColour = 'default';
-				}
-				?>
-				<article class="album {{ $panelColour }}">
-					<header>
-						{!! App\Libraries\VideoHelper::getVideoHTML($video, false, 'edit') !!}
+			@foreach($videos as $video)
+				@php
+					$date = $video->created_at->isToday() ? 'Today' : date('jS M',strtotime($video->created_at))
+				@endphp
+				@if($currentDay != $date)
+					@php
+						$currentDay = $date;
+					@endphp
+					<div class="col-xs-12 date-header">
+						<h2>
+							{{ $date }}
+						</h2>
+					</div>
+				@endif
 
-						<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" class="album-options">
-							<i class="fa fa-pencil"></i>
-							Edit
-						</a>
-					</header>
+				<div class="col-sm-6 col-md-4" id="video-{{ $video->alpha_id }}">
+					@switch($video->state)
+						@case('rejected')
+						@case('problem')
+							@php
+								$panelColour = 'danger';
+							@endphp
+							@break
+						@case('licensed')
+							@php
+								$panelColour = 'success';
+							@endphp
+							@break
+						@case('restricted')
+							@php
+								$panelColour = 'warning';
+							@endphp
+							@break
+						@default
+							@php
+								$panelColour = 'default';
+							@endphp
+					@endswitch
 
-					<section class="album-info">
-						<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
+					<article class="album {{ $panelColour }}">
+						<header>
+							{!! App\Libraries\VideoHelper::getVideoHTML($video, false, 'edit') !!}
 
-						<p>{{ $video->description }}</p>
-					</section>
+							<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" class="album-options">
+								<i class="fa fa-pencil"></i>
+								Edit
+							</a>
+						</header>
 
-					<footer>
-						<div class="album-images-count">
-							@if(!$video->trashed())
-								@if($video->state == 'new')
-								<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></a>
-		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
-								@elseif($video->state == 'pending')
-								<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></a>
-		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-		                    	<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
-								@elseif($video->state == 'licensed')
-								<i class="fa fa-check" title="Licensed"></i> Licensed
-								@elseif($video->state == 'accepted')
-									@if($video->reminders)
-										<i class="fa fa-clock-o" title="Reminder sent"></i> Reminder {{ $video->reminders }} Sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+						<section class="album-info">
+							<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
+
+							<p>{{ $video->description }}</p>
+						</section>
+
+						<footer>
+							<div class="album-images-count">
+								@if(!$video->trashed())
+									@if($video->state == 'new')
+										<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></a>
+										<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
+									@elseif($video->state == 'pending')
+										<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></a>
+										<a href="#" data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+										<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
+									@elseif($video->state == 'licensed')
+										<i class="fa fa-check" title="Licensed"></i> Licensed
+									@elseif($video->state == 'accepted')
+										@if(($video->reminders)AND($video->more_details_sent))
+											<i class="fa fa-clock-o" title="Reminder sent"></i>
+											Reminder {{ $video->reminders }}
+											Sent:
+											{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+										@elseif($video->more_details_sent)
+											<i class="fa fa-clock-o" title="More details sent"></i>
+											More details sent:
+											{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+										@endif
+									@elseif($video->state == 'rejected')
+										<i class="fa fa-times" title="Rejected"></i> Rejected
+									@elseif($video->state == 'problem')
+										<i class="fa fa-exclamation" title="Problem"></i> Problem
+									@elseif($video->state == 'restricted')
+										<i class="fa fa-exclamation-triangle" title="Restricted"></i> Restricted
 									@else
-										<i class="fa fa-clock-o" title="More details sent"></i> More details sent: {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$video->more_details_sent)->diffForHumans() }}
+										<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
 									@endif
 
-								@elseif($video->state == 'rejected')
-								<i class="fa fa-times" title="Rejected"></i> Rejected
-								@elseif($video->state == 'problem')
-								<i class="fa fa-exclamation" title="Problem"></i> Problem
-								@elseif($video->state == 'restricted')
-								<i class="fa fa-exclamation-triangle" title="Restricted"></i> Restricted
+									@if($video->state != 'new' && $video->state != 'accepted')
+										| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Exclusive"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Exclusive
+									@endif
+
+									@if(isset($video) && count($video->campaigns)>0)
+										<?php
+										$has_exclusivity = false;
+										foreach($video->campaigns as $campaign){
+											$date1 = now();
+											$date2 = new DateTime($campaign->pivot->created_at);
+
+											$diff = $date2->diff($date1);
+
+											$exclusivity = 48 - ($diff->h + ($diff->days*24));
+
+											if($exclusivity > 0){
+												$has_exclusivity = true;
+											}
+										}
+										if($has_exclusivity){
+											echo '| <i class="fa fa-hourglass-half text-danger" title="Has Exclusivity: '.$exclusivity.' hours"></i>';
+										}
+										?>
+									@endif
+								@endif
+							</div>
+
+							<div class="album-options">
+								@if($video->trashed())
+								<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Remove from trash" class="undelete">
+									<i class="fa fa-upload"></i>
+								</a>
 								@else
-								<i class="fa fa-youtube-play"></i> {{ ucfirst($video->state) }}
+									@if($video->file_watermark)
+									<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="js-download">
+										<i class="fa fa-download"></i>
+									</a>
+									@elseif($video->file)
+									<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
+										<i class="fa fa-download"></i>
+									</a>
+									@endif
+									@if($video->state == 'problem' || $video->state == 'rejected')
+									<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="js-delete">
+										<i class="fa fa-trash-o"></i>
+									</a>
+									@endif
+									@if($video->state != 'new')
+									<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
+										<i class="fa fa-print"></i>
+									</a>
+									@endif
+									<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
+										<i class="fa fa-pencil"></i>
+									</a>
 								@endif
-
-								@if($video->state != 'new' && $video->state != 'accepted')
-									| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Exclusive"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Exclusive
-								@endif
-
-								@if(isset($video) && count($video->campaigns)>0)
-									<?php
-									$has_exclusivity = false;
-									foreach($video->campaigns as $campaign){
-		                                $date1 = now();
-		                                $date2 = new DateTime($campaign->pivot->created_at);
-
-		                                $diff = $date2->diff($date1);
-
-		                                $exclusivity = 48 - ($diff->h + ($diff->days*24));
-
-		                                if($exclusivity > 0){
-		                                	$has_exclusivity = true;
-		                                }
-									}
-									if($has_exclusivity){
-										echo '| <i class="fa fa-hourglass-half text-danger" title="Has Exclusivity: '.$exclusivity.' hours"></i>';
-									}
-									?>
-								@endif
-							@endif
-						</div>
-
-						<div class="album-options">
-							@if($video->trashed())
-							<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Remove from trash" class="undelete">
-								<i class="fa fa-upload"></i>
-							</a>
-							@else
-								@if($video->file_watermark)
-								<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="js-download">
-									<i class="fa fa-download"></i>
-								</a>
-								@elseif($video->file)
-								<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
-									<i class="fa fa-download"></i>
-								</a>
-								@endif
-								@if($video->state == 'problem' || $video->state == 'rejected')
-								<a href="{{ url('admin/videos/delete/'.$video->alpha_id) }}" title="Delete Video" class="js-delete">
-									<i class="fa fa-trash-o"></i>
-								</a>
-								@endif
-								@if($video->state != 'new')
-								<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
-									<i class="fa fa-print"></i>
-								</a>
-								@endif
-								<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
-									<i class="fa fa-pencil"></i>
-								</a>
-							@endif
-						</div>
-					</footer>
-				</article>
-			</div>
-			<?php endforeach; ?>
+							</div>
+						</footer>
+					</article>
+				</div>
+			@endforeach
 
 			<div class="clear"></div>
 

@@ -2,49 +2,49 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
 use Auth;
-use Validator;
 use Redirect;
-
-use App\Page;
-use App\Menu;
 use App\VideoShotType;
-
 use App\Traits\Slug;
-use App\Libraries\ThemeHelper;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 
 class AdminVideoShotTypeController extends Controller
 {
     use Slug;
 
     /**
-     * constructor.
+     * AdminVideoShotTypeController constructor.
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->middleware('admin');
     }
 
-    public function index(){
-        $data = array(
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        $data = [
             'admin_user' => Auth::user(),
             'video_shottypes' => json_decode(VideoShotType::orderBy('order', 'ASC')->get()->toJson()),
-        );
+        ];
 
         return view('admin.videos.shottypes.index', $data);
     }
 
-    public function store(){
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store()
+    {
         $input = Input::all();
         $last_shottype = VideoShotType::orderBy('order', 'DESC')->first();
 
-        if(isset($last_shottype->order)){
+        if (isset($last_shottype->order)) {
             $new_shottype_order = intval($last_shottype->order) + 1;
         } else {
             $new_shottype_order = 1;
@@ -52,37 +52,50 @@ class AdminVideoShotTypeController extends Controller
         $input['order'] = $new_shottype_order;
         $input['slug'] = $this->slugify($input['name']);
         $video_shottype = VideoShotType::create($input);
-        if(isset($video_shottype->id)){
-            return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Added Your New Video Shot Type', 'note_type' => 'success') );
+        if (!$video_shottype) {
+            abort(404);
         }
+        return Redirect::to('admin/videos/shottypes')->with([
+            'note' => 'Successfully Added Your New Video Shot Type',
+            'note_type' => 'success'
+        ]);
     }
 
-    public function update(){
+    public function update()
+    {
         $input = Input::all();
         $input['slug'] = $this->slugify($input['name']);
         $shottype = VideoShotType::find($input['id'])->update($input);
-        if(isset($shottype)){
-            return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Updated Shot Type', 'note_type' => 'success') );
+        if (isset($shottype)) {
+            return Redirect::to('admin/videos/shottypes')->with([
+                'note' => 'Successfully Updated Shot Type',
+                'note_type' => 'success'
+            ]);
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         VideoShotType::destroy($id);
         $child_shottypes = VideoShotType::where('parent_id', '=', $id)->get();
-        foreach($child_shottypes as $shottype){
+        foreach ($child_shottypes as $shottype) {
             $shottype->parent_id = NULL;
             $shottype->save();
         }
-        return Redirect::to('admin/videos/shottypes')->with(array('note' => 'Successfully Deleted Shot Type', 'note_type' => 'success') );
+        return Redirect::to('admin/videos/shottypes')->with([
+            'note' => 'Successfully Deleted Shot Type',
+            'note_type' => 'success'
+        ]);
     }
 
-    public function edit($id){
-        return view('admin.videos.shottypes.edit', array('shottype' => VideoShotType::find($id)));
+    public function edit($id)
+    {
+        return view('admin.videos.shottypes.edit', ['shottype' => VideoShotType::find($id)]);
     }
 
-    public function order(){
+    public function order()
+    {
         $shottype_order = json_decode(Input::get('order'));
-        $video_shottypes = VideoShotType::all();
         $order = 1;
 
         foreach($shottype_order as $shottype_level_1):

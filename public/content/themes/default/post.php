@@ -15,7 +15,7 @@
 
 				<div class="post-body">
 
-					<?php if($post->access == 'guest' || ($post->access == 'subscriber' && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $post->access == 'registered' && $settings->free_registration && Auth::user()->role == 'registered') ): ?>
+					<?php if($post->access == 'guest' || ($post->access == 'subscriber' && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $post->access == 'registered' && $settings['free_registration'] && Auth::user()->role == 'registered') ): ?>
 
 						<?= $post->body ?>
 

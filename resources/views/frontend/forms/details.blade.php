@@ -197,7 +197,7 @@
                 <v-flex xs12>
                     <v-checkbox
                         color="dark"
-                        label="{{$settings->terms_ex_contact_is_owner}}"
+                        label="{{$settings['terms_ex_contact_is_owner']}}"
                         v-model="contact_is_owner"
                         :rules="[v => !!v || 'You must agree to continue']"
                         :value="contact_is_owner"
@@ -208,7 +208,7 @@
                 <v-flex xs12>
                     <v-checkbox
                         color="dark"
-                        label="{{$settings->terms_ex_allow_publish}}"
+                        label="{{$settings['terms_ex_contact_is_owner']}}"
                         v-model="allow_publish"
                         :rules="[v => !!v || 'You must agree to continue']"
                         required></v-checkbox>
@@ -217,7 +217,7 @@
                 <v-flex xs12>
                     <v-checkbox
                         color="dark"
-                        label="{{$settings->terms_ex_is_exclusive}}"
+                        label="{{$settings['terms_ex_is_exclusive']}}"
                         :rules="[v => !!v || 'You must agree to continue']"
                         v-model="is_exclusive"
                         required></v-checkbox>

@@ -13,7 +13,7 @@ $sidebar_videos = \App\Video::where('active', '=', '1')->orderByRaw("RAND()")->t
 
 			<div class="col-md-6 col-sm-6 col-xs-12">
 				<article class="block">
-					<a class="block-thumbnail" href="<?= ($settings->enable_https) ? secure_url('video') : URL::to('video') ?><?= '/' . $video->id ?>">
+					<a class="block-thumbnail" href="<?= ($settings['enable_https']) ? secure_url('video') : URL::to('video') ?><?= '/' . $video->id ?>">
 						<div class="thumbnail-overlay"></div>
 						<span class="play-button"></span>
 						<img src="<?= \App\Libraries\ImageHandler::getImage($video->image, 'medium')  ?>">
