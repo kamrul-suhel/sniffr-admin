@@ -7,7 +7,7 @@
 
 endif;*/
 
-if(env('APP_ENV')!=='local'){
+if(env('APP_ENV')=='local'){
 	define("THEME_URL", url('/content/themes/default'));
 } else {
 	define("THEME_URL", secure_url('/content/themes/default'));
@@ -16,7 +16,7 @@ if(env('APP_ENV')!=='local'){
 // DEFINE SPECIFIC UPLOAD URL AND DIRECTORIES
 
 if( substr(Config::get('site.uploads_dir'), 0, 1) == '/' ){
-	if(env('APP_ENV')!='local'){
+	if(env('APP_ENV')=='local'){
 		Config::set('site.uploads_dir', URL::to('/') . '/content/uploads/' );
 	} else {
 		Config::set('site.uploads_dir', secure_url('/') . '/content/uploads/' );
@@ -24,7 +24,7 @@ if( substr(Config::get('site.uploads_dir'), 0, 1) == '/' ){
 }
 
 if( substr(Config::get('site.uploads_url'), 0, 1) == '/' ){
-	if(env('APP_ENV')!='local'){
+	if(env('APP_ENV')=='local'){
 		Config::set('site.uploads_url', URL::to('/') . '/content/uploads/' );
 	} else {
 		Config::set('site.uploads_url', secure_url('/') . '/content/uploads/' );
