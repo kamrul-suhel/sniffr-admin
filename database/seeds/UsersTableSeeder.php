@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
                 'last_four' => NULL,
                 'trial_ends_at' => NULL,
                 'subscription_ends_at' => NULL,
-                'password' => md5(env('ADMIN_PASSWORD')),
+                'password' => Hash::make(env('ADMIN_PASSWORD')),
             ],
             [
                 'client_id' => NULL,

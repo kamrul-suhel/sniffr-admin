@@ -14,7 +14,6 @@ use App\Video;
 use App\Contact;
 use App\VideoCategory;
 use App\Jobs\QueueEmail;
-
 use App\Notifications\DetailsReview;
 
 class ThemeDetailsController extends Controller
@@ -45,11 +44,9 @@ class ThemeDetailsController extends Controller
     }
 
     /**
-     * Show the upload form
-     *
      * @param Request $request
      * @param $code
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function index(Request $request, $code)
     {
@@ -60,22 +57,21 @@ class ThemeDetailsController extends Controller
 
         $iframe = $this->getVideoHtml($video, true);
         $video['iframe'] = $iframe;
-        if($request->ajax()){
-            if($video){
-                return $this->successResponse($video);
-            }else{
-                return $this->errorResponse("Not found");
-            }
+
+        if (!$video) {
+            abort(404);
+        }
+
+        if ($request->ajax()) {
+            return $this->successResponse($video);
         }
 
         return view('frontend.master', $this->data);
     }
 
     /**
-     * Returns the details form with no page wrapper
-     *
      * @param $code
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function form($code)
     {
@@ -87,9 +83,9 @@ class ThemeDetailsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
+     * @param Request $request
+     * @param $code
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function store(Request $request, $code)
     {
@@ -99,7 +95,6 @@ class ThemeDetailsController extends Controller
         $this->validate($request, $this->rules);
 
         if ($validator->fails()) {
-
             if($request->ajax()){
                 return $this->errorResponse('Sorry there is something wrong please review the form and submit again');
             }
@@ -142,12 +137,10 @@ class ThemeDetailsController extends Controller
 
             $this->data['video'] = $video;
 
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->successResponse();
-            }else{
-                return view('frontend.master', $this->data);
             }
-
+            return view('frontend.master', $this->data);
         }
     }
 }

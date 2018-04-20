@@ -2,7 +2,7 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
-Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
+Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('/settings_object', function () {
         return response(config('settings.public'));
@@ -81,10 +81,10 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::get('islogin', 'ThemeAuthController@isLogin')->name('islogin');
     Route::post('login', 'ThemeAuthController@login');
 
-    Route::get('password/reset', array('uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind'));
-    Route::post('password/reset', array('uses' => 'ThemeAuthController@password_request', 'as' => 'password.request'));
-    Route::get('password/reset/{token}', array('uses' => 'ThemeAuthController@password_reset_token', 'as' => 'password.reset'));
-    Route::post('password/reset/{token}', array('uses' => 'ThemeAuthController@password_reset_post', 'as' => 'password.update'));
+    Route::get('password/reset', ['uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind']);
+    Route::post('password/reset', ['uses' => 'ThemeAuthController@password_request', 'as' => 'password.request']);
+    Route::get('password/reset/{token}', ['uses' => 'ThemeAuthController@password_reset_token', 'as' => 'password.reset']);
+    Route::post('password/reset/{token}', ['uses' => 'ThemeAuthController@password_reset_post', 'as' => 'password.update']);
 
     Route::get('verify/{activation_code}', 'ThemeAuthController@verify');
 
@@ -96,10 +96,10 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
     Route::get('user/{username}', 'ThemeUserController@index');
     Route::get('user/{username}/edit', 'ThemeUserController@edit');
-    Route::post('user/{username}/update', array('uses' => 'ThemeUserController@update'));
-    Route::get('user/{username}/billing', array('uses' => 'ThemeUserController@billing'));
-    Route::get('user/{username}/cancel', array('uses' => 'ThemeUserController@cancel_account'));
-    Route::get('user/{username}/resume', array('uses' => 'ThemeUserController@resume_account'));
+    Route::post('user/{username}/update', ['uses' => 'ThemeUserController@update']);
+    Route::get('user/{username}/billing', ['uses' => 'ThemeUserController@billing']);
+    Route::get('user/{username}/cancel', ['uses' => 'ThemeUserController@cancel_account']);
+    Route::get('user/{username}/resume', ['uses' => 'ThemeUserController@resume_account']);
     Route::get('user/{username}/update_cc', 'ThemeUserController@update_cc');
 
 }); // End if_logged_in_must_be_subscribed route
@@ -108,10 +108,10 @@ Route::get('unsubscribe/{email}', 'ThemeContactController@index');
 Route::post('unsubscribe', 'ThemeContactController@edit');
 
 Route::get('user/{username}/renew_subscription', 'ThemeUserController@renew');
-Route::post('user/{username}/update_cc', array('uses' => 'ThemeUserController@update_cc_store'));
+Route::post('user/{username}/update_cc', ['uses' => 'ThemeUserController@update_cc_store']);
 
 Route::get('user/{username}/upgrade_subscription', 'ThemeUserController@upgrade');
-Route::post('user/{username}/upgrade_cc', array('uses' => 'ThemeUserController@upgrade_cc_store'));
+Route::post('user/{username}/upgrade_cc', ['uses' => 'ThemeUserController@upgrade_cc_store']);
 
 Route::get('logout', 'ThemeAuthController@logout');
 
