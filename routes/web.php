@@ -10,14 +10,15 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('/', 'ThemeHomeController@index')->name('home');
 
-    Route::get('videos', 'Video\VideoController@index');
-    Route::get('dailies', 'Video\VideoController@dailiesIndex');
-    Route::get('videos/category/{category}', 'Video\VideoController@category' );
-    Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' );
-    Route::get('videos/{id}', 'Video\VideoController@show');
-    Route::post('upload', 'Video\VideoController@store');
-    Route::get('upload', 'Video\VideoController@upload')->name('upload');
-    Route::get('upload/form', 'Video\VideoController@form');
+    Route::get('videos', 'Video\VideoController@index')->name('videos_index');
+    Route::get('dailies', 'Video\VideoController@dailiesIndex')->name('dailies_index');
+    Route::get('videos/category/{category}', 'Video\VideoController@category' )->name('videos_category_index');
+    Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' )->name('videos_tag_index');
+    Route::get('videos/{id}', 'Video\VideoController@show')->name('videos_show');
+    Route::post('upload', 'Video\VideoController@store')->name('videos_store');
+    Route::get('upload', 'Video\VideoController@upload')->name('upload')->name('videos_upload');
+    // TODO: remove this form route
+    Route::get('upload/form', 'Video\VideoController@form')->name('videos_upload_form');
     Route::post('issue', 'Video\VideoController@issueAlert');
     Route::post('videocheck', 'Video\VideoController@videoCheck');
     Route::get('details/{code}', 'DetailsController@show')->name('details_show');
