@@ -8,6 +8,7 @@ import PasswordResetComponent from './vue-component/pages/loging/PasswordResetCo
 import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
 import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
+import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
 import Notfound from './vue-component/pages/404Component.vue';
 
 
@@ -82,6 +83,12 @@ export const routes = [
         path: '/password/reset/:token',
         name: 'password_reset_token',
         component: PasswordResetTokenComponent
+    },
+
+    {
+        path: '/unsubscribe/:email',
+        name: 'unsubscribe_user',
+        component: UnsubscribeComponent
     },
 
     {

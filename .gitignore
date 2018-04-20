@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /public/admin
-/public/assets
+/public/assets/*
 /storage/*.key
 /storage/logs/*
 /vendor

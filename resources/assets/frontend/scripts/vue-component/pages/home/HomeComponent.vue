@@ -68,7 +68,7 @@
         <feature-component></feature-component>
 
         <!-- Countdown Component -->
-        <!--<count-down></count-down>-->
+        <!-- <count-down></count-down> -->
 
         <!-- Upload video component -->
         <!--<upload-video-component></upload-video-component>-->

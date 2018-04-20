@@ -1,7 +1,7 @@
 <template>
     <!-- FOOTER SECTION -->
     <section class="footer-section section-space" >
-        <v-container grid-list-lg>
+        <v-container grid-list-lg class="pt-0 pb-0">
             <v-layout row wrap>
                 <v-flex xs12 sm8 md8 lg8>
                     <div class="footer-left">
