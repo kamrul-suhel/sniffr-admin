@@ -297,50 +297,24 @@ class VideoController extends Controller
 
     /**
      * @param Request $request
-     * @param Tag $tag
+     * @param string $tagName
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function findByTag(Request $request, Tag $tag)
+    public function findByTag(Request $request, string $tagName)
     {
-        $page = Input::get('page', 1);
-
-        if (!isset($tag)) {
-            return Redirect::to('videos');
+        if (!isset($tagName)) {
+            return redirect()->to('video_index');
         }
 
-        $tag_name = $tag;
+        $videos = Video::whereHas('tags', function ($query) use ($tagName) {
+            $query->where('name', '=', $tagName);
+        })->paginate($this->videos_per_page);
 
-        $tag = Tag::where('name', '=', $tag)->first();
-
-        $tags = VideoTag::where('tag_id', '=', $tag->id)->get();
-
-        $tag_array = [];
-        foreach ($tags as $key => $tag) {
-            array_push($tag_array, $tag->video_id);
+        if ($request->ajax() || $request->isJson()) {
+            return $this->successResponse(['videos' => $videos]);
         }
 
-        $videos = Video::where('state', 'licensed')
-            ->whereIn('id', $tag_array)
-            ->paginate($this->videos_per_page);
-
-        $data = [
-            'videos' => $videos,
-            'current_page' => $page,
-            'page_title' => 'Videos tagged with "' . $tag_name . '"',
-            'page_description' => 'Page ' . $page,
-            'pagination_url' => '/videos/tags/' . $tag_name,
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'pages' => Page::where('active', '=', 1)->get(),
-        ];
-
-        $isJson = $request->ajax() || $request->isJson();
-
-        if ($isJson) {
-            return $this->successResponse($data);
-        }
-
-        return view('frontend.master', $data);
+        return view('frontend.master', ['videos' => $videos]);
     }
 
     /**
