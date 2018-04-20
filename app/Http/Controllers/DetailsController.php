@@ -93,52 +93,52 @@ class DetailsController extends Controller
         $this->validate($request, $this->rules);
 
         if ($validator->fails()) {
-            if($request->ajax()){
+            if ($request->ajax() || $request->isJson()) {
                 return $this->errorResponse('Sorry there is something wrong please review the form and submit again');
             }
 
             return Redirect::back()
                 ->withErrors($validator)
                 ->withInput();
-        } else {
-            //get additional form data
-            $contact = Contact::where('id',$video->contact_id)->first();
-            $contact->tel = Input::get('tel');
-            $contact->save();
-
-            $date = Input::get('date_filmed');
-            if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date)) {
-                $video->date_filmed = Input::get('date_filmed');
-            }
-            
-            $video->location = Input::get('location');
-            $video->description = Input::get('description');
-            $video->filmed_by_me = Input::get('filmed_by_me');
-            $video->permission = Input::get('permission') == 'yes' ? 1 : 0;
-            $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' ? 1 : 0;
-            $video->submitted_where = Input::get('submitted_where');
-            $video->contact_is_owner = Input::get('contact_is_owner');
-            $video->allow_publish = Input::get('allow_publish');
-            $video->contact_is_owner = Input::get('contact_is_owner');
-            $video->is_exclusive = Input::get('is_exclusive');
-            $video->more_details = 1;
-            $video->state = 'pending';
-            $video->save();
-
-            // Notification of new video
-            if(env('APP_ENV') != 'local'){
-                $video->notify(new DetailsReview($video));
-            }
-            
-            // Send thanks notification email (via queue after 2mins)
-            QueueEmail::dispatch($video->id, 'details_thanks');
-
-            $this->data['video'] = $video;
-
-            if ($request->ajax()) {
-                return $this->successResponse();
-            }
-            return view('frontend.master', $this->data);
         }
+
+        //get additional form data
+        $contact = Contact::where('id', $video->contact_id)->first();
+        $contact->tel = Input::get('tel');
+        $contact->save();
+
+        $date = Input::get('date_filmed');
+        if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $date)) {
+            $video->date_filmed = Input::get('date_filmed');
+        }
+
+        $video->location = Input::get('location');
+        $video->description = Input::get('description');
+        $video->filmed_by_me = Input::get('filmed_by_me');
+        $video->permission = Input::get('permission') == 'yes' ? 1 : 0;
+        $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' ? 1 : 0;
+        $video->submitted_where = Input::get('submitted_where');
+        $video->contact_is_owner = Input::get('contact_is_owner');
+        $video->allow_publish = Input::get('allow_publish');
+        $video->contact_is_owner = Input::get('contact_is_owner');
+        $video->is_exclusive = Input::get('is_exclusive');
+        $video->more_details = 1;
+        $video->state = 'pending';
+        $video->save();
+
+        // Notification of new video
+        if (env('APP_ENV') != 'local') {
+            $video->notify(new DetailsReview($video));
+        }
+
+        // Send thanks notification email (via queue after 2mins)
+        QueueEmail::dispatch($video->id, 'details_thanks');
+
+        $this->data['video'] = $video;
+
+        if ($request->ajax() || $request->isJson()) {
+            return $this->successResponse();
+        }
+        return view('frontend.master', $this->data);
     }
 }
