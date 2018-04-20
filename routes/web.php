@@ -8,7 +8,7 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
         return response(config('settings.public'));
     });
 
-    Route::get('/', 'ThemeHomeController@index')->name('home');
+    Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('videos', 'Video\VideoController@index')->name('videos_index');
     Route::get('dailies', 'Video\VideoController@dailiesIndex')->name('dailies_index');
