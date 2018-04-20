@@ -64,6 +64,7 @@ class VideoController extends Controller
         ];
 
         $this->videoService = $videoService;
+
     }
 
     /**
@@ -297,10 +298,10 @@ class VideoController extends Controller
 
     /**
      * @param Request $request
-     * @param Tag $tag
+     * @param string $tag
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function findByTag(Request $request, Tag $tag)
+    public function findByTag(Request $request, string $tag)
     {
         $page = Input::get('page', 1);
 
@@ -313,6 +314,8 @@ class VideoController extends Controller
         $tag = Tag::where('name', '=', $tag)->first();
 
         $tags = VideoTag::where('tag_id', '=', $tag->id)->get();
+
+        dd($tags);
 
         $tag_array = [];
         foreach ($tags as $key => $tag) {
