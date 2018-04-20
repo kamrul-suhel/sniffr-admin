@@ -16,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->videos_per_page = $settings['videos_per_page'];
+        $this->videos_per_page = config('settings.site.videos_per_page');
     }
 
     /**
