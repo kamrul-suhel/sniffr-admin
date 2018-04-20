@@ -20,6 +20,10 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     Route::get('upload/form', 'Video\VideoController@form');
     Route::post('issue', 'Video\VideoController@issueAlert');
     Route::post('videocheck', 'Video\VideoController@videoCheck');
+    Route::get('details/{code}', 'DetailsController@show')->name('details_show');
+    Route::post('details/{code}', 'DetailsController@store')->name('details_store');
+    // TODO: remove this form route
+    Route::get('details/form/{code}', 'DetailsController@form')->name('details_form');
 
     Route::get('tags', 'ThemeTagController@index');
 
@@ -31,15 +35,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     Route::post('submission', 'ThemeSubmissionController@store');
     Route::get('submission', 'ThemeSubmissionController@index');
     Route::get('submission/form', 'ThemeSubmissionController@form');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Details Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('details/{code}', 'ThemeDetailsController@store');
-    Route::get('details/{code}', 'ThemeDetailsController@index');
-    Route::get('details/form/{code}', 'ThemeDetailsController@form');
 
     /*
     |--------------------------------------------------------------------------

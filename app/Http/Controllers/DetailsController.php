@@ -9,14 +9,13 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Page;
-use App\Menu;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
 use App\Jobs\QueueEmail;
 use App\Notifications\DetailsReview;
 
-class ThemeDetailsController extends Controller
+class DetailsController extends Controller
 {
     use FrontendResponser;
     use VideoHelper;
@@ -36,7 +35,6 @@ class ThemeDetailsController extends Controller
 
         $this->data = [
             'user' => $user,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
