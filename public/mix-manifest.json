@@ -1,11 +1,17 @@
 {
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/frontend/scripts/plugin.js": "/assets/frontend/scripts/plugin.js",
-    "/assets/frontend/sripts/jquery.js": "/assets/frontend/sripts/jquery.js",
-    "/assets/frontend/css/plugin/vuetify.css": "/assets/frontend/css/plugin/vuetify.css",
-    "/assets/js/utils.js": "/assets/js/utils.js"
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=b07e05923904539d42fc",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=fb00dfee2f4139792fec",
+    "/assets/js/app.js": "/assets/js/app.js?id=610723b92609b14e1ae1",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=f08af914ce9475c64a37",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=efa440b62d2f80476629",
+    "/assets/js/app.js.map": "/assets/js/app.js.map?id=c6f0a17d092a35418c33",
+    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=9157dd2750283d5c0981",
+    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=c07fef0f6de7cbd5db56",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=5cd0ef09b9bbd07a8cb8",
+    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=3aa4773e876b11cd3e6d",
+    "/assets/frontend/scripts/plugin.js": "/assets/frontend/scripts/plugin.js?id=ff40fe5ce339514bc277",
+    "/assets/frontend/scripts/plugin.js.map": "/assets/frontend/scripts/plugin.js.map?id=3d5164fff7079ddf55b0",
+    "/assets/frontend/sripts/jquery.js": "/assets/frontend/sripts/jquery.js?id=6a07da9fae934baf3f74",
+    "/assets/frontend/css/plugin/vuetify.css": "/assets/frontend/css/plugin/vuetify.css?id=701782414b3e1125ed6c",
+    "/assets/js/utils.js": "/assets/js/utils.js?id=121feeeb49b503fd9e7f"
 }

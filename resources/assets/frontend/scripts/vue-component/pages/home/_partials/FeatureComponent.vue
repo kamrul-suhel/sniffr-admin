@@ -10,140 +10,37 @@
                 </v-flex>
             </v-layout>
 
-            <v-layout row wrap>
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
+            <v-layout row wrap class="videos-section">
 
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4 lg4>
-                    <v-card>
-                        <v-card-media src="assets/frontend/images/sample_bg.jpg" height="200px">
-                        </v-card-media>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-                </v-flex>
+                <video-loop-component v-for="video in videos" :video="video"></video-loop-component>
 
             </v-layout>
         </v-container>
     </section>
 </template>
 <script>
+    import VideoLoopComponent from '../../../includes/VideoLoopComponent.vue';
+
     export default{
         data(){
             return {
-
+                videos:''
             }
         },
+
+        components: {
+            VideoLoopComponent
+        },
+
         methods:{
 
         },
-        created(){
 
+        created(){
+            axios.get('/')
+            .then((response) => {
+                this.videos = response.data.videos;
+            });
         }
     }
 </script>

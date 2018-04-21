@@ -8,9 +8,11 @@ use App\Video;
 use App\VideoCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Traits\FrontendResponser;
 
 class ThemeHomeController extends Controller
 {
+    use FrontendResponser;
 
     public function __construct()
     {
@@ -27,6 +29,8 @@ class ThemeHomeController extends Controller
                         ->limit(12)
                         ->get()
             ];
+
+            return $this->successResponse($data);
         }
 		return view('frontend.master');
 	}

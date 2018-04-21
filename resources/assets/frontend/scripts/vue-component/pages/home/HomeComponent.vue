@@ -15,6 +15,7 @@
                                 <a href=""><img src="assets/frontend/images/logo-sniffr-white.png"/></a>
                             </div>
                         </v-flex>
+                        
                         <v-flex xs12 sm6 md8 lg8>
                             <nav class="navigation">
                                 <ul>
