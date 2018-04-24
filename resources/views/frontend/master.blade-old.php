@@ -36,6 +36,8 @@
 
     <link rel="stylesheet" href="{{asset('assets/frontend/css/styles.css')}}" />
 
+    <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/airbrake-js/1.0.4/client.min.js"></script>
     <script>
         // Airbrake error notificatios

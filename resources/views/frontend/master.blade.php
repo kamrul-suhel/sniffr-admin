@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . 'settings/' . $favicon }}" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+     <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
+
     <link rel="stylesheet" href="{{asset('assets/frontend/css/styles.css')}}" />
 
     <!-- If we need to add page specific style -->
@@ -34,35 +36,6 @@
     <script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>
     <!-- End scripts Section -->
 
-
-<script src="/assets/admin/js/video.js"></script>
-<script src="/assets/admin/js/videojs-vimeo.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-
-        // var massVideo = $('.video-js');
-        // for(var i = 0; i < massVideo.length; i++){
-        //     videojs(massVideo[i]).ready(function(){
-        //         var myPlayer = this;    // Store the video object
-        //         var aspectRatio = 2/4; // Make up an aspect ratio
-
-        //         function resizeVideoJS(){
-        //             // Get the parent element's actual width
-        //             var width = $('.video-container')[0].offsetWidth;
-        //             // Set width to fill parent element, Set height
-        //             myPlayer.width(width).height( width * aspectRatio );
-        //         }
-
-        //         resizeVideoJS(); // Initialize the function
-        //         window.onresize = resizeVideoJS; // Call the function on resize
-        //     });
-        // }
-    });
-</script>
-
-
-    
     @if(isset($settings['google_tracking_id']) && $settings['google_tracking_id'] != '')
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
