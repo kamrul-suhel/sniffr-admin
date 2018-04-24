@@ -151,9 +151,7 @@ Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
 });
 
-Route::get("/terms", function(){
-   return view('Theme::terms');
-});
+Route::get('terms', 'ThemeTermsController@index');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
