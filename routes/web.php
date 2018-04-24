@@ -150,6 +150,10 @@ Route::get('upgrade', 'UpgradeController@upgrade');
 Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
 });
+
+Route::get("/terms", function(){
+   return view('Theme::terms');
+});
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
