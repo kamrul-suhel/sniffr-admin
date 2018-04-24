@@ -97,14 +97,10 @@
         <div class="form-check">
             <h2>Terms &amp; Conditions</h2>
 
-            <div class="scroll-box">
-                <?php echo $settings->terms_ex; ?>
-            </div>
-
             <div class="styled-checkbox">
                 <input id="terms" name="terms" type="checkbox">
                 <label class="form-check-label-left js-checkbox" for="terms"></label>
-                <p class="terms-copy" data-attr="terms">I agree to the above terms and conditions <span>* </span></p>
+                <p class="terms-copy" data-attr="terms" style="">I agree to the <a href="<?php echo (isset($_GET['source']) ? 'https://www.unilad.co.uk/terms-use/' : '/terms/'); ?>" target="_blank">terms and conditions</a> <span>* </span></p>
             </div>
         </div>
 

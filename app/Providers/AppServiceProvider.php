@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
         if (\App::environment() !== 'production') {
             Video::observe(VideoObserver::class);
         }
+        if (!\App::environment('local')) {
+            \URL::forceScheme('https');
+        }
     }
 
     /**
