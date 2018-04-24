@@ -25,7 +25,7 @@ class ThemeHomeController extends Controller
         if($request->ajax()){
             $data = [
                 'videos' => Video::where('state', 'licensed')
-                       ->orderBy('created_at', 'DESC')
+                       ->orderBy('id', 'DESC')
                         ->limit(12)
                         ->get()
             ];

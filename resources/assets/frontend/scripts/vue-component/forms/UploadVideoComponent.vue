@@ -95,8 +95,6 @@
                                             label="Video link/URL"
                                             v-model="url"
                                     ></v-text-field>
-                                    <span v-if="error"
-                                          class="red--text">Upload your file or provide a links please</span>
                                 </v-flex>
                             </v-layout>
                         </v-container>
