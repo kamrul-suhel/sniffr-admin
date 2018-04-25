@@ -434,10 +434,6 @@
             },
 
             setTermsLink(){
-                if(this.source === 'website'){
-                    this.termslink = '/terms';
-                    return;
-                }
 
                 if(this.source === ''){
                     this.termslink = '/terms';
@@ -445,6 +441,8 @@
                 }
 
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
+
+
             }
         }
     }
