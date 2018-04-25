@@ -84,7 +84,6 @@ class VideoController extends Controller
     {
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'upload';
-
         return view('frontend.iframe', $this->data);
     }
 
