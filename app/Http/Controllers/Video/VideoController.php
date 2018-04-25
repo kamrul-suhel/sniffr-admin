@@ -224,24 +224,24 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
-        $video = new Video;
-        $page = Input::get('page', 1);
-        $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
-
-        $data = [
-            'videos' => $videos,
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'pages' => (new Page)->where('active', '=', 1)->get(),
-        ];
-
         $isJson = $request->ajax() || $request->isJson();
 
         if ($isJson) {
+            $video = new Video;
+            $page = Input::get('page', 1);
+            $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+
+            $data = [
+                'videos' => $videos,
+                'video_categories' => VideoCategory::all(),
+                'theme_settings' => config('settings.theme'),
+                'pages' => (new Page)->where('active', '=', 1)->get(),
+            ];
+
             return $this->successResponse($data);
         }
 
-        return view('frontend.master', $data);
+        return view('frontend.master');
     }
 
     /**
@@ -295,28 +295,26 @@ class VideoController extends Controller
         ]);
     }
 
-     /**
+    /**
      * @param Request $request
      * @param string $tagName
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function findByTag(Request $request, string $tagName)
     {
-        if (!isset($tagName)) {
-            return redirect()->to('video_index');
-        }
-
-        $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
-            $query->where('name', '=', $tagName);
-        })->paginate($this->videos_per_page);
-
-        
-
         if ($request->ajax() || $request->isJson()) {
+            if (!isset($tagName)) {
+                return redirect()->to('video_index');
+            }
+
+            $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
+                $query->where('name', '=', $tagName);
+            })->paginate($this->videos_per_page);
+
             return $this->successResponse(['videos' => $videos]);
         }
 
-        return view('frontend.master', ['videos' => $videos]);
+        return view('frontend.master');
     }
 
     /**

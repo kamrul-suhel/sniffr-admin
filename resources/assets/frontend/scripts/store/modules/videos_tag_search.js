@@ -38,14 +38,12 @@ const actions = {
             axios.get(url)
                 .then((response) => {
                 let data = response.data;
-                console.log(data);
                 commit('setTagSearchVideoData', data);
                 commit('setTagSearchPaginationObject', data.videos);
                 resovle();
             })
             .catch((error) => {
                 console.log('Not connect');
-                console.log(error);
                 reject();
             });
         });

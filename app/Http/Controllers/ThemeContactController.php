@@ -13,13 +13,12 @@ class ThemeContactController extends Controller
 
     public function index(Request $request, $email)
     {
-
-        $contact = Contact::where('email', $email)->first();
-        $data = [
-            'contact' => $contact,
-        ];
-
         if ($request->ajax()) {
+            $contact = Contact::where('email', $email)->first();
+            $data = [
+                'contact' => $contact,
+            ];
+
             if ($contact) {
                 return $this->successResponse($data);
             }
@@ -30,20 +29,20 @@ class ThemeContactController extends Controller
 
     public function edit(Request $request)
     {
-        if ($request->input('key')) {
-            $contact = Contact::where('email', $request->input('key'))->first();
-            if (isset($contact)) {
-                $contact->delete();
-                if (isset($contact->videos)) {
-                    foreach ($contact->videos as $video) {
-                        $video->contact_id = 0;
-                        $video->save();
+        if ($request->ajax()) {
+            if ($request->input('key')) {
+                $contact = Contact::where('email', $request->input('key'))->first();
+                if (isset($contact)) {
+                    $contact->delete();
+                    if (isset($contact->videos)) {
+                        foreach ($contact->videos as $video) {
+                            $video->contact_id = 0;
+                            $video->save();
+                        }
                     }
                 }
             }
-        }
 
-        if ($request->ajax()) {
             return $this->successResponse();
         }
 

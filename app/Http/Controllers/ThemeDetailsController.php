@@ -53,14 +53,14 @@ class ThemeDetailsController extends Controller
      */
     public function index(Request $request, $code)
     {
-        $video = Video::select($this->getVideoFieldsForFrontend())
-            ->where('more_details_code', $code)
-            ->with('contact')
-            ->first();
-
-        $iframe = $this->getVideoHtml($video, true);
-        $video['iframe'] = $iframe;
         if($request->ajax()){
+            $video = Video::select($this->getVideoFieldsForFrontend())
+                ->where('more_details_code', $code)
+                ->with('contact')
+                ->first();
+
+            $iframe = $this->getVideoHtml($video, true);
+            $video['iframe'] = $iframe;
             if($video){
                 return $this->successResponse($video);
             }else{
