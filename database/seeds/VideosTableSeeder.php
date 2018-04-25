@@ -19,6 +19,16 @@ class VideosTableSeeder extends Seeder
         $videoShotTypeIds = VideoShotType::pluck('id')->toArray();
         $verticals = config('verticals');
         $states = config('videos.states');
+        $videoDates = [
+            strtotime('today'),
+            strtotime('yesterday'),
+            strtotime('3 days ago'),
+            strtotime('4 days ago'),
+            strtotime('5 days ago'),
+            strtotime('last week'),
+            strtotime('last month'),
+            strtotime('2 months ago'),
+        ];
 
         foreach (range(1, 1000) as $index) {
             $vertical = $faker->randomElement($verticals);
@@ -75,6 +85,7 @@ class VideosTableSeeder extends Seeder
                 'ip' => $faker->ipv4,
                 'user_agent' => $faker->userAgent,
                 'licensed_at' => $faker->date(),
+                'created_at' => date('Y-m-d', $faker->randomElement($videoDates)),
             ]);
         }
     }
