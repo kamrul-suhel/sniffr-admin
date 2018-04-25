@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Hash;
@@ -39,6 +38,7 @@ class ThemeUserController extends Controller
                 'note_type' => 'error'
             ]);
         }
+
         if ($authUser->id != $user->id && $authUser->role != 'admin') {
             return redirect()->home()->with([
                 'note' => 'Sorry but you do not have permission to access this page!',
@@ -59,7 +59,6 @@ class ThemeUserController extends Controller
             'user' => $user,
             'type' => 'profile',
             'videos' => $videos,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),

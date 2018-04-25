@@ -61,6 +61,8 @@ class CreateVideosTable extends Migration
             $table->string('ip')->nullable();
             $table->text('user_agent')->nullable();
             $table->dateTime('licensed_at')->nullable();
+            $table->integer('dimension_width')->unsigned()->nullable();
+            $table->integer('dimension_height')->unsigned()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

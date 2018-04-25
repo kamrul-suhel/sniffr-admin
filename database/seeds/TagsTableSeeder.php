@@ -2,25 +2,16 @@
 
 use App\Tag;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 
 class TagsTableSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
-        $tags = [];
+        $sampleTagNames = ['dog', 'cat', 'funny', 'tv', 'accident'];
 
-        foreach (range(1, 300) as $index) {
-            $word = $faker->word;
-            // check if keyword already exists in the table
-            if (key_exists($word, $tags)) {
-                continue;
-            }
-            $tags[$word] = $word;
-
+        foreach ($sampleTagNames as $tag) {
             Tag::create([
-                'name' => $word,
+                'name' => $tag,
             ]);
         }
     }
