@@ -51,7 +51,8 @@
                                             label="Video title"
                                             v-model="title"
                                             color="dark"
-                                            :rules="[v => !!v || 'Title is required']"
+                                            :rules="[v => !!v || 'Title is required', (v) => v.length <= 10 || 'Max 140 characters']"
+                                            :counter="140"
                                             required
                                     ></v-text-field>
                                 </v-flex>
