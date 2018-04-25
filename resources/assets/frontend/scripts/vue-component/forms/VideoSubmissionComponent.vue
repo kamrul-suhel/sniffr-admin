@@ -93,7 +93,7 @@
                                  id="scroll-target">
                                 <v-layout row wrap>
                                     <v-flex class="text-xs-center">
-                                        <h2>Terms & Conditions</h2>
+                                        <h2>Terms &amp; Conditions</h2>
                                     </v-flex>
                                 </v-layout>
 
@@ -121,7 +121,7 @@
                                         <h4>Publicity/Confidentiality</h4>
                                         <p>I shall not release, or cause the release, of any information concerning the Licensed Rights, UNILAD or the terms of this License. I will inform UNILAD if there are any changes to my personal details for the duration of this agreement. UNILAD undertakes to maintain personal details confidentially and in accordance with all relevant data protection laws and the Privacy Policy available on our Website and incorporated herein.</p>
 
-                                        <h4>Terms & Services</h4>
+                                        <h4>Terms &amp; Services</h4>
                                         <p>I acknowledged, understands and agree to the additional terms and services displayed on the UNILAD website which are incorporated herein by this reference and subject to change.</p>
 
                                         <h4>Termination Clause</h4>

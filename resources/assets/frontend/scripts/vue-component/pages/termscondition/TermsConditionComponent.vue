@@ -3,7 +3,7 @@
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
-                    <h1 class="heading">Terms & Conditions</h1>
+                    <h1 class="heading">Terms &amp; Conditions</h1>
                 </div>
             </div>
         </section>
