@@ -66,6 +66,7 @@
         },
 
         created(){
+            console.log('d;lk');
             this.search_title = this.$route.query.value;
             this.current_page = this.$route.query.page ? this.$route.query.page : this.current_page;
             this.updateSearch();

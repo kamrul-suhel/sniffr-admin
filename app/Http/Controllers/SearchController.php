@@ -20,16 +20,18 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         $search_value = Input::get('value');
-
-        if (empty($search_value)) {
-            return Redirect::to('/');
-        }
+        $settings = config('settings.site');
 
         $videos = Video::where(function ($query) use ($search_value) {
-            $query->where('state', '=', 'licensed')->where('title', 'LIKE', '%' . $search_value . '%');
-        })->orWhereHas('tags', function ($q) use ($search_value) {
-            $q->where('state', '=', 'licensed')->where('name', 'LIKE', '%' . $search_value . '%');
-        })->orderBy('licensed_at', 'DESC')->get();
+            $query->where('state', '=', 'licensed')
+                ->where('title', 'LIKE', '%' . $search_value . '%');
+        })
+            ->orWhereHas('tags', function ($q) use ($search_value) {
+            $q->where('state', '=', 'licensed')
+                ->where('name', 'LIKE', '%' . $search_value . '%');
+        })
+                ->orderBy('licensed_at', 'DESC')
+            ->paginate($settings['posts_per_page']);
 
 		$data = [
 			'videos' => $videos,

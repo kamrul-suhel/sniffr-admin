@@ -102,7 +102,7 @@
                         <v-container grid-list-lg>
                             <v-layout row wrap>
                                 <v-flex xs12>
-                                    <h2 class="text-xs-center text-uppercase">Terms & Conditions</h2>
+                                    <h2 class="text-xs-center text-uppercase">Terms &amp; Conditions</h2>
                                 </v-flex>
                             </v-layout>
 

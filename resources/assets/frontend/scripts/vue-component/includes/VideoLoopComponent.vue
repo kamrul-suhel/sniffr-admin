@@ -43,8 +43,10 @@
             }
         },
         props:['video'],
+
         created(){
         },
+
         methods:{
             defaultImage(){
                 this.video_image = '/assets/img/default.jpg';
@@ -66,10 +68,10 @@
 
             }
         },
+
         directives: {
             checkimage: {
                 inserted: function (el, binding) {
-                    console.log(el);
                     let img_src = binding.value;
                     let image = new Image();
                     image.src = img_src;
