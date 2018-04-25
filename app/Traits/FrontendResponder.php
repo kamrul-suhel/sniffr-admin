@@ -1,7 +1,7 @@
 <?php
     namespace App\Traits;
 
-trait FrontendResponser {
+trait FrontendResponder {
     protected function successResponse($data = array()){
         $data['success'] = '1';
         return response()->json($data);

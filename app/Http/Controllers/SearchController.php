@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Setting;
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use Illuminate\Http\Request;
 use Redirect;
 use App\Video;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Input;
 
 class SearchController extends Controller
 {
-    use FrontendResponser;
+    use FrontendResponder;
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View

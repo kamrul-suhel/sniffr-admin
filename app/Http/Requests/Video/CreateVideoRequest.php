@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Video;
 
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
 class CreateVideoRequest extends FormRequest
 {
-    use FrontendResponser;
+    use FrontendResponder;
 
     /**
      * Determine if the user is authorized to make this request.

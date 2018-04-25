@@ -8,11 +8,11 @@ use App\Video;
 use App\VideoCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 
 class ThemeHomeController extends Controller
 {
-    use FrontendResponser;
+    use FrontendResponder;
 
     public function __construct()
     {

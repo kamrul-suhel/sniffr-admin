@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use Auth;
 use Redirect;
 use Validator;
@@ -23,7 +23,7 @@ use App\Notifications\SubmissionNewNonEx;
 class ThemeSubmissionController extends Controller
 {
 
-    use FrontendResponser;
+    use FrontendResponder;
 
     protected $rules = [
         'full_name' => 'required',

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
 use App\Tag;
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use App\VideoTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -27,7 +27,7 @@ use App\Notifications\SubmissionAlert;
 
 class VideoController extends Controller
 {
-    use FrontendResponser;
+    use FrontendResponder;
     use VideoHelper;
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
