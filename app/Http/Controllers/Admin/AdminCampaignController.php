@@ -37,13 +37,11 @@ class AdminCampaignController extends Controller
     public function index()
     {
         $campaigns = Campaign::orderBy('created_at', 'DESC')->paginate(10);
-        $user = Auth::user();
 
-        $data = array(
+        $data = [
             'campaigns' => $campaigns,
-            'user' => $user,
-            'admin_user' => Auth::user()
-        );
+            'user' => Auth::user()
+        ];
 
         return view('admin.campaigns.index', $data);
     }
@@ -53,12 +51,12 @@ class AdminCampaignController extends Controller
      */
     public function create()
     {
-        $data = array(
+        $data = [
             'post_route' => url('admin/campaigns/store'),
             'button_text' => 'Add New Campaign',
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'clients' => Client::get()
-        );
+        ];
 
         return view('admin.campaigns.create_edit', $data);
     }
@@ -114,14 +112,14 @@ class AdminCampaignController extends Controller
      {
          $campaign = Campaign::find($id);
 
-         $data = array(
+         $data = [
              'headline' => '<i class="fa fa-edit"></i> Edit Campaign',
              'campaign' => $campaign,
              'post_route' => url('admin/campaigns/update'),
              'button_text' => 'Update Campaign',
-             'admin_user' => Auth::user(),
+             'user' => Auth::user(),
              'clients' => Client::get()
-        );
+         ];
 
          return view('admin.campaigns.create_edit', $data);
      }

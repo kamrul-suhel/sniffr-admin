@@ -37,7 +37,7 @@ class AdminController extends Controller {
 		$settings = config('settings.site');
 
 		$data = [
-			'admin_user' => Auth::user(),
+			'user' => Auth::user(),
 			'video_state_count' => $video_state_count,
 			'total_videos' => $videos->count(),
 			'video_traffic' => $video_traffic,
@@ -50,13 +50,11 @@ class AdminController extends Controller {
 		return view('admin.index', $data);
 	}
 
-
 	public function settings_form(){
 		$settings = config('settings.site');
-		$user = Auth::user();
 		$data = array(
 			'settings' => $settings,
-			'admin_user'	=> $user,
+			'user'	=> Auth::user(),
 		);
 
 		return view('admin.settings.index', $data);

@@ -30,12 +30,10 @@ class AdminClientController extends Controller
     public function index()
     {
         $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
-        $user = Auth::user();
 
         $data = [
             'clients' => $clients,
-            'user' => $user,
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
         ];
 
          return view('admin.clients.index', $data);
@@ -49,7 +47,7 @@ class AdminClientController extends Controller
         $data = [
             'post_route' => url('admin/clients/store'),
             'button_text' => 'Add New Client',
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
         ];
 
         return view('admin.clients.create_edit', $data);
@@ -90,7 +88,7 @@ class AdminClientController extends Controller
             'client' => $client,
             'post_route' => url('admin/clients/update'),
             'button_text' => 'Update Client',
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
         ];
 
         return view('admin.clients.create_edit', $data);

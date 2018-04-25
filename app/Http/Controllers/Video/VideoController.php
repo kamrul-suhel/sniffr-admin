@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Video;
 
-use App\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;

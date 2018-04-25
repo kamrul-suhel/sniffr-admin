@@ -41,16 +41,15 @@ class AdminContactController extends Controller
         $contacts = new Contact;
 
         if (!empty($search_value)) {
-            $contacts = Contact::where('full_name', 'LIKE', '%' . $search_value . '%')->orWhere('email', 'LIKE', '%' . $search_value . '%');
+            $contacts = Contact::where('full_name', 'LIKE', '%' . $search_value . '%')
+                ->orWhere('email', 'LIKE', '%' . $search_value . '%');
         }
 
         $contacts = $contacts->orderBy('created_at', 'DESC')->paginate(10);
-        $user = Auth::user();
 
         $data = [
             'contacts' => $contacts,
-            'user' => $user,
-            'admin_user' => Auth::user()
+            'user' => Auth::user()
         ];
 
         return view('admin.contacts.index', $data);
@@ -64,7 +63,7 @@ class AdminContactController extends Controller
         $data = [
             'post_route' => url('admin/contacts/store'),
             'button_text' => 'Add New Contact',
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'videos' => Video::get()
         ];
         return view('admin.contacts.create_edit', $data);
@@ -99,7 +98,7 @@ class AdminContactController extends Controller
              'contact' => $contact,
              'post_route' => url('admin/contacts/update'),
              'button_text' => 'Update Contact',
-             'admin_user' => Auth::user(),
+             'user' => Auth::user(),
              'videos' => $contact->videos
          ];
 
