@@ -32,8 +32,6 @@ trait FrontendResponder {
             'embed_code',
             'duration',
             'description',
-            'dimension_width',
-            'dimension_height',
             'date_filmed',
             'location',
             'source',

@@ -68,7 +68,7 @@ class ThemeDetailsController extends Controller
             }
         }
 
-        return view('frontend.master', $this->data);
+        return view('frontend.master');
     }
 
     /**
