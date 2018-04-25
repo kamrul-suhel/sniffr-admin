@@ -9,6 +9,7 @@ import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordRe
 import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
+import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 
 
@@ -89,6 +90,11 @@ export const routes = [
         path: '/unsubscribe/:email',
         name: 'unsubscribe_user',
         component: UnsubscribeComponent
+    },
+    {
+      path: '/terms',
+      name: 'termsconditions',
+      component: TermsConditionsComponent
     },
 
     {

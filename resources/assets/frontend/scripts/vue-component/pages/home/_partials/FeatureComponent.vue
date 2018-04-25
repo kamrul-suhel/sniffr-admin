@@ -1,7 +1,7 @@
 <template>
     <!-- FEATURE SECTION -->
     <section class="feature-section section-space">
-        <v-container grid-list-xl>
+        <v-container grid-list-lg>
             <v-layout row wrap>
                 <v-flex xs12 text-center>
                     <div class="featured-section-title">

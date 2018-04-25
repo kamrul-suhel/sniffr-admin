@@ -8,7 +8,7 @@
             </div>
 
             <div class="second-navigation">
-                <v-container grid-list-md>
+                <v-container grid-list-lg>
                     <v-layout row wrap>
                         <v-flex xs12 sm6 md4 lg4>
                             <div class="logo">
@@ -121,7 +121,6 @@
                 this.is_login = this.$store.getters.isUserLogin;
                 if(this.is_login){
                     this.user = this.$store.getters.getUser;
-                    console.log(this.user);
                 }
             });
 

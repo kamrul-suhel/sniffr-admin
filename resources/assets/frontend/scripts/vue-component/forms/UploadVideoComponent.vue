@@ -51,7 +51,7 @@
                                             label="Video title"
                                             v-model="title"
                                             color="dark"
-                                            :rules="[v => !!v || 'Title is required', (v) => v.length <= 10 || 'Max 140 characters']"
+                                            :rules="[v => !!v || 'Title is required', (v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
                                             required
                                     ></v-text-field>
@@ -171,7 +171,7 @@
                                             in accordance with all relevant data protection laws and the Privacy Policy
                                             available on our Website and incorporated herein.</p>
 
-                                        <h4>Terms & Services</h4>
+                                        <h4>Terms &amp; Services</h4>
                                         <p>
                                             I acknowledged, understands and agree to the additional terms and services
                                             displayed on the UNILAD website which are incorporated herein by this
@@ -198,12 +198,13 @@
 
                                 <v-flex xs12 pb-0>
                                     <v-checkbox
-                                            label="I agree to the above terms and conditions"
                                             v-model="terms_condition"
                                             :rules="[v => !!v || 'You must agree to continue']"
                                             color="dark"
                                             required
-                                    ></v-checkbox>
+                                    >
+                                        <span slot="label">I agree to the above <a :href="termslink" target="_blank">terms and conditions</a></span>
+                                    </v-checkbox>
                                 </v-flex>
 
                                 <v-flex xsl2 text-xs-right pa-0>
@@ -306,6 +307,9 @@
             validate_email_error: false,
             upload_error_msg: '',
             thank_you_dialog: false,
+
+            //terms & condition
+            termslink:''
         }),
         created() {
             this.setSourceField();
@@ -426,6 +430,21 @@
                     this.source = this.$route.query.source;
                 }
 
+                this.setTermsLink();
+            },
+
+            setTermsLink(){
+                if(this.source === 'website'){
+                    this.termslink = '/terms';
+                    return;
+                }
+
+                if(this.source === ''){
+                    this.termslink = '/terms';
+                    return;
+                }
+
+                this.termslink = 'https://www.unilad.co.uk/terms-use'
             }
         }
     }
