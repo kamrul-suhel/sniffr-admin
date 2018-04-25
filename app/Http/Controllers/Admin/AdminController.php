@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 
 class AdminController extends Controller {
 
-    const BASE_YEAR = '2018';
-    const BASE_MONTH = '02';
-    const BASE_DAY = '15';
+    const YEAR = '2018';
+    const MONTH = '02';
+    const DAY = '15';
 
 	public function __construct()
     {
@@ -32,7 +32,9 @@ class AdminController extends Controller {
 	        return Carbon::parse($date->created_at)->format('m-d'); // grouping by days
 	    });
 
-	    $video_state_count = Video::get()->where('created_at', '>', $date->create(self::BASE_YEAR, self::BASE_MONTH, self::BASE_DAY))->groupBy('state');
+		// TODO: is this date arbitrary? is it a period?
+	    $video_state_count = Video::get()->where('created_at', '>', $date->create(self::YEAR, self::MONTH, self::DAY))
+            ->groupBy('state');
 
 		$settings = config('settings.site');
 
