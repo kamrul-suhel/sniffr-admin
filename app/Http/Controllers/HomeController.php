@@ -32,8 +32,9 @@ class HomeController extends Controller
         if ($request->ajax() || $request->isJson()) {
             $data = [
                 'videos' => Video::where('state', 'licensed')
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate($this->videos_per_page),
+                    ->orderBy('id', 'DESC')
+                    ->limit(12)
+                    ->get()
             ];
             return $this->successResponse($data);
         }

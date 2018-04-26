@@ -122,10 +122,8 @@
 
                     //send request
                     let requestUrl = '/password/reset/'+this.token;
-                    console.log(requestUrl);
                     axios.post(requestUrl, passworchangeform)
                         .then(response => {
-                            console.log(response);
                         })
                         .catch(error => {
                             console.log(error);

@@ -329,7 +329,6 @@
 
             // check if this code is exists in our database
             let url = '/details/'+this.code;
-            console.log(url);
             axios.get(url)
                 .then( (response) => {
                     let data = response.data;

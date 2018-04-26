@@ -4,7 +4,6 @@ const state = {
 
 const mutations = {
     setSettingsObject(state, settings){
-        console.log(settings);
         state.settings = settings;
     }
 }
