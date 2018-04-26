@@ -53,7 +53,7 @@
 }
 
 .navigation{
-  margin-top:20px;
+  margin-top:12px;
   text-align:center;
 
   .btn{
@@ -74,6 +74,7 @@
     li{
       margin-right:20px;
       display:inline;
+      
       a{
         color:$home-textcolor;
         transition:all ease-in-out .2s;
@@ -87,11 +88,22 @@
           display: inline-block;
         }
       }
+      
       a:hover{
         opacity:.5;
       }
+      
       a:focus{
         outline:none;
+      }
+
+      .btn__content{
+        padding:0;
+
+        i{
+          display:inline-block;
+          margin-right:5px;
+        }
       }
     }
   }
@@ -107,9 +119,16 @@
   a{
     color:#fff;
     text-decoration:none;
+    transition:all ease-in-out .3s;
 
     &:hover{
-      text-decoration:underline;
+      text-decoration:none;
+      opacity:.5;
+    }
+
+    i{
+      display:inline-block;
+      width:24px;
     }
   }
 }
@@ -145,7 +164,7 @@
   z-index:100;
   .logo {
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:0px;
     img{
       width:110px;
     }

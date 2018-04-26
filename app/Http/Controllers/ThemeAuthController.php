@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use Auth;
 use Session;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Input;
  */
 class ThemeAuthController extends Controller
 {
-    use FrontendResponser;
+    use FrontendResponder;
     /**
      * @param  $data []
      * @return \Illuminate\Contracts\Validation\Validator

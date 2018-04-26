@@ -14,7 +14,7 @@
 
                 <v-layout row wrap v-else>
                     <v-flex xs12>
-                        <h1 class="heading text-xs-center">Your Video Details</h1>
+                        <h1 class="heading text-xs-center text-uppercase">Your Video Details</h1>
                     </v-flex>
 
                     <v-flex xs12 class="text-xs-center">
@@ -33,7 +33,7 @@
                     </v-flex>
 
                     <v-flex xs12>
-                        <h2 class="sub-heading text-xs-center">Your Contact Details</h2>
+                        <h2 class="sub-heading text-xs-center text-uppercase">Your Contact Details</h2>
                     </v-flex>
 
                     <v-flex xs12>
@@ -66,7 +66,7 @@
                     </v-flex>
 
                     <v-flex xs12>
-                        <h2 class="sub-heading text-xs-center">Additional Details</h2>
+                        <h2 class="sub-heading text-xs-center text-uppercase">Additional Details</h2>
                     </v-flex>
 
                     <v-flex xs12>
@@ -120,7 +120,7 @@
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
                             <v-layout row wrap>
-                                <v-flex xs6 sm4 md4 lg4>
+                                <v-flex xs12 sm4 md4 lg4>
                                     <v-radio
                                             color="dark"
                                             label="I filmed the video"
@@ -128,7 +128,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs6 sm4 md4 lg4 align-content-left>
+                                <v-flex xs12 sm4 md4 lg4 align-content-left>
                                     <v-radio
                                             color="dark"
                                             label="Someone else filmed it"
@@ -149,7 +149,7 @@
                                 required>
 
                             <v-layout row wrap>
-                                <v-flex xs6 sm4 md4 lg4>
+                                <v-flex xs12 sm4 md4 lg4>
                                     <v-radio
                                             label="Yes"
                                             color="dark"
@@ -157,7 +157,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs6 sm4 md4 lg4 align-content-start>
+                                <v-flex xs12 sm4 md4 lg4 align-content-start>
                                     <v-radio
                                             label="No"
                                             color="dark"
@@ -175,7 +175,7 @@
                                 v-model="submitted_elsewhere"
                                 required>
                             <v-layout row wrap>
-                                <v-flex xs6 sm4 md4 lg4>
+                                <v-flex xs12 sm4 md4 lg4>
                                     <v-radio
                                             label="Yes"
                                             color="dark"
@@ -183,7 +183,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs6 sm4 md4 lg4>
+                                <v-flex xs12 sm4 md4 lg4>
                                     <v-radio
                                             label="No"
                                             color="dark"
@@ -203,41 +203,42 @@
                     </v-flex>
 
                     <v-flex xs12>
-                        <h2 class="sub-heading text-xs-center">Important Legal Stuff</h2>
+                        <h2 class="sub-heading text-xs-center text-uppercase">Important Legal Stuff</h2>
                     </v-flex>
 
-                    <v-flex xs12>
+                    <v-flex xs12 class="legal-stuff">
                         <v-checkbox
                                 color="dark"
                                 v-model="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required
                         >
-                            <div slot="label">
-                                {{ settings.terms_ex_contact_is_owner }}
-                            </div>
+                            <span slot="label">
+                                I confirm that I filmed this video and/or I am the rightful owner to this video.
+                            </span>
                         </v-checkbox>
                     </v-flex>
 
-                    <v-flex xs12>
+                    <v-flex xs12 class="legal-stuff">
                         <v-checkbox
                                 color="dark"
                                 v-model="allow_publish"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required>
-                            <div slot="label">
-                                {{ settings.terms_ex_allow_publish }}
-                            </div>
+                            <span slot="label">
+                                I confirm that I am happy for this video to be published and viewed by potentially millions of people. (Especially in cases where there are minors/children in the video).
+                            </span>
                         </v-checkbox>
                     </v-flex>
 
-                    <v-flex xs12>
+                    <v-flex xs12 class="legal-stuff">
                         <v-checkbox
                                 color="dark"
-                                :label="settings.terms_ex_is_exclusive"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
-                                required></v-checkbox>
+                                required>
+                            <span slot="label">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</span>
+                        </v-checkbox>
                     </v-flex>
 
                     <v-flex xs12 class="text-xs-right">
@@ -328,9 +329,9 @@
 
             // check if this code is exists in our database
             let url = '/details/'+this.code;
+            console.log(url);
             axios.get(url)
                 .then( (response) => {
-                    console.log(response.data);
                     let data = response.data;
 
                     if(!data.error){
@@ -342,8 +343,6 @@
                         this.tel = data.contact.tel;
                         this.location = data.location;
                         this.description = data.description;
-
-                        console.log(this.permission);
 
                     }else{
                         //error return to 404 page

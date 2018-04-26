@@ -12,6 +12,11 @@
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
             <v-container grid-list-lg pt-0>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-btn flat raised @click="onGoback()" class="ml-0">Go Back</v-btn>
+                    </v-flex>
+                </v-layout>
 
                 <v-layout row wrap>
                     <v-flex align-content-center v-html="video_detail.iframe">
@@ -33,7 +38,6 @@
                                 </li>
                             </ul>
                         </div>
-                        <v-btn flat raised @click="onGoback()" class="ml-0">Go Back</v-btn>
                     </v-flex>
 
                     <v-flex xs12 sm12 md4 lg4>
@@ -125,6 +129,10 @@
                 }
                 this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
 
+                if(this.video_detail.iframe.includes('vimeo')){
+                    this.reloadVideoJs();
+                }
+
                 this.reloadFacebook();
             });
 
@@ -166,6 +174,20 @@
                     }, 30);
 
                 }
+            },
+
+            reloadVideoJs() {
+               
+                    let videojs1 = document.createElement('script');
+                    videojs1.type = "text/javascript";
+                    videojs1.src="/assets/admin/js/video.js";
+
+                    let vimeo = document.createElement('script');
+                    vimeo.type = "text/javascript";
+                    vimeo.src="/assets/admin/js/videojs-vimeo.js";
+                    $('body').append(videojs1);
+                    $('body').append(vimeo);
+                    
             }
         },
 

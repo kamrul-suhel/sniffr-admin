@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use Auth;
 use Redirect;
 use Validator;
@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Page;
-use App\Menu;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
@@ -23,7 +22,7 @@ use App\Notifications\SubmissionNewNonEx;
 class ThemeSubmissionController extends Controller
 {
 
-    use FrontendResponser;
+    use FrontendResponder;
 
     protected $rules = [
         'full_name' => 'required',
@@ -33,13 +32,15 @@ class ThemeSubmissionController extends Controller
         'terms' => 'required'
     ];
 
+    /**
+     * ThemeSubmissionController constructor.
+     */
     public function __construct()
     {
         $user = Auth::user();
 
         $this->data = [
             'user' => $user,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
@@ -47,9 +48,7 @@ class ThemeSubmissionController extends Controller
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -57,9 +56,7 @@ class ThemeSubmissionController extends Controller
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function form()
     {
@@ -70,9 +67,7 @@ class ThemeSubmissionController extends Controller
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function thanks()
     {
@@ -80,9 +75,8 @@ class ThemeSubmissionController extends Controller
     }
 
     /**
-     * Store a newly created video in storage.
-     *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function store(Request $request)
     {
@@ -163,14 +157,14 @@ class ThemeSubmissionController extends Controller
         $video->source = Input::get('source');
         $video->save();
 
-        // May also need to action Youtube upload (or at least action anaylsis bit from AdminVideoController) as we skip "accepted" state
+        // May also need to action Youtube upload (or at least action analysis bit from AdminVideoController) as we skip "accepted" state
 
         // Notification of new video
         if (env('APP_ENV') != 'local') {
             $video->notify(new SubmissionNewNonEx($video));
         }
 
-        // Send thanks notification email (via queue after 2mins)
+        // Send thanks notification email (via queue after 2 mins)
         QueueEmail::dispatch($video->id, 'submission_thanks_nonex');
 
         if ($request->hasFile('file')) {
@@ -192,12 +186,15 @@ class ThemeSubmissionController extends Controller
             ];
             return $this->successResponse($data);
 
-        } else {
-            if ($iframe == 'true') {
-                return Redirect::to('https://www.unilad.co.uk');
-            } else {
-                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success'));
-            }
         }
+
+        if ($iframe == 'true') {
+            return Redirect::to('https://www.unilad.co.uk');
+        }
+
+        return view('Theme::thanks', $this->data)->with([
+            'note' => 'Video Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 }

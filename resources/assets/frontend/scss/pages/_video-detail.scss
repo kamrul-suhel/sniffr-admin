@@ -6,6 +6,20 @@
   .video-container{
     width:100%;
 
+    .video_player-dimensions{
+      width:100%;
+      height:450px;
+      position:relative;
+    }
+
+    .vjs-control-bar{
+      display:none;
+    }
+
+    .vjs-caption-settings{
+      display:none;
+    }
+
     iframe {
       width:100%;
       

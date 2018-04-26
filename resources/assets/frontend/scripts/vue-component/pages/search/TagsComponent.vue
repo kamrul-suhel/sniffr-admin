@@ -3,7 +3,7 @@
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
-                    <h1 class="heading">{{ tag_title }}</h1>
+                    <h1 class="heading">Search result</h1>
                 </div>
             </div>
 
@@ -26,7 +26,7 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'tagsearch'" v-if="videos.length > 12"></pagination-component>
+        <pagination-component :pagination="paginate" :page="'tagsearch'" v-if="paginate.last_page > 1"></pagination-component>
     </div>
 </template>
 <script>
