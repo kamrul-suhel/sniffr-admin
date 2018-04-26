@@ -19,16 +19,10 @@ class VideosTableSeeder extends Seeder
         $videoShotTypeIds = VideoShotType::pluck('id')->toArray();
         $verticals = config('verticals');
         $states = config('videos.states');
-        $videoDates = [
-            strtotime('today'),
-            strtotime('yesterday'),
-            strtotime('3 days ago'),
-            strtotime('4 days ago'),
-            strtotime('5 days ago'),
-            strtotime('last week'),
-            strtotime('last month'),
-            strtotime('2 months ago'),
-        ];
+
+        foreach (range(1, 60) as $index) {
+            $videoDates[] = strtotime($index . ' days ago');
+        }
 
         foreach (range(1, 1000) as $index) {
             $vertical = $faker->randomElement($verticals);
