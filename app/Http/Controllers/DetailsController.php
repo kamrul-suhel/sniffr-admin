@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libraries\VideoHelper;
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponse;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ use App\Notifications\DetailsReview;
 
 class DetailsController extends Controller
 {
-    use FrontendResponser;
+    use FrontendResponse;
     use VideoHelper;
 
     protected $rules = [

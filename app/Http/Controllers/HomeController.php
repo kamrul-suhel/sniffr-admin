@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\FrontendResponse;
 use App\Video;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    use FrontendResponse;
+
     /**
      * @var int
      */
@@ -20,16 +24,20 @@ class HomeController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = [
-            'videos' => Video::where('state', 'licensed')
-                ->orderBy('created_at', 'DESC')
-                ->paginate($this->videos_per_page),
-        ];
-
-		return view('frontend.master',$data);
+        if ($request->ajax() || $request->isJson()) {
+            $data = [
+                'videos' => Video::where('state', 'licensed')
+                    ->orderBy('id', 'DESC')
+                    ->limit(12)
+                    ->get()
+            ];
+            return $this->successResponse($data);
+        }
+		return view('frontend.master');
 	}
 }

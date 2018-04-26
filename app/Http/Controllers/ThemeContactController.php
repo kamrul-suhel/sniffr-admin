@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use Illuminate\Support\Facades\Input;
-use App\Traits\FrontendResponder;
+use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 
 class ThemeContactController extends Controller
 {
-    use FrontendResponder;
+    use FrontendResponse;
 
     public function index(Request $request, $email)
     {
