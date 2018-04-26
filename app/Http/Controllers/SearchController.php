@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Setting;
-use App\Traits\FrontendResponder;
+use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 use Redirect;
 use App\Video;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Input;
 
 class SearchController extends Controller
 {
-    use FrontendResponder;
+    use FrontendResponse;
 
     /**
      * @param Request $request
@@ -19,8 +19,7 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
-        $isJson = $request->ajax() || $request->isJson();
-        if ($isJson) {
+        if ($request->ajax() || $request->isJson()) {
             $search_value = Input::get('value');
             $settings = config('settings.site');
 

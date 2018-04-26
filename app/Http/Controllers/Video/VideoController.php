@@ -5,16 +5,13 @@ namespace App\Http\Controllers\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
-use App\Tag;
-use App\Traits\FrontendResponder;
-use App\VideoTag;
+use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use App\Page;
-use App\Menu;
 use App\User;
 use App\Video;
 use App\Contact;
@@ -26,7 +23,7 @@ use App\Notifications\SubmissionAlert;
 
 class VideoController extends Controller
 {
-    use FrontendResponder;
+    use FrontendResponse;
     use VideoHelper;
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
