@@ -1,11 +1,33 @@
 /* ************************* Video header section style ******************* */
 
 #header{
-  margin-top:-102px;
+  margin-top:-173px;
   height:350px;
 }
 
+@include small-device {
+  #header{
+    margin-top:-165px;
+  }
+}
 
+@include medium-device {
+  #header{
+    margin-top:-102px;
+  }
+}
+
+@include large-device {
+  #header{
+    margin-top:-102px;
+  }
+}
+
+@include extra-large-device {
+  #header{
+    margin-top:-102px;
+  }
+}
 /* ************************* Video search section style ******************* */
 
 .videos-filter-section{
@@ -38,10 +60,6 @@
     background-color:rgba(255,255,255,0.54);
   }
 
-
-
-
-
   @include small-device{
     input{
       margin-bottom:10px;
@@ -69,12 +87,19 @@
 /* ************************* Videos section style ******************* */
 
 .videos-section{
+
   .video-section-title{
     margin-bottom: $section-title-after-space;
 
     h1{
       @include headingstyle();
     }
+  }
+
+  .headline {
+    overflow: hidden;
+    height: 32px;
+    width:100%;
   }
 
   .video-section-title::after{

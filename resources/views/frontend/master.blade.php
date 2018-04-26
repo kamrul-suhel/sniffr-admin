@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . 'settings/' . $favicon }}" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+     <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
+
     <link rel="stylesheet" href="{{asset('assets/frontend/css/styles.css')}}" />
 
     <!-- If we need to add page specific style -->
@@ -33,7 +35,7 @@
     <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
     <script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>
     <!-- End scripts Section -->
-    
+
     @if(isset($settings['google_tracking_id']) && $settings['google_tracking_id'] != '')
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

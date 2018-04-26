@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12 sm6 md4 lg4 xl4>
-        <v-card flat class="block">
+        <v-card class="block">
             <v-card-media height="200px"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <a
@@ -43,8 +43,10 @@
             }
         },
         props:['video'],
+
         created(){
         },
+
         methods:{
             defaultImage(){
                 this.video_image = '/assets/img/default.jpg';
@@ -59,7 +61,6 @@
             },
 
             goToDetail(video) {
-//                console.log(video);
                 this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
                 setTimeout(() => {
                     this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
@@ -67,10 +68,10 @@
 
             }
         },
+
         directives: {
             checkimage: {
                 inserted: function (el, binding) {
-                    console.log(el);
                     let img_src = binding.value;
                     let image = new Image();
                     image.src = img_src;

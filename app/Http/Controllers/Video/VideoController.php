@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
 use App\Tag;
-use App\Traits\FrontendResponser;
+use App\Traits\FrontendResponder;
 use App\VideoTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -26,7 +26,7 @@ use App\Notifications\SubmissionAlert;
 
 class VideoController extends Controller
 {
-    use FrontendResponser;
+    use FrontendResponder;
     use VideoHelper;
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
@@ -82,7 +82,6 @@ class VideoController extends Controller
     {
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'upload';
-
         return view('frontend.iframe', $this->data);
     }
 
@@ -223,24 +222,22 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
-        $video = new Video;
-        $page = Input::get('page', 1);
-        $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+        if ($request->ajax() || $request->isJson()) {
+            $video = new Video;
+            $page = Input::get('page', 1);
+            $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
 
-        $data = [
-            'videos' => $videos,
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'pages' => (new Page)->where('active', '=', 1)->get(),
-        ];
+            $data = [
+                'videos' => $videos,
+                'video_categories' => VideoCategory::all(),
+                'theme_settings' => config('settings.theme'),
+                'pages' => (new Page)->where('active', '=', 1)->get(),
+            ];
 
-        $isJson = $request->ajax() || $request->isJson();
-
-        if ($isJson) {
             return $this->successResponse($data);
         }
 
-        return view('frontend.master', $data);
+        return view('frontend.master');
     }
 
     /**
@@ -301,19 +298,19 @@ class VideoController extends Controller
      */
     public function findByTag(Request $request, string $tagName)
     {
-        if (!isset($tagName)) {
-            return redirect()->to('video_index');
-        }
-
-        $videos = Video::whereHas('tags', function ($query) use ($tagName) {
-            $query->where('name', '=', $tagName);
-        })->paginate($this->videos_per_page);
-
         if ($request->ajax() || $request->isJson()) {
+            if (!isset($tagName)) {
+                return redirect()->to('video_index');
+            }
+
+            $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
+                $query->where('name', '=', $tagName);
+            })->paginate($this->videos_per_page);
+
             return $this->successResponse(['videos' => $videos]);
         }
 
-        return view('frontend.master', ['videos' => $videos]);
+        return view('frontend.master');
     }
 
     /**
