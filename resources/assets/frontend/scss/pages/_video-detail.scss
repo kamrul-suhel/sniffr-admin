@@ -24,15 +24,40 @@
       width:100%;
       
       &.youtube-iframe {
-        height:450px;
+        height:auto;
       }
       &.instagram-media {
         margin:0 auto !important; // to overwrite default style 
+      }
+
+      @include small-device {
+        &.youtube-iframe{
+          height:auto;
+        }
+      }
+
+      @include medium-device{
+        &.youtube-iframe{
+          height:450px;
+        }
+      }
+
+      @include large-device{
+        &.youtube-iframe{
+          height:450px;
+        }
+      }
+
+      @include extra-large-device{
+        &.youtube-iframe{
+          height:450px;
+        }
       }
     }
     .fb-video{
       width:50%;
     }
+
   }
 
   .video-detail-content{

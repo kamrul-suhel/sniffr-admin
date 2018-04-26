@@ -6,7 +6,31 @@ body {
 }
 
 section.section-space {
-  padding: $section-spacing 0px;
+  padding: $section-spacing-mobile 0px;
+}
+
+@include small-device {
+  section.section-space {
+    padding: $section-spacing-mobile 0px;
+  }
+}
+
+@include medium-device {
+  section.section-space {
+    padding: $section-spacing 0px;
+  }
+}
+
+@include large-device {
+  section.section-space {
+    padding: $section-spacing 0px;
+  }
+}
+
+@include extra-large-device {
+  section.section-space {
+    padding: $section-spacing 0px;
+  }
 }
 
 .nav-background {
@@ -34,9 +58,33 @@ h1 {
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@include small-device {
+  h2 {
+    font-size: 16px;
+  }
+}
+
+@include medium-device {
+  h2 {
+    font-size: 18px;
+  }
+}
+
+@include large-device {
+  h2 {
+    font-size: 24px;
+  }
+}
+
+@include extra-large-device {
+  h2 {
+    font-size: 24px;
+  }
 }
 
 p {
@@ -47,7 +95,31 @@ p {
 }
 
 .heading {
-  font-size: 40px;
+  font-size: 20px;
+}
+
+@include small-device {
+  .heading {
+    font-size: 20px;
+  }
+}
+
+@include medium-device {
+  .heading {
+    font-size: 30px;
+  }
+}
+
+@include large-device {
+  .heading {
+    font-size: 40px;
+  }
+}
+
+@include extra-large-device {
+  .heading {
+    font-size: 40px;
+  }
 }
 
 .sub-heading {
