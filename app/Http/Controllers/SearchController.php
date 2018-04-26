@@ -9,7 +9,6 @@ use Redirect;
 use App\Video;
 use Illuminate\Support\Facades\Input;
 
-
 class SearchController extends Controller
 {
     use FrontendResponder;

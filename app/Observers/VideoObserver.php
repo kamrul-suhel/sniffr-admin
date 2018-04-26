@@ -15,9 +15,19 @@ class VideoObserver
      */
     public function updated()
     {
+        Video::created(function () {
+            //TODO: add logging logic
+        });
+
         Video::updated(function () {
-            //FlushCacheTag::dispatch('licensed.paginated');
-            //Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
+            if (config('settings.cache.cache_enabled')) {
+                FlushCacheTag::dispatch('licensed.paginated');
+                Log::info('Job Dispatched: Flush Licensed Paginated Videos Cache');
+            }
+        });
+
+        Video::deleted(function () {
+            //TODO: add logging logic
         });
     }
 }

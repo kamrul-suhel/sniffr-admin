@@ -2,24 +2,29 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
-Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
+Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('/settings_object', function () {
         return response(config('settings.public'));
     });
 
-    Route::get('/', 'ThemeHomeController@index')->name('home');
+    Route::get('/', 'HomeController@index')->name('home');
 
-    Route::get('videos', 'Video\VideoController@index');
-    Route::get('dailies', 'Video\VideoController@dailiesIndex');
-    Route::get('videos/category/{category}', 'Video\VideoController@category' );
-    Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' );
-    Route::get('videos/{id}', 'Video\VideoController@show');
-    Route::post('upload', 'Video\VideoController@store');
-    Route::get('upload', 'Video\VideoController@upload')->name('upload');
-    Route::get('upload/form', 'Video\VideoController@form');
+    Route::get('videos', 'Video\VideoController@index')->name('videos_index');
+    Route::get('dailies', 'Video\VideoController@dailiesIndex')->name('dailies_index');
+    Route::get('videos/category/{category}', 'Video\VideoController@category' )->name('videos_category_index');
+    Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' )->name('videos_tag_index');
+    Route::get('videos/{id}', 'Video\VideoController@show')->name('videos_show');
+    Route::post('upload', 'Video\VideoController@store')->name('videos_store');
+    Route::get('upload', 'Video\VideoController@upload')->name('upload')->name('videos_upload');
+    // TODO: remove this form route
+    Route::get('upload/form', 'Video\VideoController@form')->name('videos_upload_form');
     Route::post('issue', 'Video\VideoController@issueAlert');
     Route::post('videocheck', 'Video\VideoController@videoCheck');
+    Route::get('details/{code}', 'DetailsController@show')->name('details_show');
+    Route::post('details/{code}', 'DetailsController@store')->name('details_store');
+    // TODO: remove this form route
+    Route::get('details/form/{code}', 'DetailsController@form')->name('details_form');
 
     Route::get('tags', 'ThemeTagController@index');
 
@@ -31,15 +36,6 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::post('submission', 'ThemeSubmissionController@store');
     Route::get('submission', 'ThemeSubmissionController@index');
     Route::get('submission/form', 'ThemeSubmissionController@form');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Details Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('details/{code}', 'ThemeDetailsController@store');
-    Route::get('details/{code}', 'ThemeDetailsController@index');
-    Route::get('details/form/{code}', 'ThemeDetailsController@form');
 
     /*
     |--------------------------------------------------------------------------
@@ -81,10 +77,10 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
     Route::get('islogin', 'ThemeAuthController@isLogin')->name('islogin');
     Route::post('login', 'ThemeAuthController@login');
 
-    Route::get('password/reset', array('uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind'));
-    Route::post('password/reset', array('uses' => 'ThemeAuthController@password_request', 'as' => 'password.request'));
-    Route::get('password/reset/{token}', array('uses' => 'ThemeAuthController@password_reset_token', 'as' => 'password.reset'));
-    Route::post('password/reset/{token}', array('uses' => 'ThemeAuthController@password_reset_post', 'as' => 'password.update'));
+    Route::get('password/reset', ['uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind']);
+    Route::post('password/reset', ['uses' => 'ThemeAuthController@password_request', 'as' => 'password.request']);
+    Route::get('password/reset/{token}', ['uses' => 'ThemeAuthController@password_reset_token', 'as' => 'password.reset']);
+    Route::post('password/reset/{token}', ['uses' => 'ThemeAuthController@password_reset_post', 'as' => 'password.update']);
 
     Route::get('verify/{activation_code}', 'ThemeAuthController@verify');
 
@@ -96,10 +92,10 @@ Route::group(array('before' => 'if_logged_in_must_be_subscribed'), function(){
 
     Route::get('user/{username}', 'ThemeUserController@index');
     Route::get('user/{username}/edit', 'ThemeUserController@edit');
-    Route::post('user/{username}/update', array('uses' => 'ThemeUserController@update'));
-    Route::get('user/{username}/billing', array('uses' => 'ThemeUserController@billing'));
-    Route::get('user/{username}/cancel', array('uses' => 'ThemeUserController@cancel_account'));
-    Route::get('user/{username}/resume', array('uses' => 'ThemeUserController@resume_account'));
+    Route::post('user/{username}/update', ['uses' => 'ThemeUserController@update']);
+    Route::get('user/{username}/billing', ['uses' => 'ThemeUserController@billing']);
+    Route::get('user/{username}/cancel', ['uses' => 'ThemeUserController@cancel_account']);
+    Route::get('user/{username}/resume', ['uses' => 'ThemeUserController@resume_account']);
     Route::get('user/{username}/update_cc', 'ThemeUserController@update_cc');
 
 }); // End if_logged_in_must_be_subscribed route
@@ -108,10 +104,10 @@ Route::get('unsubscribe/{email}', 'ThemeContactController@index');
 Route::post('unsubscribe', 'ThemeContactController@edit');
 
 Route::get('user/{username}/renew_subscription', 'ThemeUserController@renew');
-Route::post('user/{username}/update_cc', array('uses' => 'ThemeUserController@update_cc_store'));
+Route::post('user/{username}/update_cc', ['uses' => 'ThemeUserController@update_cc_store']);
 
 Route::get('user/{username}/upgrade_subscription', 'ThemeUserController@upgrade');
-Route::post('user/{username}/upgrade_cc', array('uses' => 'ThemeUserController@upgrade_cc_store'));
+Route::post('user/{username}/upgrade_cc', ['uses' => 'ThemeUserController@upgrade_cc_store']);
 
 Route::get('logout', 'ThemeAuthController@logout');
 
@@ -210,17 +206,6 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('user/edit/{id}', 'Admin\AdminUsersController@edit');
     Route::post('user/update', array('uses' => 'Admin\AdminUsersController@update'));
     Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));
-
-    Route::get('menu', 'Admin\AdminMenuController@index');
-    Route::post('menu/store', array('uses' => 'Admin\AdminMenuController@store'));
-    Route::get('menu/edit/{id}', 'Admin\AdminMenuController@edit');
-    Route::post('menu/update', array('uses' => 'Admin\AdminMenuController@update'));
-    Route::post('menu/order', array('uses' => 'Admin\AdminMenuController@order'));
-    Route::get('menu/delete/{id}', array('uses' => 'Admin\AdminMenuController@destroy'));
-
-    Route::get('plugins', 'Admin\AdminPluginsController@index');
-    Route::get('plugin/deactivate/{plugin_name}', 'Admin\AdminPluginsController@deactivate');
-    Route::get('plugin/activate/{plugin_name}', 'Admin\AdminPluginsController@activate');
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');

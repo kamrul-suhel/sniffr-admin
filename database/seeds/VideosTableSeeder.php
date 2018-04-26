@@ -20,7 +20,7 @@ class VideosTableSeeder extends Seeder
         $verticals = config('verticals');
         $states = config('videos.states');
 
-        foreach (range(1, 100) as $index) {
+        foreach (range(1, 1000) as $index) {
             $vertical = $faker->randomElement($verticals);
             $verticalId = $vertical['id'];
             Video::create([

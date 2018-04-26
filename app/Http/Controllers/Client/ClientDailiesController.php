@@ -79,10 +79,9 @@ class ClientDailiesController extends Controller
         $data = [
             'state' => $state,
             'videos' => $videos,
-            'user' => $user,
+            'user' => Auth::user(),
             'campaign' => $campaign,
             'campaigns' => $campaigns,
-            'admin_user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
@@ -99,17 +98,14 @@ class ClientDailiesController extends Controller
     {
         $video = Video::where('alpha_id', $id)->where('state', 'licensed')->first();
 
-        $user = Auth::user();
-
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
-            'user' => $user
         ];
 
         return view('client.dailies.create_edit', $data);

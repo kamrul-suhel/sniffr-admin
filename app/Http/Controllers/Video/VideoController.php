@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Video;
 
-use App\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
@@ -64,7 +63,6 @@ class VideoController extends Controller
         ];
 
         $this->videoService = $videoService;
-
     }
 
     /**
@@ -224,9 +222,7 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
-        $isJson = $request->ajax() || $request->isJson();
-
-        if ($isJson) {
+        if ($request->ajax() || $request->isJson()) {
             $video = new Video;
             $page = Input::get('page', 1);
             $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);

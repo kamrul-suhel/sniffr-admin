@@ -29,7 +29,7 @@ class AdminVideoShotTypeController extends Controller
     public function index()
     {
         $data = [
-            'admin_user' => Auth::user(),
+            'user' => Auth::user(),
             'video_shottypes' => json_decode(VideoShotType::orderBy('order', 'ASC')->get()->toJson()),
         ];
 

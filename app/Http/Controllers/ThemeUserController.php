@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Hash;
@@ -39,6 +38,7 @@ class ThemeUserController extends Controller
                 'note_type' => 'error'
             ]);
         }
+
         if ($authUser->id != $user->id && $authUser->role != 'admin') {
             return redirect()->home()->with([
                 'note' => 'Sorry but you do not have permission to access this page!',
@@ -59,7 +59,6 @@ class ThemeUserController extends Controller
             'user' => $user,
             'type' => 'profile',
             'videos' => $videos,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
@@ -108,7 +107,10 @@ class ThemeUserController extends Controller
             if ($user->username != $input['username']) {
                 $username_exist = User::where('username', '=', $input['username'])->first();
                 if ($username_exist) {
-                    return Redirect::to('user/' . $user->username . '/edit')->with(array('note' => 'Sorry That Username is already in Use', 'note_type' => 'error'));
+                    return Redirect::to('user/' . $user->username . '/edit')->with([
+                        'note' => 'Sorry That Username is already in Use',
+                        'note_type' => 'error'
+                    ]);
                 }
             }
 
@@ -134,7 +136,10 @@ class ThemeUserController extends Controller
 
         if (Auth::user()->username == $username) {
             if (Auth::user()->role == 'admin') {
-                return Redirect::to('/user/' . $username . '/edit')->with(array('note' => 'This user type does not have billing info associated with their account.', 'note_type' => 'warning'));
+                return Redirect::to('/user/' . $username . '/edit')->with([
+                    'note' => 'This user type does not have billing info associated with their account.',
+                    'note_type' => 'warning'
+                ]);
             }
 
             $user = User::where('username', '=', $username)->first();
