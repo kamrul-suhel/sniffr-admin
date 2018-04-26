@@ -7,15 +7,19 @@ use App\Video;
 use Carbon\Carbon as Carbon;
 use App\Http\Controllers\Controller;
 
-class AdminController extends Controller {
+class DashboardController extends Controller
+{
+    const START_DATE = ['2018', '02', '15'];
 
-    const YEAR = '2018';
-    const MONTH = '02';
-    const DAY = '15';
+    /**
+     * @var Carbon
+     */
+    private $startDate;
 
-	public function __construct()
+    public function __construct()
     {
         $this->middleware('admin');
+        $this->startDate = (new Carbon)->create(self::START_DATE[0], self::START_DATE[1], self::START_DATE[2]);
     }
 
     /**
@@ -27,13 +31,12 @@ class AdminController extends Controller {
         $videos = Video::get(['id']);
         $videos_by_state = Video::get(['state'])->groupBy('state');
 
-        $date = new Carbon;
-		$video_traffic = Video::get()->where('created_at', '>', $date->now()->subDays(30))->groupBy(function($date) {
+		$video_traffic = Video::get()->where('created_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function($date) {
 	        return Carbon::parse($date->created_at)->format('m-d'); // grouping by days
 	    });
 
 		// TODO: is this date arbitrary? is it a period?
-	    $video_state_count = Video::get()->where('created_at', '>', $date->create(self::YEAR, self::MONTH, self::DAY))
+	    $video_state_count = Video::get()->where('created_at', '>', $this->startDate)
             ->groupBy('state');
 
 		$settings = config('settings.site');
@@ -51,15 +54,4 @@ class AdminController extends Controller {
 
 		return view('admin.dashboard.index', $data);
 	}
-
-	public function settings_form(){
-		$settings = config('settings.site');
-		$data = array(
-			'settings' => $settings,
-			'user'	=> Auth::user(),
-		);
-
-		return view('admin.settings.index', $data);
-	}
-
 }
