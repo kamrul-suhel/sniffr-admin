@@ -207,17 +207,6 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('user/update', array('uses' => 'Admin\AdminUsersController@update'));
     Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));
 
-    Route::get('menu', 'Admin\AdminMenuController@index');
-    Route::post('menu/store', array('uses' => 'Admin\AdminMenuController@store'));
-    Route::get('menu/edit/{id}', 'Admin\AdminMenuController@edit');
-    Route::post('menu/update', array('uses' => 'Admin\AdminMenuController@update'));
-    Route::post('menu/order', array('uses' => 'Admin\AdminMenuController@order'));
-    Route::get('menu/delete/{id}', array('uses' => 'Admin\AdminMenuController@destroy'));
-
-    Route::get('plugins', 'Admin\AdminPluginsController@index');
-    Route::get('plugin/deactivate/{plugin_name}', 'Admin\AdminPluginsController@deactivate');
-    Route::get('plugin/activate/{plugin_name}', 'Admin\AdminPluginsController@activate');
-
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
     Route::get('failedjobs', 'Admin\AdminLabelController@reviewFailedJobs');
