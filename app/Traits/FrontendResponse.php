@@ -1,17 +1,22 @@
 <?php
-    namespace App\Traits;
 
-trait FrontendResponder {
-    protected function successResponse($data = array()){
+namespace App\Traits;
+
+trait FrontendResponse
+{
+    protected function successResponse($data = array())
+    {
         $data['success'] = '1';
         return response()->json($data);
     }
 
-    protected function errorResponse($message){
-        return response()->json(['error' => 'true', 'error_message' => $message ]);
+    protected function errorResponse($message)
+    {
+        return response()->json(['error' => 'true', 'error_message' => $message]);
     }
 
-    protected function getVideoFieldsForFrontend(){
+    protected function getVideoFieldsForFrontend()
+    {
         $fields = [
             'id',
             'alpha_id',
