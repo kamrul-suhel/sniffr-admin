@@ -33,9 +33,6 @@ use Carbon\Carbon as Carbon;
 
 class AdminVideosController extends Controller
 {
-    // TODO WE SHOULD PROBABLY ADD RULES TO THIS
-    protected $rules = [];
-
     /**
      * AdminVideosController constructor.
      * @param Request $request
@@ -98,7 +95,7 @@ class AdminVideosController extends Controller
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('id', 'DESC')->paginate(24);
+        $videos = $videos->orderBy('created_at', 'DESC')->paginate(24);
 
         $data = [
             'state' => $state,
