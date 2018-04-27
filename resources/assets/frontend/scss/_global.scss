@@ -178,12 +178,33 @@ p {
 /* ************************* Upload video Section style ******************* */
 
 .upload-video-section {
+
   .upload-video-title {
     margin-bottom: $section-title-after-space;
 
     h1 {
       margin: 0 0 $featured-title-space 0;
       color: $upload-video-title-color;
+    }
+  }
+
+  .terms{
+    .input-group {
+      height:auto;
+
+      label {
+        position:static;
+        height:auto;
+        line-height:18px;
+        overflow:inherit;
+        white-space:unset;
+        margin-left:40px;
+      }
+
+      .input-group__input{
+        position:absolute;
+        top:-6px;
+      }
     }
   }
 
@@ -208,8 +229,6 @@ p {
   }
 
   .term-condition-content {
-    padding: 20px;
-    border: 1px solid #777;
   }
 }
 

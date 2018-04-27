@@ -1,6 +1,6 @@
 <template>
     <div class="more-detail-component">
-        <v-form v-model="valid" ref="detail_form">
+        <v-form v-model="valid" ref="detail_form" id="details-form">
 
             <v-container grid-list-lg>
 
@@ -40,6 +40,7 @@
                         <v-text-field
                                 color="dark"
                                 v-model="full_name"
+                                name="full_name"
                                 value=""
                                 label="Name"
                                 hint="Please type your full name"
@@ -50,6 +51,8 @@
                     <v-flex xs12>
                         <v-text-field
                                 v-model="email"
+                                name="email"
+                                type="email"
                                 label="Email"
                                 color="dark"
                                 disabled
@@ -59,6 +62,8 @@
                     <v-flex xs12>
                         <v-text-field
                                 v-model="tel"
+                                name="tel"
+                                type="tel"
                                 value=""
                                 color="dark"
                                 disabled
@@ -107,6 +112,7 @@
                     <v-flex xs12>
                         <v-text-field
                                 v-model="description"
+                                name="description"
                                 label="Please provide us with any other information (what's the story behind your video?)"
                                 color="dark"
                                 multi-line
@@ -117,6 +123,7 @@
                         <v-radio-group
                                 label="Who filmed the video?"
                                 v-model="filmed_by_me"
+                                name="filmed_by_me"
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
                             <v-layout row wrap>
@@ -145,6 +152,7 @@
                         </v-flex>
                         <v-radio-group
                                 v-model="permission"
+                                name="permission"
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
 
@@ -173,6 +181,7 @@
                                 label="Have you submitted this video through any other online form?"
                                 :rules="[v => !!v || 'Field is required']"
                                 v-model="submitted_elsewhere"
+                                name="submitted_elsewhere"
                                 required>
                             <v-layout row wrap>
                                 <v-flex xs12 sm4 md4 lg4>
@@ -197,6 +206,7 @@
                         <v-text-field
                                 label="Where else have you submitted this video?"
                                 v-model="submitted_where"
+                                name="submitted_where"
                                 color="dark"
                                 multi-line>
                         </v-text-field>
@@ -210,6 +220,7 @@
                         <v-checkbox
                                 color="dark"
                                 v-model="contact_is_owner"
+                                name="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required
                         >
@@ -223,6 +234,7 @@
                         <v-checkbox
                                 color="dark"
                                 v-model="allow_publish"
+                                name="allow_publish"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required>
                             <span slot="label">
@@ -236,6 +248,7 @@
                                 color="dark"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
+                                name="is_exclusive"
                                 required>
                             <span slot="label">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</span>
                         </v-checkbox>

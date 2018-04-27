@@ -184,7 +184,7 @@ class ThemeAuthController extends Controller
 		{
 			case PasswordBroker::RESET_LINK_SENT:
 			    if($request->ajax()){
-                    $data = array('success_message' => 'Reset link was sent to your email please check');
+                    $data = array('success_message' => 'We\'ve just sent you a reset password link, please check your email');
                     return $this->successResponse($data);
                 }
 				return Redirect::to('login')->with(array('note' => trans($response), 'note_type' => 'success'));
