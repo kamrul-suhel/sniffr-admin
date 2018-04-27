@@ -61,7 +61,7 @@
 			return {
                 valid:false,
                 user:{
-                    email:''
+                    email:'kamrul@uniled.co.uk'
                 },
                 emailRules: [
                     v => !!v || 'E-mail is required',
@@ -78,7 +78,7 @@
                 loader: null,
 
                 //Password reset section
-                open_dialog : false,
+                open_dialog : true,
                 active_password_reset: false,
                 password_reset_error: false,
                 password_reset_success: false,
@@ -114,6 +114,7 @@
                     axios.post('/password/reset', password_reset_form)
                         .then(response => {
                             let result = response.data;
+                            console.log(result);
 
                             if(!result.error){
                                 // success to send email

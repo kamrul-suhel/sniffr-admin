@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Traits\FrontendResponse;
 use Auth;
+use Illuminate\Contracts\Auth\PasswordBroker;
+use Password;
 use Session;
 use Illuminate\Http\Request;
 use Validator;
@@ -172,16 +174,17 @@ class ThemeAuthController extends Controller
      */
     public function password_request(Request $request)
     {
-        $credentials = ['email' => Input::get('email')];
+        $credentials = ['email' => $request->input('email')];
         $response = Password::sendResetLink($credentials, function($message){
             $message->subject('Password Reset Info');
         });
+
 
 		switch ($response)
 		{
 			case PasswordBroker::RESET_LINK_SENT:
 			    if($request->ajax()){
-                    $data = array('success' => 'Reset link was sent to your email please check');
+                    $data = array('success_message' => 'Reset link was sent to your email please check');
                     return $this->successResponse($data);
                 }
 				return Redirect::to('login')->with(array('note' => trans($response), 'note_type' => 'success'));

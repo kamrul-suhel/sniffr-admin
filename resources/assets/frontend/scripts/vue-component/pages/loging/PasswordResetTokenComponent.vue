@@ -105,10 +105,12 @@
         beforeRouteEnter(to, from, next){
           next();
         },
+
         created() {
             this.token = this.$route.params.token;
             this.getEmail();
         },
+
         methods: {
             onPasswordResetSubmit(){
                 if(this.$refs.password_reset_form.validate()){
@@ -124,6 +126,7 @@
                     let requestUrl = '/password/reset/'+this.token;
                     axios.post(requestUrl, passworchangeform)
                         .then(response => {
+                            console.log(response);
                         })
                         .catch(error => {
                             console.log(error);
