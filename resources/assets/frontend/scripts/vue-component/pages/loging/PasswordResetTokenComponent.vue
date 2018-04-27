@@ -1,5 +1,5 @@
 <template>
-    <!-- VIDEOS ITEM SECTION -->
+    <!-- Password reset section-->
     <div class="">
         <section id="header" class="page-videos">
             <div class="header-content">
@@ -9,7 +9,7 @@
             </div>
         </section>
 
-        <!-- VIDEOS ITEM SECTION -->
+        <!-- Password reset form -->
         <v-container grid-list-xl class="section-space">
             <v-layout row wrap justify-center>
                 <v-form v-model="valid" ref="password_reset_form" @submit.prevent="onPasswordResetSubmit()">
@@ -25,7 +25,7 @@
                                     color="dark"
                                     label="Email"
                                     v-model="email"
-                                    disabled></v-text-field>
+                                    ></v-text-field>
                             </v-flex>
 
                             <v-flex xs12>
@@ -65,9 +65,13 @@
                                         raised
                                         dark
                                         :loading="loading"
-                                        :disabled="loading"
+                                        :disabled="loading || buttonDisable"
                                         @click="onPasswordResetSubmit()"
                                 >Reset password</v-btn>
+                            </v-flex>
+
+                            <v-flex xs12 text-xs-center>
+                                <span v-if="showMessage" :class="[error ? 'red--text' : 'green--text']">{{message}}</span>
                             </v-flex>
 
                         </v-card-text>
@@ -84,8 +88,8 @@
                 // validation & data
                 token:'',
                 email:'',
-                password:'kam',
-                confirm_password:'kam',
+                password:'',
+                confirm_password:'',
                 counter:30,
                 valid:false,
 
@@ -100,42 +104,50 @@
                 //Loading button
                 loading: false,
                 loader: null,
+
+                buttonDisable: false,
+
+                showMessage: false,
+                message: '',
+                error: false
             }
         },
         beforeRouteEnter(to, from, next){
           next();
         },
+
         created() {
             this.token = this.$route.params.token;
-            this.getEmail();
         },
+
         methods: {
             onPasswordResetSubmit(){
                 if(this.$refs.password_reset_form.validate()){
-//                    this.loading = true;
-
                     //collect form data
                     let passworchangeform = new FormData();
+                    passworchangeform.append('email', this.email);
                     passworchangeform.append('password', this.password);
                     passworchangeform.append('password_confirmation', this.password);
                     passworchangeform.append('token', this.token);
 
                     //send request
                     let requestUrl = '/password/reset/'+this.token;
-                    console.log(requestUrl);
                     axios.post(requestUrl, passworchangeform)
                         .then(response => {
-                            console.log(response);
+                            this.showMessage = true;
+                            this.buttonDisable = true;
+                            if(!response.data.error){
+                                this.message = response.data.success_message;
+                            }else{
+                                this.error = true;
+                                this.message = response.data.error_message;
+                            }
                         })
                         .catch(error => {
                             console.log(error);
                         });
 
                 }
-            },
-
-            getEmail(){
-                axios.get();
             }
         }
     }

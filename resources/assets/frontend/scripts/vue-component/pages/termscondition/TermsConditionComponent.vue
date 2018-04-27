@@ -1,15 +1,7 @@
 <template>
     <div class="terms-section">
-        <section id="header" class="page-videos">
-            <div class="header-content">
-                <div class="position-center">
-                    <h1 class="heading">Terms &amp; Conditions</h1>
-                </div>
-            </div>
-        </section>
-
         <!-- Terms & conditions -->
-        <section class="videos-section section-space">
+        <section class="terms-conditions section-space">
             <v-container grid-list-lg>
                 <div>
                     <h2 class="text-center text-uppercase">Terms Of Use</h2>

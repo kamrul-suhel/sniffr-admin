@@ -55,7 +55,6 @@
             getInstagramImage(){
                 axios.get('https://api.instagram.com/oembed/?url=https://www.instagram.com/p/BYzFX1dDVMn/')
                     .then((response) => {
-                    console.log(response);
                 });
                 return '/assets/img/default.jpg';
             },

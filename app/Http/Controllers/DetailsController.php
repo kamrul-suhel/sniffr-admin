@@ -46,7 +46,7 @@ class DetailsController extends Controller
      * @param $code
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function index(Request $request, $code)
+    public function show(Request $request, $code)
     {
         $video = Video::select($this->getVideoFieldsForFrontend())
             ->where('more_details_code', $code)
