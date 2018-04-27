@@ -30,13 +30,13 @@ class Handler extends ExceptionHandler
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $exception
-     * @return void
+     * @param Exception $exception
+     * @return mixed|void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
-        if ($this->shouldReport($exception)) {
+        if (((config('app.env') != 'local')) && $this->shouldReport($exception)) {
             $airbrakeNotifier = \App::make('Airbrake\Notifier');
             $airbrakeNotifier->notify($exception);
         }
@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
