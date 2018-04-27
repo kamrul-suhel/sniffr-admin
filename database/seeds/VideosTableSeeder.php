@@ -74,7 +74,7 @@ class VideosTableSeeder extends Seeder
                 'source' => $referral,
                 'more_details' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
                 'more_details_sent' => (array_search($state, $exclusiveStates)) ? $faker->dateTime() : NULL,
-                'more_details_code' => (array_search($state, $exclusiveStates)) ? 'code' : NULL,
+                'more_details_code' => (array_search($state, $exclusiveStates)) ? $faker->uuid : NULL,
                 'reminders' => NULL,
                 'contact_is_owner' => NULL,
                 'submitted_elsewhere' => NULL,
