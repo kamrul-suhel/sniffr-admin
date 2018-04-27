@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        if (((config('app.env') != 'local')) && $this->shouldReport($exception)) {
+        if ($this->shouldReport($exception)) {
             $airbrakeNotifier = \App::make('Airbrake\Notifier');
             $airbrakeNotifier->notify($exception);
         }
