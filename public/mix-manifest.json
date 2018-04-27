@@ -4,8 +4,5 @@
     "/assets/css/admin.css": "/assets/css/admin.css",
     "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
     "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/frontend/scripts/plugin.js": "/assets/frontend/scripts/plugin.js",
-    "/assets/frontend/sripts/jquery.js": "/assets/frontend/sripts/jquery.js",
-    "/assets/frontend/css/plugin/vuetify.css": "/assets/frontend/css/plugin/vuetify.css",
     "/assets/js/utils.js": "/assets/js/utils.js"
 }
