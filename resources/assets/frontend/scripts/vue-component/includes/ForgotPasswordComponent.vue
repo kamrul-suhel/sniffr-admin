@@ -121,7 +121,7 @@
                                     this.loading = false;
 
                                     this.password_reset_success = true;
-                                    this.password_reset_text = result.success;
+                                    this.password_reset_text = result.success_message;
                                     this.active_password_reset = true;
                                     this.$refs.forgot_password_form.reset();
 
@@ -143,7 +143,7 @@
                                 setTimeout(() => {
                                     this.loading = false;
                                     this.password_reset_error = true;
-                                    this.password_reset_text = result.error;
+                                    this.password_reset_text = result.error_message;
                                     this.active_password_reset = true;
                                 }, 1000);        
                             }

@@ -12,13 +12,14 @@
                         <h2 class="text-center text-uppercase">Your Contact Details</h2>
                     </div>
 
-                    <v-form v-model="valid" ref="form">
+                    <v-form v-model="valid" ref="form" id="upload-form">
                         <v-container grid-list-lg>
                             <v-layout row wrap>
                                 <v-flex xs12>
                                     <v-text-field
                                             label="Full Name:"
                                             v-model="full_name"
+                                            name="full_name"
                                             :rules="nameRules"
                                             color="dark"
                                             required
@@ -29,6 +30,8 @@
                                     <v-text-field
                                             label="Email Address:"
                                             v-model="email"
+                                            name="email"
+                                            type="email"
                                             :rules="emailRules"
                                             color="dark"
                                             required
@@ -42,6 +45,8 @@
                                     <v-text-field
                                             label="Phone Number"
                                             v-model="tel"
+                                            name="tel"
+                                            type="tel"
                                             color="dark"
                                     ></v-text-field>
                                 </v-flex>
@@ -50,6 +55,7 @@
                                     <v-text-field
                                             label="Video title"
                                             v-model="title"
+                                            name="title"
                                             color="dark"
                                             :rules="[v => !!v || 'Title is required', (v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
@@ -85,6 +91,7 @@
                                     <input
                                             color="dark"
                                             type="file"
+                                            name="file"
                                             style="display:none;"
                                             ref="inputfile"
                                             accept="video/mp4,video/x-m4v,video/*"
@@ -96,6 +103,7 @@
                                             color="dark"
                                             label="Video link/URL"
                                             v-model="url"
+                                            name="url"
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -196,11 +204,12 @@
                         <v-container grid-list-lg>
                             <v-layout row wrap>
 
-                                <v-flex xs12 pb-0>
+                                <v-flex xs12 pb-0 class="terms">
                                     <v-checkbox
                                             v-model="terms_condition"
                                             :rules="[v => !!v || 'You must agree to continue']"
                                             color="dark"
+                                            name="terms"
                                             required
                                     >
                                         <span slot="label">I agree to the above <a :href="termslink" target="_blank">terms and conditions</a></span>

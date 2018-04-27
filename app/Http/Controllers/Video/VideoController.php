@@ -71,9 +71,7 @@ class VideoController extends Controller
     }
 
     /**
-     * Returns the form with no page wrapper
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function form()
     {

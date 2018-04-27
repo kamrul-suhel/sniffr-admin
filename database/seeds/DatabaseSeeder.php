@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             LegalTermsSeeder::class,
             TagsTableSeeder::class,
             TagVideoTableSeeder::class,
+            YoutubeAccessTableSeeder::class,
         ]);
     }
 }

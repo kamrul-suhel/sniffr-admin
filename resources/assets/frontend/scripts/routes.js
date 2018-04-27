@@ -4,7 +4,6 @@ import VideoDetailComponent from './vue-component/pages/videos/VideoDetailCompon
 import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
 import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
-import PasswordResetComponent from './vue-component/pages/loging/PasswordResetComponent.vue';
 import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
 import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
@@ -77,7 +76,7 @@ export const routes = [
     {
         path: '/password/reset',
         name: 'reset_password',
-        component: PasswordResetComponent
+        component: PasswordResetTokenComponent
     },
 
     {

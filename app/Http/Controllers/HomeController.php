@@ -31,8 +31,12 @@ class HomeController extends Controller
     {
         if ($request->ajax() || $request->isJson()) {
             $data = [
-                'videos' => Video::where('state', 'licensed')
-                    ->orderBy('id', 'DESC')
+                'videos' => Video::where(function ($query) {
+                    $query->where([['state', 'licensed'], ['active', 1], ['featured', 1]])
+                        ->orWhere('state', 'licensed')->orderBy('licensed_at', 'DESC');
+                })
+                    ->orderBy('featured', 'DESC')
+                    ->orderBy('licensed_at', 'DESC')
                     ->limit(12)
                     ->get()
             ];

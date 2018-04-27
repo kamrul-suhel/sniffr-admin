@@ -44,7 +44,6 @@ const actions = {
                 })
                 .catch((error) => {
                     console.log('Not connect');
-                    console.log(error);
                     reject();
             });
         });
