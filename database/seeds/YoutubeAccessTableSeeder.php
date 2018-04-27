@@ -14,7 +14,7 @@ class YoutubeAccessTableSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        \DB::table('users')->insert([
+        \DB::table('youtube_access_tokens')->insert([
             [
                 'access_token' => 'ya29.Gl2nBefoVnCXvox0TSmppbH8eTe5f6OFgs9nUH6omMQfTUySfHml9ycCkxaMuA5quBadAy73U9_LlwoMcd_qnuCYIsufx8eALCI7g5t4uAr6-PUVJigMsaHHED9ZBIs',
                 'created_at' => $faker->dateTime(),
