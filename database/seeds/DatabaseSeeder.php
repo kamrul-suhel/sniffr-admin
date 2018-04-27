@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             CampaignsTableSeeder::class,
             CampaignVideoTableSeeder::class,
             CommentsTableSeeder::class,
-            DownloadsTableSeeder::class,
+            //DownloadsTableSeeder::class, not being used now
             FavoritesTableSeeder::class,
             MenuTableSeeder::class,
             PagesTableSeeder::class,
