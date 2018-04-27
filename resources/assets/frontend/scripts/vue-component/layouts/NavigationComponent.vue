@@ -105,7 +105,9 @@
                 if(to.name != 'home'){
                     this.nav_background = true;
                 }else{
-                    this.nav_background = false;
+                    setTimeout(() => {
+                        this.nav_background = false;
+                    }, 800);
                 }
                 // see user status
                 this.$store.dispatch('getLoginStatus').then((response) => {

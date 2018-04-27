@@ -4,7 +4,8 @@
  ********************************************************
  */
 
-window.Vue = require('vue');
+// window.Vue = require('vue');
+import Vue from "vue";
 import Vuetify from 'Vuetify';
 import Vuerouter from 'vue-router';
 
