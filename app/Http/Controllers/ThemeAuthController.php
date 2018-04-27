@@ -208,20 +208,19 @@ class ThemeAuthController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function password_reset_token($token)
+	public function password_reset_token(Request $request, $token)
 	{
 		$data = [
-			'type' => 'reset_password',
 			'token' => $token,
-			'menu' => Menu::orderBy('order', 'ASC')->get(),
-			'payment_settings' => config('settings.payments'),
-			'video_categories' => VideoCategory::all(),
 			'theme_settings' => config('settings.theme'),
-			'pages' => Page::where('active', '=', 1)->get(),
         ];
+
+		if($request->ajax()){
+        }
 
 	  return view('frontend.master', $data);
 	}
@@ -232,23 +231,32 @@ class ThemeAuthController extends Controller
      */
     public function password_reset_post(Request $request)
     {
-        $credentials = $credentials = array(
-            'email' => Input::get('email'),
-            'password' => Input::get('password'),
-            'password_confirmation' => Input::get('password_confirmation'),
-            'token' => Input::get('token')
-        );
+        $credentials = $credentials = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'password_confirmation' => $request->input('password_confirmation'),
+            'token' => $request->input('token')
+        ];
 
         $response = Password::reset($credentials, function ($user, $password) {
             $user->password = \Hash::make($password);
             $user->save();
         });
 
+
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
-                return Redirect::to('login')->with(array('note' => 'Your password has been successfully reset. Please login below', 'note_type' => 'success'));
+                if($request->ajax()){
+                    return $this->successResponse(['success_message' => 'Your password has been successfully reset. Please login']);
+                }
+
+                return Redirect::to('login')->with(array('note' => 'Your password has been successfully reset. Please login ', 'note_type' => 'success'));
 
             default:
+                if($request->ajax()){
+                    return $this->errorResponse(trans($response));
+                }
+
                 return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
         }
     }

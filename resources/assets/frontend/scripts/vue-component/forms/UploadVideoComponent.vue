@@ -12,7 +12,7 @@
                         <h2 class="text-center text-uppercase">Your Contact Details</h2>
                     </div>
 
-                    <v-form v-model="valid" ref="form">
+                    <v-form v-model="valid" ref="form" id="upload-form">
                         <v-container grid-list-lg>
                             <v-layout row wrap>
                                 <v-flex xs12>

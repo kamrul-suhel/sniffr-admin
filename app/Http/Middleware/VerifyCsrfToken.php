@@ -18,6 +18,6 @@ class VerifyCsrfToken extends Middleware
         'upload',
         'upload/form',
         'videocheck',
-        'password/reset'
+        'password/reset/*',
     ];
 }
