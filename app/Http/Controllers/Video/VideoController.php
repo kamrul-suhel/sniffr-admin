@@ -248,7 +248,7 @@ class VideoController extends Controller
         $isJson = $request->ajax() || $request->isJson();
 
         //Make sure video is active
-        if ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed') {
+        if (($video) && ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed')) {
             $favorited = false;
             $downloaded = false;
             $iFrame = $this->getVideoHtml($video, true);
