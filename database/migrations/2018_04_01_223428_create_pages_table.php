@@ -14,7 +14,6 @@ class CreatePagesTable extends Migration
             $table->string('slug')->nullable();
             $table->text('body');
             $table->boolean('active')->default(1);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

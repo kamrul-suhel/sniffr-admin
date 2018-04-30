@@ -8,10 +8,11 @@ class CreateCampaignVideoTable extends Migration
     public function up()
     {
         Schema::create('campaign_video', function (Blueprint $table) {
-            $table->integer('video_id')->unsigned();
-            $table->integer('campaign_id')->unsigned();
-            $table->string('state');
-            $table->timestamps();
+            $table->integer('video_id')->unsigned()->nullable();
+            $table->integer('campaign_id')->unsigned()->nullable();
+            $table->string('state')->nullable();
+            $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent();
         });
     }
 
