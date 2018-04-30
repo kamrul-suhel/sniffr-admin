@@ -33,6 +33,7 @@
         "moment": "^2.22.1",
         "nestable2": "^1.6.0",
         "noty": "^2.1.0",
+        "popper.js": "^1.12",
         "raphael": "^2.2.7",
         "rickshaw": "^1.6.5",
         "rrssb": "^1.14.0",
@@ -41,7 +42,6 @@
         "tinymce": "^4.7.11",
         "toastr": "^2.1.4",
         "video_background": "^1.0.2",
-        "popper.js": "^1.12",
         "vue": "^2.5.16",
         "vue-router": "^3.0.1",
         "vuetify": "^1.0.17",
@@ -58,6 +58,7 @@
         "npm": "^5.6.0",
         "select2": "^4.0.6-rc.1",
         "twitter-widgets": "^1.0.0",
-        "video.js": "^6.9.0"
+        "video.js": "^6.9.0",
+        "vue-template-compiler": "^2.5.16"
     }
 }
