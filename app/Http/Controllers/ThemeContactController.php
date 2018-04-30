@@ -31,7 +31,7 @@ class ThemeContactController extends Controller
     {
         if ($request->ajax()) {
             if ($request->input('key')) {
-                $contact = Contact::where('email', $request->input('key'))->first();
+                $contact = Contact::where('email', base64_decode(Input::get('key')))->first();
                 if (isset($contact)) {
                     $contact->delete();
                     if (isset($contact->videos)) {
