@@ -1,7 +1,7 @@
 <template>
     <v-flex xs12 sm6 md4 lg4 xl4>
         <v-card class="block">
-            <v-card-media height="200px"
+            <v-card-media class="sniffr-media-thumbnail"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <a
                 @click.stop="goToDetail(video)"
@@ -23,7 +23,7 @@
 
             <v-card-title class="pb-0">
                 <h3 class="headline mb-0">
-                    {{ video.title | readmore(20, '...') }}
+                    {{ video.title }}
                 </h3>
             </v-card-title>
 
