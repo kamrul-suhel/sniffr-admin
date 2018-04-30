@@ -229,12 +229,15 @@ class AdminVideosController extends Controller
             'post_route' => url('admin/videos/store'),
             'button_text' => 'Add New Video',
             'user' => Auth::user(),
+            'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
             'users' => User::all(),
+            'video' => null
         ];
+
         return view('admin.videos.create_edit', $data);
     }
 
@@ -352,31 +355,39 @@ class AdminVideosController extends Controller
     {
         $video = Video::where('alpha_id', $id)->withTrashed()->first();
 
-        if(!empty($video)) {
-            $video_state = (Input::get('previous_state') ? Input::get('previous_state') : $video->state);
-            $next = Video::where('id', '<', $video->id)->where('state', '=', $video_state)->orderBy('id','desc')->first();
-            $previous = Video::where('id', '>', $video->id)->where('state', '=', $video_state)->orderBy('id','asc')->first();
-
-            $data = [
-                'headline' => '<i class="fa fa-edit"></i> Edit Video',
-                'video' => $video,
-                'previous' => $previous,
-                'next' => $next,
-                'post_route' => url('admin/videos/update'),
-                'button_text' => 'Update Video',
-                'user' => Auth::user(),
-                'video_categories' => VideoCategory::all(),
-                'video_collections' => VideoCollection::all(),
-                'video_shottypes' => VideoShotType::all(),
-                'video_campaigns' => Campaign::all(),
-                'users' => User::all(),
-            ];
+        if (!$video) {
+            return Redirect::to('admin/videos/')->with([
+                'note' => 'Sorry, we could not find the video',
+                'note_type' => 'error'
+            ]);
         }
 
-        return (!empty($video) ? view('admin.videos.create_edit', $data) : Redirect::to('admin/videos/')->with([
-            'note' => 'Sorry, we could not find the video',
-            'note_type' => 'error'
-        ]));
+        $video_state = (Input::get('previous_state') ? Input::get('previous_state') : $video->state);
+        $next = Video::where('id', '<', $video->id)->where('state', '=', $video_state)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $previous = Video::where('id', '>', $video->id)
+            ->where('state', '=', $video_state)
+            ->orderBy('id', 'asc')->first();
+
+        $data = [
+            'headline' => '<i class="fa fa-edit"></i> Edit Video',
+            'video' => $video,
+            'previous' => $previous,
+            'next' => $next,
+            'post_route' => url('admin/videos/update'),
+            'button_text' => 'Update Video',
+            'user' => Auth::user(),
+            'contacts' => Contact::all(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
+            'video_shottypes' => VideoShotType::all(),
+            'video_campaigns' => Campaign::all(),
+            'users' => User::all(),
+        ];
+
+        return view('admin.videos.create_edit', $data);
     }
 
     /**
