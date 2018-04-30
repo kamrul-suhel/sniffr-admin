@@ -1,5 +1,6 @@
 <?php
 
+use App\Client;
 use App\Download;
 use App\User;
 use App\Video;
@@ -16,7 +17,7 @@ class DownloadsTableSeeder extends Seeder
     {
         $faker = Faker::create();
         $userIds = User::pluck('id')->toArray();
-        $clientIds = User::pluck('id')->toArray();
+        $clientIds = Client::pluck('id')->toArray();
         $videoIds = Video::pluck('id')->toArray();
         $downloadTypes = config('site.downloads.types');
 

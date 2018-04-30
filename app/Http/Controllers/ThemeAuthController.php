@@ -119,15 +119,18 @@ class ThemeAuthController extends Controller
                 $response_data['error'] = false;
                 return $this->successResponse($response_data);
             }
-            return Redirect::to($redirect)->with(array('note' => 'You have been successfully logged in.', 'note_type' => 'success'));
+            return Redirect::to($redirect)->with([
+                'note' => 'You have been successfully logged in.',
+                'note_type' => 'success'
+            ]);
         }
 
         $redirect = (Input::get('redirect')) ? '?redirect=' . Input::get('redirect') : '';
         // auth failure! redirect to login with errors
-        $error = array(
+        $error = [
             'note' => 'Invalid login, please try again.',
             'note_type' => 'error'
-        );
+        ];
 
         if($request->ajax()){
             return $this->errorResponse('Invalid login, please try again.');
@@ -147,7 +150,10 @@ class ThemeAuthController extends Controller
             $data = ['success' => 'You are successfully logout'];
             return $this->successResponse($data);
         }
-		return Redirect::to('/')->with(array('note' => 'You have been successfully logged out', 'note_type' => 'success'));
+		return Redirect::to('/')->with([
+		    'note' => 'You have been successfully logged out',
+            'note_type' => 'success'
+        ]);
 	}
 
     /**
@@ -184,16 +190,22 @@ class ThemeAuthController extends Controller
 		{
 			case PasswordBroker::RESET_LINK_SENT:
 			    if($request->ajax()){
-                    $data = array('success_message' => 'We\'ve just sent you a reset password link, please check your email');
+                    $data = ['success_message' => 'We\'ve just sent you a reset password link, please check your email'];
                     return $this->successResponse($data);
                 }
-				return Redirect::to('login')->with(array('note' => trans($response), 'note_type' => 'success'));
+				return Redirect::to('login')->with([
+				    'note' => trans($response),
+                    'note_type' => 'success'
+                ]);
 
 			case PasswordBroker::INVALID_USER:
                 if($request->ajax()){
                     return $this->errorResponse('User is not found in our database');
                 }
-				return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
+				return redirect()->back()->with([
+				    'note' => trans($response),
+                    'note_type' => 'error'
+                ]);
 		}
 	}
 
@@ -247,17 +259,25 @@ class ThemeAuthController extends Controller
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
                 if($request->ajax()){
-                    return $this->successResponse(['success_message' => 'Your password has been successfully reset. Please login']);
+                    return $this->successResponse([
+                        'success_message' => 'Your password has been successfully reset. Please login'
+                    ]);
                 }
 
-                return Redirect::to('login')->with(array('note' => 'Your password has been successfully reset. Please login ', 'note_type' => 'success'));
+                return Redirect::to('login')->with([
+                    'note' => 'Your password has been successfully reset. Please login ',
+                    'note_type' => 'success'
+                ]);
 
             default:
                 if($request->ajax()){
                     return $this->errorResponse(trans($response));
                 }
 
-                return redirect()->back()->with(array('note' => trans($response), 'note_type' => 'error'));
+                return redirect()->back()->with([
+                    'note' => trans($response),
+                    'note_type' => 'error'
+                ]);
         }
     }
 }
