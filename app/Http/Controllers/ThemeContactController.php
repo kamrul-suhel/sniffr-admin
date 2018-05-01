@@ -11,14 +11,14 @@ class ThemeContactController extends Controller
 {
     use FrontendResponse;
 
-    public function index(Request $request, $email)
+    public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            $contact = Contact::where('email', base64_decode(Input::get('key')))->first();
+            $contact = Contact::where('email', base64_decode($request->email))->first();
             $data = [
                 'contact' => $contact,
             ];
-
             if ($contact) {
                 return $this->successResponse($data);
             }
