@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'uploads_url' => '/content/uploads/',
-    'uploads_dir' => '/content/uploads/',
+    'uploads_url' => '/assets/admin/images/',
+    'uploads_dir' => '/assets/admin/images/',
     'media_upload_function' => 'ImageHandler::upload',
     'num_results_per_page' => 15,
     'downloads' => [

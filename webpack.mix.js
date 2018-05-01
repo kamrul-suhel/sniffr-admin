@@ -48,10 +48,14 @@ mix.js([
 
 //Copying file from resource folder to public
 
-// mix.copy(
-//     'resources/assets/frontend/images',
-//     'public/assets/frontend/images/'
-// );
+mix.copy(
+    'resources/assets/frontend/images',
+    'public/assets/frontend/images/'
+);
+mix.copy(
+    'resources/assets/admin/images',
+    'public/assets/admin/images/'
+);
 
 /*
 * ******************************************
