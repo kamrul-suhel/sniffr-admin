@@ -153,7 +153,8 @@
 
         <v-dialog
                 v-model="uplod_progress"
-                max-width="500px" >
+                max-width="500px"
+                persistent>
             <v-card class="upload-dialog">
                 <v-card-title>
                     <v-container>

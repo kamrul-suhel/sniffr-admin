@@ -33,6 +33,11 @@ const LoginEventBus = new Vue({
         closePasswordresetDialog() {
             this.password_reset_dialog = false;
             this.$emit('closePasswordresetDialog', this.password_reset_dialog);
+        },
+
+        logoutStateChange(){
+            this.is_login = false;
+            this.$emit('logoutChangeState');
         }
     }
 });

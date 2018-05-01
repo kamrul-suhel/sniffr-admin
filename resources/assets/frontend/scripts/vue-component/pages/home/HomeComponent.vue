@@ -102,7 +102,38 @@
             }
         },
 
+        watch: {
+            // Detach which page and set navigation background
+            $route(to, from, next){
+                if(to.name != 'home'){
+                    this.nav_background = true;
+                }else{
+                    setTimeout(() => {
+                        this.nav_background = false;
+                    }, 800);
+                }
+                // see user status
+                this.$store.dispatch('getLoginStatus').then((response) => {
+                    this.is_login = this.$store.getters.isUserLogin;
+                    if(this.is_login){
+                        this.user = this.$store.getters.getUser;
+                    }
+                });
+            }
+        },
+
         methods: {
+            onLogout(){
+                this.$store.dispatch('userLogout')
+                    .then((response) => {
+                        this.logout = true;
+                        this.is_login = this.$store.getters.isUserLogin;
+                        setTimeout(() => {
+                            this.logout = false;
+                        }, 3500);
+                    });
+            },
+
             onUploadVideo(){
                 this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
                 setTimeout(() => {
@@ -112,10 +143,18 @@
 
             onLoginClick() {
                 LoginEventBus.openLoginDialog();
+            },
+
+            logoutStateChange() {
+                this.is_login = false;
             }
         },
 
         created(){
+            LoginEventBus.$on('logoutChangeState', () => {
+                this.is_login = false;
+            });
+
             //Get user data
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;

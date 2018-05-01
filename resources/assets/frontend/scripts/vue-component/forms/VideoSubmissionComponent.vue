@@ -14,6 +14,7 @@
                                     <v-text-field
                                             label="Full Name:"
                                             v-model="full_name"
+                                            name="full_name"
                                             :rules="nameRules"
                                             color="dark"
                                             required
@@ -24,6 +25,7 @@
                                     <v-text-field
                                             label="Email Address:"
                                             v-model="email"
+                                            name="email"
                                             :rules="emailRules"
                                             color="dark"
                                             required
@@ -41,6 +43,7 @@
                                     <v-text-field
                                             label="Video title"
                                             v-model="title"
+                                            name="title"
                                             color="dark"
                                             :rules="[v => !!v || 'Title is required']"
                                             required
@@ -52,6 +55,7 @@
                                             color="dark"
                                             label="Video link/URL"
                                             v-model="url"
+                                            name="url"
                                     ></v-text-field>
 
                                     <span v-if="error" class="red--text">Upload your file or provide a links please</span>
@@ -76,6 +80,7 @@
 
                                     <input
                                             type="file"
+                                            name="file"
                                             style="display:none;"
                                             ref="inputfile"
                                             accept="video/mp4,video/x-m4v,video/*"
@@ -148,8 +153,8 @@
                                 <v-flex xs12>
                                     <v-text-field
                                             v-model="credit"
-                                            label="Credit link"
                                             name="credit"
+                                            label="Credit link"
                                             hint="Credits are placed in the pinned comment (unless alternative method is agreed)"
                                             color="dark"
                                     ></v-text-field>
@@ -158,8 +163,8 @@
                                 <v-flex xs12>
                                     <v-text-field
                                             v-model="referrer"
-                                            label="Unilad Referrer"
                                             name="referrer"
+                                            label="Unilad Referrer"
                                             hint="Who at UNILAD asked you to fill in this form?"
                                             color="dark">
 
@@ -177,6 +182,7 @@
                                     <v-checkbox
                                             label="I agree to the above terms and conditions"
                                             v-model="terms_condition"
+                                            name="terms_condition"
                                             :rules="[v => !!v || 'You must agree to continue']"
                                             color="dark"
                                             required
@@ -256,6 +262,7 @@
             credit:'',
             referrer:'',
             terms_condition:'',
+            source:'',
             nameRules: [
                 v => !!v || 'Name is required'
             ],
@@ -274,7 +281,7 @@
             thank_you_dialog: false,
         }),
         created() {
-
+            this.setSourceField();
         },
 
 
@@ -339,6 +346,7 @@
                 form.append('notes', this.notes);
                 form.append('credit', this.credit);
                 form.append('referrer', this.referrer);
+                form.append('source', this.source);
 
                 //show the uploading dialog box
                 this.uplod_progress = true;
@@ -374,6 +382,14 @@
                         console.log(error);
                         console.log('FAILURE!!');
                     });
+            },
+
+            setSourceField(){
+                if(this.$route.query.source){
+                    this.source = this.$route.query.source;
+                }
+
+                this.setTermsLink();
             }
         }
     }
