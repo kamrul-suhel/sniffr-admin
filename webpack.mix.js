@@ -44,6 +44,13 @@ mix.js([
 ], 'public/assets/frontend/scripts/scripts.js');
 
 
+//Copying file from resource folder to public
+
+mix.copy(
+    'resources/assets/frontend/images',
+    'public/assets/frontend/images/'
+);
+
 /*
 * ******************************************
     End frontend script and scss

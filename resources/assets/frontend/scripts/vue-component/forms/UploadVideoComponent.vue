@@ -139,9 +139,7 @@
                                            :loading="validete_email_progress"
                                            :disabled="validete_email_progress"
                                            @click="onSubmit()"
-                                    >
-                                        Submit your video
-                                    </v-btn>
+                                    >Submit your video</v-btn>
 
                                 </v-flex>
                             </v-layout>
