@@ -4,7 +4,7 @@
             <v-layout row wrap>
                 <v-flex xs12>
                     <div>
-                        <h2 class="text-center">Your Contact Details</h2>
+                        <h2 class="text-center text-uppercase">Your Contact Details</h2>
                     </div>
 
                     <v-form v-model="valid" ref="form">
@@ -36,7 +36,7 @@
 
                             <v-layout row wrap>
                                 <v-flex xs12 text-xs-center>
-                                    <h2 class="text-xs-center">Your video details</h2>
+                                    <h2 class="text-xs-center text-uppercase">Your video details</h2>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -45,8 +45,8 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :rules="[v => !!v || 'Title is required']"
-                                            required
+                                            :rules="[(v) => v.length <= 140 || 'Max 140 characters']"
+                                            :counter="140"
                                     ></v-text-field>
                                 </v-flex>
 
@@ -57,8 +57,6 @@
                                             v-model="url"
                                             name="url"
                                     ></v-text-field>
-
-                                    <span v-if="error" class="red--text">Upload your file or provide a links please</span>
                                 </v-flex>
                             </v-layout>
 
@@ -67,7 +65,8 @@
                                     <v-btn
                                             dark
                                             raised
-                                            class="{error: error}"
+                                            :class="{error: error}"
+                                            class="ml-0"
                                             @click="onPickFile()">
                                         Upload your video <v-icon dark right>system_update_alt</v-icon>
                                     </v-btn>
@@ -90,53 +89,6 @@
 
                             </v-layout>
                         </v-container>
-
-                        <v-container grid-list-lg>
-
-                            <div class="term-condition-content scroll-y term-condition"
-                                 style="max-height: 250px"
-                                 id="scroll-target">
-                                <v-layout row wrap>
-                                    <v-flex class="text-xs-center">
-                                        <h2>Terms &amp; Conditions</h2>
-                                    </v-flex>
-                                </v-layout>
-
-                                <v-layout row wrap
-                                          column
-                                          align-center
-                                          justify-center
-                                          v-scroll:#scroll-target="onScroll">
-
-                                    <v-flex xs12>
-
-                                        <h4>Ownership</h4>
-                                        <p>I certify that I am the sole owner of all intellectual property rights for this video or have the express permission of the rights holder to submit this video to UNILAD for exclusive publishing on UNILAD.</p>
-                                        <p>I agree to submit and licence this video and its content to UNILAD and their associated companies for their use at their sole discretion, in exchange for entry into their £300 monthly prize draw.</p>
-
-                                        <h4>Video Publishing Acknowledgement</h4>
-                                        <p>I understand that the video I am submitting may be published to UNILAD web properties including, but not limited to, YouTube, UNILAD.co.uk, Twitter, Facebook, and any other avenues of promotion, as determined by UNILAD according to the terms of this agreement, which I have read and agree to.</p>
-
-                                        <h4>Exclusive Licensing</h4>
-                                        <p>I agree that UNILAD as the ‘License Holder’ be granted the exclusive, unlimited right to use, and to exhibit, distribute, and hereafter devise, in any manner upon all UNILAD platforms throughout the world, in perpetuity, for any purpose whatsoever as UNILAD in its sole discretion may determine (the “Licensed Rights”). I do hereby irrevocably appoint UNILAD as its attorney-in-fact in relation to the rights over these images.</p>
-                                        <p>I certify that I act with full lawful authority to grant this license, and warrant that there has not been any previous grant of any other license to third parties in relation to these images and it is expressly understood that UNILAD has not assumed any obligations under any other contracts entered into by myself.</p>
-                                        <p>I further undertake not to enter any future agreements over this content with any third parties, as required by the exclusivity of this agreement and will promptly forward any communications regarding my content to UNILAD, as the new License Holder.</p>
-                                        <p>I hereby agree to indemnify, release and hold harmless UNILAD, its successors, in any action arising from the use of the images, resulting from any breach by Licensor of any warranty, representation or any other provision of these Terms.</p>
-
-                                        <h4>Publicity/Confidentiality</h4>
-                                        <p>I shall not release, or cause the release, of any information concerning the Licensed Rights, UNILAD or the terms of this License. I will inform UNILAD if there are any changes to my personal details for the duration of this agreement. UNILAD undertakes to maintain personal details confidentially and in accordance with all relevant data protection laws and the Privacy Policy available on our Website and incorporated herein.</p>
-
-                                        <h4>Terms &amp; Services</h4>
-                                        <p>I acknowledged, understands and agree to the additional terms and services displayed on the UNILAD website which are incorporated herein by this reference and subject to change.</p>
-
-                                        <h4>Termination Clause</h4>
-                                        <p>The License shall only be terminable upon the mutual agreement of the parties with 5 months’ notice, I agree to indemnify UNILAD for any losses from third party contracts arising due to termination. Termination will have no effect on any prior use or treatment of the images by UNILAD, which may continue in perpetuity.</p>
-                                        <p>I understand that participation in the UNILAD video system is at will and I agree that this license may only be terminated by mutual agreement between UNILAD and I as set out above.</p>
-                                    </v-flex>
-                                </v-layout>
-                            </div>
-                        </v-container>
-
 
                         <v-container grid-list-lg>
                             <v-layout row wrap>
@@ -174,19 +126,27 @@
                         </v-container>
 
 
+                        <v-container grid-list-lg>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <h2 class="text-xs-center text-uppercase">Terms &amp; Conditions</h2>
+                                </v-flex>
+                            </v-layout>
+                        </v-container> <!-- End container -->
 
                         <v-container grid-list-lg>
                             <v-layout row wrap>
 
-                                <v-flex xs12 pb-0>
+                                <v-flex xs12 pb-0 class="terms">
                                     <v-checkbox
-                                            label="I agree to the above terms and conditions"
                                             v-model="terms_condition"
-                                            name="terms_condition"
                                             :rules="[v => !!v || 'You must agree to continue']"
                                             color="dark"
+                                            name="terms"
                                             required
-                                    ></v-checkbox>
+                                    >
+                                        <span slot="label">I agree to the above <a :href="termslink" target="_blank" class="dark--text">terms and conditions</a></span>
+                                    </v-checkbox>
                                 </v-flex>
 
                                 <v-flex xl2 text-xs-right pa-0>
@@ -197,7 +157,7 @@
                                             color="dark"
                                             v-if="validete_email_progress"></v-progress-circular>
 
-                                    <v-btn dark @click="onSubmit()">Submit your file</v-btn>
+                                    <v-btn dark @click="onSubmit()">Submit your video</v-btn>
 
                                 </v-flex>
                             </v-layout>
@@ -207,7 +167,7 @@
             </v-layout>
         </v-container>
 
-        <v-dialog v-model="uplod_progress" max-width="500px">
+        <v-dialog v-model="uplod_progress" max-width="500px" persistent>
             <v-card class="upload-dialog">
                 <v-card-title>
                     <v-container >
@@ -261,12 +221,14 @@
             notes:'',
             credit:'',
             referrer:'',
-            terms_condition:'',
             source:'',
+            terms_condition: false,
+            termslink:'',
+
             nameRules: [
                 v => !!v || 'Name is required'
             ],
-            email: 'test@unilad.co.uk',
+            email: '',
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
@@ -390,6 +352,16 @@
                 }
 
                 this.setTermsLink();
+            },
+
+            setTermsLink(){
+
+                if(this.source === ''){
+                    this.termslink = '/terms';
+                    return;
+                }
+
+                this.termslink = 'https://www.unilad.co.uk/terms-use'
             }
         }
     }

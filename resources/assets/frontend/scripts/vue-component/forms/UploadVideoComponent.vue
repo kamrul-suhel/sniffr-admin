@@ -57,7 +57,7 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :rules="[v => !!v || 'Title is required', (v) => v.length <= 140 || 'Max 140 characters']"
+                                            :rules="[(v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
                                     ></v-text-field>
                                 </v-flex>

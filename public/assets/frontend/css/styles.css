@@ -1211,3 +1211,7 @@ p {
 .submission-form-page .term-condition-content {
   padding: 20px;
 }
+
+.upload-video-section .terms label a {
+  color: #000;
+}
