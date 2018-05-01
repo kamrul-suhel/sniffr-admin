@@ -13,7 +13,7 @@
 
     <title>{{ $settings['website_name'] . ' - ' . $settings['website_description'] }}</title>
 
-    <link rel="stylesheet" href="{{ '/assets/css/admin.css' }}">
+    <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
 
     <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
@@ -23,7 +23,7 @@
 <body class="page-body skin-black">
 
 <a href="{{ url('/') }}" class="top-left-logo">
-    <img src="/content/uploads/settings/logo-sniffr-white.png">
+    <img src="/assets/frontend/images/logo-sniffr-white.png">
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
