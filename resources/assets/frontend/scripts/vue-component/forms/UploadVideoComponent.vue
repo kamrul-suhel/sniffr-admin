@@ -38,7 +38,7 @@
                                             required
                                     ></v-text-field>
 
-                                    <div class="email-validation red--text">Are you sure this is correct?</div>
+                                    <div class="email-validation red--text" v-if="email_optional_error">Are you sure this is correct?</div>
                                 </v-flex>
 
                             </v-layout>
@@ -60,7 +60,6 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :rules="[(v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
                                     ></v-text-field>
                                 </v-flex>
@@ -213,7 +212,7 @@
             title: '',
             url: '',
             file: '',
-            terms_condition: false,
+            terms_condition: true,
             nameRules: [
                 v => !!v || 'Full name is required'
             ],
@@ -235,6 +234,8 @@
             validate_email_error: false,
             upload_error_msg: '',
             thank_you_dialog: false,
+
+            email_optional_error: false,
 
             //terms & condition
             termslink:''
@@ -318,11 +319,7 @@
                             'Content-Type': 'multipart/form-data',
                             'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN': this.csrf_token
-                        },
-                        onUploadProgress: function (progressEvent) {
-                            this.progressbar = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-                            console.log(this.progressbar);
-                        }.bind(this)
+                        }
                     }
                 )
                     .then(response => {
@@ -336,6 +333,7 @@
                             this.uplod_progress = false;
 
                             // clear form data
+
                             this.$refs.form.reset();
                             this.file_name = '';
                             setTimeout(() => {
@@ -362,34 +360,18 @@
             },
 
             setTermsLink(){
-
                 if(this.source === ''){
                     this.termslink = '/terms';
                     return;
                 }
 
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
-
-
             },
 
             checkEmailfield(email){
-              console.log(email);
-            },
-
-            validateEmail(){
-                $('#email').on('change', function(e) {
-                    var target = $( e.target ).val();
-                    if (target.toLowerCase().indexOf(".con") >= 0 || target.toLowerCase().indexOf(".conuk") >= 0) {
-                        if($('#areyousure').length) {
-                            $('#areyousure').show();
-                        } else {
-                            $("label[for='email']").append('');
-                        }
-                    } else {
-                        $('#areyousure').hide();
-                    }
-                });
+                if (email.toLowerCase().indexOf(".con") >= 0 || email.toLowerCase().indexOf(".conuk") >= 0){
+                    this.email_optional_error = true;
+                }
             }
         }
     }
