@@ -31,11 +31,14 @@
                                             label="Email Address:"
                                             v-model="email"
                                             name="email"
+                                            @keyup="checkEmailfield(email)"
                                             type="email"
                                             :rules="emailRules"
                                             color="dark"
                                             required
                                     ></v-text-field>
+
+                                    <div class="email-validation red--text">Are you sure this is correct?</div>
                                 </v-flex>
 
                             </v-layout>
@@ -168,7 +171,7 @@
                     <v-container grid-list-xl>
                         <v-layout>
                             <v-flex>
-                                <img src="assets/frontend/images/hamster_wheel.gif"/>
+                                <img src="/assets/frontend/images/hamster_wheel.gif"/>
                             </v-flex>
                         </v-layout>
 
@@ -368,6 +371,10 @@
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
 
 
+            },
+
+            checkEmailfield(email){
+              console.log(email);
             },
 
             validateEmail(){
