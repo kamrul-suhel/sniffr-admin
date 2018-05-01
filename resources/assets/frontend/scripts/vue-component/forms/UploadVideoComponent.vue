@@ -57,9 +57,8 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :rules="[v => !!v || 'Title is required', (v) => v.length <= 140 || 'Max 140 characters']"
+                                            :rules="[(v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
-                                            required
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -140,9 +139,7 @@
                                            :loading="validete_email_progress"
                                            :disabled="validete_email_progress"
                                            @click="onSubmit()"
-                                    >
-                                        Submit your video
-                                    </v-btn>
+                                    >Submit your video</v-btn>
 
                                 </v-flex>
                             </v-layout>
@@ -152,7 +149,10 @@
             </v-layout>
         </v-container>
 
-        <v-dialog v-model="uplod_progress" max-width="500px">
+        <v-dialog
+                v-model="uplod_progress"
+                max-width="500px"
+                persistent>
             <v-card class="upload-dialog">
                 <v-card-title>
                     <v-container>
