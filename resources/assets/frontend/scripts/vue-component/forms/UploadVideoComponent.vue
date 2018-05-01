@@ -368,6 +368,21 @@
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
 
 
+            },
+
+            validateEmail(){
+                $('#email').on('change', function(e) {
+                    var target = $( e.target ).val();
+                    if (target.toLowerCase().indexOf(".con") >= 0 || target.toLowerCase().indexOf(".conuk") >= 0) {
+                        if($('#areyousure').length) {
+                            $('#areyousure').show();
+                        } else {
+                            $("label[for='email']").append('');
+                        }
+                    } else {
+                        $('#areyousure').hide();
+                    }
+                });
             }
         }
     }
