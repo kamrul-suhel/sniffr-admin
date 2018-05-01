@@ -14,7 +14,7 @@ class ThemeContactController extends Controller
     public function index(Request $request, $email)
     {
         if ($request->ajax()) {
-            $contact = Contact::where('email', $email)->first();
+            $contact = Contact::where('email', base64_decode(Input::get('key')))->first();
             $data = [
                 'contact' => $contact,
             ];
