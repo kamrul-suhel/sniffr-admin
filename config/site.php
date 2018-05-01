@@ -9,6 +9,6 @@ return [
         'types' => [
             'regular',
             'watermark'
-        ],
-    ],
+        ]
+    ]
 ];

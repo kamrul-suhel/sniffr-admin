@@ -5,7 +5,7 @@
     @include('frontend.layout.head.meta')
 
     @php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; @endphp
-    <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . 'settings/' . $favicon }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . $favicon }}" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
      <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
