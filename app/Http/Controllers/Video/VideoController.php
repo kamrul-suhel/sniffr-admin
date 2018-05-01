@@ -90,9 +90,6 @@ class VideoController extends Controller
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
-        // TODO remove when frontend 3 is completed?
-        $isJson = $request->ajax() || $request->isJson();
-
         //save Contact
         $contact = Contact::where('email', Input::get('email'))->first();
 

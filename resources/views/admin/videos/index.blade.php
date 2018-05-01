@@ -62,7 +62,7 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+						<input type="text" class="form-control" name="search_value" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
 					</div>
 				</div>
 			</form>

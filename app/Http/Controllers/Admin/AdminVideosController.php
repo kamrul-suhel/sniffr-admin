@@ -52,15 +52,15 @@ class AdminVideosController extends Controller
      */
     public function index(Request $request, $state = 'all')
     {
-        $search_value = Input::get('s', false);
-        $category_value = Input::get('category');
-        $collection_value = Input::get('collection');
-        $shot_value = Input::get('shot_type');
-        $rights = Input::get('rights');
+        $search_value = $request->input('search_value', null);
+        $category_value = $request->input('category');
+        $collection_value = $request->input('collection');
+        $shot_value = $request->input('shot_type');
+        $rights = $request->input('rights');
 
         $videos = new Video;
 
-        if (!$search_value) {
+        if ($search_value) {
             $videos = $videos->where(function ($query) use ($search_value) {
                 $query->where('title', 'LIKE', '%' . $search_value . '%')
                     ->orWhereHas('tags', function ($q) use ($search_value) {
