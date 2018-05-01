@@ -20802,7 +20802,7 @@ hr {
 }
 
 .video-container .video-thumb .play-button {
-  background: url(/content/themes/default/assets/img/play-button-large.png);
+  background: url(/assets/frontend/images/play-button-large.png);
   width: 80px;
   height: 80px;
   position: absolute;
