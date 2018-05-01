@@ -59,7 +59,6 @@
                                             color="dark"
                                             :rules="[v => !!v || 'Title is required', (v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
-                                            required
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -152,7 +151,9 @@
             </v-layout>
         </v-container>
 
-        <v-dialog v-model="uplod_progress" max-width="500px">
+        <v-dialog
+                v-model="uplod_progress"
+                max-width="500px" >
             <v-card class="upload-dialog">
                 <v-card-title>
                     <v-container>
