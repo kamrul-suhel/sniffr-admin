@@ -37,19 +37,21 @@ mix.sass(
     .options({
         processCssUrls: false,
     })
-    .sourceMaps();
+    .sourceMaps()
+    .version();
 
 mix.js([
     'resources/assets/frontend/scripts/main.js',
-], 'public/assets/frontend/scripts/scripts.js');
+], 'public/assets/frontend/scripts/scripts.js')
+    .version();
 
 
 //Copying file from resource folder to public
 
-mix.copy(
-    'resources/assets/frontend/images',
-    'public/assets/frontend/images/'
-);
+// mix.copy(
+//     'resources/assets/frontend/images',
+//     'public/assets/frontend/images/'
+// );
 
 /*
 * ******************************************

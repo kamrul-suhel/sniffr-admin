@@ -61,7 +61,7 @@
 			return {
                 valid:false,
                 user:{
-                    email:'kamrul@unilad.co.uk'
+                    email:''
                 },
                 emailRules: [
                     v => !!v || 'E-mail is required',
