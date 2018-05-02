@@ -11,8 +11,8 @@ class CreateCampaignVideoTable extends Migration
             $table->integer('video_id')->unsigned()->nullable();
             $table->integer('campaign_id')->unsigned()->nullable();
             $table->string('state')->nullable();
-            $table->dateTime('created_at')->useCurrent();
-            $table->dateTime('updated_at')->useCurrent();
+            $table->dateTime('created_at')->useCurrent()->nullable();
+            $table->dateTime('updated_at')->useCurrent()->nullable();
         });
     }
 
