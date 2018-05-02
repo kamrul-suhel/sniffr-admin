@@ -32,7 +32,7 @@ class Download extends Model
     protected $table = 'downloads';
     protected $guarded = [];
     public static $rules = [];
-    protected $fillable = ['user_id', 'video_id'];
+    protected $fillable = ['user_id', 'video_id', 'client_id'];
 
     public function user()
     {
