@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
  */
 class VideoCollection extends Model
 {
-    use SoftDeletes;
     protected $guarded = [];
     public static $rules = [];
     protected $table = 'video_collections';
