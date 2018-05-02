@@ -31,11 +31,14 @@
                                             label="Email Address:"
                                             v-model="email"
                                             name="email"
+                                            @keyup="checkEmailfield(email)"
                                             type="email"
                                             :rules="emailRules"
                                             color="dark"
                                             required
                                     ></v-text-field>
+
+                                    <div class="email-validation red--text" v-if="email_optional_error">Are you sure this is correct?</div>
                                 </v-flex>
 
                             </v-layout>
@@ -57,9 +60,7 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :rules="[v => !!v || 'Title is required', (v) => v.length <= 140 || 'Max 140 characters']"
                                             :counter="140"
-                                            required
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -140,9 +141,7 @@
                                            :loading="validete_email_progress"
                                            :disabled="validete_email_progress"
                                            @click="onSubmit()"
-                                    >
-                                        Submit your video
-                                    </v-btn>
+                                    >Submit your video</v-btn>
 
                                 </v-flex>
                             </v-layout>
@@ -152,7 +151,10 @@
             </v-layout>
         </v-container>
 
-        <v-dialog v-model="uplod_progress" max-width="500px">
+        <v-dialog
+                v-model="uplod_progress"
+                max-width="500px"
+                persistent>
             <v-card class="upload-dialog">
                 <v-card-title>
                     <v-container>
@@ -168,7 +170,7 @@
                     <v-container grid-list-xl>
                         <v-layout>
                             <v-flex>
-                                <img src="assets/frontend/images/hamster_wheel.gif"/>
+                                <img src="/assets/frontend/images/hamster_wheel.gif"/>
                             </v-flex>
                         </v-layout>
 
@@ -210,7 +212,7 @@
             title: '',
             url: '',
             file: '',
-            terms_condition: false,
+            terms_condition: true,
             nameRules: [
                 v => !!v || 'Full name is required'
             ],
@@ -232,6 +234,8 @@
             validate_email_error: false,
             upload_error_msg: '',
             thank_you_dialog: false,
+
+            email_optional_error: false,
 
             //terms & condition
             termslink:''
@@ -315,11 +319,7 @@
                             'Content-Type': 'multipart/form-data',
                             'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN': this.csrf_token
-                        },
-                        onUploadProgress: function (progressEvent) {
-                            this.progressbar = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-                            console.log(this.progressbar);
-                        }.bind(this)
+                        }
                     }
                 )
                     .then(response => {
@@ -333,6 +333,7 @@
                             this.uplod_progress = false;
 
                             // clear form data
+
                             this.$refs.form.reset();
                             this.file_name = '';
                             setTimeout(() => {
@@ -359,15 +360,18 @@
             },
 
             setTermsLink(){
-
                 if(this.source === ''){
                     this.termslink = '/terms';
                     return;
                 }
 
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
+            },
 
-
+            checkEmailfield(email){
+                if (email.toLowerCase().indexOf(".con") >= 0 || email.toLowerCase().indexOf(".conuk") >= 0){
+                    this.email_optional_error = true;
+                }
             }
         }
     }
