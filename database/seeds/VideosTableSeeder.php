@@ -86,7 +86,7 @@ class VideosTableSeeder extends Seeder
                 'terms' => NULL,
                 'ip' => $faker->ipv4,
                 'user_agent' => $faker->userAgent,
-                'licensed_at' => ($state == 'licensed') ? $faker->date() : null,
+                'licensed_at' => ($state == 'licensed') ? $faker->dateTime() : null,
                 'dimension_height' => $dimension_height,
                 'dimension_width' => $dimension_width,
             ]);

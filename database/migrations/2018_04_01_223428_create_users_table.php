@@ -26,7 +26,6 @@ class CreateUsersTable extends Migration
             $table->dateTime('trial_ends_at')->nullable();
             $table->dateTime('subscription_ends_at')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
