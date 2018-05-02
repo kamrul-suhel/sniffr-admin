@@ -220,6 +220,7 @@
                         <v-checkbox
                                 color="dark"
                                 v-model="contact_is_owner"
+                                true-value="1"
                                 name="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required
@@ -235,6 +236,7 @@
                                 color="dark"
                                 v-model="allow_publish"
                                 name="allow_publish"
+                                true-value="1"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required>
                             <span slot="label">
@@ -248,6 +250,7 @@
                                 color="dark"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
+                                true-value="1"
                                 name="is_exclusive"
                                 required>
                             <span slot="label">I confirm that I am granting UNILAD an exclusive license to this video and understand that this means I cannot and will not enter into a discussion with any other company regarding this content. I understand that UNILAD are the new license holders and I will inform them of any contact I receive from another company regarding the use of this video.</span>
@@ -305,7 +308,7 @@
             permission:'',
             submitted_elsewhere:'',
             submitted_where:'',
-            contact_is_owner:'',
+            contact_is_owner:0,
             allow_publish:'',
             is_exclusive:'',
 
@@ -397,6 +400,9 @@
                 form.append('allow_publish', this.allow_publish);
                 form.append('is_exclusive', this.is_exclusive);
                 form.append('date_filmed', this.date_filmed);
+
+                console.log(this.contact_is_owner);
+                return;
 
                 //url
                 let url = '/details/' + this.code;
