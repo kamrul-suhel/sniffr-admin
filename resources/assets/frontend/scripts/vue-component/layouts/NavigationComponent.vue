@@ -89,12 +89,15 @@
                 nav_background: false,
                 //Password reset section
                 password_reset_dialog: false,
+
                 //user auth
                 is_login: false,
+
                 //logout
                 logout: false,
                 logoutTime: 3000,
                 logout_text: 'you are successfully logout',
+
                 //if user login all data
                 user: '',
             }
@@ -105,7 +108,9 @@
                 if(to.name != 'home'){
                     this.nav_background = true;
                 }else{
-                    this.nav_background = false;
+                    setTimeout(() => {
+                        this.nav_background = false;
+                    }, 800);
                 }
                 // see user status
                 this.$store.dispatch('getLoginStatus').then((response) => {
@@ -114,12 +119,13 @@
                         this.user = this.$store.getters.getUser;
                     }
                 });
-            },
-            
-            is_login(){
             }
         },
         created(){
+            LoginEventBus.$on('logoutChangeState', () => {
+                this.is_login = false;
+            });
+
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;
                 if(this.is_login){
@@ -138,20 +144,14 @@
                     .then((response) => {
                         this.logout = true;
                         this.is_login = this.$store.getters.isUserLogin;
+                        LoginEventBus.logoutStateChange();
                         setTimeout(() => {
                             this.logout = false;
                         }, 3500);
                     });
             },
-            // ForgotPasswordComponent trigger this methods when value change
-            onChangeForgotPassword(changeForgot) {
-                this.password_reset_dialog = true;
-            },
-            onClosePasswordDialog(changeForgotPassword){
-                if(!changeForgotPassword){
-                    this.password_reset_dialog = false;
-                }
-            },
+
+
             // Login component trigger this methods when change any value
             onChangeLogin(changeLogin){
                 if(!changeLogin){
@@ -160,6 +160,11 @@
             },
             onLoginClick(){
                 LoginEventBus.openLoginDialog();
+            },
+
+            logoutStateChange() {
+                console.log('this is click');
+              this.is_login = false;
             }
         }
     }

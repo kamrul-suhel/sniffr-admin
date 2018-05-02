@@ -4,8 +4,10 @@
  ********************************************************
  */
 
+window.axios = require('axios');
 window.Vue = require('vue');
-import Vuetify from 'Vuetify';
+window.Vuetify = require('Vuetify');
+
 import Vuerouter from 'vue-router';
 
 
@@ -14,7 +16,7 @@ import Vuerouter from 'vue-router';
  * Vuex package (store)
  ********************************************************
  */
-import {store} from './store/store';
+
 Vue.use(Vuetify);
 Vue.use(Vuerouter);
 
@@ -25,7 +27,7 @@ Vue.use(Vuerouter);
  ********************************************************
  */
 
-window.axios = require('axios');
+
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
@@ -39,8 +41,8 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
 import NavigationComponent from './vue-component/layouts/NavigationComponent.vue';
 import FooterComonent from './vue-component/layouts/FooterComponent.vue';
 
-import {routes} from './routes';
-
+import {routes} from './routes.js';
+import {store} from './store/store';
 
 /*
  ********************************************************
@@ -57,7 +59,7 @@ require('./filters/filters');
  ********************************************************
  */
 
-import {LoginEventBus} from './event-bus/login-event-bus.js';
+import {LoginEventBus} from './event-bus/login-event-bus';
 
 
 /*

@@ -11,14 +11,14 @@ class ThemeContactController extends Controller
 {
     use FrontendResponse;
 
-    public function index(Request $request, $email)
+    public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            $contact = Contact::where('email', $email)->first();
+            $contact = Contact::where('email', base64_decode($request->email))->first();
             $data = [
                 'contact' => $contact,
             ];
-
             if ($contact) {
                 return $this->successResponse($data);
             }
@@ -31,7 +31,7 @@ class ThemeContactController extends Controller
     {
         if ($request->ajax()) {
             if ($request->input('key')) {
-                $contact = Contact::where('email', $request->input('key'))->first();
+                $contact = Contact::where('email', base64_decode($request->input('key')))->first();
                 if (isset($contact)) {
                     $contact->delete();
                     if (isset($contact->videos)) {

@@ -1,5 +1,4 @@
 let mix = require('laravel-mix');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -27,7 +26,6 @@ mix.js(['resources/assets/js/app.js','resources/assets/js/custom.js'], 'public/a
         mix.version();
     }
 
-
 /*
 * *********************************************
 * Frontend script and scss
@@ -39,26 +37,25 @@ mix.sass(
     .options({
         processCssUrls: false,
     })
-    .sourceMaps();
-
-mix.js([
-    'node_modules/vue/dist/vue.min.js',
-    'node_modules/vuetify/dist/vuetify.min.js',
-],  'public/assets/frontend/scripts/plugin.js');
+    .sourceMaps()
+    .version();
 
 mix.js([
     'resources/assets/frontend/scripts/main.js',
-], 'public/assets/frontend/scripts/scripts.js');
+], 'public/assets/frontend/scripts/scripts.js')
+    .version();
+
+
+//Copying file from resource folder to public
 
 mix.copy(
-    'node_modules/jquery/dist/jquery.js',
-    'public/assets/frontend/sripts/jquery.js'
+    'resources/assets/frontend/images',
+    'public/assets/frontend/images/'
 );
 mix.copy(
-    'node_modules/vuetify/dist/vuetify.css',
-    'public/assets/frontend/css/plugin/vuetify.css'
+    'resources/assets/admin/images',
+    'public/assets/admin/images/'
 );
-
 
 /*
 * ******************************************

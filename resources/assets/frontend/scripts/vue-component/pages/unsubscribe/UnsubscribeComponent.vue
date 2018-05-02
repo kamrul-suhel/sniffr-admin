@@ -7,7 +7,7 @@
               		<div class="headline text-uppercase text-xs-center">Unsubscribe</div>
               		<div v-if="contactFound">
               			<p>Please review your email adddress below and click 'unsubscribe' to delete your details from our platform. <strong>Warning:</strong> This action cannot be undone and will be permanent.</p>
-              			<p class="red--text">{{ email }}</p>
+              			<p class="red--text">{{ display_email }}</p>
           			
           				<v-btn dark 
           					@click="onUnsubscribe()"
@@ -35,6 +35,7 @@ export default {
 	data() {
 		return {
 			email: '',
+			display_email:'',
 			contactNotFound: false,
 			contactDeleted: false,
 			contactFound: false,
@@ -59,6 +60,7 @@ export default {
 
 				if(response.data.success){
 					this.contactFound = true;
+					this.display_email = response.data.contact.email;
 				}
 			});
 		}
