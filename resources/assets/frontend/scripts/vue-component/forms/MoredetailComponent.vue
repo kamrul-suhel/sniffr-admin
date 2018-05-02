@@ -410,9 +410,6 @@
                 form.append('is_exclusive', this.is_exclusive);
                 form.append('date_filmed', this.date_filmed);
 
-                console.log(this.contact_is_owner);
-                return;
-
                 //url
                 let url = '/details/' + this.code;
                 axios.post(url, form)
