@@ -168,7 +168,7 @@
                         <div class="text-right">
                             {{ $comment->user->username }} |
                             {{ $comment->created_at->diffForHumans() }}
-                            @if($admin_user->isAdmin() || $comment->user_id == $admin_user->id)
+                            @if(Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id))
                                 &nbsp
                                 {!! Form::open([
                                     'route' => ['comment.destroy', $comment->id],
