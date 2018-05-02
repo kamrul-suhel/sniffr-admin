@@ -1,8 +1,8 @@
 {
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=1cd232e451e265bbae55",
+    "/assets/js/app.js": "/assets/js/app.js?id=6836abeea4b381826c23",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=7e420b9651a0adeb7dcc",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=0d8995f33177cd5ab2f6",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=fb18256c9e4ac6228323",
     "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
 }
