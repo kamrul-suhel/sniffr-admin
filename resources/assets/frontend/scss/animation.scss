@@ -10,7 +10,21 @@
   opacity:0;
 }
 
-.slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active below version 2.1.8 */ {
+.slide-fade-enter, .slide-fade-leave-to {
   opacity: 0;
+}
+
+.slide-up{
+
+}
+
+@keyframes slide-up {
+  from{
+    transform:translateX(0);
+    opacity:1;
+  }
+  to{
+    transform:translateX(100px);
+    opacity:0;
+  }
 }
