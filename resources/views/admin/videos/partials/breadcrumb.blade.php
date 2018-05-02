@@ -12,11 +12,7 @@
         </li>
         <li class="active">
             <strong>
-                @if($video->title)
-                    <a href="/admin/videos/edit/{{ $video->alpha_id }}">{{ $video->title  }}</a>
-                @else
-                    No Title Provided
-                @endif
+                <a href="/admin/videos/edit/{{ $video->alpha_id }}">{{ $video->title  }}</a>
             </strong>
         </li>
     @else

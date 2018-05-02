@@ -12,8 +12,9 @@
                 <select id="user_id" name="user_id">
                     <option value="">Not assigned</option>
                     @foreach($users as $user2)
-                        <option value="{{ $user2->id }}"
-                                @if(isset($video)) @if(!empty($user2->id == $video->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+                        <option value="{{ $user2->id }}" @if(($video) && ($user2->id == $video->user_id)) selected="selected" @endif>
+                            {{ $user2->username }}
+                        </option>
                     @endforeach
                 </select>
             </div>
