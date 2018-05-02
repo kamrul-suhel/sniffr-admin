@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
  */
 class VideoCategory extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
     protected $guarded = [];
     protected $table = 'video_categories';
     public static $rules = [];

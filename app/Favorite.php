@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Favorite extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
     protected $table = 'favorites';
     protected $guarded = array();
     public static $rules = array();
