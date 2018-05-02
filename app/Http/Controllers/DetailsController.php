@@ -114,14 +114,13 @@ class DetailsController extends Controller
 
         $video->location = Input::get('location');
         $video->description = Input::get('description');
-        $video->filmed_by_me = Input::get('filmed_by_me');
-        $video->permission = Input::get('permission') == 'yes' ? 1 : 0;
-        $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' ? 1 : 0;
+        $video->filmed_by_me = Input::get('filmed_by_me') == 'yes' || 1  ? 1 : 0;
+        $video->permission = Input::get('permission') == 'yes' || 1  ? 1 : 0;
+        $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' || 1 ? 1 : 0;
         $video->submitted_where = Input::get('submitted_where');
-        $video->contact_is_owner = Input::get('contact_is_owner');
-        $video->allow_publish = Input::get('allow_publish');
-        $video->contact_is_owner = Input::get('contact_is_owner');
-        $video->is_exclusive = Input::get('is_exclusive');
+        $video->contact_is_owner = Input::get('contact_is_owner') == 'yes' || 1 ? 1 : 0;
+        $video->allow_publish = Input::get('allow_publish') == 'yes' || 1 ? 1 : 0;
+        $video->is_exclusive = Input::get('is_exclusive') == 'yes' || 1 ? 1 : 0;
         $video->more_details = 1;
         $video->state = 'pending';
         $video->save();
