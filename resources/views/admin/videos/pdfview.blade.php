@@ -40,12 +40,14 @@ td.small {
 			<td>{{ $video->contact->full_name }}</td>
 		</tr>
 
+        @if(isset($video->contact->email))
         <tr>
             <td class="grey">Email:</td>
 			<td>{{ $video->contact->email }}</td>
 		</tr>
+        @endif
 
-        @if(!empty($video->contact->tel))
+        @if(isset($video->contact->tel))
         <tr>
             <td class="grey">Phone:</td>
 			<td>{{ $video->contact->tel }}</td>
