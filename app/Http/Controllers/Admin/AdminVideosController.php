@@ -849,6 +849,7 @@ class AdminVideosController extends Controller
         $video = Video::where('alpha_id', $alpha_id)->first();
 
         $data = [
+            'terms' => config('settings.terms'),
             'video' => $video,
         ];
 

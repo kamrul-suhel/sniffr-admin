@@ -108,16 +108,16 @@ td.small {
         <tr>
             <td class="grey">I confirm:</td>
 			<td>
-                <p>{{ $settings['terms_ex']_contact_is_owner }}</p>
-                <p>{{ $settings['terms_ex']_allow_publish }}</p>
-                <p>{{ $settings['terms_ex']_is_exclusive }}</p>
+                <p>{{ $terms['contact_is_owner'] }}</p>
+                <p>{{ $terms['allow_publish'] }}</p>
+                <p>{{ $terms['is_exclusive'] }}</p>
             </td>
 		</tr>
         @endif
         <tr>
             <td class="grey">Terms and Conditions Accepted:</td>
 			<td class="small">
-                {!! ($video->rights=='ex' ? $settings['terms_ex'] : $settings['terms_non_ex']) !!}
+                {!! ($video->rights=='ex' ? $terms['terms_ex'] : $terms['terms_non_ex']) !!}
             </td>
 		</tr>
         <!-- Terms end -->
