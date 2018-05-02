@@ -235,7 +235,8 @@ class AdminVideosController extends Controller
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
             'users' => User::all(),
-            'video' => null
+            'video' => null,
+            'tags' => null,
         ];
 
         return view('admin.videos.create_edit', $data);
@@ -253,7 +254,7 @@ class AdminVideosController extends Controller
         ini_set('post_max_size', '1024M');
         set_time_limit(1800); // Longer timeout
 
-        $validator = Validator::make($data = Input::all(), $this->rules);
+        $validator = Validator::make($data = Input::all());
 
         if ($validator->fails())
         {
@@ -374,6 +375,7 @@ class AdminVideosController extends Controller
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Video',
             'video' => $video,
+            'tags' => $video->tags,
             'previous' => $previous,
             'next' => $next,
             'post_route' => url('admin/videos/update'),
@@ -396,16 +398,8 @@ class AdminVideosController extends Controller
      */
     public function update(Request $request)
     {
-        $input = Input::all();
-        $id = $input['id'];
-        $video = Video::where('alpha_id', $id)->first();
-
-        $validator = Validator::make($data = $input, $this->rules);
-
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
+        $data = $request->all();
+        $video = Video::where('alpha_id', $request->input('id'))->first();
 
         $tags = $data['tags'];
         unset($data['tags']);
@@ -497,7 +491,7 @@ class AdminVideosController extends Controller
                 ->delay(now()->addSeconds(5));
         }
 
-        return Redirect::to('admin/videos/edit/'.$id)->with([
+        return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
             'note' => 'Successfully Updated Video!',
             'note_type' => 'success'
         ]);
