@@ -26,7 +26,6 @@ class ThemeSubmissionController extends Controller
     protected $rules = [
         'full_name' => 'required',
         'email' => 'required|email',
-        'title' => 'required',
         'file' => 'file|mimes:ogg,mp4,qt,avi,wmv,m4v,mov,webm,3gpp,quicktime|min:1|max:500000',
         'terms' => 'required'
     ];
