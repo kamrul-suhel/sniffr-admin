@@ -67,8 +67,9 @@
                                 type="tel"
                                 value=""
                                 color="dark"
-                                :disabled="tel"
-                                label="Phone Number:"></v-text-field>
+                                :disabled="(tel != '') && tel.length >= 15"
+                                label="Phone Number:"
+                            counter="15"></v-text-field>
                     </v-flex>
 
                     <v-flex xs12>
