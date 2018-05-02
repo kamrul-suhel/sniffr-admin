@@ -7,7 +7,8 @@
                 <v-layout row wrap v-if="http_error">
                     <v-flex xs12>
                         <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">Sorry, we can't seem to find your video with the code you provided. Please contact <u>submissions@unilad.co.uk</u></div>
+                            <div class="panel-heading">Sorry, we can't seem to find your video with the code you
+                                provided. Please contact <u>submissions@unilad.co.uk</u></div>
                         </div>
                     </v-flex>
                 </v-layout>
@@ -44,7 +45,7 @@
                                 value=""
                                 label="Name"
                                 hint="Please type your full name"
-                            disabled>
+                                disabled>
                         </v-text-field>
                     </v-flex>
 
@@ -66,7 +67,7 @@
                                 type="tel"
                                 value=""
                                 color="dark"
-                                disabled
+                                :disabled="tel"
                                 label="Phone Number:"></v-text-field>
                     </v-flex>
 
@@ -76,8 +77,9 @@
 
                     <v-flex xs12>
                         <v-dialog
-                                color="light"
+                                color="dark"
                                 ref="dialog"
+                                class="dark"
                                 persistent
                                 v-model="date_picker_modal"
                                 lazy
@@ -99,7 +101,7 @@
                                     min="2000-04"
                                     :max="max_date"
                                     v-model="date_filmed"
-                                    >
+                            >
                                 <v-spacer></v-spacer>
 
                                 <v-btn flat color="dark" @click="date_picker_modal = false">Cancel</v-btn>
@@ -115,7 +117,6 @@
                                 name="description"
                                 label="Please provide us with any other information (what's the story behind your video?)"
                                 color="dark"
-                                multi-line
                         ></v-text-field>
                     </v-flex>
 
@@ -123,6 +124,7 @@
                         <v-radio-group
                                 label="Who filmed the video?"
                                 v-model="filmed_by_me"
+                                id="filmed_by_me"
                                 name="filmed_by_me"
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
@@ -148,11 +150,13 @@
 
                     <v-flex xs12>
                         <v-flex xs12 class="pl-0 pb-0">
-                            <p class="gray-text mb-0">Have you received permission to film/submit this video from those who are featured? (Especially in cases where there are minors/children in the video)</p>
+                            <p class="gray-text mb-0">Have you received permission to film/submit this video from those
+                                who are featured? (Especially in cases where there are minors/children in the video)</p>
                         </v-flex>
                         <v-radio-group
                                 v-model="permission"
                                 name="permission"
+                                id="permission"
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
 
@@ -182,6 +186,7 @@
                                 :rules="[v => !!v || 'Field is required']"
                                 v-model="submitted_elsewhere"
                                 name="submitted_elsewhere"
+                                id="submitted_elsewhere"
                                 required>
                             <v-layout row wrap>
                                 <v-flex xs12 sm4 md4 lg4>
@@ -203,13 +208,15 @@
                     </v-flex>
 
                     <v-flex xs12>
-                        <v-text-field
-                                label="Where else have you submitted this video?"
-                                v-model="submitted_where"
-                                name="submitted_where"
-                                color="dark"
-                                multi-line>
-                        </v-text-field>
+                        <transition name="slide-fade" mode="out-in" v-if="submitted_elsewhere === '1'">
+                            <v-text-field
+                                    label="Where else have you submitted this video?"
+                                    v-model="submitted_where"
+                                    name="submitted_where"
+                                    color="dark"
+                            >
+                            </v-text-field>
+                        </transition>
                     </v-flex>
 
                     <v-flex xs12>
@@ -222,6 +229,7 @@
                                 v-model="contact_is_owner"
                                 true-value="1"
                                 name="contact_is_owner"
+                                id="contact_is_owner"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required
                         >
@@ -236,6 +244,7 @@
                                 color="dark"
                                 v-model="allow_publish"
                                 name="allow_publish"
+                                id="allow_publish"
                                 true-value="1"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 required>
@@ -250,6 +259,7 @@
                                 color="dark"
                                 :rules="[v => !!v || 'You must agree to continue']"
                                 v-model="is_exclusive"
+                                id="is_exclusive"
                                 true-value="1"
                                 name="is_exclusive"
                                 required>
@@ -294,37 +304,37 @@
 <script>
     export default {
         data: () => ({
-            settings:'',
+            settings: '',
             video: '',
             valid: false,
 
             //form data
             full_name: '',
             email: '',
-            tel:'',
-            location:'',
-            description:'',
-            filmed_by_me:'',
-            permission:'',
-            submitted_elsewhere:'',
-            submitted_where:'',
-            contact_is_owner:0,
-            allow_publish:'',
-            is_exclusive:'',
+            tel: '',
+            location: '',
+            description: '',
+            filmed_by_me: '',
+            permission: '',
+            submitted_elsewhere: '',
+            submitted_where: '',
+            contact_is_owner: 0,
+            allow_publish: '',
+            is_exclusive: '',
 
             // date picker setting
-            date_filmed:null,
-            date_picker_modal:false,
-            menu:false,
+            date_filmed: null,
+            date_picker_modal: false,
+            menu: false,
 
-            uplod_progress:false,
+            uplod_progress: false,
             progressbar: 0,
 
             //Loading process
             loading: false,
 
             //route params
-            code : '',
+            code: '',
             max_date: new Date().toISOString().split('T')[0],
 
             // not found error
@@ -339,27 +349,27 @@
         }),
         created() {
             this.code = this.$route.params.code;
-            if(!this.code){
+            if (!this.code) {
                 this.$router.push({name: 'home'});
             }
 
             // check if this code is exists in our database
-            let url = '/details/'+this.code;
+            let url = '/details/' + this.code;
             axios.get(url)
-                .then( (response) => {
+                .then((response) => {
                     let data = response.data;
 
-                    if(!data.error){
+                    if (!data.error) {
                         // process data
                         this.video = data;
 
-                        this.full_name =  data.contact.full_name;
+                        this.full_name = data.contact.full_name;
                         this.email = data.contact.email;
                         this.tel = data.contact.tel;
                         this.location = data.location;
                         this.description = data.description;
 
-                    }else{
+                    } else {
                         //error return to 404 page
                         this.$router.push({name: 'notfound'});
                     }
@@ -372,14 +382,13 @@
                 this.settings = this.$store.getters.getSettingsObject;
             });
         },
-        watch: {
-        },
+        watch: {},
 
 
         methods: {
             onSubmit() {
-                if(this.$refs.detail_form.validate()){
-                    this.loading=true;
+                if (this.$refs.detail_form.validate()) {
+                    this.loading = true;
                     this.uploadFormData();
                 }
             },
@@ -410,9 +419,9 @@
                     .then(response => {
                         //data uploaded succes
                         let data = response.data;
-                        if(!data.error){
-                            setTimeout( () => {
-                                this.loading=false;
+                        if (!data.error) {
+                            setTimeout(() => {
+                                this.loading = false;
                                 this.$refs.detail_form.reset();
                                 this.submit_success_dialog = true;
                             }, 1000);
