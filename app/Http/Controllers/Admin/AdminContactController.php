@@ -64,7 +64,8 @@ class AdminContactController extends Controller
             'post_route' => url('admin/contacts/store'),
             'button_text' => 'Add New Contact',
             'user' => Auth::user(),
-            'videos' => Video::get()
+            'videos' => Video::get(),
+            'contact' => null,
         ];
         return view('admin.contacts.create_edit', $data);
     }
