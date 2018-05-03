@@ -48,23 +48,23 @@ class DetailsController extends Controller
      */
     public function show(Request $request, $code)
     {
-        $video = Video::select($this->getVideoFieldsForFrontend())
-            ->where('more_details_code', $code)
-            ->with('contact')
-            ->first();
 
-        $iframe = $this->getVideoHtml($video, true);
-        $video['iframe'] = $iframe;
+        if ($request->ajax() || $request->isJson()) {
+            $video = Video::select($this->getVideoFieldsForFrontend())
+                ->where('more_details_code', $code)
+                ->with('contact')
+                ->first();
 
-        if (!$video) {
-            abort(404);
-        }
+            $iframe = $this->getVideoHtml($video, true);
+            $video['iframe'] = $iframe;
 
-        if ($request->ajax()) {
+            if (!$video) {
+                abort(404);
+            }
             return $this->successResponse($video);
         }
 
-        return view('frontend.master', $this->data);
+        return view('frontend.master');
     }
 
     /**

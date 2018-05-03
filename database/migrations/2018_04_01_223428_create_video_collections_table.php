@@ -14,7 +14,6 @@ class CreateVideoCollectionsTable extends Migration
             $table->string('name');
             $table->string('slug')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
