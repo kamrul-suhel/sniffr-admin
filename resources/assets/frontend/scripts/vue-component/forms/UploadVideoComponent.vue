@@ -22,6 +22,7 @@
                                             name="full_name"
                                             :rules="nameRules"
                                             color="dark"
+                                            class="input-group--focused"
                                             required
                                     ></v-text-field>
                                 </v-flex>
@@ -35,6 +36,7 @@
                                             type="email"
                                             :rules="emailRules"
                                             color="dark"
+                                            class="input-group--focused"
                                             required
                                     ></v-text-field>
 
@@ -346,6 +348,7 @@
 
                             this.$refs.form.reset();
                             this.file_name = '';
+                            this.file = '';
                             setTimeout(() => {
                                 this.thank_you_dialog = true;
                             }, 1000)
