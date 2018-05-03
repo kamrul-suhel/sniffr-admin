@@ -20,15 +20,10 @@
                         <div v-html="video.iframe"></div>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <div class="item-video text-xs-center">
+                    <v-flex xs12 v-if="video.more_details == 1">
+                        <div class="item-video text-xs-center green--text">
+                            You have already filled out more details.
                         </div>
-                    </v-flex>
-
-                    <v-flex xs12>
-                        <h3 class="sub-heading text-xs-center">
-
-                        </h3>
                     </v-flex>
 
                     <v-flex xs12>
