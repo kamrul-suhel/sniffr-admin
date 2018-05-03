@@ -9,7 +9,7 @@ class ContactsTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        foreach (range(1, 30) as $index) {
+        foreach (range(1, 300) as $index) {
             Contact::create([
                 'full_name' => $faker->name,
                 'email' => $faker->email,
