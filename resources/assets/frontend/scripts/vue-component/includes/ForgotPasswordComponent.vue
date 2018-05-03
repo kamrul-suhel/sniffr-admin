@@ -37,9 +37,7 @@
                                         @click="onForgotPassword()"
                                         :loading="loading"
                                         :disabled="loading"
-                                >
-                                    SEND EMAIL
-                                </v-btn>
+                                >SEND EMAIL</v-btn>
                             </v-flex>
 
                             <v-flex xs12 class="text-xs-center">
