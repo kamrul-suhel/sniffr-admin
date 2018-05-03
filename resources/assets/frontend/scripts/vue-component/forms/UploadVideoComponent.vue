@@ -346,6 +346,7 @@
 
                             this.$refs.form.reset();
                             this.file_name = '';
+                            this.file = '';
                             setTimeout(() => {
                                 this.thank_you_dialog = true;
                             }, 1000)

@@ -4,7 +4,11 @@
         <div id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
-                    <h1 class="heading">{{video_detail.video.title ? video_detail.video.title : ''}}</h1>
+                    <v-container grid-list-lg>
+                        <v-layout row wrap>
+                            <h1 class="heading">{{video_detail.video.title ? video_detail.video.title : ''}}</h1>
+                        </v-layout>
+                    </v-container>
                 </div>
             </div>
         </div>
