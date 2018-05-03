@@ -4,7 +4,7 @@
             <v-layout justify-center align-center>
                 <v-flex xs12>
                     <div class="text-xs-center">Sorry, we can't seem to find your video with the code you
-                            provided. Please contact <u>submissions@unilad.co.uk</u></div>
+                        provided. Please contact <u>submissions@unilad.co.uk</u></div>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -62,7 +62,7 @@
                                 color="dark"
                                 :disabled="telOptional"
                                 label="Phone Number:"
-                            ></v-text-field>
+                        ></v-text-field>
                     </v-flex>
 
                     <v-flex xs12>
@@ -338,7 +338,7 @@
             error: false,
 
         }),
-        mounted(){
+        mounted() {
             this.code = this.$route.params.code;
             if (!this.code) {
                 this.$router.push({name: 'home'});
@@ -356,7 +356,7 @@
                         this.full_name = data.contact.full_name;
                         this.email = data.contact.email;
                         this.tel = data.contact.tel;
-                        this.telOptional = data.contact.tel? true : false;
+                        this.telOptional = data.contact.tel ? true : false;
                         this.location = data.location;
                         this.description = data.description;
 
