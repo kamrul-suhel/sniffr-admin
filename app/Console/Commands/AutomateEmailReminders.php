@@ -89,22 +89,24 @@ class AutomateEmailReminders extends Command
                 }
 
                 // Only send email reminder if within above range plus if video has a contact/email
-                if(isset($video->contact) && $video->contact->email!=NULL && $send_ok == true){
+                if(isset($video->contact)) {
+                    if($video->contact->email!=NULL && $send_ok == true){
 
-                    // Output to schedule log
-                    echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$video->alpha_id.' : '.$video->title.' : '.$video->more_details_sent.' : '.($video->reminders ? $video->reminders : '0').' : '.$video->contact->email. PHP_EOL;
+                        // Output to schedule log
+                        echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$video->alpha_id.' : '.$video->title.' : '.$video->more_details_sent.' : '.($video->reminders ? $video->reminders : '0').' : '.$video->contact->email. PHP_EOL;
 
-                    // Need to update video reminder count and more details sent timestamp
-                    $video->more_details_sent = now();
-                    $video->reminders = $video->reminders ? $video->reminders+1 : 1;
-                    $video->save();
+                        // Need to update video reminder count and more details sent timestamp
+                        $video->more_details_sent = now();
+                        $video->reminders = $video->reminders ? $video->reminders+1 : 1;
+                        $video->save();
 
-                    // Schedule email reminder to be sent via queue/job
-                    QueueEmail::dispatch($video->id, 'details_reminder')
-                        ->delay(now()->addSeconds($queue_delay));
+                        // Schedule email reminder to be sent via queue/job
+                        QueueEmail::dispatch($video->id, 'details_reminder')
+                            ->delay(now()->addSeconds($queue_delay));
 
-                    // Increment queue delay
-                    $queue_delay = $queue_delay + 10;
+                        // Increment queue delay
+                        $queue_delay = $queue_delay + 10;
+                    }
                 }
             }
         }

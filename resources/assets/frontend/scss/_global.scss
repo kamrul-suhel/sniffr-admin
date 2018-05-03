@@ -1,0 +1,265 @@
+/* ************************* Global style ******************* */
+body {
+  font-family: JosefinSansregular;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+section.section-space {
+  padding: $section-spacing-mobile 0px;
+}
+
+@include small-device {
+  section.section-space {
+    padding: $section-spacing-mobile 0px;
+  }
+}
+
+@include medium-device {
+  section.section-space {
+    padding: $section-spacing 0px;
+  }
+}
+
+@include large-device {
+  section.section-space {
+    padding: $section-spacing 0px;
+  }
+}
+
+@include extra-large-device {
+  section.section-space {
+    padding: $section-spacing 0px;
+  }
+}
+
+.nav-background {
+  background: #000;
+}
+
+p.gray-text {
+  color: $gray-5;
+}
+
+/* ************************* Font and size ******************* */
+
+h1, h2, h3, h4, h5 {
+  font-family: JosefinSansbold;
+}
+
+p, form, form input, a, span {
+  font-family: JosefinSansregular;
+}
+
+h1 {
+  @include headingstyle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h2 {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@include small-device {
+  h2 {
+    font-size: 16px;
+  }
+}
+
+@include medium-device {
+  h2 {
+    font-size: 18px;
+  }
+}
+
+@include large-device {
+  h2 {
+    font-size: 24px;
+  }
+}
+
+@include extra-large-device {
+  h2 {
+    font-size: 24px;
+  }
+}
+
+p {
+  font-size: 16px;
+  font-weight: lighter;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.heading {
+  font-size: 24px;
+}
+
+@include small-device {
+  .heading {
+    font-size: 24px;
+  }
+}
+
+@include medium-device {
+  .heading {
+    font-size: 30px;
+  }
+}
+
+@include large-device {
+  .heading {
+    font-size: 40px;
+  }
+}
+
+@include extra-large-device {
+  .heading {
+    font-size: 40px;
+  }
+}
+
+.sub-heading {
+  font-size: 20px;
+}
+
+.card {
+  font-family: JosefinSansregular;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+/* ************************* End Font and size ******************* */
+
+/* ************************* Login style ******************* */
+.forgot-password {
+  color: #000;
+
+  &:hover {
+    color: #777;
+  }
+}
+
+/* ************************* Setup From font ******************* */
+.input, label {
+  font-family: JosefinSansregular;
+}
+
+/* ************************* Countdown section style ******************* */
+
+.countdown {
+  background: $countdown-background-color;
+  color: $countdown-text-color;
+
+  .countdown-container {
+    text-align: center;
+
+    .countdown-number h2 {
+      font-size: $countdown-number-font-size;
+    }
+
+    .countdown-subtitle {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+  }
+}
+
+/* ************************* Upload video Section style ******************* */
+
+.upload-video-section {
+
+  .upload-video-title {
+    margin-bottom: $section-title-after-space;
+
+    h1 {
+      margin: 0 0 $featured-title-space 0;
+      color: $upload-video-title-color;
+    }
+  }
+
+  .terms{
+    .input-group {
+      height:auto;
+
+      label {
+        position:static;
+        height:auto;
+        line-height:18px;
+        overflow:inherit;
+        white-space:unset;
+        margin-left:40px;
+      }
+
+      .input-group__input{
+        position:absolute;
+        top:-6px;
+      }
+    }
+  }
+
+  .upload-video-title::after {
+    content: '';
+    width: 200px;
+    background: #000;
+    margin: 0px auto;
+    height: 5px;
+    display: block;
+  }
+
+  .video-upload-box {
+    width: 100%;
+  }
+
+  .input-group--details:before {
+    background: #000;
+  }
+
+  .term-condition {
+  }
+
+  .term-condition-content {
+  }
+}
+
+/* ************************* More detail Section style ******************* */
+
+.more-detail-component {
+  .legal-stuff{
+    .input-group {
+      height:auto;
+
+      label {
+        position:static;
+        height:auto;
+        line-height:18px;
+        overflow:inherit;
+        white-space:unset;
+        margin-left:40px;
+      }
+
+      .input-group__input{
+        position:absolute;
+        top:-6px;
+      }
+    }
+  }
+
+}
+
+/* ************************* 404 page style ******************* */
+
+.notfound-title {
+  font-size: 10rem;
+  font-weight: bold;
+}

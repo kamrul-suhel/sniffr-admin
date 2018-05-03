@@ -141,7 +141,7 @@
 				</div>
 
 				<div class="panel-body" style="display: block;">
-					@if($video->contact_id!=0)
+					@if(isset($video->contact->id))
 					<h3><a href="{{ url('admin/contacts/edit/'.$video->contact->id) }}">{{ $video->contact->full_name ? $video->contact->full_name : 'Not submitted' }}</a></h3>
                     <p><a href="mailto:{{ $video->contact->email }}">{{ $video->contact->email }}</a></p>
 					@else
@@ -168,7 +168,7 @@
                         <div class="text-right">
                             {{ $comment->user->username }} |
                             {{ $comment->created_at->diffForHumans() }}
-                            @if($admin_user->isAdmin() || $comment->user_id == $admin_user->id)
+                            @if(Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id))
                                 &nbsp
                                 {!! Form::open([
                                     'route' => ['comment.destroy', $comment->id],

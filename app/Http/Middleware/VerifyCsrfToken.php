@@ -13,9 +13,11 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'admin/media/*',
+        'login',
         'issue',
         'upload',
         'upload/form',
-        'videocheck'
+        'videocheck',
+        'password/reset/*',
     ];
 }

@@ -4,13 +4,26 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call([
+            ClientsTableSeeder::class,
+            UsersTableSeeder::class,
+            ContactsTableSeeder::class,
+            VideoCategoriesTableSeeder::class,
+            VideoCollectionsTableSeeder::class,
+            VideoShotTypesTableSeeder::class,
+            VideosTableSeeder::class,
+            CampaignsTableSeeder::class,
+            CampaignVideoTableSeeder::class,
+            CommentsTableSeeder::class,
+            DownloadsTableSeeder::class,
+            FavoritesTableSeeder::class,
+            MenuTableSeeder::class,
+            PagesTableSeeder::class,
+            TagsTableSeeder::class,
+            TagVideoTableSeeder::class,
+            YoutubeAccessTableSeeder::class,
+        ]);
     }
 }
