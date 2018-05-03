@@ -23,4 +23,11 @@ return [
         'problem' => 'danger',
         'noresponse' => 'default',
     ],
+    'icons' => [
+        'accepted' => 'fa fa-clock-o',
+        'rejected' => 'fa fa-times',
+        'problem' => 'fa fa-exclamation',
+        'licensed' => 'fa fa-check',
+        'restricted' => 'fa fa-exclamation-triangle'
+    ]
 ];

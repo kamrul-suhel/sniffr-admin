@@ -19,34 +19,8 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			@if(isset($contact->videos))
+			@if($contact)
 				@foreach($contact->videos as $video)
-				<?php
-				switch($video->state){
-					case 'accepted':
-						$stateIcon = 'fa fa-clock-o';
-						$panelColor = 'default';
-						break;
-					case 'rejected':
-						$stateIcon = 'fa fa-times';
-						$panelColor = 'danger';
-						break;
-					case 'problem':
-						$stateIcon = 'fa fa-exclamation';
-						$panelColor = 'danger';
-						break;
-					case 'licensed':
-						$stateIcon = 'fa fa-check';
-						$panelColor = 'success';
-						break;
-					case 'restricted':
-						$stateIcon = 'fa fa-exclamation-triangle';
-						$panelColor = 'warning';
-						break;
-					default:
-						$stateIcon = '';
-				}
-				?>
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title"><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></div>
@@ -62,9 +36,10 @@
 						</div>
 					</div>
 
-					<div class="panel-footer">
-						<i class="{{ $stateIcon }}"></i> {{ ucfirst($video->state) }}
-					</div>
+                    <div class="panel-footer">
+                        <i class="{{ (key_exists($video->state, config('videos.icons'))) ? config('videos.icons')[$video->state] : '' }}"></i>
+                        {{ ucfirst($video->state) }}
+                    </div>
 				</div>
 				@endforeach
 			@endif
