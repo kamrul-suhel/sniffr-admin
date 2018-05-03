@@ -49,7 +49,7 @@ class DetailsController extends Controller
     public function show(Request $request, $code)
     {
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->isJson()) {
             $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('more_details_code', $code)
                 ->with('contact')
