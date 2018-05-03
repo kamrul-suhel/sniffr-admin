@@ -67,9 +67,9 @@
                                 type="tel"
                                 value=""
                                 color="dark"
-                                :disabled="(tel != '')"
+                                :disabled="(tel != '') && (tel === 'NULL')"
                                 label="Phone Number:"
-                            counter="15"></v-text-field>
+                            ></v-text-field>
                     </v-flex>
 
                     <v-flex xs12>
@@ -359,7 +359,6 @@
             axios.get(url)
                 .then((response) => {
                     let data = response.data;
-
                     if (!data.error) {
                         // process data
                         this.video = data;
