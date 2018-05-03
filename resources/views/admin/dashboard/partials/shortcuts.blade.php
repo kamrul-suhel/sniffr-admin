@@ -14,6 +14,15 @@
                     </a>
                 </div>
             </div>
+
+            <div class="panel-body">
+                <div class="tab-content">
+                    <a href="{{ url('admin/contacts/create') }}" class="btn btn-success">
+                        <i class="fa fa-plus-circle"></i>
+                        Add New Creator
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
