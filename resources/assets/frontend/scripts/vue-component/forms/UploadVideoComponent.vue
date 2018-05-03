@@ -38,7 +38,9 @@
                                             required
                                     ></v-text-field>
 
-                                    <div class="email-validation red--text" v-if="email_optional_error">Are you sure this is correct?</div>
+                                    <div class="email-validation red--text" v-if="email_optional_error">Are you sure
+                                        this is correct?
+                                    </div>
                                 </v-flex>
 
                             </v-layout>
@@ -141,7 +143,8 @@
                                            :loading="validete_email_progress"
                                            :disabled="validete_email_progress"
                                            @click="onSubmit()"
-                                    >Submit your video</v-btn>
+                                    >Submit your video
+                                    </v-btn>
 
                                 </v-flex>
                             </v-layout>
@@ -212,7 +215,7 @@
             title: '',
             url: '',
             file: '',
-            terms_condition: true,
+            terms_condition: false,
             nameRules: [
                 v => !!v || 'Full name is required'
             ],
@@ -222,7 +225,7 @@
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
             ],
             tel: '',
-            source:'',
+            source: '',
 
             uplod_progress: false,
             file_name: '',
@@ -238,7 +241,7 @@
             email_optional_error: false,
 
             //terms & condition
-            termslink:''
+            termslink: ''
         }),
         created() {
             this.setSourceField();
@@ -306,11 +309,17 @@
                 form.append('full_name', this.full_name);
                 form.append('email', this.email);
                 form.append('title', this.title);
-                form.append('tel', this.tel);
+
+                // Checking if tel phone is null then not to send this field
+                if (this.tel != '') {
+                    form.append('tel', this.tel);
+                }
+
                 form.append('terms', this.terms_condition);
                 form.append('url', this.url);
                 form.append('source', this.source);
                 //set request
+
 
                 //show the uploading dialog box
                 this.uplod_progress = true;
@@ -323,6 +332,7 @@
                     }
                 )
                     .then(response => {
+                        console.log(response);
                         //data uploaded succes
                         let data = response.data;
                         if (data.status == 'success') {
@@ -351,16 +361,16 @@
                     });
             },
 
-            setSourceField(){
-                if(this.$route.query.source){
+            setSourceField() {
+                if (this.$route.query.source) {
                     this.source = this.$route.query.source;
                 }
 
                 this.setTermsLink();
             },
 
-            setTermsLink(){
-                if(this.source === ''){
+            setTermsLink() {
+                if (this.source === '') {
                     this.termslink = '/terms';
                     return;
                 }
@@ -368,9 +378,13 @@
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
             },
 
-            checkEmailfield(email){
-                if (email.toLowerCase().indexOf(".con") >= 0 || email.toLowerCase().indexOf(".conuk") >= 0){
-                    this.email_optional_error = true;
+            checkEmailfield(email) {
+                if(email != null){
+                    if (email.toLowerCase().indexOf(".con") >= 0 || email.toLowerCase().indexOf(".conuk") >= 0) {
+                        this.email_optional_error = true;
+                    }else{
+                        this.email_optional_error = false;
+                    }
                 }
             }
         }
