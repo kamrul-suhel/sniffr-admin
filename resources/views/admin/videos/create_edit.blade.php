@@ -1,33 +1,7 @@
 @extends('admin.master')
 
 @section('css')
-    <style>
-        .nav-tabs li a {
-            background: #F9F9F9;
-        }
-
-        .nav-tabs li a {
-            font-size: 16px;
-            color: #868686;
-            border-color: #DDD;
-            border-bottom: 0px;
-        }
-
-        .tab-content {
-            border: 2px solid #DDD;
-            border-top: 0px;
-            background: #F9F9F9;
-            min-height: 200px;
-        }
-
-        .save_button {
-            padding: 40px;
-        }
-
-        .input-group {
-            padding: 20px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/tabs.css">
 @endsection
 
 @section('content')
@@ -35,14 +9,7 @@
         @include('admin.videos.partials.breadcrumb')
 
         @if($video)
-            <div class="row bottom-padding">
-                <div class="col-sm-12">
-                    <div class="row">
-                        {{--@include('admin.videos.partials.search')--}}
-                        @include('admin.videos.partials.prev_next_nav')
-                    </div>
-                </div>
-            </div>
+            @include('admin.videos.partials.prev_next_nav')
         @endif
 
         <div class="clear"></div>
