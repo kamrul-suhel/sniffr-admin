@@ -97,8 +97,8 @@
                             </v-text-field>
 
                             <v-date-picker
-                                    color="light"
-                                    light
+                                    dark
+                                    header-color="black"
                                     min="2000-04"
                                     :max="max_date"
                                     v-model="date_filmed"
