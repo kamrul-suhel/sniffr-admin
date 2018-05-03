@@ -1,8 +1,13 @@
 {
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=5584c3d3d542d86be752",
-    "/assets/js/app.js": "/assets/js/app.js?id=94b7703659aaa6e16c23",
-    "/assets/css/admin.css": "/assets/css/admin.css?id=7e420b9651a0adeb7dcc",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=0d8995f33177cd5ab2f6",
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=5e9c65b56fd739ab48b5",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=6c64ab7ae354125acb1b",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=e39054e54de350d18e48",
+    "/assets/js/app.js": "/assets/js/app.js?id=50a269f086acf3591b9f",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=a493803fbe3306f14ffb",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=167cb830da65321bc454",
+    "/assets/js/app.js.map": "/assets/js/app.js.map?id=f06ddd46f557f4776d82",
+    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=2d3cd7a20d0be00ca8d7",
+    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=eb990684ab1cc2855a28",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=9d36a0eaf8c92b343af9",
+    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=696bd70119d46756243d",
     "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
 }
