@@ -96,7 +96,7 @@
                 //logout
                 logout: false,
                 logoutTime: 3000,
-                logout_text: 'you are successfully logout',
+                logout_text: 'You have successfully logged out',
 
                 //if user login all data
                 user: '',
