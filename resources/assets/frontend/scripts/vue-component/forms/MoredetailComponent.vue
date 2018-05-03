@@ -1,21 +1,19 @@
 <template>
-    <div class="more-detail-component">
-        <v-form v-model="valid" ref="detail_form" id="details-form">
+    <div class="more-detail-component fill-height">
+        <v-container fill-height v-if="http_error">
+            <v-layout justify-center align-center>
+                <v-flex xs12>
+                    <div class="text-xs-center">Sorry, we can't seem to find your video with the code you
+                            provided. Please contact <u>submissions@unilad.co.uk</u></div>
+                </v-flex>
+            </v-layout>
+        </v-container>
 
+        <v-form v-model="valid" ref="detail_form" id="details-form" v-else>
             <v-container grid-list-lg>
-
-                <v-layout row wrap v-if="http_error">
+                <v-layout row wrap>
                     <v-flex xs12>
-                        <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">Sorry, we can't seem to find your video with the code you
-                                provided. Please contact <u>submissions@unilad.co.uk</u></div>
-                        </div>
-                    </v-flex>
-                </v-layout>
-
-                <v-layout row wrap v-else>
-                    <v-flex xs12>
-                        <h1 class="heading text-xs-center text-uppercase">Your Video Details</h1>
+                        <h1 class="heading text-xs-center text-uppercase">{{video.title}}</h1>
                     </v-flex>
 
                     <v-flex xs12 class="text-xs-center">
@@ -67,7 +65,7 @@
                                 type="tel"
                                 value=""
                                 color="dark"
-                                :disabled="(tel != '') && (tel === 'NULL')"
+                                :disabled="tel"
                                 label="Phone Number:"
                             ></v-text-field>
                     </v-flex>
@@ -101,13 +99,9 @@
                                     header-color="black"
                                     min="2000-04"
                                     :max="max_date"
+                                    @input="$refs.dialog.save(date_filmed)"
                                     v-model="date_filmed"
                             >
-                                <v-spacer></v-spacer>
-
-                                <v-btn flat color="dark" @click="date_picker_modal = false">Cancel</v-btn>
-
-                                <v-btn flat color="dark" @click="$refs.dialog.save(date_filmed)">OK</v-btn>
                             </v-date-picker>
                         </v-dialog>
                     </v-flex>
@@ -290,7 +284,7 @@
                 persistent>
             <v-card dark>
                 <v-card-text>
-                    <h2 class="text-xs-center">Thank you for your detail. we will contact you soon</h2>
+                    <h2 class="text-xs-center">Thank you for your details. We will contact you soon</h2>
                 </v-card-text>
 
                 <v-card-actions>
@@ -348,7 +342,7 @@
             error: false,
 
         }),
-        created() {
+        mounted(){
             this.code = this.$route.params.code;
             if (!this.code) {
                 this.$router.push({name: 'home'});
@@ -382,6 +376,11 @@
                 this.settings = this.$store.getters.getSettingsObject;
             });
         },
+
+        created() {
+
+        },
+
         watch: {},
 
 
