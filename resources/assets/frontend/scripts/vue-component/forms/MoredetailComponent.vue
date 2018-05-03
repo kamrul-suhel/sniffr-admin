@@ -60,7 +60,7 @@
                                 type="tel"
                                 value=""
                                 color="dark"
-                                :disabled="tel"
+                                :disabled="telOptional"
                                 label="Phone Number:"
                             ></v-text-field>
                     </v-flex>
@@ -302,6 +302,7 @@
             full_name: '',
             email: '',
             tel: '',
+            telOptional: true,
             location: '',
             description: '',
             filmed_by_me: '',
@@ -355,6 +356,7 @@
                         this.full_name = data.contact.full_name;
                         this.email = data.contact.email;
                         this.tel = data.contact.tel;
+                        this.telOptional = data.contact.tel? true : false;
                         this.location = data.location;
                         this.description = data.description;
 

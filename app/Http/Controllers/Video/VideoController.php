@@ -90,6 +90,7 @@ class VideoController extends Controller
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
+
         //save Contact
         $contact = Contact::where('email', Input::get('email'))->first();
 
