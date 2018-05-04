@@ -198,12 +198,16 @@ p {
         line-height:18px;
         overflow:inherit;
         white-space:unset;
-        margin-left:40px;
+        margin-left:30px;
       }
 
       .input-group__input{
-        position:absolute;
-        top:-6px;
+        position:relative;
+        top:-26px;
+      }
+
+      .input-group__details{
+        top:-26px;
       }
     }
   }
@@ -262,4 +266,11 @@ p {
 .notfound-title {
   font-size: 10rem;
   font-weight: bold;
+}
+
+
+/* ************************* Iframe style section ******************* */
+
+.iframe-style{
+  width:100%;
 }

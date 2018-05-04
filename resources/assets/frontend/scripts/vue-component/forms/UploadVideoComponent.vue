@@ -1,6 +1,6 @@
 <template>
     <!-- UPLODA VIDEO SECTION -->
-    <section class="upload-video-section section-space">
+    <section class="upload-video-section section-space" :class="{'iframe-style': is_iframe}">
         <v-container grid-list-xl>
             <v-layout row wrap>
                 <v-flex xs12>
@@ -22,7 +22,7 @@
                                             name="full_name"
                                             :rules="nameRules"
                                             color="dark"
-                                            class="input-group--focused"
+                                            :box="is_iframe"
                                             required
                                     ></v-text-field>
                                 </v-flex>
@@ -36,7 +36,6 @@
                                             type="email"
                                             :rules="emailRules"
                                             color="dark"
-                                            class="input-group--focused"
                                             required
                                     ></v-text-field>
 
@@ -243,7 +242,9 @@
             email_optional_error: false,
 
             //terms & condition
-            termslink: ''
+            termslink: '',
+
+            is_iframe: false
         }),
         created() {
             this.setSourceField();
@@ -377,7 +378,7 @@
                     this.termslink = '/terms';
                     return;
                 }
-
+                this.is_iframe = true;
                 this.termslink = 'https://www.unilad.co.uk/terms-use'
             },
 

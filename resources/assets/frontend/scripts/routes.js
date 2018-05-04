@@ -11,6 +11,8 @@ import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeC
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 
+import IframeTestingComponent from './vue-component/forms/IframeTestingComponent';
+
 
 export const routes = [
     {
@@ -94,6 +96,12 @@ export const routes = [
       path: '/terms',
       name: 'termsconditions',
       component: TermsConditionsComponent
+    },
+
+    {
+        path: '/iframe_test',
+        name: 'iframe_test',
+        component: IframeTestingComponent
     },
 
     {

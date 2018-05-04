@@ -2,6 +2,16 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
+
+/*
+ * Testing Iframe
+ */
+
+Route::get('iframe_test', function(){
+    return view('frontend.master');
+});
+
+
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('/settings_object', function () {
