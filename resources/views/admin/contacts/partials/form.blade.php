@@ -1,39 +1,40 @@
-<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+<form method="POST" action="{{ ($contact) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
     <div class="row">
         <div class="col-md-12">
             <h2>Contact Information</h2>
         </div>
         <div class="col-md-12">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Full Name</span>
-                <input type="text" class="form-control" id="full_name" name="full_name" value="{{ $contact->full_name or '' }} }}" aria-describedby="basic-addon1">
+                <span class="input-group-addon">Full Name</span>
+                <input type="text" class="form-control" id="full_name" name="full_name"
+                       value="{{ $contact->full_name or old('full_name') }}">
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Email</span>
-                <input type="text" class="form-control" id="email" name="email" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Email</span>
+                <input type="text" class="form-control" id="email" name="email" value="{{ $contact->email or old('email') }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Phone</span>
-                <input type="text" class="form-control" id="phone" name="phone" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Phone</span>
+                <input type="text" class="form-control" id="tel" name="tel" value="{{ $contact->tel or old('tel') }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Country</span>
-                <select type="text" class="form-control" id="country_code" name="country_code" placeholder=""
-                        aria-describedby="basic-addon1">
+                <span class="input-group-addon">Country</span>
+                <select type="text" class="form-control" id="country_code" name="country_code" title="country_code">
+                    <option value="">--</option>
                     @foreach(config('countries') as $country)
-                        <option value="{{ $country['code'] }}">{{ $country['name'] }}</option>
+                        <option value="{{ $country['code'] }}" {{ ((($contact) && ($country['code'] == $contact->country_code)) || (old('country_code') == $country['code'])) ? 'selected="selected"' : '' }}>
+                            {{ $country['name'] }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -41,11 +42,13 @@
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Language</span>
-                <select type="text" class="form-control" id="language_code" name="language_code" placeholder=""
-                        aria-describedby="basic-addon1">
+                <span class="input-group-addon">Language</span>
+                <select type="text" class="form-control" id="language_code" name="language_code" title="language_code">
+                    <option value="">--</option>
                     @foreach(config('languages') as $language)
-                        <option value="{{ $language['code'] }}">{{ $language['name'] }}</option>
+                        <option value="{{ $language['code'] }}" {{ ((($contact) && ($language['code'] == $contact->language)) || (old('language_code') == $language['code'])) ? 'selected="selected"' : '' }}>
+                            {{ $language['name'] }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -53,9 +56,8 @@
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">City</span>
-                <input type="text" class="form-control" id="city" name="city" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">City</span>
+                <input type="text" class="form-control" id="location" name="location" value="{{ $contact->location or old('location') }}">
             </div>
         </div>
     </div>
@@ -66,41 +68,40 @@
         </div>
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Twitter</span>
-                <input type="text" class="form-control" id="twitter" name="twitter" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Twitter</span>
+                <input type="text" class="form-control" id="twitter" name="twitter"
+                       value="{{ $contact->twitter or old('twitter') }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Facebook</span>
-                <input type="text" class="form-control" id="facebook" name="facebook" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Facebook</span>
+                <input type="text" class="form-control" id="facebook" name="facebook"
+                       value="{{ $contact->facebook or old('facebook') }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Instagram</span>
-                <input type="text" class="form-control" id="instagram" name="instagram" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Instagram</span>
+                <input type="text" class="form-control" id="instagram" name="instagram"
+                       value="{{ $contact->instagram or old('instagram') }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Reddit</span>
-                <input type="text" class="form-control" id="reddit" name="reddit" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Reddit</span>
+                <input type="text" class="form-control" id="reddit" name="reddit" value="{{ $contact->reddit or old('reddit') }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Youtube</span>
-                <input type="text" class="form-control" id="youtube" name="youtube" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Youtube</span>
+                <input type="text" class="form-control" id="youtube" name="youtube"
+                       value="{{ $contact->youtube or old('youtube') }}">
             </div>
         </div>
     </div>
@@ -111,9 +112,8 @@
         </div>
         <div class="col-md-6">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Paypal</span>
-                <input type="text" class="form-control" id="paypal" name="paypal" placeholder=""
-                       aria-describedby="basic-addon1">
+                <span class="input-group-addon">Paypal</span>
+                <input type="text" class="form-control" id="paypal" name="paypal" value="{{ $contact->paypal or old('paypal') }}">
             </div>
         </div>
     </div>
@@ -125,17 +125,19 @@
 
         <div class="col-md-12">
             <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Notes</span>
-                <textarea class="form-control" id="notes" name="notes" placeholder="Other contact information"
-                          aria-describedby="basic-addon1" rows="4"></textarea>
+                <span class="input-group-addon">Notes</span>
+                <textarea class="form-control" id="other" name="other" rows="4">{{ $contact->other or old('other') }}</textarea>
             </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-        <input type="hidden" name="_token" value="<?= csrf_token() ?>"/>
-        <input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right"/>
-    </div>
+            {{ csrf_field() }}
+
+            {{ ($contact) ? method_field('PUT') : method_field('POST') }}
+
+            <input type="submit" value="{{ ($contact) ? 'Update' : 'Create' }} Contact" class="btn btn-success pull-right"/>
+        </div>
     </div>
 </form>

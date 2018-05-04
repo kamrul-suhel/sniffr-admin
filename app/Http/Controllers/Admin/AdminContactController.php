@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Contact\CreateContactRequest;
+use App\Http\Requests\Contact\UpdateContactRequest;
 use Auth;
-use Validator;
 use Redirect;
 use App\Comment;
 use App\Contact;
@@ -70,15 +71,27 @@ class AdminContactController extends Controller
         return view('admin.contacts.create_edit', $data);
     }
 
-    public function store()
+    /**
+     * @param CreateContactRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(CreateContactRequest $request)
     {
-        $validator = Validator::make($data = Input::all(), Contact::$rules);
-
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-
-        Contact::create($data);
+        $contact = new Contact();
+        $contact->full_name = $request->input('full_name');
+        $contact->email = $request->input('email');
+        $contact->tel = $request->input('tel');
+        $contact->language = $request->input('language_code');
+        $contact->country_code = $request->input('country_code');
+        $contact->location = $request->input('location');
+        $contact->paypal = $request->input('paypal');
+        $contact->facebook = $request->input('facebook');
+        $contact->youtube = $request->input('youtube');
+        $contact->instagram = $request->input('instagram');
+        $contact->twitter = $request->input('twitter');
+        $contact->reddit = $request->input('reddit');
+        $contact->other = $request->input('other');
+        $contact->save();
 
         return Redirect::to('admin/contacts')->with([
             'note' => 'New Contact Successfully Added!',
@@ -107,31 +120,28 @@ class AdminContactController extends Controller
     }
 
     /**
+     * @param Contact $contact
+     * @param UpdateContactRequest $request
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function update()
+    public function update(Contact $contact, UpdateContactRequest $request)
     {
-        $data = Input::all();
-        $id = $data['id'];
-        $contact = Contact::findOrFail($id);
+        $contact->full_name = $request->input('full_name');
+        $contact->email = $request->input('email');
+        $contact->tel = $request->input('tel');
+        $contact->language = $request->input('language_code');
+        $contact->country_code = $request->input('country_code');
+        $contact->location = $request->input('location');
+        $contact->paypal = $request->input('paypal');
+        $contact->facebook = $request->input('facebook');
+        $contact->youtube = $request->input('youtube');
+        $contact->instagram = $request->input('instagram');
+        $contact->twitter = $request->input('twitter');
+        $contact->reddit = $request->input('reddit');
+        $contact->other = $request->input('other');
+        $contact->save();
 
-        $validator = Validator::make($data, Contact::$rules);
-
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-
-        if ($data['comment']) {
-            $comment = new Comment();
-            $comment->comment = $data['comment'];
-            $comment->user_id = Auth::id();
-
-            $contact->comments()->save($comment);
-        }
-
-        $contact->update($data);
-
-        return Redirect::to('admin/contacts/edit' . '/' . $id)->with([
+        return redirect()->route('contacts.edit' , ['id' => $contact->id])->with([
             'note' => 'Successfully Updated Contact!',
             'note_type' => 'success'
         ]);
@@ -155,5 +165,18 @@ class AdminContactController extends Controller
             'note' => 'Successfully Deleted Contact',
             'note_type' => 'success'
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Contact $contact
+     */
+    public function addComment(Request $request, Contact $contact)
+    {
+        $comment = new Comment();
+        $comment->comment = $request['comment'];
+        $comment->user_id = Auth::id();
+
+        $contact->comments()->save($comment);
     }
 }
