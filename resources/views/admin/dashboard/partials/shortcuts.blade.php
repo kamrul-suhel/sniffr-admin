@@ -17,7 +17,7 @@
 
             <div class="panel-body">
                 <div class="tab-content">
-                    <a href="{{ url('admin/contacts/create') }}" class="btn btn-success">
+                    <a href="{{ route('contacts.create') }}" class="btn btn-success">
                         <i class="fa fa-plus-circle"></i>
                         Add New Creator
                     </a>

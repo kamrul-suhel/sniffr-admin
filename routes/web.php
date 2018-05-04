@@ -185,12 +185,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
-    Route::get('contacts', 'Admin\AdminContactController@index');
-    Route::get('contacts/create', 'Admin\AdminContactController@create');
-    Route::post('contacts/store', array('uses' => 'Admin\AdminContactController@store'));
-    Route::get('contacts/edit/{id}', 'Admin\AdminContactController@edit');
-    Route::post('contacts/update', array('uses' => 'Admin\AdminContactController@update'));
-    Route::get('contacts/delete/{id}', array('uses' => 'Admin\AdminContactController@destroy'));
+    Route::resource('contacts', 'Admin\AdminContactController');
 
     Route::get('campaigns', 'Admin\AdminCampaignController@index')->name('admin_campaigns');
     Route::get('campaigns/create', 'Admin\AdminCampaignController@create');

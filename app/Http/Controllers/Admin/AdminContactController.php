@@ -62,8 +62,6 @@ class AdminContactController extends Controller
     public function create()
     {
         $data = [
-            'post_route' => url('admin/contacts/store'),
-            'button_text' => 'Add New Contact',
             'user' => Auth::user(),
             'videos' => Video::get(),
             'contact' => null,
@@ -110,8 +108,6 @@ class AdminContactController extends Controller
          $data = [
              'headline' => '<i class="fa fa-edit"></i> Edit Contact',
              'contact' => $contact,
-             'post_route' => url('admin/contacts/update'),
-             'button_text' => 'Update Contact',
              'user' => Auth::user(),
              'videos' => $contact->videos
          ];
