@@ -125,7 +125,6 @@ class AdminVideosController extends Controller
 
         // Send email
         if ($video->state == 'accepted') {
-
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
 
@@ -235,6 +234,7 @@ class AdminVideosController extends Controller
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
             'users' => User::all(),
+            'creators' => Contact::orderBy('created_at', 'desc')->get(),
             'video' => null,
             'tags' => null,
         ];
@@ -253,13 +253,6 @@ class AdminVideosController extends Controller
         ini_set('upload_max_filesize', '1024M');
         ini_set('post_max_size', '1024M');
         set_time_limit(1800); // Longer timeout
-
-        $validator = Validator::make($data = Input::all());
-
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
 
         //handle file upload to S3 and Youtube ingestion
         $filePath = $fileSize = $fileMimeType = $youtubeId = '';
@@ -310,6 +303,7 @@ class AdminVideosController extends Controller
         $video->details = Input::get('details');
         $video->active = 0;
         $video->featured = 0;
+        $video->contact_id = $request->input('creator_id');
 
         // Foreign keys
         // TODO: in what circumstance we want the user_id to be submitted instead of get it from the session?
@@ -387,6 +381,7 @@ class AdminVideosController extends Controller
             'video_shottypes' => VideoShotType::all(),
             'video_campaigns' => Campaign::all(),
             'users' => User::all(),
+            'creators' => Contact::orderBy('created_at', 'desc')->get(),
         ];
 
         return view('admin.videos.create_edit', $data);
@@ -398,41 +393,43 @@ class AdminVideosController extends Controller
      */
     public function update(Request $request)
     {
-        $data = $request->all();
+        $request->all();
+
         $video = Video::where('alpha_id', $request->input('id'))->first();
 
+        /*
         $tags = $data['tags'];
         unset($data['tags']);
 
         if($tags) {
             $this->addUpdateVideoTags($video, $tags);
-        }
+        }*/
 
         // Youtube integration
-        if ($video->youtube_id && $video->file && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
+        /*if ($video->youtube_id && $video->file && env('APP_ENV') != 'local') { // Fetches video duration on update and is youtube if none
             if (!$video->duration) {
                 $data['duration'] = TimeHelper::convert_seconds_to_HMS(Youtube::getDuration($video->youtube_id));
             }
 
             Youtube::setSnippet($video->youtube_id, $data['title'], $data['description'], explode(',', $tags));
-        }
+        }*/
 
         // Duration
-        if (isset($data['duration'])) {
+        /*if (isset($data['duration'])) {
             $data['duration'] = TimeHelper::convert_HMS_to_seconds($data['duration']);
-        }
+        }*/
 
-        if (empty($data['image'])) {
+        /*if (empty($data['image'])) {
             unset($data['image']);
         } else {
             $fileName = time() . '.' . $request->image->getClientOriginalExtension();
             $file = $request->file('image');
             $t = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
             $data['image'] = Storage::disk('s3')->url($fileName);
-        }
+        }*/
 
         //handle file upload to S3 and Youtube ingestion
-        if ($request->hasFile('file')) {
+        /*if ($request->hasFile('file')) {
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
             $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
@@ -447,13 +444,13 @@ class AdminVideosController extends Controller
             $video->file = $filePath;
             $video->mime = $fileMimeType;
             $video->youtube_id = '';
-        }
+        }*/
 
-        $selected_campaigns = $video->campaigns->pluck('id')->all();
-        $campaigns = [];
+        /*$selected_campaigns = $video->campaigns->pluck('id')->all();
+        $campaigns = [];*/
 
-        if(Input::get('campaigns')){
-            // IAN:  Hmm, tough one, only want to set their state to new if their new.
+        // IAN:  Hmm, tough one, only want to set their state to new if their new.
+        /*if(Input::get('campaigns')){
             foreach(Input::get('campaigns') as $key => $campaign){
                 if(in_array($campaign, $selected_campaigns)){
                     $campaigns[$campaign] = $campaign;
@@ -461,35 +458,41 @@ class AdminVideosController extends Controller
                     $campaigns[$campaign]['state'] = 'new';
                 }
             }
-        }
+        }*/
 
-        if(Input::get('user_id')){
+        /*if(Input::get('user_id')){
             $video->user_id = Input::get('user_id');
-        }
+        }*/
 
         // Check if ex/nonex dropdown was changed for rights management make sure is_exclusive field is also changed
-        if($request->rights=='nonex') {
+        /*if($request->rights=='nonex') {
             $video->is_exclusive = NULL;
         } else {
             $video->is_exclusive = 1;
-        }
+        }*/
 
-        $video->campaigns()->sync($campaigns);
+        //$video->campaigns()->sync($campaigns);
 
-        if(empty($data['active'])){
+        /*if(empty($data['active'])){
             $data['active'] = 0;
         }
 
         if(empty($data['featured'])){
             $data['featured'] = 0;
-        }
+        }*/
 
-        $video->update($data);
+        $video->contract_id = $request->input('contract_id', null);
+        $video->video_collection_id = $request->input('collection_id', null);
+        $video->video_shottype_id = $request->input('collection_id', null);
+        $video->video_category_id = $request->input('category_id', null);
+        $video->contact_id = $request->input('creator_id', null);
 
-        if($request->hasFile('file')){
+        $video->update();
+
+        /*if($request->hasFile('file')){
             QueueVideo::dispatch($video->id, true)
                 ->delay(now()->addSeconds(5));
-        }
+        }*/
 
         return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
             'note' => 'Successfully Updated Video!',
@@ -551,7 +554,7 @@ class AdminVideosController extends Controller
                         $video->title = $record['title'];
                         $video->state = $select_state;
                         $video->rights = $select_rights;
-                        $video->video_collection_id = count($collection) ? $collection->id : 0;
+                        $video->video_collection_id = count($collection) ? $collection->id : null;
 
                         if(strpos($link, 'jotform') || strpos($link, 'drive.google.com') || strpos($link, 'dropbox')) { // Check if link is jotform
                             if($select_type == 'both' || $select_type == 'files'){
