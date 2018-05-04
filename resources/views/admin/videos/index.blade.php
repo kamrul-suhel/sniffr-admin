@@ -6,7 +6,9 @@
 			<div class="col-xs-12">
 				<h3>
 					<i class="fa fa-youtube-play"></i>
-					<a href="/admin/videos/{{ lcfirst($state) }}">{{ ucfirst($state) }} Videos</a>
+					<a href="/admin/videos/{{ lcfirst($state) }}">
+						{{ ucfirst($state) }} Videos
+					</a>
 					<a href="{{ url('admin/videos/create') }}" class="btn btn-success pull-right">
 						<i class="fa fa-plus-circle"></i>
 						Add New
@@ -19,7 +21,7 @@
 			<form id="search-form" method="get" role="form" class="search-form-full">
 				<div class="col-md-2">
 					<div class="form-group">
-						<select id="category" name="category" class="selectpicker form-control">
+						<select id="category" name="category" class="selectpicker form-control" title="category">
 							<option value="">Vertical</option>
 							@foreach($video_categories as $category)
 								<option value="{{ $category->id }}"{{ isset($_GET['category']) && ($_GET['category'] == $category->id) ? ' selected="selected"' : '' }}>{{ $category->name }}</option>
