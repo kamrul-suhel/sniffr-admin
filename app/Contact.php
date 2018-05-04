@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comment[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Video[] $videos
+ * @property array|string reddit
+ * @property array|string country_code
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contact onlyTrashed()
  * @method static bool|null restore()
@@ -50,8 +52,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contact extends Model
 {
     use SoftDeletes;
-    public static $rules = [];
-    protected $table = 'contacts';
     protected $softDelete = true;
 
     protected $fillable = [
@@ -59,12 +59,14 @@ class Contact extends Model
         'email',
         'tel',
         'language',
+        'country_code',
         'location',
         'comments',
         'facebook',
         'youtube',
         'instagram',
         'twitter',
+        'reddit',
         'other',
         'terms'
     ];
