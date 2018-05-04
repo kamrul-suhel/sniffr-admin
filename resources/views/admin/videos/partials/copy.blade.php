@@ -29,8 +29,7 @@
             <div class="panel-body">
                 <p>Add a short description of the video below:</p>
 
-                <textarea class="form-control" name="description"
-                          id="description" rows="9">{{ ($video) ? $video->description : '' }}</textarea>
+                <textarea class="form-control" name="description" id="description" rows="9">{{ ($video) ? $video->description : '' }}</textarea>
             </div>
         </div>
     </div>
