@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Cache;
  * @property mixed details
  * @property mixed date_filmed
  * @property int is_exclusive
+ * @property array|string creator_id
  * @mixin \Eloquent
  */
 class Video extends Model
