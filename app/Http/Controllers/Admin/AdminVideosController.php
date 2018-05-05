@@ -224,10 +224,8 @@ class AdminVideosController extends Controller
     public function create()
     {
         $data = [
-            'headline' => '<i class="fa fa-plus-circle"></i> New Video',
-            'post_route' => url('admin/videos/store'),
-            'button_text' => 'Add New Video',
             'user' => Auth::user(),
+            'contact' => null,
             'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
@@ -336,7 +334,7 @@ class AdminVideosController extends Controller
             $this->addUpdateVideoTags($video, $tags);
         }
 
-        return redirect()->route('admin_videos_index')->with([
+        return redirect()->route('videos.index')->with([
             'note' => 'New Video Successfully Added!',
             'note_type' => 'success'
         ]);
@@ -372,6 +370,7 @@ class AdminVideosController extends Controller
             'tags' => $video->tags,
             'previous' => $previous,
             'next' => $next,
+            'contact' => $video->contact,
             'post_route' => url('admin/videos/update'),
             'button_text' => 'Update Video',
             'user' => Auth::user(),

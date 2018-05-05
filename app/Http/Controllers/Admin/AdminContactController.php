@@ -91,9 +91,14 @@ class AdminContactController extends Controller
         $contact->other = $request->input('other');
         $contact->save();
 
-        return Redirect::to('admin/contacts')->with([
-            'note' => 'New Contact Successfully Added!',
-            'note_type' => 'success'
+        $new_contact = Contact::where('email', $request->input('email'))->first();
+
+        $redirect_url = $request->input('referral', 'contacts.index');
+
+        return redirect()->route($redirect_url)->with([
+            'note' => 'New Creator Successfully Added!',
+            'note_type' => 'success',
+            'contact_id' => $new_contact->id
         ]);
     }
 
