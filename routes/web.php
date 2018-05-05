@@ -125,13 +125,14 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('', 'Admin\DashboardController@index');
 
     // Admin Video Functionality
-    Route::get('videos', 'Admin\AdminVideosController@index')->name('admin_videos_index');
+    Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');
-    Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
-    Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
+    Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'))->name('videos.update');
+    Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'))->name('videos.destroy');
     Route::get('videos/restore/{id}', array('uses' => 'Admin\AdminVideosController@restore'));
-    Route::get('videos/create', 'Admin\AdminVideosController@create');
-    Route::post('videos/store', array('uses' => 'Admin\AdminVideosController@store'));
+    Route::get('videos/create', 'Admin\AdminVideosController@create')->name('videos.create');
+    Route::post('videos/store', array('uses' => 'Admin\AdminVideosController@store'))->name('videos.store');
+
     Route::get('videos/categories', 'Admin\AdminVideoCategoriesController@index');
     Route::post('videos/categories/store', array('uses' => 'Admin\AdminVideoCategoriesController@store'));
     Route::post('videos/categories/order', array('uses' => 'Admin\AdminVideoCategoriesController@order'));
