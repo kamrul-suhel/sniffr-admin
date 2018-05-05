@@ -1,5 +1,6 @@
 @extends('admin.master')
 
+
 @section('content')
 	<div class="admin-section-title bottom-padding">
 		<div class="row">

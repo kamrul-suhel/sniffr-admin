@@ -23,3 +23,8 @@
 .input-group {
     padding: 20px 0;
 }
+
+.input-group .form-control {
+    position: relative;
+    z-index: inherit !important;
+}

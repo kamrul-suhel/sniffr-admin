@@ -6,8 +6,9 @@
         <div class="col-md-12">
             <div class="input-group">
                 <span class="input-group-addon">Full Name</span>
-                <input type="text" class="form-control" id="full_name" name="full_name"
-                       value="{{ $contact->full_name or old('full_name') }}">
+                <input type="text" class="form-control" id="full_name" name="full_name" value="{{
+                $contact->full_name or old('full_name')
+                }}" title="full name">
             </div>
         </div>
     </div>
@@ -57,51 +58,9 @@
         <div class="col-md-6">
             <div class="input-group">
                 <span class="input-group-addon">City</span>
-                <input type="text" class="form-control" id="location" name="location" value="{{ $contact->location or old('location') }}">
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Social Media</h2>
-        </div>
-        <div class="col-md-6">
-            <div class="input-group">
-                <span class="input-group-addon">Twitter</span>
-                <input type="text" class="form-control" id="twitter" name="twitter"
-                       value="{{ $contact->twitter or old('twitter') }}">
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="input-group">
-                <span class="input-group-addon">Facebook</span>
-                <input type="text" class="form-control" id="facebook" name="facebook"
-                       value="{{ $contact->facebook or old('facebook') }}">
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="input-group">
-                <span class="input-group-addon">Instagram</span>
-                <input type="text" class="form-control" id="instagram" name="instagram"
-                       value="{{ $contact->instagram or old('instagram') }}">
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="input-group">
-                <span class="input-group-addon">Reddit</span>
-                <input type="text" class="form-control" id="reddit" name="reddit" value="{{ $contact->reddit or old('reddit') }}">
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="input-group">
-                <span class="input-group-addon">Youtube</span>
-                <input type="text" class="form-control" id="youtube" name="youtube"
-                       value="{{ $contact->youtube or old('youtube') }}">
+                <input type="text" class="form-control" id="location" name="location" title="location" value="{{
+                $contact->location or old('location')
+                }}">
             </div>
         </div>
     </div>
@@ -113,7 +72,59 @@
         <div class="col-md-6">
             <div class="input-group">
                 <span class="input-group-addon">Paypal</span>
-                <input type="text" class="form-control" id="paypal" name="paypal" value="{{ $contact->paypal or old('paypal') }}">
+                <input type="text" class="form-control" id="paypal" name="paypal" value="{{
+                $contact->paypal or old('paypal')
+                }}" title="paypal">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Social Media</h2>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">Twitter</span>
+                <input type="text" class="form-control" id="twitter" name="twitter" value="{{
+                $contact->twitter or old('twitter')
+                }}">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">Facebook</span>
+                <input type="text" class="form-control" id="facebook" name="facebook" value="{{
+                $contact->facebook or old('facebook')
+                }}">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">Instagram</span>
+                <input type="text" class="form-control" id="instagram" name="instagram" value="{{
+                $contact->instagram or old('instagram')
+                }}">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">Reddit</span>
+                <input type="text" class="form-control" id="reddit" name="reddit" value="{{
+                $contact->reddit or old('reddit')
+                }}">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">Youtube</span>
+                <input type="text" class="form-control" id="youtube" name="youtube" value="{{
+                $contact->youtube or old('youtube')
+                }}">
             </div>
         </div>
     </div>
@@ -126,7 +137,9 @@
         <div class="col-md-12">
             <div class="input-group">
                 <span class="input-group-addon">Notes</span>
-                <textarea class="form-control" id="other" name="other" rows="4">{{ $contact->other or old('other') }}</textarea>
+                <textarea class="form-control" id="other" name="other" rows="4" title="notes">{{
+                $contact->other or old('other')
+                }}</textarea>
             </div>
         </div>
     </div>
@@ -134,6 +147,10 @@
     <div class="row">
         <div class="col-md-12">
             {{ csrf_field() }}
+
+            @if(\Request::route()->getName() != "contact.create")
+                <input type="hidden" value="{{ \Request::route()->getName() }}" name="referral" id="referral" title="referral">
+            @endif
 
             {{ ($contact) ? method_field('PUT') : method_field('POST') }}
 
