@@ -79,7 +79,8 @@
                         <div class="col-md-12">
                             {{ csrf_field() }}
                             {{ method_field('POST') }}
-                            <input type="hidden" id="video_id" name="video_id" value="{{ $video->alpha_id }}"/>
+                            <input type="hidden" id="video_id" name="video_id" value="{{ $video->id }}"/>
+                            <input type="hidden" id="video_alpha_id" name="video_alpha_id" value="{{ $video->alpha_id }}"/>
                             <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
                         </div>
                     </div>

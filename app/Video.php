@@ -51,6 +51,11 @@ use Illuminate\Support\Facades\Cache;
  */
 class Video extends Model
 {
+    public function getRouteKeyName()
+    {
+        return 'alpha_id';
+    }
+
     use SoftDeletes, Notifiable;
 
     const CACHE_EXPIRATION = 720;
@@ -104,6 +109,19 @@ class Video extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    public function currentContract()
+    {
+        return $this->hasOne('\App\Contract')->latest();
     }
 
     /**

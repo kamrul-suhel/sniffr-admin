@@ -163,6 +163,7 @@ Route::group(array('prefix' => 'admin'), function(){
 
     Route::resource('comment', 'CommentController');
     Route::resource('contract', 'Contract\ContractController');
+    Route::post('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
 
     Route::get('media', 'Admin\AdminMediaController@index');
     // Route::post('media/files', 'Admin\AdminMediaController@files');

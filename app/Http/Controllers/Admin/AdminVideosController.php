@@ -345,9 +345,12 @@ class AdminVideosController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        $video = Video::where('alpha_id', $id)->withTrashed()->first();
+        $video = Video::with('currentContract')
+            ->where('alpha_id', $id)
+            ->withTrashed()
+            ->first();
 
         if (!$video) {
             return Redirect::to('admin/videos/')->with([

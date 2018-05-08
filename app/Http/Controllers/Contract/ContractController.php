@@ -23,7 +23,7 @@ class ContractController extends Controller
         $contract->save();
 
         return redirect()->route('admin_video_edit', [
-            'id' => $request->input('video_id')
+            'id' => $request->input('video_alpha_id')
         ]);
     }
 
