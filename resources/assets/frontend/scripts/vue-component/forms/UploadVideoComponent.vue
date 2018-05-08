@@ -32,7 +32,6 @@
                                             name="full_name"
                                             :rules="nameRules"
                                             color="dark"
-                                            :box="is_iframe"
                                             required
                                     ></v-text-field>
                                 </v-flex>
