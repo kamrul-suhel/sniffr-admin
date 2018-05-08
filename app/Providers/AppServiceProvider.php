@@ -20,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
         if (config('settings.cache.cache_enabled')) {
             Video::observe(VideoObserver::class);
         }
+        if (!\App::environment('local')) {
+            \URL::forceScheme('https');
+        }
 
         $settings = config('settings.site');
         View::share('settings', $settings);

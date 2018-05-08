@@ -1,5 +1,5 @@
 <template>
-    <div class="text-xs-center">
+    <div class="text-xs-center pagination-section">
         <v-container grid-list-lg>
             <v-layout justify-center>
                 <v-flex xs12>

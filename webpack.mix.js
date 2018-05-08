@@ -37,14 +37,23 @@ mix.sass(
     .options({
         processCssUrls: false,
     })
-    .sourceMaps()
-    .version();
+    .sourceMaps();
+
+    if (mix.inProduction()) {
+        mix.version();
+    }
+
+    if (!mix.inProduction()) {
+        mix.webpackConfig({devtool: 'inline-source-map'})
+    }
 
 mix.js([
     'resources/assets/frontend/scripts/main.js',
 ], 'public/assets/frontend/scripts/scripts.js')
-    .version();
 
+    if (mix.inProduction()) {
+        mix.version();
+    }
 
 //Copying file from resource folder to public
 

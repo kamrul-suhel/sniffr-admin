@@ -2,6 +2,16 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
+
+/*
+ * Testing Iframe
+ */
+
+Route::get('iframe_test', function(){
+    return view('frontend.master');
+});
+
+
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('/settings_object', function () {
@@ -114,6 +124,8 @@ Route::get('logout', 'ThemeAuthController@logout');
 Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
 });
+
+Route::get('terms', 'ThemeTermsController@index');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
