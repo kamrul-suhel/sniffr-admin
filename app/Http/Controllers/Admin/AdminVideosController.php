@@ -246,13 +246,14 @@ class AdminVideosController extends Controller
      */
     public function store(Request $request)
     {
-        ini_set('memory_limit', '1024M'); // Increase memory limit for larger video files
+        /*ini_set('memory_limit', '1024M'); // Increase memory limit for larger video files
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '1024M');
         ini_set('post_max_size', '1024M');
-        set_time_limit(1800); // Longer timeout
+        set_time_limit(1800);*/
+        // Longer timeout
 
-        //handle file upload to S3 and Youtube ingestion
+        /*//handle file upload to S3 and Youtube ingestion
         $filePath = $fileSize = $fileMimeType = $youtubeId = '';
         if($request->hasFile('file')){
             $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
@@ -276,19 +277,19 @@ class AdminVideosController extends Controller
             $embed_code = Input::get('embed_code');
         } else {
             $embed_code = '';
-        }
+        }*/
 
         // Duration
-        if(isset($data['duration'])){
+        /*if(isset($data['duration'])){
             $data['duration'] = TimeHelper::convert_HMS_to_seconds($data['duration']);
-        }
+        }*/
 
         //add additional form data to db (with video file info)
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->title = Input::get('title');
         $video->description = Input::get('description');
-        $video->url = $url;
+        /*$video->url = $url;
         $video->embed_code = $embed_code;
         $video->file = $filePath;
         $video->youtube_id = $youtubeId;
@@ -301,11 +302,11 @@ class AdminVideosController extends Controller
         $video->details = Input::get('details');
         $video->active = 0;
         $video->featured = 0;
-        $video->contact_id = $request->input('creator_id');
+        $video->contact_id = $request->input('creator_id');*/
 
         // Foreign keys
         // TODO: in what circumstance we want the user_id to be submitted instead of get it from the session?
-        $video->user_id = Input::get('user_id', null) ?: Auth::user()->id;
+        /*$video->user_id = Input::get('user_id', null) ?: Auth::user()->id;
         if (Input::get('video_category_id', null) AND ($category_id = VideoCategory::first(Input::get('video_category_id', null)))) {
             $video->video_category_id = $category_id;
         }
@@ -316,23 +317,23 @@ class AdminVideosController extends Controller
 
         if (Input::get('video_shottype_id', null) AND ($video_shottype_id = VideoCategory::first(Input::get('video_shottype_id', null)))) {
             $video->video_shottype_id = $video_shottype_id;
-        }
+        }*/
 
         if (Input::get('contact_id', null) AND ($contact_id = VideoCategory::first(Input::get('contact_id', null)))) {
             $video->contact_id = $contact_id;
         }
         $video->save();
 
-        if ($filePath) {
+        /*if ($filePath) {
             QueueVideo::dispatch($video->id)
                 ->delay(now()->addSeconds(15));
-        }
+        }*/
 
         //adds tags
-        $tags = trim(Input::get('tags'));
+        /*$tags = trim(Input::get('tags'));
         if ($tags) {
             $this->addUpdateVideoTags($video, $tags);
-        }
+        }*/
 
         return redirect()->route('videos.index')->with([
             'note' => 'New Video Successfully Added!',
