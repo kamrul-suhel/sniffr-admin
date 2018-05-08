@@ -51,11 +51,6 @@ use Illuminate\Support\Facades\Cache;
  */
 class Video extends Model
 {
-    public function getRouteKeyName()
-    {
-        return 'alpha_id';
-    }
-
     use SoftDeletes, Notifiable;
 
     const CACHE_EXPIRATION = 720;
