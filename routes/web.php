@@ -114,6 +114,8 @@ Route::get('logout', 'ThemeAuthController@logout');
 Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
 });
+
+Route::get('contract/accept/{token}', 'Contract\ContractController@accept')->name('contract.accept');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -163,7 +165,7 @@ Route::group(array('prefix' => 'admin'), function(){
 
     Route::resource('comment', 'CommentController');
     Route::resource('contract', 'Contract\ContractController');
-    Route::post('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
+    Route::get('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
 
     Route::get('media', 'Admin\AdminMediaController@index');
     // Route::post('media/files', 'Admin\AdminMediaController@files');
