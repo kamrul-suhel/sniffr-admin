@@ -1,6 +1,7 @@
 @extends('admin.master')
 
 @section('css')
+    <link rel="stylesheet" href="/css/modals.css">
     <link rel="stylesheet" href="/css/tabs.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
@@ -138,7 +139,7 @@
     </div>
 
     @if($video)
-        {{--@include('admin.videos.partials.contract')--}}
+        @include('admin.videos.partials.contract_modal')
     @endif
 
     @include('admin.videos.partials.add_creator_modal')
