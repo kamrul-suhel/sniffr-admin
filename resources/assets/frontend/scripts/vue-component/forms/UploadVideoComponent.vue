@@ -2,6 +2,16 @@
     <!-- UPLODA VIDEO SECTION -->
     <section class="upload-video-section section-space" :class="{'iframe-style': is_iframe}">
         <v-container grid-list-xl>
+            <v-layout row  wrap v-if="source">
+                <v-flex xs12 class="text-xs-center">
+                    <h1 class="heading text-uppercase">Share your content and grab £100 while you’re at it!</h1>
+                </v-flex>
+
+                <v-flex xs12 class="text-xs-center">
+                    <p>We never get bored of seeing videos from our fans! Whether it’s a must-see moment of comedy gold, an unbelievable skill or just something that’s flat out bizarre, send it our way and if we put it up on the UNILAD Facebook page we’ll send you £100!</p>
+                </v-flex>
+            </v-layout>
+
             <v-layout row wrap>
                 <v-flex xs12>
                     <div class="upload-video-title">
