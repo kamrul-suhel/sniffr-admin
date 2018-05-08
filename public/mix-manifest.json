@@ -1,8 +1,13 @@
 {
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/js/utils.js": "/assets/js/utils.js"
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=6c64ab7ae354125acb1b",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=c21dc7333f7bc5dc3aa0",
+    "/assets/js/app.js": "/assets/js/app.js?id=50a269f086acf3591b9f",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=a493803fbe3306f14ffb",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=261fe2ea5829df89a1dc",
+    "/assets/js/app.js.map": "/assets/js/app.js.map?id=4cbc45d6b1978396216d",
+    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=2d3cd7a20d0be00ca8d7",
+    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=f86162c3bde11e482c95",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=15c4615fa5cabbdf6426",
+    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=7264e4a5fd1c638b866e",
+    "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
 }
