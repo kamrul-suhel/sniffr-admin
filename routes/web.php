@@ -161,8 +161,8 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
 
-    // comments
     Route::resource('comment', 'CommentController');
+    Route::resource('contract', 'Contract\ContractController');
 
     Route::get('media', 'Admin\AdminMediaController@index');
     // Route::post('media/files', 'Admin\AdminMediaController@files');

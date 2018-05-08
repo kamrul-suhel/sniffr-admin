@@ -15,7 +15,7 @@ class AddContractsTable extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('video_id');
+            $table->string('video_id');
             $table->integer('revenue_share')->nullable();
             $table->integer('upfront_payment')->nullable();
             $table->integer('success_system')->nullable();

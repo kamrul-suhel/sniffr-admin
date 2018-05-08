@@ -1,13 +1,12 @@
-<div id="myModal" class="modal fade" role="dialog">
+<div id="contract_modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Create Contact for this Video</h4>
+                <h4 class="modal-title">Create Contract for this Video</h4>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ ($video) ? route('contacts.create') : route('contacts.store') }}" accept-charset="UTF-8">
-                    <input type="hidden" id="id" name="id" value="{{ $video->alpha_id }}"/>
+                <form method="POST" action="{{ route('contract.store') }}" accept-charset="UTF-8">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="input-group">
@@ -31,7 +30,7 @@
                         <div class="col-md-12">
                             <div class="input-group">
                                 <span class="input-group-addon">Upfront Payment</span>
-                                <input type="text" class="form-control" id="location" name="upfront_payment"
+                                <input type="text" class="form-control" id="upfront_payment" name="upfront_payment" title="upfront_payment"
                                        value="{{ $video->contract->upfront_payment or old('upfront_payment') }}">
                             </div>
                         </div>
@@ -68,9 +67,9 @@
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                    <textarea class="form-control" name="credit" id="credit" rows="3" title="">{{
-                    ($video) ? $video->contract['credit'] : ''
-                    }}</textarea>
+                                    <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
+                                    $video->contract['credit']
+                                    }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -78,12 +77,10 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <input type="hidden" value="{{ $video->id or '' }}" name="video_id" title="video_id"
-                                   id="video_id">
                             {{ csrf_field() }}
-                            {{ ($video) ? method_field('PUT') : method_field('POST') }}
-                            <input type="submit" value="{{ ($video) ? 'Update' : 'Create' }} Contact"
-                                   class="btn btn-success pull-right"/>
+                            {{ method_field('POST') }}
+                            <input type="hidden" id="video_id" name="video_id" value="{{ $video->alpha_id }}"/>
+                            <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
                         </div>
                     </div>
                 </form>
