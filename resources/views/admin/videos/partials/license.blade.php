@@ -1,4 +1,4 @@
-<div class="panel panel-{{ config('videos.colors')[$video->state] }}" data-collapsed="0">
+<div class="panel panel-{{ (key_exists($video->state, config('videos.colors'))) ? config('videos.colors')[$video->state] : $video->state }}" data-collapsed="0">
     <div class="panel-heading">
         <div class="panel-title">
             {{ ucfirst($video->state) }}
