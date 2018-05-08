@@ -287,8 +287,9 @@ class AdminVideosController extends Controller
         //add additional form data to db (with video file info)
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
-        $video->title = Input::get('title');
-        $video->description = Input::get('description');
+        $video->title = $request->input('title');
+        $video->description = $request->input('description');
+        $video->contact_id = $request->input('creator_id');
         /*$video->url = $url;
         $video->embed_code = $embed_code;
         $video->file = $filePath;
