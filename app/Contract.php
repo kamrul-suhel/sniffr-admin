@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer $user_id
  * @property string $video_id
  * @property string $upfront_payment
+ * @property string $token
  */
 class Contract extends Model
 {

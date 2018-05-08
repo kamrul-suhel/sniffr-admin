@@ -21,6 +21,8 @@ class AddContractsTable extends Migration
             $table->integer('success_system')->nullable();
             $table->text('credit')->nullable();
             $table->string('ip')->nullable();
+            $table->string('token')->nullable();
+            $table->integer('user_id')->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamp('signature')->nullable();
             $table->timestamps();
