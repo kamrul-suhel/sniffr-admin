@@ -304,7 +304,7 @@ class AdminVideosController extends Controller
         $video->state = 'problem';
         $video->rights = Input::get('rights');
         $video->is_exclusive = 1;
-        $video->image = $request->has('image') ?: '/assets/img/placeholder.png';
+        $video->image = $request->has('image') ?: '/assets/admin/images/placeholder.png';
         $video->date_filmed = Input::get('date_filmed');
         $video->details = Input::get('details');
         $video->active = 0;
@@ -827,19 +827,19 @@ class AdminVideosController extends Controller
     private function deleteVideoImages($video)
     {
         $ext = pathinfo($video->image, PATHINFO_EXTENSION);
-        if(file_exists(config('site.uploads_dir') . 'images/' . $video->image) && $video->image != 'placeholder.jpg'){
+        if(file_exists(config('site.uploads_dir') . 'images/' . $video->image) && $video->image != 'placeholder.png'){
             @unlink(config('site.uploads_dir') . 'images/' . $video->image);
         }
 
-        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
+        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image) )  && $video->image != 'placeholder.png'){
             @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image) );
         }
 
-        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
+        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image) )  && $video->image != 'placeholder.png'){
             @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image) );
         }
 
-        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) )  && $video->image != 'placeholder.jpg'){
+        if(file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) )  && $video->image != 'placeholder.png'){
             @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image) );
         }
     }
