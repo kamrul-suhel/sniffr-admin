@@ -362,7 +362,9 @@
 
                     } else {
                         //error return to 404 page
-                        this.$router.push({name: 'notfound'});
+                        this.error = true;
+                        this.http_error = true;
+                        // this.$router.push({name: 'notfound'});
                     }
                 })
                 .catch((error) => {
