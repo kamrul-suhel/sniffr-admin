@@ -65,16 +65,6 @@
                                             color="dark"
                                     ></v-text-field>
                                 </v-flex>
-
-                                <v-flex xs12>
-                                    <v-text-field
-                                            label="Video title"
-                                            v-model="title"
-                                            name="title"
-                                            color="dark"
-                                            :counter="140"
-                                    ></v-text-field>
-                                </v-flex>
                             </v-layout>
 
                             <v-layout row wrap>
@@ -84,18 +74,28 @@
                             </v-layout>
 
                             <v-layout row wrap>
-                                <v-flex xs12 p-0>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Video title"
+                                            v-model="title"
+                                            name="title"
+                                            color="dark"
+                                            :counter="140"
+                                    ></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12 p-0 class="upload-video-button">
                                     <v-btn
                                             dark
                                             raised
                                             class="ml-0"
                                             :class="{error: error}"
                                             @click="onPickFile()">
-                                        Upload your video
-                                        <v-icon dark right>system_update_alt</v-icon>
+                                        Choose file
+                                        <v-icon dark right>attachment</v-icon>
                                     </v-btn>
                                     <span v-if="error"
-                                          class="red--text">Upload your file OR provide a link please</span> <span>{{file_name}}</span>
+                                          class="red--text">Upload your video OR provide video a link please.</span> <span>{{file_name}}</span>
 
                                     <p class="small-italic">
                                         Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv,
@@ -109,6 +109,12 @@
                                             ref="inputfile"
                                             accept="video/mp4,video/x-m4v,video/*"
                                             @change="onFilechange($event)"/>
+                                </v-flex>
+
+                                <v-flex xs12 class="text-xs-center">
+                                    <div class="video-upload-separator">
+                                        <h2>Or</h2>
+                                    </div>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -141,7 +147,7 @@
                                             name="terms"
                                             required
                                     >
-                                        <span slot="label">I agree to the above <a :href="termslink" target="_blank">terms and conditions</a></span>
+                                        <span slot="label">I agree to the <a :href="termslink" target="_blank">terms and conditions</a></span>
                                     </v-checkbox>
                                 </v-flex>
 
