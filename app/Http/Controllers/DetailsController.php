@@ -61,7 +61,7 @@ class DetailsController extends Controller
                 return $this->successResponse($video);
             }
 
-            return $this->errorResponse('Sorry we did not found your video');
+            return $this->errorResponse('Sorry we did not found your video" to "Sorry, we could not find your video');
 
         }
 
