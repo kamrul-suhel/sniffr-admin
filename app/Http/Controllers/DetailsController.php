@@ -55,13 +55,14 @@ class DetailsController extends Controller
                 ->with('contact')
                 ->first();
 
-            $iframe = $this->getVideoHtml($video, true);
-            $video['iframe'] = $iframe;
-
-            if (!$video) {
-                abort(404);
+            if($video){
+                $iframe = $this->getVideoHtml($video, true);
+                $video['iframe'] = $iframe;
+                return $this->successResponse($video);
             }
-            return $this->successResponse($video);
+
+            return $this->errorResponse('Sorry we did not found your video');
+
         }
 
         return view('frontend.master');

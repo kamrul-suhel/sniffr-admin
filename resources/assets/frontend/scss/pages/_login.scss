@@ -6,7 +6,7 @@
   margin:0 auto;
   padding:20px;
   background:#fff;
-  width:450px;
+  width:100%;
 
   .login-title{
     color: $title-color;
@@ -31,7 +31,9 @@
       }
     }
   }
+
 }
+
 
 .application .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat),
 .theme--dark .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
