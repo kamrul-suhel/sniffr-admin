@@ -549,7 +549,7 @@ class AdminVideosController extends Controller
                         $video->title = $record['title'];
                         $video->state = $select_state;
                         $video->rights = $select_rights;
-                        $video->video_collection_id = count($collection) ? $collection->id : 0;
+                        $video->video_collection_id = isset($collection) ? $collection->id : 0;
 
                         if(strpos($link, 'jotform') || strpos($link, 'drive.google.com') || strpos($link, 'dropbox')) { // Check if link is jotform
                             if($select_type == 'both' || $select_type == 'files'){
