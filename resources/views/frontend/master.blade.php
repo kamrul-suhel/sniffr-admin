@@ -4,6 +4,8 @@
     <!-- All meta tags -->
     @include('frontend.layout.head.meta')
 
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+
     @php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; @endphp
     <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . $favicon }}" type="image/x-icon">
 
