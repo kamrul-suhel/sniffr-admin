@@ -8,7 +8,7 @@
                 <v-card width="800">
                     <v-card-text>
                         <v-flex xs12 align-center>
-                            <h2 class="text-xs-center">CONTRACT</h2>
+                            <h2 class="text-xs-center">LICENSE AND RELEASE</h2>
                         </v-flex>
 
                         <v-flex xs12>
