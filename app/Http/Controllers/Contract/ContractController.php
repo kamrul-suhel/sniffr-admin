@@ -74,7 +74,7 @@ class ContractController extends Controller
             return $this->successResponse([
                 'videos' => $video,
                 'signed' => ($contract->signature) ? true : false,
-                'contract' => config('settings.contract.text')
+                'contract' => config('contracts.text')
             ]);
         }
 

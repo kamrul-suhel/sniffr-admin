@@ -13,7 +13,7 @@
 
                         <v-flex xs12>
                             <input type="hidden" name="token" id="token" v-model="token">
-                            <textarea name="contract" title="contract" rows="20" style="width: 100%"
+                            <textarea name="contract" title="contract" rows="14" style="width: 100%"
                                       disabled="disabled">{{ contract }}</textarea>
                         </v-flex>
 
