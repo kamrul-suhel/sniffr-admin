@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Contract;
 
-use App\Contact;
 use App\Contract;
 use App\Mail\ContractMailable;
+use App\Traits\FrontendResponse;
 use App\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
+use Illuminate\Http\Request;
 
 class ContractController extends Controller
 {
+    use FrontendResponse;
     /**
      * @param CreateContractRequest $request
      * @return \Illuminate\Http\RedirectResponse
@@ -30,32 +32,80 @@ class ContractController extends Controller
 
         return redirect()->route('admin_video_edit', [
             'id' => $request->input('video_alpha_id')
+        ])->with([
+            'note' => 'Contract Saved!',
+            'note_type' => 'success'
         ]);
     }
 
     /**
      * @param int $video_id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function send(int $video_id)
     {
-        $video = Video::find($video_id);
-        //$video = Video::with('currentContract')->with('contact')->find($video_id);
-
+        $video = Video::with('currentContract')->with('contact')->find($video_id);
         \Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
+
+        return redirect()->route('admin_video_edit', [
+            'id' => $video->alpha_id
+        ])->with([
+            'note' => 'Contract Sent!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
+     * @param Request $request
      * @param string $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function accept(string $token)
+    public function accept(Request $request, string $token)
     {
-        $contract = Contract::where('token', $token)->first;
+        $contract = Contract::where('token', '=', $token)->first();
+
+        if (!$contract) {
+            abort(404);
+        }
+
         $video = Video::with('contact')->find($contract->video_id);
 
-        return view('contracts.accept', [
-            'contract' => $contract,
-            'video' => $video
-        ]);
+        if ($request->ajax() || $request->isJson()) {
+            return $this->successResponse([
+                'videos' => $video,
+                'contract' => config('settings.contract.text')
+            ]);
+        }
+
+        return view('frontend.master');
+    }
+
+    /**
+     * @param Request $request
+     * @param string $token
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function sign(Request $request, string $token)
+    {
+        $contract = Contract::where('token', '=', $token)->first();
+        $contract->signature = now();
+        $contract->ip = $request->ip();
+        $contract->user_agent = $request->header('User-Agent');
+        $contract->save();
+
+        if (!$contract) {
+            abort(404);
+        }
+
+        $video = Video::with('contact')->find($contract->video_id);
+
+        if ($request->ajax() || $request->isJson()) {
+            return $this->successResponse([
+                'videos' => $video,
+                'signed' => true
+            ]);
+        }
+
+        return view('frontend.master');
     }
 }
