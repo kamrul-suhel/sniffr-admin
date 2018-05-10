@@ -41,16 +41,12 @@
                                 <span class="input-group-addon">Success System</span>
                                 <select type="text" class="form-control" id="success_system" name="success_system"
                                         title="success system">
-                                    @for($y=1; $y <= 3; $y++)
-                                        <option value="">--</option>
-                                        @for($i=(50); $i <= (150); $i = ($i+50))
-                                            <option value="{{ $i }}" {{ ((($video) && ($video->contract['success_system'] == $i)) || (old('success_system') == $i)) ? 'selected="selected"' : '' }}>
-                                                {{ $i*$y }}&pound;
-                                                =>
-                                                {{ number_format($i * 100000, 2, ',', ',') }} views
-                                            </option>
-                                        @endfor
-                                    @endfor
+                                    <option value="">--</option>
+                                    @foreach(config('success_system') as $k => $success_system_option)
+                                        <option value="{{ $k }}" {{ (old('success_system') == $k) ? 'selected="selected"' : '' }}>
+                                            {{ $success_system_option }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

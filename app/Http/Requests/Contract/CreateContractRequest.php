@@ -27,11 +27,11 @@ class CreateContractRequest extends FormRequest
     public function rules()
     {
         return [
-            'revenue_share' => 'integer|max:100',
-            'upfront_payment' => 'integer|max:999',
-            'success_system' => 'integer|max:999',
-            'credit' => 'string|max:1024',
-            'video_id' => 'required|string',
+            'revenue_share' => 'integer|max:100|nullable',
+            'upfront_payment' => 'integer|nullable',
+            'success_system' => 'integer|nullable',
+            'credit' => 'string|nullable',
+            'video_id' => 'required|integer',
         ];
     }
 
@@ -41,7 +41,6 @@ class CreateContractRequest extends FormRequest
      */
     protected function response(array $errors)
     {
-        dd("chao");
         $isJson = $this->ajax() || $this->isJson();
 
         if ($isJson) {
