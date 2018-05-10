@@ -1,7 +1,10 @@
 <template>
     <v-container fluid fill-height class="section-space">
-        <v-layout align-center justify-center>
-            <v-form ref="contract_accept_form" @submit.prevent="onContractAcceptSubmit()">
+        <v-layout align-center justify-center v-if="display_thank_you">
+            <div v-if="signed">
+                Thank you my friend!
+            </div>
+            <v-form ref="contract_accept_form" @submit.prevent="onContractAcceptSubmit()" v-else>
                 <v-card width="800">
                     <v-card-text>
                         <v-flex xs12 align-center>
@@ -28,7 +31,6 @@
                         <v-flex xs12 text-xs-center>
                             <span v-if="showMessage" :class="[error ? 'red--text' : 'green--text']">{{message}}</span>
                         </v-flex>
-
                     </v-card-text>
                 </v-card>
             </v-form>
@@ -48,6 +50,8 @@
                 showMessage: false,
                 message: '',
                 contract: null,
+                signed: true,
+                display_thank_you: false,
                 error: false
             }
         },
@@ -63,6 +67,8 @@
                 .then(response => {
                     this.contract = response.data.contract
                     this.video = response.data.video
+                    this.signed = response.data.signed
+                    this.display_thank_you = true
                 })
         },
 
@@ -80,6 +86,8 @@
                         this.buttonDisable = true;
                         if (!response.data.error) {
                             this.message = response.data.success_message;
+                            this.signed = response.data.signed
+                            this.display_thank_you = true
                         } else {
                             this.error = true;
                             this.message = response.data.error_message;
