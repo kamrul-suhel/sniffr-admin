@@ -37,6 +37,7 @@
                                 name="full_name"
                                 value=""
                                 label="Name"
+                                hint="Please type your full name"
                                 disabled>
                         </v-text-field>
                     </v-flex>
@@ -118,7 +119,7 @@
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
                             <v-layout row wrap>
-                                <v-flex xs12 sm4 md4 lg4>
+                                <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
                                             color="dark"
                                             label="I filmed the video"
@@ -126,7 +127,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs12 sm4 md4 lg4 align-content-left>
+                                <v-flex xs6 sm4 md4 lg4 align-content-left>
                                     <v-radio
                                             color="dark"
                                             label="Someone else filmed it"
@@ -178,7 +179,7 @@
                                 id="submitted_elsewhere"
                                 required>
                             <v-layout row wrap>
-                                <v-flex xs6sm4 md4 lg4>
+                                <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
                                             label="Yes"
                                             color="dark"
@@ -295,7 +296,6 @@
         data: () => ({
             settings: '',
             video: '',
-            video_detail:'',
             valid: false,
 
             //form data
@@ -340,7 +340,6 @@
         }),
         mounted() {
             this.code = this.$route.params.code;
-            console.log(this.code);
             if (!this.code) {
                 this.$router.push({name: 'home'});
             }
@@ -353,7 +352,8 @@
                     if (!data.error) {
                         // process data
                         this.video = data;
-
+                        console.log("Success methos");
+                        console.log(this.http_error);
                         this.full_name = data.contact.full_name;
                         this.email = data.contact.email;
                         this.tel = data.contact.tel;
@@ -365,30 +365,19 @@
                         //error return to 404 page
                         this.error = true;
                         this.http_error = true;
-                        // this.$router.push({name: 'notfound'});
+                        console.log("calling else if");
+                        console.log(this.http_error);
                     }
                 })
                 .catch((error) => {
                     this.http_error = true;
+                    console.log("calling catch error");
+                    console.log(this.http_error);
                 });
+
 
             this.$store.dispatch('setSettingObjectFromServer').then(() => {
                 this.settings = this.$store.getters.getSettingsObject;
-            });
-
-            // Show video function
-            window.addEventListener('fb-sdk-ready', this.onFBReady);
-            this.$store.dispatch('getVideoDetailData', {alpha_id: this.code}).then(() => {
-                this.video_detail = this.$store.getters.getVideoDetailData;
-                console.log(this.video_detail);
-
-                this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
-
-                if (this.video_detail.iframe.includes('vimeo')) {
-                    this.reloadVideoJs();
-                }
-
-                this.reloadFacebook();
             });
         },
 
@@ -417,17 +406,13 @@
                 form.append('description', this.description);
                 form.append('filmed_by_me', this.filmed_by_me);
                 form.append('permission', this.permission);
-                form.append('submitted_where', this.submitted_where);
 
                 if(!this.submitted_where){
                     this.submitted_elsewhere = 0;
                 }
 
-                console.log("Submitted where :"+ this.submitted_where);
-                console.log("Submitted elsewhere :"+ this.submitted_elsewhere);
-                return;
-
                 form.append('submitted_elsewhere', this.submitted_elsewhere);
+                form.append('submitted_where', this.submitted_where);
                 form.append('contact_is_owner', this.contact_is_owner);
                 form.append('allow_publish', this.allow_publish);
                 form.append('is_exclusive', this.is_exclusive);
@@ -457,57 +442,6 @@
                 setTimeout(() => {
                     this.$router.push({name: 'home'});
                 }, 700);
-
-            },
-
-
-
-            // video load function
-
-            reloadInstagrm(src) {
-                var s = document.createElement("script");
-                s.type = "text/javascript";
-                s.src = src;
-                s.async = true;
-
-                $('body').append(s);
-                setTimeout(function () {
-                    if (typeof window.instgrm !== 'undefined') {
-                        window.instgrm.Embeds.process();
-                    }
-                }, 30);
-            },
-
-            reloadFacebook() {
-                if (!document.getElementById('facebook-jssdk')) {
-                    (function (d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
-
-                } else {
-                    setTimeout(() => {
-                        window.FB.XFBML.parse();
-                    }, 30);
-
-                }
-            },
-
-            reloadVideoJs() {
-
-                let videojs1 = document.createElement('script');
-                videojs1.type = "text/javascript";
-                videojs1.src = "/assets/admin/js/video.js";
-
-                let vimeo = document.createElement('script');
-                vimeo.type = "text/javascript";
-                vimeo.src = "/assets/admin/js/videojs-vimeo.js";
-                $('body').append(videojs1);
-                $('body').append(vimeo);
 
             }
         }
