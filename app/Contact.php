@@ -21,12 +21,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $twitter
  * @property string|null $other
  * @property string|null $deleted_at
+ * @property string|null reddit
+ * @property string|null country_code
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comment[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Video[] $videos
- * @property array|string reddit
- * @property array|string country_code
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contact onlyTrashed()
  * @method static bool|null restore()
