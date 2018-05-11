@@ -129,8 +129,12 @@ class AdminVideosController extends Controller
         // Send email
         if ($video->state == 'accepted') {
 
+
             $video->more_details_code = str_random(30);
             $video->more_details_sent = now();
+
+            // Save video data to database
+            $video->save();
 
             // Set to process for youtube and analysis
             if (empty($video->youtube_id) && $video->file) {
@@ -140,6 +144,7 @@ class AdminVideosController extends Controller
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
+
         } elseif ($video->state == 'rejected') {
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_rejected');
@@ -148,7 +153,7 @@ class AdminVideosController extends Controller
                 // Make youtube video unlisted
                 Youtube::setStatus($video->youtube_id, 'unlisted');
             }
-        } elseif ($video->state == 'licensed') {
+        }    elseif ($video->state == 'licensed') {
             // Check if licensed_at has already been set so we don't send contact/user another email
             if (!$video->licensed_at) {
                 // Check if there is a contact for the video

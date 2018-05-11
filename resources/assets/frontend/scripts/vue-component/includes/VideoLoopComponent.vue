@@ -15,7 +15,7 @@
                         {{video.state}}
                     </span>
 
-                    <div class="video-duration">
+                    <div class="video-duration" v-if="video.duration">
                         {{video.duration | convertTime}}
                     </div>
                 </a>

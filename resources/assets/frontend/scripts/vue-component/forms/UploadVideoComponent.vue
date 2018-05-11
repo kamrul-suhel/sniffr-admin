@@ -80,7 +80,7 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :counter="140"
+                                            :counter="70"
                                     ></v-text-field>
                                 </v-flex>
 
@@ -225,7 +225,6 @@
 <script>
     export default {
         data: () => ({
-            csrf_token: $('meta[name="csrf-token"]').attr('content'),
             valid: false,
             full_name: '',
             title: '',
