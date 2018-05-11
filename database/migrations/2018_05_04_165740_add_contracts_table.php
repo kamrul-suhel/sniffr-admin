@@ -19,7 +19,9 @@ class AddContractsTable extends Migration
             $table->string('reference_id');
             $table->integer('revenue_share')->nullable();
             $table->integer('upfront_payment')->nullable();
+            $table->integer('upfront_payment_currency');
             $table->integer('success_system')->nullable();
+            $table->integer('contract_model_id');
             $table->text('credit')->nullable();
             $table->text('notes')->nullable();
             $table->string('ip')->nullable();

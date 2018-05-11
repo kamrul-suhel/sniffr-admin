@@ -22,11 +22,14 @@ class ContractController extends Controller
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
         $contract = new \App\Contract();
         $contract->upfront_payment = $request->input('upfront_payment');
+        $contract->upfront_payment_currency_id = $request->input('upfront_payment_currency_id');
         $contract->revenue_share = $request->input('revenue_share');
         $contract->success_system = $request->input('success_system');
         $contract->credit = $request->input('credit');
         $contract->notes = $request->input('notes');
         $contract->user_id = \Auth::id();
+        $contract->video_id = $request->input('video_id');
+        $contract->contract_model_id = $request->input('contract_model_id');
         $contract->token = md5(uniqid($request->input('video_id'), true));
         $contract->reference_id = $uuid->toString();
         $contract->save();
@@ -71,7 +74,7 @@ class ContractController extends Controller
 
         $video = Video::with('contact')->find($contract->video_id);
 
-        $contract_text = config('contracts.text');
+        $contract_text = config('contracts')[$contract->contract_model_id]['text'];
         $contract_text = str_replace(':contract_date', date('d-m-Y'), $contract_text);
         $contract_text = str_replace(':licensor_name', $video->contact->full_name, $contract_text);
         $contract_text = str_replace(':licensor_email', $video->contact->email, $contract_text);

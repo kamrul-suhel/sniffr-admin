@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $token
  * @property string notes
  * @property string reference_id
+ * @property integer contract_model_id
+ * @property integer upfront_payment_currency_id
  */
 class Contract extends Model
 {
@@ -26,7 +28,14 @@ class Contract extends Model
         'credit',
         'notes',
         'upfront_payment',
+        'upfront_payment_currency',
         'reference_id',
+        'user_id',
+        'video_id',
+        'contract_model_id',
+        'signed_at',
+        'ip',
+        'user_agent',
     ];
 
     /**

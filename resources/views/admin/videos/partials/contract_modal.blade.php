@@ -25,15 +25,32 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="input-group">
                                 <span class="input-group-addon">Upfront Payment</span>
-                                <input type="number" min="1" class="form-control" id="upfront_payment" name="upfront_payment" title="upfront_payment"
+                                <input type="number" min="1" class="form-control" id="upfront_payment"
+                                       name="upfront_payment" title="upfront_payment"
                                        value="{{ $video->contract->upfront_payment or old('upfront_payment') }}">
                             </div>
                         </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">Upfront Payment Currency</span>
+                                <select type="text" class="form-control" id="upfront_payment_currency_id" name="upfront_payment_currency_id"
+                                        title="success system">
+                                    @foreach(config('currencies') as $currency)
+                                        <option value="{{ $currency['id'] }}" {{ (old('upfront_payment_currency_id') == $currency['id']) ? 'selected="selected"' : '' }}>
+                                            {{ $currency['abbreviation'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="row">
+
                         <div class="col-md-12">
                             <div class="input-group">
                                 <span class="input-group-addon">Success System</span>
@@ -66,14 +83,27 @@
                                     }}</textarea>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <span class="input-group-addon">Contract Type</span>
+                                <select type="text" class="form-control" id="contract_model_id" name="contract_model_id"
+                                        title="success system">
+                                    @foreach(config('contracts') as $contract)
+                                        <option value="{{ $contract['id'] }}" {{ (old('contract_model_id') == $contract['id']) ? 'selected="selected"' : '' }}>
+                                            {{ $contract['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="col-md-12">
                             {{ csrf_field() }}
                             {{ method_field('POST') }}
                             <input type="hidden" id="video_id" name="video_id" value="{{ $video->id }}"/>
-                            <input type="hidden" id="video_alpha_id" name="video_alpha_id" value="{{ $video->alpha_id }}"/>
+                            <input type="hidden" id="video_alpha_id" name="video_alpha_id"
+                                   value="{{ $video->alpha_id }}"/>
                             <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
                         </div>
                     </div>
