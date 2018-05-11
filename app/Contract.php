@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $upfront_payment
  * @property string $token
  * @property string notes
+ * @property string reference_id
  */
 class Contract extends Model
 {
@@ -25,6 +26,14 @@ class Contract extends Model
         'credit',
         'notes',
         'upfront_payment',
-        'video_id',
+        'reference_id',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function video()
+    {
+        return $this->belongsTo(Video::class);
+    }
 }

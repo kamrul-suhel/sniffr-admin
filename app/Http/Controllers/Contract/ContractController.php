@@ -19,6 +19,7 @@ class ContractController extends Controller
      */
     public function store(CreateContractRequest $request)
     {
+        $uuid = \Ramsey\Uuid\Uuid::uuid4();
         $contract = new \App\Contract();
         $contract->upfront_payment = $request->input('upfront_payment');
         $contract->revenue_share = $request->input('revenue_share');
@@ -27,7 +28,7 @@ class ContractController extends Controller
         $contract->notes = $request->input('notes');
         $contract->user_id = \Auth::id();
         $contract->token = md5(uniqid($request->input('video_id'), true));
-        $contract->video_id = $request->input('video_id');
+        $contract->reference_id = $uuid->toString();
         $contract->save();
 
         return redirect()->route('admin_video_edit', [
@@ -70,11 +71,21 @@ class ContractController extends Controller
 
         $video = Video::with('contact')->find($contract->video_id);
 
+        $contract_text = config('contracts.text');
+        $contract_text = str_replace(':contract_date', date('d-m-Y'), $contract_text);
+        $contract_text = str_replace(':licensor_name', $video->contact->full_name, $contract_text);
+        $contract_text = str_replace(':licensor_email', $video->contact->email, $contract_text);
+        $contract_text = str_replace(':story_title', $video->title, $contract_text);
+        $contract_text = str_replace(':story_link', $video->url, $contract_text);
+        $contract_text = str_replace(':contract_ref_number', $contract->reference_id, $contract_text);
+        $contract_text = str_replace(':unilad_share', (100 - $contract->revenue_share), $contract_text);
+        $contract_text = str_replace(':creator_share', $contract->revenue_share, $contract_text);
+
         if ($request->ajax() || $request->isJson()) {
             return $this->successResponse([
                 'videos' => $video,
                 'signed' => ($contract->signed_at) ? true : false,
-                'contract' => config('contracts.text')
+                'contract' => $contract_text,
             ]);
         }
 
