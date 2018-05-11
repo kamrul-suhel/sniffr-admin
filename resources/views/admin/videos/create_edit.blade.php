@@ -213,7 +213,7 @@
 
 				<div class="panel-body" style="display: block;">
                     <p class="{{ $video->contact_is_owner ? 'text-success' : 'text-danger' }}"><strong>{!! $video->contact_is_owner ? '<i class="fa fa-check"></i> Contact is owner' : '<i class="fa fa-times"></i> Does not own video' !!}</strong></p>
-                    @if($video->submitted_elsewhere&&$video->submitted_elsewhere!='NULL')
+                    @if($video->submitted_elsewhere&&$video->submitted_elsewhere!==NULL)
                     <p class="text-warning"><strong><i class="fa fa-exclamation"></i> Submitted to: {{ $video->submitted_where }}</strong></p>
                     @endif
                     <p class="{{ $video->allow_publish ? 'text-success' : 'text-danger' }}"><strong>{!! $video->allow_publish ? '<i class="fa fa-check"></i> H' : '<i class="fa fa-times"></i> Not h' !!}appy to publish</strong></p>
