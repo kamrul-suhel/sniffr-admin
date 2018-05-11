@@ -394,7 +394,7 @@
                     return;
                 }
                 this.is_iframe = true;
-                this.termslink = 'https://www.unilad.co.uk/terms-use'
+                this.termslink = 'https://www.unilad.co.uk/submit/submission-terms-and-conditions/'
             },
 
             checkEmailfield(email) {
