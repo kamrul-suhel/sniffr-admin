@@ -62,7 +62,6 @@
         created() {
             this.token = this.$route.params.token;
 
-            console.log(this.token);
             axios.get('/contract/' + this.token + '/accept')
                 .then(response => {
                     this.contract = response.data.contract
