@@ -3,7 +3,7 @@
         <div class="input-group">
             <span class="input-group-addon">Title</span>
             <input type="text" class="form-control" name="title" id="title" value="{{
-            ($video) ? $video->title : ''
+            $video->title or old('title')
             }}" title="title" maxlength="200"/>
         </div>
     </div>

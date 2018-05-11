@@ -37,10 +37,45 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="input-group">
-                        <span class="input-group-addon">Success System</span>
+                        <span class="input-group-addon">Credit</span>
                         <textarea class="form-control" disabled="disabled">{{
                         $video->currentContract->credit
                         }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Notes</span>
+                        <textarea class="form-control" disabled="disabled">{{
+                        $video->currentContract->notes
+                        }}</textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Signed At</span>
+                        <input type="text" class="form-control" disabled="disabled"
+                               value="{{ date('l jS \of F Y h:i:s A', strtotime($video->currentContract->signed_at)) }}">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">IP Address</span>
+                        <input type="text" class="form-control" disabled="disabled"
+                               value="{{ $video->currentContract->ip }}">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">User Agent</span>
+                        <textarea class="form-control" disabled="disabled" rows="4">{{
+                        $video->currentContract->user_agent
+                        }}"</textarea>
                     </div>
                 </div>
             </div>

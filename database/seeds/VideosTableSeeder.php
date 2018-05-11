@@ -74,7 +74,7 @@ class VideosTableSeeder extends Seeder
                 'mime' => $faker->randomElement(['video/mp4', 'video/quicktime', 'video/x-m4v']),
                 'rights' => 'ex',
                 'youtube_id' => $social_video ? null : ((array_search($state, $acceptedStates)) ? $faker->randomElement($youtubeIds) : NULL),
-                'title' => $faker->sentence(10),
+                'title' => $faker->sentence(4),
                 'access' => 'guest',
                 'details' => NULL,
                 'description' => $faker->paragraph(50),

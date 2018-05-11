@@ -16,8 +16,6 @@
                                     <option value="">--</option>
                                     @for($i=0; $i <= 100; $i = $i+5)
                                         <option value="{{ $i }}" {{ ((($video) && ($video->contract['revenue_share'] == $i)) || (old('revenue_share') == $i)) ? 'selected="selected"' : '' }}>
-                                            Sniffer {{ 100 - $i }} %
-                                            -
                                             Creator {{ $i }} %
                                         </option>
                                     @endfor
@@ -30,7 +28,7 @@
                         <div class="col-md-12">
                             <div class="input-group">
                                 <span class="input-group-addon">Upfront Payment</span>
-                                <input type="text" class="form-control" id="upfront_payment" name="upfront_payment" title="upfront_payment"
+                                <input type="number" min="1" class="form-control" id="upfront_payment" name="upfront_payment" title="upfront_payment"
                                        value="{{ $video->contract->upfront_payment or old('upfront_payment') }}">
                             </div>
                         </div>
@@ -50,23 +48,22 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="panel panel-primary" data-collapsed="0">
-                                <div class="panel-heading">
-                                    <div class="panel-title">
-                                        <label for="description">Credit</label>
-                                    </div>
-                                    <div class="panel-options">
-                                        <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
-                                    $video->contract['credit']
+
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <span class="input-group-addon">Credit</span>
+                                <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
+                                    $video->contract['credit'] or old('credit')
                                     }}</textarea>
-                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <span class="input-group-addon">Notes</span>
+                                <textarea class="form-control" name="notes" id="notes" rows="4" title="notes">{{
+                                    $video->contract['notes'] or old('notes')
+                                    }}</textarea>
                             </div>
                         </div>
                     </div>

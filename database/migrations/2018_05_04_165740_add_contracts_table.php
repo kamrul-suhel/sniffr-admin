@@ -20,11 +20,12 @@ class AddContractsTable extends Migration
             $table->integer('upfront_payment')->nullable();
             $table->integer('success_system')->nullable();
             $table->text('credit')->nullable();
+            $table->text('notes')->nullable();
             $table->string('ip')->nullable();
             $table->string('token')->nullable();
             $table->integer('user_id')->nullable();
             $table->text('user_agent')->nullable();
-            $table->timestamp('signature')->nullable();
+            $table->timestamp('signed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

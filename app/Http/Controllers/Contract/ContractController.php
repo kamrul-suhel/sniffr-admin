@@ -24,7 +24,7 @@ class ContractController extends Controller
         $contract->revenue_share = $request->input('revenue_share');
         $contract->success_system = $request->input('success_system');
         $contract->credit = $request->input('credit');
-        $contract->credit = $request->input('credit');
+        $contract->notes = $request->input('notes');
         $contract->user_id = \Auth::id();
         $contract->token = md5(uniqid($request->input('video_id'), true));
         $contract->video_id = $request->input('video_id');
@@ -73,7 +73,7 @@ class ContractController extends Controller
         if ($request->ajax() || $request->isJson()) {
             return $this->successResponse([
                 'videos' => $video,
-                'signed' => ($contract->signature) ? true : false,
+                'signed' => ($contract->signed_at) ? true : false,
                 'contract' => config('contracts.text')
             ]);
         }
@@ -89,7 +89,7 @@ class ContractController extends Controller
     public function sign(Request $request, string $token)
     {
         $contract = Contract::where('token', '=', $token)->first();
-        $contract->signature = now();
+        $contract->signed_at = now();
         $contract->ip = $request->ip();
         $contract->user_agent = $request->header('User-Agent');
         $contract->save();

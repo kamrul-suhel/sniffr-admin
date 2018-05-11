@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $video_id
  * @property string $upfront_payment
  * @property string $token
+ * @property string notes
  */
 class Contract extends Model
 {
@@ -22,6 +23,7 @@ class Contract extends Model
         'revenue_share',
         'success_system',
         'credit',
+        'notes',
         'upfront_payment',
         'video_id',
     ];
