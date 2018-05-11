@@ -352,8 +352,6 @@
                     if (!data.error) {
                         // process data
                         this.video = data;
-                        console.log("Success methos");
-                        console.log(this.http_error);
                         this.full_name = data.contact.full_name;
                         this.email = data.contact.email;
                         this.tel = data.contact.tel;
@@ -365,14 +363,10 @@
                         //error return to 404 page
                         this.error = true;
                         this.http_error = true;
-                        console.log("calling else if");
-                        console.log(this.http_error);
                     }
                 })
                 .catch((error) => {
                     this.http_error = true;
-                    console.log("calling catch error");
-                    console.log(this.http_error);
                 });
 
 
