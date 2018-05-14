@@ -1,22 +1,14 @@
-<div class="panel panel-primary" data-collapsed="0">
-    <div class="panel-heading">
-        <div class="panel-title">
-            Tags
-        </div>
-        <div class="panel-options">
-            <a href="#" data-rel="collapse">
-                <i class="fa fa-angle-down"></i>
-            </a>
-        </div>
-    </div>
-
-    <div class="panel-body" style="display: block;">
-        <div id="video-analysis"></div>
-        <label for="tags">Add video tags below:</label>
+<div class="row">
+    <span class="col-md-6">
+        <span class="input-group">
+            <span class="input-group-addon">
+                Tags
+            </span>
         <input class="form-control" name="tags" id="tags" data-role="tagsinput" value="@if($tags)
         @foreach($tags as $tag)
-            {{ $tag->name }}
+        {{ $tag->name }}
         @endforeach
-        @endif">
-    </div>
+        @endif" title="tags">
+        </span>
+    </span>
 </div>

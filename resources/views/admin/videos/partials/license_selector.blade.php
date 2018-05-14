@@ -6,12 +6,12 @@
         </div>
     </div>
     <div class="panel-body">
-        <label for="rights">Select if the video is exclusive or non-exclusive</label>
-        <select id="rights" name="rights">
-            <option value="ex" {{ (($video) && ($video->rights == 'ex')) ? 'selected' : '' }}>
+        <label for="is_exclusive">Select if the video is exclusive or non-exclusive</label>
+        <select id="is_exclusive" name="is_exclusive">
+            <option value="1" {{ (($video) && ($video->is_exclusive)) ? 'selected' : '' }}>
                 Exclusive
             </option>
-            <option value="nonex" {{ (($video) && ($video->rights == 'nonex')) ? 'selected' : '' }}>
+            <option value="0" {{ (($video) && (!$video->is_exclusive)) ? 'selected' : '' }}>
                 Non-Exclusive
             </option>
         </select>

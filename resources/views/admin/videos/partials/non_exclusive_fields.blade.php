@@ -11,14 +11,16 @@
     </div>
     <div class="panel-body" style="display: block;">
         <p>Notes for the video:</p>
-        <textarea class="form-control" name="notes"
-                  id="notes">{{ ($video->notes) ? $video->notes : '' }}</textarea>
+        <textarea class="form-control" name="notes" id="notes">{{
+        ($video->notes) ? $video->notes : ''
+        }}</textarea>
     </div>
 
     <div class="panel-body" style="display: block;">
         <p>Credit link for the video:</p>
-        <input class="form-control" name="credit" id="credit"
-               value="{{ ($video->credit) ? $video->credit : '' }}"/>
+        <input class="form-control" name="credit" id="credit" value="{{
+        ($video->credit) ? $video->credit : ''
+        }}"/>
     </div>
 
     <div class="panel-body" style="display: block;">
