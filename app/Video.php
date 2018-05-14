@@ -20,33 +20,35 @@ use Illuminate\Support\Facades\Cache;
  * @property-read \App\Comment|null $comments
  * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
- * @property string alpha_id
- * @property int contact_id
- * @property string title
- * @property string state
- * @property string rights
- * @property string source
- * @property string ip
- * @property string user_agent
- * @property string url
- * @property string file
- * @property null|string mime
- * @property string youtube_id
- * @property string image
- * @property string thumb
- * @property string embed_code
- * @property int vertical
- * @property string description
- * @property int video_category_id
- * @property int video_collection_id
- * @property int video_shottype_id
- * @property int user_id
- * @property int featured
- * @property int active
- * @property mixed details
- * @property mixed date_filmed
- * @property int is_exclusive
- * @property array|string creator_id
+ * @property string $alpha_id
+ * @property int $contact_id
+ * @property int $contract_id
+ * @property string $title
+ * @property string $state
+ * @property string $rights
+ * @property string $source
+ * @property string $ip
+ * @property string $user_agent
+ * @property string $url
+ * @property string $file
+ * @property null|string $mime
+ * @property string $youtube_id
+ * @property string $image
+ * @property string $thumb
+ * @property string $embed_code
+ * @property int $vertical
+ * @property string $description
+ * @property int $video_category_id
+ * @property int $video_collection_id
+ * @property int $video_shottype_id
+ * @property int $user_id
+ * @property int $featured
+ * @property int $active
+ * @property string $details
+ * @property string $location
+ * @property string date_filmed
+ * @property int $is_exclusive
+ * @property int $creator_id
  * @mixin \Eloquent
  */
 class Video extends Model

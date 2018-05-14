@@ -43,7 +43,11 @@
                         </li>
 
                         <li>
-                            <a href="#files" role="tab" data-toggle="tab">Files</a>
+                            <a href="#image_files" role="tab" data-toggle="tab">Image Files</a>
+                        </li>
+
+                        <li>
+                            <a href="#video_files" role="tab" data-toggle="tab">Video Files</a>
                         </li>
 
                         <li>
@@ -77,17 +81,20 @@
                         </div>
                         <div class="tab-pane" id="metadata">
                             @include('admin.videos.partials.location')
-                            @include('admin.videos.partials.details')
                             @include('admin.videos.partials.shotType')
                             @include('admin.videos.partials.video_information')
                             @include('admin.videos.partials.duration')
+                            @include('admin.videos.partials.details')
                         </div>
                         <div class="tab-pane" id="vertical">
                             @include('admin.videos.partials.vertical')
                             @include('admin.videos.partials.category')
                             @include('admin.videos.partials.tags')
                         </div>
-                        <div class="tab-pane" id="files">
+                        <div class="tab-pane" id="image_files">
+                            @include('admin.videos.partials.image_files')
+                        </div>
+                        <div class="tab-pane" id="video_files">
                             @include('admin.videos.partials.video_files')
                         </div>
                         <div class="tab-pane" id="sales">
