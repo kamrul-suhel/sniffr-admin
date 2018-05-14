@@ -15,7 +15,7 @@
                         {{video.state}}
                     </span>
 
-                    <div class="video-duration">
+                    <div class="video-duration" v-if="video.duration">
                         {{video.duration | convertTime}}
                     </div>
                 </a>
@@ -39,7 +39,7 @@
     export default {
         data() {
             return {
-                video_image: '/assets/img/default.jpg'
+                video_image: '/assets/frontend/images/placeholder.png'
             }
         },
         props:['video'],
@@ -49,14 +49,11 @@
 
         methods:{
             defaultImage(){
-                this.video_image = '/assets/img/default.jpg';
+                this.video_image = '/assets/frontend/images/placeholder.png';
             },
 
             getInstagramImage(){
-                axios.get('https://api.instagram.com/oembed/?url=https://www.instagram.com/p/BYzFX1dDVMn/')
-                    .then((response) => {
-                });
-                return '/assets/img/default.jpg';
+                return '/assets/frontend/images/placeholder.png';
             },
 
             goToDetail(video) {
@@ -81,7 +78,7 @@
                     }
 
                     image.onerror = function(){
-                        let default_img = '/assets/img/default.jpg';
+                        let default_img = '/assets/frontend/images/placeholder.png';
 
                         let img_tag = document.createElement('img');
                         img_tag.src = default_img;

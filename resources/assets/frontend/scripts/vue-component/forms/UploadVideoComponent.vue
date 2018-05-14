@@ -2,6 +2,16 @@
     <!-- UPLODA VIDEO SECTION -->
     <section class="upload-video-section section-space" :class="{'iframe-style': is_iframe}">
         <v-container grid-list-xl>
+            <v-layout row  wrap v-if="source">
+                <v-flex xs12 class="text-xs-center">
+                    <h1 class="heading text-uppercase">Share your content and grab £100 while you’re at it!</h1>
+                </v-flex>
+
+                <v-flex xs12 class="text-xs-center">
+                    <p>We never get bored of seeing videos from our fans! Whether it’s a must-see moment of comedy gold, an unbelievable skill or just something that’s flat out bizarre, send it our way and if we put it up on the UNILAD Facebook page we’ll send you £100!</p>
+                </v-flex>
+            </v-layout>
+
             <v-layout row wrap>
                 <v-flex xs12>
                     <div class="upload-video-title">
@@ -22,7 +32,6 @@
                                             name="full_name"
                                             :rules="nameRules"
                                             color="dark"
-                                            :box="is_iframe"
                                             required
                                     ></v-text-field>
                                 </v-flex>
@@ -56,16 +65,6 @@
                                             color="dark"
                                     ></v-text-field>
                                 </v-flex>
-
-                                <v-flex xs12>
-                                    <v-text-field
-                                            label="Video title"
-                                            v-model="title"
-                                            name="title"
-                                            color="dark"
-                                            :counter="140"
-                                    ></v-text-field>
-                                </v-flex>
                             </v-layout>
 
                             <v-layout row wrap>
@@ -75,18 +74,32 @@
                             </v-layout>
 
                             <v-layout row wrap>
-                                <v-flex xs12 p-0>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Video title"
+                                            v-model="title"
+                                            name="title"
+                                            color="dark"
+                                            :error="title_optional"
+                                            :hint="title_optional ? 'Title must be 70 characters or less.' : ''"
+                                            :required="title_optional"
+                                            :counter="70"
+                                            @keyup="checkTitleLength()"
+                                    ></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12 p-0 class="upload-video-button">
                                     <v-btn
                                             dark
                                             raised
                                             class="ml-0"
                                             :class="{error: error}"
                                             @click="onPickFile()">
-                                        Upload your video
-                                        <v-icon dark right>system_update_alt</v-icon>
+                                        Choose file
+                                        <v-icon dark right>attachment</v-icon>
                                     </v-btn>
                                     <span v-if="error"
-                                          class="red--text">Upload your file OR provide a link please</span> <span>{{file_name}}</span>
+                                          class="red--text">Upload your video OR provide video a link please.</span> <span>{{file_name}}</span>
 
                                     <p class="small-italic">
                                         Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv,
@@ -100,6 +113,12 @@
                                             ref="inputfile"
                                             accept="video/mp4,video/x-m4v,video/*"
                                             @change="onFilechange($event)"/>
+                                </v-flex>
+
+                                <v-flex xs12 class="text-xs-center">
+                                    <div class="video-upload-separator">
+                                        <h2>Or</h2>
+                                    </div>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -132,7 +151,7 @@
                                             name="terms"
                                             required
                                     >
-                                        <span slot="label">I agree to the above <a :href="termslink" target="_blank">terms and conditions</a></span>
+                                        <span slot="label">I agree to the <a :href="termslink" target="_blank">terms and conditions</a></span>
                                     </v-checkbox>
                                 </v-flex>
 
@@ -210,7 +229,6 @@
 <script>
     export default {
         data: () => ({
-            csrf_token: $('meta[name="csrf-token"]').attr('content'),
             valid: false,
             full_name: '',
             title: '',
@@ -243,6 +261,8 @@
 
             //terms & condition
             termslink: '',
+
+            title_optional: false,
 
             is_iframe: false
         }),
@@ -280,6 +300,11 @@
                     this.error = false;
                 }
 
+                //check title length
+                if(this.title && this.title.length > 70){
+                    return false;
+                }
+
                 if (this.$refs.form.validate()) {
                     if (this.error) {
                         return;
@@ -309,6 +334,7 @@
                     form.append('file', this.file);
                 }
 
+
                 form.append('full_name', this.full_name);
                 form.append('email', this.email);
                 form.append('title', this.title);
@@ -335,7 +361,6 @@
                     }
                 )
                     .then(response => {
-                        console.log(response);
                         //data uploaded succes
                         let data = response.data;
                         if (data.status == 'success') {
@@ -390,7 +415,18 @@
                         this.email_optional_error = false;
                     }
                 }
+            },
+
+            checkTitleLength(){
+                if(this.title && this.title.length > 70){
+                    this.title_optional = true;
+                    return true;
+                }
+                this.title_optional = false;
             }
+
+
+
         }
     }
 </script>

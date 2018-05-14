@@ -67,7 +67,7 @@
                         </v-layout>
 
                         <v-layout row justify-center>
-                            <v-flex xs12 text-xs-center>
+                            <v-flex xs12 class="text-xs-center">
                                 <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
                             </v-flex>
                         </v-layout>
