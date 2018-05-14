@@ -233,6 +233,12 @@ class VideoController extends Controller
         return view('frontend.master');
     }
 
+    public function getVideoForVideoDialog($alpha_id){
+        $video = Video::where('state', 'licensed')
+            ->where('alpha_id', $alpha_id)
+            ->orderBy('id', 'DESC')->paginate();
+    }
+
     /**
      * @param Request $request
      * @param string $id

@@ -62,6 +62,7 @@ require('./filters/filters');
  */
 
 import {LoginEventBus} from './event-bus/login-event-bus';
+import {VideoDialogBoxEventBux} from './event-bus/video-dialog-box-event-bus';
 
 
 /*
