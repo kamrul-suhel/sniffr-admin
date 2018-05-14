@@ -17,20 +17,22 @@
 
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
-            <v-container grid-list-lg pt-0>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn flat raised @click="onGoback()" class="ml-0 pl-0">
-                            <v-icon>chevron_left</v-icon>Go Back</v-btn>
+                        <v-btn small dark @click="onGoback()" class="dark">
+                            Go back<v-icon right dark>chavron_right</v-icon></v-btn>
                     </v-flex>
                 </v-layout>
 
                 <v-layout row wrap>
-                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}" align-content-center v-html="video_detail.iframe" xs12 sm12 md7 lg7 xl7>
-                    </v-flex>
+                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}"
+                            align-content-center
+                            v-html="video_detail.iframe"
+                            xs12 sm12 md7 lg7 xl7></v-flex>
 
                     <v-flex xs12 sm12 md5 lg5 xl5>
-                        <v-layout row wrap class="video-detail-content">
+                        <v-layout row wrap class="video-detail-content pl-3">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
                                 <p>{{ video_detail.video.description }}</p>
