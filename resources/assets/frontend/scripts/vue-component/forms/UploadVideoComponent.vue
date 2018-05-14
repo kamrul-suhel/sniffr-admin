@@ -80,7 +80,11 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :counter="140"
+                                            :error="title_optional"
+                                            :hint="title_optional ? 'Title must be 70 characters or less.' : ''"
+                                            :required="title_optional"
+                                            :counter="70"
+                                            @keyup="checkTitleLength()"
                                     ></v-text-field>
                                 </v-flex>
 
@@ -225,7 +229,6 @@
 <script>
     export default {
         data: () => ({
-            csrf_token: $('meta[name="csrf-token"]').attr('content'),
             valid: false,
             full_name: '',
             title: '',
@@ -258,6 +261,8 @@
 
             //terms & condition
             termslink: '',
+
+            title_optional: false,
 
             is_iframe: false
         }),
@@ -295,6 +300,11 @@
                     this.error = false;
                 }
 
+                //check title length
+                if(this.title && this.title.length > 70){
+                    return false;
+                }
+
                 if (this.$refs.form.validate()) {
                     if (this.error) {
                         return;
@@ -324,6 +334,7 @@
                     form.append('file', this.file);
                 }
 
+
                 form.append('full_name', this.full_name);
                 form.append('email', this.email);
                 form.append('title', this.title);
@@ -350,7 +361,6 @@
                     }
                 )
                     .then(response => {
-                        console.log(response);
                         //data uploaded succes
                         let data = response.data;
                         if (data.status == 'success') {
@@ -405,7 +415,18 @@
                         this.email_optional_error = false;
                     }
                 }
+            },
+
+            checkTitleLength(){
+                if(this.title && this.title.length > 70){
+                    this.title_optional = true;
+                    return true;
+                }
+                this.title_optional = false;
             }
+
+
+
         }
     }
 </script>

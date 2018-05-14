@@ -119,7 +119,7 @@
                                 :rules="[v => !!v || 'Field is required']"
                                 required>
                             <v-layout row wrap>
-                                <v-flex xs12 sm4 md4 lg4>
+                                <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
                                             color="dark"
                                             label="I filmed the video"
@@ -127,7 +127,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs12 sm4 md4 lg4 align-content-left>
+                                <v-flex xs6 sm4 md4 lg4 align-content-left>
                                     <v-radio
                                             color="dark"
                                             label="Someone else filmed it"
@@ -151,7 +151,7 @@
                                 required>
 
                             <v-layout row wrap>
-                                <v-flex xs12 sm4 md4 lg4>
+                                <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
                                             label="Yes"
                                             color="dark"
@@ -159,7 +159,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs12 sm4 md4 lg4 align-content-start>
+                                <v-flex xs6 sm4 md4 lg4 align-content-start>
                                     <v-radio
                                             label="No"
                                             color="dark"
@@ -179,7 +179,7 @@
                                 id="submitted_elsewhere"
                                 required>
                             <v-layout row wrap>
-                                <v-flex xs12 sm4 md4 lg4>
+                                <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
                                             label="Yes"
                                             color="dark"
@@ -187,7 +187,7 @@
                                     ></v-radio>
                                 </v-flex>
 
-                                <v-flex xs12 sm4 md4 lg4>
+                                <v-flex xs6 sm4 md4 lg4>
                                     <v-radio
                                             label="No"
                                             color="dark"
@@ -352,7 +352,6 @@
                     if (!data.error) {
                         // process data
                         this.video = data;
-
                         this.full_name = data.contact.full_name;
                         this.email = data.contact.email;
                         this.tel = data.contact.tel;
@@ -364,12 +363,12 @@
                         //error return to 404 page
                         this.error = true;
                         this.http_error = true;
-                        // this.$router.push({name: 'notfound'});
                     }
                 })
                 .catch((error) => {
                     this.http_error = true;
                 });
+
 
             this.$store.dispatch('setSettingObjectFromServer').then(() => {
                 this.settings = this.$store.getters.getSettingsObject;
@@ -401,6 +400,11 @@
                 form.append('description', this.description);
                 form.append('filmed_by_me', this.filmed_by_me);
                 form.append('permission', this.permission);
+
+                if(!this.submitted_where){
+                    this.submitted_elsewhere = 0;
+                }
+
                 form.append('submitted_elsewhere', this.submitted_elsewhere);
                 form.append('submitted_where', this.submitted_where);
                 form.append('contact_is_owner', this.contact_is_owner);

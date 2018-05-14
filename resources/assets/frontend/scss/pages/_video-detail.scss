@@ -3,7 +3,25 @@
 }
 
 .videos-detail-section{
+
+  .horizontal {
+    .video-container{
+      .fb-video{
+        width:100% !important;
+      }
+    }
+  }
+
+  .vertical {
+    .video-container{
+      .fb-video{
+        width:50% !important;
+      }
+    }
+  }
+
   .video-container{
+    display:flex;
     width:100%;
 
     .video_player-dimensions{
@@ -24,7 +42,7 @@
       width:100%;
       
       &.youtube-iframe {
-        height:auto;
+        height:300px;
       }
       &.instagram-media {
         margin:0 auto !important; // to overwrite default style 
@@ -32,7 +50,7 @@
 
       @include small-device {
         &.youtube-iframe{
-          height:auto;
+          height:300px;
         }
       }
 
@@ -55,9 +73,13 @@
       }
     }
     .fb-video{
-      width:50%;
+      width:50% !important;
+      margin:0 auto;
     }
+  }
 
+  .embedded{
+    background:#000;
   }
 
   .video-detail-content{
@@ -133,5 +155,10 @@
         }
       }
     }
+  }
+
+  .loading {
+    animation: loader 1s infinite;
+    display: flex;
   }
 }

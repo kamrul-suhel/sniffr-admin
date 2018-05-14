@@ -44,9 +44,7 @@ trait VideoHelper{
 		    </video>';
 		}else if(str_contains($video->url, 'facebook')){
 			if(str_contains($video->url, 'posts') && $embed){
-	    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
-						<div id="fb-root"></div>
-	               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
+	    		$sHTML .= '<div class="interactive interaadminctive-fb-post" style="background:#000 !important;text-align:center;"><div id="fb-root"></div><div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 	    	}else if(str_contains($video->url, 'videos')){
 				if($video->vertical === 0 || $embed) {
 					$sHTML .= '<div class="fb-video'.($video->vertical === 0 ? ' fb-horizontal' : '').'" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
