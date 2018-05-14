@@ -20,7 +20,8 @@
             <v-container grid-list-lg pt-0>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn flat raised @click="onGoback()" class="ml-0">Go Back</v-btn>
+                        <v-btn flat raised @click="onGoback()" class="ml-0 pl-0">
+                            <v-icon>chevron_left</v-icon>Go Back</v-btn>
                     </v-flex>
                 </v-layout>
 
@@ -33,7 +34,7 @@
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
                                 <p>{{ video_detail.video.description }}</p>
-                                <div class="video-detail-tags">
+                                <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
                                         <li v-for="tag in tags">
@@ -65,32 +66,6 @@
 
                                     <div class="video-detail-social-share">
                                         <!--<div class="video-license">License</div>-->
-                                        <div class="video-social-link">
-                                            <!--<h3>Share</h3>-->
-                                            <ul>
-                                                <!-- Buttons start here -->
-                                                <ul class="rrssb-buttons clearfix">
-                                                    <li class="rrssb-facebook">
-                                                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?= $media_url ?>"
-                                                           class="popup">
-                                                            <i class="fab fa-facebook-f fa-1x"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="rrssb-twitter">
-                                                        <a href="http://twitter.com/home?status=<?= $media_subject ?> : <?= $media_url ?>"
-                                                           class="popup">
-                                                            <i class="fab fa-twitter fa-1x"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="rrssb-email">
-                                                        <a href="mailto:?subject=<?= $media_subject ?>&amp;body=<?= $media_url ?>">
-                                                            <i class="fas fa-at"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <!-- Buttons end here -->
-                                            </ul>
-                                        </div>
                                     </div>
                                 </v-layout>
                             </v-flex>
@@ -99,18 +74,6 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-
-            <!--<v-content>-->
-                <!--<v-container>-->
-                    <!--<v-layout>-->
-                        <!--<v-flex xs12 align-center justify-center>-->
-                            <!--<v-icon class="loading">cached</v-icon>-->
-                        <!--</v-flex>-->
-
-                    <!--</v-layout>-->
-                <!--</v-container>-->
-
-            <!--</v-content>-->
         </div>
     </section>
 </template>
