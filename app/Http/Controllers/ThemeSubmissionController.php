@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\FrontendResponse;
 use Auth;
 use Redirect;
 use Validator;
@@ -9,17 +10,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Page;
-use App\Menu;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
-use App\Libraries\ThemeHelper;
+
 use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Jobs\QueueVideo;
 use App\Notifications\SubmissionNewNonEx;
 
-class ThemeSubmissionController extends Controller {
+class ThemeSubmissionController extends Controller
+{
+    use FrontendResponse;
 
     protected $rules = [
         'full_name' => 'required',
@@ -28,56 +30,51 @@ class ThemeSubmissionController extends Controller {
         'terms' => 'required'
     ];
 
+    /**
+     * ThemeSubmissionController constructor.
+     */
     public function __construct()
     {
         $user = Auth::user();
 
         $this->data = [
             'user' => $user,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        return view('Theme::submission', $this->data);
+        return view('frontend.pages.submission.submission', $this->data);
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function form()
     {
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'submission';
 
-        return view('Theme::templates/iframe', $this->data);
+        return view('frontend.iframe', $this->data);
     }
 
     /**
-     * Display a listing of videos
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function thanks()
     {
-        return view('Theme::thanks', $this->data);
+        return view('frontend.layout.thanks', $this->data);
     }
 
     /**
-     * Store a newly created video in storage.
-     *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function store(Request $request)
     {
@@ -88,12 +85,12 @@ class ThemeSubmissionController extends Controller {
 
         $isJson = $request->ajax();
 
+
         //validate the request
         $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails())
-        {
-            if($isJson) {
-                return response()->json(['status' => 'error']);
+        if ($validator->fails()) {
+            if ($isJson) {
+                return $this->errorResponse('Something is wrong pelase review the from and submit again.');
             } else {
                 return Redirect::back()
                     ->withErrors($validator)
@@ -102,9 +99,9 @@ class ThemeSubmissionController extends Controller {
         }
 
         //get additional form data
-        $contact = Contact::where('email',Input::get('email'))->first();
+        $contact = Contact::where('email', Input::get('email'))->first();
         //if contact exists
-        if(!$contact){
+        if (!$contact) {
             $contact = new Contact();
             $contact->full_name = Input::get('full_name');
             $contact->email = Input::get('email');
@@ -120,10 +117,10 @@ class ThemeSubmissionController extends Controller {
 
         //handle file upload to S3 and Youtube ingestion
         $fileSize = $filePath = '';
-        if($request->hasFile('file')){
-            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
+        if ($request->hasFile('file')) {
+            $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', pathinfo(Input::file('file')->getClientOriginalName(), PATHINFO_FILENAME)));
 
-            $fileName = time().'-'.$fileOriginalName.'.'.$request->file->getClientOriginalExtension();
+            $fileName = time() . '-' . $fileOriginalName . '.' . $request->file->getClientOriginalExtension();
 
             $file = $request->file('file');
             $fileMimeType = $file->getMimeType();
@@ -136,7 +133,7 @@ class ThemeSubmissionController extends Controller {
             $video->url = Input::get('url');
             $video->file = $filePath;
             $video->mime = $fileMimeType;
-        }else{
+        } else {
             //Check link details
             $linkDetails = VideoHelper::videoLinkChecker(Input::get('url'));
 
@@ -158,17 +155,17 @@ class ThemeSubmissionController extends Controller {
         $video->source = Input::get('source');
         $video->save();
 
-        // May also need to action Youtube upload (or at least action anaylsis bit from AdminVideoController) as we skip "accepted" state
+        // May also need to action Youtube upload (or at least action analysis bit from AdminVideoController) as we skip "accepted" state
 
         // Notification of new video
-        if(env('APP_ENV') != 'local'){
+        if (env('APP_ENV') != 'local') {
             $video->notify(new SubmissionNewNonEx($video));
         }
-        
-        // Send thanks notification email (via queue after 2mins)
+
+        // Send thanks notification email (via queue after 2 mins)
         QueueEmail::dispatch($video->id, 'submission_thanks_nonex');
 
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             // Send video to queue for watermarking
             QueueVideo::dispatch($video->id)
                 ->delay(now()->addSeconds(5));
@@ -176,14 +173,26 @@ class ThemeSubmissionController extends Controller {
 
         $iframe = Input::get('iframe') ? Input::get('iframe') : 'false';
 
-        if($isJson) {
-            return response()->json(['status' => 'success', 'iframe' => $iframe, 'href' => 'https://www.unilad.co.uk/submit/thanks', 'message' => 'Video Successfully Added!', 'files' => ['name' => Input::get('title'), 'size' => $fileSize, 'url' => $filePath]]);
-        } else {
-            if($iframe == 'true'){
-                return Redirect::to('https://www.unilad.co.uk');
-            }else{
-                return view('Theme::thanks', $this->data)->with(array('note' => 'Video Successfully Added!', 'note_type' => 'success') );
-            }
+        if ($isJson) {
+            $data = [
+                'status' => 'success',
+                'iframe' => $iframe,
+                'href' => 'https://www.unilad.co.uk/submit/thanks',
+                'message' => 'Video Successfully Added!',
+                'files' => ['name' => Input::get('title'),
+                    'size' => $fileSize, 'url' => $filePath]
+            ];
+            return $this->successResponse($data);
+
         }
+
+        if ($iframe == 'true') {
+            return Redirect::to('https://www.unilad.co.uk');
+        }
+
+        return view('Theme::thanks', $this->data)->with([
+            'note' => 'Video Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 }

@@ -6,6 +6,6 @@ class ThemeTermsController extends Controller
 {
     public function index(){
 
-        return view('Theme::terms');
+        return view('frontend.master');
     }
 }

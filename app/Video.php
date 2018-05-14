@@ -20,6 +20,32 @@ use Illuminate\Support\Facades\Cache;
  * @property-read \App\Comment|null $comments
  * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
+ * @property string alpha_id
+ * @property int contact_id
+ * @property string title
+ * @property string state
+ * @property string rights
+ * @property string source
+ * @property string ip
+ * @property string user_agent
+ * @property string url
+ * @property string file
+ * @property null|string mime
+ * @property string youtube_id
+ * @property string image
+ * @property string thumb
+ * @property string embed_code
+ * @property int vertical
+ * @property string description
+ * @property int video_category_id
+ * @property int video_collection_id
+ * @property int video_shottype_id
+ * @property int user_id
+ * @property int featured
+ * @property int active
+ * @property mixed details
+ * @property mixed date_filmed
+ * @property int is_exclusive
  * @mixin \Eloquent
  */
 class Video extends Model
@@ -117,12 +143,13 @@ class Video extends Model
      */
     public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
     {
-        if (\App::environment() !== 'production') {
+        if (config('settings.cache.cache_enabled')) {
             return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
-                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
             });
         }
-        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+
+        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
     }
 
     /**
@@ -173,5 +200,16 @@ class Video extends Model
         return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
             return $this->tags->toArray();
         });
+    }
+
+    /**
+     * @param Client $client
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function clientVideos(Client $client)
+    {
+        return Video::whereHas('campaigns', function ($q) use ($client) {
+            $q->where('id', $client->id);
+        })->orderBy('licensed_at', 'desc')->paginate(12);
     }
 }

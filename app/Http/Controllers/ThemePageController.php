@@ -8,7 +8,7 @@ use App\User;
 use App\Page;
 use App\Menu;
 use App\VideoCategory;
-use App\Libraries\ThemeHelper;
+
 
 class ThemePageController extends Controller
 {
@@ -28,7 +28,7 @@ class ThemePageController extends Controller
                 'author' => $author,
                 'menu' => Menu::orderBy('order', 'ASC')->get(),
                 'video_categories' => VideoCategory::all(),
-                'theme_settings' => ThemeHelper::getThemeSettings(),
+                'theme_settings' => config('settings.theme'),
                 'pages' => Page::where('active', '=', 1)->get(),
             ];
             return view('Theme::page', $data);
@@ -46,7 +46,7 @@ class ThemePageController extends Controller
             'page_description' => 'All Pages',
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
-            'theme_settings' => ThemeHelper::getThemeSettings(),
+            'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
         ];
 

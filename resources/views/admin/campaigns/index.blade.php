@@ -9,8 +9,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="clear"></div>
 
+	<div class="clear"></div>
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">

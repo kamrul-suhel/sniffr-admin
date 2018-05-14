@@ -22,7 +22,7 @@
 	<form method="POST" action="<?= $post_route ?>" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div id="user-badge">
 			@if(isset($user->avatar))<?php $avatar = $user->avatar; ?>@else<?php $avatar = 'default.jpg'; ?>@endif
-			<img src="<?= Config::get('site.uploads_url') . 'avatars/' . $avatar ?>" />
+			<img src="<?= Config::get('site.uploads_url') . $avatar ?>" />
 			<label for="avatar">@if(isset($user->username))<?= ucfirst($user->username). '\'s'; ?>@endif Profile Image</label>
 			<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
 		</div>

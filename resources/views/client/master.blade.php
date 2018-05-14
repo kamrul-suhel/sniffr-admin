@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php $settings = App\Setting::first(); ?>
+    <?php $settings = config('settings.site'); ?>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,19 +11,19 @@
     <meta name="description" content="Client Panel" />
     <meta name="author" content="" />
 
-    <title>{{ $settings->website_name . ' - ' . $settings->website_description }}</title>
+    <title>{{ $settings['website_name'] . ' - ' . $settings['website_description'] }}</title>
 
-    <link rel="stylesheet" href="{{ '/assets/css/admin.css' }}">
+    <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
 
-    <?php $favicon = (isset($settings->favicon) && trim($settings->favicon) != "") ? $settings->favicon : 'favicon.png'; ?>
-    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . 'settings/' . $favicon ?>" type="image/x-icon">
+    <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
+    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . $favicon ?>" type="image/x-icon">
 
     @yield('css')
 </head>
 <body class="page-body skin-black">
 
 <a href="{{ url('/') }}" class="top-left-logo">
-    <img src="/content/uploads/settings/logo-sniffr-white.png">
+    <img src="/assets/admin/images/logo-sniffr-white.png">
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
@@ -56,7 +56,7 @@
                 <ul class="user-info pull-left pull-none-xsm">
                     <!-- Profile Info -->
                     <li class="profile"><!-- add class "pull-right" if you want to place this from right -->
-                        <img src="{{ Config::get('site.uploads_dir') . 'avatars/' . Auth::user()->avatar }}" alt="" class="img-circle" width="26" />
+                        <img src="{{ Config::get('site.uploads_dir') . Auth::user()->avatar }}" alt="" class="img-circle" width="26" />
                         <span>Howdy, {{ ucfirst(Auth::user()->username) }}</span>
                     </li>
                 </ul>

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 trait VideoHelper{
 
 	public static function getVideoHTML($video, $embed = false, $path = 'view') {
+
+
 		$path = '/admin/videos/'.$path;
 		$sHTML = '';
 
@@ -42,10 +44,7 @@ trait VideoHelper{
 		    </video>';
 		}else if(str_contains($video->url, 'facebook')){
 			if(str_contains($video->url, 'posts') && $embed){
-	    		$sHTML .= '<div class="interactive interactive-fb-post" style="background:#000 !important;text-align:center;">
-						<div id="fb-root"></div>
-						<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11";  fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>
-	               	<div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
+	    		$sHTML .= '<div class="interactive interaadminctive-fb-post" style="background:#000 !important;text-align:center;"><div id="fb-root"></div><div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 	    	}else if(str_contains($video->url, 'videos')){
 				if($video->vertical === 0 || $embed) {
 					$sHTML .= '<div class="fb-video'.($video->vertical === 0 ? ' fb-horizontal' : '').'" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
@@ -62,7 +61,9 @@ trait VideoHelper{
 			    	$sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
 			    //}
 			}
-		}else if(str_contains($video->url, 'twitter') && $embed){
+		}
+
+		else if(str_contains($video->url, 'twitter') && $embed){
 			preg_match('#status\/([\d^]+)#', $video->url, $matches);
 
 			if(isset($matches[1])){
@@ -70,7 +71,9 @@ trait VideoHelper{
 			} else {
 				$sHTML .= '<p align="center">Cannot find a valid Tweet</p>';
 			}
-		}else if(str_contains($video->url, 'instagram')){
+		}
+
+		else if(str_contains($video->url, 'instagram')){
 			if($embed && $video->embed_code){
 				$sHTML .= $video->embed_code;
 			}else{
@@ -98,18 +101,27 @@ trait VideoHelper{
 				    //}
 				}
 			}
-		}else if(str_contains($video->url, 'vimeo')){
-	        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto" width="100%" style="width:100%;"
-	        data-setup=\'{ "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}] }\'>
+		}
+
+		else if(str_contains($video->url, 'vimeo')){
+	        $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" preload="auto"
+	        	data-setup=\'{ "width": 400, "height": 200, "techOrder": ["vimeo"], "sources": [{ "type": "video/vimeo", "src": "'.$video->url.'"}], "controlBar": { "muteToggle": false } }\'
+	        >
 	        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
 	        </video>';
-	    }else if($embed && str_contains($video->url, 'vine.co')){
+	    }
+
+	    else if($embed && str_contains($video->url, 'vine.co')){
 			$sHTML .= '<iframe src="'.$video->url.'embed/simple" class="vine-embed" type="text/html" width="600" height="600" frameborder="0" allowfullscreen></iframe>
 			<script async src="//platform.vine.co/static/scripts/embed.js"></script>';
-		}else if($embed && str_contains($video->url, 'streamable')){
+		}
+
+		else if($embed && str_contains($video->url, 'streamable')){
 			$sHTML .= '<blockquote class="embedly-card"><h4><a href="'.$video->url.'"></a></h4></blockquote>
 			<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
-		}else if(!empty($video->embed_code)){
+		}
+
+		else if(!empty($video->embed_code)){
 		    if (str_contains($video->embed_code, 'youtube')){
 		        $sHTML .= '<div class="youtube-player" data-id="'.$video->getKey().'"></div>';
 		    }else{
@@ -203,8 +215,8 @@ trait VideoHelper{
 			$linkVars['state'] = 'problem';
 		}
 
-		$linkVars['image'] = $linkVars['image'] ? $linkVars['image'] : '/assets/img/placeholder.png';
-		$linkVars['thumb'] = $linkVars['thumb'] ? $linkVars['thumb'] : '/assets/img/placeholder.png';
+		$linkVars['image'] = $linkVars['image'] ? $linkVars['image'] : '/assets/admin/images/placeholder.png';
+		$linkVars['thumb'] = $linkVars['thumb'] ? $linkVars['thumb'] : '/assets/admin/images/placeholder.png';
 
 		return $linkVars;
 	}
