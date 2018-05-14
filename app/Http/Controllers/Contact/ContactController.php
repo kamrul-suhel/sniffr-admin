@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
-class AdminContactController extends Controller
+class ContactController extends Controller
 {
     use VideoHelper;
 
@@ -125,7 +125,7 @@ class AdminContactController extends Controller
      * @param UpdateContactRequest $request
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function update(Contact $contact, UpdateContactRequest $request)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
         $contact->full_name = $request->input('full_name');
         $contact->email = $request->input('email');
