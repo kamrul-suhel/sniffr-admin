@@ -38,6 +38,9 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('tags', 'ThemeTagController@index');
 
+    // Frontend video dialog box, getting current video, next & previous link
+    Route::get('video/dialogbox/{alpha_id}', 'Video\VideoController@videoDialogboxContent');
+
     /*
     |--------------------------------------------------------------------------
     | Submission Routes (for exclusive and non-exclusive videos)

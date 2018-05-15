@@ -66,14 +66,8 @@
             },
 
             openVideoDialog(video){
-                    this.$store.dispatch('getVideoDetailData', {alpha_id: video.alpha_id}).then(() => {
-                    let video_detail = this.$store.getters.getVideoDetailData;
-
-                    this.$store.commit('setVideoDialogBox', video_detail);
                     VideoDialogBoxEventBus.openVideoDialog();
-                    this.$router.push({name: 'video_in_dialog', params: {id: 'rXZLchr4Mt'}});
-                    // this.$router.push({name: 'video_in_dialog', params: {id: video_detail.video.alpha_id}});
-                });
+                    this.$router.push({name: 'video_in_dialog', params: {alpha_id: video.alpha_id}});
             },
         },
 

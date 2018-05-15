@@ -2,18 +2,18 @@
     <div class="video-in-dialog">
         <v-container grid-list-xs pt-0 v-if="video_detail">
             <v-layout row wrap>
-                <v-flex :class="{'vertical': video_detail.video.vertical? video_detail.video.vertical : '', 'horizontal': !video_detail.video.vertical}" align-content-center v-html="video_detail.iframe" xs12 sm12 md7 lg7 xl7>
+                <v-flex :class="{'vertical': video_detail.vertical? video_detail.vertical : '', 'horizontal': !video_detail.vertical}" align-content-center v-html="video_detail.iframe" xs12 sm12 md7 lg7 xl7>
                 </v-flex>
 
                 <v-flex xs12 sm12 md5 lg5 xl5>
                     <v-layout row wrap class="video-detail-content">
                         <v-flex xs12>
-                            <h2>{{ video_detail.video.title }}</h2>
-                            <p>{{ video_detail.video.description }}</p>
+                            <h2>{{ video_detail.title }}</h2>
+                            <p>{{ video_detail.description }}</p>
                             <div class="video-detail-tags" v-if="tags.length > 0">
                                 <h3 id="tags">Tags:</h3>
                                 <ul>
-                                    <li v-for="tag in video_detail.video.tags">
+                                    <li v-for="tag in video_detail.tags">
                                         <router-link :to="'/videos/tag/'+tag.name">
                                             #{{ tag.name }}
                                         </router-link>
@@ -32,11 +32,11 @@
                                             small
                                             color="pink favorite"
                                             data-authenticated=""
-                                            :data-videoid="video_detail.video.id">
+                                            :data-videoid="video_detail.id">
                                         <v-icon dark>remove_red_eye</v-icon>
                                     </v-btn>
 
-                                    {{ video_detail.video.views+1}} views
+                                    {{ video_detail.views+1}} views
                                 </v-flex>
                             </v-layout>
                         </v-flex>
@@ -58,20 +58,20 @@
 
                 ready_to_show : true,
 
-                previousPageUrl: ''
+                nextPageAlphaId: '',
+                previousPageAlphaId: ''
             }
         },
 
         watch: {
             '$route'(to, from, next) {
+                this.getVideoData();
             }
         },
 
         created() {
             VideoDialogBoxEventBus.$on('videoDialogStateChange', () => {
-                this.video_detail = this.$store.getters.getCurrentVideoForDialog;
-                console.log("Created methods call");
-                console.log(this.video_detail);
+                this.getVideoData();
             })
         },
 
@@ -80,6 +80,18 @@
         },
 
         methods: {
+            getVideoData(){
+                let alpha_id = this.$route.params.alpha_id;
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id} ).then(() => {
+                    this.video_detail = this.$store.getters.getCurrentVideoForDialog;
+                    if (this.video_detail.tags.length > 0) {
+                        this.tags.push(...this.video_detail.tags);
+                    }
+                    this.nextPageAlphaId = this.$store.getters.getNextVideoAlphaId;
+                    this.previousPageAlphaId = this.$store.getters.getPrevVideoAlphaId;
+                });
+            },
+
             onGoback() {
                 this.$router.go(-1);
             },

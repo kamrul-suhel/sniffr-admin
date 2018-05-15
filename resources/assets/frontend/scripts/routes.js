@@ -26,7 +26,7 @@ export const routes = [
         component: VideoComponent,
         children: [
             {
-                path: ':id',
+                path: ':alpha_id',
                 name: 'video_in_dialog',
                 component: VideoInDialogComponent
             }

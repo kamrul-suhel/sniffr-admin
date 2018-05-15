@@ -34,6 +34,7 @@
                 v-model="video_dialog"
                 transition="dialog-bottom-transition"
                 scrollable
+                persistent
         >
             <v-card tile>
                 <v-toolbar card dark color="dark">
@@ -47,7 +48,7 @@
                 <v-card-text>
                     <v-layout row wrap justify-center>
                         <v-flex justify-start>
-                            <v-btn color="dark ma-0" fab small dark>
+                            <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()">
                                 <v-icon>chevron_left</v-icon>
                             </v-btn>
                         </v-flex>
@@ -56,7 +57,7 @@
                             <router-view></router-view>
                         </v-flex>
 
-                        <v-flex justify-start class="text-xs-right">
+                        <v-flex justify-start class="text-xs-right" @click="onNextVideo()">
                             <v-btn color="dark ma-0" fab small dark>
                                 <v-icon>chevron_right</v-icon>
                             </v-btn>
@@ -107,7 +108,7 @@
 
             // Video dialog box
             VideoDialogBoxEventBus.$on('videoDialogStateChange', () => {
-                this.video_dialog = this.$store.getters.getVideoDialogBox;
+                this.video_dialog = VideoDialogBoxEventBus.openVideoDialogBox;
             });
 
         },
@@ -123,6 +124,16 @@
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then( () => {
                     this.videos = this.$store.getters.getVideoData;
                 });
+            },
+
+            onPreviousVideo(){
+                let alpha_id = this.$store.getters.getPrevVideoAlphaId;
+                this.$router.push({name: 'video_in_dialog', params: {alpha_id: alpha_id}});
+            },
+
+            onNextVideo(){
+                let alpha_id = this.$store.getters.getNextVideoAlphaId;
+                this.$router.push({name: 'video_in_dialog', params: {alpha_id: alpha_id}});
             }
         }
     }

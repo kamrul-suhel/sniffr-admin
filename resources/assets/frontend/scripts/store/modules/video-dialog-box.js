@@ -1,16 +1,34 @@
 const state = {
-    video_dialog_box : false,
     video_dialog_current_video: '',
+    video_dialog_next_alpha_id: '',
+    video_dialog_prev_alpha_id: ''
 }
 
 const mutations = {
-    setVideoDialogBox(state, current_video){
+    setVideoDialogBox(state, data){
        state.video_dialog_box = true;
-       state.video_dialog_current_video = current_video;
+       console.log(data);
+       state.video_dialog_current_video = data.current_video;
+       state.video_dialog_next_alpha_id = data.next_video_alpha_id;
+       state.video_dialog_prev_alpha_id = data.prev_video_alpha_id;
     }
 }
 
 const actions = {
+    getVideoNextAndPrevLink({commit}, payload) {
+        return new Promise(function(resolve, reject) {
+            let url = '/video/dialogbox/'+ payload.alpha_id;
+            axios.get(url)
+                .then((response) => {
+                    commit('setVideoDialogBox', response.data);
+                    resolve();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject();
+                });
+        })
+    }
 }
 
 const getters = {
@@ -20,6 +38,14 @@ const getters = {
 
     getCurrentVideoForDialog(state){
         return state.video_dialog_current_video;
+    },
+
+    getNextVideoAlphaId(){
+        return state.video_dialog_next_alpha_id;
+    },
+
+    getPrevVideoAlphaId(){
+        return state.video_dialog_prev_alpha_id;
     }
 }
 
