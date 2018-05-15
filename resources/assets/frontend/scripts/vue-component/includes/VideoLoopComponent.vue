@@ -71,6 +71,7 @@
 
                     this.$store.commit('setVideoDialogBox', video_detail);
                     VideoDialogBoxEventBus.openVideoDialog();
+                    this.$router.push({name: 'video_in_dialog', params: {id: video_detail.video.alpha_id}});
                 });
             },
         },

@@ -2,7 +2,7 @@
     <div class="video-in-dialog">
         <v-container grid-list-xs pt-0>
             <v-layout row wrap>
-                <v-flex :class="{'vertical': video_detail.video.vertical, 'horizontal': !video_detail.video.vertical}" align-content-center v-html="video_detail.video.iframe" xs12 sm12 md7 lg7 xl7>
+                <v-flex :class="{'vertical': video_detail.video.vertical? video_detail.video.vertical : '', 'horizontal': !video_detail.video.vertical}" align-content-center v-html="video_detail.video.iframe" xs12 sm12 md7 lg7 xl7>
                 </v-flex>
 
                 <v-flex xs12 sm12 md5 lg5 xl5>
