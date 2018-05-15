@@ -190,6 +190,13 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
+    Route::get('stories', 'Admin\AdminStoryController@index');
+    Route::get('stories/create', 'Admin\AdminStoryController@create');
+    Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
+    Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
+    Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+    Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
+
     Route::get('clients', 'Admin\AdminClientController@index');
     Route::get('clients/create', 'Admin\AdminClientController@create');
     Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
