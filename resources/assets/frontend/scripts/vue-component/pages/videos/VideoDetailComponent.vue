@@ -20,8 +20,7 @@
             <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn small dark @click="onGoback()" class="dark">
-                            Go back<v-icon right dark>chavron_right</v-icon></v-btn>
+                        <v-btn light flat  raised @click="onGoback()"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
                 </v-layout>
 
@@ -53,13 +52,12 @@
                                     <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
                                             text-xl-right>
                                         <v-btn
-                                                fab
                                                 dark
-                                                small
-                                                color="pink favorite"
-                                                data-authenticated=""
-                                                :data-videoid="video_detail.video.id">
-                                            <v-icon dark>remove_red_eye</v-icon>
+                                                fab
+                                                flat
+                                                color="dark favorite"
+                                                class="mr-0">
+                                            <v-icon dark color="black ">remove_red_eye</v-icon>
                                         </v-btn>
 
                                         {{ video_detail.video.views+1}} views
@@ -103,6 +101,8 @@
         },
 
         created() {
+            let breakpoin = this.$vuetify.breakpoint;
+            console.log(breakpoint);
 
         },
 

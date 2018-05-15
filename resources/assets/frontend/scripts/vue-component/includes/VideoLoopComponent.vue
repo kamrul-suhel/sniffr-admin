@@ -57,10 +57,9 @@
             },
 
             goToDetail(video) {
-                this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
-                setTimeout(() => {
-                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
-                }, 800);
+                // this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
+
+                this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
 
             }
         },
