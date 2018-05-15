@@ -328,9 +328,7 @@ class AdminVideosController extends Controller
             $this->addUpdateVideoTags($video, $tags);
         }
 
-        $duration = $request->input('duration', null);
-        $video->duration = $this->getDuration($video, $duration);
-
+        // update video information in Youtube
         $this->setSnippet($video, $request->input('title'), $request->input('description'), $tags);
 
         if ($request->hasFile('image')) {
@@ -344,7 +342,7 @@ class AdminVideosController extends Controller
             $videoFile = $request->file('file');
             $video->file = $this->saveVideoFile($videoFile, $video);
             $video->mime = $videoFile->getMimeType();
-            //TODO: Why is this was empty string?
+            //TODO: should the old video in youtube be removed?
             $video->youtube_id = null;
         }
 
@@ -353,15 +351,20 @@ class AdminVideosController extends Controller
             $video->campaigns()->sync($campaigns);
         }
 
+        $duration = $request->input('duration', null);
+        $video->duration = $this->getDuration($video, $duration);
+
         $video->user_id = Auth::id();
         $video->is_exclusive = ($request->input('is_exclusive')) ?: 0;
         $video->active = ($request->input('active')) ?: 0;
         $video->featured = ($request->input('featured')) ?: 0;
-        $video->video_collection_id = $request->input('collection_id', null);
-        $video->video_shottype_id = $request->input('collection_id', null);
-        $video->video_category_id = $request->input('category_id', null);
+        $video->video_collection_id = $request->input('video_collection_id', null);
+        $video->video_shottype_id = $request->input('video_shottype_id', null);
+        $video->video_category_id = $request->input('video_category_id', null);
         $video->contact_id = $request->input('creator_id', null);
         $video->title = $request->input('title');
+        $video->embed_code = $request->input('embed_code');
+        $video->url = $request->input('url');
         $video->location = $request->input('location');
         $video->details = $request->input('details');
         $video->description = $request->input('description');
@@ -791,12 +794,12 @@ class AdminVideosController extends Controller
     }
 
     /**
-     * @param $video
+     * @param Video $video
      * @param string $title
      * @param string $description
      * @param string|null $tags_string
      */
-    private function setSnippet($video, string $title, string $description, string $tags_string = null)
+    private function setSnippet(Video $video, string $title, string $description, string $tags_string = null)
     {
         if (($video->youtube_id) && ($video->file) && (config('app.env') != 'local')) {
             $tags_array = explode(',', $tags_string);
