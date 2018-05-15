@@ -90,10 +90,12 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
+        $user = User::find($id);
+
         $data = [
             'clients' => Client::get(),
             'post_route' => url('admin/user/update'),
-            'user' => Auth::user(),
+            'user' => $user,
             'button_text' => 'Update User',
         ];
 
