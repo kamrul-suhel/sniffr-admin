@@ -31,7 +31,7 @@
                             xs12 sm12 md7 lg7 xl7></v-flex>
 
                     <v-flex xs12 sm12 md5 lg5 xl5>
-                        <v-layout row wrap class="video-detail-content pl-3">
+                        <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
                                 <p>{{ video_detail.video.description }}</p>
@@ -91,7 +91,9 @@
 
                 ready_to_show : true,
 
-                previousPageUrl: ''
+                previousPageUrl: '',
+
+                content_padding:true
             }
         },
 
@@ -101,8 +103,10 @@
         },
 
         created() {
-            let breakpoin = this.$vuetify.breakpoint;
-            console.log(breakpoint);
+            let breakpoint = this.$vuetify.breakpoint.name;
+            if(breakpoint === 'sm' || breakpoint === 'xs' ){
+                this.content_padding = false;
+            }
 
         },
 
