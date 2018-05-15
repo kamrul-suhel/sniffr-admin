@@ -17,20 +17,21 @@
 
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
-            <v-container grid-list-lg pt-0>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn flat raised @click="onGoback()" class="ml-0 pl-0">
-                            <v-icon>chevron_left</v-icon>Go Back</v-btn>
+                        <v-btn light flat  raised @click="onGoback()"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
                 </v-layout>
 
                 <v-layout row wrap>
-                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}" align-content-center v-html="video_detail.iframe" xs12 sm12 md7 lg7 xl7>
-                    </v-flex>
+                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}"
+                            align-content-center
+                            v-html="video_detail.iframe"
+                            xs12 sm12 md7 lg7 xl7></v-flex>
 
                     <v-flex xs12 sm12 md5 lg5 xl5>
-                        <v-layout row wrap class="video-detail-content">
+                        <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
                                 <p>{{ video_detail.video.description }}</p>
@@ -51,13 +52,12 @@
                                     <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
                                             text-xl-right>
                                         <v-btn
-                                                fab
                                                 dark
-                                                small
-                                                color="pink favorite"
-                                                data-authenticated=""
-                                                :data-videoid="video_detail.video.id">
-                                            <v-icon dark>remove_red_eye</v-icon>
+                                                fab
+                                                flat
+                                                color="dark favorite"
+                                                class="mr-0">
+                                            <v-icon dark color="black ">remove_red_eye</v-icon>
                                         </v-btn>
 
                                         {{ video_detail.video.views+1}} views
@@ -91,7 +91,9 @@
 
                 ready_to_show : true,
 
-                previousPageUrl: ''
+                previousPageUrl: '',
+
+                content_padding:true
             }
         },
 
@@ -101,6 +103,10 @@
         },
 
         created() {
+            let breakpoint = this.$vuetify.breakpoint.name;
+            if(breakpoint === 'sm' || breakpoint === 'xs' ){
+                this.content_padding = false;
+            }
 
         },
 
