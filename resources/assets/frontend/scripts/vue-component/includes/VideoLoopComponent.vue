@@ -11,8 +11,12 @@
                     <span class="play-button">
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
-                    <span class="label" :class="video.state == 'licensed' ? 'label-success': 'label-danger'">
+                    <span class="label" :class="video.state == 'licensed' ? 'label-licensed': 'label-danger'">
                         {{video.state}}
+                    </span>
+
+                    <span v-if="video.nsfw == '1'" class="label" :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
+                        NSFW
                     </span>
 
                     <div class="video-duration" v-if="video.duration">
@@ -45,6 +49,7 @@
         props:['video'],
 
         created(){
+            console.log(this.video);
         },
 
         methods:{
