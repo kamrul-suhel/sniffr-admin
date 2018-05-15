@@ -29,7 +29,7 @@
         <pagination-component :pagination="paginate" :page="'video'"></pagination-component>
 
 
-        <!-- light box -->
+        <!-- Dialog box -->
         <v-dialog
                 v-model="video_dialog"
                 transition="dialog-bottom-transition"
@@ -71,7 +71,8 @@
 <script>
     import SearchComponent from '../../includes/SearchComponent';
     import VideoLoopComponent from '../../includes/VideoLoopComponent';
-    import PaginationComponent from '../../includes/PaginationComponent'
+    import PaginationComponent from '../../includes/PaginationComponent';
+    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default{
         components:{
@@ -103,8 +104,11 @@
                 this.current_page = this.$route.query.page;
             }
             this.setAlldata();
+
             // Video dialog box
-            this.video_dialog = this.$store.getters.getVideoDialogBox;
+            VideoDialogBoxEventBus.$on('videoDialogStateChange', () => {
+                this.video_dialog = this.$store.getters.getVideoDialogBox;
+            });
 
         },
         methods: {
