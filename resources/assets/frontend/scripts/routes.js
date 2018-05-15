@@ -9,6 +9,7 @@ import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailCom
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
+import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 
 
@@ -29,6 +30,12 @@ export const routes = [
         path: '/videos/:id',
         name: 'videos_detail',
         component: VideoDetailComponent
+    },
+
+    {
+        path: '/contract/:token/accept',
+        name: 'contract_accept',
+        component: ContractComponent
     },
 
     {

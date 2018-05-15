@@ -2,16 +2,6 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
-
-/*
- * Testing Iframe
- */
-
-Route::get('iframe_test', function(){
-    return view('frontend.master');
-});
-
-
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('/settings_object', function () {
@@ -126,6 +116,9 @@ Route::get('upload_dir', function(){
 });
 
 Route::get('terms', 'ThemeTermsController@index');
+
+Route::get('contract/{token}/accept', 'Contract\ContractController@accept')->name('contract.accept');
+Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('contract.sign');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -134,16 +127,17 @@ Route::get('terms', 'ThemeTermsController@index');
 
 Route::group(array('prefix' => 'admin'), function(){
     // Admin Dashboard
-    Route::get('', 'Admin\AdminController@index');
+    Route::get('', 'Admin\DashboardController@index');
 
     // Admin Video Functionality
-    Route::get('videos', 'Admin\AdminVideosController@index')->name('admin_videos_index');
+    Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');
-    Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'));
-    Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'));
+    Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'))->name('videos.update');
+    Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'))->name('videos.destroy');
     Route::get('videos/restore/{id}', array('uses' => 'Admin\AdminVideosController@restore'));
-    Route::get('videos/create', 'Admin\AdminVideosController@create');
-    Route::post('videos/store', array('uses' => 'Admin\AdminVideosController@store'));
+    Route::get('videos/create', 'Admin\AdminVideosController@create')->name('videos.create');
+    Route::post('videos/store', array('uses' => 'Admin\AdminVideosController@store'))->name('videos.store');
+
     Route::get('videos/categories', 'Admin\AdminVideoCategoriesController@index');
     Route::post('videos/categories/store', array('uses' => 'Admin\AdminVideoCategoriesController@store'));
     Route::post('videos/categories/order', array('uses' => 'Admin\AdminVideoCategoriesController@order'));
@@ -172,8 +166,9 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
 
-    // comments
     Route::resource('comment', 'CommentController');
+    Route::resource('contract', 'Contract\ContractController');
+    Route::get('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
 
     Route::get('media', 'Admin\AdminMediaController@index');
     // Route::post('media/files', 'Admin\AdminMediaController@files');
@@ -197,12 +192,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
-    Route::get('contacts', 'Admin\AdminContactController@index');
-    Route::get('contacts/create', 'Admin\AdminContactController@create');
-    Route::post('contacts/store', array('uses' => 'Admin\AdminContactController@store'));
-    Route::get('contacts/edit/{id}', 'Admin\AdminContactController@edit');
-    Route::post('contacts/update', array('uses' => 'Admin\AdminContactController@update'));
-    Route::get('contacts/delete/{id}', array('uses' => 'Admin\AdminContactController@destroy'));
+    Route::resource('contacts', 'Contact\ContactController');
 
     Route::get('campaigns', 'Admin\AdminCampaignController@index')->name('admin_campaigns');
     Route::get('campaigns/create', 'Admin\AdminCampaignController@create');
