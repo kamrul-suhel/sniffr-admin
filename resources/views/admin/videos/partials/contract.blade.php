@@ -33,11 +33,11 @@
                 <div class="col-md-12">
                     <div class="input-group">
                         <span class="input-group-addon">Success System</span>
-                        <input type="text" class="form-control" disabled="disabled" value="{{
+                        <textarea class="form-control" disabled="disabled">{{
                 (key_exists($video->currentContract->success_system, config('success_system'))) ?
                 config('success_system')[$video->currentContract->success_system]
                 : ''
-                }}">
+                }}"></textarea>
                     </div>
                 </div>
             </div>

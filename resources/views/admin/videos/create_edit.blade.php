@@ -57,6 +57,11 @@
                         <li>
                             <a href="#rights" role="tab" data-toggle="tab">Rights</a>
                         </li>
+
+                        <li>
+                            <a href="#creator" role="tab" data-toggle="tab">Creator</a>
+                        </li>
+
                         <li>
                             <a href="#admin" role="tab" data-toggle="tab">Admin</a>
                         </li>
@@ -68,7 +73,7 @@
                 <div class="panel-body tab-content">
                     @if(!$video)
                         <div class="tab-pane active" id="creator_search">
-                            @include('admin.videos.partials.creator_choose')
+                            @include('admin.videos.partials.basic_information')
                         </div>
                     @endif
 
@@ -88,7 +93,7 @@
                         </div>
                         <div class="tab-pane" id="vertical">
                             @include('admin.videos.partials.vertical')
-                            @include('admin.videos.partials.category')
+                            @include('admin.videos.partials.collection')
                             @include('admin.videos.partials.tags')
                         </div>
                         <div class="tab-pane" id="image_files">
@@ -118,6 +123,10 @@
                                     @endif
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="tab-pane" id="creator">
+                            @include('admin.videos.partials.choose_creator')
                         </div>
 
                         <div class="tab-pane" id="admin">
