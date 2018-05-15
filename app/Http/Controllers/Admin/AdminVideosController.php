@@ -49,15 +49,15 @@ class AdminVideosController extends Controller
      */
     public function index(Request $request, $state = 'all')
     {
-        $search_value = Input::get('s', false);
-        $category_value = Input::get('category');
-        $collection_value = Input::get('collection');
-        $shot_value = Input::get('shot_type');
-        $rights = Input::get('rights');
+        $search_value = $request->input('search_value', null);
+        $category_value = $request->input('category');
+        $collection_value = $request->input('collection');
+        $shot_value = $request->input('shot_type');
+        $rights = $request->input('rights');
 
         $videos = new Video;
 
-        if (!$search_value) {
+        if ($search_value) {
             $videos = $videos->where(function ($query) use ($search_value) {
                 $query->where('title', 'LIKE', '%' . $search_value . '%')
                     ->orWhereHas('tags', function ($q) use ($search_value) {
@@ -136,6 +136,7 @@ class AdminVideosController extends Controller
 
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_accepted');
+
         } elseif ($video->state == 'rejected') {
             // Send thanks notification email
             QueueEmail::dispatch($video->id, 'submission_rejected');
@@ -324,7 +325,7 @@ class AdminVideosController extends Controller
 
         $tags = $request->input('tags', null);
 
-        if ($request->input('tags')) {
+        if ($tags) {
             $this->addUpdateVideoTags($video, $tags);
         }
 
@@ -714,20 +715,20 @@ class AdminVideosController extends Controller
     private function deleteVideoImages($video)
     {
         $ext = pathinfo($video->image, PATHINFO_EXTENSION);
-        if (file_exists(config('site.uploads_dir') . 'images/' . $video->image) && $video->image != 'placeholder.jpg') {
+        if (file_exists(config('site.uploads_dir') . $video->image) && $video->image != 'placeholder.png') {
             @unlink(config('site.uploads_dir') . 'images/' . $video->image);
         }
 
-        if (file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image)) && $video->image != 'placeholder.jpg') {
-            @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-large.' . $ext, $video->image));
+        if (file_exists(config('site.uploads_dir') . str_replace('.' . $ext, '-large.' . $ext, $video->image)) && $video->image != 'placeholder.png') {
+            @unlink(config('site.uploads_dir') . str_replace('.' . $ext, '-large.' . $ext, $video->image));
         }
 
-        if (file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image)) && $video->image != 'placeholder.jpg') {
-            @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-medium.' . $ext, $video->image));
+        if (file_exists(config('site.uploads_dir') . str_replace('.' . $ext, '-medium.' . $ext, $video->image)) && $video->image != 'placeholder.png') {
+            @unlink(config('site.uploads_dir') . str_replace('.' . $ext, '-medium.' . $ext, $video->image));
         }
 
-        if (file_exists(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image)) && $video->image != 'placeholder.jpg') {
-            @unlink(config('site.uploads_dir') . 'images/' . str_replace('.' . $ext, '-small.' . $ext, $video->image));
+        if (file_exists(config('site.uploads_dir') . str_replace('.' . $ext, '-small.' . $ext, $video->image)) && $video->image != 'placeholder.png') {
+            @unlink(config('site.uploads_dir') . str_replace('.' . $ext, '-small.' . $ext, $video->image));
         }
     }
 
@@ -736,6 +737,7 @@ class AdminVideosController extends Controller
         $video = Video::where('alpha_id', $alpha_id)->first();
 
         $data = [
+            'terms' => config('settings.terms'),
             'video' => $video,
         ];
 

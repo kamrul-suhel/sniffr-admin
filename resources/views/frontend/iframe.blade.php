@@ -5,10 +5,10 @@
     @include('frontend.layout.head.meta')
 
     @php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; @endphp
-    <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . 'settings/' . $favicon }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . $favicon }}" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('assets/frontend/css/styles.css')}}" />
+    <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}" />
 
     <!-- If we need to add page specific style -->
     @yield('page_styles')
@@ -26,9 +26,9 @@
 
     <!-- Scripts Section -->
     <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
-    <script src="{{asset('assets/frontend/scripts/scripts.js')}}"></script>
+    <script src="{{mix('assets/frontend/scripts/scripts.js')}}"></script>
     <!-- End scripts Section -->
-    
+
     @if($settings['google_tracking_id'])
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

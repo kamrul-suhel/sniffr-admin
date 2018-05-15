@@ -1,5 +1,5 @@
 <template>
-    <div class="video-more-detail-component">
+    <div class="video-more-detail-component fill-height">
         <moredetail-component></moredetail-component>
     </div>
 </template>

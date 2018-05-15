@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Page extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
     protected $table = 'pages';
     protected $fillable = ['user_id', 'title', 'slug', 'image', 'body', 'active', 'created_at'];
 }

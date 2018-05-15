@@ -105,7 +105,7 @@ class VideoController extends Controller
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
         $video->contact_id = $contact->id;
-        $video->title = Input::get('title', 'Untitled ' . $video->alpha_id);
+        $video->title = $request->input('title') ?: ('Untitled ' . $video->alpha_id);
         $video->state = 'new';
         $video->rights = 'ex';
         $video->source = Input::get('source');
@@ -137,7 +137,7 @@ class VideoController extends Controller
             'href' => self::THANKS_URL,
             'message' => 'Video Successfully Added!',
             'files' => [
-                'name' => Input::get('title'),
+                'name' => $video->title,
                 'size' => $fileSize,
                 'url' => $filePath
             ]

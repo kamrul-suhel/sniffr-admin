@@ -38,6 +38,7 @@ trait FrontendResponse
             'duration',
             'description',
             'date_filmed',
+            'more_details',
             'location',
             'source',
             'contact_is_owner',

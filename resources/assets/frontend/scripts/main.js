@@ -4,6 +4,8 @@
  ********************************************************
  */
 
+import 'babel-polyfill';
+
 window.axios = require('axios');
 window.Vue = require('vue');
 window.Vuetify = require('Vuetify');

@@ -1,5 +1,5 @@
 <template>
-    <div class="text-xs-center">
+    <div class="text-xs-center pagination-section">
         <v-container grid-list-lg>
             <v-layout justify-center>
                 <v-flex xs12>
@@ -8,7 +8,7 @@
                             class="dark"
                             :length="pagination.last_page"
                             v-model="current_page"
-                            :total-visible="10"
+                            :total-visible="total_visiable"
                         ></v-pagination>
                 </v-flex>
             </v-layout>
@@ -21,6 +21,7 @@
         data() {
             return {
                 current_page: 1,
+                total_visiable: 10,
             }
         },
 
@@ -28,6 +29,8 @@
             'pagination',
             'page'
         ],
+
+
 
         watch: {
             pagination(){
@@ -60,6 +63,11 @@
         },
 
         created(){
+            let device = this.$vuetify.breakpoint.name;
+
+            if(device === 'xs'){
+                this.total_visiable = 5;
+            }
         },
 
         methods: {

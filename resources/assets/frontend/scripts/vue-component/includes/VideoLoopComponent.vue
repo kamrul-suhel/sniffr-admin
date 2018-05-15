@@ -4,18 +4,22 @@
             <v-card-media class="sniffr-media-thumbnail"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <a
-                @click.stop="goToDetail(video)"
+                @click.stop="goToDetail()"
                 class="block-thumbnail"
                 >
                     <div class="thumbnail-overlay"></div>
                     <span class="play-button">
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
-                    <span class="label" :class="video.state == 'licensed' ? 'label-success': 'label-danger'">
+                    <span class="label" :class="video.state == 'licensed' ? 'label-licensed': 'label-danger'">
                         {{video.state}}
                     </span>
 
-                    <div class="video-duration">
+                    <span v-if="video.nsfw == '1'" class="label" :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
+                        NSFW
+                    </span>
+
+                    <div class="video-duration" v-if="video.duration">
                         {{video.duration | convertTime}}
                     </div>
                 </a>
@@ -39,7 +43,7 @@
     export default {
         data() {
             return {
-                video_image: '/assets/img/default.jpg'
+                video_image: '/assets/frontend/images/placeholder.png'
             }
         },
         props:['video'],
@@ -49,21 +53,15 @@
 
         methods:{
             defaultImage(){
-                this.video_image = '/assets/img/default.jpg';
+                this.video_image = '/assets/frontend/images/placeholder.png';
             },
 
             getInstagramImage(){
-                axios.get('https://api.instagram.com/oembed/?url=https://www.instagram.com/p/BYzFX1dDVMn/')
-                    .then((response) => {
-                });
-                return '/assets/img/default.jpg';
+                return '/assets/frontend/images/placeholder.png';
             },
 
-            goToDetail(video) {
-                this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
-                setTimeout(() => {
-                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
-                }, 800);
+            goToDetail() {
+                this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
 
             }
         },
@@ -81,7 +79,7 @@
                     }
 
                     image.onerror = function(){
-                        let default_img = '/assets/img/default.jpg';
+                        let default_img = '/assets/frontend/images/placeholder.png';
 
                         let img_tag = document.createElement('img');
                         img_tag.src = default_img;

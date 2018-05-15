@@ -7,7 +7,7 @@ export const checkImage = Vue.filter('checkimage', function(value){
         return value;
     }
     image.onerror = function(){
-        var newImage = './image/default.png';
+        var newImage = '/assets/frontend/images/placeholder.png';
         return newImage;
     }
 });

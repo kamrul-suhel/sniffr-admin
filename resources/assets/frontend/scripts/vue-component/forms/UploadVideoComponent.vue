@@ -1,7 +1,17 @@
 <template>
     <!-- UPLODA VIDEO SECTION -->
-    <section class="upload-video-section section-space">
+    <section class="upload-video-section section-space" :class="{'iframe-style': is_iframe}">
         <v-container grid-list-xl>
+            <v-layout row  wrap v-if="source">
+                <v-flex xs12 class="text-xs-center">
+                    <h1 class="heading text-uppercase">Share your content and grab £100 while you’re at it!</h1>
+                </v-flex>
+
+                <v-flex xs12 class="text-xs-center">
+                    <p>We never get bored of seeing videos from our fans! Whether it’s a must-see moment of comedy gold, an unbelievable skill or just something that’s flat out bizarre, send it our way and if we put it up on the UNILAD Facebook page we’ll send you £100!</p>
+                </v-flex>
+            </v-layout>
+
             <v-layout row wrap>
                 <v-flex xs12>
                     <div class="upload-video-title">
@@ -38,7 +48,9 @@
                                             required
                                     ></v-text-field>
 
-                                    <div class="email-validation red--text" v-if="email_optional_error">Are you sure this is correct?</div>
+                                    <div class="email-validation red--text" v-if="email_optional_error">Are you sure
+                                        this is correct?
+                                    </div>
                                 </v-flex>
 
                             </v-layout>
@@ -53,16 +65,6 @@
                                             color="dark"
                                     ></v-text-field>
                                 </v-flex>
-
-                                <v-flex xs12>
-                                    <v-text-field
-                                            label="Video title"
-                                            v-model="title"
-                                            name="title"
-                                            color="dark"
-                                            :counter="140"
-                                    ></v-text-field>
-                                </v-flex>
                             </v-layout>
 
                             <v-layout row wrap>
@@ -72,18 +74,32 @@
                             </v-layout>
 
                             <v-layout row wrap>
-                                <v-flex xs12 p-0>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Video title"
+                                            v-model="title"
+                                            name="title"
+                                            color="dark"
+                                            :error="title_optional"
+                                            :hint="title_optional ? 'Title must be 70 characters or less.' : ''"
+                                            :required="title_optional"
+                                            :counter="70"
+                                            @keyup="checkTitleLength()"
+                                    ></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12 p-0 class="upload-video-button">
                                     <v-btn
                                             dark
                                             raised
                                             class="ml-0"
                                             :class="{error: error}"
                                             @click="onPickFile()">
-                                        Upload your video
-                                        <v-icon dark right>system_update_alt</v-icon>
+                                        Choose file
+                                        <v-icon dark right>attachment</v-icon>
                                     </v-btn>
                                     <span v-if="error"
-                                          class="red--text">Upload your file OR provide a link please</span> <span>{{file_name}}</span>
+                                          class="red--text">Upload your video OR provide video a link please.</span> <span>{{file_name}}</span>
 
                                     <p class="small-italic">
                                         Maximum file size: 500MB. Acceptable file types: avi, flv, mov, mp4, mpg, mkv,
@@ -97,6 +113,12 @@
                                             ref="inputfile"
                                             accept="video/mp4,video/x-m4v,video/*"
                                             @change="onFilechange($event)"/>
+                                </v-flex>
+
+                                <v-flex xs12 class="text-xs-center">
+                                    <div class="video-upload-separator">
+                                        <h2>Or</h2>
+                                    </div>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -129,7 +151,7 @@
                                             name="terms"
                                             required
                                     >
-                                        <span slot="label">I agree to the above <a :href="termslink" target="_blank">terms and conditions</a></span>
+                                        <span slot="label">I agree to the <a :href="termslink" target="_blank">terms and conditions</a></span>
                                     </v-checkbox>
                                 </v-flex>
 
@@ -141,7 +163,8 @@
                                            :loading="validete_email_progress"
                                            :disabled="validete_email_progress"
                                            @click="onSubmit()"
-                                    >Submit your video</v-btn>
+                                    >Submit your video
+                                    </v-btn>
 
                                 </v-flex>
                             </v-layout>
@@ -206,13 +229,12 @@
 <script>
     export default {
         data: () => ({
-            csrf_token: $('meta[name="csrf-token"]').attr('content'),
             valid: false,
             full_name: '',
             title: '',
             url: '',
             file: '',
-            terms_condition: true,
+            terms_condition: false,
             nameRules: [
                 v => !!v || 'Full name is required'
             ],
@@ -222,7 +244,7 @@
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
             ],
             tel: '',
-            source:'',
+            source: '',
 
             uplod_progress: false,
             file_name: '',
@@ -238,7 +260,11 @@
             email_optional_error: false,
 
             //terms & condition
-            termslink:''
+            termslink: '',
+
+            title_optional: false,
+
+            is_iframe: false
         }),
         created() {
             this.setSourceField();
@@ -274,6 +300,11 @@
                     this.error = false;
                 }
 
+                //check title length
+                if(this.title && this.title.length > 70){
+                    return false;
+                }
+
                 if (this.$refs.form.validate()) {
                     if (this.error) {
                         return;
@@ -303,14 +334,21 @@
                     form.append('file', this.file);
                 }
 
+
                 form.append('full_name', this.full_name);
                 form.append('email', this.email);
                 form.append('title', this.title);
-                form.append('tel', this.tel);
+
+                // Checking if tel phone is null then not to send this field
+                if (this.tel != '') {
+                    form.append('tel', this.tel);
+                }
+
                 form.append('terms', this.terms_condition);
                 form.append('url', this.url);
                 form.append('source', this.source);
                 //set request
+
 
                 //show the uploading dialog box
                 this.uplod_progress = true;
@@ -336,6 +374,7 @@
 
                             this.$refs.form.reset();
                             this.file_name = '';
+                            this.file = '';
                             setTimeout(() => {
                                 this.thank_you_dialog = true;
                             }, 1000)
@@ -351,28 +390,43 @@
                     });
             },
 
-            setSourceField(){
-                if(this.$route.query.source){
+            setSourceField() {
+                if (this.$route.query.source) {
                     this.source = this.$route.query.source;
                 }
 
                 this.setTermsLink();
             },
 
-            setTermsLink(){
-                if(this.source === ''){
+            setTermsLink() {
+                if (this.source === '') {
                     this.termslink = '/terms';
                     return;
                 }
-
-                this.termslink = 'https://www.unilad.co.uk/terms-use'
+                this.is_iframe = true;
+                this.termslink = 'https://www.unilad.co.uk/submit/submission-terms-and-conditions/'
             },
 
-            checkEmailfield(email){
-                if (email.toLowerCase().indexOf(".con") >= 0 || email.toLowerCase().indexOf(".conuk") >= 0){
-                    this.email_optional_error = true;
+            checkEmailfield(email) {
+                if(email != null){
+                    if (email.toLowerCase().indexOf(".con") >= 0 || email.toLowerCase().indexOf(".conuk") >= 0) {
+                        this.email_optional_error = true;
+                    }else{
+                        this.email_optional_error = false;
+                    }
                 }
+            },
+
+            checkTitleLength(){
+                if(this.title && this.title.length > 70){
+                    this.title_optional = true;
+                    return true;
+                }
+                this.title_optional = false;
             }
+
+
+
         }
     }
 </script>

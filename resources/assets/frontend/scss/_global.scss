@@ -175,62 +175,6 @@ p {
   }
 }
 
-/* ************************* Upload video Section style ******************* */
-
-.upload-video-section {
-
-  .upload-video-title {
-    margin-bottom: $section-title-after-space;
-
-    h1 {
-      margin: 0 0 $featured-title-space 0;
-      color: $upload-video-title-color;
-    }
-  }
-
-  .terms{
-    .input-group {
-      height:auto;
-
-      label {
-        position:static;
-        height:auto;
-        line-height:18px;
-        overflow:inherit;
-        white-space:unset;
-        margin-left:40px;
-      }
-
-      .input-group__input{
-        position:absolute;
-        top:-6px;
-      }
-    }
-  }
-
-  .upload-video-title::after {
-    content: '';
-    width: 200px;
-    background: #000;
-    margin: 0px auto;
-    height: 5px;
-    display: block;
-  }
-
-  .video-upload-box {
-    width: 100%;
-  }
-
-  .input-group--details:before {
-    background: #000;
-  }
-
-  .term-condition {
-  }
-
-  .term-condition-content {
-  }
-}
 
 /* ************************* More detail Section style ******************* */
 
@@ -262,4 +206,11 @@ p {
 .notfound-title {
   font-size: 10rem;
   font-weight: bold;
+}
+
+
+/* ************************* Iframe style section ******************* */
+
+.iframe-style{
+  width:100%;
 }

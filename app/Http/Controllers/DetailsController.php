@@ -48,23 +48,24 @@ class DetailsController extends Controller
      */
     public function show(Request $request, $code)
     {
-        $video = Video::select($this->getVideoFieldsForFrontend())
-            ->where('more_details_code', $code)
-            ->with('contact')
-            ->first();
 
-        $iframe = $this->getVideoHtml($video, true);
-        $video['iframe'] = $iframe;
+        if ($request->ajax() || $request->isJson()) {
+            $video = Video::select($this->getVideoFieldsForFrontend())
+                ->where('more_details_code', $code)
+                ->with('contact')
+                ->first();
 
-        if (!$video) {
-            abort(404);
+            if($video){
+                $iframe = $this->getVideoHtml($video, true);
+                $video['iframe'] = $iframe;
+                return $this->successResponse($video);
+            }
+
+            return $this->errorResponse('Sorry, we could not find your video');
+
         }
 
-        if ($request->ajax()) {
-            return $this->successResponse($video);
-        }
-
-        return view('frontend.master', $this->data);
+        return view('frontend.master');
     }
 
     /**
@@ -114,14 +115,13 @@ class DetailsController extends Controller
 
         $video->location = Input::get('location');
         $video->description = Input::get('description');
-        $video->filmed_by_me = Input::get('filmed_by_me');
-        $video->permission = Input::get('permission') == 'yes' ? 1 : 0;
-        $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' ? 1 : 0;
+        $video->filmed_by_me = Input::get('filmed_by_me') == 'yes' || 1  ? 1 : 0;
+        $video->permission = Input::get('permission') == 'yes' || 1  ? 1 : 0;
+        $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 'yes' || 1 ? 1 : 0;
         $video->submitted_where = Input::get('submitted_where');
-        $video->contact_is_owner = Input::get('contact_is_owner');
-        $video->allow_publish = Input::get('allow_publish');
-        $video->contact_is_owner = Input::get('contact_is_owner');
-        $video->is_exclusive = Input::get('is_exclusive');
+        $video->contact_is_owner = Input::get('contact_is_owner') == 'yes' || 1 ? 1 : 0;
+        $video->allow_publish = Input::get('allow_publish') == 'yes' || 1 ? 1 : 0;
+        $video->is_exclusive = Input::get('is_exclusive') == 'yes' || 1 ? 1 : 0;
         $video->more_details = 1;
         $video->state = 'pending';
         $video->save();

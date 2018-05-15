@@ -115,6 +115,8 @@ Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
 });
 
+Route::get('terms', 'ThemeTermsController@index');
+
 Route::get('contract/{token}/accept', 'Contract\ContractController@accept')->name('contract.accept');
 Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('contract.sign');
 /*

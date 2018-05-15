@@ -34,12 +34,12 @@ class ThemeContactController extends Controller
                 $contact = Contact::where('email', base64_decode($request->input('key')))->first();
                 if (isset($contact)) {
                     $contact->delete();
-                    if (isset($contact->videos)) {
-                        foreach ($contact->videos as $video) {
-                            $video->contact_id = 0;
-                            $video->save();
-                        }
-                    }
+                    // if (isset($contact->videos)) {
+                    //     foreach ($contact->videos as $video) {
+                    //         $video->contact_id = 0;
+                    //         $video->save();
+                    //     }
+                    // }
                 }
             }
 
