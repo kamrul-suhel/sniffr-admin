@@ -4,7 +4,7 @@
             <v-card-media class="sniffr-media-thumbnail"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <a
-                @click.stop="goToDetail(video)"
+                @click.stop="goToDetail()"
                 class="block-thumbnail"
                 >
                     <div class="thumbnail-overlay"></div>
@@ -56,9 +56,7 @@
                 return '/assets/frontend/images/placeholder.png';
             },
 
-            goToDetail(video) {
-                // this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
-
+            goToDetail() {
                 this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
 
             }
