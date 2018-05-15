@@ -99,7 +99,7 @@
 						<div class="panel-body" style="display: block;">
 							<p>Select a Post Category Below:</p>
 							<select id="post_category_id" name="post_category_id">
-								<option value="0">Uncategorized</option>
+								<option value="">Uncategorized</option>
 								@foreach($post_categories as $category)
 									<option value="{{ $category->id }}" @if(!empty($post->post_category_id) && $post->post_category_id == $category->id)selected="selected"@endif>{{ $category->name }}</option>
 								@endforeach
