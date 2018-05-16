@@ -5,7 +5,7 @@ namespace App\Http\Requests\Contract;
 use App\Traits\FrontendResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateContractRequest extends FormRequest
+class DeleteContractRequest extends FormRequest
 {
     use FrontendResponse;
 
@@ -27,11 +27,7 @@ class CreateContractRequest extends FormRequest
     public function rules()
     {
         return [
-            'revenue_share' => 'integer|max:100|nullable',
-            'upfront_payment' => 'integer|nullable',
-            'success_system' => 'integer|nullable',
-            'credit' => 'string|nullable',
-            'video_id' => 'required|integer',
+            'id' => 'integer|exists:contracts',
         ];
     }
 }
