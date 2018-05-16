@@ -104,14 +104,14 @@
                             <input type="hidden" id="video_id" name="video_id" value="{{ $video->id }}"/>
                             <input type="hidden" id="video_alpha_id" name="video_alpha_id"
                                    value="{{ $video->alpha_id }}"/>
-                            <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
                         </div>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
             </div>
+            </form>
         </div>
     </div>
 </div>
