@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Contract;
 
 use App\Contract;
+use App\Http\Requests\Contract\DeleteContractRequest;
 use App\Mail\ContractMailable;
+use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
 use App\Video;
 use App\Http\Controllers\Controller;
@@ -13,6 +15,36 @@ use Illuminate\Http\Request;
 class ContractController extends Controller
 {
     use FrontendResponse;
+
+    /**
+     * @param DeleteContractRequest $request
+     * @param Contract $contract
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function delete(DeleteContractRequest $request, Contract $contract)
+    {
+        $note_type = 'error';
+        $note = 'Can\'t delete a contract that is already signed';
+
+        if(!$contract->signed_at) {
+            $note = 'Contract Deleted!';
+            $note_type = 'success';
+            $contract->delete();
+            $contract->save();
+        }
+
+        $video = Video::find($contract->video_id);
+
+        return redirect()->route('admin_video_edit', [
+            'id' => $video->alpha_id
+        ])->with([
+            'active_tab' => 'contract',
+            'note' => $note,
+            'note_type' => $note_type
+        ]);
+    }
+
     /**
      * @param CreateContractRequest $request
      * @return \Illuminate\Http\RedirectResponse
@@ -37,6 +69,7 @@ class ContractController extends Controller
         return redirect()->route('admin_video_edit', [
             'id' => $request->input('video_alpha_id')
         ])->with([
+            'active_tab' => 'contract',
             'note' => 'Contract Saved!',
             'note_type' => 'success'
         ]);
@@ -49,11 +82,13 @@ class ContractController extends Controller
     public function send(int $video_id)
     {
         $video = Video::with('currentContract')->with('contact')->find($video_id);
+
         \Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
 
         return redirect()->route('admin_video_edit', [
             'id' => $video->alpha_id
         ])->with([
+            'active_tab' => 'contract',
             'note' => 'Contract Sent!',
             'note_type' => 'success'
         ]);
@@ -75,20 +110,20 @@ class ContractController extends Controller
         $video = Video::with('contact')->find($contract->video_id);
 
         $contract_text = config('contracts')[$contract->contract_model_id]['text'];
-        $contract_text = str_replace(':contract_date', date('d-m-Y'), $contract_text);
-        $contract_text = str_replace(':licensor_name', $video->contact->full_name, $contract_text);
-        $contract_text = str_replace(':licensor_email', $video->contact->email, $contract_text);
-        $contract_text = str_replace(':story_title', $video->title, $contract_text);
-        $contract_text = str_replace(':story_link', $video->url, $contract_text);
-        $contract_text = str_replace(':contract_ref_number', $contract->reference_id, $contract_text);
-        $contract_text = str_replace(':unilad_share', (100 - $contract->revenue_share), $contract_text);
-        $contract_text = str_replace(':creator_share', $contract->revenue_share, $contract_text);
+        $contract_text = str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
+        $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
+        $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
+        $contract_text = str_replace(':story_title', '<strong>'.$video->title.'</strong>', $contract_text);
+        $contract_text = str_replace(':story_link', '<strong>'.$video->url.'</strong>', $contract_text);
+        $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
+        $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
+        $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
 
         if ($request->ajax() || $request->isJson()) {
             return $this->successResponse([
                 'videos' => $video,
                 'signed' => ($contract->signed_at) ? true : false,
-                'contract' => $contract_text,
+                'contract' => nl2br($contract_text),
             ]);
         }
 
@@ -113,6 +148,10 @@ class ContractController extends Controller
         }
 
         $video = Video::with('contact')->find($contract->video_id);
+
+        if (env('APP_ENV') != 'local') {
+            $video->notify(new ContractSigned($video));
+        }
 
         if ($request->ajax() || $request->isJson()) {
             return $this->successResponse([
