@@ -69,7 +69,6 @@
 
         watch: {
             '$route'(to, from, next) {
-                this.getVideoData();
             }
         },
 
@@ -79,11 +78,19 @@
                 this.content_padding = false;
             }
 
-            this.getVideoData();
-
-            VideoDialogBoxEventBus.$on('videoDialogStateChange', () => {
-                this.getVideoData();
+            VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
+                this.getVideoData(alpha_id);
             })
+
+            VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
+                let alpha_id = this.$store.getters.getNextVideoAlphaId;
+                this.getVideoData(alpha_id);
+            });
+
+            VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
+                let alpha_id = this.$store.getters.getPrevVideoAlphaId;
+                this.getVideoData(alpha_id)
+            });
         },
 
         mounted() {
@@ -91,8 +98,7 @@
         },
 
         methods: {
-            getVideoData(){
-                let alpha_id = this.$route.params.alpha_id;
+            getVideoData(alpha_id){
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id} ).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
                     if (this.video_detail.tags.length > 0) {
@@ -102,6 +108,15 @@
                     }
                     this.nextPageAlphaId = this.$store.getters.getNextVideoAlphaId;
                     this.previousPageAlphaId = this.$store.getters.getPrevVideoAlphaId;
+
+                    this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
+
+                    if (this.video_detail.iframe.includes('vimeo')) {
+                        this.reloadVideoJs();
+                    }
+
+                    this.reloadFacebook();
+
                 });
             },
 

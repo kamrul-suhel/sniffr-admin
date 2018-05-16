@@ -6,6 +6,20 @@
 .video-dialog-box{
   position:relative;
 
+  .nsfw {
+    position: absolute;
+    right:0;
+    display: inline-block;
+    background: #da0039;
+    padding: 5px 10px;
+
+    a{
+      text-decoration:none;
+      color: #fff;
+    }
+
+  }
+
   .dialog-box-switch{
     position:absolute;
 
@@ -39,8 +53,10 @@
   }
 
   .video-container{
+
     display:flex;
     width:100%;
+    position:relative;
 
     .video_player-dimensions{
       width:100%;

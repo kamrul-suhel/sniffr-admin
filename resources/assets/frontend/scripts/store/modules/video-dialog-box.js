@@ -1,13 +1,15 @@
 const state = {
+    video_dialog_current_alpha_id: '',
     video_dialog_current_video: '',
     video_dialog_next_alpha_id: '',
-    video_dialog_prev_alpha_id: ''
+    video_dialog_prev_alpha_id: '',
 }
 
 const mutations = {
     setVideoDialogBox(state, data){
        state.video_dialog_box = true;
        console.log(data);
+       state.video_dialog_current_video = data.current_video.alpha_id;
        state.video_dialog_current_video = data.current_video;
        state.video_dialog_next_alpha_id = data.next_video_alpha_id;
        state.video_dialog_prev_alpha_id = data.prev_video_alpha_id;
@@ -38,6 +40,10 @@ const getters = {
 
     getCurrentVideoForDialog(state){
         return state.video_dialog_current_video;
+    },
+
+    getCurrentVideoAlphaId(){
+        return state.video_dialog_current_alpha_id;
     },
 
     getNextVideoAlphaId(){

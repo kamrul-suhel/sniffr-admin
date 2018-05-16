@@ -39,6 +39,7 @@
         </v-card>
     </v-flex>
 </template>
+
 <script>
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus'
     export default {
@@ -67,9 +68,10 @@
             },
 
             openVideoDialog(video){
-                    VideoDialogBoxEventBus.openVideoDialog();
-                    this.$router.push({name: 'video_in_dialog', params: {alpha_id: video.alpha_id}});
-            },
+                let url = '/videos/'+video.alpha_id;
+                window.history.pushState(null, "page 2",url);
+                VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
+            }
         },
 
         directives: {
