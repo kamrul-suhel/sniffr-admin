@@ -3,7 +3,7 @@
 }
 
 .nav-tabs li a {
-    font-size: 16px;
+    font-size: 12px;
     color: #868686;
     border-color: #DDD;
     border-bottom: 0px;
@@ -17,7 +17,7 @@
 }
 
 .save_button {
-    padding: 40px;
+    padding: 20px;
 }
 
 .input-group {
