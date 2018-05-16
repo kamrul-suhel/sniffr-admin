@@ -37,10 +37,11 @@ class AdminStoryController extends Controller
 
         $data = [
             'stories' => $stories,
+            'users' => User::all(),
             'user' => Auth::user()
         ];
 
-         return view('admin.stories.index', $data);
+        return view('admin.stories.index', $data);
     }
 
     /**
