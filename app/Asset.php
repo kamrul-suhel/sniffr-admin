@@ -12,14 +12,14 @@ class Asset extends Model
 
     protected $guarded = [];
     public static $rules = [];
-    protected $table = 'assets';
+    protected $table = 'asset_video';
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function stories()
     {
-        return $this->belongsTo(Story::class);
+        return $this->BelongsToMany(Story::class);
     }
 
     /**
@@ -27,6 +27,6 @@ class Asset extends Model
      */
     public function videos()
     {
-        return $this->belongsToMany(Video::class);
+        return $this->BelongsToMany(Video::class);
     }
 }

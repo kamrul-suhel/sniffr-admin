@@ -44,17 +44,28 @@
 
 			</div>
 
-			@if(!empty($story->created_at))
-				<div class="col-sm-3">
-					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-						<div class="panel-title">Created Date</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
-						<div class="panel-body" style="display: block;">
-							<p>Select Date/Time Below</p>
-							<input type="text" class="form-control" name="created_at" id="created_at" placeholder="" value="@if(!empty($story->created_at)){{ $story->created_at }}@endif" />
+			<div class="col-sm-6">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Assets</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
+
+					<div class="panel-body" style="display: block;">
+						<select name="assets[]" id="assets" class="form-control" multiple>
+							@if(!empty($videos))
+								@foreach($videos as $video)
+									<option value="{{ $video->id }}">{{ $video->title }}</option>
+								@endforeach
+							@endif
+						</select>
+
+					</div>
 				</div>
-			@endif
+			</div>
 
 		</div>
 

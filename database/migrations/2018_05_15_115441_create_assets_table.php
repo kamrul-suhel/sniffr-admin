@@ -12,7 +12,7 @@ class CreateAssetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('asset_video', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('story_id')->unsigned()->nullable();
             $table->integer('type')->default(1);
@@ -25,6 +25,6 @@ class CreateAssetsTable extends Migration
 
     public function down()
     {
-        Schema::drop('assets');
+        Schema::drop('asset_video');
     }
 }

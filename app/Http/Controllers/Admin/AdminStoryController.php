@@ -51,7 +51,9 @@ class AdminStoryController extends Controller
         $data = [
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'users' => User::all(),
+            'videos' => Video::all()
         ];
 
         return view('admin.stories.create_edit', $data);
@@ -87,11 +89,16 @@ class AdminStoryController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
-            'client' => $story,
+            'story' => $story,
             'post_route' => url('admin/stories/update'),
             'button_text' => 'Update Story',
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'users' => User::all(),
+            'assets' => Asset::all(),
+            'videos' => Video::all()
         ];
+
+        dd($story->assets->videos);
 
         return view('admin.stories.create_edit', $data);
     }

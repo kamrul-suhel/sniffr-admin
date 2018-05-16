@@ -29,12 +29,4 @@ class Story extends Model
     {
         return $this->hasMany(Asset::class);
     }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
 }
