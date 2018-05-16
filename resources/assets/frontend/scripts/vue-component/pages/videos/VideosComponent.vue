@@ -33,10 +33,12 @@
         <v-dialog
                 v-model="video_dialog"
                 transition="dialog-bottom-transition"
-                scrollable
                 persistent
+                scrollable
+                class="video-dialog-container"
+                content-class="video-dialog-container"
         >
-            <v-card tile>
+            <v-card>
                 <v-toolbar card dark color="dark">
                     <v-btn icon dark @click.native="video_dialog = false">
                         <v-icon>close</v-icon>
@@ -45,23 +47,23 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
 
-                <v-card-text>
-                    <v-layout row wrap justify-center>
-                        <v-flex justify-start>
+                <v-card-text class="video-dialog-box">
+                    <v-layout row wrap>
+                        <div class="dialog-box-switch prev">
                             <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()">
                                 <v-icon>chevron_left</v-icon>
                             </v-btn>
-                        </v-flex>
+                        </div>
 
-                        <v-flex>
+                        <v-container grid-list-xs fluid :class="{'mx-5': margin_content}">
                             <router-view></router-view>
-                        </v-flex>
+                        </v-container>
 
-                        <v-flex justify-start class="text-xs-right" @click="onNextVideo()">
-                            <v-btn color="dark ma-0" fab small dark>
+                        <div class="dialog-box-switch next">
+                            <v-btn color="dark ma-0" fab small dark @click="onNextVideo()">
                                 <v-icon>chevron_right</v-icon>
                             </v-btn>
-                        </v-flex>
+                        </div>
                     </v-layout>
                 </v-card-text>
             </v-card>
@@ -87,7 +89,9 @@
                 videos: '',
                 paginate: '',
                 current_page: 0,
-                video_dialog: false
+                video_dialog: false,
+
+                margin_content: true
             }
         },
         watch: {
@@ -101,6 +105,11 @@
         },
 
         created(){
+            let current_device = this.$vuetify.breakpoint.name;
+            if(current_device == 'sm' || current_device == 'xs'){
+                this.margin_content = false;
+            }
+
             if(this.$route.query.page){
                 this.current_page = this.$route.query.page;
             }
