@@ -232,6 +232,12 @@ class VideoController extends Controller
         return view('frontend.master');
     }
 
+    public function getVideoForVideoDialog($alpha_id){
+        $video = Video::where('state', 'licensed')
+            ->where('alpha_id', $alpha_id)
+            ->orderBy('id', 'DESC')->paginate();
+    }
+
     /**
      * @param Request $request
      * @param string $id
@@ -424,5 +430,47 @@ class VideoController extends Controller
         ];
 
         return view('Theme::video-list', $data);
+    }
+
+    // Getting video dialog box content
+
+    public function videoDialogboxContent(Request $request, $alpha_id){
+        $current_video = Video::where('alpha_id', '=', $alpha_id)
+            ->with('tags')
+            ->first();
+        $current_video->iframe = $this->getVideoHtml($current_video, true);
+
+        $next_alpha_id = '';
+        $next = Video::select('alpha_id')
+            ->where('id', '<', $current_video->id)
+            ->where('state', '=', 'licensed')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // Check if exists or no
+        if($next){
+            $next_alpha_id = $next->alpha_id;
+        }
+
+        $previous_alpha_id = '';
+        $previous = Video::select('alpha_id')
+            ->where('id', '>', $current_video->id)
+            ->where('state', '=', 'licensed')
+            ->orderBy('id', 'asc')
+            ->first();
+
+        if($previous){
+            $previous_alpha_id = $previous->alpha_id;
+        }
+
+        $data = [
+            'current_video' => $current_video,
+            'next_video_alpha_id'   => $next_alpha_id,
+            'prev_video_alpha_id'   => $previous_alpha_id
+        ];
+
+        if($request->isJson() || $request->ajax()){
+            return $this->successResponse($data);
+        }
     }
 }
