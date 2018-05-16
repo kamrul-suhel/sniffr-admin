@@ -26,20 +26,16 @@
                     @endif
 
                     @if($video)
-                        <li class="active">
+                        <li class="{{ (!session('active_tab')) ? 'active' : '' }}">
                             <a href="#copy" role="tab" data-toggle="tab">Copy</a>
                         </li>
 
-                        <li>
+                        <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
                             <a href="#contract" role="tab" data-toggle="tab">Contract</a>
                         </li>
 
                         <li>
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
-                        </li>
-
-                        <li>
-                            <a href="#vertical" role="tab" data-toggle="tab">Vertical</a>
                         </li>
 
                         <li>
@@ -78,23 +74,22 @@
                     @endif
 
                     @if($video)
-                        <div class="tab-pane active" id="copy">
+                        <div class="tab-pane {{ (!session('active_tab')) ? 'active' : '' }}" id="copy">
                             @include('admin.videos.partials.copy')
                         </div>
-                        <div class="tab-pane" id="contract">
+                        <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
                             @include('admin.videos.partials.contract')
                         </div>
                         <div class="tab-pane" id="metadata">
+                            @include('admin.videos.partials.vertical')
+                            @include('admin.videos.partials.collection')
+                            @include('admin.videos.partials.tags')
+
                             @include('admin.videos.partials.location')
                             @include('admin.videos.partials.shotType')
                             @include('admin.videos.partials.video_information')
                             @include('admin.videos.partials.duration')
                             @include('admin.videos.partials.details')
-                        </div>
-                        <div class="tab-pane" id="vertical">
-                            @include('admin.videos.partials.vertical')
-                            @include('admin.videos.partials.collection')
-                            @include('admin.videos.partials.tags')
                         </div>
                         <div class="tab-pane" id="image_files">
                             @include('admin.videos.partials.image_files')
