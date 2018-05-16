@@ -7,11 +7,11 @@ use Validator;
 use Redirect;
 use App\User;
 use App\Story;
-use App\Asset;
 use App\Video;
 use App\Contact;
 use App\Comment;
-use App\Campaign;
+use App\Libraries\TimeHelper;
+use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
@@ -33,7 +33,7 @@ class AdminStoryController extends Controller
      */
     public function index()
     {
-        $stories = Story::orderBy('created_at', 'DESC')->paginate(10);
+        $stories = Story::orderBy('updated_at', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,
@@ -71,7 +71,19 @@ class AdminStoryController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        Story::create($data);
+        $story = new Story();
+        $story->alpha_id = VideoHelper::quickRandom();
+        $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
+        $story->title = Input::get('title');
+        $story->description = (Input::get('description') ? Input::get('description') : NULL);
+        $story->notes = (Input::get('notes') ? Input::get('notes') : NULL);
+        $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
+        $story->active = 1;
+        $story->save();
+
+        if(Input::get('videos')) {
+            $story->videos()->sync(Input::get('videos'));
+        }
 
         return Redirect::to('admin/stories')->with([
             'note' => 'New Story Successfully Added!',
@@ -94,11 +106,10 @@ class AdminStoryController extends Controller
             'button_text' => 'Update Story',
             'user' => Auth::user(),
             'users' => User::all(),
-            'assets' => Asset::all(),
             'videos' => Video::all()
         ];
 
-        dd($story->assets->videos);
+        //dd($story->videos);
 
         return view('admin.stories.create_edit', $data);
     }
@@ -119,7 +130,27 @@ class AdminStoryController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        $story->update($data);
+        if(Input::get('title')) {
+            $story->title = Input::get('title');
+        }
+
+        $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
+
+        if(Input::get('description')) {
+            $story->description = Input::get('description');
+        }
+
+        if(Input::get('notes')) {
+            $story->notes = Input::get('notes');
+        }
+
+        $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
+
+        if(Input::get('videos')) {
+            $story->videos()->sync(Input::get('videos'));
+        }
+
+        $story->save();
 
         return Redirect::to('admin/stories/edit' . '/' . $id)->with([
             'note' => 'Successfully Updated Story!',

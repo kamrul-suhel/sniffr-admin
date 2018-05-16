@@ -23,10 +23,10 @@ class Story extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
-    public function assets()
+    public function videos()
     {
-        return $this->hasMany(Asset::class);
+        return $this->belongsToMany(Video::class);
     }
 }
