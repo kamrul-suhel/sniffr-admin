@@ -27,11 +27,10 @@ const actions = {
         return new Promise(function(resolve, reject) {
             let url = '';
             let request_url = state.current_route_obj.name;
-            console.log(state.current_route_obj.name);
 
             //Featured videos
             if(request_url === 'home'){
-                url = ''
+                url = '/videosdialog/featured/'+payload.alpha_id;
             }
 
             //Search video url
@@ -43,20 +42,15 @@ const actions = {
             if(request_url === 'videos_tag'){
 
             }
-            return;
-
-            if(state.current_route_obj.name === 'videos'){
-                url = '/videosdialogbox/'+ payload.alpha_id;
-                axios.get(url)
-                    .then((response) => {
-                        commit('setVideoDialogBox', response.data);
-                        resolve();
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        reject();
-                });
-            }
+            axios.get(url)
+                .then((response) => {
+                    commit('setVideoDialogBox', response.data);
+                    resolve();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject();
+            });
         })
     }
 }

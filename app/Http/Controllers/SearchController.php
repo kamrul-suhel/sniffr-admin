@@ -44,8 +44,56 @@ class SearchController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function featureVideosInDialog(Request $request){
 
-    public function featureVideosInDialog(){
+        if($request->ajax() || $request->isJson()){
+            $current_video = Video::select($this->getVideoFieldsForFrontend())
+                ->where('alpha_id', '=', $request->alpha_id)
+                ->first();
+
+
+            $featured_videos = Video::where(function ($query) {
+                $query->where([['state', 'licensed'], ['active', 1], ['featured', 1]])
+                    ->orWhere('state', 'licensed')->orderBy('licensed_at', 'DESC');
+            })
+                ->orderBy('featured', 'DESC')
+                ->orderBy('licensed_at', 'DESC')
+                ->limit(12)
+                ->get();
+
+
+            $next_alpha_id = '';
+            $previous_alpha_id = '';
+
+            $position = $featured_videos
+                ->pluck('id')
+                ->search($current_video->id);
+
+
+            $check_previous_id = $position-1;
+            if($check_previous_id >= 0){
+                $previous_alpha_id = $featured_videos[$check_previous_id]->alpha_id;
+            }
+
+            $check_next_id = $position+1;
+            if($check_next_id <= 11){
+                $next_alpha_id = $featured_videos[$check_next_id]->alpha_id;
+            }
+
+
+
+            $data = [
+                'current_video' => $current_video,
+                'next_video_alpha_id'   => $next_alpha_id,
+                'prev_video_alpha_id'   => $previous_alpha_id
+            ];
+
+            return $this->successResponse($data);
+        }
 
     }
 
