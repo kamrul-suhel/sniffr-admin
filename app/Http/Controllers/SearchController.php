@@ -157,6 +157,10 @@ class SearchController extends Controller
 
     public function searchVideosInDialog(Request $request)
     {
+        $current_video = Video::select($this->getVideoFieldsForFrontend())
+            ->where('alpha_id', '=', $request->alpha_id)
+            ->first();
+        $current_video->iframe = $this->getVideoHtml($current_video, true);
 
     }
 

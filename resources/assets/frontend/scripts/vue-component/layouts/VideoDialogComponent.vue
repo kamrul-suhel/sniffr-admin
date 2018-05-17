@@ -11,7 +11,7 @@
     >
         <v-card height="650px">
             <v-toolbar card dark color="dark">
-                <v-btn icon dark @click.native="onCloseDialogbox()">
+                <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
                 <v-toolbar-title>{{ current_video.title ? current_video.title : ''}}</v-toolbar-title>
@@ -111,14 +111,14 @@
 
             },
 
-            onCloseDialogbox() {
+            onCloseDialogBox() {
                 this.video_dialog = false;
                 let url = this.$store.getters.getEnterStateUrl;
                 window.history.pushState(null, '', url)
+                this.$store.commit('setResetVideoDialogObject');
             },
 
             checkAlphaIdExists() {
-                console.log("method call everyting");
                 if (!this.nextPageAlphaId) {
                     this.nextPageExists = false;
                 }else{

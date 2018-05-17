@@ -29,15 +29,14 @@
                     <v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
                             <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
-                                    text-xl-right>
+                                    text-xl-right v-if="video_detail.views">
                                 <v-btn
-                                        fab
                                         dark
-                                        small
-                                        color="pink favorite"
-                                        data-authenticated=""
-                                        :data-videoid="video_detail.id">
-                                    <v-icon dark>remove_red_eye</v-icon>
+                                        fab
+                                        flat
+                                        color="dark favorite"
+                                        class="mr-0">
+                                    <v-icon dark color="black ">remove_red_eye</v-icon>
                                 </v-btn>
 
                                 {{ video_detail.views+1}} views
