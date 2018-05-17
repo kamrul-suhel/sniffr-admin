@@ -12,7 +12,8 @@
                 <v-layout row wrap class="video-detail-content">
                     <v-flex xs12>
                         <h2>{{ video_detail.title }}</h2>
-                        <p>{{ video_detail.description }}</p>
+                        <p>{{ video_detail.description | readmore(300, '...')}}</p>
+                        <p><router-link :to="{name : 'videos_detail', params: { id: video_detail.alpha_id}}">Read more</router-link></p>
                         <div class="video-detail-tags" v-if="tags.length > 0">
                             <h3 id="tags">Tags:</h3>
                             <ul>
@@ -99,6 +100,9 @@
 
         methods: {
             getVideoData(alpha_id) {
+
+                this.$store.commit('setRouteObject', this.$route);
+
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
                     if (this.video_detail.tags.length > 0) {

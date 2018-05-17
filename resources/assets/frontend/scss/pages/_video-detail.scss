@@ -4,6 +4,10 @@
 
 .videos-detail-section{
 
+  .btn .btn__content .icon {
+    margin-left: -8px;
+  }
+
   .nsfw {
     position: absolute;
     right:0;
@@ -117,6 +121,8 @@
 
         a{
           color:#cdcdcd;
+          font-size:16px;
+          margin-right:10px;
           text-decoration:none;
           transition:all ease-in-out .3s;
         }

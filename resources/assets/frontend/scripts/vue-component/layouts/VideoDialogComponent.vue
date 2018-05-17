@@ -9,7 +9,7 @@
             content-class="video-dialog-container"
             max-width="1200px"
     >
-        <v-card>
+        <v-card height="650px">
             <v-toolbar card dark color="dark">
                 <v-btn icon dark @click.native="onCloseDialogbox()">
                     <v-icon>close</v-icon>
@@ -74,12 +74,6 @@
           VideoDialogComponent
         },
 
-        watch: {
-            '$route' (to, from , next){
-                console.log(to);
-            }
-        },
-
         created() {
             let current_device = this.$vuetify.breakpoint.name;
             if(current_device == 'sm' || current_device == 'xs'){
@@ -119,7 +113,8 @@
 
             onCloseDialogbox() {
                 this.video_dialog = false;
-                window.history.pushState(null, '', '/')
+                let url = this.$store.getters.getEnterStateUrl;
+                window.history.pushState(null, '', url)
             },
 
             checkAlphaIdExists() {

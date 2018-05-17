@@ -28,8 +28,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('tags', 'ThemeTagController@index');
 
-    // Frontend video dialog box, getting current video, next & previous link
-    Route::get('video/dialogbox/{alpha_id}', 'Video\VideoController@videoDialogboxContent');
 
     /*
     |--------------------------------------------------------------------------
@@ -69,6 +67,7 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     |--------------------------------------------------------------------------
     */
     Route::get('search', 'SearchController@index')->name('search');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -246,6 +245,20 @@ Route::group(array('prefix' => 'client'), function(){
     Route::get('dailies/status/{state}/{id}', array('uses' => 'Client\ClientDailiesController@status'));
     Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
 });
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Frontend video dialog box, getting current video, next & previous link
+|--------------------------------------------------------------------------
+*/
+
+Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
+Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
+Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
+Route::get('videosdialog/tags/{alpha_id}/{value}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+
 
 /*
 |--------------------------------------------------------------------------

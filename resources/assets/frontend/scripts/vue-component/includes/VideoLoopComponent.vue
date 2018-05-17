@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl4>
+    <v-flex xs12 sm6 md4 lg4 xl3>
         <v-card class="block">
             <v-card-media class="sniffr-media-thumbnail"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
@@ -32,7 +32,7 @@
             </v-card-title>
 
             <v-card-text class="pt-0">
-                <div class="video-content">
+                <div class="video-content" v-if="video.description != 'null'">
                     {{ video.description | readmore(100, '...') }}
                 </div>
             </v-card-text>

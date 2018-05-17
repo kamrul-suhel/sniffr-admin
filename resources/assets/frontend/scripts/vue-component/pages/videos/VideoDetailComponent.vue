@@ -20,7 +20,7 @@
             <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn light flat  raised @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
+                        <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
                 </v-layout>
 
