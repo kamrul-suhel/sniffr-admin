@@ -118,6 +118,7 @@
             },
 
             checkAlphaIdExists() {
+                console.log("method call everyting");
                 if (!this.nextPageAlphaId) {
                     this.nextPageExists = false;
                 }else{

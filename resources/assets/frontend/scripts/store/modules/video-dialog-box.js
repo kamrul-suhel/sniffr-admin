@@ -44,6 +44,7 @@ const actions = {
             }
             axios.get(url)
                 .then((response) => {
+                    console.log(response);
                     commit('setVideoDialogBox', response.data);
                     resolve();
                 })

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 class SearchController extends Controller
 {
     use FrontendResponse;
+    use VideoHelper;
 
     /**
      * @param Request $request
@@ -48,12 +50,15 @@ class SearchController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function featureVideosInDialog(Request $request){
+    public function featureVideosInDialog(Request $request)
+    {
 
-        if($request->ajax() || $request->isJson()){
+        if ($request->ajax() || $request->isJson()) {
             $current_video = Video::select($this->getVideoFieldsForFrontend())
+                ->with('tags')
                 ->where('alpha_id', '=', $request->alpha_id)
                 ->first();
+            $current_video->iframe = $this->getVideoHtml($current_video, true);
 
 
             $featured_videos = Video::where(function ($query) {
@@ -74,22 +79,21 @@ class SearchController extends Controller
                 ->search($current_video->id);
 
 
-            $check_previous_id = $position-1;
-            if($check_previous_id >= 0){
+            $check_previous_id = $position - 1;
+            if ($check_previous_id >= 0) {
                 $previous_alpha_id = $featured_videos[$check_previous_id]->alpha_id;
             }
 
-            $check_next_id = $position+1;
-            if($check_next_id <= 11){
+            $check_next_id = $position + 1;
+            if ($check_next_id <= 11) {
                 $next_alpha_id = $featured_videos[$check_next_id]->alpha_id;
             }
 
 
-
             $data = [
                 'current_video' => $current_video,
-                'next_video_alpha_id'   => $next_alpha_id,
-                'prev_video_alpha_id'   => $previous_alpha_id
+                'next_video_alpha_id' => $next_alpha_id,
+                'prev_video_alpha_id' => $previous_alpha_id
             ];
 
             return $this->successResponse($data);
@@ -102,7 +106,8 @@ class SearchController extends Controller
      * @param $alpha_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function videosInDialog(Request $request, $alpha_id){
+    public function videosInDialog(Request $request, $alpha_id)
+    {
         $current_video = Video::where('alpha_id', '=', $alpha_id)
             ->with('tags')
             ->first();
@@ -116,7 +121,7 @@ class SearchController extends Controller
             ->first();
 
         // Check if exists or no
-        if($next){
+        if ($next) {
             $next_alpha_id = $next->alpha_id;
         }
 
@@ -127,30 +132,31 @@ class SearchController extends Controller
             ->orderBy('id', 'asc')
             ->first();
 
-        if($previous){
+        if ($previous) {
             $previous_alpha_id = $previous->alpha_id;
         }
 
         $data = [
             'current_video' => $current_video,
-            'next_video_alpha_id'   => $next_alpha_id,
-            'prev_video_alpha_id'   => $previous_alpha_id
+            'next_video_alpha_id' => $next_alpha_id,
+            'prev_video_alpha_id' => $previous_alpha_id
         ];
 
-        if($request->isJson() || $request->ajax()){
+        if ($request->isJson() || $request->ajax()) {
             return $this->successResponse($data);
         }
     }
 
     public function tagsSearchVideosInDialog(Request $request)
     {
-        $videos = Video::where('title', 'LIKE','%'. $request->value. '%')
+        $videos = Video::where('title', 'LIKE', '%' . $request->value . '%')
             ->where('state', '=', 'licensed')
             ->get();
         dd($videos);
     }
 
-    public function searchVideosInDialog(Request $request){
+    public function searchVideosInDialog(Request $request)
+    {
 
     }
 
