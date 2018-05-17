@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-8">
             <h2>
-                {{ ($video->currentContract->signed_at) ? 'Signed ' : 'Proposed' }}
+                {{ ($video->currentContract->signed_at) ? '' : 'Proposed' }}
                 Contract
             </h2>
             <div class="row">
@@ -37,7 +37,7 @@
                 (key_exists($video->currentContract->success_system, config('success_system'))) ?
                 config('success_system')[$video->currentContract->success_system]
                 : ''
-                }}"></textarea>
+                }}</textarea>
                     </div>
                 </div>
             </div>
@@ -100,15 +100,25 @@
                     </div>
                 @endif
             </div>
+            @if(!$video->currentContract->signed_at)
+                <div class="input-group text-center">
+                    <a href="{{ route('contract.delete', ['id' => $video->currentContract->id]) }}"
+                       class="btn btn-warning btn-lg">
+                        Delete
+                    </a>
+                </div>
+            @endif
         </div>
 
         @if(!$video->currentContract->signed_at)
             <div class="col-md-4 text-center">
-                <h4>Send Contract to {{ $video->contact->email }}</h4>
+                <div class="input-group">
+                    <h4>Send Contract to {{ $video->contact->email }}</h4>
 
-                <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg">
-                    Send
-                </a>
+                    <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg">
+                        Send
+                    </a>
+                </div>
             </div>
         @endif
     </div>

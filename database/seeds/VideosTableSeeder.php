@@ -47,6 +47,11 @@ class VideosTableSeeder extends Seeder
         unset($states[3]);
         unset($states[8]);
 
+        $videoDates =[];
+        foreach (range(1, 60) as $index) {
+            $videoDates[] = strtotime($index . ' days ago');
+        }
+
         foreach (range(1, 1000) as $index) {
             $social_video = $faker->boolean(60);
             $social_video_data = $social_video ? $faker->randomElement($social_videos) : null;
@@ -118,6 +123,7 @@ class VideosTableSeeder extends Seeder
                 'licensed_at' => ($state == 'licensed') ? $faker->dateTime() : null,
                 'dimension_height' => $dimension_height,
                 'dimension_width' => $dimension_width,
+                'created_at' => date('Y-m-d', $faker->randomElement($videoDates)),
             ]);
         }
     }

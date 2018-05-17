@@ -13,8 +13,8 @@
 
                         <v-flex xs12>
                             <input type="hidden" name="token" id="token" v-model="token">
-                            <textarea name="contract" title="contract" rows="14" style="width: 100%"
-                                      disabled="disabled">{{ contract }}</textarea>
+                            <div name="contract" title="contract" rows="14" style="width: 100%"
+                                      disabled="disabled" v-html="contract"></div>
                         </v-flex>
 
                         <v-flex xs12 class="text-center">
@@ -99,3 +99,17 @@
         }
     }
 </script>
+<style>
+    body::-webkit-scrollbar {
+        width: 1em;
+    }
+
+    body::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid slategrey;
+    }
+</style>
