@@ -14,14 +14,23 @@
                 <v-btn icon dark @click.native="onCloseDialogbox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Sniffr media</v-toolbar-title>
+                <v-toolbar-title>{{ current_video.title ? current_video.title : ''}}</v-toolbar-title>
+
                 <v-spacer></v-spacer>
+
+                <v-toolbar-items>
+                    <v-btn dark flat @click.native="dialog = false">
+                        <div class="video-duration" v-if="current_video.duration">
+                            {{current_video.duration | convertTime}}
+                        </div>
+                    </v-btn>
+                </v-toolbar-items>
             </v-toolbar>
 
             <v-card-text class="video-dialog-box">
                 <v-layout row wrap>
                     <div class="dialog-box-switch prev">
-                        <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()">
+                        <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">
                             <v-icon>chevron_left</v-icon>
                         </v-btn>
                     </div>
@@ -31,7 +40,7 @@
                     </v-container>
 
                     <div class="dialog-box-switch next">
-                        <v-btn color="dark ma-0" fab small dark @click="onNextVideo()">
+                        <v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextPageExists">
                             <v-icon>chevron_right</v-icon>
                         </v-btn>
                     </div>
@@ -48,9 +57,16 @@
     export default {
         data() {
             return {
+                current_video: '',
                 video_dialog: false,
                 margin_content: true,
                 current_page: 0,
+
+                nextPageExists: true,
+                nextPageAlphaId: '',
+
+                previousPageExists: true,
+                previousPageAlphaId: ''
             }
         },
 
@@ -74,6 +90,15 @@
                 this.video_dialog = VideoDialogBoxEventBus.openVideoDialogBox;
             })
 
+            VideoDialogBoxEventBus.$on('setNextPrevButton', () => {
+                this.nextPageAlphaId = this.$store.getters.getNextVideoAlphaId;
+                this.previousPageAlphaId = this.$store.getters.getPrevVideoAlphaId;
+
+                this.checkAlphaIdExists();
+                this.current_video = this.$store.getters.getCurrentVideoForDialog;
+
+            })
+
         },
 
         methods: {
@@ -95,7 +120,21 @@
             onCloseDialogbox() {
                 this.video_dialog = false;
                 window.history.pushState(null, '', '/')
-            }
+            },
+
+            checkAlphaIdExists() {
+                if (!this.nextPageAlphaId) {
+                    this.nextPageExists = false;
+                }else{
+                    this.nextPageExists = true;
+                }
+
+                if (!this.previousPageAlphaId) {
+                    this.previousPageExists = false;
+                }else{
+                    this.previousPageExists = true;
+                }
+            },
 
         }
     }

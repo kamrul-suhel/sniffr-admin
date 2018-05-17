@@ -52,18 +52,18 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
+
     export default {
         data() {
             return {
-                video_detail:'',
+                video_detail: '',
                 tags: [],
 
-                ready_to_show : true,
+                ready_to_show: true,
 
-                content_padding:true,
+                content_padding: true,
 
-                nextPageAlphaId: '',
-                previousPageAlphaId: ''
+
             }
         },
 
@@ -74,7 +74,7 @@
 
         created() {
             let breakpoint = this.$vuetify.breakpoint.name;
-            if(breakpoint === 'sm' || breakpoint === 'xs' ){
+            if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;
             }
 
@@ -98,16 +98,16 @@
         },
 
         methods: {
-            getVideoData(alpha_id){
-                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id} ).then(() => {
+            getVideoData(alpha_id) {
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
-                    }else{
+                    } else {
                         this.tags = [];
                     }
-                    this.nextPageAlphaId = this.$store.getters.getNextVideoAlphaId;
-                    this.previousPageAlphaId = this.$store.getters.getPrevVideoAlphaId;
+
+                    VideoDialogBoxEventBus.$emit('setNextPrevButton');
 
                     this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
 
@@ -119,6 +119,8 @@
 
                 });
             },
+
+
 
             onGoback() {
                 this.$router.go(-1);
