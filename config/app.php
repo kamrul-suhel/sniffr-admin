@@ -75,7 +75,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Schoooch\Youtube\YoutubeServiceProvider::class,
+        Schooch\Youtube\YoutubeServiceProvider::class,
         BaoPham\DynamoDb\DynamoDbServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
