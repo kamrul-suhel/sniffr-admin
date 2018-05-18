@@ -22,7 +22,7 @@
 
   .dialog-box-switch{
     position:absolute;
-
+    z-index:10;
     &.prev{
       left:10px;
       top:calc(50% - 50px);
@@ -36,10 +36,52 @@
 }
 
 .video-dialog-content{
+
+  #video_player{
+    width:100%;
+    height:auto;
+  }
+
+  .fb_iframe_widget{
+    span{
+      height: auto !important;
+      max-height: 540px;
+      width: 100% !important;
+
+      @include small-device {
+        &{
+          height: 530px !important;
+          max-height: 540px;
+        }
+      }
+
+      @include medium-device {
+        &{
+          height: 530px !important;
+          max-height: 540px;
+        }
+      }
+
+      @include large-device {
+        &{
+          height: 530px !important;
+          max-height: 540px;
+        }
+      }
+
+      @include extra-large-device {
+        &{
+          height: 530px !important;
+          max-height: 540px;
+        }
+      }
+
+    }
+  }
   .horizontal {
     .video-container{
       .fb-video{
-        width:100% !important;
+        width:530px !important;
       }
     }
   }
@@ -47,7 +89,8 @@
   .vertical {
     .video-container{
       .fb-video{
-        width:50% !important;
+        width:530px !important;
+        max-height:530px !important;
       }
     }
   }

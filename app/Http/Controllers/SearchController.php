@@ -54,11 +54,7 @@ class SearchController extends Controller
     {
 
         if ($request->ajax() || $request->isJson()) {
-            $current_video = Video::select($this->getVideoFieldsForFrontend())
-                ->with('tags')
-                ->where('alpha_id', '=', $request->alpha_id)
-                ->first();
-            $current_video->iframe = $this->getVideoHtml($current_video, true);
+            $current_video = $this->getCurrentVideo($request->alpha_id);
 
 
             $featured_videos = Video::where(function ($query) {
@@ -106,12 +102,9 @@ class SearchController extends Controller
      * @param $alpha_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function videosInDialog(Request $request, $alpha_id)
+    public function videosInDialog(Request $request)
     {
-        $current_video = Video::where('alpha_id', '=', $alpha_id)
-            ->with('tags')
-            ->first();
-        $current_video->iframe = $this->getVideoHtml($current_video, true);
+        $current_video = $this->getCurrentVideo($request->alpha_id);
 
         $next_alpha_id = '';
         $next = Video::select('alpha_id')
@@ -142,11 +135,13 @@ class SearchController extends Controller
             'prev_video_alpha_id' => $previous_alpha_id
         ];
 
-        if ($request->isJson() || $request->ajax()) {
             return $this->successResponse($data);
-        }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function tagsSearchVideosInDialog(Request $request)
     {
         $tagName = $request->tag;
@@ -162,47 +157,20 @@ class SearchController extends Controller
         })
             ->get();
 
-        $total_row = $videos->count() - 1;
-
-
-        $position = $videos->search(function($item , $key) use ($current_video){
-            if($item->alpha_id == $current_video->alpha_id){
-                return $item;
-            }
-        });
-
-        $next_alpha_id = '';
-        $previous_alpha_id = '';
-
-        $next_position = $position + 1;
-        if($next_position <= $total_row){
-            $next_alpha_id = $videos[$next_position]->alpha_id;
-        }
-        $previous_position = $position -1;
-
-        if($previous_position >= 0){
-            $previous_alpha_id = $videos[$previous_position]->alpha_id;
-        }
-
-
-
-        $data = [
-            'current_video' => $current_video,
-            'next_video_alpha_id' => $next_alpha_id,
-            'prev_video_alpha_id' => $previous_alpha_id
-        ];
+        $data = $this->getNextPreviousAlphaId($current_video, $videos);
 
         return $this->successResponse($data);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchVideosInDialog(Request $request)
     {
         $current_video = $this->getCurrentVideo($request->alpha_id);
 
         $search_value = $request->value;
-
-        $next_alpha_id = '';
-        $previous_alpha_id = '';
 
         $videos = Video::
             where(function ($query) use ($search_value) {
@@ -216,7 +184,27 @@ class SearchController extends Controller
             ->orderByDesc('licensed_at')
             ->get();
 
+        $data = $this->getNextPreviousAlphaId($current_video, $videos);
+
+        return $this->successResponse($data);
+
+    }
+
+    private function getCurrentVideo($alpha_id){
+        $current_video = Video::
+            where('alpha_id', '=', $alpha_id)
+            ->with('tags')
+            ->first();
+        $current_video->iframe = $this->getVideoHtml($current_video, true);
+
+        return $current_video;
+    }
+
+    private function getNextPreviousAlphaId($current_video, $videos){
         $total_row = $videos->count() - 1;
+
+        $next_alpha_id = '';
+        $previous_alpha_id = '';
 
 
         $position = $videos->search(function($item , $key) use ($current_video){
@@ -235,24 +223,11 @@ class SearchController extends Controller
             $previous_alpha_id = $videos[$previous_position]->alpha_id;
         }
 
-        $data = [
+        return  [
             'current_video' => $current_video,
             'next_video_alpha_id' => $next_alpha_id,
             'prev_video_alpha_id' => $previous_alpha_id
         ];
-
-        return $this->successResponse($data);
-
-    }
-
-    private function getCurrentVideo($alpha_id){
-        $current_video = Video::select($this->getVideoFieldsForFrontend())
-            ->where('alpha_id', '=', $request->alpha_id)
-            ->with('tags')
-            ->first();
-        $current_video->iframe = $this->getVideoHtml($current_video, true);
-
-        return $current_video;
     }
 
 }

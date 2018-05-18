@@ -9,8 +9,8 @@ const state = {
 
 const mutations = {
     setVideoDialogBox(state, data) {
-        console.log(data);
         state.video_dialog_box = true;
+        console.log(data);
         state.video_dialog_current_video = data.current_video.alpha_id;
         state.video_dialog_current_video = data.current_video;
         state.video_dialog_next_alpha_id = data.next_video_alpha_id;
@@ -49,7 +49,6 @@ const actions = {
             //Search video url
             if (request_url === 'videos_search') {
                 url = '/videosdialog/search/'+payload.alpha_id+'/'+state.current_route_obj.query.value;
-                console.log(url);
             }
 
             //Search by tag video url

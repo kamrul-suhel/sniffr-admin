@@ -47,7 +47,7 @@ trait VideoHelper{
 	    		$sHTML .= '<div class="interactive interaadminctive-fb-post" style="background:#000 !important;text-align:center;"><div id="fb-root"></div><div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';
 	    	}else if(str_contains($video->url, 'videos')){
 				if($video->vertical === 0 || $embed) {
-					$sHTML .= '<div class="fb-video'.($video->vertical === 0 ? ' fb-horizontal' : '').'" data-href="'.$video->url.'" data-allowfullscreen="true"></div>';
+					$sHTML .= '<div class="fb-video'.($video->vertical === 0 ? ' fb-horizontal' : '').'" data-href="'.$video->url.'" data-height="530" data-allowfullscreen="true"></div>';
 				} else if($video->image){
 					$sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 				} else {

@@ -62,8 +62,6 @@
                 ready_to_show: true,
 
                 content_padding: true,
-
-
             }
         },
 
@@ -94,7 +92,6 @@
         },
 
         mounted() {
-            this.$vuetify.goTo('#scroll_to');
         },
 
         methods: {
@@ -123,9 +120,6 @@
                 });
             },
 
-            onGoback() {
-                this.$router.go(-1);
-            },
 
             reloadInstagrm(src) {
                 var s = document.createElement("script");

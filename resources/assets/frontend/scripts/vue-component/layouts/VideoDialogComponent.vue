@@ -3,7 +3,6 @@
     <v-dialog
             v-model="video_dialog"
             transition="dialog-bottom-transition"
-            persistent
             scrollable
             class="video-dialog-container"
             content-class="video-dialog-container"
@@ -67,6 +66,16 @@
 
                 previousPageExists: true,
                 previousPageAlphaId: ''
+            }
+        },
+
+        watch: {
+            video_dialog() {
+                if(this.video_dialog === false){
+                    let url = this.$store.getters.getEnterStateUrl;
+                    window.history.pushState(null, '', url)
+                    this.$store.commit('setResetVideoDialogObject');
+                }
             }
         },
 
