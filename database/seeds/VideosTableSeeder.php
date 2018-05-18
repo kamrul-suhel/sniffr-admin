@@ -76,7 +76,7 @@ class VideosTableSeeder extends Seeder
             $videoDates[] = strtotime($index . ' days ago');
         }
 
-        foreach (range(1, 1000) as $index) {
+        foreach (range(1, 100) as $index) {
             $social_video = $faker->boolean(60);
             $submitted_elsewhere = $faker->boolean(70);
             $social_video_data = $social_video ? $faker->randomElement($social_videos) : null;
@@ -105,7 +105,7 @@ class VideosTableSeeder extends Seeder
                 'video_shottype_id' => $faker->randomElement($videoShotTypeIds),
                 'mime' => $social_video ? null : $video_data['mime'],
                 'rights' => 'ex',
-                'youtube_id' => $social_video ? $social_video['youtube_id'] : ((array_search($state, $youtubeStates)) ? $faker->randomElements($youtubeIds) : NULL),
+                'youtube_id' => $social_video ? $social_video['youtube_id'] : ((array_search($state, $youtubeStates)) ? $faker->randomElement($youtubeIds) : NULL),
                 'title' => $faker->sentence(4),
                 'access' => 'guest',
                 'details' => NULL,
