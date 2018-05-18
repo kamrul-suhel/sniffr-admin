@@ -34,6 +34,8 @@
                         </v-btn>
                     </div>
 
+                    <div class="video-dialog-loading"></div>
+
                     <v-container grid-list-xs fluid :class="{'mx-5': margin_content}">
                         <video-dialog-component></video-dialog-component>
                     </v-container>
@@ -57,7 +59,7 @@
         data() {
             return {
                 current_video: '',
-                video_dialog: false,
+                video_dialog: true,
                 margin_content: true,
                 current_page: 0,
 

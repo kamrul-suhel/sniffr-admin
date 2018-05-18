@@ -1,5 +1,12 @@
 .video-dialog-container{
   border-radius:0px;
+
+  .video-dialog-loading{
+    position:absolute;
+    widht:100%;
+    height:100%;
+    background:#000;
+  }
 }
 
 

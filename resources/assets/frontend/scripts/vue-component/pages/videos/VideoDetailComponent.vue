@@ -127,6 +127,8 @@
                 }
 
                 this.reloadFacebook();
+
+                this.realoadTwitter();
             });
 
         },
@@ -167,6 +169,19 @@
                     }, 30);
 
                 }
+            },
+
+            realoadTwitter(){
+                TwitterWidgetsLoader.load(function(twttr) {
+                    var tweets = jQuery(".tweet");
+
+                    $(tweets).each( function( t, tweet ) {
+                        var id = jQuery(this).attr('id');
+                        twttr.widgets.createVideo(id,tweet).then( function( el ) {
+                            //console.log('Video added.');
+                        });
+                    });
+                });
             },
 
             reloadVideoJs() {
