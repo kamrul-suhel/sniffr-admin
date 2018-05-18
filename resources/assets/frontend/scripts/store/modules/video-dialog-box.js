@@ -26,6 +26,8 @@ const mutations = {
         state.video_dialog_current_video = '';
         state.video_dialog_next_alpha_id = '';
         state.video_dialog_prev_alpha_id = '';
+
+        state.current_route_obj = ''
     }
 }
 
@@ -52,7 +54,7 @@ const actions = {
 
             //Search by tag video url
             if (request_url === 'videos_tag') {
-
+                url = '/videosdialog/tags/'+payload.alpha_id+'/'+state.current_route_obj.params.value;
             }
 
             axios.get(url)

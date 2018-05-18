@@ -303,7 +303,8 @@ class VideoController extends Controller
 
             $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
                 $query->where('name', '=', $tagName);
-            })->paginate($this->videos_per_page);
+            })
+                ->paginate($this->videos_per_page);
 
             return $this->successResponse(['videos' => $videos]);
         }

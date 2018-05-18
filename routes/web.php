@@ -257,7 +257,7 @@ Route::group(array('prefix' => 'client'), function(){
 Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
 Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
 Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
-Route::get('videosdialog/tags/{alpha_id}/{value}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
 
 
 /*

@@ -149,19 +149,55 @@ class SearchController extends Controller
 
     public function tagsSearchVideosInDialog(Request $request)
     {
-        $videos = Video::where('title', 'LIKE', '%' . $request->value . '%')
-            ->where('state', '=', 'licensed')
+        $tagName = $request->tag;
+
+        $current_video = Video::where('alpha_id', $request->alpha_id)
+            ->with('tags')
+            ->first();
+        $current_video->iframe = $this->getVideoHtml($current_video, true);
+
+        $videos = Video::where('state', 'licensed')
+            ->whereHas('tags', function ($query) use ($tagName) {
+            $query->where('name', '=', $tagName);
+        })
             ->get();
-        dd($videos);
+
+        $total_row = $videos->count() - 1;
+
+
+        $position = $videos->search(function($item , $key) use ($current_video){
+            if($item->alpha_id == $current_video->alpha_id){
+                return $item;
+            }
+        });
+
+        $next_alpha_id = '';
+        $previous_alpha_id = '';
+
+        $next_position = $position + 1;
+        if($next_position <= $total_row){
+            $next_alpha_id = $videos[$next_position]->alpha_id;
+        }
+        $previous_position = $position -1;
+
+        if($previous_position >= 0){
+            $previous_alpha_id = $videos[$previous_position]->alpha_id;
+        }
+
+
+
+        $data = [
+            'current_video' => $current_video,
+            'next_video_alpha_id' => $next_alpha_id,
+            'prev_video_alpha_id' => $previous_alpha_id
+        ];
+
+        return $this->successResponse($data);
     }
 
     public function searchVideosInDialog(Request $request)
     {
-        $current_video = Video::select($this->getVideoFieldsForFrontend())
-            ->where('alpha_id', '=', $request->alpha_id)
-            ->with('tags')
-            ->first();
-        $current_video->iframe = $this->getVideoHtml($current_video, true);
+        $current_video = $this->getCurrentVideo($request->alpha_id);
 
         $search_value = $request->value;
 
@@ -207,6 +243,16 @@ class SearchController extends Controller
 
         return $this->successResponse($data);
 
+    }
+
+    private function getCurrentVideo($alpha_id){
+        $current_video = Video::select($this->getVideoFieldsForFrontend())
+            ->where('alpha_id', '=', $request->alpha_id)
+            ->with('tags')
+            ->first();
+        $current_video->iframe = $this->getVideoHtml($current_video, true);
+
+        return $current_video;
     }
 
 }
