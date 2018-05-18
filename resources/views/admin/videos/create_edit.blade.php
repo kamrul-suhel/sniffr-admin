@@ -15,7 +15,7 @@
 
         <div class="row">
             <div class="col-sm-9">
-                @if(($video) && (($video->file) || ($video->link)))
+                @if(($video) && (($video->file) || ($video->url)))
                     @include('admin.videos.partials.license')
                 @endif
                 <ul class="nav nav-tabs" role="tablist">
