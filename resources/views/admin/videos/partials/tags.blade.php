@@ -6,7 +6,7 @@
             </span>
         <input class="form-control" name="tags" id="tags" data-role="tagsinput" value="@if($tags)
         @foreach($tags as $tag)
-        {{ $tag->name }}
+            {{ $tag->name . ',' }}
         @endforeach
         @endif" title="tags">
         </span>
