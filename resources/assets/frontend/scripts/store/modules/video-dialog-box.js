@@ -46,15 +46,15 @@ const actions = {
 
             //Search video url
             if (request_url === 'videos_search') {
-                url = 'videosdialog/search/'+payload.alpha_id+'/'+state.current_route_obj.query.value;
+                url = '/videosdialog/search/'+payload.alpha_id+'/'+state.current_route_obj.query.value;
                 console.log(url);
-                return;
             }
 
             //Search by tag video url
             if (request_url === 'videos_tag') {
 
             }
+
             axios.get(url)
                 .then((response) => {
                     commit('setVideoDialogBox', response.data);
