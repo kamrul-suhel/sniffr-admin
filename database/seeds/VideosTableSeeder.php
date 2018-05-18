@@ -76,7 +76,7 @@ class VideosTableSeeder extends Seeder
             $videoDates[] = strtotime($index . ' days ago');
         }
 
-        foreach (range(1, 100) as $index) {
+        foreach (range(1, 1000) as $index) {
             $social_video = $faker->boolean(60);
             $submitted_elsewhere = $faker->boolean(70);
             $social_video_data = $social_video ? $faker->randomElement($social_videos) : null;
@@ -111,16 +111,15 @@ class VideosTableSeeder extends Seeder
                 'details' => NULL,
                 'notes' => NULL,
                 'nsfw' => $faker->boolean(1),
-                'referrer' => $faker->name(),
-                'credit' => $faker->name(),
+                'referrer' => NULL,
+                'credit' => NULL,
                 'active' => $faker->boolean(80),
-                'featured' => $faker->boolean(1),
+                'featured' => (($state == 'licensed') && !$social_video) ? $faker->boolean(4) : NULL,
                 'views' => $faker->numberBetween(0, 1000),
                 'image' => $social_video ? $social_video_data['image'] : $video_data['image'],
                 'thumb' => $social_video ? $social_video_data['image'] : $video_data['image'],
                 'ext' => NULL,
                 'url' => $social_video ? $social_video_data['url'] : null,
-
                 'file' => $social_video ? null : $video_data['file'] . $video_data['extension'],
                 'file_watermark' => $social_video ? null : $video_data['file'] . '-watermark' . $video_data['extension'],
                 'file_watermark_dirty' => $social_video ? null : $video_data['file'] . '-watermark-dirty' . $video_data['extension'],
@@ -143,7 +142,6 @@ class VideosTableSeeder extends Seeder
                 'contact_is_owner' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
                 'allow_publish' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
                 'is_exclusive' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
-
                 'terms' => NULL,
                 'ip' => $faker->ipv4,
                 'user_agent' => $faker->userAgent,

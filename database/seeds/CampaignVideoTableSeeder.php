@@ -15,7 +15,7 @@ class CampaignVideoTableSeeder extends Seeder
         $unique_ids = [];
         $states = config('videos.states');
 
-        foreach (range(1, 300) as $index) {
+        foreach (range(1, 3) as $index) {
             // check composite id is unique
             $newVideoId = $faker->randomElement($videoIds);
             $newCampaignId = $faker->randomElement($campaignIds);
