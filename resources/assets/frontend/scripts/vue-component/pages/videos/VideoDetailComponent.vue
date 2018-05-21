@@ -99,6 +99,7 @@
 
         watch: {
             '$route'(to, from, next) {
+                console.log("where is now " + to + ": Where is coming from " + from );
             }
         },
 
@@ -108,6 +109,7 @@
                 this.content_padding = false;
             }
 
+            console.log(this.$router);
         },
 
         mounted() {
