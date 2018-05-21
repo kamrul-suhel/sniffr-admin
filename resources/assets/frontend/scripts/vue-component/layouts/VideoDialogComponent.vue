@@ -106,6 +106,22 @@
 
             })
 
+            VideoDialogBoxEventBus.$on('videoDialogBoxClose', (video) => {
+                this.video_dialog = false;
+                setTimeout(()=> {
+                    this.$router.push({name: 'videos_detail', params : {id : video.alpha_id}});
+                }, 500);
+
+            });
+
+            VideoDialogBoxEventBus.$on('videoDialogBoxCloseByTag', (tag) => {
+                this.video_dialog = false;
+                setTimeout(() => {
+                    this.$router.push({name: 'videos_tag', params: {value: tag.name}});
+                }, 500);
+
+            });
+
         },
 
         methods: {

@@ -13,14 +13,14 @@
                     <v-flex xs12>
                         <h2>{{ video_detail.title }}</h2>
                         <p v-if="video_detail.description != 'null'">{{ video_detail.description | readmore(300, '...')}}</p>
-                        <p><router-link :to="{name : 'videos_detail', params: { id: video_detail.alpha_id}}">Read more</router-link></p>
+                        <p><a @click.stop="goToDetail()">Read more</a></p>
                         <div class="video-detail-tags" v-if="tags.length > 0">
                             <h3 id="tags">Tags:</h3>
                             <ul>
                                 <li v-for="tag in video_detail.tags">
-                                    <router-link :to="'/videos/tag/'+tag.name">
+                                    <a @click.stop="goToTagSearch(tag)">
                                         #{{ tag.name }}
-                                    </router-link>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -123,6 +123,14 @@
                     this.realoadTwitter();
 
                 });
+            },
+
+            goToTagSearch(tag){
+                VideoDialogBoxEventBus.closeDialogByTagSearch(tag);
+            },
+
+            goToDetail(){
+                VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
             },
 
 

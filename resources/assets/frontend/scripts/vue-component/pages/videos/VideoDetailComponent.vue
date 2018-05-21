@@ -79,6 +79,7 @@
 </template>
 
 <script>
+
     export default {
         data() {
             return {
@@ -109,7 +110,6 @@
                 this.content_padding = false;
             }
 
-            console.log(this.$router);
         },
 
         mounted() {
