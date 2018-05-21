@@ -128,6 +128,6 @@
     </button>
 @else
     <p>
-        Can't create/send a contract if there the video is not assigned to a creator
+        We cannot create a contract if the video is not assigned to a creator/contact. Perhaps the contact has unsubscribed.
     </p>
 @endif
