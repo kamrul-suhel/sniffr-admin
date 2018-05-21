@@ -8,17 +8,17 @@
             content-class="video-dialog-container"
             max-width="1200px"
     >
-        <!--<div class="dialog-box-switch prev">-->
-            <!--<v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">-->
-                <!--<v-icon>chevron_left</v-icon>-->
-            <!--</v-btn>-->
-        <!--</div>-->
+        <div class="dialog-box-switch prev">
+            <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">
+                <v-icon>chevron_left</v-icon>
+            </v-btn>
+        </div>
 
-        <!--<div class="dialog-box-switch next">-->
-            <!--<v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextPageExists">-->
-                <!--<v-icon>chevron_right</v-icon>-->
-            <!--</v-btn>-->
-        <!--</div>-->
+        <div class="dialog-box-switch next">
+            <v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextPageExists">
+                <v-icon>chevron_right</v-icon>
+            </v-btn>
+        </div>
 
         <v-card height="650px">
             <v-toolbar card dark color="dark">
