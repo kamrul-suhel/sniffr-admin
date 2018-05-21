@@ -59,7 +59,7 @@
         data() {
             return {
                 current_video: '',
-                video_dialog: true,
+                video_dialog: false,
                 margin_content: true,
                 current_page: 0,
 

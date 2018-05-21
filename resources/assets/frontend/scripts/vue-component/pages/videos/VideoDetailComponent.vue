@@ -65,7 +65,7 @@
 
 
                                     <div class="video-detail-social-share">
-                                        <!--<div class="video-license">License</div>-->
+                                        <div class="video-license">License</div>
                                     </div>
                                 </v-layout>
                             </v-flex>
@@ -178,7 +178,7 @@
                     $(tweets).each( function( t, tweet ) {
                         var id = jQuery(this).attr('id');
                         twttr.widgets.createVideo(id,tweet).then( function( el ) {
-                            //console.log('Video added.');
+                            widget_type=video
                         });
                     });
                 });

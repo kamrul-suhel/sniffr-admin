@@ -41,6 +41,10 @@
 
                                 {{ video_detail.views+1}} views
                             </v-flex>
+
+                            <div class="video-detail-social-share">
+                                <div class="video-license">License</div>
+                            </div>
                         </v-layout>
                     </v-flex>
 
