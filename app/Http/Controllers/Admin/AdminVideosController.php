@@ -801,7 +801,7 @@ class AdminVideosController extends Controller
      * @param string $description
      * @param string|null $tags_string
      */
-    private function setSnippet(Video $video, string $title, string $description, string $tags_string = null)
+    private function setSnippet(Video $video, string $title = null, string $description = null, string $tags_string = null)
     {
         if (($video->youtube_id) && ($video->file) && (config('app.env') != 'local')) {
             $tags_array = explode(',', $tags_string);
