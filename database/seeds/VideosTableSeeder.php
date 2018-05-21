@@ -80,7 +80,7 @@ class VideosTableSeeder extends Seeder
             $videoDates[] = strtotime($index . ' days ago');
         }
 
-        foreach (range(1, 1000) as $index) {
+        foreach (range(1, 200) as $index) {
             $social_video = $faker->boolean(60);
             $submitted_elsewhere = $faker->boolean(70);
             $social_video_data = $social_video ? $faker->randomElement($social_videos) : null;
