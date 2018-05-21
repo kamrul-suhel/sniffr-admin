@@ -43,7 +43,7 @@
                             </v-flex>
 
                             <div class="video-detail-social-share">
-                                <v-btn dark block class="dark">License</v-btn>
+                                <!--<v-btn dark block class="dark">License</v-btn>-->
                             </div>
                         </v-layout>
                     </v-flex>

@@ -34,7 +34,7 @@
                         <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
-                                <p>{{ video_detail.video.description }}</p>
+                                <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
                                 <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
@@ -65,7 +65,7 @@
 
 
                                     <div class="video-detail-social-share">
-                                        <v-btn dark block class="dark mt-0">License</v-btn>
+                                        <!--<v-btn dark block class="dark mt-0">License</v-btn>-->
                                     </div>
                                 </v-layout>
                             </v-flex>

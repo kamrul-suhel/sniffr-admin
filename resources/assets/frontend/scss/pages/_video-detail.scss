@@ -40,8 +40,9 @@
   .video-container{
 
     .video-js{
-      height:450px;
+      height:350px;
       position:unset;
+      background:none;
     }
 
     display:flex;
@@ -99,6 +100,7 @@
     }
     .fb-video{
       width: 100% !important;
+      max-height:350px;
       display: flex;
       align-items: center;
       justify-items: center;
@@ -146,6 +148,7 @@
 
   .video-detail-sidebar{
     .video-detail-social-share{
+      width:150px;
       text-align:center;
     }
 
