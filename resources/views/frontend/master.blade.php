@@ -3,9 +3,8 @@
 <head>
     @include('frontend.layout.head.meta')
 
-    @if((key_exists('favicon', $settings)) && (trim($settings['favicon'])))
-        <link rel="shortcut icon" href="{{ Config::get('site.uploads_dir') . trim($settings['favicon']) }}" type="image/x-icon">
-    @endif
+    <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
+    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . $favicon ?>" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />

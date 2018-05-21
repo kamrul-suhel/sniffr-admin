@@ -232,6 +232,12 @@ class VideoController extends Controller
         return view('frontend.master');
     }
 
+    public function getVideoForVideoDialog($alpha_id){
+        $video = Video::where('state', 'licensed')
+            ->where('alpha_id', $alpha_id)
+            ->orderBy('id', 'DESC')->paginate();
+    }
+
     /**
      * @param Request $request
      * @param string $id
@@ -297,7 +303,8 @@ class VideoController extends Controller
 
             $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
                 $query->where('name', '=', $tagName);
-            })->paginate($this->videos_per_page);
+            })
+                ->paginate($this->videos_per_page);
 
             return $this->successResponse(['videos' => $videos]);
         }
@@ -425,4 +432,5 @@ class VideoController extends Controller
 
         return view('Theme::video-list', $data);
     }
+
 }

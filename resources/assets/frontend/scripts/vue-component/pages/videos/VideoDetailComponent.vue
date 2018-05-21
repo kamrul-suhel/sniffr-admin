@@ -20,7 +20,7 @@
             <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn light flat  raised @click="onGoback()"><v-icon>chevron_left</v-icon>Go back</v-btn>
+                        <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
                 </v-layout>
 
@@ -34,7 +34,7 @@
                         <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
-                                <p>{{ video_detail.video.description }}</p>
+                                <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
                                 <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
@@ -56,7 +56,7 @@
                                                 fab
                                                 flat
                                                 color="dark favorite"
-                                                class="mr-0">
+                                                class="mr-0 mb-0">
                                             <v-icon dark color="black ">remove_red_eye</v-icon>
                                         </v-btn>
 
@@ -65,7 +65,7 @@
 
 
                                     <div class="video-detail-social-share">
-                                        <!--<div class="video-license">License</div>-->
+                                        <!--<v-btn dark block class="dark mt-0">License</v-btn>-->
                                     </div>
                                 </v-layout>
                             </v-flex>
@@ -99,6 +99,7 @@
 
         watch: {
             '$route'(to, from, next) {
+                console.log("where is now " + to + ": Where is coming from " + from );
             }
         },
 
@@ -108,6 +109,7 @@
                 this.content_padding = false;
             }
 
+            console.log(this.$router);
         },
 
         mounted() {
@@ -116,7 +118,6 @@
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
-                console.log(this.video_detail);
 
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
@@ -128,6 +129,8 @@
                 }
 
                 this.reloadFacebook();
+
+                this.realoadTwitter();
             });
 
         },
@@ -168,6 +171,19 @@
                     }, 30);
 
                 }
+            },
+
+            realoadTwitter(){
+                TwitterWidgetsLoader.load(function(twttr) {
+                    var tweets = jQuery(".tweet");
+
+                    $(tweets).each( function( t, tweet ) {
+                        var id = jQuery(this).attr('id');
+                        twttr.widgets.createVideo(id,tweet).then( function( el ) {
+                            widget_type=video
+                        });
+                    });
+                });
             },
 
             reloadVideoJs() {

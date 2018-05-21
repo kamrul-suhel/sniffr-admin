@@ -1,8 +1,11 @@
 .video-detail-nav{
-  background:#000;
 }
 
 .videos-detail-section{
+
+  .btn .btn__content .icon {
+    margin-left: -8px;
+  }
 
   .nsfw {
     position: absolute;
@@ -35,6 +38,13 @@
   }
 
   .video-container{
+
+    .video-js{
+      height:350px;
+      position:unset;
+      background:none;
+    }
+
     display:flex;
     width:100%;
     position:relative;
@@ -89,13 +99,18 @@
       }
     }
     .fb-video{
-      width:50% !important;
-      margin:0 auto;
+      width: 100% !important;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      justify-content: center;
+      span{
+        width:100% !important;
+      }
     }
   }
 
   .embedded{
-    background:#000;
   }
 
   .video-detail-content{
@@ -117,6 +132,8 @@
 
         a{
           color:#cdcdcd;
+          font-size:16px;
+          margin-right:10px;
           text-decoration:none;
           transition:all ease-in-out .3s;
         }
@@ -130,6 +147,7 @@
 
   .video-detail-sidebar{
     .video-detail-social-share{
+      width:150px;
       text-align:center;
     }
 
