@@ -1,5 +1,20 @@
 .video-dialog-container{
   border-radius:0px;
+  position:relative;
+
+  .dialog-box-switch{
+    position:absolute;
+    z-index:10;
+    &.prev{
+      left:10px;
+      top:calc(50% - 50px);
+    }
+
+    &.next{
+      top:calc(50% - 50px);
+      right:10px;
+    }
+  }
 
   .video-dialog-loading{
     position:absolute;
@@ -25,20 +40,6 @@
       color: #fff;
     }
 
-  }
-
-  .dialog-box-switch{
-    position:absolute;
-    z-index:10;
-    &.prev{
-      left:10px;
-      top:calc(50% - 50px);
-    }
-
-    &.next{
-      top:calc(50% - 50px);
-      right:10px;
-    }
   }
 }
 
@@ -209,6 +210,7 @@
 
   .video-detail-sidebar{
     .video-detail-social-share{
+      width:150px;
       text-align:center;
     }
 

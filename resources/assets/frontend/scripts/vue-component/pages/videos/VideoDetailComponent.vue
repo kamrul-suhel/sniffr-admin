@@ -56,7 +56,7 @@
                                                 fab
                                                 flat
                                                 color="dark favorite"
-                                                class="mr-0">
+                                                class="mr-0 mb-0">
                                             <v-icon dark color="black ">remove_red_eye</v-icon>
                                         </v-btn>
 
@@ -65,7 +65,7 @@
 
 
                                     <div class="video-detail-social-share">
-                                        <div class="video-license">License</div>
+                                        <v-btn dark block class="dark mt-0">License</v-btn>
                                     </div>
                                 </v-layout>
                             </v-flex>

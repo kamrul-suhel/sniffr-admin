@@ -8,6 +8,18 @@
             content-class="video-dialog-container"
             max-width="1200px"
     >
+        <div class="dialog-box-switch prev">
+            <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">
+                <v-icon>chevron_left</v-icon>
+            </v-btn>
+        </div>
+
+        <div class="dialog-box-switch next">
+            <v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextPageExists">
+                <v-icon>chevron_right</v-icon>
+            </v-btn>
+        </div>
+
         <v-card height="650px">
             <v-toolbar card dark color="dark">
                 <v-btn icon dark @click.native="onCloseDialogBox()">
@@ -28,23 +40,13 @@
 
             <v-card-text class="video-dialog-box">
                 <v-layout row wrap>
-                    <div class="dialog-box-switch prev">
-                        <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">
-                            <v-icon>chevron_left</v-icon>
-                        </v-btn>
-                    </div>
-
                     <div class="video-dialog-loading"></div>
 
                     <v-container grid-list-xs fluid :class="{'mx-5': margin_content}">
                         <video-dialog-component></video-dialog-component>
                     </v-container>
 
-                    <div class="dialog-box-switch next">
-                        <v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextPageExists">
-                            <v-icon>chevron_right</v-icon>
-                        </v-btn>
-                    </div>
+
                 </v-layout>
             </v-card-text>
         </v-card>
@@ -59,7 +61,7 @@
         data() {
             return {
                 current_video: '',
-                video_dialog: false,
+                video_dialog: true,
                 margin_content: true,
                 current_page: 0,
 

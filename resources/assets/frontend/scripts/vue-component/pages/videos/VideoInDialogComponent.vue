@@ -12,7 +12,7 @@
                 <v-layout row wrap class="video-detail-content">
                     <v-flex xs12>
                         <h2>{{ video_detail.title }}</h2>
-                        <p>{{ video_detail.description | readmore(300, '...')}}</p>
+                        <p v-if="video_detail.description != 'null'">{{ video_detail.description | readmore(300, '...')}}</p>
                         <p><router-link :to="{name : 'videos_detail', params: { id: video_detail.alpha_id}}">Read more</router-link></p>
                         <div class="video-detail-tags" v-if="tags.length > 0">
                             <h3 id="tags">Tags:</h3>
@@ -35,7 +35,7 @@
                                         fab
                                         flat
                                         color="dark favorite"
-                                        class="mr-0">
+                                        class="mr-0 mb-0">
                                     <v-icon dark color="black ">remove_red_eye</v-icon>
                                 </v-btn>
 
@@ -43,7 +43,7 @@
                             </v-flex>
 
                             <div class="video-detail-social-share">
-                                <div class="video-license">License</div>
+                                <v-btn dark block class="dark">License</v-btn>
                             </div>
                         </v-layout>
                     </v-flex>
