@@ -111,7 +111,7 @@ class VideosTableSeeder extends Seeder
                 'details' => NULL,
                 'notes' => NULL,
                 'nsfw' => $faker->boolean(1),
-                'referrer' => NULL,
+                'referrer' => 0,
                 'credit' => NULL,
                 'active' => $faker->boolean(80),
                 'featured' => (($state == 'licensed') && !$social_video) ? $faker->boolean(4) : NULL,
@@ -120,6 +120,7 @@ class VideosTableSeeder extends Seeder
                 'thumb' => $social_video ? $social_video_data['image'] : $video_data['image'],
                 'ext' => NULL,
                 'url' => $social_video ? $social_video_data['url'] : null,
+
                 'file' => $social_video ? null : $video_data['file'] . $video_data['extension'],
                 'file_watermark' => $social_video ? null : $video_data['file'] . '-watermark' . $video_data['extension'],
                 'file_watermark_dirty' => $social_video ? null : $video_data['file'] . '-watermark-dirty' . $video_data['extension'],
@@ -142,6 +143,7 @@ class VideosTableSeeder extends Seeder
                 'contact_is_owner' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
                 'allow_publish' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
                 'is_exclusive' => (array_search($state, $exclusiveStates)) ? 1 : NULL,
+
                 'terms' => NULL,
                 'ip' => $faker->ipv4,
                 'user_agent' => $faker->userAgent,
