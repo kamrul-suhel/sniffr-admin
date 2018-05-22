@@ -85,6 +85,7 @@ return [
         MichaelJWright\Rekognition\RekognitionServiceProvider::class,
         \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
         ComoCode\LaravelAb\LaravelAbServiceProvider::class,
+        AstritZeqiri\LaravelWpApi\LaravelWpApiServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -154,6 +155,7 @@ return [
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Rekognition' => 'MichaelJWright\Rekognition\RekognitionFacade',
+        'WpApi' => AstritZeqiri\LaravelWpApi\Facades\WpApi::class,
     ],
 
 ];
