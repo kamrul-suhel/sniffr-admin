@@ -370,7 +370,7 @@ class AdminVideosController extends Controller
         $video->details = $request->input('details');
         $video->description = $request->input('description');
 
-        $video->update();
+        $video->save();
 
         if ($request->hasFile('file')) {
             QueueVideo::dispatch($video->id, true)->delay(now()->addSeconds(5));
@@ -811,16 +811,13 @@ class AdminVideosController extends Controller
 
     /**
      * @param UploadedFile $videoFile
-     * @param Video $video
-     * @return Video
+     * @return string
      */
-    public function saveVideoFile(UploadedFile $videoFile, Video $video)
+    public function saveVideoFile(UploadedFile $videoFile)
     {
         $fileOriginalName = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/', '', pathinfo($videoFile->getClientOriginalName(), PATHINFO_FILENAME)));
 
         $fileName = time() . '-' . $fileOriginalName . '.' . $videoFile->getClientOriginalExtension();
-
-        $fileMimeType = $videoFile->getMimeType();
 
         // Upload to S3
         $stored = \Storage::disk('s3')->put($fileName, file_get_contents($videoFile), 'public');
@@ -831,10 +828,7 @@ class AdminVideosController extends Controller
 
         $filePath = \Storage::disk('s3')->url($fileName);
 
-        $video->file = $filePath;
-        $video->mime = $fileMimeType;
-        $video->youtube_id = '';
-        return $video;
+        return $filePath;
     }
 
     /**
