@@ -4,7 +4,7 @@
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
-                    <h1 class="heading">Videos</h1>
+                    <h1 class="heading">Client</h1>
                 </div>
             </div>
         </section>
@@ -36,6 +36,15 @@
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default{
+
+        beforeRouteEnter: (to, from, next) => {
+            axios.get('/islogin')
+                .then((response) => {
+                    console.log(response);
+                });
+            next();
+        },
+
         components:{
             searchComponent: SearchComponent,
             videoloopComponent: VideoLoopComponent,
@@ -77,6 +86,10 @@
                     this.videos = this.$store.getters.getVideoData;
                 });
             },
+
+            callingMethod() {
+                console.log("this is calling");
+            }
         }
     }
 </script>

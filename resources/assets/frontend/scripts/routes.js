@@ -1,8 +1,6 @@
 import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
-import VideoInDialogComponent from './vue-component/pages/videos/VideoInDialogComponent';
-import VideoDialogComponent from './vue-component/layouts/VideoDialogComponent';
 import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
 import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
@@ -13,6 +11,8 @@ import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeC
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
+import ClientVideosComponent from './vue-component/pages/clients/ClientVideosComponent';
+import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
 
 
 export const routes = [
@@ -105,6 +105,18 @@ export const routes = [
       path: '/terms',
       name: 'termsconditions',
       component: TermsConditionsComponent
+    },
+
+    {
+        path: '/client',
+        name: 'client_videos',
+        component: ClientVideosComponent,
+    },
+
+    {
+        path: '/client/videos/:alpha_id',
+        name: 'client_video_download',
+        component: ClientVideoDownloadComponent
     },
 
     {
