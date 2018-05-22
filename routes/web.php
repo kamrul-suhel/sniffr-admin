@@ -125,9 +125,8 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'admin'), function(){
-    // Admin Dashboard
-    Route::get('', 'Admin\DashboardController@index');
+Route::group(array('prefix' => 'admin'), function () {
+    Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
@@ -237,9 +236,8 @@ Route::group(array('prefix' => 'admin'), function(){
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'client'), function(){
-    // Client Video Functionality
-    Route::get('videos', 'Client\ClientVideosController@index');
+Route::group(array('prefix' => 'client'), function () {
+    Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/view/{id}', 'Client\ClientVideosController@view');
     Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
