@@ -94,39 +94,30 @@ class AuthController extends Controller
                 'note_type' => 'error'
             ];
 
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->isJson()) {
                 return $this->errorResponse('Invalid login, please try again.');
             }
 
             return Redirect::to('login' . $redirect)->with($error);
         }
-        
-        $redirect = '';
 
-        if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'editorial') {
-            $redirect = ($request->input('redirect')) ? $request->input('redirect') : '/admin';
-        } elseif (Auth::user()->role == 'client') {
-            $redirect = ($request->input('redirect')) ? $request->input('redirect') : '/client/videos';
+        $redirect_route = '';
+
+        if (key_exists(Auth::user()->role, config('roles.admins'))) {
+            $redirect_route = '/admin';
+        } elseif (key_exists(Auth::user()->role, config('roles.clients'))) {
+            $redirect_route = '/client/videos';
         }
 
-        if ($request->ajax()) {
-            $response_data['redirect_url'] = $redirect;
-            $response_data['error'] = false;
-            return $this->successResponse($response_data);
-        } else {
-            return Redirect::to($redirect);
-        }
+        $redirect = ($request->input('redirect')) ?: $redirect_route;
 
-        $redirect = ($request->input('redirect')) ? $request->input('redirect') : '/';
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->isJson()) {
             $response_data['redirect_url'] = $redirect;
             $response_data['error'] = false;
             return $this->successResponse($response_data);
         }
-        return Redirect::to($redirect)->with([
-            'note' => 'You have been successfully logged in.',
-            'note_type' => 'success'
-        ]);
+
+        return Redirect::to($redirect);
     }
 
     /**
