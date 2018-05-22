@@ -341,7 +341,7 @@ class AdminVideosController extends Controller
         //handle file upload to S3 and Youtube ingestion
         if ($request->hasFile('file')) {
             $videoFile = $request->file('file');
-            $video->file = $this->saveVideoFile($videoFile, $video);
+            $video->file = $this->saveVideoFile($videoFile);
             $video->mime = $videoFile->getMimeType();
             //TODO: should the old video in youtube be removed?
             $video->youtube_id = null;
