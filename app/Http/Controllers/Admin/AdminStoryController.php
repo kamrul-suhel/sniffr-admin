@@ -68,16 +68,18 @@ class AdminStoryController extends Controller
 
 		curl_close($curl);
 
-		if ($err) {
-			echo "cURL Error #:" . $err;
-		} else {
-			//do something if successful
-		}
+        // get curl request
+        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1  OR /users/me
+//        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/posts?tags=37777');
+//        $raw_posts = curl_exec($curl) or abort(502);
+        $raw_posts = json_decode($response);
 
-		dd($response);
+        //dd($raw_posts);
 
+		$WP_API_URL = $this->url.'wp-json/wp/v2';
         $stories = [];
 
+		$curl = curl_init();
         foreach($raw_posts as $post){
 
             // create array for curl stories objects
@@ -95,7 +97,7 @@ class AdminStoryController extends Controller
                 curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/users/' . $post->author);
                 $raw_author = curl_exec($curl) or abort(502);
                 $raw_author = json_decode($raw_author);
-                $curpost["author"] = ($raw_author->name ? $raw_author->name : '');
+                $curpost["author"] = isset($raw_author->name) ? $raw_author->name : '';
             } else {
                 $curpost["author"] = '';
             }
@@ -105,13 +107,13 @@ class AdminStoryController extends Controller
                 curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/media/' . $post->featured_media);
                 $raw_media = curl_exec($curl) or abort(502);
                 $raw_media = json_decode($raw_media);
-                $curpost["thumb"] = ($raw_media->source_url ? preg_replace("/^http:/i", "https:", $raw_media->source_url) : '');
+                $curpost["thumb"] = isset($raw_media->source_url) ? preg_replace("/^http:/i", "https:", $raw_media->source_url) : '';
             } else {
                 $curpost["thumb"] = '';
             }
 
             // Excerpt the post content.
-            $curpost["excerpt"] = substr($curpost["description"],0,200).'...';
+            $curpost["excerpt"] = substr($curpost["description"],0,700).'...';
 
             //get the featured image link if present
             // if (!is_null($post->better_featured_image)){
@@ -127,6 +129,7 @@ class AdminStoryController extends Controller
 
             $stories[] = $curpost;
         }
+		curl_close($curl);
 
         //dd($stories);
 

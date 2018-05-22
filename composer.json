@@ -6,7 +6,6 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "astritzeqiri/laravel-wp-api": "^2.1",
         "aws/aws-sdk-php-laravel": "~3.0",
         "baopham/dynamodb": "^4.1",
         "barryvdh/laravel-dompdf": "^0.8.2",
