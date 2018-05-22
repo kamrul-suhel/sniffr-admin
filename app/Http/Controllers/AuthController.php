@@ -14,13 +14,12 @@ use Redirect;
 use App\Page;
 use App\Menu;
 use App\VideoCategory;
-use Illuminate\Support\Facades\Input;
 
 /**
  * Class ThemeAuthController
  * @package App\Http\Controllers
  */
-class ThemeAuthController extends Controller
+class AuthController extends Controller
 {
     use FrontendResponse;
     /**
@@ -89,44 +88,33 @@ class ThemeAuthController extends Controller
 
         if ((!Auth::attempt($email_login)) && (!Auth::attempt($username_login))) {
             $redirect = ($request->input('redirect')) ? '?redirect=' . $request->input('redirect') : '';
-            // auth failure! redirect to login with errors
+
             $error = [
                 'note' => 'Invalid login, please try again.',
                 'note_type' => 'error'
             ];
 
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->errorResponse('Invalid login, please try again.');
             }
 
             return Redirect::to('login' . $redirect)->with($error);
         }
+        
+        $redirect = '';
 
         if (Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'editorial') {
             $redirect = ($request->input('redirect')) ? $request->input('redirect') : '/admin';
-
-            if ($request->ajax()) {
-                $response_data['redirect_url'] = $redirect;
-                $response_data['error'] = false;
-                $response_data['data'] = 'This is admin';
-                return $this->successResponse($response_data);
-            } else {
-                return Redirect::to($redirect);
-            }
         } elseif (Auth::user()->role == 'client') {
-            $redirect = ($request->input('redirect', 'false')) ? $request->input('redirect') : '/client/videos';
+            $redirect = ($request->input('redirect')) ? $request->input('redirect') : '/client/videos';
+        }
 
-            if (Auth::user()->username == 'dailymail') {
-                $redirect = '/client/dashboard';
-            }
-
-            if ($request->ajax()) {
-                $response_data['redirect_url'] = $redirect;
-                $response_data['error'] = false;
-                return $this->successResponse($response_data);
-            } else {
-                return Redirect::to($redirect);
-            }
+        if ($request->ajax()) {
+            $response_data['redirect_url'] = $redirect;
+            $response_data['error'] = false;
+            return $this->successResponse($response_data);
+        } else {
+            return Redirect::to($redirect);
         }
 
         $redirect = ($request->input('redirect')) ? $request->input('redirect') : '/';
