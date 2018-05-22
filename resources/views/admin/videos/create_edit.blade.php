@@ -30,10 +30,6 @@
                             <a href="#copy" role="tab" data-toggle="tab">Copy</a>
                         </li>
 
-                        <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
-                            <a href="#contract" role="tab" data-toggle="tab">Contract</a>
-                        </li>
-
                         <li>
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
                         </li>
@@ -58,6 +54,10 @@
                             <a href="#creator" role="tab" data-toggle="tab">Creator</a>
                         </li>
 
+                        <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
+                            <a href="#contract" role="tab" data-toggle="tab">Contract</a>
+                        </li>
+
                         <li>
                             <a href="#admin" role="tab" data-toggle="tab">Admin</a>
                         </li>
@@ -76,9 +76,6 @@
                     @if($video)
                         <div class="tab-pane {{ (!session('active_tab')) ? 'active' : '' }}" id="copy">
                             @include('admin.videos.partials.copy')
-                        </div>
-                        <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
-                            @include('admin.videos.partials.contract')
                         </div>
                         <div class="tab-pane" id="metadata">
                             @include('admin.videos.partials.vertical')
@@ -122,6 +119,10 @@
 
                         <div class="tab-pane" id="creator">
                             @include('admin.videos.partials.choose_creator')
+                        </div>
+
+                        <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
+                            @include('admin.videos.partials.contract')
                         </div>
 
                         <div class="tab-pane" id="admin">
