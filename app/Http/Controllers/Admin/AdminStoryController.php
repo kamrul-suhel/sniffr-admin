@@ -56,12 +56,12 @@ class AdminStoryController extends Controller
         $WP_API_URL = 'https://testing.unilad.co.uk/wp-json/wp/v2';
 
         // get curl request
-        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1
-        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/users/me');
+        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1  OR /users/me
+        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/posts?tags=37777');
         $raw_posts = curl_exec($curl) or abort(502);
         $raw_posts = json_decode($raw_posts);
 
-        dd($raw_posts);
+        //dd($raw_posts);
 
         $stories = [];
 
@@ -98,7 +98,7 @@ class AdminStoryController extends Controller
             }
 
             // Excerpt the post content.
-            $curpost["excerpt"] = substr($curpost["description"],0,200).'...';
+            $curpost["excerpt"] = substr($curpost["description"],0,700).'...';
 
             //get the featured image link if present
             // if (!is_null($post->better_featured_image)){
