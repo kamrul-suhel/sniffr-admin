@@ -20,6 +20,9 @@ use Carbon\Carbon as Carbon;
 
 class AdminStoryController extends Controller
 {
+	public $url = 'http://testing.unilad.co.uk/';
+	public $token_path = 'wp-json/jwt-auth/v1/token';
+
     protected $rules = [
         'title' => 'required'
     ];
@@ -29,21 +32,22 @@ class AdminStoryController extends Controller
         $this->middleware(['admin:admin,manager,editorial']);
     }
 
-    private function getCurl(){
-
-        $WP_USERNAME = "sniffr-api";
-        $WP_PASSWORD = "5uc(z(QqtSvH#gusJqkQwgMU";
-
-        // using http basic auth
-        $auth_header = ["Authorization: Basic " . base64_encode($WP_PASSWORD . ":" . $WP_PASSWORD)];
-
+    private function getToken() {
         $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_HTTPHEADER => $auth_header
-        ));
 
-        return $curl;
+		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username='.env('UNILAD_WP_USER').'&password='.env('UNILAD_WP_PASS'));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_POST, 1);
+
+		$response = json_decode(curl_exec($curl));
+
+		curl_close ($curl);
+
+		if(!$response->token){
+			exit('Unable to connect');
+		}
+
+        return $response->token;
     }
 
     /**
@@ -51,17 +55,26 @@ class AdminStoryController extends Controller
      */
     public function index(){
 
-        $curl = $this->getCurl();
+        $token = $this->getToken();
 
-        $WP_API_URL = 'https://testing.unilad.co.uk/wp-json/wp/v2';
+		$curl = curl_init();
 
-        // get curl request
-        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1
-        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/users/me');
-        $raw_posts = curl_exec($curl) or abort(502);
-        $raw_posts = json_decode($raw_posts);
+		curl_setopt($curl, CURLOPT_URL, $this->url.'wp-json/wp/v2/posts?status=draft');
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
 
-        dd($raw_posts);
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+		if ($err) {
+			echo "cURL Error #:" . $err;
+		} else {
+			//do something if successful
+		}
+
+		dd($response);
 
         $stories = [];
 
