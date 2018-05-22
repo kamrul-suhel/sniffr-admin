@@ -53,15 +53,15 @@ class AdminStoryController extends Controller
 
         $curl = $this->getCurl();
 
-        $WP_API_URL = "https://testing.unilad.co.uk/wp-json/wp/v2";
+        $WP_API_URL = 'https://testing.unilad.co.uk/wp-json/wp/v2';
 
         // get curl request
         // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1
-        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . "/posts?per_page=3&page=1");
+        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/users/me');
         $raw_posts = curl_exec($curl) or abort(502);
         $raw_posts = json_decode($raw_posts);
 
-        //dd($hello);
+        dd($raw_posts);
 
         $stories = [];
 
