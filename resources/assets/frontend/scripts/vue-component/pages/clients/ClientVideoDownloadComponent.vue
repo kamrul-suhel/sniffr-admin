@@ -34,23 +34,8 @@
                             </v-flex>
 
                             <v-flex xs12>
-                                <v-layout row wrap>
-                                    <v-flex>
-                                        <div class="thumbnail client-assets" style="background:url('/assets/images/placeholder.png')"></div>
-                                    </v-flex>
-
-                                    <v-flex>
-                                        <div class="thumbnail client-assets" style="background:url('/assets/images/placeholder.png')"></div>
-                                    </v-flex>
-
-                                    <v-flex>
-                                        <div class="thumbnail client-assets" style="background:url('/assets/images/placeholder.png')"></div>
-                                    </v-flex>
-
-                                    <v-flex>
-                                        <div class="thumbnail client-assets" style="background:url('/assets/images/placeholder.png')"></div>
-                                    </v-flex>
-
+                                <v-layout row wrap class="client-assets">
+                                    <asset-component v-for="item in 6" :key="item"></asset-component>
                                 </v-layout>
                             </v-flex>
                         </v-layout>
@@ -76,7 +61,7 @@
 
                             <v-flex xs12>
                                 <v-layout column wrap align-end class="video-detail-sidebar">
-                                    <v-btn dark block large class="dark mt-0" @click="downloadAssets()"><v-icon left >cloud_download</v-icon>Download assets</v-btn>
+                                    <v-btn dark block large class="dark mt-0" @click="downloadAssets()"><v-icon left >cloud_download</v-icon>Download all asset</v-btn>
                                 </v-layout>
                             </v-flex>
 
@@ -89,7 +74,7 @@
 </template>
 
 <script>
-
+    import AssetComponent from './partials/AssetComponent';
     export default {
         beforeRouteEnter: (to, from, next) => {
             axios.get('/islogin')
@@ -97,6 +82,10 @@
                     console.log(response);
                 });
             next();
+        },
+
+        components: {
+          assetComponent: AssetComponent
         },
 
         data() {

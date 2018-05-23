@@ -1,13 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
     <div class="videos-section">
-        <section id="header" class="page-videos">
-            <div class="header-content">
-                <div class="position-center">
-                    <h1 class="heading">Client</h1>
-                </div>
-            </div>
-        </section>
 
         <search-component @searchOption="searchOption($event)"></search-component>
 
