@@ -75,16 +75,16 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     |--------------------------------------------------------------------------
     */
 
-    Route::get('login', 'ThemeAuthController@login_form')->name('login');
-    Route::get('islogin', 'ThemeAuthController@isLogin')->name('islogin');
-    Route::post('login', 'ThemeAuthController@login');
+    Route::get('login', 'AuthController@login_form')->name('login');
+    Route::get('islogin', 'AuthController@isLogin')->name('islogin');
+    Route::post('login', 'AuthController@login')->name('auth.login');
 
-    Route::get('password/reset', ['uses' => 'ThemeAuthController@password_reset', 'as' => 'password.remind']);
-    Route::post('password/reset', ['uses' => 'ThemeAuthController@password_request', 'as' => 'password.request']);
-    Route::get('password/reset/{token}', ['uses' => 'ThemeAuthController@password_reset_token', 'as' => 'password.reset']);
-    Route::post('password/reset/{token}', ['uses' => 'ThemeAuthController@password_reset_post', 'as' => 'password.update']);
+    Route::get('password/reset', ['uses' => 'AuthController@password_reset', 'as' => 'password.remind']);
+    Route::post('password/reset', ['uses' => 'AuthController@password_request', 'as' => 'password.request']);
+    Route::get('password/reset/{token}', ['uses' => 'AuthController@password_reset_token', 'as' => 'password.reset']);
+    Route::post('password/reset/{token}', ['uses' => 'AuthController@password_reset_post', 'as' => 'password.update']);
 
-    Route::get('verify/{activation_code}', 'ThemeAuthController@verify');
+    Route::get('verify/{activation_code}', 'AuthController@verify');
 
     /*
     |--------------------------------------------------------------------------
@@ -111,7 +111,7 @@ Route::post('user/{username}/update_cc', ['uses' => 'ThemeUserController@update_
 Route::get('user/{username}/upgrade_subscription', 'ThemeUserController@upgrade');
 Route::post('user/{username}/upgrade_cc', ['uses' => 'ThemeUserController@upgrade_cc_store']);
 
-Route::get('logout', 'ThemeAuthController@logout');
+Route::get('logout', 'AuthController@logout')->name('auth.logout');
 
 Route::get('upload_dir', function(){
     echo Config::get('site.uploads_dir');
@@ -127,9 +127,8 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'admin'), function(){
-    // Admin Dashboard
-    Route::get('', 'Admin\DashboardController@index');
+Route::group(array('prefix' => 'admin'), function () {
+    Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
@@ -239,9 +238,8 @@ Route::group(array('prefix' => 'admin'), function(){
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'client'), function(){
-    // Client Video Functionality
-    Route::get('videos', 'Client\ClientVideosController@index');
+Route::group(array('prefix' => 'client'), function () {
+    Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/view/{id}', 'Client\ClientVideosController@view');
     Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
