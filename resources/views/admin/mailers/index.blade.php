@@ -6,13 +6,10 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h3>
-					<i class="fa fa-users"></i> Stories
-					<a href="#" class="btn btn-primary pull-right js-create-mailer">
+					<i class="fa fa-users"></i> Client Mailers
+					<a href="/admin/stories/" class="btn btn-success pull-right">
 						<i class="fa fa-plus-circle"></i> Create Mailer
 					</a>
-					<!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
-						<i class="fa fa-plus-circle"></i> Add New Story
-					</a> -->
 				</h3>
 			</div>
 		</div>
@@ -21,26 +18,24 @@
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
-			<th style="width: 25%">Title</th>
-			<th style="width: 30%">Excerpt</th>
-			<th>Status</th>
-			<th>Assigned To</th>
+			<th style="width: 25%">Mailer Id</th>
+			<th>Created By</th>
 			<th>Created At</th>
 			<th>Actions</th>
-			@foreach($stories as $story)
+			@foreach($mailers as $mailer)
 			<tr>
-				<td><strong>{{ TextHelper::shorten($story['title'], 250) }}</strong> <img src="{{ $story['thumb'] }}" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" /></td>
-				<td>{{ $story['excerpt'] }}</td>
-				<td>{{ $story['status'] }}</td>
-				<td>{{ $story['author'] }}</td>
-				<td>{{ date('jS M Y h:i:s',strtotime($story['date'])) }}</td>
+				<td>{{ $mailer->alpha_id }}</td>
+				<td>@foreach($users as $user2)
+			                @if(!empty($user2->id == $mailer->user_id))
+			                    {{ $user2->username }}
+			                @endif
+			            @endforeach
+				</td>
+				<td>{{ date('jS M Y h:i:s',strtotime($mailer->created_at)) }}</td>
 				<td>
 					<p>
-						<label class="btn btn-primary">
-							<input type="checkbox" value="{{ $story['id'] }}" name="stories" autocomplete="off" style="font-size: 20px;">
-						</label>
-						<!-- <a href="{{ url('admin/stories/edit') . '/' . $story['wp_id'] }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ url('admin/stories/delete') . '/' . $story['wp_id'] }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a> -->
+						<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
+						<a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>

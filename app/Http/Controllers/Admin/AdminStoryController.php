@@ -9,7 +9,8 @@ use App\User;
 use App\Story;
 use App\Video;
 use App\Contact;
-use App\Comment;
+use App\Client;
+use App\ClientMailer;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
@@ -61,9 +62,10 @@ class AdminStoryController extends Controller
         $raw_posts = curl_exec($curl) or abort(502);
         $raw_posts = json_decode($raw_posts);
 
-        //dd($raw_posts);
+        dd($raw_posts);
 
-        $stories = [];
+        $stories_wp = [];
+        $story_ids = [];
 
         foreach($raw_posts as $post){
 
@@ -100,11 +102,6 @@ class AdminStoryController extends Controller
             // Excerpt the post content.
             $curpost["excerpt"] = substr($curpost["description"],0,700).'...';
 
-            //get the featured image link if present
-            // if (!is_null($post->better_featured_image)){
-            //     $curpost["thumb"] = $post->better_featured_image->media_details->sizes->medium->source_url;
-            // }
-
             //get the post categories
             $cat_list = [];
             foreach($post->categories as $tax_obj){
@@ -112,23 +109,40 @@ class AdminStoryController extends Controller
             }
             $curpost["categories"] = $cat_list;
 
-            $stories[] = $curpost;
+            $stories_wp[] = $curpost;
+            $story_ids[] = $post->id;
         }
 
-        //dd($stories);
-
         // Would be good to sync up stories table with
-        //$stories = Story::orderBy('updated_at', 'DESC')->paginate(10);
+        // $story_sync = Story::whereIn('wp_id', $story_ids)
+        //     ->get();
 
-        // Below is for future blade template
-        // @foreach($users as $user2)
-        //         @if(!empty($user2->id == $story->user_id))
-        //             {{ $user2->username }}
-        //         @endif
-        //     @endforeach
+        // store stories from wordpress in database
+        foreach($stories_wp as $story_wp){
+            $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+            if(!$story_find) {
+                $story = new Story();
+                $story->alpha_id = VideoHelper::quickRandom();
+                $story->wp_id = $story_wp['wp_id'];
+                $story->url = $story_wp['url'];
+                $story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
+                $story->author = $story_wp['author'];
+                $story->thumb = $story_wp['thumb'];
+                $story->date_ingested = $story_wp['date'];
+                $story->categories = implode("|",$story_wp['categories']);
+                $story->status = $story_wp['status'];
+                $story->state = 'licensed';
+                $story->title = $story_wp['title'];
+                $story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
+                $story->notes = NULL;
+                $story->user_id = (Auth::user() ? Auth::user()->id : 0);
+                $story->active = 1;
+                $story->save();
+            }
+        }
 
         $data = [
-            'stories' => $stories,
+            'stories' => Story::all(),
             'users' => User::all(),
             'user' => Auth::user()
         ];
