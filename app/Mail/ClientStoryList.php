@@ -12,9 +12,9 @@ use App\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Qsueue\ShouldQueue;
 
-class ClientMailer extends Mailable
+class ClientStoryList extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -25,9 +25,9 @@ class ClientMailer extends Mailable
      *
      * @return void
      */
-    public function __construct(Video $video)
+    public function __construct(ClientMailer $clientMailer)
     {
-        $this->video = $video;
+        $this->mailer = $clientMailer;
     }
 
     /**

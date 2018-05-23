@@ -194,6 +194,7 @@ Route::group(array('prefix' => 'admin'), function(){
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+	Route::get('stories/refresh', array('uses' => 'Admin\AdminStoryController@refresh'));
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');

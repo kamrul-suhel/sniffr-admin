@@ -10,21 +10,21 @@
 
     @if(Auth::user()->isAdmin())
     <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
-        <a href="{{ url('admin/mailers') }}" class="tlink">
+        <a href="{{ url('admin/stories') }}" class="tlink">
             <i class="fa fa-tasks"></i>
-            <span class="title">Client Mailers & Stories</span>
+            <span class="title">Stories</span>
         </a>
         <ul>
             <li>
-                <a href="{{ url('admin/stories') }}">
-                    <span class="title">Create Client Mailer</span>
+                <a href="{{ url('admin/mailers') }}">
+                    <span class="title">Mailers</span>
                 </a>
             </li>
-            <li>
+            <!-- li>
                 <a href="{{ url('admin/mailers') }}">
                     <span class="title">Edit Client Mailers</span>
                 </a>
-            </li>
+            </li -->
             <!-- <li>
                 <a href="{{ url('admin/stories/trello') }}">
                     <span class="title">Stories Board</span>

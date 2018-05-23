@@ -23,6 +23,7 @@ use Carbon\Carbon as Carbon;
 class AdminStoryController extends Controller
 {
 	public $url = 'http://testing.unilad.co.uk/';
+	public $api_path = 'wp-json/wp/v2/';
 	public $token_path = 'wp-json/jwt-auth/v1/token';
 
     protected $rules = [
@@ -52,6 +53,32 @@ class AdminStoryController extends Controller
         return $response->token;
     }
 
+	/**
+	 * @get Makes curl request
+	 * @param string $request
+	 * @param bool $req_token
+	 * @return JSON Object
+	 */
+	private function apiRequest($request, $req_token = false){
+		if($req_token){
+			$token = $this->getToken();
+		}
+
+		$curl = curl_init();
+
+		curl_setopt($curl, CURLOPT_URL, $this->url.$this->api_path.$request);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		if($req_token){
+			curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
+		}
+
+		$response = json_decode(curl_exec($curl)); //or abort(502);
+		$err = curl_error($curl);
+		curl_close($curl);
+
+		return $response;
+	}
+
     /**
      * @get URLs from string (string maybe a url)
      * @param string $string
@@ -64,142 +91,127 @@ class AdminStoryController extends Controller
         return ($matches[0]);
     }
 
+
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function refresh()
+	{
+		$posts = $this->apiRequest('posts?status=draft&tags=37777', true);
+
+		$stories_wp = [];
+		$story_ids = [];
+
+		foreach($posts as $post){
+			// create array for curl stories objects
+			$curpost = [
+				"wp_id" => $post->id,
+				"status" => $post->status,
+				"title" => trim(strip_tags($post->title->rendered)),
+				"excerpt" => substr(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),0,700).'...',
+				"description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
+				"url" => $post->link,
+				"date" => Carbon::parse($post->date)->formatLocalized('%d %B %Y'),
+				"author" => ''
+			];
+
+			// find assets within post content
+			//$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
+			if($post->id) {
+				// get featured image
+				if($post->featured_media != 0) {
+					$curpost['assets'][] = $this->apiRequest('media/' . $post->featured_media, true);
+				}
+
+				// Get images in text (ignore urls for now)
+				preg_match_all('/wp-image-(\d+)/', $curpost['description'], $imageMatches);
+				if(isset($imageMatches[1])){
+					foreach($imageMatches[1] as $imageId){
+						// Fetch all the assets from wp
+						$curpost['assets'][] = $this->apiRequest('media/' . $imageId, true);
+					}
+				}
+			}
+
+			// get curl for author
+			if($post->author) {
+				$author = $this->apiRequest('users/' . $post->author);
+				$curpost["author"] = isset($author->name) ? $author->name : '';
+			}
+
+			//get the post categories
+			$cat_list = [];
+			foreach($post->categories as $tax_obj){
+				$cat_list[] = $tax_obj;
+			}
+			$curpost["categories"] = $cat_list;
+
+			$stories_wp[] = $curpost;
+			$story_ids[] = $post->id;
+		}
+
+		// Would be good to sync up stories table with
+		// $story_sync = Story::whereIn('wp_id', $story_ids)
+		//     ->get();
+
+		// store stories from wordpress in database
+		foreach($stories_wp as $story_wp){
+
+			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+
+			if(!$story_find) {
+				$story = new Story();
+
+				$asset_ids = [];
+				if(isset($story_wp['assets'])){
+					foreach($story_wp['assets'] as $key => $asset_wp){
+						$asset = new Asset();
+						$asset->alpha_id = VideoHelper::quickRandom();
+						$asset->url = preg_replace("/^http:/i", "https:", $asset_wp->source_url);
+						$asset->save();
+						$asset_ids[] = $asset->id;
+
+						if($key === 0){
+							$story->thumb = $asset->url; //$asset_ids[1];//$story_wp['url'];
+						}
+					}
+				}
+
+
+				$story->alpha_id = VideoHelper::quickRandom();
+				$story->wp_id = $story_wp['wp_id'];
+				$story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
+				$story->author = $story_wp['author'];
+				$story->date_ingested = $story_wp['date'];
+				$story->categories = implode("|",$story_wp['categories']);
+				$story->status = $story_wp['status'];
+				$story->state = 'licensed';
+				$story->title = $story_wp['title'];
+				$story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
+				$story->user_id = (Auth::user() ? Auth::user()->id : 0);
+				$story->active = 1;
+				$story->save();
+				$story->assets()->sync($asset_ids);
+			}
+		}
+
+		return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+	}
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
-
-        $token = $this->getToken();
-
-		$curl = curl_init();
-
-		curl_setopt($curl, CURLOPT_URL, $this->url.'wp-json/wp/v2/posts?status=draft&tags=37777');
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
-
-		$response = curl_exec($curl); //or abort(502);
-		$err = curl_error($curl);
-		curl_close($curl);
-
-        // get curl request data
-        $raw_posts = json_decode($response);
-        //dd($raw_posts);
-
-        $stories_wp = [];
-        $story_ids = [];
-
-        foreach($raw_posts as $post){
-
-            // create array for curl stories objects
-            $curpost = [
-                "wp_id" => $post->id,
-                "status" => $post->status,
-                "title" => trim(strip_tags($post->title->rendered)),
-                "excerpt" => substr(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),0,700).'...',
-                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
-                "url" => $post->link,
-                "date" => Carbon::parse($post->date)->formatLocalized('%d %B %Y')
-            ];
-
-            // find assets within post content
-            $curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
-            if($post->id) {
-        		$curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, $this->url. 'wp-json/wp/v2/media?filter[post_parent]='.$post->id.'&filter[post_type]=attachment');
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
-                $raw_assets = curl_exec($curl);
-                $raw_assets = json_decode($raw_assets);
-                curl_close($curl);
-                $curpost["assets"] = $raw_assets;
-            }
-
-            // get curl for author
-            if($post->author) {
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, $this->url. 'wp-json/wp/v2/users/' . $post->author);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
-                $raw_author = curl_exec($curl);
-                $raw_author = json_decode($raw_author);
-                $curpost["author"] = isset($raw_author->name) ? $raw_author->name : '';
-            } else {
-                $curpost["author"] = '';
-            }
-
-            // get curl for featured image
-            // if($post->featured_media != 0) {
-            //     $curl = curl_init();
-            //     curl_setopt($curl, CURLOPT_URL, $this->url. 'wp-json/wp/v2/media/' . $post->featured_media);
-            //     $raw_media = curl_exec($curl);
-            //     curl_close($curl);
-            //     $raw_media = json_decode($raw_media);
-            //     $curpost["thumb"] = isset($raw_media->source_url) ? preg_replace("/^http:/i", "https:", $raw_media->source_url) : '';
-            // } else {
-            //     if(isset($raw_assets)) {
-            //         $curpost["thumb"] = $raw_assets[0]->source_url;
-            //         $raw_assets = NULL;
-            //     } else {
-            //         $curpost["thumb"] = '';
-            //     }
-            // }
-
-            //get the post categories
-            $cat_list = [];
-            foreach($post->categories as $tax_obj){
-                $cat_list[] = $tax_obj;
-            }
-            $curpost["categories"] = $cat_list;
-
-            $stories_wp[] = $curpost;
-            $story_ids[] = $post->id;
-        }
-
-        // Would be good to sync up stories table with
-        // $story_sync = Story::whereIn('wp_id', $story_ids)
-        //     ->get();
-
-        // store stories from wordpress in database
-        foreach($stories_wp as $story_wp){
-
-            $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
-
-            if(!$story_find) {
-
-                $asset_ids = [];
-                foreach($story_wp['assets'] as $asset_wp){
-                    $asset = new Asset();
-                    $asset->alpha_id = VideoHelper::quickRandom();
-                    $asset->url = preg_replace("/^http:/i", "https:", $asset_wp->source_url);
-                    $asset->save();
-                    $asset_ids[] = $asset->id;
-                }
-
-                $story = new Story();
-                $story->alpha_id = VideoHelper::quickRandom();
-                $story->wp_id = $story_wp['wp_id'];
-                $story->url = $asset_ids[1];//$story_wp['url'];
-                $story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-                $story->author = $story_wp['author'];
-                $story->thumb = (isset($thumb) ? $thumb : NULL);
-                $story->date_ingested = $story_wp['date'];
-                $story->categories = implode("|",$story_wp['categories']);
-                $story->status = $story_wp['status'];
-                $story->state = 'licensed';
-                $story->title = $story_wp['title'];
-                $story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
-                $story->user_id = (Auth::user() ? Auth::user()->id : 0);
-                $story->active = 1;
-                $story->save();
-                $story->assets()->sync($asset_ids);
-            }
-        }
-
         $data = [
             'stories' => Story::all(),
             'users' => User::all(),
             'user' => Auth::user()
         ];
+//
+//        foreach($data['stories'] as $story){
+//			dd($story->assets()->first()-);
+//		}
+
 
         return view('admin.stories.index', $data); //return response()->json($formatted_posts);
     }

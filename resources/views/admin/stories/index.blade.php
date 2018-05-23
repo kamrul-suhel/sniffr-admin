@@ -9,6 +9,8 @@
 					<i class="fa fa-users"></i> Stories
 					<a href="#" class="btn btn-primary pull-right js-create-mailer">
 						<i class="fa fa-plus-circle"></i> Create Mailer
+					</a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right">
+						<i class="fa fa-refresh"></i> Refresh Stories
 					</a>
 					<!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
 						<i class="fa fa-plus-circle"></i> Add New Story
