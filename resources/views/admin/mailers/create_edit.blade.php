@@ -137,7 +137,7 @@
 						<select name="clients[]" id="clients" class="form-control" multiple style="height:400px;">
 							@if(!empty($clients))
 								@foreach($clients as $client)
-									<option value="{{ $client->id }}">{{ $client->email }}</option>
+									<option value="{{ $client->id }}">{{ $client->username }} ({{ $client->email }})</option>
 								@endforeach
 							@endif
 						</select>
@@ -153,7 +153,8 @@
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
-		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
+		<input type="submit" value="{{ $button_text }}" class="btn btn-primary pull-right" />
+		<a href="#" id="js-save-mailer" class="btn btn-success pull-right" style="margin-right:10px;">Save Mailer</a>
 	</form>
 
 	<div class="clear"></div>

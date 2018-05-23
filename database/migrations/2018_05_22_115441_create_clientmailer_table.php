@@ -17,7 +17,9 @@ class CreateClientMailerTable extends Migration
             $table->increments('id');
             $table->string('alpha_id', 10)->nullable()->index('alpha_id');
             $table->integer('user_id')->unsigned()->nullable();
+            $table->text('note')->nullable();
             $table->boolean('active')->default(1);
+            $table->timestamp('sent_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -36,7 +36,7 @@ class AdminStoryController extends Controller
     private function getToken() {
         $curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username=mike@unilad.co.uk&password=)xaES&zgHNyB!o21');
+		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username=sniffr-api&password=5uc(z(QqtSvH#gusJqkQwgMU');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, 1);
 
@@ -151,7 +151,6 @@ class AdminStoryController extends Controller
                 $story->state = 'licensed';
                 $story->title = $story_wp['title'];
                 $story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
-                $story->notes = NULL;
                 $story->user_id = (Auth::user() ? Auth::user()->id : 0);
                 $story->active = 1;
                 $story->save();

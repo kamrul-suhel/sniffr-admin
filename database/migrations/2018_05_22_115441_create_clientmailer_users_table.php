@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateClientMailerLogsTable extends Migration
+class CreateClientMailerUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateClientMailerLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_mailer_logs', function (Blueprint $table) {
+        Schema::create('client_mailer_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('client_mailer_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
@@ -21,6 +21,6 @@ class CreateClientMailerLogsTable extends Migration
 
     public function down()
     {
-        Schema::drop('client_mailer_logs');
+        Schema::drop('client_mailer_user');
     }
 }

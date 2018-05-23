@@ -122,33 +122,30 @@ class AdminClientMailerController extends Controller
         $id = $data['id'];
         $mailer = ClientMailer::findOrFail($id);
 
-        $validator = Validator::make($data, $this->rules);
-
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-
-        if(Input::get('title')) {
-            $mailer->title = Input::get('title');
-        }
-
-        $mailer->state = (Input::get('state') ? Input::get('state') : 'sourced');
-
-        if(Input::get('description')) {
-            $mailer->description = Input::get('description');
-        }
-
-        $mailer->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
-
-        // if(Input::get('videos')) {
-        //     $story->videos()->sync(Input::get('videos'));
+        // $validator = Validator::make($data, $this->rules);
+        // if ($validator->fails())
+        // {
+        //     return Redirect::back()->withErrors($validator)->withInput();
         // }
+
+        if(Input::get('note')) {
+            $mailer->note = Input::get('note');
+        }
+
+        if(Input::get('clients')) {
+            $mailer->logs()->sync(Input::get('clients'));
+        }
+
+        $mailer->user_id = (Auth::user() ? Auth::user()->id : $mailer->user_id);
 
         $mailer->save();
 
-        return Redirect::to('admin/mailers/edit' . '/' . $id)->with([
-            'note' => 'Successfully Updated Client Mailer!',
+        // If send mailer (rather than just saved) then queue mailer to send
+        if(Input::get('send_mailer')) {
+        }
+
+        return Redirect::to('admin/mailers')->with([
+            'note' => 'Successfully Sent Client Mailer!',
             'note_type' => 'success'
         ]);
     }

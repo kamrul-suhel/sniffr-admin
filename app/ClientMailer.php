@@ -22,7 +22,7 @@ class ClientMailer extends Model
         return $this->belongsToMany(Story::class);
     }
 
-    public function users()
+    public function logs()
     {
         return $this->belongsToMany(User::class);
     }

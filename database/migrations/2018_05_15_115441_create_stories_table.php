@@ -24,7 +24,6 @@ class CreateStoriesTable extends Migration
             $table->text('author')->nullable();
             $table->text('excerpt')->nullable();
             $table->text('description')->nullable();
-            $table->text('notes')->nullable();
             $table->string('thumb')->nullable();
             $table->string('categories')->nullable();
             $table->string('date_ingested')->nullable();
