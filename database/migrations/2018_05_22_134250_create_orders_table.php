@@ -15,13 +15,13 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('video_id')->unsigned()->index();
+            $table->integer('story_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('client_id')->unsigned()->index();
-            $table->string('ip')->nullable();
+            $table->string('ip_address')->nullable();
             $table->text('user_agent')->nullable();
-            $table->timestamp('ordered_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
