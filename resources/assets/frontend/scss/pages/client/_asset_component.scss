@@ -1,0 +1,55 @@
+.client-assets {
+
+  .thumbnail {
+    width: 100%;
+    height: 100px;
+    background: #777;
+    background-size: cover !important;
+    background-position: center !important;
+    position:relative;
+    overflow:hidden;
+
+    .download_asset{
+      position: absolute;
+      left: calc(50% - 30px);
+      bottom: -60px;
+      transition:bottom ease-in-out .3s;
+    }
+    .show{
+      bottom:10px;
+    }
+
+    &:hover .download_asset{
+      bottom:10px;
+    }
+  }
+
+  .btn .btn__content .icon{
+    margin:0;
+  }
+
+  @include small-device {
+    .thumbnail {
+      height:120px;
+    }
+  }
+
+  @include medium-device {
+    .thumbnail {
+      height:120px;
+    }
+  }
+
+  @include large-device {
+    .thumbnail {
+      height:120px;
+    }
+  }
+
+  @include extra-large-device {
+    .thumbnail {
+      height:150px;
+    }
+  }
+
+}

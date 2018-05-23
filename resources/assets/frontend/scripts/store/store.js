@@ -7,6 +7,7 @@ import VideoDetail from './modules/video-detail';
 import VideoDialogBox from './modules/video-dialog-box'
 import VideoSearch from './modules/search';
 import VideoTagSearch from './modules/videos_tag_search';
+import ClientLogin from './modules/client-login';
 
 Vue.use(Vuex);
 
@@ -29,5 +30,6 @@ export const store = new Vuex.Store({
 		VideoDialogBox,
 		VideoSearch,
 		VideoTagSearch,
+		ClientLogin
 	}
 });
