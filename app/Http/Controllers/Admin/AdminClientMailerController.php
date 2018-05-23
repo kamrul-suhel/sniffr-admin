@@ -20,7 +20,7 @@ use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 use App\Jobs\QueueClientMailer;
-use App\Notifications\ClientMailer;
+use App\Notifications\ClientMailerAlert;
 
 class AdminClientMailerController extends Controller
 {

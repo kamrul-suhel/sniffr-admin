@@ -7,6 +7,7 @@ use Validator;
 use Redirect;
 use App\User;
 use App\Story;
+use App\Asset;
 use App\Video;
 use App\Contact;
 use App\Client;
@@ -52,6 +53,18 @@ class AdminStoryController extends Controller
     }
 
     /**
+     * @get URLs from string (string maybe a url)
+     * @param string $string
+     * @return array
+     */
+    private function getUrls($string) {
+        $regex = '/https?\:\/\/[^\" ]+/i';
+        preg_match_all($regex, $string, $matches);
+        //return (array_reverse($matches[0]));
+        return ($matches[0]);
+    }
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
@@ -60,25 +73,21 @@ class AdminStoryController extends Controller
 
 		$curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, $this->url.'wp-json/wp/v2/posts?status=draft');
+		curl_setopt($curl, CURLOPT_URL, $this->url.'wp-json/wp/v2/posts?status=draft&tags=37777');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
 
 		$response = curl_exec($curl); //or abort(502);
 		$err = curl_error($curl);
-
 		curl_close($curl);
 
         // get curl request data
-        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1  OR /posts?tags=37777
         $raw_posts = json_decode($response);
-
         //dd($raw_posts);
 
         $stories_wp = [];
         $story_ids = [];
 
-		$curl = curl_init();
         foreach($raw_posts as $post){
 
             // create array for curl stories objects
@@ -86,15 +95,32 @@ class AdminStoryController extends Controller
                 "wp_id" => $post->id,
                 "status" => $post->status,
                 "title" => trim(strip_tags($post->title->rendered)),
-                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),
+                "excerpt" => substr(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),0,700).'...',
+                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
                 "url" => $post->link,
                 "date" => Carbon::parse($post->date)->formatLocalized('%d %B %Y')
             ];
 
+            // find assets within post content
+            $curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
+            if($post->id) {
+        		$curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $this->url. 'wp-json/wp/v2/media?filter[post_parent]='.$post->id.'&filter[post_type]=attachment');
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
+                $raw_assets = curl_exec($curl);
+                $raw_assets = json_decode($raw_assets);
+                curl_close($curl);
+                $curpost["assets"] = $raw_assets;
+            }
+
             // get curl for author
             if($post->author) {
-                curl_setopt($curl, CURLOPT_URL, $this->url. '/users/' . $post->author);
-                $raw_author = curl_exec($curl) or abort(502);
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $this->url. 'wp-json/wp/v2/users/' . $post->author);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
+                $raw_author = curl_exec($curl);
                 $raw_author = json_decode($raw_author);
                 $curpost["author"] = isset($raw_author->name) ? $raw_author->name : '';
             } else {
@@ -102,17 +128,21 @@ class AdminStoryController extends Controller
             }
 
             // get curl for featured image
-            if($post->featured_media) {
-                curl_setopt($curl, CURLOPT_URL, $this->url. '/media/' . $post->featured_media);
-                $raw_media = curl_exec($curl) or abort(502);
-                $raw_media = json_decode($raw_media);
-                $curpost["thumb"] = isset($raw_media->source_url) ? preg_replace("/^http:/i", "https:", $raw_media->source_url) : '';
-            } else {
-                $curpost["thumb"] = '';
-            }
-
-            // Excerpt the post content.
-            $curpost["excerpt"] = substr($curpost["description"],0,700).'...';
+            // if($post->featured_media != 0) {
+            //     $curl = curl_init();
+            //     curl_setopt($curl, CURLOPT_URL, $this->url. 'wp-json/wp/v2/media/' . $post->featured_media);
+            //     $raw_media = curl_exec($curl);
+            //     curl_close($curl);
+            //     $raw_media = json_decode($raw_media);
+            //     $curpost["thumb"] = isset($raw_media->source_url) ? preg_replace("/^http:/i", "https:", $raw_media->source_url) : '';
+            // } else {
+            //     if(isset($raw_assets)) {
+            //         $curpost["thumb"] = $raw_assets[0]->source_url;
+            //         $raw_assets = NULL;
+            //     } else {
+            //         $curpost["thumb"] = '';
+            //     }
+            // }
 
             //get the post categories
             $cat_list = [];
@@ -124,7 +154,6 @@ class AdminStoryController extends Controller
             $stories_wp[] = $curpost;
             $story_ids[] = $post->id;
         }
-		curl_close($curl);
 
         // Would be good to sync up stories table with
         // $story_sync = Story::whereIn('wp_id', $story_ids)
@@ -132,15 +161,27 @@ class AdminStoryController extends Controller
 
         // store stories from wordpress in database
         foreach($stories_wp as $story_wp){
+
             $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+
             if(!$story_find) {
+
+                $asset_ids = [];
+                foreach($story_wp['assets'] as $asset_wp){
+                    $asset = new Asset();
+                    $asset->alpha_id = VideoHelper::quickRandom();
+                    $asset->url = preg_replace("/^http:/i", "https:", $asset_wp->source_url);
+                    $asset->save();
+                    $asset_ids[] = $asset->id;
+                }
+
                 $story = new Story();
                 $story->alpha_id = VideoHelper::quickRandom();
                 $story->wp_id = $story_wp['wp_id'];
-                $story->url = $story_wp['url'];
+                $story->url = $asset_ids[1];//$story_wp['url'];
                 $story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
                 $story->author = $story_wp['author'];
-                $story->thumb = $story_wp['thumb'];
+                $story->thumb = (isset($thumb) ? $thumb : NULL);
                 $story->date_ingested = $story_wp['date'];
                 $story->categories = implode("|",$story_wp['categories']);
                 $story->status = $story_wp['status'];
@@ -150,6 +191,7 @@ class AdminStoryController extends Controller
                 $story->user_id = (Auth::user() ? Auth::user()->id : 0);
                 $story->active = 1;
                 $story->save();
+                $story->assets()->sync($asset_ids);
             }
         }
 

@@ -23,17 +23,15 @@
 		<tr class="table-header">
 			<th style="width: 25%">Title</th>
 			<th style="width: 30%">Excerpt</th>
-			<th>Status</th>
 			<th>Assigned To</th>
 			<th>Created At</th>
 			<th>Actions</th>
 			@foreach($stories as $story)
 			<tr>
-				<td><strong>{{ TextHelper::shorten($story['title'], 250) }}</strong> <img src="@if($story['thumb']){{ $story['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" /></td>
+				<td><strong>{{ TextHelper::shorten($story['title'], 250) }}</strong> <img src="{{ $story->assets()->get($story->id)->url }}" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" /></td>
 				<td>{{ $story['excerpt'] }}</td>
-				<td>{{ $story['status'] }}</td>
 				<td>{{ $story['author'] }}</td>
-				<td>{{ date('jS M Y h:i:s',strtotime($story['date_ingested'])) }}</td>
+				<td>{{ date('jS M Y h:i:s',strtotime($story['updated_at'])) }}</td>
 				<td>
 					<p>
 						<label class="btn btn-primary">
