@@ -36,11 +36,13 @@ class AdminStoryController extends Controller
     private function getToken() {
         $curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username='.env('UNILAD_WP_USER').'&password='.env('UNILAD_WP_PASS'));
+		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username=mike@unilad.co.uk&password=)xaES&zgHNyB!o21');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, 1);
 
 		$response = json_decode(curl_exec($curl));
+
+        dd($response);
 
 		curl_close ($curl);
 
@@ -71,8 +73,8 @@ class AdminStoryController extends Controller
 
         // get curl request
         // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1  OR /users/me
-//        $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/posts?tags=37777');
-//        $raw_posts = curl_exec($curl) or abort(502);
+        // $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/posts?tags=37777');
+        // $raw_posts = curl_exec($curl) or abort(502);
         $raw_posts = json_decode($response);
 
         dd($raw_posts);
