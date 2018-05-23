@@ -12,7 +12,7 @@
 	</div>
 	<div class="clear"></div>
 
-	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data" id="form-mailer">
 
 		<div class="row">
 
@@ -28,7 +28,7 @@
 										<td height="100%" valign="top">
 											<img src="{{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/logo-unilad-black.png" style="width:25%;height:auto;" border="0">
 											<div><span style="margin-top:20px;font-style:italic;color:#999;">powered by Sniffr</span></div>
-											<div id="show_note" style="padding-top:20px;padding-bottom:10px;"></div>
+											<div id="show_note" style="padding-top:20px;padding-bottom:10px;">{{ $mailer->note }}</div>
 										</td>
 									</tr>
 								</table>
@@ -45,7 +45,7 @@
 														<h4>{{ TextHelper::shorten($story['title'], 250) }}</h4>
 														by {{ $story['author'] }}
 														<br />
-														<img src="{{ $story['thumb'] }}" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
+														<img src="@if($story['thumb']){{ $story['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
 													</td>
 													<td>
 														<br />{{ $story['excerpt'] }}..
@@ -120,7 +120,7 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						<textarea class="form-control" name="note" id="note"></textarea>
+						<textarea class="form-control" name="note" id="note">{{ $mailer->note }}</textarea>
 					</div>
 				</div>
 
@@ -137,7 +137,8 @@
 						<select name="clients[]" id="clients" class="form-control" multiple style="height:400px;">
 							@if(!empty($clients))
 								@foreach($clients as $client)
-									<option value="{{ $client->id }}">{{ $client->username }} ({{ $client->email }})</option>
+
+									<option value="{{ $client->id }}" @if(isset($mailer)) @if(!empty($client->id == $mailer->user_id))selected="selected"@endif @endif>{{ $client->username }} ({{ $client->email }})</option>
 								@endforeach
 							@endif
 						</select>
@@ -152,9 +153,10 @@
 			<input type="hidden" id="id" name="id" value="{{ $mailer->id }}" />
 		@endif
 
+		<input type="hidden" name="send_mailer" value="1" />
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="submit" value="{{ $button_text }}" class="btn btn-primary pull-right" />
-		<a href="#" id="js-save-mailer" class="btn btn-success pull-right" style="margin-right:10px;">Save Mailer</a>
+		<a href="#" class="btn btn-success pull-right js-save-mailer" style="margin-right:10px;">Save Mailer</a>
 	</form>
 
 	<div class="clear"></div>
@@ -169,6 +171,12 @@
 
 		$('#note').keyup(function(event) {
 			$('#show_note').text($(this).val());
+		});
+
+		$('.js-save-mailer').click(function(e){
+			e.preventDefault();
+			$('#send_mailer').val(0);
+			$('#form-mailer').submit();
 		});
 
 	});

@@ -16,6 +16,7 @@ class CreateClientMailerUsersTable extends Migration
             $table->increments('id');
             $table->integer('client_mailer_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
+            $table->timestamp('sent_at')->nullable();
         });
     }
 

@@ -21,6 +21,7 @@
 			<th style="width: 25%">Mailer Id</th>
 			<th>Created By</th>
 			<th>Created At</th>
+			<th>Sent At</th>
 			<th>Actions</th>
 			@foreach($mailers as $mailer)
 			<tr>
@@ -32,6 +33,7 @@
 			            @endforeach
 				</td>
 				<td>{{ date('jS M Y h:i:s',strtotime($mailer->created_at)) }}</td>
+				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['date'])) }}@else Not yet sent. @endif</td>
 				<td>
 					<p>
 						<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>

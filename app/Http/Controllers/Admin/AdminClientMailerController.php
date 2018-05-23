@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
+use App\Jobs\QueueClientMailer;
+use App\Notifications\ClientMailer;
 
 class AdminClientMailerController extends Controller
 {
@@ -141,7 +143,15 @@ class AdminClientMailerController extends Controller
         $mailer->save();
 
         // If send mailer (rather than just saved) then queue mailer to send
-        if(Input::get('send_mailer')) {
+        if(Input::get('send_mailer')==1) {
+
+            // Slack notification
+            if (env('APP_ENV') == 'production') {
+                $mailer->notify(new ClientMailer($mailer));
+            }
+
+            // send mailer to selected clients via email
+            QueueClientMailer::dispatch($mailer->id);
         }
 
         return Redirect::to('admin/mailers')->with([

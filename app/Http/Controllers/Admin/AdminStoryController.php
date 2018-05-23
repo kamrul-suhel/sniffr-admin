@@ -36,13 +36,11 @@ class AdminStoryController extends Controller
     private function getToken() {
         $curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username=sniffr-api&password=5uc(z(QqtSvH#gusJqkQwgMU');
+		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username='.env('UNILAD_WP_USER').'&password='.env('UNILAD_WP_PASS'));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, 1);
 
 		$response = json_decode(curl_exec($curl));
-
-        dd($response);
 
 		curl_close ($curl);
 
@@ -66,18 +64,16 @@ class AdminStoryController extends Controller
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
 
-		$response = curl_exec($curl);
+		$response = curl_exec($curl); //or abort(502);
 		$err = curl_error($curl);
 
 		curl_close($curl);
 
-        // get curl request
-        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1  OR /users/me
-        // $hello = curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/posts?tags=37777');
-        // $raw_posts = curl_exec($curl) or abort(502);
+        // get curl request data
+        // /posts?filter[tag]=wedding&filter[status]=draft&per_page=3&page=1  OR /posts?tags=37777
         $raw_posts = json_decode($response);
 
-        dd($raw_posts);
+        //dd($raw_posts);
 
         $stories_wp = [];
         $story_ids = [];
@@ -90,14 +86,14 @@ class AdminStoryController extends Controller
                 "wp_id" => $post->id,
                 "status" => $post->status,
                 "title" => trim(strip_tags($post->title->rendered)),
-                "description" => trim(strip_tags($post->content->rendered)),
+                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),
                 "url" => $post->link,
                 "date" => Carbon::parse($post->date)->formatLocalized('%d %B %Y')
             ];
 
             // get curl for author
             if($post->author) {
-                curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/users/' . $post->author);
+                curl_setopt($curl, CURLOPT_URL, $this->url. '/users/' . $post->author);
                 $raw_author = curl_exec($curl) or abort(502);
                 $raw_author = json_decode($raw_author);
                 $curpost["author"] = isset($raw_author->name) ? $raw_author->name : '';
@@ -107,7 +103,7 @@ class AdminStoryController extends Controller
 
             // get curl for featured image
             if($post->featured_media) {
-                curl_setopt($curl, CURLOPT_URL, $WP_API_URL . '/media/' . $post->featured_media);
+                curl_setopt($curl, CURLOPT_URL, $this->url. '/media/' . $post->featured_media);
                 $raw_media = curl_exec($curl) or abort(502);
                 $raw_media = json_decode($raw_media);
                 $curpost["thumb"] = isset($raw_media->source_url) ? preg_replace("/^http:/i", "https:", $raw_media->source_url) : '';
