@@ -29,4 +29,13 @@ class Story extends Model
     {
         return $this->belongsToMany(Video::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function assets()
+    {
+        return $this->belongsToMany(Asset::class);
+    }
+
 }

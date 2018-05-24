@@ -193,7 +193,15 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+	Route::get('stories/refresh', array('uses' => 'Admin\AdminStoryController@refresh'));
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
+
+    Route::get('mailers', 'Admin\AdminClientMailerController@index');
+    Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
+    Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
+    Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');
+    Route::post('mailers/update', array('uses' => 'Admin\AdminClientMailerController@update'));
+    Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 
     Route::get('clients', 'Admin\AdminClientController@index');
     Route::get('clients/create', 'Admin\AdminClientController@create');

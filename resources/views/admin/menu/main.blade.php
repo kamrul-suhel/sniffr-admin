@@ -8,6 +8,32 @@
         </a>
     </li>
 
+    @if(Auth::user()->isAdmin())
+    <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
+        <a href="{{ url('admin/stories') }}" class="tlink">
+            <i class="fa fa-tasks"></i>
+            <span class="title">Stories</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ url('admin/mailers') }}">
+                    <span class="title">Mailers</span>
+                </a>
+            </li>
+            <!-- li>
+                <a href="{{ url('admin/mailers') }}">
+                    <span class="title">Edit Client Mailers</span>
+                </a>
+            </li -->
+            <!-- <li>
+                <a href="{{ url('admin/stories/trello') }}">
+                    <span class="title">Stories Board</span>
+                </a>
+            </li> -->
+        </ul>
+    </li>
+    @endif
+
     <li class="{{ Request::segment(2) == 'videos' ? 'active' : '' }}">
         <a href="{{ url('admin/videos') }}" class="tlink">
             <i class="fa fa-youtube-play"></i>
@@ -109,7 +135,7 @@
             <span class="title">Contacts</span>
         </a>
     </li>
-    
+
     @if(Auth::user()->isAdmin())
     <li class="{{ Request::segment(2) == 'clients' ? 'active' : '' }}">
         <a href="{{ url('admin/clients') }}" class="tlink">
