@@ -13,6 +13,7 @@ import ContractComponent from './vue-component/pages/contract/ContractComponent'
 import Notfound from './vue-component/pages/404Component.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientVideosComponent from './vue-component/pages/clients/ClientVideosComponent';
+import ClientVideoDetailComponent from './vue-component/pages/clients/ClientVideoDetailComponent';
 import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
 
 
@@ -110,17 +111,22 @@ export const routes = [
 
     {
         path: '/client',
-        name: 'client',
         component: ClientComponent,
         children:[
             {
                 path: '',
-                name: 'client_videos',
+                name: 'client',
                 component:ClientVideosComponent
             },
 
             {
-                path: 'video/:alpha_id',
+                path: 'video/:detail',
+                name: 'client_video_detail',
+                component: ClientVideoDetailComponent
+            },
+
+            {
+                path: 'downloads',
                 name: 'client_video_download',
                 component: ClientVideoDownloadComponent
             },

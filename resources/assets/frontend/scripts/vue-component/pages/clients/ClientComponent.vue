@@ -37,14 +37,16 @@
 
         methods: {
             checklogin(){
-                let login_status = this.$store.getters.isUserLogin;
+                this.$store.dispatch('getLoginStatus').then((response) => {
+                    let login_status = this.$store.getters.isUserLogin;
+                    if(!login_status){
+                        this.$store.commit('setAttemptRoute', this.$route);
+                        LoginEventBus.openLoginDialog();
+                    }else{
+                        this.content_show = true;
+                    }
+                });
 
-                if(!login_status){
-                    this.$store.commit('setAttemptRoute', this.$route);
-                    LoginEventBus.openLoginDialog();
-                }else{
-                    this.content_show = true;
-                }
 
             }
         }

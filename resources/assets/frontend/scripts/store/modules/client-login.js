@@ -28,7 +28,6 @@ const mutations = {
 
     setAttemptRoute(state, route){
         state.attempt_route = route;
-        console.log(route);
     }
 }
 
