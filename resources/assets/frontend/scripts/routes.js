@@ -1,6 +1,8 @@
 import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
+import VideoInDialogComponent from './vue-component/pages/videos/VideoInDialogComponent';
+import VideoDialogComponent from './vue-component/layouts/VideoDialogComponent';
 import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
 import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
@@ -9,6 +11,7 @@ import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailCom
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
+import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 
 
@@ -16,7 +19,9 @@ export const routes = [
     {
         path: '',
         name: 'home',
-        component: HomeComponent
+        components: {
+            default: HomeComponent,
+        }
     },
 
     {
@@ -29,6 +34,12 @@ export const routes = [
         path: '/videos/:id',
         name: 'videos_detail',
         component: VideoDetailComponent
+    },
+
+    {
+        path: '/contract/:token/accept',
+        name: 'contract_accept',
+        component: ContractComponent
     },
 
     {

@@ -29,10 +29,16 @@ Vue.use(Vuerouter);
  ********************************************************
  */
 
-
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
+
+/*
+ ********************************************************
+ * Twitter widget for twitter widget loader
+ ********************************************************
+ */
+window.TwitterWidgetsLoader = require('twitter-widgets');
 
 /*
  ********************************************************
@@ -62,6 +68,7 @@ require('./filters/filters');
  */
 
 import {LoginEventBus} from './event-bus/login-event-bus';
+import {VideoDialogBoxEventBux} from './event-bus/video-dialog-box-event-bus';
 
 
 /*

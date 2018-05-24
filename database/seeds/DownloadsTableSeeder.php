@@ -15,7 +15,7 @@ class DownloadsTableSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
+        /*$faker = Faker::create();
         $userIds = User::pluck('id')->toArray();
         $clientIds = Client::pluck('id')->toArray();
         $videoIds = Video::pluck('id')->toArray();
@@ -28,6 +28,6 @@ class DownloadsTableSeeder extends Seeder
                 'video_id' => $faker->randomElement($videoIds),
                 'type' => $faker->randomElement($downloadTypes),
             ]);
-        }
+        }*/
     }
 }

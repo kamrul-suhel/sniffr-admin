@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 import Settings from './modules/settings';
 import User from './modules/user';
 import Videos from './modules/videos';
-import VideoDetail from './modules/video_detail';
+import VideoDetail from './modules/video-detail';
+import VideoDialogBox from './modules/video-dialog-box'
 import VideoSearch from './modules/search';
 import VideoTagSearch from './modules/videos_tag_search';
 
@@ -25,6 +26,7 @@ export const store = new Vuex.Store({
 		User,
 		Videos,
 		VideoDetail,
+		VideoDialogBox,
 		VideoSearch,
 		VideoTagSearch,
 	}

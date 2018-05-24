@@ -4,21 +4,13 @@ return [
 
     'name' => env('APP_NAME', 'Sniffr'),
     'logo' => env('APP_LOGO', ''),
-
     'env' => env('APP_ENV', 'production'),
-
     'debug' => env('APP_DEBUG', false),
-
     'url' => env('APP_URL', 'http://localhost'),
-
     'timezone' => 'UTC',
-
     'locale' => 'en',
-
     'fallback_locale' => 'en',
-
     'key' => env('APP_KEY'),
-
     'cipher' => 'AES-256-CBC',
 
     /*
@@ -83,7 +75,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Schoooch\Youtube\YoutubeServiceProvider::class,
+        Schooch\Youtube\YoutubeServiceProvider::class,
         BaoPham\DynamoDb\DynamoDbServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -156,7 +148,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
-        'Youtube' => Schoooch\Youtube\Facades\Youtube::class,
+        'Youtube' => Schooch\Youtube\Facades\Youtube::class,
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,

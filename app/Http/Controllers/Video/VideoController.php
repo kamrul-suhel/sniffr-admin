@@ -90,7 +90,6 @@ class VideoController extends Controller
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
-
         //save Contact
         $contact = Contact::where('email', Input::get('email'))->first();
 
@@ -122,7 +121,7 @@ class VideoController extends Controller
             : $this->videoService->saveVideoLink($video, Input::get('url'));
 
         // Slack notification
-        if (env('APP_ENV') != 'local') {
+        if (env('APP_ENV') == 'production') {
             $video->notify(new SubmissionNew($video));
         }
 
@@ -233,6 +232,12 @@ class VideoController extends Controller
         return view('frontend.master');
     }
 
+    public function getVideoForVideoDialog($alpha_id){
+        $video = Video::where('state', 'licensed')
+            ->where('alpha_id', $alpha_id)
+            ->orderBy('id', 'DESC')->paginate();
+    }
+
     /**
      * @param Request $request
      * @param string $id
@@ -249,7 +254,7 @@ class VideoController extends Controller
         $isJson = $request->ajax() || $request->isJson();
 
         //Make sure video is active
-        if ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed') {
+        if (($video) && ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed')) {
             $favorited = false;
             $downloaded = false;
             $iFrame = $this->getVideoHtml($video, true);
@@ -298,7 +303,8 @@ class VideoController extends Controller
 
             $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
                 $query->where('name', '=', $tagName);
-            })->paginate($this->videos_per_page);
+            })
+                ->paginate($this->videos_per_page);
 
             return $this->successResponse(['videos' => $videos]);
         }
@@ -426,4 +432,5 @@ class VideoController extends Controller
 
         return view('Theme::video-list', $data);
     }
+
 }
