@@ -6,6 +6,7 @@ const state = {
     avatar: '',
     email: '',
     user_login: false,
+    user_id:''
 }
 
 const mutations = {
@@ -23,10 +24,12 @@ const mutations = {
             state.email = user.email;
             state.avatar = user.avatar;
             state.user_login = true;
+            state.user_id = user.id;
         } else {
             state.username = '';
             state.avatar = '';
             state.email = '';
+            state.user_id = '';
             state.user_login = false;
         }
     }
@@ -74,8 +77,9 @@ const getters = {
             name: state.username,
             email: state.email,
             avatar: state.avatar,
+            id: state.user_id
         }
-    }
+    },
 }
 
 export default {

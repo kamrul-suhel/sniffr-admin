@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Traits\FrontendResponse;
 use Auth;
 use Validator;
 use Redirect;
@@ -22,6 +23,8 @@ use Carbon\Carbon as Carbon;
 
 class AdminStoryController extends Controller
 {
+    use FrontendResponse;
+
 	public $url = 'http://testing.unilad.co.uk/';
 	public $api_path = 'wp-json/wp/v2/';
 	public $token_path = 'wp-json/jwt-auth/v1/token';
@@ -282,6 +285,7 @@ class AdminStoryController extends Controller
 
         return view('admin.stories.create_edit', $data);
     }
+
 
     /**
      * @return $this|\Illuminate\Http\RedirectResponse

@@ -1,7 +1,7 @@
 <template>
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
-            <div class="cdi-content" style="background:url('https://picsum.photos/500/1300/?random')">
+            <div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }">
             </div>
         </v-flex>
 
@@ -14,15 +14,13 @@
                 <v-spacer></v-spacer>
 
                 <v-flex class="text-xs-right">
-                    <div class="cd-time">3 month ago</div>
+                    <div class="cd-time">{{ story.created_at }}</div>
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
                 <v-flex xs12>
-                    <h2>Is simply dummy text of the printing and ....</h2>
-                    <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
-                    <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
-                    <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
+                    <h2>{{story.title}}</h2>
+                    <div v-html="story.excerpt"></div>
                 </v-flex>
             </v-layout>
         </v-flex>
@@ -32,6 +30,7 @@
                     block
                     dark
                     large
+                    @click="goToDetail()"
                     color="dark"
                     class="mb-3">
                 View
@@ -63,6 +62,14 @@
             }
         },
 
+        props:[
+            'story'
+        ],
+
+        created() {
+            console.log(this.story);
+        },
+
         watch: {
             loader () {
                 const l = this.loader
@@ -82,6 +89,20 @@
             onDownloadAllAssets(){
                 this.loader = 'loading';
                 console.log("Send the download all assets request ");
+            },
+
+            goToDetail(){
+
+            },
+
+            getImage(image){
+                console.log(image);
+                if(!image){
+                    console.log('console added');
+                    return '/assets/frontend/images/placeholder.png';
+
+                }
+                return image;
             }
         }
     }
