@@ -18,16 +18,16 @@ class ClientStoryList extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $video, $user;
+    public $mailer, $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(ClientMailer $clientMailer)
+    public function __construct(ClientMailer $mailer)
     {
-        $this->mailer = $clientMailer;
+        $this->mailer = $mailer;
     }
 
     /**

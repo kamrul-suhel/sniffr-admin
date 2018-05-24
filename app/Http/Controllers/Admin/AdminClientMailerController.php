@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Auth;
 use Validator;
 use Redirect;
+use App\Asset;
 use App\User;
 use App\Story;
 use App\Video;
@@ -124,12 +125,6 @@ class AdminClientMailerController extends Controller
         $id = $data['id'];
         $mailer = ClientMailer::findOrFail($id);
 
-        // $validator = Validator::make($data, $this->rules);
-        // if ($validator->fails())
-        // {
-        //     return Redirect::back()->withErrors($validator)->withInput();
-        // }
-
         if(Input::get('note')) {
             $mailer->note = Input::get('note');
         }
@@ -149,10 +144,14 @@ class AdminClientMailerController extends Controller
                 $mailer->notify(new ClientMailer($mailer));
             }
 
+            // set sent_at
+            $mailer->sent_at = now();
+            $mailer->save();
+
             // send mailer to selected clients via email
 			foreach($mailer->users()->get() as $client) {
-                dd($client->id);
-				//QueueClientMailer::dispatch($client->id, $mailer->id);
+                $mailer->users()->update(['sent_at' => now()]);
+				QueueClientMailer::dispatch($client->id, $mailer->id);
 			}
         }
 

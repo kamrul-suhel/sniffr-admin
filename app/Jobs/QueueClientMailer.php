@@ -6,6 +6,7 @@ use App\ClientMailer;
 use App\Contact;
 use App\Story;
 use App\User;
+use App\Asset;
 use App\Video;
 use App\Client;
 use Illuminate\Support\Facades\Mail;
