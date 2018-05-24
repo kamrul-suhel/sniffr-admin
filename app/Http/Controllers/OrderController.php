@@ -20,11 +20,6 @@ class OrderController extends Controller
         return ($orders);
     }
 
-    public function create(Request $request)
-    {
-        return "create form";
-    }
-
     public function store(Request $request)
     {
         $order = new Order();
