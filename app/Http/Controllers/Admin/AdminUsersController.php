@@ -53,7 +53,7 @@ class AdminUsersController extends Controller
 
         $data = [
             'post_route' => url('admin/user/store'),
-            'user' => Auth::user(),
+            'admin_user' => Auth::user(),
             'button_text' => 'Create User',
             'clients' => $clients
         ];
@@ -74,7 +74,7 @@ class AdminUsersController extends Controller
             $input['avatar'] = 'default.jpg';
         }
 
-        $input['password'] = Hash::make('password');
+        $input['password'] = Hash::make($input['password']);
 
         User::create($input);
 

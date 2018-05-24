@@ -1658,7 +1658,7 @@ function setup_sidebar_menu()
 			submenu_open_easing: Sine.easeInOut,
 			submenu_opened_class: 'opened'
 		},
-		root_level_class 	  = 'root-level',
+		root_level_class 	  = 'root-level';
 		is_multiopen 		  = public_vars.$mainMenu.hasClass('multiple-expanded');
 
 	public_vars.$mainMenu.find('> li').addClass(root_level_class);
@@ -1826,7 +1826,7 @@ function setup_horizontal_menu()
 		$search				  = public_vars.$horizontalMenu.find('li#search'),
 		$search_input		  = $search.find('.search-input'),
 		$search_submit		  = $search.find('form'),
-		root_level_class 	  = 'root-level'
+		root_level_class 	  = 'root-level',
 		is_multiopen 		  = $nav_bar_menu.hasClass('multiple-expanded'),
 		submenu_options		  = {
 			submenu_open_delay: 0.5,
