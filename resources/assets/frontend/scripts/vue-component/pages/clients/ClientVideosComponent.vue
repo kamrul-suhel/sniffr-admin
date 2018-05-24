@@ -1,6 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <div class="videos-section">
+    <div class="videos-section section-space">
 
         <search-component @searchOption="searchOption($event)"></search-component>
 
@@ -49,7 +49,6 @@
                 videos: '',
                 paginate: '',
                 current_page: 0,
-
             }
         },
         watch: {

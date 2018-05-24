@@ -2,6 +2,7 @@ const state = {
     client_login : false,
     client_name: '',
     client_id : '',
+    attempt_route: ''
 
 }
 
@@ -23,6 +24,11 @@ const mutations = {
             state.email = '';
             state.user_login = false;
         }
+    },
+
+    setAttemptRoute(state, route){
+        state.attempt_route = route;
+        console.log(route);
     }
 }
 
@@ -55,7 +61,8 @@ const actions = {
                     reject();
                 });
         })
-    }
+    },
+
 }
 
 const getters = {
@@ -69,6 +76,10 @@ const getters = {
             email: state.email,
             avatar: state.avatar,
         }
+    },
+
+    getAttepmtRoute(state){
+        return state.attempt_route;
     }
 }
 

@@ -11,6 +11,7 @@ import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeC
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
+import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientVideosComponent from './vue-component/pages/clients/ClientVideosComponent';
 import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
 
@@ -109,14 +110,22 @@ export const routes = [
 
     {
         path: '/client',
-        name: 'client_videos',
-        component: ClientVideosComponent,
-    },
+        name: 'client',
+        component: ClientComponent,
+        children:[
+            {
+                path: '',
+                name: 'client_videos',
+                component:ClientVideosComponent
+            },
 
-    {
-        path: '/client/videos/:alpha_id',
-        name: 'client_video_download',
-        component: ClientVideoDownloadComponent
+            {
+                path: 'video/:alpha_id',
+                name: 'client_video_download',
+                component: ClientVideoDownloadComponent
+            },
+
+        ],
     },
 
     {
