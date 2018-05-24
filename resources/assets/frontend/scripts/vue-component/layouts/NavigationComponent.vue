@@ -126,6 +126,15 @@
                 this.is_login = false;
             });
 
+            LoginEventBus.$on('clientLoginSuccess', () => {
+                this.$store.dispatch('getLoginStatus').then((response) => {
+                    this.is_login = this.$store.getters.isUserLogin;
+                    if(this.is_login){
+                        this.user = this.$store.getters.getUser;
+                    }
+                });
+            });
+
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;
                 if(this.is_login){
