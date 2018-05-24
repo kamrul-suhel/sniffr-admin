@@ -135,7 +135,7 @@ class AdminClientMailerController extends Controller
         }
 
         if(Input::get('clients')) {
-            $mailer->logs()->sync(Input::get('clients'));
+            $mailer->users()->sync(Input::get('clients'));
         }
 
         $mailer->user_id = (Auth::user() ? Auth::user()->id : $mailer->user_id);
@@ -150,8 +150,9 @@ class AdminClientMailerController extends Controller
             }
 
             // send mailer to selected clients via email
-			foreach($mailer->logs()->get() as $client) {
-				QueueClientMailer::dispatch($client->id, $mailer->id);
+			foreach($mailer->users()->get() as $client) {
+                dd($client->id);
+				//QueueClientMailer::dispatch($client->id, $mailer->id);
 			}
         }
 

@@ -2,6 +2,8 @@
 
 @section('content')
 
+	<ol class="breadcrumb"> <li> <a href="/admin/stories"><i class="fa fa-tasks"></i> All Stories</a> </li> </ol>
+
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
@@ -9,7 +11,7 @@
 					<i class="fa fa-users"></i> Stories
 					<a href="#" class="btn btn-primary pull-right js-create-mailer">
 						<i class="fa fa-plus-circle"></i> Create Mailer
-					</a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right">
+					</a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right" style="margin-right:10px;">
 						<i class="fa fa-refresh"></i> Refresh Stories
 					</a>
 					<!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
@@ -76,7 +78,6 @@
 					    dataType: 'json',
 					    success: function (data) {
 							if(data.status=='success') {
-								//console.log(data);
 								if(data.mailer_id) {
 									window.location.href = '/admin/mailers/edit/'+data.mailer_id;
 								}
@@ -85,6 +86,8 @@
 							}
 					    }
 					});
+				} else {
+					swal({  title: 'Please select some stories first under [Actions]', icon: 'error', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
 				}
 			});
 		});

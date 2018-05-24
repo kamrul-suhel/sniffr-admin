@@ -5,14 +5,22 @@
 <div id="admin-container">
 <!-- This is where -->
 
-	<ol class="breadcrumb"> <li> <a href="/admin/mailers"><i class="fa fa-newspaper-o"></i>All Client Mailers</a> </li> <li class="active">@if(!empty($mailer->id)) <strong>Mailer Id {{ $mailer->alpha_id }}</strong> @else <strong>New Client Mailer</strong> @endif</li> </ol>
-
-	<div class="admin-section-title">
-		<h3><i class="fa fa-plus"></i> Review Client Mailer</h3>
-	</div>
-	<div class="clear"></div>
+	<ol class="breadcrumb"> <li> <a href="/admin/mailers"><i class="fa fa-tasks"></i> All Client Mailers</a> </li> <li class="active">@if(!empty($mailer->id)) <strong>Mailer Id {{ $mailer->alpha_id }}</strong> @else <strong>New Client Mailer</strong> @endif</li> </ol>
 
 	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data" id="form-mailer">
+
+	<div class="admin-section-title bottom-padding">
+		<div class="row">
+			<div class="col-xs-12">
+				<h3>
+					<i class="fa fa-plus"></i> Review Client Mailer
+					<input type="submit" value="{{ $button_text }}" class="btn btn-primary pull-right" />
+					<a href="#" class="btn btn-success pull-right js-save-mailer" style="margin-right:10px;">Save Mailer</a>
+				</h3>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
 
 		<div class="row">
 
@@ -155,8 +163,7 @@
 
 		<input type="hidden" name="send_mailer" value="1" />
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
-		<input type="submit" value="{{ $button_text }}" class="btn btn-primary pull-right" />
-		<a href="#" class="btn btn-success pull-right js-save-mailer" style="margin-right:10px;">Save Mailer</a>
+
 	</form>
 
 	<div class="clear"></div>

@@ -1,17 +1,24 @@
-Hey {{ $video->contact->full_name }}!
+Hi,
 
-Video Ref: {{ $video->alpha_id }}
+@if(!empty($mailer->note)) {{ $mailer->note }} @endif
 
-Thanks for sending through your video! It has now been sent over to our content team who will review it and decide if it’s something they’re looking for.
+@if(!empty($mailer->stories))
+    @foreach($mailer->stories as $story)
+        {{ TextHelper::shorten($story['title'], 250) }}
+        by {{ $story['author'] }}
 
-They will email you with an update on this process ASAP.
+        @if($story['thumb'])IMG: {{ $story['thumb'] }} @endif
+        {{ $story['excerpt'] }}..
+        REQUEST LICENSE: link
+        --------
 
-You may be asked to fill out some more details so be sure to keep an eye out for them getting in touch!
+    @endforeach
+@else
+    No Stories have been selected.
+@endif
 
 Regards,
 
 The UNILAD Team
 
 (powered by Sniffr)
-
-Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}

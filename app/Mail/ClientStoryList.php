@@ -18,7 +18,7 @@ class ClientStoryList extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $video, $contact;
+    public $video, $user;
 
     /**
      * Create a new message instance.

@@ -46,10 +46,10 @@ class QueueClientMailer implements ShouldQueue
      */
     public function handle()
     {
-        $mailer = ClientMailer::find(1);
+        $mailer = ClientMailer::find($this->mailer_id);
 		$user = User::find($this->client_id);
 
-        //check if contact has unsubcribed (contact_id!=0)
+        //check if user has unsubcribed (user_id!=0)
 		Mail::to($user->email)->send(new ClientStoryList($mailer));
     }
 
@@ -63,6 +63,6 @@ class QueueClientMailer implements ShouldQueue
     {
         // Send user notification of failure, etc...
         $user = new User();
-        $user->notify(new ClientMailer('A client mailer failed to send, please check job queue (Id: ' . $this->video_id . ')'));
+        $user->notify(new ClientMailer('Failed to send an email within a client mailer, please check user (Id: ' . $this->client_id . ')'));
     }
 }

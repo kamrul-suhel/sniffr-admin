@@ -2,6 +2,8 @@
 
 @section('content')
 
+	<ol class="breadcrumb"> <li> <a href="/admin/mailers"><i class="fa fa-tasks"></i> All Client Mailers</a> </li> </ol>
+
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">

@@ -91,7 +91,6 @@ class AdminStoryController extends Controller
         return ($matches[0]);
     }
 
-
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
@@ -177,7 +176,6 @@ class AdminStoryController extends Controller
 					}
 				}
 
-
 				$story->alpha_id = VideoHelper::quickRandom();
 				$story->wp_id = $story_wp['wp_id'];
 				$story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
@@ -187,6 +185,7 @@ class AdminStoryController extends Controller
 				$story->status = $story_wp['status'];
 				$story->state = 'licensed';
 				$story->title = $story_wp['title'];
+                $story->url = $story_wp['url'];
 				$story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
 				$story->user_id = (Auth::user() ? Auth::user()->id : 0);
 				$story->active = 1;
