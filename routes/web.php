@@ -247,6 +247,8 @@ Route::group(array('prefix' => 'admin'), function () {
 */
 
 Route::group(array('prefix' => 'client'), function () {
+    Route::resource('orders', 'OrderController');
+
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/view/{id}', 'Client\ClientVideosController@view');

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             VideoCollectionsTableSeeder::class,
             VideoShotTypesTableSeeder::class,
             VideosTableSeeder::class,
+            StoryTableSeeder::class,
             CampaignsTableSeeder::class,
             CampaignVideoTableSeeder::class,
             CommentsTableSeeder::class,
