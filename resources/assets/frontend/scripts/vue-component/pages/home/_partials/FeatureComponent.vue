@@ -33,7 +33,6 @@
         },
 
         methods:{
-
         },
 
         created(){

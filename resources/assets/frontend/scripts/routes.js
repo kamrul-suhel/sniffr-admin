@@ -1,6 +1,8 @@
 import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
+import VideoInDialogComponent from './vue-component/pages/videos/VideoInDialogComponent';
+import VideoDialogComponent from './vue-component/layouts/VideoDialogComponent';
 import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
 import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
@@ -17,7 +19,9 @@ export const routes = [
     {
         path: '',
         name: 'home',
-        component: HomeComponent
+        components: {
+            default: HomeComponent,
+        }
     },
 
     {

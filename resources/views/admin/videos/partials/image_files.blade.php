@@ -8,7 +8,7 @@
         </span>
     </span>
     <span class="col-md-6">
-        @if(!empty($video->image))
+        @if($video->image != 'placeholder.gif')
             <img src="{{ $video->image }}" class="video-img" width="200"/>
         @endif
     </span>

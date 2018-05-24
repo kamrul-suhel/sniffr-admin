@@ -10,7 +10,7 @@
         </div>
 
         <div class="panel-body" style="display: block;">
-            @if($video->contact_id!=0)
+            @if(($video->contact) && $video->contact_id!=0)
                 <h3>
                     <a href="{{ route('contacts.update', ['id' => $video->contact->id]) }}">
                         {{ $video->contact->full_name or 'Not submitted' }}

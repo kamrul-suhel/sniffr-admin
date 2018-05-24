@@ -61,6 +61,17 @@
                     </div>
                 </div>
 
+                @if(key_exists($video->currentContract->contract_model_id, config('contracts')))
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">Contract Template</span>
+                            <input type="text" class="form-control" disabled="disabled" value="{!!
+                            config('contracts')[$video->currentContract->contract_model_id]['name']
+                            !!}">
+                        </div>
+                    </div>
+                @endif
+
                 @if($video->currentContract->signed_at)
                     <div class="col-md-12">
                         <div class="input-group">
@@ -128,6 +139,6 @@
     </button>
 @else
     <p>
-        Can't create/send a contract if there the video is not assigned to a creator
+        We cannot create a contract if the video is not assigned to a creator/contact. Perhaps the contact has unsubscribed.
     </p>
 @endif

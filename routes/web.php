@@ -28,6 +28,7 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('tags', 'ThemeTagController@index');
 
+
     /*
     |--------------------------------------------------------------------------
     | Submission Routes (for exclusive and non-exclusive videos)
@@ -66,6 +67,7 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     |--------------------------------------------------------------------------
     */
     Route::get('search', 'SearchController@index')->name('search');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -191,7 +193,15 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+	Route::get('stories/refresh', array('uses' => 'Admin\AdminStoryController@refresh'));
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
+
+    Route::get('mailers', 'Admin\AdminClientMailerController@index');
+    Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
+    Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
+    Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');
+    Route::post('mailers/update', array('uses' => 'Admin\AdminClientMailerController@update'));
+    Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 
     Route::get('clients', 'Admin\AdminClientController@index');
     Route::get('clients/create', 'Admin\AdminClientController@create');
@@ -254,6 +264,20 @@ Route::group(array('prefix' => 'client'), function () {
     Route::get('dailies/status/{state}/{id}', array('uses' => 'Client\ClientDailiesController@status'));
     Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
 });
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Frontend video dialog box, getting current video, next & previous link
+|--------------------------------------------------------------------------
+*/
+
+Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
+Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
+Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
+Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+
 
 /*
 |--------------------------------------------------------------------------

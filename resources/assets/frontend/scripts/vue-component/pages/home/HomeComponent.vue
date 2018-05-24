@@ -12,7 +12,7 @@
                     <v-layout row wrap>
                         <v-flex xs12 sm6 md4 lg4>
                             <div class="logo">
-                                <a href=""><img src="/assets/frontend/images/logo-sniffr-white.png"/></a>
+                                <router-link to="/" tag="a"><img src="/assets/frontend/images/logo-sniffr-white.png"/></router-link>
                             </div>
                         </v-flex>
                         

@@ -86,7 +86,7 @@
 
                         <div class="col-md-12">
                             <div class="input-group">
-                                <span class="input-group-addon">Contract Type</span>
+                                <span class="input-group-addon">Contract Template</span>
                                 <select type="text" class="form-control" id="contract_model_id" name="contract_model_id"
                                         title="success system">
                                     @foreach(config('contracts') as $contract)

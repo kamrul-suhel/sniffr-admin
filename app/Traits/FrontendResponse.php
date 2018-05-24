@@ -48,7 +48,8 @@ trait FrontendResponse
             'filmed_by_me',
             'permission',
             'is_exclusive',
-            'terms'
+            'terms',
+            'licensed_at'
         ];
 
         return $fields;

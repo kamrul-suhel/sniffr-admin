@@ -15,7 +15,11 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg>
                 <transition-group name="slide-fade" tag="div" class="layout row wrap">
-                        <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
+                        <videoloop-component
+                                v-for="(video, index) in videos"
+                                :video="video"
+                                :key="video.alpha_id">
+                        </videoloop-component>
                 </transition-group>
             </v-container>
         </section>
@@ -28,7 +32,8 @@
 <script>
     import SearchComponent from '../../includes/SearchComponent';
     import VideoLoopComponent from '../../includes/VideoLoopComponent';
-    import PaginationComponent from '../../includes/PaginationComponent'
+    import PaginationComponent from '../../includes/PaginationComponent';
+    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default{
         components:{
@@ -42,6 +47,7 @@
                 videos: '',
                 paginate: '',
                 current_page: 0,
+
             }
         },
         watch: {
@@ -50,8 +56,7 @@
                 this.updateVideodata();
             }
         },
-        beforeCreate(){
-        },
+
         created(){
             if(this.$route.query.page){
                 this.current_page = this.$route.query.page;
@@ -60,7 +65,6 @@
 
         },
         methods: {
-
             setAlldata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
@@ -72,7 +76,7 @@
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then( () => {
                     this.videos = this.$store.getters.getVideoData;
                 });
-            }
+            },
         }
     }
 </script>

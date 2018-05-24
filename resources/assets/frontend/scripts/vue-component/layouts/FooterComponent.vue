@@ -54,9 +54,14 @@
                 </v-flex>
             </v-layout>
         </v-container>
+
+        <!-- Video dialog box -->
+        <video-dialog-component></video-dialog-component>
     </section>
 </template>
 <script>
+    import VideoDialogComponent from './VideoDialogComponent'
+
     export default {
         data() {
             return {
@@ -66,8 +71,13 @@
         created() {
 
         },
+
         methods: {
 
         },
+
+        components: {
+            VideoDialogComponent
+        }
     }
 </script>

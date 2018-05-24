@@ -1,10 +1,10 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl4>
+    <v-flex xs12 sm6 md4 lg4 xl3>
         <v-card class="block">
             <v-card-media class="sniffr-media-thumbnail"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <a
-                @click.stop="goToDetail()"
+                @click.stop="openVideoDialog(video)"
                 class="block-thumbnail"
                 >
                     <div class="thumbnail-overlay"></div>
@@ -26,24 +26,26 @@
             </v-card-media>
 
             <v-card-title class="pb-0">
-                <h3 class="headline mb-0">
+                <h3 class="headline mb-0" @click.stop="goToDetail(video)">
                     {{ video.title }}
                 </h3>
             </v-card-title>
 
             <v-card-text class="pt-0">
-                <div class="video-content">
+                <div class="video-content" v-if="video.description != 'null'">
                     {{ video.description | readmore(100, '...') }}
                 </div>
             </v-card-text>
         </v-card>
     </v-flex>
 </template>
+
 <script>
+    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus'
     export default {
         data() {
             return {
-                video_image: '/assets/frontend/images/placeholder.png'
+                video_image: '/assets/frontend/images/placeholder.png',
             }
         },
         props:['video'],
@@ -63,6 +65,12 @@
             goToDetail() {
                 this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
 
+            },
+
+            openVideoDialog(video){
+                let url = '/videos/'+video.alpha_id;
+                window.history.pushState(null, "page 2",url);
+                VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
             }
         },
 
