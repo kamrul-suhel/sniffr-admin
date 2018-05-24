@@ -7,7 +7,7 @@
                     <h2 class="text-center text-uppercase">Terms Of Use</h2>
                     <h2>Ownership</h2>
                     <p>I certify that I am the sole owner of all intellectual property rights for this video or have the express permission of the rights holder to submit this video to SNIFFR for exclusive publishing on SNIFFR.</p>
-                    <p>I agree to submit and licence this video and its content to SNIFFR and their associated companies for their use at their sole discretion, in exchange you will be given the opportunity to receive a one of fee of £100.</p>
+                    <p>I agree to submit and licence this video and its content to SNIFFR and their associated companies for their use at their sole discretion, in exchange you will be given the opportunity to receive a one of fee of £100 if the video is used on the SNIFFR facebook page as a stand alone post, not part of a compilation.</p>
                     <h2>Video Publishing Acknowledgement</h2>
                     <p>I understand that the video I am submitting may be published to SNIFFR web properties including, but not limited to, YouTube, sniffrmedia.co.uk, Twitter, Facebook, and any other avenues of promotion, as determined by SNIFFR according to the terms of this agreement, which I have read and agree to.</p>
                     <h2>Exclusive Licensing</h2>
@@ -24,7 +24,7 @@
                     <p>I understand that participation in the SNIFFR video system is at will and I agree that this license may only be terminated by mutual agreement between SNIFFR and I as set out above.</p>
                     <p>I certify that I am the sole owner of all intellectual property rights for this video or have the express permission of the rights holder to submit this video to SNIFFR for exclusive publishing on SNIFFR.</p>
                     <p>I agree to submit and licence this video and its content to SNIFFR and their associated companies for their use at their sole discretion, in exchange you will be given the opportunity to receive a one of fee of £100.</p>
-                    
+
                 </div>
             </v-container>
         </section>
