@@ -106,7 +106,7 @@ class AuthController extends Controller
         if (key_exists(Auth::user()->role, config('roles.admins'))) {
             $redirect_route = '/admin';
         } elseif (key_exists(Auth::user()->role, config('roles.clients'))) {
-            $redirect_route = '/client/videos';
+            $redirect_route = '/client/stories/mail';
         }
 
         $redirect = ($request->input('redirect')) ?: $redirect_route;
