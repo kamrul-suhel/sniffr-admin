@@ -25,9 +25,10 @@ class ClientStoryList extends Mailable
      *
      * @return void
      */
-    public function __construct(ClientMailer $mailer)
+    public function __construct(ClientMailer $mailer, User $user)
     {
         $this->mailer = $mailer;
+		$this->user = $user;
     }
 
     /**
