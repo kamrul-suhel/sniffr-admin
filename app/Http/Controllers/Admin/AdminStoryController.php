@@ -110,7 +110,7 @@ class AdminStoryController extends Controller
 				"excerpt" => substr(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),0,700).'...',
 				"description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
 				"url" => $post->link,
-				"date" => Carbon::parse($post->date)->formatLocalized('%d %B %Y'),
+				"date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
 				"author" => ''
 			];
 
@@ -149,14 +149,11 @@ class AdminStoryController extends Controller
 			$story_ids[] = $post->id;
 		}
 
-		// Would be good to sync up stories table with
-		// $story_sync = Story::whereIn('wp_id', $story_ids)
-		//     ->get();
-
 		// store stories from wordpress in database
 		foreach($stories_wp as $story_wp){
 
-			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+			// checks if wp post already exists within sniffr stories (TO DO: or if wp post has been updated)
+			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first(); //, ['date', '>', Carbon::now()->subDays(30)->toDateTimeString()]
 
 			if(!$story_find) {
 				$story = new Story();
