@@ -56,6 +56,7 @@
 <script>
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus';
     import VideoDialogComponent from '../pages/videos/VideoInDialogComponent';
+    import LoginEventBus from '../../event-bus/login-event-bus';
 
     export default {
         data() {
@@ -79,6 +80,7 @@
                     let url = this.$store.getters.getEnterStateUrl;
                     window.history.pushState(null, '', url)
                     this.$store.commit('setResetVideoDialogObject');
+                    LoginEventBus.$emit('onResetCurrentVideoIndialog');
                 }
             }
         },
