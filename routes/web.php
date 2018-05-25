@@ -130,6 +130,9 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 Route::group(array('prefix' => 'admin'), function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
+    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
+    Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
+
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');

@@ -69,6 +69,12 @@
 							<span class="fa fa-trash"></span>
 							Delete
 						</a>
+						@if($user->client_id)
+							<a href="{{ route('users.stories.sent', ['id' => $user->id]) }}" class="btn btn-xs btn-info">
+								<span class="fa fa-edit"></span>
+								Stories Sent
+							</a>
+						@endif
 					</td>
 				</tr>
 			@endforeach

@@ -10,9 +10,6 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $client_id = \Auth::user()->client_id;
-        if(key_exists(\Auth::user()->role, config('roles.admins'))) {
-            $client_id = $request->input('client_id');
-        }
 
         $orders = Order::with('stories')
             ->where('client_id', '=', $client_id)
