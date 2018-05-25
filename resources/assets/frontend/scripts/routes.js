@@ -16,6 +16,7 @@ import ClientVideosComponent from './vue-component/pages/clients/ClientVideosCom
 import ClientVideoDetailComponent from './vue-component/pages/clients/ClientVideoDetailComponent';
 import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
 import ClientMailComponent from './vue-component/pages/clients/ClientMailComponent';
+import ClientStoryDetailComponent from './vue-component/pages/clients/ClientStoryDetailComponent';
 
 
 export const routes = [
@@ -133,13 +134,13 @@ export const routes = [
             },
 
             {
-                path: 'stories/alpha_id',
+                path: '/client/story/show/:alpha_id',
                 name: 'client_story_detail',
-                component: ClientVideoDetailComponent
+                component: ClientStoryDetailComponent
             },
 
             {
-                path: 'stories/mail',
+                path: 'mail',
                 name: 'client_story_mail',
                 component: ClientMailComponent
             },

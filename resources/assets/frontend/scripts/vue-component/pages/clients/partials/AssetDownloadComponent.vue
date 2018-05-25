@@ -48,7 +48,10 @@
                 Download all assets
             </v-btn>
         </v-flex>
-        <v-flex xs12 class="my-4"><v-divider></v-divider></v-flex>
+
+        <v-flex xs12 class="my-4">
+            <v-divider></v-divider>
+        </v-flex>
     </v-layout>
 </template>
 
@@ -92,7 +95,7 @@
             },
 
             goToDetail(){
-
+                this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
 
             getImage(image){

@@ -17,10 +17,17 @@ class FrontendStoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function getMailerStories(Request $request){
+
+
         if($request->ajax() || $request->isJson()){
+           $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories')
-                ->where('user_id', '=', $request->user_id)
+                ->whereHas('users', function ($query) use($user_id) {
+                    $query->where('users.id', '=', $user_id);
+                })
+                ->orderBy('created_at', 'DESC')
                 ->first();
+
             $data = [
                 'stories' => $client_mailer->stories
             ];
@@ -34,16 +41,19 @@ class FrontendStoryController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(string $alpha_id, Request $request)
+    public function show(Request $request)
     {
-        $story_id = Story::select('id')->where('alpha_id','=',$alpha_id)->first()['id'];
-        $story = Story::with('assets')->with('videos')->find($story_id);
 
-        $data = [
-            'story' => $story,
-        ];
+        if($request->ajax() || $request->isJson()){
+            $story_id = Story::select('id')->where('alpha_id','=', $request->alpha_id)->first()['id'];
+            $story = Story::with('assets')->with('videos')->find($story_id);
 
-        if($request->ajax() || $request->json()){
+            $description = preg_replace("/<img[^>]+\>/i", "", $story->description);
+
+            $story->description = $description;
+            $data = [
+                'story' => $story,
+            ];
            return $this->successResponse($data);
         }
 

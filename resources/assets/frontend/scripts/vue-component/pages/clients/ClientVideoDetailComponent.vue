@@ -23,51 +23,6 @@
                         <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
                 </v-layout>
-
-                <v-layout row wrap>
-                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}"
-                            align-content-center
-                            xs12 sm12 md7 lg7 xl7>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <div v-html="video_detail.iframe"></div>
-                            </v-flex>
-
-                            <v-flex xs12>
-                                <v-layout row wrap class="client-assets">
-                                    <asset-component v-for="item in 6" :key="item"></asset-component>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
-
-                    </v-flex>
-
-                    <v-flex xs12 sm12 md5 lg5 xl5>
-                        <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
-                            <v-flex xs12>
-                                <h2>{{ video_detail.video.title }}</h2>
-                                <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
-                                <div class="video-detail-tags" v-if="tags.length > 0">
-                                    <h3 id="tags">Tags:</h3>
-                                    <ul>
-                                        <li v-for="tag in tags">
-                                            <router-link :to="'/videos/tag/'+tag.name">
-                                                #{{ tag.name }}
-                                            </router-link>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </v-flex>
-
-                            <v-flex xs12>
-                                <v-layout column wrap align-end class="video-detail-sidebar">
-                                    <v-btn dark block large class="dark mt-0" @click="downloadAssets()"><v-icon left >cloud_download</v-icon>Download all asset</v-btn>
-                                </v-layout>
-                            </v-flex>
-
-                        </v-layout>
-                    </v-flex>
-                </v-layout>
             </v-container>
         </div>
     </section>
@@ -77,11 +32,6 @@
     import AssetComponent from './partials/AssetComponent';
     export default {
         beforeRouteEnter: (to, from, next) => {
-            axios.get('/islogin')
-                .then((response) => {
-                    console.log(response);
-                });
-            next();
         },
 
         components: {

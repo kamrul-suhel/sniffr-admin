@@ -267,9 +267,9 @@ Route::group(array('prefix' => 'client'), function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/client/stories/mail', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail');
+Route::get('/client/mail', 'Frontend\FrontendStoryController@getMailerStories')->name('client.mail');
 Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
-Route::get('/client/story/show/{alpha_id}', 'Admin\AdminStoryController@show');
+Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
 
 /*
 |--------------------------------------------------------------------------

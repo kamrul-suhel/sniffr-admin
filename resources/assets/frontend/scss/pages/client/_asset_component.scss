@@ -30,25 +30,25 @@
 
   @include small-device {
     .thumbnail {
-      height:120px;
+      height:150px;
     }
   }
 
   @include medium-device {
     .thumbnail {
-      height:120px;
+      height: 150px;
     }
   }
 
   @include large-device {
     .thumbnail {
-      height:120px;
+      height: 150px;
     }
   }
 
   @include extra-large-device {
     .thumbnail {
-      height:150px;
+      height: 200px;
     }
   }
 

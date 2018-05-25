@@ -1,16 +1,14 @@
 <template>
-    <v-flex xs6 sm4 lg4 xl3>
-        <div class="thumbnail client-assets" @click="showDownloadButton" style="background:url('https://picsum.photos/500/1300/?random')">
-            <div class="download_asset" :class="{show: showButton}">
-                <v-btn fab dark small color="dark"
-                       :loading="loading"
-                       :disabled="loading"
-                       @click.native="downloadAsset()">
-                    <v-icon dark>cloud_download</v-icon>
-                </v-btn>
-            </div>
+    <div class="thumbnail mb-4" @click="showDownloadButton" :style="{backgroundImage:'url('+asset.url+')'}">
+        <div class="download_asset" :class="{show: showButton}">
+            <v-btn fab dark small color="dark"
+                   :loading="loading"
+                   :disabled="loading"
+                   @click.native="downloadAsset()">
+                <v-icon dark>cloud_download</v-icon>
+            </v-btn>
         </div>
-    </v-flex>
+    </div>
 </template>
 
 <script>
@@ -19,9 +17,12 @@
             return {
                 loading:false,
                 loader: null,
-                showButton : false
+                showButton : false,
+                img :'',
             }
         },
+
+        props:['asset'],
 
         watch: {
             loader () {
@@ -32,6 +33,9 @@
 
                 this.loader = null
             }
+        },
+        created() {
+
         },
 
         methods: {

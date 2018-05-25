@@ -3,7 +3,7 @@
         <v-container grid-list-lg>
             <v-layout row wrap>
                 <v-flex>
-                    <h2>Welcome Stories</h2>
+                    <h2>Mail</h2>
                 </v-flex>
             </v-layout>
 
