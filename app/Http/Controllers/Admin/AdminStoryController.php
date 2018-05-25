@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Download;
 use Auth;
+use Chumper\Zipper\Facades\Zipper;
 use Validator;
 use Redirect;
 use App\User;
@@ -89,6 +91,55 @@ class AdminStoryController extends Controller
         preg_match_all($regex, $string, $matches);
         //return (array_reverse($matches[0]));
         return ($matches[0]);
+    }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function download($id)
+    {
+        $story = Story::find($id);
+
+        if (!$story) {
+            abort(404, 'Story Not Found Found');
+        }
+
+        $videos = Video::with('stories')->whereHas('stories', function ($query) use ($id) {
+            $query->where('stories.id', '=', $id);
+        })->get();
+
+        $assets = Asset::with('stories')->whereHas('stories', function ($query) use ($id) {
+            $query->where('stories.id', '=', $id);
+        })->get();
+
+        if ((!$assets->count()) && (!$videos->count())) {
+            abort(404, 'No Assets Found in this Story');
+        }
+
+        $newZipFileName = 'public/zips/'.time().'.zip';
+        $files = [];
+
+        if ($assets->count()) {
+            foreach ($assets as $asset) {
+                $filename = rand(10, 999);
+                $tempImage = tempnam(sys_get_temp_dir(), $filename) . '.jpg';
+                copy($asset->url, $tempImage);
+                $files[] = $tempImage;
+            }
+        }
+
+        if ($videos->count()) {
+            foreach ($videos as $video) {
+                $filename = rand(10, 99) . '.mov';
+                $tempVideo = tempnam(sys_get_temp_dir(), $filename);
+                copy($video->file, $tempVideo);
+                $files[] = $tempVideo;
+            }
+        }
+
+        Zipper::make($newZipFileName)->add($files)->close();
+        return response()->download($newZipFileName);
     }
 
 	/**

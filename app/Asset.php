@@ -22,5 +22,4 @@ class Asset extends Model
     {
         return $this->belongsToMany(Story::class);
     }
-
 }
