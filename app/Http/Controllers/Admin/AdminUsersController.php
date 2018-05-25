@@ -149,8 +149,8 @@ class AdminUsersController extends Controller
     public function storiesSent(Request $request, $user_id)
     {
         $user = User::find($user_id);
-        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) {
-            $query->where('users.id', '=', 3);
+        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) use ($user_id) {
+            $query->where('users.id', '=', $user_id);
         })->orderBy('sent_at', 'DESC')->get();
 
         return view('admin.users.stories_sent', [
