@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Order;
 use Auth;
 use Validator;
 use Redirect;
@@ -136,6 +137,23 @@ class AdminClientController extends Controller
         return Redirect::to('admin/clients')->with([
             'note' => 'Successfully Deleted Client',
             'note_type' => 'success'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $client_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function orders(Request $request, $client_id)
+    {
+        $client = Client::find($client_id);
+        $orders = Order::where('client_id', '=', $client_id)
+            ->get();
+
+        return view('admin.clients.orders', [
+            'orders' => $orders,
+            'client' => $client,
         ]);
     }
 }
