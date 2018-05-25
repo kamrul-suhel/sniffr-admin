@@ -140,7 +140,7 @@ class AdminClientMailerController extends Controller
         // If send mailer (rather than just saved) then queue mailer to send
         if(Input::get('send_mailer')==1) {
             // Slack notification
-            if (env('APP_ENV') == 'production') {
+            if (env('APP_ENV') == 'prod') {
                 $mailer->notify(new ClientMailer($mailer));
             }
 
