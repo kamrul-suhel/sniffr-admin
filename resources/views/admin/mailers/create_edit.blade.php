@@ -57,7 +57,7 @@
 													</td>
 													<td>
 														<br />{{ $story['excerpt'] }}..
-														<br /><br /><a href="#" style="background:#000;color:#fff;padding:10px 6px;border-radius:5px;display:inherit;margin-top:20px;">Request License</a>
+														<br /><br /><a href="#" style="background:#000;color:#fff;padding:10px 6px;border-radius:5px;display:inherit;margin-top:20px;font-weight:bold;">View story</a>
 													</td>
 												</tr>
 												@endforeach

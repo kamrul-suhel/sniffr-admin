@@ -38,6 +38,6 @@ class ClientStoryList extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.clientmailers.mailer')->text('emails.clientmailers.mailer_plain')->subject('Sniffr Video Suggestions');
+        return $this->view('emails.clientmailers.mailer')->text('emails.clientmailers.mailer_plain')->subject('SNIFFR Video Suggestions');
     }
 }
