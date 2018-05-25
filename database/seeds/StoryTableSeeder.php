@@ -23,6 +23,7 @@ class StoryTableSeeder extends Seeder
 
             Story::create([
                 'alpha_id' => VideoHelper::quickRandom(),
+                'title' => $faker->title,
                 'created_at' => $faker->date(),
             ]);
         }
