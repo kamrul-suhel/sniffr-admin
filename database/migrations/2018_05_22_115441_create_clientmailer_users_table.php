@@ -15,7 +15,8 @@ class CreateClientMailerUsersTable extends Migration
         Schema::create('client_mailer_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('client_mailer_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('user_client_id')->unsigned()->index()->default(0);
+            $table->integer('user_id')->unsigned()->index()->default(0);
             $table->timestamp('sent_at')->nullable();
         });
     }

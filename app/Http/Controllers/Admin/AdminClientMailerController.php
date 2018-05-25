@@ -148,9 +148,10 @@ class AdminClientMailerController extends Controller
             $mailer->sent_at = now();
             $mailer->save();
 
-            // send mailer to selected clients via email
+            // send mailer to selected clients (actually users which are linked to clients) via email
 			foreach($mailer->users()->get() as $client) {
-                $mailer->users()->update(['sent_at' => now()]);
+                $user = User::find($client->id);
+                $mailer->users()->where('user_id', $client->id)->update(['sent_at' => now(), 'user_client_id' => $user->client_id]);
 				QueueClientMailer::dispatch($client->id, $mailer->id);
 			}
         }
