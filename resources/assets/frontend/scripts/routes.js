@@ -141,7 +141,7 @@ export const routes = [
 
             {
                 path: 'mail',
-                name: 'client_story_mail',
+                name: 'client_mail',
                 component: ClientMailComponent
             },
 

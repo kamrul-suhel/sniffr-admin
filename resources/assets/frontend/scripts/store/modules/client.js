@@ -19,7 +19,6 @@ const actions = {
     getMailStories({commit}, user){
         return new Promise((resolve, reject) => {
             let url = '/client/stories/mail/'+ user.id;
-            console.log(url);
             axios.get(url)
                 .then((response) => {
                 let data = response.data;

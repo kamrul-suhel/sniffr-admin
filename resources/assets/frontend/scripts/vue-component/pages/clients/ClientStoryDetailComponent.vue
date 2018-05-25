@@ -2,8 +2,9 @@
     <div class="client-video-download-section">
         <v-container grid-list-xl class="client-story-detail-section">
             <v-layout row wrap>
-                <v-flex xs12>
-                </v-flex>
+                <!--<v-flex xs12>-->
+                    <!--<v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>-->
+                <!--</v-flex>-->
 
                 <v-flex xs12 sm12 md5 lg4 xl4 class="client-assets">
                     <h2>Assets</h2>
@@ -67,13 +68,16 @@
         },
 
         methods: {
+            onGoback() {
+                this.$router.go(-1);
+            },
+
             getStoryDetail(){
                 let alpha_id = this.$route.params.alpha_id;
 
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
-                        console.log(this.story);
                     });
             },
 

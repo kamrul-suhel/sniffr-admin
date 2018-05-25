@@ -55,12 +55,6 @@
             }
         },
 
-        watch: {
-            '$route'(to, from, next) {
-                console.log("where is now " + to + ": Where is coming from " + from );
-            }
-        },
-
         created() {
             let breakpoint = this.$vuetify.breakpoint.name;
             if(breakpoint === 'sm' || breakpoint === 'xs' ){

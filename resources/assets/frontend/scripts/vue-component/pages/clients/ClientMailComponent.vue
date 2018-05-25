@@ -3,7 +3,6 @@
         <v-container grid-list-lg>
             <v-layout row wrap>
                 <v-flex>
-                    <h2>Mail</h2>
                 </v-flex>
             </v-layout>
 
@@ -39,7 +38,6 @@
                 this.$store.dispatch('getMailStories', user)
                     .then(() => {
                     this.stories = this.$store.getters.getMailStories;
-                    console.log(this.stories);
                 });
             }
         }

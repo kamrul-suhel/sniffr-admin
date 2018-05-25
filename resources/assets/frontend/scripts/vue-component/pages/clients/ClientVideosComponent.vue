@@ -2,8 +2,6 @@
     <!-- VIDEOS ITEM SECTION -->
     <div class="videos-section section-space">
 
-        <search-component @searchOption="searchOption($event)"></search-component>
-
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg>
@@ -33,7 +31,6 @@
         beforeRouteEnter: (to, from, next) => {
             axios.get('/islogin')
                 .then((response) => {
-                    console.log(response);
                 });
             next();
         },
@@ -77,10 +74,6 @@
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then( () => {
                     this.videos = this.$store.getters.getVideoData;
                 });
-            },
-
-            callingMethod() {
-                console.log("this is calling");
             }
         }
     }

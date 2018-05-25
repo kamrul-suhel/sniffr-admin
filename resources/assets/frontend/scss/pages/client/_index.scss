@@ -3,3 +3,24 @@
 @import './client_story_detail';
 
 @import './client_video_download';
+
+.client-content{
+  .speed-dial {
+    position: absolute;
+    left:0;
+  }
+
+  .btn--floating {
+    position: relative;
+  }
+}
+.client-sub-menu{
+  top: 150px !important;
+}
+
+.client-nav{
+  position:relative;
+  width:100%;
+  height:20px;
+}
+

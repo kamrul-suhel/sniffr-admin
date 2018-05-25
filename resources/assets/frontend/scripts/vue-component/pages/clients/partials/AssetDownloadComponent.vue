@@ -70,7 +70,6 @@
         ],
 
         created() {
-            console.log(this.story);
         },
 
         watch: {
@@ -91,7 +90,6 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                console.log("Send the download all assets request ");
             },
 
             goToDetail(){
@@ -99,11 +97,8 @@
             },
 
             getImage(image){
-                console.log(image);
                 if(!image){
-                    console.log('console added');
                     return '/assets/frontend/images/placeholder.png';
-
                 }
                 return image;
             }
