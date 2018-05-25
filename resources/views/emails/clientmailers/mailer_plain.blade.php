@@ -9,7 +9,7 @@ Hi,
 
         @if($story['thumb'])IMG: {{ $story['thumb'] }} @endif
         {{ $story['excerpt'] }}..
-        REQUEST LICENSE: link
+        REQUEST LICENSE: {{ url('client/mail/'.$story['alpha_id'] ) }}
         --------
 
     @endforeach
