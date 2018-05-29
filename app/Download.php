@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $user_id
  * @property int $client_id
- * @property int $video_id
+ * @property int story_id
  * @property string|null $type
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at

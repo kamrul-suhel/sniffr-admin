@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Asset;
+use App\Download;
+use App\Order;
 use App\Story;
 use App\Video;
 use Chumper\Zipper\Facades\Zipper;
@@ -34,7 +36,7 @@ class StoryController extends Controller
             abort(404, 'No Assets Found in this Story');
         }
 
-        $newZipFileName = 'zips/' . time() . '.zip';
+        $newZipFileName = '../storage/zips/' . time() . '.zip';
         $prefix = 'sniffr_';
         $files = [];
 
@@ -64,8 +66,50 @@ class StoryController extends Controller
             }
         }
 
+        // save the order
+        $this->logDownload($id);
+        $this->saveDownloadToOrder($id);
+
         Zipper::make($newZipFileName)->add($files)->close();
         return response()->download($newZipFileName);
+    }
+
+    /**
+     * @param $story_id
+     */
+    public function saveDownloadToOrder($story_id)
+    {
+        $order = Order::where('story_id', '=', $story_id)
+            ->where('client_id', '=', \Auth::user()->client_id)
+            ->first();
+        if ($order) {
+            return;
+        }
+        $order = new Order();
+        $order->story_id = $story_id;
+        $order->user_id = \Auth::user()->id;
+        $order->client_id = \Auth::user()->client_id;
+        $order->save();
+    }
+
+    /**
+     * @param $story_id
+     */
+    public function logDownload($story_id)
+    {
+        $download = Order::where('story_id', '=', $story_id)
+            ->where('client_id', '=', \Auth::user()->client_id)
+            ->first();
+
+        if ($download) {
+            return;
+        }
+
+        $download = new Download();
+        $download->story_id = $story_id;
+        $download->user_id = \Auth::user()->id;
+        $download->client_id = \Auth::user()->client_id ?: 0;
+        $download->save();
     }
 
     /**
@@ -141,7 +185,7 @@ class StoryController extends Controller
         }
 
         $pdfName = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        $pdfUrl = 'pdfs/' . $pdfName . '.pdf';
+        $pdfUrl = '../storage/pdfs/' . $pdfName . '.pdf';
         $pdf->save($pdfUrl);
 
         return $pdfUrl;
