@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\ClientMailer;
 use App\Story;
 use App\Traits\FrontendResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -27,6 +28,7 @@ class FrontendStoryController extends Controller
                 })
                 ->orderBy('created_at', 'DESC')
             ->get();
+
 
             $data = [
                 'stories' => $client_mailer
