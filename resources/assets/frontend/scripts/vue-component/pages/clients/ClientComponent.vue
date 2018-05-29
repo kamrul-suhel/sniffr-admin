@@ -4,60 +4,60 @@
 
         <!-- Client content SECTION -->
         <section class="client-content" align-content-end v-if="content_show">
-            <v-container grid-list-xl>
-                <v-layout row wrap>
-                    <v-flex class="text-xs-right">
-                        <div class="client-nav">
-                            <v-speed-dial
-                                    v-model="fab"
-                                    left
-                                    :direction="direction"
-                                    :open-on-hover="hover"
-                                    transition="slide-y-reverse-transition"
-                            >
-                                <v-btn
-                                        slot="activator"
-                                        v-model="fab"
-                                        small
-                                        color="dark"
-                                        dark
-                                        fab
-                                >
-                                    <v-icon>account_circle</v-icon>
-                                    <v-icon>close</v-icon>
-                                </v-btn>
-                                <!--<v-btn-->
-                                        <!--fab-->
-                                        <!--dark-->
-                                        <!--small-->
-                                        <!--color="dark"-->
-                                        <!--@click="onClientStories()"-->
-                                <!--&gt;-->
-                                    <!--<v-tooltip bottom>-->
-                                        <!--<v-icon slot="activator">alternate_email</v-icon>-->
-                                        <!--<span>Email</span>-->
-                                    <!--</v-tooltip>-->
-                                <!--</v-btn>-->
+            <!--<v-container grid-list-xl>-->
+                <!--<v-layout row wrap>-->
+                    <!--<v-flex class="text-xs-right">-->
+                        <!--&lt;!&ndash;<div class="client-nav">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<v-speed-dial&ndash;&gt;-->
+                                    <!--&lt;!&ndash;v-model="fab"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;left&ndash;&gt;-->
+                                    <!--&lt;!&ndash;:direction="direction"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;:open-on-hover="hover"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;transition="slide-y-reverse-transition"&ndash;&gt;-->
+                            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                                <!--&lt;!&ndash;<v-btn&ndash;&gt;-->
+                                        <!--&lt;!&ndash;slot="activator"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;v-model="fab"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;small&ndash;&gt;-->
+                                        <!--&lt;!&ndash;color="dark"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;dark&ndash;&gt;-->
+                                        <!--&lt;!&ndash;fab&ndash;&gt;-->
+                                <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<v-icon>account_circle</v-icon>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<v-icon>close</v-icon>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</v-btn>&ndash;&gt;-->
+                                <!--&lt;!&ndash;&lt;!&ndash;<v-btn&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;fab&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;dark&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;small&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;color="dark"&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;@click="onClientStories()"&ndash;&gt;&ndash;&gt;-->
+                                <!--&lt;!&ndash;&lt;!&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;&lt;!&ndash;<v-tooltip bottom>&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;<v-icon slot="activator">alternate_email</v-icon>&ndash;&gt;&ndash;&gt;-->
+                                        <!--&lt;!&ndash;&lt;!&ndash;<span>Email</span>&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;&lt;!&ndash;</v-tooltip>&ndash;&gt;&ndash;&gt;-->
+                                <!--&lt;!&ndash;&lt;!&ndash;</v-btn>&ndash;&gt;&ndash;&gt;-->
 
-                                <v-btn
-                                        fab
-                                        dark
-                                        small
-                                        color="dark"
-                                        @click="onClientEmail()"
-                                >
-                                    <v-tooltip>
+                                <!--&lt;!&ndash;<v-btn&ndash;&gt;-->
+                                        <!--&lt;!&ndash;fab&ndash;&gt;-->
+                                        <!--&lt;!&ndash;dark&ndash;&gt;-->
+                                        <!--&lt;!&ndash;small&ndash;&gt;-->
+                                        <!--&lt;!&ndash;color="dark"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;@click="onClientEmail()"&ndash;&gt;-->
+                                <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<v-tooltip>&ndash;&gt;-->
 
-                                        <v-icon slot="activator">library_books</v-icon>
-                                        <span>Stories</span>
-                                    </v-tooltip>
-                                </v-btn>
+                                        <!--&lt;!&ndash;<v-icon slot="activator">library_books</v-icon>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<span>Stories</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</v-tooltip>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</v-btn>&ndash;&gt;-->
 
-                            </v-speed-dial>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
+                            <!--&lt;!&ndash;</v-speed-dial>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--</v-flex>-->
+                <!--</v-layout>-->
+            <!--</v-container>-->
 
             <router-view></router-view>
         </section>

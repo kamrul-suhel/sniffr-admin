@@ -1,11 +1,15 @@
 <template>
-    <div class="client-video-download-section">
-        <v-container grid-list-lg>
-            <h2 class="text-xs-center no-stories" v-if="!stories">Sorry, we cannot find any stories associated with your account.  Please contact mel@unilad.co.uk for more information.</h2>
-            <asset-download-component
-                    v-for="story in stories"
-                    :key="story.id"
-                    :story="story"></asset-download-component>
+    <div class="client-mail-section" v-if="ini_state">
+        <v-container grid-list-lg v-if="stories">
+            <h2 class="text-xs-center no-stories" v-if="!stories">Sorry, we cannot find any stories associated with your account.  Please contact <a href="mailto:mel@unilad.co.uk?Subject=Enquiry" target="_top">mel@unilad.co.uk</a> for more information.</h2>
+            <div v-for="items in stories">
+                <h2 class="client-title">Sent Mail: {{ items.sent_at | convertDate }}</h2>
+                <asset-download-component
+                        v-for="story in items.stories"
+                        :key="story.id"
+                        :story="story"></asset-download-component>
+            </div>
+
 
         </v-container>
     </div>
@@ -21,6 +25,7 @@
         data() {
             return {
                 stories: '',
+                ini_state: false,
             }
         },
 
@@ -34,6 +39,7 @@
                 this.$store.dispatch('getMailStories', user)
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
+                        this.ini_state = true;
                     });
             }
         }

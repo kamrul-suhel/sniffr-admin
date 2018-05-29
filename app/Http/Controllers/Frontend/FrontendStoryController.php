@@ -26,10 +26,10 @@ class FrontendStoryController extends Controller
                     $query->where('users.id', '=', $user_id);
                 })
                 ->orderBy('created_at', 'DESC')
-                ->first();
+            ->get();
 
             $data = [
-                'stories' => $client_mailer->stories
+                'stories' => $client_mailer
             ];
             return $this->successResponse($data);
         }

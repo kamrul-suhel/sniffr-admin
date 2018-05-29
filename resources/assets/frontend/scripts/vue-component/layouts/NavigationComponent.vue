@@ -43,7 +43,7 @@
                                         <!--<v-list-tile v-if="client_login">-->
                                             <!--<v-list-tile-title>-->
                                                 <!--<a @click.prevent.stop="onClientStories()">-->
-                                                    <!--<v-icon color="white" left size="20px">alternate_email</v-icon> Email-->
+                                                    <!--<v-icon color="white" left size="20px">library_books</v-icon> Email-->
                                                 <!--</a>-->
                                             <!--</v-list-tile-title>-->
                                         <!--</v-list-tile>-->
@@ -51,7 +51,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientEmail()">
-                                                    <v-icon color="white" left size="20px">library_books</v-icon> Stories
+                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> Stories
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>

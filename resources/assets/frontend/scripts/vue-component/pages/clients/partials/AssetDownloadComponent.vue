@@ -7,13 +7,9 @@
 
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-layout row wrap>
-                <v-flex pb-0>
-                    <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
-                </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-                <v-flex xs12 pt-0>
+                <v-flex xs12 pb-0>
                     <h2>{{story.title}}</h2>
+                    <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
                     <div v-html="story.excerpt"></div>
                 </v-flex>
             </v-layout>
@@ -84,6 +80,8 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
+                var url = '/client/stories/'+this.story.id+'/download';
+                window.location = url;
             },
 
             goToDetail(){
