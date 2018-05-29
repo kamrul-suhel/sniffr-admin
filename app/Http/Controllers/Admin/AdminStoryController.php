@@ -27,7 +27,7 @@ class AdminStoryController extends Controller
 {
     use FrontendResponse;
 
-	public $url = 'http://testing.unilad.co.uk/';
+	public $url = env('UNILAD_WP_URL');
 	public $api_path = 'wp-json/wp/v2/';
 	public $token_path = 'wp-json/jwt-auth/v1/token';
 
