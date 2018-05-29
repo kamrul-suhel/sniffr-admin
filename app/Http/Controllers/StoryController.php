@@ -85,4 +85,27 @@ class StoryController extends Controller
 
         return response()->download($tempImage);
     }
+
+    /**
+     * @param $videoId
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadVideo($videoId)
+    {
+        $video = Video::find($videoId);
+
+        if (!$video) {
+            abort(404, 'Asset Not Found');
+        }
+
+        $prefix = 'sniffr_';
+
+        $info = pathinfo($video->file);
+        $ext = $info['extension'];
+
+        $tempVideoFile = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
+        copy($video->file, $tempVideoFile);
+
+        return response()->download($tempVideoFile);
+    }
 }
