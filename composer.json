@@ -33,7 +33,7 @@
         "ramsey/uuid": "^3.7",
         "schooch/youtube": "^5.0.4",
         "talvbansal/media-manager": "^2.5",
-        "thujohn/twitter": "^2.2",
+        "thujohn/twitter": "^2.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
