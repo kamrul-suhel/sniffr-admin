@@ -6,6 +6,7 @@ use App\Asset;
 use App\Story;
 use App\Video;
 use Chumper\Zipper\Facades\Zipper;
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 
 class StoryController extends Controller
@@ -33,9 +34,13 @@ class StoryController extends Controller
             abort(404, 'No Assets Found in this Story');
         }
 
-        $newZipFileName = 'public/zips/' . time() . '.zip';
+        $newZipFileName = 'zips/' . time() . '.zip';
         $prefix = 'sniffr_';
         $files = [];
+
+        $pdf = $this->getPdf($id, false);
+
+        $files[] = $pdf;
 
         if ($assets->count()) {
             foreach ($assets as $asset) {
@@ -107,5 +112,38 @@ class StoryController extends Controller
         copy($video->file, $tempVideoFile);
 
         return response()->download($tempVideoFile);
+    }
+
+    /**
+     * @param int $storyId
+     * @param bool $download
+     * @return string
+     */
+    public function getPdf(int $storyId, bool $download = true)
+    {
+        $story = Story::find($storyId);
+
+        if (!$story) {
+            abort(404, 'Story Not Found');
+        }
+
+        $html = view("stories.pdf")->with([
+            "title" => $story['title'],
+            "author" => $story['author'],
+            "description" => $story['description'],
+        ]);
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html);
+
+        if ($download) {
+            return $pdf->download();
+        }
+
+        $pdfName = \Ramsey\Uuid\Uuid::uuid4()->toString();
+        $pdfUrl = 'pdfs/' . $pdfName . '.pdf';
+        $pdf->save($pdfUrl);
+
+        return $pdfUrl;
     }
 }

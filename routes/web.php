@@ -254,6 +254,7 @@ Route::group(array('prefix' => 'admin'), function () {
 Route::group(array('prefix' => 'client'), function () {
     Route::resource('orders', 'OrderController');
     Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('client.stories.download');
+    Route::get('stories/{id}/download_pdf', 'StoryController@getPdf')->name('client.stories.download_pdf');
     Route::get('asset/{id}/download', 'StoryController@downloadAsset')->name('client.asset.download');
     Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
 
