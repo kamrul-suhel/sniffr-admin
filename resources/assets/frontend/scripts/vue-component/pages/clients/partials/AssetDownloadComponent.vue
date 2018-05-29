@@ -37,18 +37,6 @@
             >
                 Download all assets
             </v-btn>
-
-            <v-btn
-                    block
-                    dark
-                    large
-                    color="dark"
-                    @click.native="onBuyStory()"
-                    :loading="loading"
-                    :disabled="loading"
-            >
-                Buy Story
-            </v-btn>
         </v-flex>
 
         <v-flex xs12 class="my-4">
