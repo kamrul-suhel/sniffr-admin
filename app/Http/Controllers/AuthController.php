@@ -102,11 +102,15 @@ class AuthController extends Controller
         }
 
         $redirect_route = '';
+        $client = '';
+        $user = '';
 
         if (key_exists(Auth::user()->role, config('roles.admins'))) {
             $redirect_route = '/admin';
         } elseif (key_exists(Auth::user()->role, config('roles.clients'))) {
-            $redirect_route = '/client/stories/mail';
+            $redirect_route = 'client';
+            $user = Auth::user();
+            $client = Auth::user()->client();
         }
 
         $redirect = ($request->input('redirect')) ?: $redirect_route;
@@ -114,6 +118,8 @@ class AuthController extends Controller
         if ($request->ajax() || $request->isJson()) {
             $response_data['redirect_url'] = $redirect;
             $response_data['error'] = false;
+            $response_data['client'] = $client;
+            $response_data['user'] = $user;
             return $this->successResponse($response_data);
         }
 
