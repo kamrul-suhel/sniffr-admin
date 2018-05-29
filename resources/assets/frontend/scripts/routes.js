@@ -134,7 +134,7 @@ export const routes = [
             },
 
             {
-                path: '/client/story/show/:alpha_id',
+                path: 'story/show/:alpha_id',
                 name: 'client_story_detail',
                 component: ClientStoryDetailComponent
             },

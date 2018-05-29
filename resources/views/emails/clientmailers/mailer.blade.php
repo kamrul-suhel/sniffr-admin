@@ -5,7 +5,7 @@
 @if(!empty($mailer->note)) <div style="padding-top:20px;padding-bottom:20px;">{{ $mailer->note }}</div> @endif
 
 @if(!empty($mailer->stories))
-<p><a href="{{ url('/client/stories') }}">Checkout all your stories here</a></p>
+<p><a href="{{ url('/client/mail') }}" style="color:#000;">Checkout all your stories here</a></p>
 
 <table>
     @php $count = 0 @endphp
@@ -19,7 +19,7 @@
             </td>
             <td valign="top" style="padding: 20px;">
                 <br />{{ TextHelper::shorten($story['excerpt'], 350) }}..
-                <br /><br /><a href="{{ url('client/mail/'.$story['alpha_id'] ) }}" style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;display:inherit;margin-top:20px;margin-bottom:10px;font-weight:bold;">View story</a>
+                <br /><br /><a href="{{ url('client/story/show/'.$story['alpha_id'] ) }}" style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;display:inherit;margin-top:20px;margin-bottom:10px;font-weight:bold;">View story</a>
             </td>
         </tr>
         @php $count++ @endphp
