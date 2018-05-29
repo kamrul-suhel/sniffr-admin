@@ -1,0 +1,28 @@
+.client-video-download-section{
+
+}
+
+.cd-box{
+
+  .cdi-content{
+    height:250px;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: cover !important;
+  }
+
+  .cd-type{
+    text-transform:uppercase;
+    font-weight:bold;
+  }
+
+  .cd-time{
+    font-style:italic;
+    color:#777;
+  }
+}
+
+.application .cd-box .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
+  background-color: hsla(0,0%,0%,1)!important;
+}
+

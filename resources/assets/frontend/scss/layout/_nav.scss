@@ -112,9 +112,10 @@
 
 .menu__content{
   box-shadow:none;
+  top:62px !important;
 
   .list{
-    background:transparent;
+    background: rgba(0,0,0,.5);
   }
   a{
     color:#fff;

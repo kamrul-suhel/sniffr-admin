@@ -22,6 +22,7 @@
                                         v-model="user.email"
                                         :rules="emailRules"
                                         required
+                                        validate-on-blur
                                         :error="validation.error"
                                 >
                                 </v-text-field>
@@ -29,8 +30,8 @@
 
                             <v-flex xs12>
                                 <v-text-field
+                                        class="email"
                                         color="dark"
-                                        name="password"
                                         label="Enter your password"
                                         v-model="user.password"
                                         :append-icon="showpassword ? 'visibility' : 'visibility_off'"
@@ -42,6 +43,7 @@
                                         required
                                 ></v-text-field>
                             </v-flex>
+
                         </v-layout>
 
                         <v-layout row justify-center>
@@ -120,6 +122,9 @@
 
 		created() {
             LoginEventBus.$on('openLoginDialog',this.openLoginDialog);
+            LoginEventBus.$on('closeLoginDialog', () => {
+                this.open_login_dialog = false;
+            });
 		},
 
 		methods: {
@@ -162,12 +167,21 @@
 
                             // Set the user store
                             this.$store.dispatch('getLoginStatus').then((response) => {
-                                this.is_login = this.$store.getters.is_login;
-                            });
+                                // Check is client
+                                if(data.redirect_url === 'client'){
+                                    let redirect_url = this.$store.getters.getAttepmtRoute;
+                                    console.log(redirect_url);
+                                    if(!redirect_url){
+                                        this.$router.push({name: 'client'});
+                                    }
+                                    LoginEventBus.clientLoginChange();
+                                    return;
+                                }
 
-                            if(data.redirect_url){
-                                window.location.href = data.redirect_url;
-                            }
+                                if(data.redirect_url){
+                                    window.location.href = data.redirect_url;
+                                }
+                            });
 
                         })
                         .catch(error => {

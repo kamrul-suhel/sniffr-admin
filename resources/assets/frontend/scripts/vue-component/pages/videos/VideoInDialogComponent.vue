@@ -43,7 +43,7 @@
                             </v-flex>
 
                             <div class="video-detail-social-share">
-                                <!--<v-btn dark block class="dark">License</v-btn>-->
+                                <v-btn dark block class="dark">License</v-btn>
                             </div>
                         </v-layout>
                     </v-flex>
@@ -56,6 +56,7 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
+    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default {
         data() {
@@ -93,6 +94,11 @@
                 let alpha_id = this.$store.getters.getPrevVideoAlphaId;
                 this.getVideoData(alpha_id)
             });
+
+            LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
+                this.video_detail = '';
+                console.log('methods called');
+            })
         },
 
         mounted() {

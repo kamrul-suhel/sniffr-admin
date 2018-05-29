@@ -270,7 +270,15 @@ Route::group(array('prefix' => 'client'), function () {
     Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
 });
 
+/*
+|--------------------------------------------------------------------------
+| Client Fronted Routes
+|--------------------------------------------------------------------------
+*/
 
+Route::get('/client/mail', 'Frontend\FrontendStoryController@getMailerStories')->name('client.mail');
+Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
+Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
 
 /*
 |--------------------------------------------------------------------------

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Download;
+use App\Traits\FrontendResponse;
 use Auth;
 use Validator;
 use Redirect;
@@ -22,7 +24,8 @@ use Carbon\Carbon as Carbon;
 
 class AdminStoryController extends Controller
 {
-	public $url = 'http://testing.unilad.co.uk/';
+    use FrontendResponse;
+
 	public $api_path = 'wp-json/wp/v2/';
 	public $token_path = 'wp-json/jwt-auth/v1/token';
 
@@ -38,7 +41,7 @@ class AdminStoryController extends Controller
     private function getToken() {
         $curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, $this->url.$this->token_path.'?username='.env('UNILAD_WP_USER').'&password='.env('UNILAD_WP_PASS'));
+		curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL').$this->token_path.'?username='.env('UNILAD_WP_USER').'&password='.env('UNILAD_WP_PASS'));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, 1);
 
@@ -66,7 +69,7 @@ class AdminStoryController extends Controller
 
 		$curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, $this->url.$this->api_path.$request);
+		curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL').$this->api_path.$request);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		if($req_token){
 			curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
