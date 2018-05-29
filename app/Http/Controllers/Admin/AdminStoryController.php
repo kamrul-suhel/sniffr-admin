@@ -36,7 +36,7 @@ class AdminStoryController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->middleware(['admin:admin,manager,editorial'])->except(['download']);
+        $this->middleware(['admin:admin,manager,editorial']);
     }
 
     private function getToken() {
