@@ -121,7 +121,7 @@ class VideoController extends Controller
             : $this->videoService->saveVideoLink($video, Input::get('url'));
 
         // Slack notification
-        if (env('APP_ENV') == 'production') {
+        if (env('APP_ENV') == 'prod') {
             $video->notify(new SubmissionNew($video));
         }
 

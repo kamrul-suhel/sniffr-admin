@@ -25,9 +25,10 @@ class ClientStoryList extends Mailable
      *
      * @return void
      */
-    public function __construct(ClientMailer $mailer)
+    public function __construct(ClientMailer $mailer, User $user)
     {
         $this->mailer = $mailer;
+		$this->user = $user;
     }
 
     /**
@@ -37,6 +38,6 @@ class ClientStoryList extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.clientmailers.mailer')->text('emails.clientmailers.mailer_plain')->subject('Sniffr Video Suggestions');
+        return $this->view('emails.clientmailers.mailer')->text('emails.clientmailers.mailer_plain')->subject('SNIFFR Video Suggestions');
     }
 }

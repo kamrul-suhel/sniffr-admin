@@ -47,14 +47,13 @@ class AdminClientController extends Controller
         $data = [
             'post_route' => url('admin/clients/store'),
             'button_text' => 'Add New Client',
-            'user' => Auth::user()
         ];
 
         return view('admin.clients.create_edit', $data);
     }
 
     /**
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
     {

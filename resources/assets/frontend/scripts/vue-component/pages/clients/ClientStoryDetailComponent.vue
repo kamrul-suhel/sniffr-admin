@@ -11,7 +11,9 @@
 
                     <v-divider style="margin-bottom:20px;"></v-divider>
 
-                    <asset-component v-for="asset in story.assets" :key="asset.id" :asset="asset"></asset-component>
+                    <v-layout row wrap>
+                        <asset-component v-for="asset in story.assets" :key="asset.id" :asset="asset"></asset-component>
+                    </v-layout>
 
                     <v-btn
                             block
@@ -22,18 +24,20 @@
                 </v-flex>
 
                 <v-flex xs12 sm12 md7 lg8 xl8>
-                    <h2>{{ story.title }}</h2>
+                    <div class="story-content">
+                        <h2>{{ story.title }}</h2>
 
-                    <div class="caption">
-                        <span>Author: {{ story.author }} | </span>
-                        <span>Created at: {{ story.created_at }}</span><br/>
-                        <span>State: <strong>{{ story.state }}</strong> |</span>
-                        <span>Status : {{ story.status }}</span>
+                        <div class="caption">
+                            <span>Author: {{ story.author }} | </span>
+                            <span>Created at: {{ story.created_at }}</span><br/>
+                            <span>State: <strong>{{ story.state }}</strong> |</span>
+                            <span>Status : {{ story.status }}</span>
+                        </div>
+
+                        <v-divider style="margin: 15px 0"></v-divider>
+
+                        <div v-html="story.description"></div>
                     </div>
-
-                    <v-divider style="margin: 15px 0"></v-divider>
-
-                    <div v-html="story.description"></div>
                 </v-flex>
 
             </v-layout>

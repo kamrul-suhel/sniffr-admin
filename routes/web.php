@@ -220,12 +220,14 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('campaigns/delete/{id}', array('uses' => 'Admin\AdminCampaignController@destroy'));
     Route::get('campaigns/{id}', array('uses' => 'Admin\AdminCampaignController@show'));
 
-    Route::get('users', 'Admin\AdminUsersController@index');
+    Route::resource('users', 'Admin\AdminUsersController', ['only'=> ['index','create','store','edit','update']]);
+
+    /*Route::get('users', 'Admin\AdminUsersController@index');
     Route::get('user/create', 'Admin\AdminUsersController@create');
     Route::post('user/store', array('uses' => 'Admin\AdminUsersController@store'));
     Route::get('user/edit/{id}', 'Admin\AdminUsersController@edit');
     Route::post('user/update', array('uses' => 'Admin\AdminUsersController@update'));
-    Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));
+    Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));*/
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
@@ -247,6 +249,8 @@ Route::group(array('prefix' => 'admin'), function () {
 */
 
 Route::group(array('prefix' => 'client'), function () {
+    Route::resource('orders', 'OrderController');
+
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/view/{id}', 'Client\ClientVideosController@view');

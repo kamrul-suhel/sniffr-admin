@@ -22,6 +22,9 @@ class ClientMailer extends Model
         return $this->belongsToMany(Story::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
     public function users()
     {
         return $this->belongsToMany(User::class);
