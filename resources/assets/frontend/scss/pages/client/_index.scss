@@ -3,6 +3,7 @@
 @import './client_story_detail';
 
 @import './client_video_download';
+@import './client_mail';
 
 .client-content{
   .speed-dial {
@@ -12,6 +13,13 @@
 
   .btn--floating {
     position: relative;
+  }
+
+  .no-stories{
+    margin-top:40px;
+  }
+  a{
+    color:#000;
   }
 }
 .client-sub-menu{

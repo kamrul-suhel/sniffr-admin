@@ -24,7 +24,7 @@
             }
         },
 
-        props: ['asset'],
+        props: ['asset','story_id'],
 
         watch: {
             loader () {
@@ -37,7 +37,7 @@
             }
         },
         created() {
-
+            console.log(this.story_id);
         },
 
         methods: {
@@ -47,7 +47,9 @@
 
             downloadAsset(){
                 this.loader = 'loading';
-                console.log("Download individual asset");
+                this.loader = 'loading';
+                var url = '/client/stories/'+this.story_id+'/download';
+                window.location = url;
             }
         }
     }

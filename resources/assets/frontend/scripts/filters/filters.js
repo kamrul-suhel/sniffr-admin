@@ -38,6 +38,9 @@ export const convertTime = Vue.filter('convertTime',function(duration){
     }else{
         return minutes + ":" + seconds;
     }
-
-
 });
+
+export const dateTimeFormat = Vue.filter('convertDate', function(date){
+    var current_date = new Date(Date.parse(date.replace('-','/','g')));
+    return current_date.toDateString();
+})
