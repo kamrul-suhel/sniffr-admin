@@ -10,6 +10,7 @@ use App\Video;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
+use PDF;
 
 class StoryController extends Controller
 {
@@ -36,7 +37,7 @@ class StoryController extends Controller
             abort(404, 'No Assets Found in this Story');
         }
 
-        $newZipFileName = '../storage/zips/' . time() . '.zip';
+        $newZipFileName = '../storage/' . time() . '.zip';
         $prefix = 'sniffr_';
         $files = [];
 
@@ -185,7 +186,7 @@ class StoryController extends Controller
         }
 
         $pdfName = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        $pdfUrl = '../storage/pdfs/' . $pdfName . '.pdf';
+        $pdfUrl = '../storage/' . $pdfName . '.pdf';
         $pdf->save($pdfUrl);
 
         return $pdfUrl;
