@@ -5,7 +5,7 @@
 @if(!empty($mailer->note)) <div style="padding-top:20px;padding-bottom:20px;">{{ $mailer->note }}</div> @endif
 
 @if(!empty($mailer->stories))
-<p><a href="{{ url('/client/mail') }}" style="color:#000;text-decoration:underline;margin-bottom:15px;">Checkout all your stories here</a></p>
+<p><a href="{{ url('/client/mail') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">Checkout all your stories here</a></p>
 
 <table>
     @php $count = 0 @endphp
