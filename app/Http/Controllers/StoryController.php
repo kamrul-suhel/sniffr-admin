@@ -14,7 +14,7 @@ class StoryController extends Controller
      * @param $id
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function download($id)
+    public function downloadStory($id)
     {
         $story = Story::find($id);
         if (!$story) {
@@ -33,7 +33,7 @@ class StoryController extends Controller
             abort(404, 'No Assets Found in this Story');
         }
 
-        $newZipFileName = 'public/zips/'.time().'.zip';
+        $newZipFileName = 'public/zips/' . time() . '.zip';
         $prefix = 'sniffr_';
         $files = [];
 
@@ -61,5 +61,28 @@ class StoryController extends Controller
 
         Zipper::make($newZipFileName)->add($files)->close();
         return response()->download($newZipFileName);
+    }
+
+    /**
+     * @param $assetId
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadAsset($assetId)
+    {
+        $asset = Asset::find($assetId);
+
+        if (!$asset) {
+            abort(404, 'Asset Not Found');
+        }
+
+        $prefix = 'sniffr_';
+
+        $info = pathinfo($asset->url);
+        $ext = $info['extension'];
+
+        $tempImage = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
+        copy($asset->url, $tempImage);
+
+        return response()->download($tempImage);
     }
 }

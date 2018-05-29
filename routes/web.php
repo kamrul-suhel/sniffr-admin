@@ -190,7 +190,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
-    Route::get('stories/{id}/download', 'StoryController@download')->name('admin.stories.download');
+    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('admin.stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
     Route::get('stories/create', 'Admin\AdminStoryController@create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
@@ -253,7 +253,8 @@ Route::group(array('prefix' => 'admin'), function () {
 
 Route::group(array('prefix' => 'client'), function () {
     Route::resource('orders', 'OrderController');
-    Route::get('stories/{id}/download', 'StoryController@download')->name('client.stories.download');
+    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('client.stories.download');
+    Route::get('asset/{id}/download', 'StoryController@downloadAsset')->name('client.asset.download');
 
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
