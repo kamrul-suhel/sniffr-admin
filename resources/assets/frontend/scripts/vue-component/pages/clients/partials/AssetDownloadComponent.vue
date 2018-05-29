@@ -7,25 +7,19 @@
 
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-layout row wrap>
-                <v-flex class="text-xs-left">
-                    <div class="cd-type">Story</div>
-                </v-flex>
-
-                <v-spacer></v-spacer>
-
-                <v-flex class="text-xs-right">
-                    <div class="cd-time">{{ story.created_at }}</div>
+                <v-flex pb-0>
+                    <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
-                <v-flex xs12>
+                <v-flex xs12 pt-0>
                     <h2>{{story.title}}</h2>
                     <div v-html="story.excerpt"></div>
                 </v-flex>
             </v-layout>
         </v-flex>
 
-        <v-flex xs12 sm12 md3 lg3 xl3>
+        <v-flex xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark

@@ -26,25 +26,25 @@
                                     <v-icon>account_circle</v-icon>
                                     <v-icon>close</v-icon>
                                 </v-btn>
-                                <v-btn
-                                        fab
-                                        dark
-                                        small
-                                        color="dark"
-                                        @click="onClientEmail()"
-                                >
-                                    <v-tooltip bottom>
-                                        <v-icon slot="activator">alternate_email</v-icon>
-                                        <span>Email</span>
-                                    </v-tooltip>
-                                </v-btn>
+                                <!--<v-btn-->
+                                        <!--fab-->
+                                        <!--dark-->
+                                        <!--small-->
+                                        <!--color="dark"-->
+                                        <!--@click="onClientStories()"-->
+                                <!--&gt;-->
+                                    <!--<v-tooltip bottom>-->
+                                        <!--<v-icon slot="activator">alternate_email</v-icon>-->
+                                        <!--<span>Email</span>-->
+                                    <!--</v-tooltip>-->
+                                <!--</v-btn>-->
 
                                 <v-btn
                                         fab
                                         dark
                                         small
                                         color="dark"
-                                        @click="onClientStories()"
+                                        @click="onClientEmail()"
                                 >
                                     <v-tooltip>
 

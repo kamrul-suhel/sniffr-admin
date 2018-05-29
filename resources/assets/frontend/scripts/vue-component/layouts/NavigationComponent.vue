@@ -32,10 +32,26 @@
                                 <v-menu bottom open-on-hover offset-y v-else min-width="140px">
                                     <a slot="activator"><v-icon color="white">face</v-icon> {{ user.name }}</a>
                                     <v-list>
-                                        <v-list-tile>
+                                        <v-list-tile v-if="!client_login">
                                             <v-list-tile-title>
                                                 <a href="/admin">
                                                     <v-icon color="white" left size="20px">settings</v-icon> Admin
+                                                </a>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
+                                        <!--<v-list-tile v-if="client_login">-->
+                                            <!--<v-list-tile-title>-->
+                                                <!--<a @click.prevent.stop="onClientStories()">-->
+                                                    <!--<v-icon color="white" left size="20px">alternate_email</v-icon> Email-->
+                                                <!--</a>-->
+                                            <!--</v-list-tile-title>-->
+                                        <!--</v-list-tile>-->
+
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
+                                                <a @click.prevent.stop="onClientEmail()">
+                                                    <v-icon color="white" left size="20px">library_books</v-icon> Stories
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -44,22 +60,6 @@
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onLogout()">
                                                     <v-icon color="white" left size="20px">lock_out</v-icon> Logout
-                                                </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <a @click.prevent.stop="onClientEmail()">
-                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> Email
-                                                </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <a @click.prevent.stop="onClientStories()">
-                                                    <v-icon color="white" left size="20px">library_books</v-icon> Stories
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>

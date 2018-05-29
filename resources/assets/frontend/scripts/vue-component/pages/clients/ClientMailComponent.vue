@@ -1,11 +1,7 @@
 <template>
     <div class="client-video-download-section">
         <v-container grid-list-lg>
-            <v-layout row wrap>
-                <v-flex>
-                </v-flex>
-            </v-layout>
-
+            <h2 class="text-xs-center no-stories" v-if="!stories">Sorry, we cannot find any stories associated with your account.  Please contact mel@unilad.co.uk for more information.</h2>
             <asset-download-component
                     v-for="story in stories"
                     :key="story.id"
@@ -24,7 +20,7 @@
 
         data() {
             return {
-                stories:'',
+                stories: '',
             }
         },
 
@@ -37,8 +33,8 @@
                 let user = this.$store.getters.getUser;
                 this.$store.dispatch('getMailStories', user)
                     .then(() => {
-                    this.stories = this.$store.getters.getMailStories;
-                });
+                        this.stories = this.$store.getters.getMailStories;
+                    });
             }
         }
     }

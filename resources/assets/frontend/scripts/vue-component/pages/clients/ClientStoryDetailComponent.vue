@@ -1,7 +1,7 @@
 <template>
     <div class="client-video-download-section">
         <v-container grid-list-xl class="client-story-detail-section">
-            <v-layout row wrap>
+            <v-layout row wrap v-if="story">
                 <!--<v-flex xs12>-->
                     <!--<v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>-->
                 <!--</v-flex>-->
@@ -29,7 +29,7 @@
 
                         <div class="caption">
                             <span>Author: {{ story.author }} | </span>
-                            <span>Created at: {{ story.created_at }}</span><br/>
+                            <span>Created at: {{ dateFormater(story.date_ingested) }}</span><br/>
                             <span>State: <strong>{{ story.state }}</strong> |</span>
                             <span>Status : {{ story.status }}</span>
                         </div>
@@ -144,6 +144,11 @@
                     }
                 }, 30);
             },
+
+            dateFormater(date){
+                var current_date = new Date(Date.parse(date.replace('-','/','g')));
+                return current_date.toDateString();
+            }
         }
     }
 </script>
