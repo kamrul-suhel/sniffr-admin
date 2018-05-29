@@ -130,6 +130,9 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 Route::group(array('prefix' => 'admin'), function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
+    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
+    Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
+
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');
@@ -188,6 +191,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
+    Route::get('stories/{id}/download', 'Admin\AdminStoryController@download')->name('stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
     Route::get('stories/create', 'Admin\AdminStoryController@create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
@@ -250,6 +254,7 @@ Route::group(array('prefix' => 'admin'), function () {
 
 Route::group(array('prefix' => 'client'), function () {
     Route::resource('orders', 'OrderController');
+    Route::get('stories/{id}/download', 'Admin\AdminStoryController@download')->name('stories.download');
 
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use Hash;
@@ -137,6 +138,24 @@ class AdminUsersController extends Controller
         return redirect()->route('users.edit', ['id' => $user->id])->with([
             'note' => 'Successfully Updated User Settings',
             'note_type' => 'success'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function storiesSent(Request $request, $user_id)
+    {
+        $user = User::find($user_id);
+        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) use ($user_id) {
+            $query->where('users.id', '=', $user_id);
+        })->orderBy('sent_at', 'DESC')->get();
+
+        return view('admin.users.stories_sent', [
+            'client_mailers' => $client_mailers,
+            'user' => $user,
         ]);
     }
 

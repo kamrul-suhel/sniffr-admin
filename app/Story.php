@@ -37,5 +37,4 @@ class Story extends Model
     {
         return $this->belongsToMany(Asset::class);
     }
-
 }

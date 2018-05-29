@@ -11,7 +11,6 @@
 	</div>
 	<div class="clear"></div>
 
-
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
 			<th>Name</th>
@@ -20,10 +19,19 @@
 			<tr>
 				<td>{{ TextHelper::shorten($client->name, 250) }}</td>
 				<td>
-					<p>
-						<a href="{{ url('admin/clients/edit') . '/' . $client->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ url('admin/clients/delete') . '/' . $client->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
-					</p>
+                    <a href="{{ route('clients.orders', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
+                        <span class="fa fa-edit"></span>
+                        Orders
+                    </a>
+                    <a href="{{ url('admin/clients/edit') . '/' . $client->id }}" class="btn btn-xs btn-info">
+                        <span class="fa fa-edit"></span>
+                        Edit
+                    </a>
+                    <a href="{{ url('admin/clients/delete') . '/' . $client->id }}"
+                       class="btn btn-xs btn-danger delete">
+                        <span class="fa fa-trash"></span>
+                        Delete
+                    </a>
 				</td>
 			</tr>
 			@endforeach
