@@ -37,6 +37,18 @@
             >
                 Download all assets
             </v-btn>
+
+            <v-btn
+                    block
+                    dark
+                    large
+                    color="dark"
+                    @click.native="onBuyStory()"
+                    :loading="loading"
+                    :disabled="loading"
+            >
+                Buy Story
+            </v-btn>
         </v-flex>
 
         <v-flex xs12 class="my-4">
@@ -93,6 +105,18 @@
                     return '/assets/frontend/images/placeholder.png';
                 }
                 return image;
+            },
+
+            onBuyStory(){
+                var url = '/client/orders';
+                var formData = new FormData();
+                formData.append('story_id', this.story.id);
+                formData.append('user_agent', navigator.userAgent);
+                formData.append('user_id', this.$store.getters.getUser.id);
+
+                axios.post(url, formData).then((response) => {
+                    console.log(response);
+                });
             }
         }
     }
