@@ -79,7 +79,6 @@ class QueueVideoYoutubeUpload implements ShouldQueue
             }
 
             if($fileName_watermark) {
-
                 // Upload it to youtube
                 if(!$video->youtube_id){
                     file_put_contents('/tmp/'.$fileName_watermark, $file_watermark);
@@ -95,6 +94,9 @@ class QueueVideoYoutubeUpload implements ShouldQueue
 
                     $response = Youtube::upload($file_watermark, ['title' => $video->title], 'unlisted');
                     $youtubeId  = $response->getVideoId();
+
+					$video->youtube_id = $youtubeId;
+					$video->save();
                 }
 
                 // Anaylsis (copies file over to another folder for analysis and suggested tag creation)
@@ -102,16 +104,9 @@ class QueueVideoYoutubeUpload implements ShouldQueue
                 if($disk->exists(basename($video->file))) {
                     $disk->move(''.basename($video->file), 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.basename($video->file));
                 }
-
-                $video->youtube_id = $youtubeId;
-                $video->save();
-
             } else {
-
                 $video->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube as no file exists (Id: '.$this->video_id.')'));
-
             }
-
         }
     }
 
