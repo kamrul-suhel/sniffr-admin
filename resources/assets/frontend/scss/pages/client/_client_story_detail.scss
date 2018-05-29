@@ -1,0 +1,26 @@
+.client-story-detail-section{
+
+  .caption{
+    color:#777;
+    font-size:14px !important;
+    font-style:italic;
+  }
+
+  .interactive-instagram{
+    width: 33%;
+    float: left;
+    height: 100%;
+    margin-right: 30px;
+
+    &:after{
+      content:'';
+      width:100%;
+      height:1px;
+      clear:both;
+    }
+  }
+
+  .story-content{
+    padding-left:24px;
+  }
+}
