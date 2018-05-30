@@ -99,7 +99,7 @@ class AdminStoryController extends Controller
 	 */
 	public function refresh()
 	{
-		$posts = $this->apiRequest('posts?status=draft&tags=37777', true);
+		$posts = $this->apiRequest('posts?status=draft&tags='.env('UNILAD_WP_TAG_ID'), true);
 
 		$stories_wp = [];
 		$story_ids = [];

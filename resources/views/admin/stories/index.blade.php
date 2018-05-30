@@ -25,7 +25,7 @@
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
-			<th style="width: 25%">Title2</th>
+			<th style="width: 25%">Title</th>
 			<th style="width: 30%">Excerpt</th>
 			<th>Assigned To</th>
 			<th>Created At</th>
