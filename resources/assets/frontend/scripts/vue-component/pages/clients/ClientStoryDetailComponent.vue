@@ -91,7 +91,7 @@
 
         methods: {
             onGoback() {
-                this.$router.push({name: 'client_mail'});
+                this.$router.push({name: 'client_stories'});
             },
 
             getStoryDetail(){
