@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Download extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
     protected $table = 'downloads';
     protected $guarded = [];
     public static $rules = [];

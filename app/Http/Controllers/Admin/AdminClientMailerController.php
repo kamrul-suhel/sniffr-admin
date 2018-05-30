@@ -12,6 +12,7 @@ use App\Video;
 use App\Client;
 use App\Comment;
 use App\ClientMailer;
+use App\Download;
 use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
@@ -44,7 +45,8 @@ class AdminClientMailerController extends Controller
         $data = [
             'mailers' => $mailers,
             'users' => User::all(),
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'downloads' => Download::all()
         ];
 
         return view('admin.mailers.index', $data); //return response()->json($formatted_posts);

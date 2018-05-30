@@ -24,6 +24,9 @@
 			<th>Created By</th>
 			<th>Created At</th>
 			<th>Sent At</th>
+			<th>Sends <span class="fa fa-bar-chart"></span></th>
+			<th>Stories <span class="fa fa-tasks"></span></th>
+			<th>Downloads <span class="fa fa-download"></span></th>
 			<th>Actions</th>
 			@foreach($mailers as $mailer)
 			<tr>
@@ -36,12 +39,15 @@
 				</td>
 				<td>{{ date('jS M Y h:i:s',strtotime($mailer->created_at)) }}</td>
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
+				<td>{{ $mailer->users()->where('sent_at', '!=', NULL)->count() }}</td>
+				<td>{{ $mailer->stories()->count() }}</td>
+				<td>@if($mailer['sent_at']) {{ $downloads->whereIn('story_id', $mailer->stories()->pluck('stories.id'))->count() }}@else 0 @endif</td>
 				<td>
 					<p>
 						@if(!$mailer['sent_at'])<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-primary"><span class="fa fa-plus-circle"></span> Send</a>@endif
-						<a href="#" class="btn btn-xs btn-warning"><span class="fa fa-bar-chart"></span> Stats</a>
+						<!-- <a href="#" class="btn btn-xs btn-warning"><span class="fa fa-bar-chart"></span> Stats</a> -->
 						<!-- <a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a> -->
-						<!-- <a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a> -->
+						<a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>
