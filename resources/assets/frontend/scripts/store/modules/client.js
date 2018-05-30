@@ -16,9 +16,13 @@ const mutations = {
 
 const actions = {
 
-    getMailStories({commit}, user){
+    getMailStories({commit}, mail_obj){
         return new Promise((resolve, reject) => {
-            let url = '/client/stories/mail/'+ user.id;
+            let url = '/client/stories/mail/'+ mail_obj.user.id;
+            if(mail_obj.page > 0){
+                url += '?page='+mail_obj.page;
+            }
+
             axios.get(url)
                 .then((response) => {
                 let data = response.data;

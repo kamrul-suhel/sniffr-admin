@@ -8,7 +8,7 @@
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
-                    <h2>{{story.title}}</h2>
+                    <h2 v-html="story.title"></h2>
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
                     <div v-html="story.excerpt"></div>
                 </v-flex>
@@ -35,7 +35,7 @@
                     :loading="loading"
                     :disabled="loading"
             >
-                Download all assets
+                Download assets
             </v-btn>
         </v-flex>
 
