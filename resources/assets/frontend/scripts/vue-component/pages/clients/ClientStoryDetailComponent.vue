@@ -3,7 +3,10 @@
         <v-container grid-list-lg class="client-story-detail-section" pt-0>
             <v-layout row wrap v-if="story">
                 <v-flex xs12 pt-0>
-                    <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
+                    <v-btn outline @click="onGoback()" class="ml-0">
+                        <v-icon>chevron_left</v-icon>
+                        Go back
+                    </v-btn>
                 </v-flex>
 
                 <v-flex xs12 sm12 md5 lg4 xl4 class="client-assets">
@@ -12,7 +15,8 @@
                     <v-divider style="margin-bottom:20px;"></v-divider>
 
                     <v-layout row wrap>
-                        <asset-component v-for="asset in story.assets" :key="asset.id" :asset="asset" :story_id="story.id"></asset-component>
+                        <asset-component v-for="asset in story.assets" :key="asset.id" :asset="asset"
+                                         :story_id="story.id"></asset-component>
                     </v-layout>
 
                     <v-btn
@@ -100,7 +104,7 @@
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
                         console.log(this.story);
-                        if(this.story.orders && this.story.orders.id){
+                        if (this.story.orders && this.story.orders.id) {
                             this.order = true;
                         }
                     });
@@ -108,14 +112,13 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                var url = '/client/stories/'+this.story.id+'/download';
+                var url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
             },
 
 
-
             dateFormater(date){
-                var current_date = new Date(Date.parse(date.replace('-','/','g')));
+                var current_date = new Date(Date.parse(date.replace('-', '/', 'g')));
                 return current_date.toDateString();
             }
         }

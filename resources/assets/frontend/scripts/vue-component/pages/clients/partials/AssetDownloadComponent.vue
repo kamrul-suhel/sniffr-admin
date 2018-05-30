@@ -58,19 +58,19 @@
     export default {
         data () {
             return {
-                loading:false,
+                loading: false,
                 loader: null,
-                showButton : false,
+                showButton: false,
                 order: false,
             }
         },
 
-        props:[
+        props: [
             'story'
         ],
 
         created() {
-            if(this.story.orders && this.story.orders.id){
+            if (this.story.orders && this.story.orders.id) {
                 this.order = true;
             }
         },
@@ -93,7 +93,7 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                var url = '/client/stories/'+this.story.id+'/download';
+                var url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
             },
 
@@ -102,7 +102,7 @@
             },
 
             getImage(image){
-                if(!image){
+                if (!image) {
                     return '/assets/frontend/images/placeholder.png';
                 }
                 return image;

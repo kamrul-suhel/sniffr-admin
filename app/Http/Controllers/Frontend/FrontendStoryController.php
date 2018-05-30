@@ -20,18 +20,19 @@ class FrontendStoryController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function getMailerStories(Request $request){
+    public function getMailerStories(Request $request)
+    {
 
-        if($request->ajax() || $request->isJson()){
-           $user_id = $request->user_id;
+        if ($request->ajax() || $request->isJson()) {
+            $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories.orders')
-                ->whereHas('users', function ($query) use($user_id) {
+                ->whereHas('users', function ($query) use ($user_id) {
                     $query->where('users.id', '=', $user_id);
                 })
                 ->orderBy('created_at', 'DESC')
-            ->get()
-            ->pluck('stories')
-            ->collapse();
+                ->get()
+                ->pluck('stories')
+                ->collapse();
 
             //Paginate collection object
             $stories = $this->paginate($client_mailer, 8, $request->page);
@@ -45,14 +46,14 @@ class FrontendStoryController extends Controller
     }
 
     /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function show(Request $request)
     {
 
-        if($request->ajax() || $request->isJson()){
-            $story_id = Story::select('id')->where('alpha_id','=', $request->alpha_id)->first()['id'];
+        if ($request->ajax() || $request->isJson()) {
+            $story_id = Story::select('id')->where('alpha_id', '=', $request->alpha_id)->first()['id'];
             $story = Story::with('assets')->with('videos')->with('orders')->find($story_id);
 
             $description = preg_replace("/<img[^>]+\>/i", "", $story->description);
@@ -61,7 +62,7 @@ class FrontendStoryController extends Controller
             $data = [
                 'story' => $story,
             ];
-           return $this->successResponse($data);
+            return $this->successResponse($data);
         }
 
         return View('frontend.master');

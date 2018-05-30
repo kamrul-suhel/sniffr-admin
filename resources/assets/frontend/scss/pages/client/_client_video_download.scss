@@ -1,48 +1,47 @@
-.client-video-download-section{
-
+.client-video-download-section {
 
 }
 
-.cd-box{
-  h2{
-    line-height:28px;
+.cd-box {
+  h2 {
+    line-height: 28px;
   }
 
-  .cdi-content{
-    height:250px;
+  .cdi-content {
+    height: 250px;
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-size: cover !important;
-    position:relative;
+    position: relative;
 
-    .cdi-label{
-      position:absolute;
+    .cdi-label {
+      position: absolute;
       top: 10px;
       right: 10px;
 
-      button.btn--floating.btn--small{
-        width:30px;
-        height:30px;
+      button.btn--floating.btn--small {
+        width: 30px;
+        height: 30px;
       }
     }
   }
 
-  .cd-type{
-    text-transform:uppercase;
-    font-weight:bold;
+  .cd-type {
+    text-transform: uppercase;
+    font-weight: bold;
   }
 
-  .cd-time{
-    font-style:italic;
-    color:#777;
+  .cd-time {
+    font-style: italic;
+    color: #777;
     margin-bottom: 10px;
   }
 }
 
-.application .cd-box .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
-  background-color: hsla(0,0%,0%,1)!important;
+.application .cd-box .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
+  background-color: hsla(0, 0%, 0%, 1) !important;
 }
 
-.application .client-video-download-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
-  background-color: hsla(0,0%,0%,1)!important;
+.application .client-video-download-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
+  background-color: hsla(0, 0%, 0%, 1) !important;
 }
