@@ -2,12 +2,12 @@
     <v-flex xs6 sm6 md12 lg12 xl12 @click="showDownloadButton" >
         <div class="thumbnail" :style="{backgroundImage:'url('+asset.url+')'}">
             <div class="download_asset" :class="{show: showButton}">
-                <v-btn fab dark small color="dark"
-                       :loading="loading"
-                       :disabled="loading"
-                       @click.native="downloadAsset()">
-                    <v-icon dark>cloud_download</v-icon>
-                </v-btn>
+                <!--<v-btn fab dark small color="dark"-->
+                       <!--:loading="loading"-->
+                       <!--:disabled="loading"-->
+                       <!--@click.native="downloadAsset()">-->
+                    <!--<v-icon dark>cloud_download</v-icon>-->
+                <!--</v-btn>-->
             </div>
         </div>
     </v-flex>
