@@ -155,14 +155,15 @@ class AdminStoryController extends Controller
 		// store stories from wordpress in database
 		foreach($stories_wp as $story_wp){
 
-			// checks if wp post already exists within sniffr stories (TO DO: or if wp post has been updated)
-			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first(); //, ['date', '>', Carbon::now()->subDays(30)->toDateTimeString()]
+			// checks if wp post already exists within sniffr stories
+			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
 
 			if(!$story_find) {
 				$story = new Story();
 
 				$asset_ids = [];
 				if(isset($story_wp['assets'])){
+                    // might be a good idea to get the assets (especially images within WP post) at this stage via a separate function to speed up initial refresh
 					foreach($story_wp['assets'] as $key => $asset_wp){
 						$asset = new Asset();
 						$asset->alpha_id = VideoHelper::quickRandom();
@@ -171,7 +172,7 @@ class AdminStoryController extends Controller
 						$asset_ids[] = $asset->id;
 
 						if($key === 0){
-							$story->thumb = $asset->url; //$asset_ids[1];//$story_wp['url'];
+							$story->thumb = $asset->url;
 						}
 					}
 				}
@@ -191,7 +192,28 @@ class AdminStoryController extends Controller
 				$story->active = 1;
 				$story->save();
 				$story->assets()->sync($asset_ids);
-			}
+			} else {
+                // if wp post is updated 5mins after our own story record
+                $storyTime = Carbon::parse($story_find->date_ingested);
+                $postTime = Carbon::parse($story_wp['date']);
+                $differenceTime = $postTime->diffInSeconds($storyTime);
+
+                if($differenceTime>300) {
+                    // need to check/update the assets associated with the story record in Sniffr
+
+                    // update the story record in Sniffr
+                    $story_find->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
+    				$story_find->author = $story_wp['author'];
+    				$story_find->date_ingested = $story_wp['date'];
+    				$story_find->categories = implode("|",$story_wp['categories']);
+    				$story_find->status = $story_wp['status'];
+    				$story_find->title = $story_wp['title'];
+                    $story_find->url = $story_wp['url'];
+    				$story_find->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
+    				$story_find->user_id = (Auth::user() ? Auth::user()->id : $story_find->user_id);
+    				$story_find->save();
+                }
+            }
 		}
 
 		return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
