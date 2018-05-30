@@ -23,7 +23,7 @@
                             :disabled="loading"
                             large
                             @click.native="onDownloadAllAssets()"
-                            color="dark">Download all assets
+                            color="dark">Download assets
 
                     </v-btn>
                 </v-flex>
