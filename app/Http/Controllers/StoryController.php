@@ -8,6 +8,7 @@ use App\Order;
 use App\Story;
 use App\Video;
 use Chumper\Zipper\Facades\Zipper;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use PDF;
@@ -37,7 +38,8 @@ class StoryController extends Controller
             abort(404, 'No Assets Found in this Story');
         }
 
-        $newZipFileName = '../storage/' . time() . '.zip';
+        $newZipFileName = $story->alpha_id. time() . '.zip';
+        $newZipFilePath = '../storage/'.$newZipFileName;
         $prefix = 'sniffr_';
         $files = [];
 
@@ -71,8 +73,10 @@ class StoryController extends Controller
         $this->logDownload($id);
         $this->saveDownloadToOrder($id);
 
-        Zipper::make($newZipFileName)->add($files)->close();
-        return response()->download($newZipFileName);
+        Zipper::make($newZipFilePath)->add($files)->close();
+        \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
+
+        return response()->download($newZipFilePath)->deleteFileAfterSend(true);
     }
 
     /**
@@ -186,9 +190,14 @@ class StoryController extends Controller
         }
 
         $pdfName = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        $pdfUrl = '../storage/' . $pdfName . '.pdf';
-        $pdf->save($pdfUrl);
+        $pdfUrl = 'downloads/' . $pdfName . '.pdf';
 
-        return $pdfUrl;
+        \Storage::disk('s3')->put($pdfUrl, $pdf->output(), 'public');
+        $pdfUrl = \Storage::disk('s3')->url($pdfUrl);
+
+        $tempPdf = tempnam(sys_get_temp_dir(), $pdfName) . '.pdf';
+        copy($pdfUrl, $tempPdf);
+
+        return $tempPdf;
     }
 }
