@@ -1,6 +1,6 @@
 <template>
     <div class="client-video-download-section">
-        <v-container grid-list-xl class="client-story-detail-section" pt-0>
+        <v-container grid-list-lg class="client-story-detail-section" pt-0>
             <v-layout row wrap v-if="story">
                 <v-flex xs12 pt-0>
                     <!--<v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>-->
