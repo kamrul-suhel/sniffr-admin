@@ -161,12 +161,15 @@
                 s.src = src;
                 s.async = true;
 
-                $('body').append(s);
                 setTimeout(function () {
                     if (typeof window.instgrm !== 'undefined') {
+                        $('body').append(s);
                         window.instgrm.Embeds.process();
+                        console.log("instagram called");
+                    }else{
+                        $('body').append(s);
                     }
-                }, 30);
+                }, 1000);
             },
 
             dateFormater(date){
