@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\ClientMailer;
+use App\Order;
 use App\Story;
 use App\Traits\FrontendResponse;
 use Carbon\Carbon;
@@ -69,7 +70,15 @@ class FrontendStoryController extends Controller
 
     }
 
-    public function paginate($items, $perPage = 15, $page = null, $options = [])
+    public function getDownloadedStories(Request $request){
+        $user_id = $request->id;
+        $order_stories = Order::with('story')
+            ->where('user_id', '=', $user_id)
+            ->get();
+        dd($order_stories);
+    }
+
+    private function paginate($items, $perPage = 15, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);

@@ -280,6 +280,7 @@ Route::group(array('prefix' => 'client'), function () {
 
 Route::get('/client/stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
 Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
+Route::get('client/stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
 Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
 
 /*
