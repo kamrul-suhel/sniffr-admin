@@ -5,7 +5,7 @@
 @if(!empty($mailer->note)) <div style="padding-top:20px;padding-bottom:20px;">{{ $mailer->note }}</div> @endif
 
 @if(!empty($mailer->stories))
-<p><a href="{{ url('/client/mail') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">Checkout all your stories here</a></p>
+<p><a href="{{ url('/client/stories') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">Checkout all your stories here</a></p>
 
 <table>
     @php $count = 0 @endphp
@@ -15,7 +15,7 @@
                 <h4>{{ TextHelper::shorten($story['title'], 250) }}</h4>
                 by {{ $story['author'] }}
                 <br />
-                <img src="@if($story['thumb']){{ $story['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 180px; width: auto; margin-top: 15px; margin-right: 15px;" />
+                <img src="@if($story['thumb']){{ $story['thumb'] }}@else {{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 180px; width: auto; margin-top: 15px; margin-right: 15px;" />
             </td>
             <td valign="top" style="padding: 20px;">
                 <br />{{ TextHelper::shorten($story['excerpt'], 350) }}..
