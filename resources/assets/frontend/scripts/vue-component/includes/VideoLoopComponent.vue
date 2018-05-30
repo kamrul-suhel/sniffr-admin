@@ -1,18 +1,22 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl4>
+    <v-flex xs12 sm6 md4 lg4 xl3>
         <v-card class="block">
             <v-card-media class="sniffr-media-thumbnail"
                 :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
                 <a
-                @click.stop="goToDetail(video)"
+                @click.stop="openVideoDialog(video)"
                 class="block-thumbnail"
                 >
                     <div class="thumbnail-overlay"></div>
                     <span class="play-button">
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
-                    <span class="label" :class="video.state == 'licensed' ? 'label-success': 'label-danger'">
+                    <span class="label" :class="video.state == 'licensed' ? 'label-licensed': 'label-danger'">
                         {{video.state}}
+                    </span>
+
+                    <span v-if="video.nsfw == '1'" class="label" :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
+                        NSFW
                     </span>
 
                     <div class="video-duration" v-if="video.duration">
@@ -22,24 +26,26 @@
             </v-card-media>
 
             <v-card-title class="pb-0">
-                <h3 class="headline mb-0">
+                <h3 class="headline mb-0" @click.stop="goToDetail(video)">
                     {{ video.title }}
                 </h3>
             </v-card-title>
 
             <v-card-text class="pt-0">
-                <div class="video-content">
+                <div class="video-content" v-if="video.description != 'null'">
                     {{ video.description | readmore(100, '...') }}
                 </div>
             </v-card-text>
         </v-card>
     </v-flex>
 </template>
+
 <script>
+    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus'
     export default {
         data() {
             return {
-                video_image: '/assets/frontend/images/placeholder.png'
+                video_image: '/assets/frontend/images/placeholder.png',
             }
         },
         props:['video'],
@@ -56,12 +62,15 @@
                 return '/assets/frontend/images/placeholder.png';
             },
 
-            goToDetail(video) {
-                this.$vuetify.goTo('.videos-section', {duration: 500, easing:'easeInCubic'});
-                setTimeout(() => {
-                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
-                }, 800);
+            goToDetail() {
+                this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
 
+            },
+
+            openVideoDialog(video){
+                let url = '/videos/'+video.alpha_id;
+                window.history.pushState(null, "page 2",url);
+                VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
             }
         },
 

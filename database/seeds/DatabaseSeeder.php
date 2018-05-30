@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             TagsTableSeeder::class,
             TagVideoTableSeeder::class,
             YoutubeAccessTableSeeder::class,
+            OrdersTableSeeder::class,
         ]);
     }
 }

@@ -17,23 +17,25 @@
 
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
-            <v-container grid-list-lg pt-0>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn flat raised @click="onGoback()" class="ml-0">Go Back</v-btn>
+                        <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
                 </v-layout>
 
                 <v-layout row wrap>
-                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}" align-content-center v-html="video_detail.iframe" xs12 sm12 md7 lg7 xl7>
-                    </v-flex>
+                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}"
+                            align-content-center
+                            v-html="video_detail.iframe"
+                            xs12 sm12 md7 lg7 xl7></v-flex>
 
                     <v-flex xs12 sm12 md5 lg5 xl5>
-                        <v-layout row wrap class="video-detail-content">
+                        <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
-                                <p>{{ video_detail.video.description }}</p>
-                                <div class="video-detail-tags">
+                                <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
+                                <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
                                         <li v-for="tag in tags">
@@ -50,13 +52,12 @@
                                     <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
                                             text-xl-right>
                                         <v-btn
-                                                fab
                                                 dark
-                                                small
-                                                color="pink favorite"
-                                                data-authenticated=""
-                                                :data-videoid="video_detail.video.id">
-                                            <v-icon dark>remove_red_eye</v-icon>
+                                                fab
+                                                flat
+                                                color="dark favorite"
+                                                class="mr-0 mb-0">
+                                            <v-icon dark color="black ">remove_red_eye</v-icon>
                                         </v-btn>
 
                                         {{ video_detail.video.views+1}} views
@@ -64,33 +65,7 @@
 
 
                                     <div class="video-detail-social-share">
-                                        <!--<div class="video-license">License</div>-->
-                                        <div class="video-social-link">
-                                            <!--<h3>Share</h3>-->
-                                            <ul>
-                                                <!-- Buttons start here -->
-                                                <ul class="rrssb-buttons clearfix">
-                                                    <li class="rrssb-facebook">
-                                                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?= $media_url ?>"
-                                                           class="popup">
-                                                            <i class="fab fa-facebook-f fa-1x"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="rrssb-twitter">
-                                                        <a href="http://twitter.com/home?status=<?= $media_subject ?> : <?= $media_url ?>"
-                                                           class="popup">
-                                                            <i class="fab fa-twitter fa-1x"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="rrssb-email">
-                                                        <a href="mailto:?subject=<?= $media_subject ?>&amp;body=<?= $media_url ?>">
-                                                            <i class="fas fa-at"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <!-- Buttons end here -->
-                                            </ul>
-                                        </div>
+                                        <!--<v-btn dark block class="dark mt-0">License</v-btn>-->
                                     </div>
                                 </v-layout>
                             </v-flex>
@@ -99,23 +74,12 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-
-            <!--<v-content>-->
-                <!--<v-container>-->
-                    <!--<v-layout>-->
-                        <!--<v-flex xs12 align-center justify-center>-->
-                            <!--<v-icon class="loading">cached</v-icon>-->
-                        <!--</v-flex>-->
-
-                    <!--</v-layout>-->
-                <!--</v-container>-->
-
-            <!--</v-content>-->
         </div>
     </section>
 </template>
 
 <script>
+
     export default {
         data() {
             return {
@@ -128,16 +92,23 @@
 
                 ready_to_show : true,
 
-                previousPageUrl: ''
+                previousPageUrl: '',
+
+                content_padding:true
             }
         },
 
         watch: {
             '$route'(to, from, next) {
+                console.log("where is now " + to + ": Where is coming from " + from );
             }
         },
 
         created() {
+            let breakpoint = this.$vuetify.breakpoint.name;
+            if(breakpoint === 'sm' || breakpoint === 'xs' ){
+                this.content_padding = false;
+            }
 
         },
 
@@ -147,7 +118,6 @@
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
-                console.log(this.video_detail);
 
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
@@ -159,6 +129,8 @@
                 }
 
                 this.reloadFacebook();
+
+                this.realoadTwitter();
             });
 
         },
@@ -199,6 +171,19 @@
                     }, 30);
 
                 }
+            },
+
+            realoadTwitter(){
+                TwitterWidgetsLoader.load(function(twttr) {
+                    var tweets = jQuery(".tweet");
+
+                    $(tweets).each( function( t, tweet ) {
+                        var id = jQuery(this).attr('id');
+                        twttr.widgets.createVideo(id,tweet).then( function( el ) {
+                            widget_type=video
+                        });
+                    });
+                });
             },
 
             reloadVideoJs() {

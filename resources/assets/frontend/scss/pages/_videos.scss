@@ -161,15 +161,24 @@
         transition:all ease-in-out .3s;
       }
 
-      .label-success{
+      .label {
         position:absolute;
         top:0;
-        right:0;
-        background:#5cb85c;
         color:#fff;
         padding:5px 10px;
         z-index:3
       }
+      .label-licensed{
+        left:0;
+        background:#5cb85c;
+      }
+
+      .label-nsfw{
+        right:0;
+        background:#da0039;
+      }
+
+
     }
   }
 

@@ -14,7 +14,7 @@ class CampaignsTableSeeder extends Seeder
     {
         $clientIds = Client::pluck('id')->toArray();
         $faker = Faker::create();
-        foreach (range(1, 30) as $index) {
+        foreach (range(1, 1) as $index) {
             Campaign::create([
                 'client_id' => $faker->randomElement($clientIds),
                 'name' => $faker->sentence(2),
