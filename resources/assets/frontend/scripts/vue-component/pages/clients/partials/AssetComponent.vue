@@ -37,7 +37,6 @@
             }
         },
         created() {
-            console.log(this.story_id);
         },
 
         methods: {

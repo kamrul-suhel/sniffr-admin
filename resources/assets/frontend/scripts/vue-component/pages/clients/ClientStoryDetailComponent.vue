@@ -1,8 +1,8 @@
 <template>
     <div class="client-video-download-section">
-        <v-container grid-list-xl class="client-story-detail-section">
+        <v-container grid-list-xl class="client-story-detail-section" pt-0>
             <v-layout row wrap v-if="story">
-                <v-flex xs12>
+                <v-flex xs12 pt-0>
                     <!--<v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>-->
                     <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
                 </v-flex>
@@ -23,14 +23,14 @@
                             :disabled="loading"
                             large
                             @click.native="onDownloadAllAssets()"
-                            color="dark">Download all assets
+                            color="dark">Download assets
 
                     </v-btn>
                 </v-flex>
 
                 <v-flex xs12 sm12 md7 lg8 xl8>
                     <div class="story-content">
-                        <h2>{{ story.title }}</h2>
+                        <h2 v-html="story.title"></h2>
 
                         <div class="caption">
                             <span>Author: {{ story.author }} | </span>

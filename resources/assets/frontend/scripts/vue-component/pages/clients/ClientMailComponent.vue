@@ -2,7 +2,10 @@
     <div class="client-mail-section" v-if="ini_state">
         <v-container grid-list-xl v-if="stories == ''">
             <v-layout row wrap>
-                <h2 class="text-xs-center no-stories" >Sorry, we cannot find any stories associated with your account.  Please contact <a href="mailto:mel@unilad.co.uk?Subject=Enquiry" target="_top">mel@unilad.co.uk</a> for more information.</h2>
+                <h2 class="text-xs-center no-stories">
+                    Sorry, we cannot find any stories associated with your account.  Please contact <a
+                        href="mailto:mel@unilad.co.uk?Subject=Enquiry" target="_top">mel@unilad.co.uk</a>
+                    for more information.</h2>
             </v-layout>
         </v-container>
 
@@ -45,7 +48,6 @@
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
                         this.ini_state = true;
-                        console.log('workign;');
                     });
             }
         }

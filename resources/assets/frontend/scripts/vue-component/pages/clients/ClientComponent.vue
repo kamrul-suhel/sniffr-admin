@@ -3,7 +3,7 @@
     <div class="client-section">
 
         <!-- Client content SECTION -->
-        <section class="client-content" align-content-end v-if="content_show">
+        <section class="client-content section-space" align-content-end v-if="content_show">
             <!--<v-container grid-list-xl>-->
                 <!--<v-layout row wrap>-->
                     <!--<v-flex class="text-xs-right">-->
