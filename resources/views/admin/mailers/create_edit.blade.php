@@ -161,7 +161,7 @@
 			<input type="hidden" id="id" name="id" value="{{ $mailer->id }}" />
 		@endif
 
-		<input type="hidden" name="send_mailer" value="1" />
+		<input type="hidden" id="send_mailer" name="send_mailer" value="1" />
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 
 	</form>
