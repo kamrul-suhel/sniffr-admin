@@ -274,11 +274,11 @@ Route::group(array('prefix' => 'client'), function () {
 
 /*
 |--------------------------------------------------------------------------
-| Client Fronted Routes
+| Client Frontend Routes
 |--------------------------------------------------------------------------
 */
 
-Route::get('/client/mail', 'Frontend\FrontendStoryController@getMailerStories')->name('client.mail');
+Route::get('/client/stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
 Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
 Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
 
