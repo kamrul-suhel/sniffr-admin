@@ -51,6 +51,8 @@
 
 	<div class="clear"></div>
 
+	<div class="text-center"><?= $stories->appends(request()->except('page'))->render(); ?></div>
+
 	@section('javascript')
 	<script>
 		$ = jQuery;

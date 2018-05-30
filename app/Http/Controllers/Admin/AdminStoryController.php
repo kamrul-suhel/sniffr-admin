@@ -201,16 +201,14 @@ class AdminStoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
+        $stories = new Story;
+        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(3);
+
         $data = [
-            'stories' => Story::all(),
+            'stories' => $stories,
             'users' => User::all(),
             'user' => Auth::user()
         ];
-//
-//        foreach($data['stories'] as $story){
-//			dd($story->assets()->first()-);
-//		}
-
 
         return view('admin.stories.index', $data); //return response()->json($formatted_posts);
     }
