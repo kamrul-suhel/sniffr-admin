@@ -145,8 +145,7 @@
 						<select name="clients[]" id="clients" class="form-control" multiple style="height:400px;">
 							@if(!empty($clients))
 								@foreach($clients as $client)
-
-									<option value="{{ $client->id }}" @if(isset($mailer)) @if(!empty($client->id == $mailer->user_id))selected="selected"@endif @endif>{{ $client->username }} ({{ $client->email }})</option>
+									<option value="{{ $client->id }}"{{ isset($mailer) && $mailer->users()->get()->contains($client->id)  ? " selected" : "" }}>{{ $client->username }} ({{ $client->email }})</option>
 								@endforeach
 							@endif
 						</select>
