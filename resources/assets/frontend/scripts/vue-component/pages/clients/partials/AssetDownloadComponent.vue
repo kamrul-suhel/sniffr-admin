@@ -2,6 +2,15 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }">
+                <div class="cdi-label" v-if="order">
+                    <v-tooltip top>
+                        <v-btn slot="activator" fab small raised dark color="dark">
+                            <v-icon light small>done</v-icon>
+                        </v-btn>
+                        <span>Downloaded</span>
+                    </v-tooltip>
+
+                </div>
             </div>
         </v-flex>
 
@@ -51,7 +60,8 @@
             return {
                 loading:false,
                 loader: null,
-                showButton : false
+                showButton : false,
+                order: false,
             }
         },
 
@@ -60,6 +70,9 @@
         ],
 
         created() {
+            if(this.story.orders && this.story.orders.id){
+                this.order = true;
+            }
         },
 
         watch: {

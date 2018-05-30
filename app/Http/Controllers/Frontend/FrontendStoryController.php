@@ -22,10 +22,9 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request){
 
-
         if($request->ajax() || $request->isJson()){
            $user_id = $request->user_id;
-            $client_mailer = ClientMailer::with('stories')
+            $client_mailer = ClientMailer::with('stories.orders')
                 ->whereHas('users', function ($query) use($user_id) {
                     $query->where('users.id', '=', $user_id);
                 })
@@ -54,7 +53,7 @@ class FrontendStoryController extends Controller
 
         if($request->ajax() || $request->isJson()){
             $story_id = Story::select('id')->where('alpha_id','=', $request->alpha_id)->first()['id'];
-            $story = Story::with('assets')->with('videos')->find($story_id);
+            $story = Story::with('assets')->with('videos')->with('orders')->find($story_id);
 
             $description = preg_replace("/<img[^>]+\>/i", "", $story->description);
 

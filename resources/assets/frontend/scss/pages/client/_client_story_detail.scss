@@ -1,30 +1,42 @@
-.client-story-detail-section{
+.client-story-detail-section {
 
-  .caption{
-    color:#777;
-    font-size:14px !important;
-    font-style:italic;
+  .caption {
+    color: #777;
+    font-size: 14px !important;
+    font-style: italic;
   }
 
-  .interactive-instagram{
+  .interactive-instagram {
     width: 33%;
     float: left;
     height: 100%;
     margin-right: 30px;
 
-    &:after{
-      content:'';
-      width:100%;
-      height:1px;
-      clear:both;
+    &:after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      clear: both;
     }
   }
 
-  button i{
-    margin-left:-8px;
+  button i {
+    margin-left: -8px;
   }
 
-  .story-content{
-    padding-left:24px;
+  .story-content {
+
+    padding-left: 24px;
+
+    .badge {
+
+      .badge__badge {
+
+        span {
+          margin-top: 4px;
+          font-weight: bold;
+        }
+      }
+    }
   }
 }

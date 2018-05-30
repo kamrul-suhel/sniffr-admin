@@ -13,6 +13,18 @@
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-size: cover !important;
+    position:relative;
+
+    .cdi-label{
+      position:absolute;
+      top: 10px;
+      right: 10px;
+
+      button.btn--floating.btn--small{
+        width:30px;
+        height:30px;
+      }
+    }
   }
 
   .cd-type{
