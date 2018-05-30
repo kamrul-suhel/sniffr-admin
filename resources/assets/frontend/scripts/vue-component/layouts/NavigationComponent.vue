@@ -40,14 +40,6 @@
                                             </v-list-tile-title>
                                         </v-list-tile>
 
-                                        <!--<v-list-tile v-if="client_login">-->
-                                            <!--<v-list-tile-title>-->
-                                                <!--<a @click.prevent.stop="onClientStories()">-->
-                                                    <!--<v-icon color="white" left size="20px">library_books</v-icon> Email-->
-                                                <!--</a>-->
-                                            <!--</v-list-tile-title>-->
-                                        <!--</v-list-tile>-->
-
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientEmail()">
@@ -204,7 +196,7 @@
             },
 
             onClientEmail(){
-                this.$router.push({name: 'client_mail'});
+                this.$router.push({name: 'client_stories'});
             },
 
             onClientStories(){

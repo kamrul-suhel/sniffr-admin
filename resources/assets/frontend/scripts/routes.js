@@ -130,7 +130,7 @@ export const routes = [
             {
                 path: 'stories',
                 name: 'client_stories',
-                component: ClientVideoDetailComponent
+                component: ClientMailComponent
             },
 
             {
