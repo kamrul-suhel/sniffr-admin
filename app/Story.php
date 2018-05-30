@@ -37,4 +37,8 @@ class Story extends Model
     {
         return $this->belongsToMany(Asset::class);
     }
+
+    public function orders(){
+        return $this->hasOne(Order::class);
+    }
 }

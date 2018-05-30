@@ -38,9 +38,18 @@
                 return this.pagination;
             },
 
+            '$route'() {
+                this.current_page = Number(this.$route.query.page);
+            },
+
             current_page(){
                 //Go to the top
-                this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
+                if(this.page === 'client_stories'){
+                    let page =  this.current_page;
+                    this.$router.push({name: 'client_stories', query:{ page: page}});
+                }else{
+                    this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
+                }
 
                 setTimeout(() => {
                     if(this.page === 'video'){
@@ -58,11 +67,15 @@
                         let page =  this.current_page;
                         this.$router.push({name: 'videos_tag', params:{value: value}, query:{ page: page}});
                     }
+
+
+
                 }, 500);
             }
         },
 
         created(){
+            this.current_page = Number(this.$route.query.page);
             let device = this.$vuetify.breakpoint.name;
 
             if(device === 'xs'){
