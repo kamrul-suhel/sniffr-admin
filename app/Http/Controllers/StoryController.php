@@ -8,6 +8,7 @@ use App\Order;
 use App\Story;
 use App\Video;
 use Chumper\Zipper\Facades\Zipper;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use PDF;
@@ -186,8 +187,9 @@ class StoryController extends Controller
         }
 
         $pdfName = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        $pdfUrl = '../storage/' . $pdfName . '.pdf';
-        $pdf->save($pdfUrl);
+        $pdfUrl = 'downloads/' . $pdfName . '.pdf';
+        \Storage::disk('s3')->put($pdfUrl, $pdf->output(), 'public');
+        $pdfUrl = \Storage::disk('s3')->url($pdfUrl);
 
         return $pdfUrl;
     }
