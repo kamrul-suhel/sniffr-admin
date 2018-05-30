@@ -172,7 +172,7 @@
                                     let redirect_url = this.$store.getters.getAttepmtRoute;
                                     console.log(redirect_url);
                                     if(!redirect_url){
-                                        this.$router.push({name: 'client_mail'});
+                                        this.$router.push({name: 'client_stories'});
                                     }
                                     LoginEventBus.clientLoginChange();
                                     return;
