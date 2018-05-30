@@ -19,8 +19,8 @@
 			<tr>
 				<td>{{ TextHelper::shorten($client->name, 250) }}</td>
 				<td>
-                    <a href="{{ route('clients.orders', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
-                        <span class="fa fa-edit"></span>
+                    <a href="{{ route('clients.orders', ['id' => $client->id]) }}" class="btn btn-xs btn-warning">
+                        <span class="fa fa-bar-chart"></span>
                         Orders
                     </a>
                     <a href="{{ url('admin/clients/edit') . '/' . $client->id }}" class="btn btn-xs btn-info">

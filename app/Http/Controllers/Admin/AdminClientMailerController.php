@@ -137,8 +137,12 @@ class AdminClientMailerController extends Controller
 
         $mailer->save();
 
+        $mailer_status = 'Saved';
+
         // If send mailer (rather than just saved) then queue mailer to send
         if(Input::get('send_mailer')==1) {
+            $mailer_status = 'Sent';
+
             // Slack notification
             if (env('APP_ENV') == 'prod') {
                 $mailer->notify(new ClientMailer($mailer));
@@ -157,7 +161,7 @@ class AdminClientMailerController extends Controller
         }
 
         return Redirect::to('admin/mailers')->with([
-            'note' => 'Successfully Sent Client Mailer!',
+            'note' => 'Successfully '.$mailer_status.' Client Mailer!',
             'note_type' => 'success'
         ]);
     }
