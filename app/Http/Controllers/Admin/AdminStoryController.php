@@ -202,7 +202,7 @@ class AdminStoryController extends Controller
      */
     public function index(){
         $stories = new Story;
-        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(3);
+        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,
