@@ -32,11 +32,10 @@
                 </v-btn>
             </div>
 
-            <v-card height="650px" flat>
+            <v-card flat>
 
                 <v-card-media
                         :src="current_item.url"
-                        height="650px"
                 >
                     <v-container fill-height fluid>
                         <v-layout fill-height>
