@@ -8,6 +8,11 @@
             content-class="video-dialog-container"
             max-width="1200px"
     >
+        <!--<div class="dialog-box-loading">-->
+            <!--<div class="dialog-box-loading-content">-->
+                <!--<v-progress-circular :size="50" indeterminate color="dark"></v-progress-circular>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="dialog-box-switch prev">
             <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">
                 <v-icon>chevron_left</v-icon>
