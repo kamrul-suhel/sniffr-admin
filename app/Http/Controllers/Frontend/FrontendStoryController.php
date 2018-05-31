@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendStoryController extends Controller
 {
@@ -23,7 +24,7 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request)
     {
-
+        //Paginate collection object
         if ($request->ajax() || $request->isJson()) {
             $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories.orders')
@@ -31,14 +32,19 @@ class FrontendStoryController extends Controller
                     $query->where('users.id', '=', $user_id);
                 })
                 ->orderBy('created_at', 'DESC')
-                ->get()
-                ->pluck('stories')
-                ->collapse();
+                ->get();
+
+            $client_mailer = $client_mailer->each(function($client_mailer){
+                foreach($client_mailer->stories as $story){
+                    $story['client_mailer_id'] = $client_mailer->id;
+                };
+            })->pluck('stories')->collapse();
+
 
             //Paginate collection object
             $stories = $this->paginate($client_mailer, 8, $request->page);
             $data = [
-                'stories' => $stories
+                'stories' => $stories,
             ];
             return $this->successResponse($data);
         }
@@ -71,10 +77,15 @@ class FrontendStoryController extends Controller
     }
 
     public function getDownloadedStories(Request $request){
-        $user_id = $request->id;
+        $user = Auth::user();
         $order_stories = Order::with('story')
-            ->where('user_id', '=', $user_id)
-            ->get();
+            ->where('user_id', '=', $user->id)
+            ->get()
+            ->pluck('story');
+
+        if($request->ajax() ){
+
+        }
         dd($order_stories);
     }
 
