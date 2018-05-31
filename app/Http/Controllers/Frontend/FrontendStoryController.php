@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class FrontendStoryController extends Controller
 {
     use FrontendResponse;
-    const PAGINATE_PER_PAGE = 2;
+    const PAGINATE_PER_PAGE = 6;
 
     /**
      * @param Request $request
