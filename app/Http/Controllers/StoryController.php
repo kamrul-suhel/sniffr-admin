@@ -109,13 +109,14 @@ class StoryController extends Controller
         // $download = Order::where('story_id', '=', $story_id)
         //     ->where('client_id', '=', \Auth::user()->client_id)
         //     ->first();
-        // 
+        //
         // if ($download) {
         //     return;
         // }
 
         $download = new Download();
         $download->story_id = $story_id;
+        $download->video_id = 0; // set to 0 until videos are eventually sent to clients (as well as stories)
         $download->mailer_id = $mailer_id;
         $download->user_id = \Auth::user()->id;
         $download->client_id = \Auth::user()->client_id ?: 0;
