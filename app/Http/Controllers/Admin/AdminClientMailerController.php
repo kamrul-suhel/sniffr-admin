@@ -175,10 +175,10 @@ class AdminClientMailerController extends Controller
         if(Input::get('send_mailer')==1) {
             $mailer_status = 'Sent';
 
-            // Slack notification
-            if (env('APP_ENV') == 'prod') {
-                $mailer->notify(new ClientMailer($mailer));
-            }
+            // Slack notification (WIP: currently doesn't work)
+            // if (env('APP_ENV') == 'prod') {
+            //     $mailer->notify(new ClientMailer($mailer));
+            // }
 
             // set sent_at
             $mailer->sent_at = now();
