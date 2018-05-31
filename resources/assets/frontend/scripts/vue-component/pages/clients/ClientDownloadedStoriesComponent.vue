@@ -3,9 +3,7 @@
         <v-container grid-list-xl v-if="stories == ''">
             <v-layout row wrap>
                 <h2 class="text-xs-center no-stories">
-                    Sorry, we cannot find any stories associated with your account.  Please contact <a
-                        href="mailto:mel@unilad.co.uk?Subject=Enquiry" target="_top">mel@unilad.co.uk</a>
-                    for more information.</h2>
+                    Sorry, you did not download any story.</h2>
             </v-layout>
         </v-container>
 
