@@ -43,10 +43,14 @@
             },
 
             current_page(){
+
                 //Go to the top
                 if(this.page === 'client_stories'){
                     let page =  this.current_page;
                     this.$router.push({name: 'client_stories', query:{ page: page}});
+                }else if(this.page === 'client_stories_download'){
+                    let page =  this.current_page;
+                    this.$router.push({name: 'client_downloaded_stories', query:{ page: page}});
                 }else{
                     this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
                 }

@@ -51,6 +51,28 @@ const actions = {
                     console.log(error);
                 });
         })
+    },
+
+    getDownloadedStories({commit}, downloaded_obj){
+        return new Promise((resolve, reject) => {
+            let url = '/client/stories/downloaded';
+            if (downloaded_obj.page > 0) {
+                url += '?page=' + downloaded_obj.page;
+            }
+            console.log(url);
+
+            axios.get(url)
+                .then((response) => {
+                    let data = response.data;
+                    commit('setStories', data);
+                    resolve();
+                })
+                .catch((error) => {
+                    reject();
+                    console.log(error);
+                });
+
+        })
     }
 
 }
