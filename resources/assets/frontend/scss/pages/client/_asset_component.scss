@@ -8,6 +8,8 @@
     background-position: center !important;
     position:relative;
     overflow:hidden;
+    cursor: pointer;
+    transition:opacity ease-in-out .3s;
 
     .download_asset{
       position: absolute;
@@ -17,6 +19,10 @@
     }
     .show{
       bottom:10px;
+    }
+
+    &:hover{
+      opacity: .5;
     }
 
     &:hover .download_asset{
