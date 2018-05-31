@@ -8,6 +8,7 @@ use App\Order;
 use App\Story;
 use App\Video;
 use Chumper\Zipper\Facades\Zipper;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
@@ -16,22 +17,22 @@ use PDF;
 class StoryController extends Controller
 {
     /**
-     * @param $id
+     * @param $story_id
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadStory($id)
+    public function downloadStory($story_id)
     {
-        $story = Story::find($id);
+        $story = Story::find($story_id);
         if (!$story) {
             abort(404, 'Story Not Found');
         }
 
-        $videos = Video::with('stories')->whereHas('stories', function ($query) use ($id) {
-            $query->where('stories.id', '=', $id);
+        $videos = Video::with('stories')->whereHas('stories', function ($query) use ($story_id) {
+            $query->where('stories.id', '=', $story_id);
         })->get();
 
-        $assets = Asset::with('stories')->whereHas('stories', function ($query) use ($id) {
-            $query->where('stories.id', '=', $id);
+        $assets = Asset::with('stories')->whereHas('stories', function ($query) use ($story_id) {
+            $query->where('stories.id', '=', $story_id);
         })->get();
 
         if ((!$assets->count()) && (!$videos->count())) {
@@ -43,7 +44,7 @@ class StoryController extends Controller
         $prefix = 'sniffr_';
         $files = [];
 
-        $pdf = $this->getPdf($id, false);
+        $pdf = $this->getPdf($story_id, false);
 
         $files[] = $pdf;
 
@@ -69,9 +70,11 @@ class StoryController extends Controller
             }
         }
 
+        $mailer_id = (Input::get('mailer_id') ? Input::get('mailer_id') : 0); //get mailer_id for better logs (which downloads relate to which mailer)
+
         // save the order
-        $this->logDownload($id);
-        $this->saveDownloadToOrder($id);
+        $this->logDownload($story_id, $mailer_id);
+        $this->saveDownloadToOrder($story_id, $mailer_id);
 
         Zipper::make($newZipFilePath)->add($files)->close();
         \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
@@ -82,7 +85,7 @@ class StoryController extends Controller
     /**
      * @param $story_id
      */
-    public function saveDownloadToOrder($story_id)
+    public function saveDownloadToOrder($story_id, $mailer_id)
     {
         $order = Order::where('story_id', '=', $story_id)
             ->where('client_id', '=', \Auth::user()->client_id)
@@ -92,6 +95,7 @@ class StoryController extends Controller
         }
         $order = new Order();
         $order->story_id = $story_id;
+        $order->mailer_id = $mailer_id;
         $order->user_id = \Auth::user()->id;
         $order->client_id = \Auth::user()->client_id;
         $order->save();
@@ -100,18 +104,19 @@ class StoryController extends Controller
     /**
      * @param $story_id
      */
-    public function logDownload($story_id)
+    public function logDownload($story_id, $mailer_id)
     {
-        $download = Order::where('story_id', '=', $story_id)
-            ->where('client_id', '=', \Auth::user()->client_id)
-            ->first();
-
-        if ($download) {
-            return;
-        }
+        // $download = Order::where('story_id', '=', $story_id)
+        //     ->where('client_id', '=', \Auth::user()->client_id)
+        //     ->first();
+        // 
+        // if ($download) {
+        //     return;
+        // }
 
         $download = new Download();
         $download->story_id = $story_id;
+        $download->mailer_id = $mailer_id;
         $download->user_id = \Auth::user()->id;
         $download->client_id = \Auth::user()->client_id ?: 0;
         $download->save();

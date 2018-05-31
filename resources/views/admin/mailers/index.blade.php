@@ -41,7 +41,7 @@
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
 				<td>{{ $mailer->users()->where('sent_at', '!=', NULL)->count() }}</td>
 				<td>{{ $mailer->stories()->count() }}</td>
-				<td>@if($mailer['sent_at']) {{ $downloads->whereIn('story_id', $mailer->stories()->pluck('stories.id'))->count() }}@else 0 @endif</td>
+				<td>@if($mailer['sent_at']) {{ $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $mailer->stories()->pluck('stories.id'))->count() }}@else 0 @endif</td>
 				<td>
 					<p>
 						@if(!$mailer['sent_at'])<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-primary"><span class="fa fa-plus-circle"></span> Send</a>@endif
