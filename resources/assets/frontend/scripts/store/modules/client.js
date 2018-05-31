@@ -1,7 +1,8 @@
 const state = {
     stories: '',
     currentStory: '',
-    mailStories: ''
+    mailStories: '',
+    client_mailer_id:'',
 }
 
 const mutations = {
@@ -11,6 +12,10 @@ const mutations = {
 
     setCurrentStory(state, story){
         state.currentStory = story.story;
+    },
+
+    setClient_mailer_id(state, client_mailer_id){
+        state.client_mailer_id = client_mailer_id;
     }
 }
 
@@ -84,6 +89,10 @@ const getters = {
 
     getCurrentStory(state){
         return state.currentStory;
+    },
+
+    getClientMailerId(state){
+        return state.client_mailer_id;
     }
 }
 
