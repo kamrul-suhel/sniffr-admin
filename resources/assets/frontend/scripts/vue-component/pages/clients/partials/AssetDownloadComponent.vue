@@ -94,11 +94,11 @@
             onDownloadAllAssets(){
                 this.loader = 'loading';
                 var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+this.story.client_mailer_id;
-                console.log(url);
                 window.location = url;
             },
 
             goToDetail(){
+                this.$store.commit('setClient_mailer_id', this.story.client_mailer_id);
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
 

@@ -34,9 +34,9 @@
                                 {{ video_detail.views + 1}} views
                             </v-flex>
 
-                            <div class="video-detail-social-share">
-                                <v-btn dark block class="dark">License</v-btn>
-                            </div>
+                            <!--<div class="video-detail-social-share">-->
+                                <!--<v-btn dark block class="dark">License</v-btn>-->
+                            <!--</div>-->
                         </v-layout>
                     </v-flex>
 

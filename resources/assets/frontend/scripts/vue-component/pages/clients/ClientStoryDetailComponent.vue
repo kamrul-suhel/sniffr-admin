@@ -106,6 +106,7 @@
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
+                        console.log(this.story);
                         if (this.story.orders && this.story.orders.id) {
                             this.order = true;
                         }
@@ -113,8 +114,9 @@
             },
 
             onDownloadAllAssets(){
+                var client_mailer_id = this.$store.getters.getClientMailerId;
                 this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download';
+                var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+client_mailer_id;
                 window.location = url;
             },
 
