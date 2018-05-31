@@ -18,6 +18,9 @@
     			<div class="col-xs-12">
     				<h3>
     					<i class="fa fa-calculator"></i> Orders for {{ $client->name }}
+                        <a href="/admin/clients/{{ $client->id }}/orders/csv" class="btn btn-success pull-right">
+    						<i class="fa fa-download"></i> Export CSV
+    					</a>
     				</h3>
     			</div>
     		</div>
@@ -31,7 +34,7 @@
                 <th>Story</th>
                 <th>Author</th>
                 <th>Wordpress Url</th>
-                <th>Downloads</th>
+                <th>Downloaded</th>
                 @php $count = 1 @endphp
                 @foreach($orders as $order)
                     <tr>

@@ -130,6 +130,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
     Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
+    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
 
     // Admin Video Functionality
