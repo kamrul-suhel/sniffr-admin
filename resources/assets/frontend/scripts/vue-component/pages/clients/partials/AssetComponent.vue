@@ -82,15 +82,6 @@
                 setTimeout(() => (this[l] = false), 3000)
 
                 this.loader = null
-            },
-
-            video_dialog() {
-                if (this.video_dialog === false) {
-                    let url = this.$store.getters.getEnterStateUrl;
-                    window.history.pushState(null, '', url)
-                    this.$store.commit('setResetVideoDialogObject');
-                    LoginEventBus.$emit('onResetCurrentVideoIndialog');
-                }
             }
         },
         created() {
