@@ -97,6 +97,36 @@ class AdminClientMailerController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    public function stats($id)
+    {
+        $mailer = ClientMailer::find($id);
+
+        $users = User::where([['role', 'client']])
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+        $downloads = Download::where([['mailer_id', $id]])
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+        $data = [
+            'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id '.$mailer->alpha_id,
+            'mailer' => $mailer,
+            'post_route' => url('admin/mailers/stats'),
+            'button_text' => 'Send Client Mailer',
+            'user' => Auth::user(),
+            'users' => $users,
+            'clients' => Client::all(),
+            'downloads' => $downloads,
+        ];
+
+        return view('admin.mailers.stats', $data);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit($id)
     {
         $mailer = ClientMailer::find($id);

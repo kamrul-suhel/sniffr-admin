@@ -130,6 +130,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
     Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
+    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
 
     // Admin Video Functionality
@@ -203,6 +204,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
     Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
     Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');
+    Route::get('mailers/stats/{id}', 'Admin\AdminClientMailerController@stats');
     Route::post('mailers/update', array('uses' => 'Admin\AdminClientMailerController@update'));
     Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 

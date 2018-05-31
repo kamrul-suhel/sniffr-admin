@@ -42,7 +42,7 @@
 							<input type="checkbox" value="{{ $story['id'] }}" name="stories" autocomplete="off" style="font-size: 20px;">
 						</label>
 						<!-- <a href="{{ url('admin/stories/edit') . '/' . $story['wp_id'] }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ url('admin/stories/delete') . '/' . $story['wp_id'] }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a> -->
+						<a href="{{ url('admin/stories/delete') . '/' . $story['wp_id'] }}" class="btn btn-xs btn-danger js-delete"><span class="fa fa-trash"></span> Delete</a> -->
 					</p>
 				</td>
 			</tr>
@@ -57,7 +57,7 @@
 	<script>
 		$ = jQuery;
 		$(document).ready(function(){
-			$('.delete').click(function(e){
+			$('.js-delete').click(function(e){
 				e.preventDefault();
 				if (confirm("Are you sure you want to delete this story?")) {
 			       window.location = $(this).attr('href');
@@ -89,7 +89,7 @@
 					    }
 					});
 				} else {
-					swal({  title: 'Please select some stories first under [Actions]', icon: 'error', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
+					swal({  title: 'Please select some stories first.', icon: 'error', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
 				}
 			});
 		});

@@ -7,6 +7,10 @@ use Auth;
 use Validator;
 use Redirect;
 use App\Client;
+use App\Users;
+use App\Story;
+use App\Download;
+use App\Asset;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -150,10 +154,46 @@ class AdminClientController extends Controller
         $client = Client::find($client_id);
         $orders = Order::where('client_id', '=', $client_id)
             ->get();
+        $downloads = Download::where('client_id', '=', $client_id)
+            ->get();
 
         return view('admin.clients.orders', [
             'orders' => $orders,
             'client' => $client,
+            'stories' => Story::all(),
+            'downloads' => $downloads
         ]);
+    }
+
+    public function orders_csv(Request $request, $client_id)
+    {
+        $client = Client::find($client_id);
+        $orders = Order::where('client_id', '=', $client_id)
+            ->get();
+        $downloads = Download::where('client_id', '=', $client_id)
+            ->get();
+        $stories = Story::all();
+
+        $csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
+
+        $csv->insertOne(['Order No.', 'Order Date', 'Story', 'Author', 'Wordpress Url', 'Downloaded']);
+
+        $count = 1;
+        $insert = [];
+        foreach ($orders as $order) {
+            $insert['order_no'] = str_pad($count, 4, '0', STR_PAD_LEFT);
+            $insert['order_date'] = date('jS M Y h:i:s',strtotime($order->created_at));
+            $insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
+            $insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
+            if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
+                $insert['wordpress_url'] = 'Not yet published';
+            } else {
+                $insert['wordpress_url'] = $stories->where('id', $order->story_id)->pluck('url')->first();
+            }
+            $insert['downloaded'] = $downloads->where('story_id', $order->story_id)->count();
+            $csv->insertOne($insert);
+        }
+
+        $csv->output('orders.csv');
     }
 }
