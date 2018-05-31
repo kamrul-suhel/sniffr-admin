@@ -1,0 +1,28 @@
+.story-dialog-container{
+  position:relative;
+
+  .dialog-box-switch{
+    position:absolute;
+    z-index:1;
+
+    &.prev{
+      left:10px;
+      top:calc(50% - 50px);
+    }
+
+    &.next{
+      top:calc(50% - 50px);
+      right:10px;
+    }
+  }
+
+}
+//.theme--light .story-dialog-container .card{
+//  background:#000;
+//
+//  .card__media__content{
+//    .container{
+//      padding:0;
+//    }
+//  }
+//}

@@ -15,7 +15,10 @@
                     <v-divider style="margin-bottom:20px;"></v-divider>
 
                     <v-layout row wrap>
-                        <asset-component v-for="asset in story.assets" :key="asset.id" :asset="asset"
+                        <asset-component v-for="asset in story.assets"
+                                         :key="asset.id"
+                                         :asset="asset"
+                                         :assets="story.assets"
                                          :story_id="story.id"></asset-component>
                     </v-layout>
 
