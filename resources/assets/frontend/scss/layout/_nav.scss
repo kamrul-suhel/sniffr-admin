@@ -72,6 +72,9 @@
   ul{
     list-style:none;
     li{
+      &:nth-last-child(1) {
+        margin-right:0;
+      }
       margin-right:20px;
       display:inline;
       
@@ -112,9 +115,10 @@
 
 .menu__content{
   box-shadow:none;
+  top:120px !important;
 
   .list{
-    background:transparent;
+    background: rgba(0,0,0,.5);
   }
   a{
     color:#fff;
@@ -134,12 +138,19 @@
 }
 
 @include small-device{
+  .menu__content{
+    top:62px !important;
+  }
   .navigation{
     text-align:center;
   }
 }
 
 @include medium-device{
+  .menu__content{
+    top:62px !important;
+  }
+
   .navigation{
     text-align:right;
   }
@@ -148,8 +159,16 @@
   .navigation{
     text-align:right;
   }
+
+  .menu__content{
+    top:62px !important;
+  }
 }
 @include extra-large-device{
+  .menu__content{
+    top:62px !important;
+  }
+
   .navigation{
     text-align:right;
   }

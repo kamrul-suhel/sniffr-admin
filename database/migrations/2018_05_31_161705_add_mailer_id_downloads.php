@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddContractIdToVideos extends Migration
+class AddMailerIdDownloads extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddContractIdToVideos extends Migration
      */
     public function up()
     {
-        Schema::table('videos', function (Blueprint $table) {
-            $table->integer('contract_id')->nullable();
+        Schema::table('downloads', function (Blueprint $table) {
+            $table->integer('mailer_id')->nullable()->after('story_id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddContractIdToVideos extends Migration
      */
     public function down()
     {
-        Schema::table('videos', function (Blueprint $table) {
-            $table->dropColumn('contract_id');
+        Schema::table('downloads', function (Blueprint $table) {
+            $table->dropColumn('mailer_id');
         });
     }
 }

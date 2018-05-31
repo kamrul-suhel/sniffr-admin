@@ -43,9 +43,7 @@ mix.sass(
         mix.version();
     }
 
-    if (!mix.inProduction()) {
-        mix.webpackConfig({devtool: 'inline-source-map'})
-    }
+
 
 mix.js([
     'resources/assets/frontend/scripts/main.js',
@@ -54,19 +52,21 @@ mix.js([
 
     if (mix.inProduction()) {
         mix.version();
-
     }
 
+if (!mix.inProduction()) {
+    mix.webpackConfig({devtool: 'inline-source-map'})
+}
 //Copying file from resource folder to public
 
-mix.copy(
-    'resources/assets/frontend/images',
-    'public/assets/frontend/images/'
-);
-mix.copy(
-    'resources/assets/admin/images',
-    'public/assets/admin/images/'
-);
+// mix.copy(
+//     'resources/assets/frontend/images',
+//     'public/assets/frontend/images/'
+// );
+// mix.copy(
+//     'resources/assets/admin/images',
+//     'public/assets/admin/images/'
+// );
 
 /*
 * ******************************************

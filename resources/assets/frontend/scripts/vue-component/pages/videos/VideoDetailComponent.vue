@@ -51,22 +51,14 @@
                                 <v-layout column wrap align-end class="video-detail-sidebar">
                                     <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
                                             text-xl-right>
-                                        <v-btn
-                                                dark
-                                                fab
-                                                flat
-                                                color="dark favorite"
-                                                class="mr-0 mb-0">
-                                            <v-icon dark color="black ">remove_red_eye</v-icon>
-                                        </v-btn>
-
+                                        <v-icon dark color="black ">remove_red_eye</v-icon>
                                         {{ video_detail.video.views+1}} views
                                     </v-flex>
 
 
-                                    <div class="video-detail-social-share">
+                                    <!--<div class="video-detail-social-share">-->
                                         <!--<v-btn dark block class="dark mt-0">License</v-btn>-->
-                                    </div>
+                                    <!--</div>-->
                                 </v-layout>
                             </v-flex>
 

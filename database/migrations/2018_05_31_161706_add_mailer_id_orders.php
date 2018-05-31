@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddRedditContact extends Migration
+class AddMailerIdOrders extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddRedditContact extends Migration
      */
     public function up()
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->string('reddit')->nullable()->after('twitter');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('mailer_id')->nullable()->after('story_id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddRedditContact extends Migration
      */
     public function down()
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->dropColumn('reddit');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('mailer_id');
         });
     }
 }

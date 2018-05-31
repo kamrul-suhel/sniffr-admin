@@ -32,13 +32,31 @@
                                 <v-menu bottom open-on-hover offset-y v-else min-width="140px">
                                     <a slot="activator"><v-icon color="white">face</v-icon> {{ user.name }}</a>
                                     <v-list>
-                                        <v-list-tile>
+                                        <v-list-tile v-if="!client_login">
                                             <v-list-tile-title>
                                                 <a href="/admin">
                                                     <v-icon color="white" left size="20px">settings</v-icon> Admin
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
+
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
+                                                <a @click.prevent.stop="onClientEmail()">
+                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> Stories
+                                                </a>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
+                                                <router-link :to="{name: 'client_downloaded_stories'}">
+                                                    <v-icon color="white" left size="20px">done</v-icon> Downloaded
+                                                </router-link>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
+
 
                                         <v-list-tile>
                                             <v-list-tile-title>
@@ -47,6 +65,7 @@
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
+
                                     </v-list>
                                 </v-menu>
                             </li>
@@ -100,6 +119,8 @@
 
                 //if user login all data
                 user: '',
+
+                client_login: false
             }
         },
         watch: {
@@ -117,6 +138,9 @@
                     this.is_login = this.$store.getters.isUserLogin;
                     if(this.is_login){
                         this.user = this.$store.getters.getUser;
+                        if(this.user.role === 'client'){
+                            this.client_login = true;
+                        }
                     }
                 });
             }
@@ -126,10 +150,25 @@
                 this.is_login = false;
             });
 
+            LoginEventBus.$on('clientLoginSuccess', () => {
+                this.$store.dispatch('getLoginStatus').then((response) => {
+                    this.is_login = this.$store.getters.isUserLogin;
+                    if(this.is_login){
+                        this.user = this.$store.getters.getUser;
+                        if(this.user.role === 'client'){
+                            this.client_login = true;
+                        }
+                    }
+                });
+            });
+
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;
                 if(this.is_login){
                     this.user = this.$store.getters.getUser;
+                    if(this.user.role === 'client'){
+                        this.client_login = true;
+                    }
                 }
             });
             if(this.$route.name != 'home'){
@@ -163,8 +202,15 @@
             },
 
             logoutStateChange() {
-                console.log('this is click');
               this.is_login = false;
+            },
+
+            onClientEmail(){
+                this.$router.push({name: 'client_stories'});
+            },
+
+            onClientStories(){
+                this.$router.push({name: 'client'});
             }
         }
     }
