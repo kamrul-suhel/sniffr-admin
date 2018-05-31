@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class FrontendStoryController extends Controller
 {
     use FrontendResponse;
+    const PAGINATE_PER_PAGE = 6;
 
     /**
      * @param Request $request
@@ -24,7 +25,6 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request)
     {
-        //Paginate collection object
         if ($request->ajax() || $request->isJson()) {
             $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories.orders')
@@ -34,15 +34,15 @@ class FrontendStoryController extends Controller
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
-            $client_mailer = $client_mailer->each(function($client_mailer){
-                foreach($client_mailer->stories as $story){
+            $client_mailer = $client_mailer->each(function ($client_mailer) {
+                foreach ($client_mailer->stories as $story) {
                     $story['client_mailer_id'] = $client_mailer->id;
                 };
             })->pluck('stories')->collapse();
 
 
             //Paginate collection object
-            $stories = $this->paginate($client_mailer, 8, $request->page);
+            $stories = $this->paginate($client_mailer, self::PAGINATE_PER_PAGE, $request->page);
             $data = [
                 'stories' => $stories,
             ];
@@ -72,21 +72,28 @@ class FrontendStoryController extends Controller
             return $this->successResponse($data);
         }
 
-        return View('frontend.master');
+        return view('frontend.master');
 
     }
 
-    public function getDownloadedStories(Request $request){
-        $user = Auth::user();
-        $order_stories = Order::with('story')
-            ->where('user_id', '=', $user->id)
-            ->get()
-            ->pluck('story');
+    public function getDownloadedStories(Request $request)
+    {
 
-        if($request->ajax() ){
+        if ($request->ajax()) {
+            $user = Auth::user();
+            $order_stories = Order::with('story.orders')
+                ->where('user_id', '=', $user->id)
+                ->get()
+                ->pluck('story');
 
+            //Paginate collection object
+            $stories = $this->paginate($order_stories, self::PAGINATE_PER_PAGE, $request->page);
+            $data = [
+                'stories' => $stories,
+            ];
+            return $this->successResponse($data);
         }
-        dd($order_stories);
+        return view('frontend.master');
     }
 
     private function paginate($items, $perPage = 15, $page = null, $options = [])
