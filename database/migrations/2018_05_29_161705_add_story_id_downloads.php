@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeVideoIdStoryId extends Migration
+class AddStoryIdDownloads extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class ChangeVideoIdStoryId extends Migration
     public function up()
     {
         Schema::table('downloads', function (Blueprint $table) {
-            $table->renameColumn('video_id', 'story_id')->change();
+            $table->integer('story_id')->nullable()->after('video_id');
         });
     }
 
@@ -26,7 +26,7 @@ class ChangeVideoIdStoryId extends Migration
     public function down()
     {
         Schema::table('downloads', function (Blueprint $table) {
-            $table->renameColumn('story_id', 'video_id')->change();
+            $table->dropColumn('story_id');
         });
     }
 }
