@@ -14,8 +14,6 @@
         <!-- Image or Video in dialog -->
         <v-dialog
                 v-model="story_dialog"
-                transition="dialog-bottom-transition"
-                scrollable
                 class="story-dialog-container"
                 content-class="story-dialog-container"
                 max-width="1200px"
@@ -120,6 +118,7 @@
                     }
                 })
             },
+
 
 
             onPreviousVideo(){
