@@ -17,6 +17,7 @@ import ClientVideoDetailComponent from './vue-component/pages/clients/ClientVide
 import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
 import ClientStoriesComponent from './vue-component/pages/clients/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/ClientStoryDetailComponent';
+import ClientDownloadedStoriesComponent from './vue-component/pages/clients/ClientDownloadedStoriesComponent.vue';
 
 
 export const routes = [
@@ -131,6 +132,12 @@ export const routes = [
                 path: 'stories',
                 name: 'client_stories',
                 component: ClientStoriesComponent
+            },
+
+            {
+                path: 'stories/downloaded',
+                name: 'client_downloaded_stories',
+                component: ClientDownloadedStoriesComponent
             },
 
             {

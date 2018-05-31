@@ -26,6 +26,6 @@ class Order extends Model
 
     public function story()
     {
-        return $this->hasOne('App\Story', 'id')->first();
+        return $this->hasOne('App\Story', 'id');
     }
 }
