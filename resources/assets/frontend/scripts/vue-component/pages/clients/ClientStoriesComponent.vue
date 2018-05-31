@@ -9,7 +9,7 @@
             </v-layout>
         </v-container>
 
-        <v-container grid-list-lg v-if="stories">
+        <v-container grid-list-lg v-if="stories" pt-0>
             <v-layout row wrap>
                 <v-flex xs12 pt-0 mb-4>
                     <div>

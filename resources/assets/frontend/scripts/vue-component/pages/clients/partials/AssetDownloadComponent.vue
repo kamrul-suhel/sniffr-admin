@@ -93,7 +93,8 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download';
+                var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+this.story.client_mailer_id;
+                console.log(url);
                 window.location = url;
             },
 
