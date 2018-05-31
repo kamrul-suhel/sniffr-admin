@@ -6,6 +6,8 @@ const state = {
     avatar: '',
     email: '',
     user_login: false,
+    user_id:'',
+    user_role: ''
 }
 
 const mutations = {
@@ -14,6 +16,8 @@ const mutations = {
         state.avatar = '';
         state.email = '';
         state.user_login = false;
+        state.user_id = '';
+        state.user_role = '';
     },
 
     checkUserState(state, data){
@@ -23,11 +27,15 @@ const mutations = {
             state.email = user.email;
             state.avatar = user.avatar;
             state.user_login = true;
+            state.user_id = user.id;
+            state.user_role = user.role;
         } else {
             state.username = '';
             state.avatar = '';
             state.email = '';
+            state.user_id = '';
             state.user_login = false;
+            state.user_role = ''
         }
     }
 }
@@ -74,8 +82,10 @@ const getters = {
             name: state.username,
             email: state.email,
             avatar: state.avatar,
+            id: state.user_id,
+            role: state.user_role
         }
-    }
+    },
 }
 
 export default {

@@ -30,21 +30,13 @@
                         <v-layout column wrap align-end class="video-detail-sidebar">
                             <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
                                     text-xl-right v-if="video_detail.views">
-                                <v-btn
-                                        dark
-                                        fab
-                                        flat
-                                        color="dark favorite"
-                                        class="mr-0 mb-0">
-                                    <v-icon dark color="black ">remove_red_eye</v-icon>
-                                </v-btn>
-
-                                {{ video_detail.views+1}} views
+                                <v-icon dark color="black ">remove_red_eye</v-icon>
+                                {{ video_detail.views + 1}} views
                             </v-flex>
 
-                            <div class="video-detail-social-share">
+                            <!--<div class="video-detail-social-share">-->
                                 <!--<v-btn dark block class="dark">License</v-btn>-->
-                            </div>
+                            <!--</div>-->
                         </v-layout>
                     </v-flex>
 
@@ -56,6 +48,7 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
+    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default {
         data() {
@@ -93,6 +86,11 @@
                 let alpha_id = this.$store.getters.getPrevVideoAlphaId;
                 this.getVideoData(alpha_id)
             });
+
+            LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
+                this.video_detail = '';
+                console.log('methods called');
+            })
         },
 
         mounted() {
@@ -168,13 +166,13 @@
             },
 
             realoadTwitter(){
-                TwitterWidgetsLoader.load(function(twttr) {
+                TwitterWidgetsLoader.load(function (twttr) {
                     var tweets = jQuery(".tweet");
 
-                    $(tweets).each( function( t, tweet ) {
+                    $(tweets).each(function (t, tweet) {
                         var id = jQuery(this).attr('id');
-                        twttr.widgets.createVideo(id,tweet).then( function( el ) {
-                            widget_type=video
+                        twttr.widgets.createVideo(id, tweet).then(function (el) {
+                            widget_type = video
                         });
                     });
                 });

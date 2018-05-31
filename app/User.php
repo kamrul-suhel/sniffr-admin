@@ -8,10 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property int $id
+ * @property int $client_id
  * @property Client $client
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property mixed role
+ * @property int active
+ * @property string password
+ * @property string email
+ * @property string username
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -35,7 +40,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|null|object|static
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function client()
     {

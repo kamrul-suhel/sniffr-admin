@@ -2,11 +2,19 @@
 
 return [
     'admins' => [
-        'admin' => 'admin',
-        'manager' => 'manager',
-        'editorial' => 'editorial',
+        'admin' => [
+            'name' => 'Admin',
+        ],
+        'manager' => [
+            'name' => 'Manager',
+        ],
+        'editorial' => [
+            'name' => 'Editorial',
+        ],
     ],
     'clients' => [
-        'client' => 'client',
+        'client' => [
+            'name' => 'Client',
+        ],
     ],
 ];

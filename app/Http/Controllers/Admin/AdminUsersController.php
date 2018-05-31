@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ClientMailer;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use Hash;
-use Auth;
 use Redirect;
 use App\Client;
 use App\User;
@@ -55,28 +57,34 @@ class AdminUsersController extends Controller
             'post_route' => url('admin/user/store'),
             'admin_user' => Auth::user(),
             'button_text' => 'Create User',
-            'clients' => $clients
+            'clients' => $clients,
+            'user' => null
         ];
 
         return view('admin.users.create_edit', $data);
     }
 
     /**
+     * @param CreateUserRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store()
+    public function store(CreateUserRequest $request)
     {
-        $input = Input::all();
+        $user = new User();
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->role = $request->input('role');
+        $user->active = $request->input('active');
+        $user->client_id = $request->input('client_id');
 
-        if (Input::hasFile('avatar')) {
-            $input['avatar'] = ImageHandler::uploadImage(Input::file('avatar'), 'avatars');
-        } else {
-            $input['avatar'] = 'default.jpg';
+        $user->avatar = 'default.jpg';
+
+        if ($request->hasFile('avatar')) {
+            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
         }
 
-        $input['password'] = Hash::make($input['password']);
-
-        User::create($input);
+        $user->save();
 
         return Redirect::to('admin/users')->with([
             'note' => 'Successfully Created New User',
@@ -103,36 +111,52 @@ class AdminUsersController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UpdateUserRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request)
     {
-        $input = Input::all();
-        $id = $input['id'];
-        $user = User::find($id);
-
-        if (Input::hasFile('avatar')) {
-            $input['avatar'] = ImageHandler::uploadImage(Input::file('avatar'), 'avatars');
-        } else {
-            $input['avatar'] = $user->avatar;
+        $user = User::find($request->get('id'));
+        if(!$user) {
+            abort(404);
         }
 
-        if (empty($input['active'])) {
-            $input['active'] = 0;
+        $user->username = $request->input('username', $user->username);
+        $user->email = $request->input('email', $user->email);
+        if ($request->input('password', null)) {
+            $user->password = Hash::make($request->input('password'));
         }
 
-        if ($input['password'] == '') {
-            $input['password'] = $user->password;
-        } else {
-            $input['password'] = Hash::make($input['password']);
+        $user->role = $request->input('role', $user->role);
+        $user->active = $request->input('active', $user->active);
+        $user->client_id = $request->input('client_id', $user->client_id);
+
+        if ($request->hasFile('avatar')) {
+            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
         }
+        $user->update();
 
-        $user->update($input);
-
-        return Redirect::to('admin/user/edit/' . $id)->with([
+        return redirect()->route('users.edit', ['id' => $user->id])->with([
             'note' => 'Successfully Updated User Settings',
             'note_type' => 'success'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function storiesSent(Request $request, $user_id)
+    {
+        $user = User::find($user_id);
+        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) use ($user_id) {
+            $query->where('users.id', '=', $user_id);
+        })->orderBy('sent_at', 'DESC')->get();
+
+        return view('admin.users.stories_sent', [
+            'client_mailers' => $client_mailers,
+            'user' => $user,
         ]);
     }
 

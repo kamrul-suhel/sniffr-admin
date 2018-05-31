@@ -24,7 +24,11 @@
   .horizontal {
     .video-container{
       .fb-video{
-        width:100% !important;
+        width: 61% !important;
+        position: absolute;
+        top: 0;
+        left: 20%;
+        height: 100%;
       }
     }
   }
@@ -37,7 +41,30 @@
     }
   }
 
+  .video-container {
+    background:#000;
+    position:relative;
+    padding-bottom:56.25%;
+    padding-top:30px;
+    height:0;
+    overflow:hidden;
+
+    iframe, .video-container object, .video-container embed {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+    }
+  }
+
+
   .video-container{
+    display:flex;
+    width:100%;
+    position:relative;
+    overflow:hidden;
+
 
     .video-js{
       height:350px;
@@ -45,58 +72,17 @@
       background:none;
     }
 
-    display:flex;
-    width:100%;
-    position:relative;
-    overflow:hidden;
+
 
     .video_player-dimensions{
       width:100%;
-      height:450px;
+      max-height:450px;
       position:relative;
     }
 
     .vjs-control-bar{
       display:none;
     }
-
-    .vjs-caption-settings{
-      display:none;
-    }
-
-    iframe {
-      width:100%;
-      
-      &.youtube-iframe {
-        height:300px;
-      }
-      &.instagram-media {
-        margin:0 auto !important; // to overwrite default style 
-      }
-
-      @include small-device {
-        &.youtube-iframe{
-          height:300px;
-        }
-      }
-
-      @include medium-device{
-        &.youtube-iframe{
-          height:450px;
-        }
-      }
-
-      @include large-device{
-        &.youtube-iframe{
-          height:450px;
-        }
-      }
-
-      @include extra-large-device{
-        &.youtube-iframe{
-          height:450px;
-        }
-      }
     }
     .fb-video{
       width: 100% !important;
@@ -105,10 +91,13 @@
       justify-items: center;
       justify-content: center;
       span{
-        width:100% !important;
+        width: 100% !important;
+        position: absolute;
+        width: 100%;
+        height: 100% !important;
+        top: 0;
       }
     }
-  }
 
   .embedded{
   }

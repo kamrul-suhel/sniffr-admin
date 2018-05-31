@@ -42,9 +42,11 @@
                             <a href="#sales" role="tab" data-toggle="tab">Sales</a>
                         </li>
 
+                        @if($video->more_details)
                         <li>
                             <a href="#rights" role="tab" data-toggle="tab">Rights</a>
                         </li>
+                        @endif
 
                         <li>
                             <a href="#creator" role="tab" data-toggle="tab">Creator</a>
@@ -97,9 +99,11 @@
 
                         <div class="tab-pane" id="rights">
                             <div class="row">
+                                @if($video->more_details)
                                 <div class="col-md-3">
                                     @include('admin.videos.partials.rights_status')
                                 </div>
+                                @endif
 
                                 <div class="col-md-3">
                                     @include('admin.videos.partials.license_selector')

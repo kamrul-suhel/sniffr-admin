@@ -7,7 +7,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     Route::get('/settings_object', function () {
         return response(config('settings.public'));
     });
-
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('videos', 'Video\VideoController@index')->name('videos_index');
@@ -130,6 +129,10 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 Route::group(array('prefix' => 'admin'), function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
+    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
+    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
+    Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
+
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');
@@ -188,12 +191,22 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
+    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('admin.stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
     Route::get('stories/create', 'Admin\AdminStoryController@create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+	Route::get('stories/refresh', array('uses' => 'Admin\AdminStoryController@refresh'));
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
+
+    Route::get('mailers', 'Admin\AdminClientMailerController@index');
+    Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
+    Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
+    Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');
+    Route::get('mailers/stats/{id}', 'Admin\AdminClientMailerController@stats');
+    Route::post('mailers/update', array('uses' => 'Admin\AdminClientMailerController@update'));
+    Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 
     Route::get('clients', 'Admin\AdminClientController@index');
     Route::get('clients/create', 'Admin\AdminClientController@create');
@@ -212,12 +225,14 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('campaigns/delete/{id}', array('uses' => 'Admin\AdminCampaignController@destroy'));
     Route::get('campaigns/{id}', array('uses' => 'Admin\AdminCampaignController@show'));
 
-    Route::get('users', 'Admin\AdminUsersController@index');
+    Route::resource('users', 'Admin\AdminUsersController', ['only'=> ['index','create','store','edit','update']]);
+
+    /*Route::get('users', 'Admin\AdminUsersController@index');
     Route::get('user/create', 'Admin\AdminUsersController@create');
     Route::post('user/store', array('uses' => 'Admin\AdminUsersController@store'));
     Route::get('user/edit/{id}', 'Admin\AdminUsersController@edit');
     Route::post('user/update', array('uses' => 'Admin\AdminUsersController@update'));
-    Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));
+    Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));*/
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');
@@ -239,6 +254,12 @@ Route::group(array('prefix' => 'admin'), function () {
 */
 
 Route::group(array('prefix' => 'client'), function () {
+    Route::resource('orders', 'OrderController');
+    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('client.stories.download');
+    Route::get('stories/{id}/download_pdf', 'StoryController@getPdf')->name('client.stories.download_pdf');
+    Route::get('asset/{id}/download', 'StoryController@downloadAsset')->name('client.asset.download');
+    Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
+
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
     Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
     Route::get('videos/view/{id}', 'Client\ClientVideosController@view');
@@ -253,7 +274,16 @@ Route::group(array('prefix' => 'client'), function () {
     Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
 });
 
+/*
+|--------------------------------------------------------------------------
+| Client Frontend Routes
+|--------------------------------------------------------------------------
+*/
 
+Route::get('/client/stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
+Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
+Route::get('client/stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
+Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
 
 /*
 |--------------------------------------------------------------------------
