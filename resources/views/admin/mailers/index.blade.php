@@ -45,9 +45,9 @@
 				<td>
 					<p>
 						@if(!$mailer['sent_at'])<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-primary"><span class="fa fa-plus-circle"></span> Send</a>@endif
-						<!-- <a href="#" class="btn btn-xs btn-warning"><span class="fa fa-bar-chart"></span> Stats</a> -->
+						@if($mailer['sent_at'])<a href="{{ url('admin/mailers/stats') . '/' . $mailer->id }}" class="btn btn-xs btn-warning"><span class="fa fa-bar-chart"></span> Stats</a>@endif
 						<!-- <a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a> -->
-						<a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
+						<a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger js-delete"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>
@@ -60,7 +60,7 @@
 	<script>
 		$ = jQuery;
 		$(document).ready(function(){
-			$('.delete').click(function(e){
+			$('.js-delete').click(function(e){
 				e.preventDefault();
 				if (confirm("Are you sure you want to delete this story?")) {
 			       window.location = $(this).attr('href');
@@ -68,24 +68,21 @@
 			    return false;
 			});
 
-			$('.js-create-mailer').click(function(e){
+			$('.js-stats-mailer').click(function(e){
 				e.preventDefault();
-				var storiesArray = [];
-				$("input:checkbox[name=stories]:checked").each(function(){
-				  	storiesArray.push($(this).val());
-				});
-				if(storiesArray.length != 0) {
-					var dataString = "stories="+JSON.stringify(storiesArray);
+				var mailer = $(this).attr('href')
+				if(mailer) {
 					$.ajax({
 					    type: 'GET',
-					    url: '/admin/mailers/create/',
-					    data: dataString,
+					    url: mailer,
+					    data: {},
 					    dataType: 'json',
 					    success: function (data) {
 							if(data.status=='success') {
 								//console.log(data);
 								if(data.mailer_id) {
-									window.location.href = '/admin/mailers/edit/'+data.mailer_id;
+									var htmlcontent = '<strong>'+data.mailer_id+'</strong>';
+									swal({  title: 'It worked', text: htmlcontent, icon: 'info', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
 								}
 							} else {
 								alert('Something went wrong');

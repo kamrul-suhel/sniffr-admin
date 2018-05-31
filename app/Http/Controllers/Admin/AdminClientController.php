@@ -7,6 +7,10 @@ use Auth;
 use Validator;
 use Redirect;
 use App\Client;
+use App\Users;
+use App\Story;
+use App\Download;
+use App\Asset;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -150,10 +154,14 @@ class AdminClientController extends Controller
         $client = Client::find($client_id);
         $orders = Order::where('client_id', '=', $client_id)
             ->get();
+        $downloads = Download::where('client_id', '=', $client_id)
+            ->get();
 
         return view('admin.clients.orders', [
             'orders' => $orders,
             'client' => $client,
+            'stories' => Story::all(),
+            'downloads' => $downloads
         ]);
     }
 }
