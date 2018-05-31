@@ -67,12 +67,12 @@
                 if(url == ''){
                     url = 1;
                 }
-                var mail_obj = {
+                var downloaded_obj = {
                     user: user,
                     page: url
                 };
 
-                this.$store.dispatch('getDownloadedStories', mail_obj)
+                this.$store.dispatch('getDownloadedStories', downloaded_obj)
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
                         this.ini_state = true;

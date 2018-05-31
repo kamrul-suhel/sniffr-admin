@@ -53,11 +53,11 @@ const actions = {
         })
     },
 
-    getDownloadedStories({commit}, mail_obj){
+    getDownloadedStories({commit}, downloaded_obj){
         return new Promise((resolve, reject) => {
             let url = '/client/stories/downloaded';
             if (mail_obj.page > 0) {
-                url += '?page=' + mail_obj.page;
+                url += '?page=' + downloaded_obj.page;
             }
             console.log(url);
 
