@@ -14,7 +14,7 @@
             </div>
         </v-flex>
 
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
                     <h2 v-html="story.title"></h2>

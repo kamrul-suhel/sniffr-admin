@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class FrontendStoryController extends Controller
 {
     use FrontendResponse;
+    const PAGINATE_PER_PAGE = 2;
 
     /**
      * @param Request $request
@@ -41,7 +42,7 @@ class FrontendStoryController extends Controller
 
 
             //Paginate collection object
-            $stories = $this->paginate($client_mailer, 8, $request->page);
+            $stories = $this->paginate($client_mailer, self::PAGINATE_PER_PAGE, $request->page);
             $data = [
                 'stories' => $stories,
             ];
@@ -71,22 +72,28 @@ class FrontendStoryController extends Controller
             return $this->successResponse($data);
         }
 
-        return View('frontend.master');
+        return view('frontend.master');
 
     }
 
     public function getDownloadedStories(Request $request)
     {
-        $user = Auth::user();
-        $order_stories = Order::with('story')
-            ->where('user_id', '=', $user->id)
-            ->get()
-            ->pluck('story');
 
         if ($request->ajax()) {
+            $user = Auth::user();
+            $order_stories = Order::with('story.orders')
+                ->where('user_id', '=', $user->id)
+                ->get()
+                ->pluck('story');
 
+            //Paginate collection object
+            $stories = $this->paginate($order_stories, self::PAGINATE_PER_PAGE, $request->page);
+            $data = [
+                'stories' => $stories,
+            ];
+            return $this->successResponse($data);
         }
-        dd($order_stories);
+        return view('frontend.master');
     }
 
     private function paginate($items, $perPage = 15, $page = null, $options = [])

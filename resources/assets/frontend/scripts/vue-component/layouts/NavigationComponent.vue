@@ -48,6 +48,14 @@
                                             </v-list-tile-title>
                                         </v-list-tile>
 
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
+                                                <router-link :to="{name: 'client_downloaded_stories'}">
+                                                    <v-icon color="white" left size="20px">done</v-icon> Downloaded
+                                                </router-link>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
 
 
                                         <v-list-tile>
