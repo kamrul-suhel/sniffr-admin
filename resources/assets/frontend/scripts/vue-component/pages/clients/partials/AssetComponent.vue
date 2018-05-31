@@ -73,7 +73,9 @@
                 this.loader = null
             }
         },
+
         created() {
+
         },
 
         methods: {

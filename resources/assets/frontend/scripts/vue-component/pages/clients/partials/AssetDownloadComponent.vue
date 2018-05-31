@@ -36,6 +36,7 @@
             </v-btn>
 
             <v-btn
+                    v-if="!hide_download_button"
                     block
                     dark
                     large
@@ -62,6 +63,7 @@
                 loader: null,
                 showButton: false,
                 order: false,
+                hide_download_button: false,
             }
         },
 
@@ -70,6 +72,11 @@
         ],
 
         created() {
+            var router_name = this.$route.name;
+            if(router_name == 'client_downloaded_stories'){
+                this.hide_download_button = true;
+            }
+
             if (this.story.orders && this.story.orders.id) {
                 this.order = true;
             }
