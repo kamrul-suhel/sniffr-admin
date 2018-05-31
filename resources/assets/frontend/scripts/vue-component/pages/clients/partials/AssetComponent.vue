@@ -35,14 +35,6 @@
                 <v-card-media
                         :src="current_item.url"
                 >
-                    <v-container fill-height fluid>
-                        <v-layout fill-height>
-                            <v-flex xs12 align-end flexbox>
-                                <span class="headline white--text">Post date: <span
-                                        v-if="current_item.created_at">{{current_item.created_at | convertDate}}</span></span>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
                 </v-card-media>
             </v-card>
         </v-dialog>
@@ -118,7 +110,6 @@
                     }
                 })
             },
-
 
 
             onPreviousVideo(){

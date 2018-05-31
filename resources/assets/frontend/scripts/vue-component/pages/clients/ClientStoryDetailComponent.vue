@@ -37,7 +37,7 @@
                 <v-flex xs12 sm12 md7 lg8 xl8>
                     <div class="story-content">
                         <v-badge right color="black" v-if="order">
-                            <span slot="badge">D</span>
+                            <span slot="badge"><v-icon dark color="white">done</v-icon></span>
                             <h2 v-html="story.title"></h2>
                         </v-badge>
                         <h2 v-html="story.title" v-else></h2>

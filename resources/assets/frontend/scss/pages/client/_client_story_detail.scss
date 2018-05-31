@@ -33,8 +33,11 @@
       .badge__badge {
 
         span {
-          margin-top: 4px;
           font-weight: bold;
+
+          i{
+            font-weight:bold;
+          }
         }
       }
     }
