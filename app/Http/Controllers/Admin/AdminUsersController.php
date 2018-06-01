@@ -77,7 +77,7 @@ class AdminUsersController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->role = $request->input('role');
         $user->active = $request->input('active');
-        $user->client_id = $request->input('client_id');
+        $user->client_id = ($request->input('client_id') ? $request->input('client_id') : NULL);
 
         $user->avatar = 'default.jpg';
 
@@ -130,7 +130,9 @@ class AdminUsersController extends Controller
 
         $user->role = $request->input('role', $user->role);
         $user->active = $request->input('active', $user->active);
-        $user->client_id = $request->input('client_id', $user->client_id);
+        if($user->client_id) {
+             $user->client_id = $request->input('client_id', $user->client_id);
+        }
 
         if ($request->hasFile('avatar')) {
             $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
