@@ -3,6 +3,7 @@ const state = {
     currentStory: '',
     mailStories: '',
     client_mailer_id:'',
+    client_goback_route_name:''
 }
 
 const mutations = {
@@ -16,6 +17,10 @@ const mutations = {
 
     setClient_mailer_id(state, client_mailer_id){
         state.client_mailer_id = client_mailer_id;
+    },
+
+    setClientGobBckRoute(state, route_name){
+        state.client_goback_route_name = route_name;
     }
 }
 
@@ -93,6 +98,10 @@ const getters = {
 
     getClientMailerId(state){
         return state.client_mailer_id;
+    },
+
+    getClientGoBackRoute(state){
+        return state.client_goback_route_name;
     }
 }
 

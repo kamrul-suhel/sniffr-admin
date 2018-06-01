@@ -58,8 +58,9 @@
                     <!--</v-flex>-->
                 <!--</v-layout>-->
             <!--</v-container>-->
-
-            <router-view></router-view>
+            <transition name="slide-fade" mode="out-in">
+                <router-view></router-view>
+            </transition>
         </section>
     </div>
 </template>
