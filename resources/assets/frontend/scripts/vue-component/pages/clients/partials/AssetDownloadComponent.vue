@@ -36,7 +36,6 @@
             </v-btn>
 
             <v-btn
-                    v-if="!hide_download_button"
                     block
                     dark
                     large
@@ -72,11 +71,6 @@
         ],
 
         created() {
-            var router_name = this.$route.name;
-            if(router_name == 'client_downloaded_stories'){
-                this.hide_download_button = true;
-            }
-
             if (this.story.orders && this.story.orders.id) {
                 this.order = true;
             }
@@ -100,12 +94,30 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+this.story.client_mailer_id;
+                var mailer_id = '';
+                var route_name = this.$route.name;
+
+                if(route_name == 'client_downloaded_stories'){
+                    mailer_id = this.story.orders.mailer_id;
+                }else{
+                    mailer_id = this.story.client_mailer_id;
+                }
+
+                var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+mailer_id;
                 window.location = url;
             },
 
             goToDetail(){
-                this.$store.commit('setClient_mailer_id', this.story.client_mailer_id);
+                var mailer_id = '';
+                var route_name = this.$route.name;
+                if(route_name == 'client_downloaded_stories'){
+                    mailer_id = this.story.orders.mailer_id;
+                }else{
+                    mailer_id = this.story.client_mailer_id;
+                }
+
+
+                this.$store.commit('setClient_mailer_id', mailer_id);
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
 
