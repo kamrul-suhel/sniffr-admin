@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use Auth;
 use Hash;
 use Redirect;
 use App\Client;
