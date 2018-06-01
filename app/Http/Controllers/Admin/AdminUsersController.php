@@ -77,7 +77,7 @@ class AdminUsersController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->role = $request->input('role');
         $user->active = $request->input('active');
-        $user->client_id = ($request->input('client_id') ? $request->input('client_id') : NULL);
+        $user->client_id = $request->input('client_id');
 
         $user->avatar = 'default.jpg';
 
