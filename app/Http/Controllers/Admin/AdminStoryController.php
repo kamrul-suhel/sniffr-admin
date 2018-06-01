@@ -94,6 +94,47 @@ class AdminStoryController extends Controller
         return ($matches[0]);
     }
 
+    /**
+     * @param string $featured_media
+     * @param string $description
+     * @return array
+     */
+    public function createAssets($featured_media, $description) {
+        $asset_ids = [];
+
+        // get featured image
+        if($featured_media != 0) {
+            $thumb = $this->apiRequest('media/' . $featured_media, true);
+            $asset = new Asset();
+            $asset->alpha_id = VideoHelper::quickRandom();
+            $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url);
+            $asset->save();
+            $asset_ids[] = $asset->id;
+        }
+
+        // get all other assets
+        if($description){
+            preg_match_all('/wp-image-(\d+)/', $description, $imageMatches);
+
+            if(isset($imageMatches[1])){
+                foreach($imageMatches[1] as $key => $imageId){
+                    // Fetch all the assets from wp
+                    $image = $this->apiRequest('media/' . $imageId, true);
+
+                    if($image->source_url) {
+                        $asset = new Asset();
+                        $asset->alpha_id = VideoHelper::quickRandom();
+                        $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
+                        $asset->save();
+                        $asset_ids[] = $asset->id;
+                    }
+                }
+            }
+        }
+
+        return $asset_ids;
+    }
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
@@ -117,11 +158,8 @@ class AdminStoryController extends Controller
 				"author" => ''
 			];
 
-			// find assets within post content
+			// find assets within post content (old way but could be useful in the future)
 			//$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
-			// if($post->id) {
-            //
-			// }
 
 			//get the post categories
 			$cat_list = [];
@@ -144,41 +182,11 @@ class AdminStoryController extends Controller
 
 			if(!$story_find) {
 				$story = new Story();
-                $asset_ids = [];
 
-                // get featured image
-				if($story_wp['featured_media'] != 0) {
-					$thumb = $this->apiRequest('media/' . $story_wp['featured_media'], true);
-                    $story->thumb = preg_replace("/^http:/i", "https:", $thumb->source_url);
-                    $asset = new Asset();
-                    $asset->alpha_id = VideoHelper::quickRandom();
-                    $asset->url = $story->thumb;
-                    $asset->save();
-                    $asset_ids[] = $asset->id;
-				}
-
-                // get all other assets
-                if($story_wp['description']){
-                    preg_match_all('/wp-image-(\d+)/', $story_wp['description'], $imageMatches);
-
-                    if(isset($imageMatches[1])){
-    					foreach($imageMatches[1] as $key => $imageId){
-    						// Fetch all the assets from wp
-    						$image = $this->apiRequest('media/' . $imageId, true);
-
-                            if($image->source_url) {
-                                $asset = new Asset();
-                                $asset->alpha_id = VideoHelper::quickRandom();
-                                $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
-                                $asset->save();
-                                $asset_ids[] = $asset->id;
-                            }
-
-                            if($key === 0&&!$story->thumb){
-                                $story->thumb = $asset->url;
-                            }
-    					}
-    				}
+                // get assets from curl request (as a function)
+                $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
+                if($story_wp['featured_media']!=0&&$asset_ids[0]) {
+                    $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
                 }
 
                 // get author from curl request
@@ -208,41 +216,10 @@ class AdminStoryController extends Controller
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 if($differenceTime>300) {
-                    $asset_ids = [];
-
-                    // get featured image
-    				if($story_wp['featured_media'] != 0) {
-    					$thumb = $this->apiRequest('media/' . $story_wp['featured_media'], true);
-                        $story->thumb = preg_replace("/^http:/i", "https:", $thumb->source_url);
-                        $asset = new Asset();
-                        $asset->alpha_id = VideoHelper::quickRandom();
-                        $asset->url = $story->thumb;
-                        $asset->save();
-                        $asset_ids[] = $asset->id;
-    				}
-
-                    // get all other assets
-                    if($story_wp['description']){
-                        preg_match_all('/wp-image-(\d+)/', $story_wp['description'], $imageMatches);
-
-                        if(isset($imageMatches[1])){
-        					foreach($imageMatches[1] as $key => $imageId){
-        						// Fetch all the assets from wp
-        						$image = $this->apiRequest('media/' . $imageId, true);
-
-                                if($image->source_url) {
-                                    $asset = new Asset();
-                                    $asset->alpha_id = VideoHelper::quickRandom();
-                                    $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
-                                    $asset->save();
-                                    $asset_ids[] = $asset->id;
-                                }
-
-                                if($key === 0&&!$story->thumb){
-                                    $story->thumb = $asset->url;
-                                }
-        					}
-        				}
+                    // get assets from curl request (as a function)
+                    $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
+                    if($story_wp['featured_media']!=0&&$asset_ids[0]) {
+                        $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
                     }
 
                     // update the author
@@ -274,7 +251,7 @@ class AdminStoryController extends Controller
      */
     public function index(){
         $stories = new Story;
-        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(10);
+        $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,
