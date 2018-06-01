@@ -185,7 +185,7 @@ class AdminStoryController extends Controller
 
                 // get assets from curl request (as a function)
                 $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
-                if($story_wp['featured_media']!=0&&$asset_ids[0]) {
+                if(count($asset_ids)) {
                     $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
                 }
 
@@ -218,7 +218,7 @@ class AdminStoryController extends Controller
                 if($differenceTime>300) {
                     // get assets from curl request (as a function)
                     $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
-                    if($story_wp['featured_media']!=0&&$asset_ids[0]) {
+                    if(count($asset_ids)) {
                         $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
                     }
 
