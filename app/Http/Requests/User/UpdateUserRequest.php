@@ -30,7 +30,7 @@ class UpdateUserRequest extends FormRequest
             'username' => 'required|string',
             'password' => 'nullable|string|min:6',
             'email' => 'required|email',
-            'client_id' => 'required_if:role,client|integer',
+            // 'client_id' => 'required_if:role,client|integer',
             'file' => 'file|mimes:jpg,gif,png|min:1|max:500000',
         ];
     }
