@@ -115,6 +115,10 @@
 
             onDownloadAllAssets(){
                 var client_mailer_id = this.$store.getters.getClientMailerId;
+                if(client_mailer_id == ''){
+                    client_mailer_id = this.$route.query.mailer_id;
+                }
+
                 this.loader = 'loading';
                 var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+client_mailer_id;
                 window.location = url;
