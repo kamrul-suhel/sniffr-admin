@@ -82,6 +82,7 @@
 
             var video_reload = new VideoReloadServices();
             video_reload.reloadAll();
+
         },
 
         watch: {
@@ -97,7 +98,12 @@
 
         methods: {
             onGoback() {
-                this.$router.push({name: 'client_stories'});
+
+                if (this.$route.query.mailer_id !== undefined) {
+                    this.$router.push({name: 'client_stories'});
+                } else {
+                    this.$router.go(-1);
+                }
             },
 
             getStoryDetail(){
@@ -115,8 +121,12 @@
 
             onDownloadAllAssets(){
                 var client_mailer_id = this.$store.getters.getClientMailerId;
+                if (client_mailer_id == '') {
+                    client_mailer_id = this.$route.query.mailer_id;
+                }
+
                 this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+client_mailer_id;
+                var url = '/client/stories/' + this.story.id + '/download/?mailer_id=' + client_mailer_id;
                 window.location = url;
             },
 

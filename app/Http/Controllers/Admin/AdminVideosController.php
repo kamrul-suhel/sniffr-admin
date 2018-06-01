@@ -160,7 +160,7 @@ class AdminVideosController extends Controller
             if ($video->youtube_id && $video->file) {
                 // Make youtube video public (if not NSFW)
                 if (!$video->nsfw) {
-                    //Youtube::setStatus($video->youtube_id, 'public');
+                    Youtube::setStatus($video->youtube_id, 'public');
                 }
             } else {
                 // Set to process for youtube and analysis (if video not already on youtube)

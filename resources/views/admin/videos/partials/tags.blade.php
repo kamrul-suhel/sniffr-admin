@@ -1,5 +1,6 @@
 <div class="row">
     <span class="col-md-6">
+        <div id="video-analysis"></div>
         <span class="input-group">
             <span class="input-group-addon">
                 Tags

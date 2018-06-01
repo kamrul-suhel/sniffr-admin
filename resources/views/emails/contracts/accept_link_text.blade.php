@@ -2,7 +2,9 @@ Hey {{ $video->contact->full_name }}!
 
 Video Ref: {{ $video->alpha_id }}
 
-If you would like to submit any more content to us, you can do so by following this link:
+You are receiving this email in reference to licensing your video. Before we can use your video we need to you to agree to an agreement which includes specific terms.
+
+Please click the following link and then agree to the terms provided on the page:
 {{ route('contract.accept', ['contract_id' => $contract->token]) }}
 
 Regards,

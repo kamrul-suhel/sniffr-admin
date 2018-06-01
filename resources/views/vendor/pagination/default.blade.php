@@ -5,7 +5,9 @@
                 <v-flex text-xs-center>
                     <ul class="pagination">
                         {{-- Previous Page Link --}}
-                        @if (!$paginator->onFirstPage())
+                        @if ($paginator->onFirstPage())
+
+                        @else
                             <li><a href="{{ $paginator->previousPageUrl() }}" class="pagination-preview" rel="prev"><i class="fa fa-angle-left"></i></a></li>
                         @endif
 

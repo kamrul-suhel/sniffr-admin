@@ -55,6 +55,7 @@ class AdminUsersController extends Controller
 
         $data = [
             'post_route' => url('admin/user/store'),
+            'admin_user' => Auth::user(),
             'button_text' => 'Create User',
             'clients' => $clients,
             'user' => null

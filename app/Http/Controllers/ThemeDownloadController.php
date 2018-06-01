@@ -24,12 +24,12 @@ class ThemeDownloadController extends Controller
         $video = Video::where('alpha_id', $id)->first();
 
         if($video && $video->file) {
-        	$download = new Download;
-        	$download->user_id = Auth::user()->id;
-            $download->client_id = (Auth::user()->client_id ? Auth::user()->client_id : 0);
-        	$download->video_id = $video->id;
-			$download->type = $type;
-        	$download->save();
+        	// $download = new Download;
+        	// $download->user_id = Auth::user()->id;
+            // $download->client_id = (Auth::user()->client_id ? Auth::user()->client_id : 0);
+        	// $download->video_id = $video->id;
+			// $download->type = $type;
+        	// $download->save();
 
 			if($type=='regular'){
 				$file = $video->file;
