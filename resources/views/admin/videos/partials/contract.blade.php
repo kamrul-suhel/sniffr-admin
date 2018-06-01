@@ -64,7 +64,7 @@
                 @if(key_exists($video->currentContract->contract_model_id, config('contracts')))
                     <div class="col-md-12">
                         <div class="input-group">
-                            <span class="input-group-addon">Contract Model</span>
+                            <span class="input-group-addon">Contract Template</span>
                             <input type="text" class="form-control" disabled="disabled" value="{!!
                             config('contracts')[$video->currentContract->contract_model_id]['name']
                             !!}">

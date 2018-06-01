@@ -6,7 +6,7 @@
                     <ul class="pagination">
                         {{-- Previous Page Link --}}
                         @if ($paginator->onFirstPage())
-                            
+
                         @else
                             <li><a href="{{ $paginator->previousPageUrl() }}" class="pagination-preview" rel="prev"><i class="fa fa-angle-left"></i></a></li>
                         @endif
@@ -33,8 +33,6 @@
                         {{-- Next Page Link --}}
                         @if ($paginator->hasMorePages())
                             <li><a href="{{ $paginator->nextPageUrl() }}" class="pagination-next" rel="next"><i class="fa fa-angle-right"></i></a></li>
-                        @else
-                            <li class="disabled default"><i class="fa fa-angle-right"></i></li>
                         @endif
                     </ul>
                 </v-flex>

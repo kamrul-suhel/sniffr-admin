@@ -8,18 +8,18 @@
                 </div>
             </div>
         </section>
-        
+
         <search-component @searchOption="searchOption($event)"></search-component>
 
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg>
                 <transition-group name="slide-fade" tag="div" class="layout row wrap">
-                        <videoloop-component
-                                v-for="(video, index) in videos"
-                                :video="video"
-                                :key="video.alpha_id">
-                        </videoloop-component>
+                    <videoloop-component
+                            v-for="(video, index) in videos"
+                            :video="video"
+                            :key="video.alpha_id">
+                    </videoloop-component>
                 </transition-group>
             </v-container>
         </section>
@@ -36,7 +36,7 @@
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default{
-        components:{
+        components: {
             searchComponent: SearchComponent,
             videoloopComponent: VideoLoopComponent,
             paginationComponent: PaginationComponent
@@ -58,7 +58,7 @@
         },
 
         created(){
-            if(this.$route.query.page){
+            if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
             this.setAlldata();
@@ -73,7 +73,7 @@
             },
 
             updateVideodata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then( () => {
+                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                 });
             },

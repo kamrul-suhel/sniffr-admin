@@ -8,6 +8,7 @@
   background:#fff;
   width:100%;
 
+
   .login-title{
     color: $title-color;
     text-align:center;
@@ -33,9 +34,13 @@
   }
 
 }
+.email {
+  .input-group__details:before {
+    height: 1px;
+  }
 
-
-.application .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat),
-.theme--dark .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
-  background-color:rgba(0,0,0,.8) !important;
+  .application .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat),
+  .theme--dark .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
+    background-color:rgba(0,0,0,.8) !important;
+  }
 }

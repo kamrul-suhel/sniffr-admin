@@ -95,7 +95,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
-
+        Chumper\Zipper\ZipperServiceProvider::class
     ],
 
     /*
@@ -154,6 +154,7 @@ return [
         'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Rekognition' => 'MichaelJWright\Rekognition\RekognitionFacade',
+        'Zipper' => Chumper\Zipper\Zipper::class,
     ],
 
 ];

@@ -1,8 +1,6 @@
 import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
-import VideoInDialogComponent from './vue-component/pages/videos/VideoInDialogComponent';
-import VideoDialogComponent from './vue-component/layouts/VideoDialogComponent';
 import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
 import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
@@ -13,6 +11,13 @@ import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeC
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
+import ClientComponent from './vue-component/pages/clients/ClientComponent';
+import ClientVideosComponent from './vue-component/pages/clients/ClientVideosComponent';
+import ClientVideoDetailComponent from './vue-component/pages/clients/ClientVideoDetailComponent';
+import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
+import ClientStoriesComponent from './vue-component/pages/clients/ClientStoriesComponent';
+import ClientStoryDetailComponent from './vue-component/pages/clients/ClientStoryDetailComponent';
+import ClientDownloadedStoriesComponent from './vue-component/pages/clients/ClientDownloadedStoriesComponent.vue';
 
 
 export const routes = [
@@ -105,6 +110,49 @@ export const routes = [
       path: '/terms',
       name: 'termsconditions',
       component: TermsConditionsComponent
+    },
+
+    {
+        path: '/client',
+        component: ClientComponent,
+        children:[
+            {
+                path: '',
+                name: 'client',
+                component:ClientVideosComponent
+            },
+
+            {
+                path: 'video/:detail',
+                name: 'client_video_detail',
+                component: ClientVideoDetailComponent
+            },
+
+            {
+                path: 'stories',
+                name: 'client_stories',
+                component: ClientStoriesComponent
+            },
+
+            {
+                path: 'stories/downloaded',
+                name: 'client_downloaded_stories',
+                component: ClientDownloadedStoriesComponent
+            },
+
+            {
+                path: 'story/show/:alpha_id',
+                name: 'client_story_detail',
+                component: ClientStoryDetailComponent
+            },
+
+            {
+                path: 'downloads',
+                name: 'client_video_download',
+                component: ClientVideoDownloadComponent
+            },
+
+        ],
     },
 
     {

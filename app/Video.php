@@ -219,6 +219,14 @@ class Video extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function stories()
+    {
+        return $this->belongsToMany(Story::class);
+    }
+
+    /**
      * @param Client $client
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */

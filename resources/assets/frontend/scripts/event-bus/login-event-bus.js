@@ -38,6 +38,11 @@ const LoginEventBus = new Vue({
         logoutStateChange(){
             this.is_login = false;
             this.$emit('logoutChangeState');
+        },
+
+        clientLoginChange(){
+            this.closeLoginDialog();
+            this.$emit('clientLoginSuccess');
         }
     }
 });
