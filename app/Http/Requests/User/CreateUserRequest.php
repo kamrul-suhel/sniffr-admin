@@ -30,7 +30,7 @@ class CreateUserRequest extends FormRequest
             'username' => 'required|string|unique:users',
             'password' => 'required|string|min:6',
             'email' => 'required|email|unique:users',
-            // 'client_id' => 'required_if:role,client|integer|null',
+            'client_id' => 'required_if:role,client',
             'file' => 'file|mimes:jpg,gif,png|min:1|max:500000',
         ];
     }
