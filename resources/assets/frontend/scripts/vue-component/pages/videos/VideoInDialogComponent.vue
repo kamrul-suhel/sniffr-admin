@@ -49,8 +49,6 @@
                             <!--<div class="video-detail-social-share">-->
                             <!--<v-btn dark block class="dark">License</v-btn>-->
                             <!--</div>-->
-
-                            <v-btn @click="switch_video = !switch_video">Click to view</v-btn>
                         </v-layout>
                     </v-flex>
 

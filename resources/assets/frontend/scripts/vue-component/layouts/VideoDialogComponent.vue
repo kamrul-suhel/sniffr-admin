@@ -6,7 +6,7 @@
             scrollable
             class="video-dialog-container"
             content-class="video-dialog-container"
-            max-width="1200px"
+            max-width="1000px"
     >
         <!--<div class="dialog-box-loading">-->
             <!--<div class="dialog-box-loading-content">-->
