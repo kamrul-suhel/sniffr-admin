@@ -1,21 +1,7 @@
 <template>
     <div class="video-dialog-content">
         <v-layout row wrap v-if="video_detail">
-            <v-flex
-                    :class="{'vertical': video_detail.vertical? video_detail.vertical : '', 'horizontal': !video_detail.vertical}"
-                    align-content-center
-                    xs12 sm12 md7 lg7 xl7>
-
-                <v-card flat v-if="!switch_video">
-                    <v-card-media :src="video_detail.image" height="400px"></v-card-media>
-                </v-card>
-
-                <v-flex xs-12 v-else>
-                    <div v-html="video_detail.iframe"></div>
-                </v-flex>
-
-                <!-- v-html="video_detail.iframe" -->
-            </v-flex>
+            <video-player :video="video_detail"></video-player>
 
             <v-flex xs12 sm12 md5 lg5 xl5 :class="{'pl-4' : content_padding, 'pt-4': !content_padding}">
                 <v-layout row wrap class="video-detail-content">
@@ -77,8 +63,12 @@
 <script>
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
+    import VideoPlayer from './VideoPlayerComponent';
 
     export default {
+        components:{
+            videoPlayer: VideoPlayer
+        },
         data() {
             return {
                 video_detail: '',
@@ -87,8 +77,6 @@
                 ready_to_show: true,
 
                 content_padding: true,
-
-                switch_video: false
             }
         },
 
@@ -114,12 +102,11 @@
 
             VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
                 let alpha_id = this.$store.getters.getPrevVideoAlphaId;
-                this.getVideoData(alpha_id)
+                this.getVideoData(alpha_id);
             });
 
             LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
                 this.video_detail = '';
-                console.log('methods called');
             })
         },
 
@@ -141,15 +128,6 @@
 
                     VideoDialogBoxEventBus.$emit('setNextPrevButton');
 
-                    this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
-
-                    if (this.video_detail.iframe.includes('vimeo')) {
-                        this.reloadVideoJs();
-                    }
-
-                    this.reloadFacebook();
-                    this.realoadTwitter();
-
                 });
             },
 
@@ -159,67 +137,6 @@
 
             goToDetail() {
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
-            },
-
-
-            reloadInstagrm(src) {
-                var s = document.createElement("script");
-                s.type = "text/javascript";
-                s.src = src;
-                s.async = true;
-
-                $('body').append(s);
-                setTimeout(function () {
-                    if (typeof window.instgrm !== 'undefined') {
-                        window.instgrm.Embeds.process();
-                    }
-                }, 30);
-            },
-
-            reloadFacebook() {
-                if (!document.getElementById('facebook-jssdk')) {
-                    (function (d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
-
-                } else {
-                    setTimeout(() => {
-                        window.FB.XFBML.parse();
-                    }, 30);
-
-                }
-            },
-
-            realoadTwitter() {
-                TwitterWidgetsLoader.load(function (twttr) {
-                    var tweets = jQuery(".tweet");
-
-                    $(tweets).each(function (t, tweet) {
-                        var id = jQuery(this).attr('id');
-                        twttr.widgets.createVideo(id, tweet).then(function (el) {
-                            widget_type = video
-                        });
-                    });
-                });
-            },
-
-            reloadVideoJs() {
-
-                let videojs1 = document.createElement('script');
-                videojs1.type = "text/javascript";
-                videojs1.src = "/assets/admin/js/video.js";
-
-                let vimeo = document.createElement('script');
-                vimeo.type = "text/javascript";
-                vimeo.src = "/assets/admin/js/videojs-vimeo.js";
-                $('body').append(videojs1);
-                $('body').append(vimeo);
-
             }
         },
 

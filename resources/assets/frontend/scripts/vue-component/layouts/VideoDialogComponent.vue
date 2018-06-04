@@ -38,7 +38,7 @@
                 <v-layout row wrap>
                     <div class="video-dialog-loading"></div>
 
-                    <v-container grid-list-xs fluid :class="{'mx-5': margin_content}">
+                    <v-container grid-list-xs fluid>
                         <video-dialog-component></video-dialog-component>
                     </v-container>
 
@@ -74,9 +74,11 @@
             video_dialog() {
                 if(this.video_dialog === false){
                     let url = this.$store.getters.getEnterStateUrl;
-                    window.history.pushState(null, '', url)
-                    this.$store.commit('setResetVideoDialogObject');
-                    LoginEventBus.$emit('onResetCurrentVideoIndialog');
+                    window.history.pushState(null, '', url);
+                    setTimeout(() => {
+                        this.$store.commit('setResetVideoDialogObject');
+                        LoginEventBus.$emit('onResetCurrentVideoIndialog');
+                    }, 500)
                 }
             }
         },

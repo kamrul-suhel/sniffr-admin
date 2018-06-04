@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\ClientMailer;
+use App\User;
 use App\Order;
 use App\Story;
 use App\Traits\FrontendResponse;

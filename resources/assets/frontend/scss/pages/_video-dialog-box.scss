@@ -1,6 +1,7 @@
 .video-dialog-container {
   border-radius: 0px;
   position: relative;
+  overflow:unset;
 
   .dialog-box-switch {
     position: absolute;
@@ -8,11 +9,11 @@
     top: calc(50% - 20px);  
 
     &.prev {
-      left: 10px;
+      left: -50px;
     }
 
     &.next {
-      right: 10px;
+      right: -50px;
     }
   }
 
@@ -221,6 +222,7 @@
 
       i{
         color:#777;
+        margin-bottom:2px;
       }
     }
 
