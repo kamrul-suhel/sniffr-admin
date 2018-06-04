@@ -14,33 +14,24 @@
             <!--</div>-->
         <!--</div>-->
         <div class="dialog-box-switch prev">
-            <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousPageExists">
+            <v-btn color="dark ma-0" fab small  light @click="onPreviousVideo()" :disabled="!previousPageExists">
                 <v-icon>chevron_left</v-icon>
             </v-btn>
         </div>
 
         <div class="dialog-box-switch next">
-            <v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextPageExists">
+            <v-btn color="dark ma-0" fab small  light @click="onNextVideo()" :disabled="!nextPageExists">
                 <v-icon>chevron_right</v-icon>
             </v-btn>
         </div>
 
-        <v-card height="650px">
+        <v-card>
             <v-toolbar card dark color="dark">
                 <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>{{ current_video.title ? current_video.title : ''}}</v-toolbar-title>
+                <v-toolbar-title><!-- {{ current_video.title ? current_video.title : ''}} --></v-toolbar-title>
 
-                <v-spacer></v-spacer>
-
-                <v-toolbar-items>
-                    <v-btn dark flat @click.native="dialog = false">
-                        <div class="video-duration" v-if="current_video.duration">
-                            {{current_video.duration | convertTime}}
-                        </div>
-                    </v-btn>
-                </v-toolbar-items>
             </v-toolbar>
 
             <v-card-text class="video-dialog-box">

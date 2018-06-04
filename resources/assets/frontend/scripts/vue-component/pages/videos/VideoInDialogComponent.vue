@@ -4,16 +4,48 @@
             <v-flex
                     :class="{'vertical': video_detail.vertical? video_detail.vertical : '', 'horizontal': !video_detail.vertical}"
                     align-content-center
-                    v-html="video_detail.iframe"
                     xs12 sm12 md7 lg7 xl7>
+
+                <v-card flat v-if="!switch_video">
+                    <v-card-media :src="video_detail.image" height="400px"></v-card-media>
+                </v-card>
+
+                <v-flex xs-12 v-else>
+                    <div v-html="video_detail.iframe"></div>
+                </v-flex>
+
+                <!-- v-html="video_detail.iframe" -->
             </v-flex>
 
             <v-flex xs12 sm12 md5 lg5 xl5 :class="{'pl-4' : content_padding, 'pt-4': !content_padding}">
                 <v-layout row wrap class="video-detail-content">
                     <v-flex xs12>
-                        <h2>{{ video_detail.title }}</h2>
-                        <p v-if="video_detail.description != 'null'">{{ video_detail.description | readmore(300, '...')}}</p>
-                        <p><a @click.stop="goToDetail()">Read more</a></p>
+                        <div clas="video-title">
+                            <h2>{{ video_detail.title }}</h2>
+                            <div class="video-title-caption">
+                                <v-layout row wrap justify-center>
+                                    <v-flex xs6>
+                                        <v-icon small>alarm</v-icon> {{video_detail.duration | convertTime}}
+                                    </v-flex>
+                                    <v-spacer></v-spacer>
+
+                                    <v-flex xs6 class="text-xs-right" v-if="video_detail.views">
+                                        <v-icon small >remove_red_eye</v-icon> {{ video_detail.views + 1}} views
+                                    </v-flex>
+                                </v-layout>
+                            </div>
+                        </div>
+
+                        <div v-if="video_detail.description != 'null'" class="content-description">
+                            <p>{{ video_detail.description | readmore(300, '...')}}</p>
+                        </div>
+
+                        <div class="read-more text-xs-right">
+                            <a @click.stop="goToDetail()">
+                                <v-icon small>keyboard_arrow_right</v-icon>
+                                Read more</a>
+                        </div>
+
                         <div class="video-detail-tags" v-if="tags.length > 0">
                             <h3 id="tags">Tags:</h3>
                             <ul>
@@ -28,15 +60,11 @@
 
                     <v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
-                            <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
-                                    text-xl-right v-if="video_detail.views">
-                                <v-icon dark color="black ">remove_red_eye</v-icon>
-                                {{ video_detail.views + 1}} views
-                            </v-flex>
-
                             <!--<div class="video-detail-social-share">-->
-                                <!--<v-btn dark block class="dark">License</v-btn>-->
+                            <!--<v-btn dark block class="dark">License</v-btn>-->
                             <!--</div>-->
+
+                            <v-btn @click="switch_video = !switch_video">Click to view</v-btn>
                         </v-layout>
                     </v-flex>
 
@@ -59,6 +87,8 @@
                 ready_to_show: true,
 
                 content_padding: true,
+
+                switch_video: false
             }
         },
 
@@ -123,11 +153,11 @@
                 });
             },
 
-            goToTagSearch(tag){
+            goToTagSearch(tag) {
                 VideoDialogBoxEventBus.closeDialogByTagSearch(tag);
             },
 
-            goToDetail(){
+            goToDetail() {
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
             },
 
@@ -165,7 +195,7 @@
                 }
             },
 
-            realoadTwitter(){
+            realoadTwitter() {
                 TwitterWidgetsLoader.load(function (twttr) {
                     var tweets = jQuery(".tweet");
 

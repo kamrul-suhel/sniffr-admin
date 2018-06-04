@@ -5,13 +5,13 @@
   .dialog-box-switch {
     position: absolute;
     z-index: 10;
+    top: calc(50% - 20px);  
+
     &.prev {
       left: 10px;
-      top: calc(50% - 50px);
     }
 
     &.next {
-      top: calc(50% - 50px);
       right: 10px;
     }
   }
@@ -34,6 +34,33 @@
 
 .video-dialog-box {
   position: relative;
+
+  .content-description{
+  }
+
+  .video-detail-content{
+
+    .read-more{
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+      
+      a{
+        font-style:italic;
+        color:#777;
+        transition:all ease-in-out .3s;
+
+        i{
+            font-size: 17px;
+            margin-bottom: 3px;
+        }
+
+        &:hover{
+          color:#000;
+        }
+      }
+    }
+  }
 
   .nsfw {
     position: absolute;
@@ -183,6 +210,18 @@
     h2 {
       text-transform: uppercase;
       margin-top: 0;
+    }
+
+    .video-title-caption{
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      margin: 10px 0;
+      color:#777;
+
+      i{
+        color:#777;
+      }
     }
 
     a {
