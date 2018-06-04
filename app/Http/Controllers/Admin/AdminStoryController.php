@@ -94,12 +94,53 @@ class AdminStoryController extends Controller
         return ($matches[0]);
     }
 
+    /**
+     * @param string $featured_media
+     * @param string $description
+     * @return array
+     */
+    public function createAssets($featured_media, $description) {
+        $asset_ids = [];
+
+        // get featured image
+        if($featured_media != 0) {
+            $thumb = $this->apiRequest('media/' . $featured_media, true);
+            $asset = new Asset();
+            $asset->alpha_id = VideoHelper::quickRandom();
+            $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url);
+            $asset->save();
+            $asset_ids[] = $asset->id;
+        }
+
+        // get all other assets
+        if($description){
+            preg_match_all('/wp-image-(\d+)/', $description, $imageMatches);
+
+            if(isset($imageMatches[1])){
+                foreach($imageMatches[1] as $key => $imageId){
+                    // Fetch all the assets from wp
+                    $image = $this->apiRequest('media/' . $imageId, true);
+
+                    if($image->source_url) {
+                        $asset = new Asset();
+                        $asset->alpha_id = VideoHelper::quickRandom();
+                        $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
+                        $asset->save();
+                        $asset_ids[] = $asset->id;
+                    }
+                }
+            }
+        }
+
+        return $asset_ids;
+    }
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function refresh()
 	{
-		$posts = $this->apiRequest('posts?status=draft&tags='.env('UNILAD_WP_TAG_ID'), true);
+		$posts = $this->apiRequest('posts?status=draft,publish&tags='.env('UNILAD_WP_TAG_ID'), true);
 
 		$stories_wp = [];
 		$story_ids = [];
@@ -117,29 +158,8 @@ class AdminStoryController extends Controller
 				"author" => ''
 			];
 
-			// find assets within post content
+			// find assets within post content (old way but could be useful in the future)
 			//$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
-			if($post->id) {
-				// get featured image
-				if($post->featured_media != 0) {
-					$curpost['assets'][] = $this->apiRequest('media/' . $post->featured_media, true);
-				}
-
-				// Get images in text (ignore urls for now)
-				preg_match_all('/wp-image-(\d+)/', $curpost['description'], $imageMatches);
-				if(isset($imageMatches[1])){
-					foreach($imageMatches[1] as $imageId){
-						// Fetch all the assets from wp
-						$curpost['assets'][] = $this->apiRequest('media/' . $imageId, true);
-					}
-				}
-			}
-
-			// get curl for author
-			if($post->author) {
-				$author = $this->apiRequest('users/' . $post->author);
-				$curpost["author"] = isset($author->name) ? $author->name : '';
-			}
 
 			//get the post categories
 			$cat_list = [];
@@ -148,6 +168,8 @@ class AdminStoryController extends Controller
 			}
 			$curpost["categories"] = $cat_list;
 
+            $curpost["featured_media"] = $post->featured_media;
+            $curpost["author"] = $post->author;
 			$stories_wp[] = $curpost;
 			$story_ids[] = $post->id;
 		}
@@ -161,26 +183,21 @@ class AdminStoryController extends Controller
 			if(!$story_find) {
 				$story = new Story();
 
-				$asset_ids = [];
-				if(isset($story_wp['assets'])){
-                    // might be a good idea to get the assets (especially images within WP post) at this stage via a separate function to speed up initial refresh
-					foreach($story_wp['assets'] as $key => $asset_wp){
-						$asset = new Asset();
-						$asset->alpha_id = VideoHelper::quickRandom();
-						$asset->url = preg_replace("/^http:/i", "https:", $asset_wp->source_url);
-						$asset->save();
-						$asset_ids[] = $asset->id;
+                // get assets from curl request (as a function)
+                $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
+                if(count($asset_ids)) {
+                    $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
+                }
 
-						if($key === 0){
-							$story->thumb = $asset->url;
-						}
-					}
-				}
+                // get author from curl request
+    			if($story_wp['author']) {
+    				$author = $this->apiRequest('users/' . $story_wp['author']);
+    				$story->author = isset($author->name) ? $author->name : NULL;
+                }
 
 				$story->alpha_id = VideoHelper::quickRandom();
 				$story->wp_id = $story_wp['wp_id'];
 				$story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-				$story->author = $story_wp['author'];
 				$story->date_ingested = $story_wp['date'];
 				$story->categories = implode("|",$story_wp['categories']);
 				$story->status = $story_wp['status'];
@@ -199,11 +216,20 @@ class AdminStoryController extends Controller
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 if($differenceTime>300) {
-                    // need to check/update the assets associated with the story record in Sniffr
+                    // get assets from curl request (as a function)
+                    $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
+                    if(count($asset_ids)) {
+                        $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
+                    }
 
-                    // update the story record in Sniffr
+                    // update the author
+                    if($story_wp['author']) {
+        				$author = $this->apiRequest('users/' . $story_wp['author']);
+        				$story->author = isset($author->name) ? $author->name : NULL;
+                    }
+
+                    // update the rest of the story record in Sniffr
                     $story_find->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-    				$story_find->author = $story_wp['author'];
     				$story_find->date_ingested = $story_wp['date'];
     				$story_find->categories = implode("|",$story_wp['categories']);
     				$story_find->status = $story_wp['status'];
@@ -212,6 +238,7 @@ class AdminStoryController extends Controller
     				$story_find->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
     				$story_find->user_id = (Auth::user() ? Auth::user()->id : $story_find->user_id);
     				$story_find->save();
+                    $story->assets()->sync($asset_ids);
                 }
             }
 		}
@@ -224,7 +251,7 @@ class AdminStoryController extends Controller
      */
     public function index(){
         $stories = new Story;
-        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(10);
+        $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,
