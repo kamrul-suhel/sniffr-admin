@@ -23,8 +23,8 @@ class StoryController extends Controller
     public function downloadStory($story_id)
     {
         $story = Story::find($story_id);
-        if (!$story) {
-            abort(404, 'Story Not Found');
+        if (!$story || !$story->assets()->count()) {
+            abort(404, 'No Story or Assets Found');
         }
 
         $newZipFileName = $story->alpha_id. time() . '.zip';
@@ -36,17 +36,13 @@ class StoryController extends Controller
 
         $files[] = $pdf;
 
-        if ($story->assets()->count()) {
-            foreach ($story->assets()->get() as $asset) {
-                $info = pathinfo($asset->url);
-                $ext = $info['extension'];
+		foreach ($story->assets()->get() as $asset) {
+			$info = pathinfo($asset->url);
+			$ext = $info['extension'];
 
-                $tempImage = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
-                copy($asset->url, $tempImage);
-                $files[] = $tempImage;
-            }
-        }else{
-			abort(404, 'No Assets Found in this Story');
+			$tempImage = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
+			copy($asset->url, $tempImage);
+			$files[] = $tempImage;
 		}
 
         $mailer_id = $story->mailers()->first()->id; //get mailer_id for better logs (which downloads relate to which mailer) - the story could be sent out in more that one email, but we just grab the first one
