@@ -32,6 +32,17 @@ class Client extends Model
     public static $rules = [];
     protected $table = 'clients';
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
+    public function users()
+	{
+		return $this->hasMany(User::class);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
     public function campaigns()
     {
         return $this->hasMany(Campaign::class);

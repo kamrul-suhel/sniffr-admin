@@ -101,13 +101,14 @@ class AdminClientMailerController extends Controller
     {
         $mailer = ClientMailer::find($id);
 
-        $users = User::where([['role', 'client']])
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        $users = User::where('role', 'client')
+			->orWhere('role','client_admin')
+			->orderBy('created_at', 'DESC')
+			->get();
 
         $downloads = Download::where([['mailer_id', $id]])
-        ->orderBy('created_at', 'DESC')
-        ->get();
+			->orderBy('created_at', 'DESC')
+			->get();
 
         $data = [
             'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id '.$mailer->alpha_id,
@@ -131,9 +132,10 @@ class AdminClientMailerController extends Controller
     {
         $mailer = ClientMailer::find($id);
 
-        $clients = User::where([['role', 'client']])
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        $clients = User::where('role', 'client')
+			->orWhere('role','client_admin')
+			->orderBy('created_at', 'DESC')
+			->get();
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Review Client Mailer',

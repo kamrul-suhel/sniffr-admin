@@ -12,7 +12,7 @@ class ClientsTableSeeder extends Seeder
 
         foreach (range(1, 5) as $index) {
             Client::create([
-                'name' => $faker->sentence(2),
+                'name' => $index == 1 ? 'The DailyMail' : ( $index == 2 ? 'The Sun' : $faker->sentence(2) ),
                 'slug' => $faker->slug(2),
             ]);
         }
