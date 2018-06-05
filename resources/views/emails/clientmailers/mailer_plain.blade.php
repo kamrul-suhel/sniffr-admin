@@ -9,7 +9,7 @@ Hi,
 
         @if($story['thumb'])IMG: {{ $story['thumb'] }} @endif
         {{ $story['excerpt'] }}..
-        VIEW STORY: {{ url('client/story/show/'.$story['alpha_id'].'/?mailer_id='.$mailer->id) }}
+        VIEW STORY: {{ url('client/story/show/'.$story['alpha_id']) }}
         --------
 
     @endforeach
