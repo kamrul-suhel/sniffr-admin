@@ -157,7 +157,7 @@ class AdminStoryController extends Controller
 
 		foreach($posts as $post){
 			// create array for curl stories objects
-            $excerpt = substr(trim(strip_tags($post->excerpt->rendered)),0,700);
+            $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
 
             $curpost = [
 				"wp_id" => $post->id,
