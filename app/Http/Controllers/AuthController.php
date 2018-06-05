@@ -60,7 +60,6 @@ class AuthController extends Controller
 
         $data = [
             'type' => 'login',
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),

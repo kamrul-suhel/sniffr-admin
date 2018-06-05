@@ -30,6 +30,12 @@ export const routes = [
     },
 
     {
+        path: '/login',
+        name: 'login',
+        component: HomeComponent
+    },
+
+    {
         path: '/videos',
         name: 'videos',
         component: VideoComponent
