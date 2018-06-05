@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Download;
 use App\Traits\FrontendResponse;
 use Auth;
 use Validator;
@@ -11,14 +10,9 @@ use App\User;
 use App\Story;
 use App\Asset;
 use App\Video;
-use App\Contact;
-use App\Client;
-use App\ClientMailer;
-use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 
@@ -38,20 +32,21 @@ class AdminStoryController extends Controller
         $this->middleware(['admin:admin,manager,editorial']);
     }
 
-    private function getToken() {
+    private function getToken()
+    {
         $curl = curl_init();
 
-		curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL').$this->token_path.'?username='.env('UNILAD_WP_USER').'&password='.env('UNILAD_WP_PASS'));
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL') . $this->token_path . '?username=' . env('UNILAD_WP_USER') . '&password=' . env('UNILAD_WP_PASS'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST, 1);
 
-		$response = json_decode(curl_exec($curl));
+        $response = json_decode(curl_exec($curl));
 
-		curl_close ($curl);
+        curl_close($curl);
 
-		if(!$response->token){
-			exit('Unable to connect');
-		}
+        if (!$response) {
+            exit('Unable to connect');
+        }
 
         return $response->token;
     }
@@ -114,6 +109,21 @@ class AdminStoryController extends Controller
 
         // get all other assets
         if($description){
+            $jwPlayerCode = $this->getJwPlayerCode($description);
+
+            if ($jwPlayerCode) {
+                $jwVideoFileUrl = $this->getJwPlayerFile($jwPlayerCode);
+
+                $asset = new Asset();
+                $asset->alpha_id = VideoHelper::quickRandom();
+                $asset->url = $jwVideoFileUrl;
+                $asset->jw_player_code = $jwPlayerCode;
+                $asset->mime_type = 'video/mp4';
+                $asset->thumbnail = 'https://assets-jpcust.jwpsrv.com/thumbs/' . $jwPlayerCode . '.jpg';
+                $asset->save();
+                $asset_ids[] = $asset->id;
+            }
+
             preg_match_all('/wp-image-(\d+)/', $description, $imageMatches);
 
             if(isset($imageMatches[1])){
@@ -147,11 +157,13 @@ class AdminStoryController extends Controller
 
 		foreach($posts as $post){
 			// create array for curl stories objects
-			$curpost = [
+            $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
+
+            $curpost = [
 				"wp_id" => $post->id,
 				"status" => $post->status,
 				"title" => trim(strip_tags($post->title->rendered)),
-				"excerpt" => substr(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim(strip_tags($post->content->rendered))),0,700).'...',
+				"excerpt" => $excerpt,
 				"description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
 				"url" => $post->link,
 				"date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
@@ -334,7 +346,7 @@ class AdminStoryController extends Controller
     }
 
     /**
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update()
     {
@@ -395,5 +407,36 @@ class AdminStoryController extends Controller
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);
+    }
+
+    /**
+     * @param string $postBody
+     * @return null|string
+     */
+    private function getJwPlayerCode(string $postBody)
+    {
+        $reg = 'jwplayer_([^_]+)';
+
+        if ($c = preg_match_all("/" . $reg . "/is", $postBody, $matches)) {
+            $alphanum = $matches[1][0];
+            return $alphanum;
+        }
+        return null;
+    }
+
+    /**
+     * @param string $jwPlayerCode
+     */
+    private function getJwPlayerFile(string $jwPlayerCode)
+    {
+        $response = \GuzzleHttp\json_decode(file_get_contents('https://content.jwplatform.com/feeds/' . $jwPlayerCode . '.json'));
+
+        $sources = $response->playlist[0]->sources;
+
+        $videoUrl = array_filter($sources, function($k) {
+            return $k->type == 'video/mp4';
+        });
+
+        return end($videoUrl)->file;
     }
 }
