@@ -27,7 +27,7 @@
 
 <div>&nbsp;</div>
 
-<div>If you have any questions you&rsquo;re more than welcome to contact the team here: <a href="mailto:submissions@unilad.co.uk">submissions@unilad.co.uk</a></div>
+<div>If you have any questions you&rsquo;re more than welcome to contact the team here: <a href="mailto:licensing@unilad.co.uk">licensing@unilad.co.uk</a></div>
 
 <div>&nbsp;</div>
 
