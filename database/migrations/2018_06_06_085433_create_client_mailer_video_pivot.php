@@ -13,7 +13,7 @@ class CreateClientMailerVideoPivot extends Migration
      */
     public function up()
     {
-        Schema::table('client_mailer_video', function (Blueprint $table) {
+        Schema::create('client_mailer_video', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('client_mailer_id')->unsigned()->index();
             $table->integer('video_id')->unsigned()->index();
@@ -27,8 +27,6 @@ class CreateClientMailerVideoPivot extends Migration
      */
     public function down()
     {
-        Schema::table('client_mailer_video', function (Blueprint $table) {
-            Schema::drop('client_mailer_video');
-        });
+        Schema::drop('client_mailer_video');
     }
 }
