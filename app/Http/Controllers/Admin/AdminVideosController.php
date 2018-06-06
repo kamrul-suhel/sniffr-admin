@@ -223,7 +223,7 @@ class AdminVideosController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
-    {
+	{
         $data = [
             'user' => Auth::user(),
             'contact' => null,
