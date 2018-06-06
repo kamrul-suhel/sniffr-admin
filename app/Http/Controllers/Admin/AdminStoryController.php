@@ -264,12 +264,15 @@ class AdminStoryController extends Controller
     public function index(){
         $stories = new Story;
         $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
+        $videos = Video::orderBy('licensed_at', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,
-            'users' => User::all(),
-            'user' => Auth::user()
+            'videos' => $videos,
         ];
+
+        /*'users' => User::all(),
+            'user' => Auth::user()*/
 
         return view('admin.stories.index', $data); //return response()->json($formatted_posts);
     }
