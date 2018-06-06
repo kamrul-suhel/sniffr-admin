@@ -82,12 +82,10 @@
 
             VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
                 this.showVideo = false;
-                console.log(this.showVideo);
             });
 
             VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
                 this.showVideo = false;
-                console.log(this.showVideo);
             })
         },
 
@@ -97,13 +95,10 @@
                 this.resetShowVideo();
 
                 if (this.video.youtube_id != null) {
-                    let promise = new Promise((resolve, reject) => {
-                        this.youtubeVideo = true;
-                    });
-
-                    promise.then(()=>{
+                    this.youtubeVideo = true;
+                    setTimeout(()=>{
                         $('.plyr__control.plyr__control--overlaid').click();
-                    })
+                    }, 2000);
                 }
 
 
@@ -193,7 +188,7 @@
                     $(tweets).each(function (t, tweet) {
                         var id = jQuery(this).attr('id');
                         twttr.widgets.createVideo(id, tweet).then(function (el) {
-                            widget_type = video
+                            widget_type = el
                         });
                     });
                 });
@@ -210,7 +205,6 @@
                 vimeo.src = "/assets/admin/js/videojs-vimeo.js";
                 $('body').append(videojs1);
                 $('body').append(vimeo);
-
             },
 
             reloadInstagrm() {
