@@ -27,7 +27,7 @@ Hi,
     @endforeach
 @endif
 
-@if((!$mailer->stories->count()) && (!$mailer->stories->count()))
+@if((!$mailer->stories->count()) && (!$mailer->videos->count()))
     No Stories or Videos have been selected.
 @endif
 
