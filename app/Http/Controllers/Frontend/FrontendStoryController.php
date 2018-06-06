@@ -26,6 +26,7 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request)
     {
+
         if ($request->ajax() || $request->isJson()) {
             $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories.orders')

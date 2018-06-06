@@ -1,7 +1,10 @@
 <template>
     <div class="video-dialog-content">
         <v-layout row wrap v-if="video_detail">
-            <video-player :video="video_detail"></video-player>
+
+            <v-flex xs12 sm12 md5 lg7 xl7>
+                <video-player :video="video_detail"></video-player>
+            </v-flex>
 
             <v-flex xs12 sm12 md5 lg5 xl5 :class="{'pl-4' : content_padding, 'pt-4': !content_padding}">
                 <v-layout row wrap class="video-detail-content">
