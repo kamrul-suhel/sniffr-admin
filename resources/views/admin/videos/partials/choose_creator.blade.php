@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="input-group">
-            <span class="input-group-addon">Creators</span>
+            <span class="input-group-addon">Creator</span>
             <select type="text" class="selectpicker form-control selected" id="creator_id" name="creator_id"
                     title="search" data-live-search="true"
                     @if(session('note_type') == 'success') data-style="btn-success" @endif>
