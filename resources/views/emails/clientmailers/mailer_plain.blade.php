@@ -15,7 +15,7 @@ Hi,
     @endforeach
 @endif
 
-@if($mailer->stories->count()))
+@if($mailer->videos->count()))
     @foreach($mailer->videos as $video)
         {{ TextHelper::shorten($video['title'], 250) }}
 

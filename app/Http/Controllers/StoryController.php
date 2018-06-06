@@ -23,20 +23,8 @@ class StoryController extends Controller
     public function downloadStory($story_id)
     {
         $story = Story::find($story_id);
-        if (!$story) {
-            abort(404, 'Story Not Found');
-        }
-
-        $videos = Video::with('stories')->whereHas('stories', function ($query) use ($story_id) {
-            $query->where('stories.id', '=', $story_id);
-        })->get();
-
-        $assets = Asset::with('stories')->whereHas('stories', function ($query) use ($story_id) {
-            $query->where('stories.id', '=', $story_id);
-        })->get();
-
-        if ((!$assets->count()) && (!$videos->count())) {
-            abort(404, 'No Assets Found in this Story');
+        if (!$story || !$story->assets()->count()) {
+            abort(404, 'No Story or Assets Found');
         }
 
         $newZipFileName = $story->alpha_id. time() . '.zip';
@@ -48,29 +36,16 @@ class StoryController extends Controller
 
         $files[] = $pdf;
 
-        if ($assets->count()) {
-            foreach ($assets as $asset) {
-                $info = pathinfo($asset->url);
-                $ext = $info['extension'];
+		foreach ($story->assets()->get() as $asset) {
+			$info = pathinfo($asset->url);
+			$ext = $info['extension'];
 
-                $tempImage = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
-                copy($asset->url, $tempImage);
-                $files[] = $tempImage;
-            }
-        }
+			$tempImage = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
+			copy($asset->url, $tempImage);
+			$files[] = $tempImage;
+		}
 
-        if ($videos->count()) {
-            foreach ($videos as $video) {
-                $info = pathinfo($video->file);
-                $ext = $info['extension'];
-
-                $tempVideo = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
-                copy($video->file, $tempVideo);
-                $files[] = $tempVideo;
-            }
-        }
-
-        $mailer_id = (Input::get('mailer_id') ? Input::get('mailer_id') : 0); //get mailer_id for better logs (which downloads relate to which mailer)
+        $mailer_id = $story->mailers()->first()->id; //get mailer_id for better logs (which downloads relate to which mailer) - the story could be sent out in more that one email, but we just grab the first one
 
         // save the order
         $this->logDownload($story_id, $mailer_id);
@@ -106,14 +81,6 @@ class StoryController extends Controller
      */
     public function logDownload($story_id, $mailer_id)
     {
-        // $download = Order::where('story_id', '=', $story_id)
-        //     ->where('client_id', '=', \Auth::user()->client_id)
-        //     ->first();
-        //
-        // if ($download) {
-        //     return;
-        // }
-
         $download = new Download();
         $download->story_id = $story_id;
         $download->video_id = 0; // set to 0 until videos are eventually sent to clients (as well as stories)
