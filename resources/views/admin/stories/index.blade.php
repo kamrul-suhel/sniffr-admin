@@ -84,7 +84,7 @@
                     videosArray.push($(this).val());
                 });
                 if ((storiesArray.length != 0) || (videosArray.length != 0)) {
-                    var dataString = "stories=" + JSON.stringify(storiesArray) + "videos=" + JSON.stringify(videosArray);
+                    var dataString = "stories=" + JSON.stringify(storiesArray) + "&videos=" + JSON.stringify(videosArray);
                     $.ajax({
                         type: 'GET',
                         url: '/admin/mailers/create/',
