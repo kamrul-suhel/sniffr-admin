@@ -217,8 +217,9 @@ class VideoController extends Controller
     {
         if ($request->ajax() || $request->isJson()) {
             $video = new Video;
-            $page = Input::get('page', 1);
-            $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+            $videos = $video->where('state', 'licensed')
+                ->orderBy('id', 'DESC')
+                ->paginate($this->videos_per_page);
 
             $data = [
                 'videos' => $videos,
@@ -397,45 +398,4 @@ class VideoController extends Controller
 
         return false;
     }
-
-    /**
-     * TODO: where are we using this?
-     *
-     * @codeCoverageIgnore
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function dailiesIndex()
-    {
-        if (\Auth::guest()) {
-            return \Redirect::to('videos');
-        }
-
-        $page = Input::get('page', 1);
-        $user = \Auth::user();
-        $client = $user->client();
-
-        if (!$client) {
-            return \Redirect::to('videos');
-        }
-
-        $video = new Video();
-        $videos = $video->clientVideos($client);
-
-        // TODO: ADD Client name to the title
-        $data = [
-            'day_sort' => true,
-            'videos' => $videos,
-            'page_title' => ucfirst(\Auth::user()->username) . '\'s Daily Videos',
-            'current_page' => $page,
-            'page_description' => 'Page ' . $page,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/favorites',
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'pages' => Page::where('active', '=', 1)->get(),
-        ];
-
-        return view('Theme::video-list', $data);
-    }
-
 }
