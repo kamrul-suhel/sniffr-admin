@@ -149,127 +149,112 @@ class AdminStoryController extends Controller
      * @param array $story_data
      * @return array
      */
-    public function updateStories($story_data) {
+    public function updateStories($story_data, $type = 'new') {
 
+        // determine if adding new story & updating
+        if($type == 'new') {
+            $story = new Story();
+            $story->alpha_id = VideoHelper::quickRandom();
+            $story->wp_id = $story_data['wp_id'];
+            $story->active = 1;
+        } else {
+            $story = Story::where([['wp_id', $story_data['wp_id']]])->first();
+        }
+
+        // get assets from curl request (as a function)
+        $asset_ids = $this->createAssets($story_data['featured_media'], $story_data['description']);
+        if(count($asset_ids)) {
+            $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
+        }
+
+        // get author from curl request
+        if($story_data['author']) {
+            $author = $this->apiRequest('users/' . $story_data['author']);
+            $story->author = isset($author->name) ? $author->name : NULL;
+        }
+
+        $story->excerpt = ($story_data['excerpt'] ? $story_data['excerpt'] : NULL);
+        $story->date_ingested = $story_data['date'];
+        $story->categories = implode("|",$story_data['categories']);
+        $story->status = $story_data['status'];
+        $story->state = 'licensed';
+        $story->title = $story_data['title'];
+        $story->url = $story_data['url'];
+        $story->description = ($story_data['description'] ? $story_data['description'] : NULL);
+        $story->user_id = (Auth::user() ? Auth::user()->id : 0);
+
+        $story->save();
+        $story->assets()->sync($asset_ids);
     }
 
-	/**
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function refresh()
-	{
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function refresh()
+    {
         //increase execution time
         ini_set('max_execution_time', 1800);
 
-		$posts_pending = $this->apiRequest('posts?status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_pending = $this->apiRequest('posts?status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
         $posts_publish = $this->apiRequest('posts?status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
         $posts = array_merge($posts_pending, $posts_publish);
 
-		$stories_wp = [];
-		$story_ids = [];
+        $stories_wp = [];
+        $story_ids = [];
 
-		foreach($posts as $post){
-			// create array for curl stories objects
+        foreach($posts as $post){
+            // create array for curl stories objects
             $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
 
             $curpost = [
-				"wp_id" => $post->id,
-				"status" => $post->status,
-				"title" => trim(strip_tags($post->title->rendered)),
-				"excerpt" => $excerpt,
-				"description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
-				"url" => $post->link,
-				"date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
-				"author" => ''
-			];
+                "wp_id" => $post->id,
+                "status" => $post->status,
+                "title" => trim(strip_tags($post->title->rendered)),
+                "excerpt" => $excerpt,
+                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
+                "url" => $post->link,
+                "date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
+                "author" => ''
+            ];
 
-			// find assets within post content (old way but could be useful in the future)
-			//$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
+            // find assets within post content (old way but could be useful in the future)
+            //$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
 
-			//get the post categories
-			$cat_list = [];
-			foreach($post->categories as $tax_obj){
-				$cat_list[] = $tax_obj;
-			}
-			$curpost["categories"] = $cat_list;
+            //get the post categories
+            $cat_list = [];
+            foreach($post->categories as $tax_obj){
+                $cat_list[] = $tax_obj;
+            }
+            $curpost["categories"] = $cat_list;
 
             $curpost["featured_media"] = $post->featured_media;
             $curpost["author"] = $post->author;
-			$stories_wp[] = $curpost;
-			$story_ids[] = $post->id;
-		}
+            $stories_wp[] = $curpost;
+            $story_ids[] = $post->id;
+        }
 
-		// store stories from wordpress in database
-		foreach($stories_wp as $story_wp){
+        // store stories from wordpress in database
+        foreach($stories_wp as $story_wp){
 
-			// checks if wp post already exists within sniffr stories
-			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+            // checks if wp post already exists within sniffr stories
+            $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
 
-			if(!$story_find) {
-				$story = new Story();
-
-                // get assets from curl request (as a function)
-                $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
-                if(count($asset_ids)) {
-                    $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
-                }
-
-                // get author from curl request
-    			if($story_wp['author']) {
-    				$author = $this->apiRequest('users/' . $story_wp['author']);
-    				$story->author = isset($author->name) ? $author->name : NULL;
-                }
-
-				$story->alpha_id = VideoHelper::quickRandom();
-				$story->wp_id = $story_wp['wp_id'];
-				$story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-				$story->date_ingested = $story_wp['date'];
-				$story->categories = implode("|",$story_wp['categories']);
-				$story->status = $story_wp['status'];
-				$story->state = 'licensed';
-				$story->title = $story_wp['title'];
-                $story->url = $story_wp['url'];
-				$story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
-				$story->user_id = (Auth::user() ? Auth::user()->id : 0);
-				$story->active = 1;
-				$story->save();
-				$story->assets()->sync($asset_ids);
-			} else {
-                // if wp post is updated 5mins after our own story record
+            if(!$story_find) {
+                $this->updateStories($story_wp, 'new');
+            } else {
                 $storyTime = Carbon::parse($story_find->date_ingested);
                 $postTime = Carbon::parse($story_wp['date']);
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
+                // if wp post is updated 5mins after our own story record
                 if($differenceTime>300) {
-                    // get assets from curl request (as a function)
-                    $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
-                    if(count($asset_ids)) {
-                        $story_find->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
-                    }
-
-                    // update the author
-                    if($story_wp['author']) {
-        				$author = $this->apiRequest('users/' . $story_wp['author']);
-        				$story_find->author = isset($author->name) ? $author->name : NULL;
-                    }
-
-                    // update the rest of the story record in Sniffr
-                    $story_find->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-    				$story_find->date_ingested = $story_wp['date'];
-    				$story_find->categories = implode("|",$story_wp['categories']);
-    				$story_find->status = $story_wp['status'];
-    				$story_find->title = $story_wp['title'];
-                    $story_find->url = $story_wp['url'];
-    				$story_find->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
-    				$story_find->user_id = (Auth::user() ? Auth::user()->id : $story_find->user_id);
-    				$story_find->update();
-                    $story_find->assets()->sync($asset_ids);
+                    $this->updateStories($story_wp, 'update');
                 }
             }
-		}
+        }
 
-		return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
-	}
+        return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
