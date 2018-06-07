@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\ClientMailer;
+use App\User;
 use App\Order;
 use App\Story;
 use App\Traits\FrontendResponse;
@@ -25,6 +26,7 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request)
     {
+
         if ($request->ajax() || $request->isJson()) {
             $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories.orders')

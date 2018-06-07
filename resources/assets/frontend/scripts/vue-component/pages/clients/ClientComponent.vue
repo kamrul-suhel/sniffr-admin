@@ -1,7 +1,6 @@
 <template>
     <!-- Client section -->
     <div class="client-section">
-
         <!-- Client content SECTION -->
         <section class="client-content section-space" align-content-end v-if="content_show">
             <transition name="slide-fade" mode="out-in">
@@ -18,10 +17,7 @@
         data() {
             return {
                 content_show: false,
-                direction: 'right',
-                fab: false,
-                fling: false,
-                hover: true,
+
             }
         },
 
@@ -60,6 +56,8 @@
 
             onClientStories(){
                 this.$router.push({name: 'client'});
+
+
             }
         }
     }
