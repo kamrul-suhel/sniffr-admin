@@ -89,6 +89,9 @@ class ContractController extends Controller
             abort(404);
         }
 
+        $video->state = 'pending';
+        $video->save();
+
         $contract = Contract::find($video->currentContract->id);
 
         if (!$contract) {
