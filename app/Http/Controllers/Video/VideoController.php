@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Video;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Order;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
@@ -254,16 +255,20 @@ class VideoController extends Controller
         $isJson = $request->ajax() || $request->isJson();
 
         //Make sure video is active
-        if (($video) && ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed')) {
+        if ((Auth::check()) && (($video) && ((Auth::user()->role == 'admin' || Auth::user()->role == 'client') || $video->state == 'licensed'))) {
             $favorited = false;
             $downloaded = false;
             $iFrame = $this->getVideoHtml($video, true);
+            $ordered = Order::where('video_id', $video->id)
+                ->where('client_id', Auth::user()->client_id)
+                ->first();
 
             $view_increment = $this->handleViewCount($id);
 
             $data = [
                 'video' => $video,
                 'iframe' => $iFrame,
+                'ordered' => $ordered ? true : false,
                 'view_increment' => $view_increment,
                 'favorited' => $favorited,
                 'downloaded' => $downloaded,
