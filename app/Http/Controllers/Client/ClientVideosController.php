@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Video;
 use App\Client;
-use App\Campaign;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
@@ -52,13 +51,6 @@ class ClientVideosController extends Controller
         if (!empty($collection_value)) {
             $videos = $videos->where('video_collection_id', $collection_value);
         }
-
-        // This strips out exclusive videos (for 48 hours) unless not being used.
-        $videos = $videos->whereDoesntHave('campaigns', function ($q) {
-            $q->where('campaign_video.created_at', '>', Carbon::now()
-                ->subDays(2))
-                ->where('campaign_video.state', '!=', 'no');
-        });
 
         $videos = $videos->orderBy('id', 'DESC')->paginate(24);
 

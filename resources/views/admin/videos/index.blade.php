@@ -175,27 +175,6 @@
 									@if($video->state != 'new' && $video->state != 'accepted')
 										| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Exclusive"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Exclusive
 									@endif
-
-									@if(isset($video) && count($video->campaigns)>0)
-										<?php
-										$has_exclusivity = false;
-										foreach($video->campaigns as $campaign){
-											$date1 = now();
-											$date2 = new DateTime($campaign->pivot->created_at);
-
-											$diff = $date2->diff($date1);
-
-											$exclusivity = 48 - ($diff->h + ($diff->days*24));
-
-											if($exclusivity > 0){
-												$has_exclusivity = true;
-											}
-										}
-										if($has_exclusivity){
-											echo '| <i class="fa fa-hourglass-half text-danger" title="Has Exclusivity: '.$exclusivity.' hours"></i>';
-										}
-										?>
-									@endif
 								@endif
 							</div>
 

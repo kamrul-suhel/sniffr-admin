@@ -92,10 +92,6 @@
                         <div class="tab-pane" id="video_files">
                             @include('admin.videos.partials.video_files')
                         </div>
-                        <div class="tab-pane" id="sales">
-                            @include('admin.videos.partials.campaign')
-                            @include('admin.videos.partials.client_exclusivity')
-                        </div>
 
                         <div class="tab-pane" id="rights">
                             <div class="row">

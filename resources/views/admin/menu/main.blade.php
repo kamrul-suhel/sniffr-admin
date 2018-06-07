@@ -144,13 +144,6 @@
     @endif
 
     @if(Auth::user()->isAdmin())
-    <li class="{{ Request::segment(2) == 'campaigns' ? 'active' : '' }}">
-        <a href="{{ url('admin/campaigns') }}" class="tlink">
-            <i class="fa fa-area-chart"></i>
-            <span class="title">Campaigns</span>
-        </a>
-    </li>
-
     <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
         <a href="{{ url('admin/users') }}" class="tlink">
             <i class="fa fa-user-circle"></i>
