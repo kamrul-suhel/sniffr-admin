@@ -11,6 +11,7 @@ use App\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
 use Illuminate\Http\Request;
+use PDF;
 
 class ContractController extends Controller
 {
@@ -158,13 +159,12 @@ class ContractController extends Controller
     }
 
     /**
-     * @param $video_id
+     * @param string $video_id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function generatePdf($video_id)
+    public function generatePdf(string $video_id)
     {
         $video = Video::find($video_id);
-        $contract = Contract::where('video_id', $video_id)->first();
 
         if (!$video) {
             return Redirect::to('admin/videos/')->with([
@@ -172,6 +172,7 @@ class ContractController extends Controller
                 'note_type' => 'error',
             ]);
         }
+        $contract = Contract::where('video_id', $video_id)->first();
 
         if (!$contract) {
             return Redirect::to('admin/videos/')->with([
