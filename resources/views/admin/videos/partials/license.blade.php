@@ -81,9 +81,14 @@
                     <i class="fa fa-download"></i>
                 </a>
             @endif
-            <a href="{{ url('/admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary" title="Download License" download>
-                <i class="fa fa-print"></i>
-            </a>
+
+            @if($video->state == 'licensed')
+                <a href="{{ url('/admin/contract/download/' . $video->id) }}" class="btn btn-primary"
+                   title="Download License" download>
+                    <i class="fa fa-print"></i>
+                </a>
+            @endif
+
             <a href="{{ url('/admin/nsfw/'.$video->alpha_id) }}" class="btn btn-primary" title="Flag NSFW">
                 <i class="fa fa-flag"></i>
             </a>
