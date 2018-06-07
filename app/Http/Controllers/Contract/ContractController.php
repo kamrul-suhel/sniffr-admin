@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Contract;
 
 use App\Contract;
 use App\Http\Requests\Contract\DeleteContractRequest;
+use App\Jobs\QueueEmail;
 use App\Mail\ContractMailable;
 use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
@@ -83,6 +84,19 @@ class ContractController extends Controller
     public function send(int $video_id)
     {
         $video = Video::with('currentContract')->with('contact')->find($video_id);
+
+        if (!$video) {
+            abort(404);
+        }
+
+        $contract = Contract::find($video->currentContract->id);
+
+        if (!$contract) {
+            abort(404);
+        }
+
+        $contract->sent_at = now();
+        $contract->save();
 
         \Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
 

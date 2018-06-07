@@ -3,7 +3,7 @@
         <div class="col-md-8">
             <h2>
                 Contract
-                {{ ($video->currentContract->signed_at) ? 'Agreed' : 'Proposed' }}
+                {{ ($video->currentContract->signed_at) ? 'Agreed' : (($video->currentContract->sent_at) ? 'Sent' : 'Draft') }}
             </h2>
             <div class="row">
                 <div class="col-md-6">
@@ -121,22 +121,50 @@
             @endif
         </div>
 
-        @if(!$video->currentContract->signed_at)
+        @if($video->currentContract->signed_at)
             <div class="col-md-4 text-center">
-                <div class="input-group">
+                <div class="">
+                    <a href="{{ route('contract.download', ['id' => $video->id]) }}" class="btn btn-info btn-lg">
+                        Download Contract
+                    </a>
+                </div>
+            </div>
+        @else
+            <div class="col-md-4 text-center">
+                <div class="">
                     <h4>Send Contract to {{ $video->contact->email }}</h4>
 
-                    <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg">
+                    <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg" id="sendContract">
                         Send
                     </a>
+                </div>
+            </div>
+            <hr>
+            <div class="col-md-4 text-center">
+                <div class="">
+                    <h4 class="text-center">
+                        {{
+                        ($video->currentContract->sent_at) ?
+                        'Sent: ' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $video->currentContract->sent_at)->diffForHumans()
+                        : ''
+                        }}
+                    </h4>
                 </div>
             </div>
         @endif
     </div>
 @elseif($video->contact)
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#contract_modal">
-        Create Contract
-    </button>
+    @if($video->source)
+        <div class="col-md-4 text-center">
+            <a href="{{ url('/admin/pdfview/' . $video->alpha_id) }}" class="btn btn-primary" title="Download License" download>
+                Download Submission Contract
+            </a>
+        </div>
+    @else
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#contract_modal">
+            Create Contract
+        </button>
+    @endif
 @else
     <p>
         We cannot create a contract if the video is not assigned to a creator/contact. Perhaps the contact has unsubscribed.
