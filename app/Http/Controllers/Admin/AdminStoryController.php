@@ -145,12 +145,25 @@ class AdminStoryController extends Controller
         return $asset_ids;
     }
 
+    /**
+     * @param array $story_data
+     * @return array
+     */
+    public function updateStories($story_data) {
+
+    }
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function refresh()
 	{
-		$posts = $this->apiRequest('posts?status=draft,publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        //increase execution time
+        ini_set('max_execution_time', 1800);
+
+		$posts_pending = $this->apiRequest('posts?status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_publish = $this->apiRequest('posts?status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts = array_merge($posts_pending, $posts_publish);
 
 		$stories_wp = [];
 		$story_ids = [];
@@ -231,13 +244,13 @@ class AdminStoryController extends Controller
                     // get assets from curl request (as a function)
                     $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
                     if(count($asset_ids)) {
-                        $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
+                        $story_find->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
                     }
 
                     // update the author
                     if($story_wp['author']) {
         				$author = $this->apiRequest('users/' . $story_wp['author']);
-        				$story->author = isset($author->name) ? $author->name : NULL;
+        				$story_find->author = isset($author->name) ? $author->name : NULL;
                     }
 
                     // update the rest of the story record in Sniffr
@@ -249,8 +262,8 @@ class AdminStoryController extends Controller
                     $story_find->url = $story_wp['url'];
     				$story_find->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
     				$story_find->user_id = (Auth::user() ? Auth::user()->id : $story_find->user_id);
-    				$story_find->save();
-                    $story->assets()->sync($asset_ids);
+    				$story_find->update();
+                    $story_find->assets()->sync($asset_ids);
                 }
             }
 		}
@@ -264,7 +277,7 @@ class AdminStoryController extends Controller
     public function index(){
         $stories = new Story;
         $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
-        $videos = Video::orderBy('licensed_at', 'DESC')->paginate(10);
+        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])->orderBy('licensed_at', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,

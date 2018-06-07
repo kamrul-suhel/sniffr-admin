@@ -6,7 +6,6 @@
             display: flex;
             height: 200px;
             width: auto;
-            margin-top: 15px;
             border: none
         }
     </style>
@@ -56,9 +55,7 @@
         </div>
         <div class="clear"></div>
     </div>
-    <div class="text-center">
-        {{--{{ $stories->appends(request()->except('page'))->render() }}--}}
-    </div>
+    
 @endsection
 
 @section('javascript')

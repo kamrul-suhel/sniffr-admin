@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @if(!empty($mailer->note)) <div style="padding-top:20px;padding-bottom:20px;">{{ $mailer->note }}</div> @endif
+    @if(!empty($mailer->note)) <div style="padding-top:10px;padding-bottom:20px;">{{ $mailer->note }}</div> @endif
 
     @if($mailer->stories->count())
         <hr>
