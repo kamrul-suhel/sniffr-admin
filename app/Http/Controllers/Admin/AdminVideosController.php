@@ -260,9 +260,10 @@ class AdminVideosController extends Controller
         $video->description = $request->input('description');
         $video->contact_id = $request->input('creator_id');
         $video->user_id = Auth::user()->id;
+        $video->state = 'new';
         $video->save();
 
-        return redirect()->route('videos.edit', ['id' => $video->alpha_id])->with([
+        return redirect()->route('admin_video_edit', ['id' => $video->alpha_id])->with([
             'note' => 'New Video Successfully Added!',
             'note_type' => 'success',
         ]);
