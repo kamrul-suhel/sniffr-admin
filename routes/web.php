@@ -274,7 +274,7 @@ Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@g
 Route::get('client/stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
 Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
 Route::get('/client/video/show/{alpha_id}', 'Video\VideoController@show');
-Route::get('/client/videos', 'Video\VideoController@videosSent');
+Route::get('/client/videos', 'Client\ClientVideosController@videosSent');
 
 /*
 |--------------------------------------------------------------------------
