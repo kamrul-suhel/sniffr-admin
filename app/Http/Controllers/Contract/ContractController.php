@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Contract;
 
 use App\Contract;
 use App\Http\Requests\Contract\DeleteContractRequest;
-use App\Jobs\QueueEmail;
 use App\Mail\ContractMailable;
+use App\Mail\ContractSignedThanks;
 use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
 use App\Video;
@@ -157,6 +157,8 @@ class ContractController extends Controller
         $video = Video::with('contact')->find($contract->video_id);
         $video->state = 'licensed';
         $video->save();
+
+        \Mail::to($video->contact->email)->send(new ContractSignedThanks($video, $video->currentContract));
 
         if (env('APP_ENV') != 'local') {
             $video->notify(new ContractSigned($video));
