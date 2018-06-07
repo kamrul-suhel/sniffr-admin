@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * @property string alpha_id
+ * @property string url
+ * @property null|string jw_player_code
+ * @property string mime_type
+ * @property string thumbnail
+ */
 class Asset extends Model
 {
     use SoftDeletes, Notifiable;

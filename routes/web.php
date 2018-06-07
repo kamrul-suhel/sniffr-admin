@@ -175,6 +175,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('contract/{contract}/delete', 'Contract\ContractController@delete')->name('contract.delete');
     Route::resource('contract', 'Contract\ContractController');
     Route::get('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
+    Route::get('/contract/download/{video_id}', 'Contract\ContractController@generatePdf')->name('contract.download');
 
     Route::get('media', 'Admin\AdminMediaController@index');
     // Route::post('media/files', 'Admin\AdminMediaController@files');
@@ -261,17 +262,6 @@ Route::group(array('prefix' => 'client'), function () {
     Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
 
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
-    Route::post('videos/update', array('uses' => 'Client\ClientVideosController@update'));
-    Route::get('videos/view/{id}', 'Client\ClientVideosController@view');
-    Route::get('videos/status/{state}/{id}', array('uses' => 'Client\ClientVideosController@status'));
-    Route::get('videos/interest/{id}', array('uses' => 'Client\ClientVideosController@interest'));
-
-    Route::get('dashboard', 'Client\ClientDashboardController@index');
-    Route::get('dailies', array('uses' => 'Client\ClientDailiesController@index'));
-    Route::get('dailies/view/{id}', 'Client\ClientDailiesController@view');
-    Route::get('dailies/{id}', array('uses' => 'Client\ClientDailiesController@index'));
-    Route::get('dailies/status/{state}/{id}', array('uses' => 'Client\ClientDailiesController@status'));
-    Route::get('dailies/request/{id}', array('uses' => 'Client\ClientDailiesController@request'));
 });
 
 /*
@@ -284,6 +274,8 @@ Route::get('/client/stories', 'Frontend\FrontendStoryController@getMailerStories
 Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
 Route::get('client/stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
 Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
+Route::get('/client/video/show/{alpha_id}', 'Video\VideoController@show');
+Route::get('/client/videos', 'Video\VideoController@videosSent');
 
 /*
 |--------------------------------------------------------------------------

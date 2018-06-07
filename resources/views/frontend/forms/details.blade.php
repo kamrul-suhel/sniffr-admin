@@ -8,7 +8,7 @@
                 <?php if(!isset($video->id)): ?>
                     <v-flex xs12>
                         <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">Sorry, we can't seem to find your video with the code you provided. Please contact <u>submissions@unilad.co.uk</u></div>
+                            <div class="panel-heading">Sorry, we can't seem to find your video with the code you provided. Please contact <u>licensing@unilad.co.uk</u></div>
                         </div>
                     </v-flex>
                 <?php elseif(!isset($video->more_details)): ?>
