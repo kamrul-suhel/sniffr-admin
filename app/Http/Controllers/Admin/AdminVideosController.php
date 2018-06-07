@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\VideoService;
 use Auth;
 use Illuminate\Http\UploadedFile;
 use Youtube;
@@ -21,7 +22,6 @@ use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
 use App\Jobs\QueueEmail;
-use App\Jobs\QueueVideo;
 use App\Jobs\QueueVideoImport;
 use App\Jobs\QueueVideoYoutubeUpload;
 use App\Jobs\QueueVideoAnalysis;
@@ -34,12 +34,19 @@ use Carbon\Carbon as Carbon;
 class AdminVideosController extends Controller
 {
     /**
+     * @var VideoService
+     */
+    private $videoService;
+
+    /**
      * AdminVideosController constructor.
      * @param Request $request
+     * @param VideoService $videoService
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, VideoService $videoService)
     {
         $this->middleware('admin');
+        $this->videoService = $videoService;
     }
 
     /**
@@ -253,9 +260,10 @@ class AdminVideosController extends Controller
         $video->description = $request->input('description');
         $video->contact_id = $request->input('creator_id');
         $video->user_id = Auth::user()->id;
+        $video->state = 'new';
         $video->save();
 
-        return redirect()->route('videos.index')->with([
+        return redirect()->route('admin_video_edit', ['id' => $video->alpha_id])->with([
             'note' => 'New Video Successfully Added!',
             'note_type' => 'success',
         ]);
@@ -338,14 +346,9 @@ class AdminVideosController extends Controller
             $video->image = $imageUrl;
         }
 
-        //handle file upload to S3 and Youtube ingestion
-        if ($request->hasFile('file')) {
-            $videoFile = $request->file('file');
-            $video->file = $this->saveVideoFile($videoFile);
-            $video->mime = $videoFile->getMimeType();
-            //TODO: should the old video in youtube be removed?
-            $video->youtube_id = null;
-        }
+        $filePath = $request->hasFile('file')
+            ? $this->videoService->saveUploadedVideoFile($video, $request->get('file'))
+            : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         if($request->input('campaigns')) {
             $campaigns = $this->saveCampaigns($request->input('campaigns'), $video);
@@ -365,16 +368,11 @@ class AdminVideosController extends Controller
         $video->contact_id = $request->input('creator_id', null);
         $video->title = $request->input('title');
         $video->embed_code = $request->input('embed_code');
-        $video->url = $request->input('url');
         $video->location = $request->input('location');
         $video->details = $request->input('details');
         $video->description = $request->input('description');
 
         $video->save();
-
-        if ($request->hasFile('file')) {
-            QueueVideo::dispatch($video->id, true)->delay(now()->addSeconds(5));
-        }
 
         return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
             'note' => 'Successfully Updated Video!',
@@ -732,9 +730,22 @@ class AdminVideosController extends Controller
         }
     }
 
+    /**
+     * This license is only for submited videos
+     * @param $alpha_id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function pdfview($alpha_id)
     {
-        $video = Video::where('alpha_id', $alpha_id)->first();
+        $video = Video::where('alpha_id', $alpha_id)
+            ->first();
+
+        if (!$video) {
+            return Redirect::to('admin/videos/')->with([
+                'note' => 'Sorry, we could not find the video',
+                'note_type' => 'error',
+            ]);
+        }
 
         $data = [
             'terms' => config('settings.terms'),
@@ -743,10 +754,7 @@ class AdminVideosController extends Controller
 
         $pdf = PDF::loadView('admin.videos.pdfview', $data);
 
-        return (!empty($video) ? $pdf->download($alpha_id . '.pdf') : Redirect::to('admin/videos/')->with([
-            'note' => 'Sorry, we could not find the video',
-            'note_type' => 'error',
-        ]));
+        return $pdf->download($alpha_id . '.pdf');
     }
 
     public function nsfw($alpha_id = null)

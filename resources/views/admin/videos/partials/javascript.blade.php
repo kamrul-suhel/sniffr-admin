@@ -1,5 +1,10 @@
 
 <script type="text/javascript">
+    $(document).ready(function(){
+        $("#sendContract").click(function () {
+            $("#sendContract").attr("disabled", true);
+        });
+    });
 //video analysis function for labels from dynamodb API
 function videoAnalysis(tempFile) {
 

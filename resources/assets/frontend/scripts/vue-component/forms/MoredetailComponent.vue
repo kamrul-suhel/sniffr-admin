@@ -4,7 +4,7 @@
             <v-layout justify-center align-center>
                 <v-flex xs12>
                     <div class="text-xs-center">Sorry, we can't seem to find your video with the code you
-                        provided. Please contact <u>submissions@unilad.co.uk</u></div>
+                        provided. Please contact <u>licensing@unilad.co.uk</u></div>
                 </v-flex>
             </v-layout>
         </v-container>

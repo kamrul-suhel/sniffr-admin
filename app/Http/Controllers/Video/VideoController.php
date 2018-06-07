@@ -10,7 +10,6 @@ use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use App\Page;
 use App\User;
@@ -118,8 +117,8 @@ class VideoController extends Controller
 
         //handle file upload to S3 and Youtube ingestion
         $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->file)
-            : $this->videoService->saveVideoLink($video, Input::get('url'));
+            ? $this->videoService->saveUploadedVideoFile($video, $request->get('file'))
+            : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         // Slack notification
         if (env('APP_ENV') == 'prod') {
