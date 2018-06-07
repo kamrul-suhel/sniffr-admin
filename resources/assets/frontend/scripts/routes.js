@@ -12,12 +12,12 @@ import TermsConditionsComponent from './vue-component/pages/termscondition/Terms
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
-import ClientVideosComponent from './vue-component/pages/clients/ClientVideosComponent';
-import ClientVideoDetailComponent from './vue-component/pages/clients/ClientVideoDetailComponent';
-import ClientVideoDownloadComponent from './vue-component/pages/clients/ClientVideoDownloadComponent';
-import ClientStoriesComponent from './vue-component/pages/clients/ClientStoriesComponent';
-import ClientStoryDetailComponent from './vue-component/pages/clients/ClientStoryDetailComponent';
-import ClientDownloadedStoriesComponent from './vue-component/pages/clients/ClientDownloadedStoriesComponent.vue';
+import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
+import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
+import ClientDownloadedStoriesComponent from './vue-component/pages/clients/stories/ClientDownloadedStoriesComponent.vue';
+
+import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
+import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 
 
 export const routes = [
@@ -123,21 +123,9 @@ export const routes = [
             },
 
             {
-                path: 'video/:detail',
-                name: 'client_video_detail',
-                component: ClientVideoDetailComponent
-            },
-
-            {
                 path: 'stories',
                 name: 'client_stories',
                 component: ClientStoriesComponent
-            },
-
-            {
-                path: 'stories/downloaded',
-                name: 'client_downloaded_stories',
-                component: ClientDownloadedStoriesComponent
             },
 
             {
@@ -147,10 +135,22 @@ export const routes = [
             },
 
             {
-                path: 'downloads',
-                name: 'client_video_download',
-                component: ClientVideoDownloadComponent
+                path: 'stories/downloaded',
+                name: 'client_downloaded_stories',
+                component: ClientDownloadedStoriesComponent
             },
+
+            {
+                path: 'videos',
+                name: 'client_videos',
+                component: ClientVideosComponent,
+            },
+
+            {
+              path: 'videos/show/:alpha_id',
+                name: 'client_video_detail',
+                component: ClientVideoDetailComponent
+            }
 
         ],
     },

@@ -70,7 +70,7 @@ class ClientVideosController extends Controller
             'video_shottypes' => VideoShotType::all(),
         ];
 
-        return view('client.videos.index', $data);
+        return view('frontend.master');
     }
 
     /**

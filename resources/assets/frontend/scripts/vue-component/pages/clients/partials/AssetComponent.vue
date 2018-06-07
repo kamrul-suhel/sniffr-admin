@@ -1,14 +1,17 @@
 <template>
     <v-flex xs6 sm6 md12 lg12 xl12 @click="showDownloadButton">
-        <div class="thumbnail" :style="{backgroundImage:'url('+asset.url+')'}" @click="onOpenDialog(asset.id)">
-            <div class="download_asset" :class="{show: showButton}">
+        <div class="thumbnail" :style="{backgroundImage:'url('+thumbnailImg+')'}" @click="onOpenDialog(asset.id)">
+            <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
+                <v-icon dark medium>play_circle_outline</v-icon>
+            </div>
+            <!--<div class="download_asset" :class="{show: showButton}">-->
                 <!--<v-btn fab dark small color="dark"-->
                 <!--:loading="loading"-->
                 <!--:disabled="loading"-->
                 <!--@click.native="downloadAsset()">-->
                 <!--<v-icon dark>cloud_download</v-icon>-->
                 <!--</v-btn>-->
-            </div>
+            <!--</div>-->
         </div>
 
         <!-- Image or Video in dialog -->
@@ -33,8 +36,20 @@
             <v-card flat>
 
                 <v-card-media
-                        :src="current_item.url"
-                >
+                        :src="current_item.mime_type === 'video/mp4'? current_item.thumbnail : current_item.url"
+                 v-if="!showVideo">
+                    <div class="video-button" v-if="current_item.mime_type === 'video/mp4'" @click="onPlayVideo()">
+                        <v-btn dark fab class="dark" medium>
+                            <v-icon dark large>play_arrow</v-icon>
+                        </v-btn>
+                    </div>
+                </v-card-media>
+
+                <v-card-media v-else>
+                    <video width="100%" height="100%" controls ref="playerVideo">
+                        <source :src="current_item.url" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </v-card-media>
             </v-card>
         </v-dialog>
@@ -50,6 +65,8 @@
                 loader: null,
                 showButton: false,
                 current_item: '',
+                current_item_thumbnail:'',
+                thumbnailImg: '',
 
                 story_dialog: false,
 
@@ -58,6 +75,8 @@
 
                 previousImgExists: true,
                 previousImgObj: '',
+
+                showVideo:false,
             }
         },
 
@@ -75,12 +94,20 @@
         },
 
         created() {
-
+            this.setImageUrl(this.asset);
         },
 
         methods: {
             showDownloadButton(){
                 this.showButton = !this.showButton;
+            },
+
+            setImageUrl(asset){
+                if(asset.mime_type === "video/mp4"){
+                    this.thumbnailImg = asset.thumbnail;
+                }else{
+                    this.thumbnailImg = asset.url;
+                }
             },
 
             downloadAsset(){
@@ -116,7 +143,7 @@
 
             onPreviousVideo(){
                 this.current_item = this.previousImgObj;
-
+                this.showVideo = false;
 
                 this.assets.forEach((item, index) => {
                     if (item.id == this.current_item.id) {
@@ -139,6 +166,7 @@
 
             onNextVideo(){
                 this.current_item = this.nextImgObj;
+                this.showVideo = false;
 
                 this.assets.forEach((item, index) => {
                     if (item.id == this.current_item.id) {
@@ -162,6 +190,23 @@
             onCloseDialogBox() {
                 this.story_dialog = false;
             },
+
+            onPlayVideo(){
+                var promise = new Promise((resolve, reject)=>{
+                    this.showVideo = true;
+                    resolve();
+                });
+
+                promise.then(() =>{
+                    console.log('frefs ');
+                    setTimeout(()=> {
+                        console.log(this.$refs.playerVideo.play());
+                    }, 100);
+
+                });
+
+                console.log('Play the video '+ this.current_item.url);
+            }
         }
     }
 </script>

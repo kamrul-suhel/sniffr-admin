@@ -94,16 +94,7 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                var mailer_id = '';
-                var route_name = this.$route.name;
-
-                if(route_name == 'client_downloaded_stories'){
-                    mailer_id = this.story.orders.mailer_id;
-                }else{
-                    mailer_id = this.story.client_mailer_id;
-                }
-
-                var url = '/client/stories/' + this.story.id + '/download/?mailer_id='+mailer_id;
+                var url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
             },
 
@@ -142,7 +133,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
