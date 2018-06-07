@@ -142,6 +142,7 @@ class Video extends Model
     /**
      * @param int $page
      * @return string
+     * @codeCoverageIgnore
      */
     public function cacheKey(int $page = 0)
     {
@@ -156,6 +157,8 @@ class Video extends Model
      * @param int $videos_per_page
      * @param $page
      * @return mixed
+     * TODO: Not being used
+     * @codeCoverageIgnore
      */
     public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
     {
@@ -170,6 +173,7 @@ class Video extends Model
 
     /**
      * @return Comment[]
+     * @codeCoverageIgnore
      */
     public function getCachedComments()
     {
@@ -180,6 +184,7 @@ class Video extends Model
 
     /**
      * @return Campaign[]
+     * @codeCoverageIgnore
      */
     public function getCachedCampaigns()
     {
@@ -190,6 +195,7 @@ class Video extends Model
 
     /**
      * @return Download[]
+     * @codeCoverageIgnore
      */
     public function getCachedDownloads()
     {
@@ -200,6 +206,7 @@ class Video extends Model
 
     /**
      * @return Contact[]
+     * @codeCoverageIgnore
      */
     public function getCachedContact()
     {
@@ -210,6 +217,7 @@ class Video extends Model
 
     /**
      * @return Tag[]
+     * @codeCoverageIgnore
      */
     public function getCachedTags()
     {
@@ -232,8 +240,12 @@ class Video extends Model
      */
     public function clientVideos(Client $client)
     {
-        return Video::whereHas('campaigns', function ($q) use ($client) {
-            $q->where('id', $client->id);
-        })->orderBy('licensed_at', 'desc')->paginate(12);
+        $user_id = $request->user_id;
+        $client_mailer = ClientMailer::with('stories.orders')
+            ->whereHas('users', function ($query) use ($user_id) {
+                $query->where('users.id', '=', $user_id);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
     }
 }
