@@ -732,9 +732,22 @@ class AdminVideosController extends Controller
         }
     }
 
+    /**
+     * This license is only for submited videos
+     * @param $alpha_id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function pdfview($alpha_id)
     {
-        $video = Video::where('alpha_id', $alpha_id)->first();
+        $video = Video::where('alpha_id', $alpha_id)
+            ->first();
+
+        if (!$video) {
+            return Redirect::to('admin/videos/')->with([
+                'note' => 'Sorry, we could not find the video',
+                'note_type' => 'error',
+            ]);
+        }
 
         $data = [
             'terms' => config('settings.terms'),
@@ -743,10 +756,7 @@ class AdminVideosController extends Controller
 
         $pdf = PDF::loadView('admin.videos.pdfview', $data);
 
-        return (!empty($video) ? $pdf->download($alpha_id . '.pdf') : Redirect::to('admin/videos/')->with([
-            'note' => 'Sorry, we could not find the video',
-            'note_type' => 'error',
-        ]));
+        return $pdf->download($alpha_id . '.pdf');
     }
 
     public function nsfw($alpha_id = null)
