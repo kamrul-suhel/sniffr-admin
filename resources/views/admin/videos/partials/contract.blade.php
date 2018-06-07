@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-md-8">
             <h2>
-                {{ ($video->currentContract->signed_at) ? '' : 'Proposed' }}
                 Contract
+                {{ ($video->currentContract->signed_at) ? 'Agreed' : 'Proposed' }}
             </h2>
             <div class="row">
                 <div class="col-md-6">
