@@ -6,15 +6,15 @@
             </span>
             <input type="file" multiple="true" class="form-control" name="file" id="file"/>
         </span>
+        <small class="pull-right"> Current Video File: <b>{{ $video->file }}</b> </small>
     </span>
     <span class="col-md-12">
         <span class="input-group">
             <span class="input-group-addon">
                 URL
             </span>
-            <input type="text" class="form-control" name="url" id="url" value="{{
-            $video->url or null
-            }}" title="URL"/>
+            <input type="text" class="form-control" name="url" id="url"
+                   @if(is_null($video->url)) placeholder="Current video is an uploaded file" @endif value="{{ $video->url or null }}" title="URL"/>
         </span>
     </span>
 

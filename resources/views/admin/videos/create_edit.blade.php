@@ -52,9 +52,11 @@
                             <a href="#creator" role="tab" data-toggle="tab">Creator</a>
                         </li>
 
+                        @if($video->rights != 'ex')
                         <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
                             <a href="#contract" role="tab" data-toggle="tab">Contract</a>
                         </li>
+                        @endif
 
                         <li>
                             <a href="#admin" role="tab" data-toggle="tab">Admin</a>

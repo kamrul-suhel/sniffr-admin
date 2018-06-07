@@ -37,11 +37,19 @@ class VideoService
 
     /**
      * @param Video $video
-     * @param String $videoUrl
+     * @param string $videoUrl
      * @return string
      */
-    public function saveVideoLink(Video $video, String $videoUrl)
+    public function saveVideoLink(Video $video, string $videoUrl = null)
     {
+        if (!$videoUrl) {
+            $video->url = null;
+            $video->youtube_id = null;
+            $video->image = null;
+            $video->thumb = null;
+            $video->save();
+            return null;
+        }
         $linkDetails = VideoHelper::videoLinkChecker($videoUrl);
 
         $video->youtube_id = $linkDetails['youtube_id'];

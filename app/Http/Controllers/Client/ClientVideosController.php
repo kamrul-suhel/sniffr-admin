@@ -2,117 +2,65 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\ClientMailer;
+use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponse;
 use Auth;
-use Redirect;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Video;
-use App\Client;
-use App\VideoCategory;
-use App\VideoCollection;
-use App\VideoShotType;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon as Carbon;
-use App\Notifications\ClientAction;
 
 class ClientVideosController extends Controller
 {
+    use FrontendResponse;
+    use VideoHelper;
+    /**
+     * @var int
+     */
+    private $videos_per_page;
+
     /**
      * ClientVideosController constructor.
-     * @param Request $request
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $this->middleware('client');
+        $settings = config('settings.site');
+        $this->videos_per_page = $settings['videos_per_page'] ?: 24;
+        $this->data = [
+            'user' => Auth::user(),
+        ];
     }
 
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function videosSent(Request $request)
     {
-        $search_value = Input::get('s');
-        $collection_value = Input::get('collection');
+        $user_id = $request->get('user_id');
+        $client_mailer = ClientMailer::with('videos')
+            ->whereHas('users', function ($query) use ($user_id) {
+                $query->where('users.id', '=', $user_id);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
-        $videos = new Video;
-        $videos = $videos->where('state', 'licensed');
+        dd($client_mailer);
 
-        if(!empty($search_value)){
-            $videos = $videos->where(function($query) use($search_value){
-                $query->where('title', 'LIKE', '%'.$search_value.'%')
-                ->orWhereHas('tags', function ($q) use($search_value){
-                    $q->where('name', 'LIKE', '%'.$search_value.'%');
-                })
-                ->orWhere('alpha_id', $search_value);
-            });
-        }
+        $video = new Video;
 
-        if (!empty($collection_value)) {
-            $videos = $videos->where('video_collection_id', $collection_value);
-        }
-
-        $videos = $videos->orderBy('id', 'DESC')->paginate(24);
+        $videos = $video->where('state', 'licensed')
+            ->orderBy('id', 'DESC')
+            ->paginate($this->videos_per_page);
 
         $data = [
             'videos' => $videos,
-            'user' => Auth::user(),
-            'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
-            'video_shottypes' => VideoShotType::all(),
         ];
 
-        return view('client.videos.index', $data);
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function view($id)
-    {
-        $video = Video::where('alpha_id', $id)->where('state', 'licensed')->first();
-
-        $data = [
-            'headline' => '<i class="fa fa-edit"></i> Edit Video',
-            'video' => $video,
-            'user' => Auth::user(),
-            'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
-            'video_shottypes' => VideoShotType::all(),
-            'video_campaigns' => Campaign::all(),
-        ];
-
-        return view('client.videos.create_edit', $data);
-    }
-
-    /**
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     */
-    public function interest(Request $request, $id)
-    {
-        $isJson = $request->ajax() || $request->isJson();
-
-        $video = Video::where('alpha_id', $id)->first();
-        $client = Client::find(Auth::user()->client_id);
-        
-        $client->notify(new ClientAction($video, 'interested', $client->name));
-
-        if ($isJson) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Our team have been notified of your interest in this video, we\'ll be in touch',
-                'state' => 'request',
-                'current_state' => session('current_state'),
-                'video_id' => $video->id
-            ]);
+        if ($request->ajax() || $request->isJson()) {
+            return $this->successResponse($data);
         }
 
-        return Redirect::to('admin/videos/' . session('state'))->with([
-            'note' => 'Our team have been notified of your interest in this video, we\'ll be in touch',
-            'note_type' => 'success'
-        ]);
+        return view('client.videos.index', $data);
     }
 }
