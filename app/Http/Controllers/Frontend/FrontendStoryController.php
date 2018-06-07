@@ -32,13 +32,9 @@ class FrontendStoryController extends Controller
                     $query->where('users.id', '=', $user_id);
                 })
                 ->orderBy('created_at', 'DESC')
-                ->get();
-
-            $client_mailer = $client_mailer->each(function ($client_mailer) {
-                foreach ($client_mailer->stories as $story) {
-                    $story['client_mailer_id'] = $client_mailer->id;
-                };
-            })->pluck('stories')->collapse();
+                ->get()
+                ->pluck('stories')
+                ->collapse();
 
 
             //Paginate collection object

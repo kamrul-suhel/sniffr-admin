@@ -61,6 +61,6 @@ class ClientVideosController extends Controller
             return $this->successResponse($data);
         }
 
-        return view('client.videos.index', $data);
+        return view('frontend.master');
     }
 }
