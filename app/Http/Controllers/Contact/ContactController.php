@@ -114,7 +114,8 @@ class ContactController extends Controller
              'headline' => '<i class="fa fa-edit"></i> Edit Contact',
              'contact' => $contact,
              'user' => Auth::user(),
-             'videos' => $contact->videos
+             'videos' => $contact->videos,
+             'comments' => $contact->comments()->orderBy('created_at', 'desc')->paginate(6)
          ];
 
         return view('admin.contacts.create_edit', $data);
