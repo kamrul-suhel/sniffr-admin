@@ -40,9 +40,8 @@ class ClientVideosController extends Controller
      */
     public function videosSent(Request $request)
     {
-
         if ($request->ajax() || $request->isJson()) {
-            $user_id = $request->get('user_id');
+            $user_id = Auth::user()->id;
             $client_videos_mailer = ClientMailer::with('videos.order')
                 ->whereHas('users', function ($query) use ($user_id) {
                     $query->where('users.id', '=', 3);

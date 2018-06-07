@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import AssetDownloadComponent from '../partials/AssetDownloadComponent'
+    import AssetDownloadComponent from '../partials/AssetStoryDownloadComponent'
     import PaginationComponent from '../../../includes/PaginationComponent'
     export default {
         components: {

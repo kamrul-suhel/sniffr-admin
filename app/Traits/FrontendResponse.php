@@ -32,7 +32,6 @@ trait FrontendResponse
             'image',
             'thumb',
             'mime',
-            'file',
             'file_watermark',
             'file_watermark_dirty',
             'link',

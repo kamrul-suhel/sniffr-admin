@@ -6,11 +6,11 @@ const state = {
 }
 
 const mutations = {
-    setclientVideos(state, clientVideos){
-        state.clientVideos = clientVideos.client_videos;
+    setClientVideos(state, clientVideos){
+        state.clientVideos = clientVideos.videos;
     },
 
-    setCurrentVideo(state, video){
+    setClientCurrentVideo(state, video){
         state.clientCurrentVideo = story.video;
     },
 
@@ -18,9 +18,9 @@ const mutations = {
 
 const actions = {
 
-    getMailClientVideos({commit}, mail_obj){
+    getClientMailVideos({commit}, mail_obj){
         return new Promise((resolve, reject) => {
-            let url = '/client/client_videos/mail/' + mail_obj.user.id;
+            let url = '/client/videos';
             if (mail_obj.page > 0) {
                 url += '?page=' + mail_obj.page;
             }
@@ -28,7 +28,7 @@ const actions = {
             axios.get(url)
                 .then((response) => {
                     let data = response.data;
-                    commit('setclient_videos', data);
+                    commit('setClientVideos', data);
                     resolve();
                 })
                 .catch((error) => {
@@ -80,8 +80,8 @@ const actions = {
 }
 
 const getters = {
-    getMailclient_videos(state){
-        return state.client_videos;
+    getClientMailVideos(state){
+        return state.clientVideos;
     },
 
     getClientCurrentVideo(state){

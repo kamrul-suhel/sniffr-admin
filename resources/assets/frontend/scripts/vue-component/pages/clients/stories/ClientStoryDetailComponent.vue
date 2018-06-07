@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import AssetComponent from '../partials/AssetComponent';
+    import AssetComponent from '../partials/AssetStoryComponent';
     import VideoReloadServices from '../../../../services/VideoReloadServices';
     export default {
         components: {
