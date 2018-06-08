@@ -13,12 +13,10 @@ use Illuminate\Support\Facades\Cache;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property Comment[] $cached_comments
- * @property Campaign[] $cached_campaigns
  * @property Download[] $cached_downloads
  * @property-read \App\Tag|null $tags
  * @property-read \App\Contact|null $contact
  * @property-read \App\Comment|null $comments
- * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
  * @property string $alpha_id
  * @property int $contact_id
@@ -129,11 +127,6 @@ class Video extends Model
         return $this->hasMany(Download::class);
     }
 
-    public function campaigns()
-    {
-        return $this->belongsToMany(Campaign::class)->withTimestamps()->withPivot('state', 'created_at');
-    }
-
     public function routeNotificationForSlack()
     {
         return 'https://hooks.slack.com/services/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';
@@ -179,17 +172,6 @@ class Video extends Model
     {
         return Cache::remember($this->cacheKey() . ':comments', self::CACHE_EXPIRATION, function () {
             return $this->comments->toArray();
-        });
-    }
-
-    /**
-     * @return Campaign[]
-     * @codeCoverageIgnore
-     */
-    public function getCachedCampaigns()
-    {
-        return Cache::remember($this->cacheKey() . ':campaigns', self::CACHE_EXPIRATION, function () {
-            return $this->campaigns->toArray();
         });
     }
 

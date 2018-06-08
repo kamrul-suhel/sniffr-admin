@@ -28,10 +28,9 @@
     <table class="table table-striped pages-table">
         <tr class="table-header">
             <th>Videos</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Name</th>
             <th>Email</th>
-            <th>Actions</th>
+            <th>Edit</th>
         @foreach($contacts as $contact)
             <tr>
                 <td>{{ count($contact->videos) }}</td>
@@ -43,10 +42,6 @@
                             <span class="fa fa-edit"></span>
                             Edit
                         </a>
-                        <a href="{{ route('contacts.destroy', ['id' => $contact->id]) }}" class="btn btn-xs btn-danger delete">
-                            <span class="fa fa-trash"></span>
-                            Delete
-                        </a>
                     </p>
                 </td>
             </tr>
@@ -57,8 +52,3 @@
 
     <div class="text-center">{{ $contacts->render() }}</div>
 @endsection
-
-
-@section('javascript')
-    @include('admin.contacts.partials.javascript')
-@stop

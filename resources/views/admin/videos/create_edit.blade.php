@@ -52,9 +52,11 @@
                             <a href="#creator" role="tab" data-toggle="tab">Creator</a>
                         </li>
 
+                        @if($video->rights != 'ex')
                         <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
                             <a href="#contract" role="tab" data-toggle="tab">Contract</a>
                         </li>
+                        @endif
 
                         <li>
                             <a href="#admin" role="tab" data-toggle="tab">Admin</a>
@@ -91,10 +93,6 @@
                         </div>
                         <div class="tab-pane" id="video_files">
                             @include('admin.videos.partials.video_files')
-                        </div>
-                        <div class="tab-pane" id="sales">
-                            @include('admin.videos.partials.campaign')
-                            @include('admin.videos.partials.client_exclusivity')
                         </div>
 
                         <div class="tab-pane" id="rights">

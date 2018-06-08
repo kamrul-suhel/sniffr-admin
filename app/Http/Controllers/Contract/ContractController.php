@@ -53,6 +53,10 @@ class ContractController extends Controller
      */
     public function store(CreateContractRequest $request)
     {
+        $video = Video::find($request->input('video_id'));
+        $video->rights = 'exc';
+        $video->save();
+
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
         $contract = new \App\Contract();
         $contract->upfront_payment = $request->input('upfront_payment');
@@ -67,6 +71,8 @@ class ContractController extends Controller
         $contract->token = md5(uniqid($request->input('video_id'), true));
         $contract->reference_id = $uuid->toString();
         $contract->save();
+
+
 
         return redirect()->route('admin_video_edit', [
             'id' => $request->input('video_alpha_id')
@@ -178,26 +184,21 @@ class ContractController extends Controller
     }
 
     /**
-     * @param string $video_id
+     * @param string $reference_id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function generatePdf(string $video_id)
+    public function generatePdf(string $reference_id)
     {
-        $video = Video::find($video_id);
-
-        if (!$video) {
-            return Redirect::to('admin/videos/')->with([
-                'note' => 'Sorry, we could not find the video',
-                'note_type' => 'error',
-            ]);
-        }
-        $contract = Contract::where('video_id', $video_id)->first();
+        $contract = Contract::where('reference_id', $reference_id)->first();
 
         if (!$contract) {
-            return Redirect::to('admin/videos/')->with([
-                'note' => 'Sorry, we could not find the contract',
-                'note_type' => 'error',
-            ]);
+            abort(404);
+        }
+
+        $video = Video::find($contract->video_id);
+
+        if (!$video) {
+            abort(404);
         }
 
         $contract_text = $this->getContractText($contract, $video);
@@ -220,8 +221,11 @@ class ContractController extends Controller
         $contract_text = str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
-        $contract_text = str_replace(':story_title', '<strong>'.$video->title.'</strong>', $contract_text);
-        $contract_text = str_replace(':story_link', '<strong>'.$video->url.'</strong>', $contract_text);
+        $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
+        $contract_text = $video->url ? str_replace(':story_link', 'URL: <strong>'.$video->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
+        $contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
+        $contract_text = $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the video on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
+        $contract_text = str_replace(':video_ref', '<strong>'.$video->alpha_id.'</strong>', $contract_text);
         $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
         $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);

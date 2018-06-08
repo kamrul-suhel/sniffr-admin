@@ -4,10 +4,9 @@ Thank you for signing the contract.
 
 If you need it you can download it from this link.
 
-If you have any questions you&rsquo;re more than welcome to contact the team here: licensing@unilad.co.uk
+{{ route('contract.download', ['id' => $video->contracts->first()->reference_id]) }}
 
-Please click the following link and then agree to the terms provided on the page:
-{{ route('contract.accept', ['contract_id' => $contract->token]) }}
+If you have any questions you&rsquo;re more than welcome to contact the team here: licensing@unilad.co.uk
 
 Regards,
 

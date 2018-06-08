@@ -14,6 +14,10 @@
 
     <div>&nbsp;</div>
 
+    <div><a href="{{ route('contract.download', ['id' => $video->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$video->contracts->first()->reference_id) }}</a></div>
+
+    <div>&nbsp;</div>
+    
     <div>If you have any questions you&rsquo;re more than welcome to contact the team here: <a
                 href="mailto:licensing@unilad.co.uk">licensing@unilad.co.uk</a></div>
 
