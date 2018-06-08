@@ -40,6 +40,10 @@ class ClientVideosController extends Controller
      */
     public function videosSent(Request $request)
     {
+        if(!Auth::check()){
+            return view('frontend.master');
+        }
+
         if ($request->ajax() || $request->isJson()) {
             $user_id = Auth::user()->id;
             $client_videos_mailer = ClientMailer::with('videos.order')
