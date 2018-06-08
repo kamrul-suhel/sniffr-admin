@@ -57,9 +57,9 @@
 					<div class="form-group">
 						<select id="rights" name="rights" class="selectpicker form-control">
 							<option value="">Rights</option>
-							<option value="exc"{{ isset($_GET['rights']) && ($_GET['rights'] == 'exx') ? ' selected="selected"' : '' }}>Exclusive Chaser</option>
-							<option value="ex"{{ isset($_GET['rights']) && ($_GET['rights'] == 'ex') ? ' selected="selected"' : '' }}>Exclusive Submission</option>
-							<option value="nonex"{{ isset($_GET['rights']) && ($_GET['rights'] == 'nonex') ? ' selected="selected"' : '' }}>Non Exclusive</option>
+							<option value="exc"{{ (app('request')->get('rights') == 'exc') ? ' selected="selected"' : '' }}>Exclusive Chaser</option>
+							<option value="ex"{{ (app('request')->get('rights') == 'ex') ? ' selected="selected"' : '' }}>Exclusive Submission</option>
+							<option value="nonex"{{ (app('request')->get('rights') == 'nonex') ? ' selected="selected"' : '' }}>Non Exclusive</option>
 						</select>
 					</div>
 				</div>
