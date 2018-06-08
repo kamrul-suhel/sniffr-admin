@@ -3,16 +3,11 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\ClientMailer;
-use App\User;
+use App\Http\Controllers\Controller;
 use App\Order;
 use App\Story;
 use App\Traits\FrontendResponse;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
 class FrontendStoryController extends Controller
