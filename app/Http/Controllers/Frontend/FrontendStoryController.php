@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\ClientMailer;
+use App\User;
 use App\Order;
 use App\Story;
 use App\Traits\FrontendResponse;
@@ -25,6 +26,7 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request)
     {
+
         if ($request->ajax() || $request->isJson()) {
             $user_id = $request->user_id;
             $client_mailer = ClientMailer::with('stories.orders')
@@ -32,13 +34,9 @@ class FrontendStoryController extends Controller
                     $query->where('users.id', '=', $user_id);
                 })
                 ->orderBy('created_at', 'DESC')
-                ->get();
-
-            $client_mailer = $client_mailer->each(function ($client_mailer) {
-                foreach ($client_mailer->stories as $story) {
-                    $story['client_mailer_id'] = $client_mailer->id;
-                };
-            })->pluck('stories')->collapse();
+                ->get()
+                ->pluck('stories')
+                ->collapse();
 
 
             //Paginate collection object
@@ -96,10 +94,6 @@ class FrontendStoryController extends Controller
         return view('frontend.master');
     }
 
-    private function paginate($items, $perPage = 15, $page = null, $options = [])
-    {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-    }
+
+
 }

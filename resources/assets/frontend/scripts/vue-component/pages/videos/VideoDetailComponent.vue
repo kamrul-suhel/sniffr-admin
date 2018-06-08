@@ -34,6 +34,20 @@
                         <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
+
+                                <div class="video-title-caption">
+                                    <v-layout row wrap justify-center>
+                                        <v-flex xs6>
+                                            <v-icon small>alarm</v-icon> {{video_detail.video.duration | convertTime}}
+                                        </v-flex>
+                                        <v-spacer></v-spacer>
+
+                                        <v-flex xs6 class="text-xs-right">
+                                            <v-icon small >remove_red_eye</v-icon> {{ video_detail.video.views+1}} views
+                                        </v-flex>
+                                    </v-layout>
+                                </div>
+
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
                                 <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
@@ -46,22 +60,6 @@
                                     </ul>
                                 </div>
                             </v-flex>
-
-                            <v-flex xs12>
-                                <v-layout column wrap align-end class="video-detail-sidebar">
-                                    <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
-                                            text-xl-right>
-                                        <v-icon dark color="black ">remove_red_eye</v-icon>
-                                        {{ video_detail.video.views+1}} views
-                                    </v-flex>
-
-
-                                    <!--<div class="video-detail-social-share">-->
-                                        <!--<v-btn dark block class="dark mt-0">License</v-btn>-->
-                                    <!--</div>-->
-                                </v-layout>
-                            </v-flex>
-
                         </v-layout>
                     </v-flex>
                 </v-layout>

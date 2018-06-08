@@ -25,7 +25,7 @@ trait VideoHelper{
 
 		if($video->youtube_id){ // Youtube
 			if($embed){
-				$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0" allowfullscreen></iframe>';
+				$sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?autoplay=1&playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0"  allowfullscreen></iframe>';
 			}else{
 				$sHTML .= '<div class="youtube-player" data-id="'.$video->youtube_id.'"></div>';
 			}

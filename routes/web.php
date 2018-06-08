@@ -250,20 +250,30 @@ Route::group(array('prefix' => 'client'), function () {
     Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
 
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Client Frontend Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
+    Route::get('stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
+    Route::get('stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
+    Route::get('story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
+    Route::get('video/show/{alpha_id}', 'Video\VideoController@show');
+    Route::get('videos', 'Client\ClientVideosController@videosSent');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Client License video & story route
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('video/{id}/license', 'Frontend\client\MailVideoLicenseController@index')->name('mailer.video.license');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Client Frontend Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/client/stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
-Route::get('/client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
-Route::get('client/stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
-Route::get('/client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
-Route::get('/client/video/show/{alpha_id}', 'Video\VideoController@show');
-Route::get('/client/videos', 'Video\VideoController@videosSent');
 
 /*
 |--------------------------------------------------------------------------

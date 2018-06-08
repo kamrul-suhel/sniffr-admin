@@ -216,6 +216,10 @@ class Video extends Model
         return $this->belongsToMany(Story::class);
     }
 
+    public function order(){
+        return $this->hasOne(Order::class);
+    }
+
     /**
      * @param Client $client
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
