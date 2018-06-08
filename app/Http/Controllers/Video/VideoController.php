@@ -239,7 +239,7 @@ class VideoController extends Controller
         $video = Video::where('state', 'licensed')
             ->where('alpha_id', $alpha_id)
             ->orderBy('id', 'DESC')
-            ->first();
+            ->paginate();
     }
 
     /**
@@ -249,53 +249,80 @@ class VideoController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $video = Video::where('state', 'licensed')
-            ->with('tags')
-            ->orderBy('licensed_at', 'DESC')
-            ->where('alpha_id', $id)
-            ->first();
-
         $isJson = $request->ajax() || $request->isJson();
-
-        //Make sure video is active
-        if ((Auth::check()) && (($video) && ((Auth::user()->role == 'admin' || Auth::user()->role == 'client') || $video->state == 'licensed'))) {
-            $favorited = false;
-            $downloaded = false;
-            $iFrame = $this->getVideoHtml($video, true);
-            $ordered = Order::where('video_id', $video->id)
-                ->where('client_id', Auth::user()->client_id)
+        if ($isJson) {
+            $video = Video::where('state', 'licensed')
+                ->with('tags')
+                ->orderBy('licensed_at', 'DESC')
+                ->where('alpha_id', $id)
                 ->first();
-
+            $iFrame = $this->getVideoHtml($video, true);
             $view_increment = $this->handleViewCount($id);
-
             $data = [
                 'video' => $video,
                 'iframe' => $iFrame,
-                'ordered' => $ordered ? true : false,
                 'view_increment' => $view_increment,
-                'favorited' => $favorited,
-                'downloaded' => $downloaded,
-                'video_categories' => VideoCategory::all(),
-                'theme_settings' => config('settings.theme'),
-                'pages' => Page::where('active', '=', 1)->get(),
             ];
 
-            if ($isJson) {
-                return $this->successResponse($data);
-            }
-
-            return view('frontend.master', $data);
+            return $this->successResponse($data);
         }
-
-        if ($isJson) {
-            return $this->errorResponse('Sorry, this video is no longer active');
-        }
-
-        return Redirect::to('videos')->with([
-            'note' => 'Sorry, this video is no longer active.',
-            'note_type' => 'error'
-        ]);
+        return view('frontend.master');
     }
+
+    /**
+     * @param Request $request
+     * @param string $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * Letter we will remove this code it is for frontend not client video show method
+     */
+//    public function show(Request $request, string $id)
+//    {
+//        $video = Video::where('state', 'licensed')
+//            ->with('tags')
+//            ->orderBy('licensed_at', 'DESC')
+//            ->where('alpha_id', $id)
+//            ->first();
+//        $isJson = $request->ajax() || $request->isJson();
+//
+//        //Make sure video is active
+//        if ((Auth::check()) && (($video) && ((Auth::user()->role == 'admin' || Auth::user()->role == 'client') || $video->state == 'licensed'))) {
+//            $favorited = false;
+//            $downloaded = false;
+//            $iFrame = $this->getVideoHtml($video, true);
+//            $ordered = Order::where('video_id', $video->id)
+//                ->where('client_id', Auth::user()->client_id)
+//                ->first();
+//
+//            $view_increment = $this->handleViewCount($id);
+//
+//            $data = [
+//                'video' => $video,
+//                'iframe' => $iFrame,
+//                'ordered' => $ordered ? true : false,
+//                'view_increment' => $view_increment,
+//                'favorited' => $favorited,
+//                'downloaded' => $downloaded,
+//                'video_categories' => VideoCategory::all(),
+//                'theme_settings' => config('settings.theme'),
+//                'pages' => Page::where('active', '=', 1)->get(),
+//            ];
+//
+//            if ($isJson) {
+//                return $this->successResponse($data);
+//            }
+//
+//            return view('frontend.master', $data);
+//        }
+//
+//        if ($isJson) {
+//            return $this->errorResponse('Sorry, this video is no longer active');
+//        }
+//
+//        return Redirect::to('videos')->with([
+//            'note' => 'Sorry, this video is no longer active.',
+//            'note_type' => 'error'
+//        ]);
+//    }
 
     /**
      * @param Request $request
