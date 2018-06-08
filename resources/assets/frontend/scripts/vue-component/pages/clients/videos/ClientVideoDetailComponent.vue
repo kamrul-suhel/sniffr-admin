@@ -1,26 +1,17 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <section class="videos-section">
-        <div id="header" class="page-videos">
-            <div class="header-content">
-                <div class="position-center">
-                    <v-container grid-list-lg>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <h1 class="heading">{{video_detail.video.title ? video_detail.video.title : ''}}</h1>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </div>
-            </div>
-        </div>
-
+    <section class="videos-section client-video-detail">
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
-            <v-container grid-list-xl>
+            <v-container grid-list-xl pt-0>
                 <v-layout row wrap>
-                    <v-flex xs12>
+                    <v-flex xs12 sm12 md7 lg7 x7 pt-0>
                         <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
+                    </v-flex>
+                    <v-flex xs12 sm12 md5 lg5 xl5 pt-0 class="text-right">
+                        <div :class="{'pl-4' : content_padding}">
+                            <v-btn dark block @click="onGoback()" class="ml-0 dark" large>License Video</v-btn>
+                        </div>
                     </v-flex>
                 </v-layout>
 
@@ -34,6 +25,20 @@
                         <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
                                 <h2>{{ video_detail.video.title }}</h2>
+
+                                <div class="video-title-caption">
+                                    <v-layout row wrap justify-center>
+                                        <v-flex xs6>
+                                            <v-icon small>alarm</v-icon> {{video_detail.video.duration | convertTime}}
+                                        </v-flex>
+                                        <v-spacer></v-spacer>
+
+                                        <v-flex xs6 class="text-xs-right">
+                                            <v-icon small >remove_red_eye</v-icon> {{ video_detail.video.views+1}} views
+                                        </v-flex>
+                                    </v-layout>
+                                </div>
+
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
                                 <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
@@ -45,21 +50,6 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </v-flex>
-
-                            <v-flex xs12>
-                                <v-layout column wrap align-end class="video-detail-sidebar">
-                                    <v-flex xs12 class="video-detail-viewer" text-xs-center text-md-center text-lg-right
-                                            text-xl-right>
-                                        <v-icon dark color="black ">remove_red_eye</v-icon>
-                                        {{ video_detail.video.views+1}} views
-                                    </v-flex>
-
-
-                                    <!--<div class="video-detail-social-share">-->
-                                    <!--<v-btn dark block class="dark mt-0">License</v-btn>-->
-                                    <!--</div>-->
-                                </v-layout>
                             </v-flex>
 
                         </v-layout>
@@ -107,9 +97,11 @@
         mounted() {
             this.$vuetify.goTo('#scroll_to');
             window.addEventListener('fb-sdk-ready', this.onFBReady)
-            let id = this.$route.params.id;
+            let id = this.$route.params.alpha_id;
+
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
+                console.log(this.video_detail);
 
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);

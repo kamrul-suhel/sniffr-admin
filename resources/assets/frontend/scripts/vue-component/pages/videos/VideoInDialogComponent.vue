@@ -2,7 +2,7 @@
     <div class="video-dialog-content">
         <v-layout row wrap v-if="video_detail">
 
-            <v-flex xs12 sm12 md5 lg7 xl7>
+            <v-flex xs12 sm12 md7 lg7 xl7>
                 <video-player :video="video_detail"></video-player>
             </v-flex>
 
