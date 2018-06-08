@@ -222,7 +222,7 @@ class ContractController extends Controller
         $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
         $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
-        $contract_text = $video->url ? str_replace(':story_link', '<strong>'.$video->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
+        $contract_text = $video->url ? str_replace(':story_link', 'URL: <strong>'.$video->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
         $contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
         $contract_text = $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the video on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
         $contract_text = str_replace(':video_ref', '<strong>'.$video->alpha_id.'</strong>', $contract_text);

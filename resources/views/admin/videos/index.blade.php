@@ -204,8 +204,8 @@
 										<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
 											<i class="fa fa-print"></i>
 										</a>
-										@else
-										<a href="{{ route('contract.download', $video->id) }}" title="Download Contract">
+										@elseif($video->rights == 'exc' && $video->currentContract)
+										<a href="{{ route('contract.download', ['id' => $video->currentContract->reference_id]) }}" title="Download Contract">
 											<i class="fa fa-print"></i>
 										</a>
 										@endif
