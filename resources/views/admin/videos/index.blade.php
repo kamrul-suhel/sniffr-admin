@@ -57,8 +57,9 @@
 					<div class="form-group">
 						<select id="rights" name="rights" class="selectpicker form-control">
 							<option value="">Rights</option>
-							<option value="ex"{{ isset($_GET['rights']) && ($_GET['rights'] == 'ex') ? ' selected="selected"' : '' }}>Exclusive</option>
-							<option value="nonex"{{ isset($_GET['rights']) && ($_GET['rights'] == 'nonex') ? ' selected="selected"' : '' }}>Non Exclusive</option>
+							<option value="exc"{{ (app('request')->get('rights') == 'exc') ? ' selected="selected"' : '' }}>Exclusive Chaser</option>
+							<option value="ex"{{ (app('request')->get('rights') == 'ex') ? ' selected="selected"' : '' }}>Exclusive Submission</option>
+							<option value="nonex"{{ (app('request')->get('rights') == 'nonex') ? ' selected="selected"' : '' }}>Non Exclusive</option>
 						</select>
 					</div>
 				</div>
@@ -142,10 +143,10 @@
 						<footer>
 							<div class="album-images-count">
 								@if(!$video->trashed())
-									@if($video->state == 'new')
+									@if($video->state == 'new' && $video->rights == 'ex')
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></a>
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
-									@elseif($video->state == 'pending')
+									@elseif($video->state == 'pending' && $video->rights == 'ex')
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></a>
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
@@ -173,28 +174,7 @@
 									@endif
 
 									@if($video->state != 'new' && $video->state != 'accepted')
-										| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Exclusive"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Exclusive
-									@endif
-
-									@if(isset($video) && count($video->campaigns)>0)
-										<?php
-										$has_exclusivity = false;
-										foreach($video->campaigns as $campaign){
-											$date1 = now();
-											$date2 = new DateTime($campaign->pivot->created_at);
-
-											$diff = $date2->diff($date1);
-
-											$exclusivity = 48 - ($diff->h + ($diff->days*24));
-
-											if($exclusivity > 0){
-												$has_exclusivity = true;
-											}
-										}
-										if($has_exclusivity){
-											echo '| <i class="fa fa-hourglass-half text-danger" title="Has Exclusivity: '.$exclusivity.' hours"></i>';
-										}
-										?>
+										| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Ex{{ $video->rights == 'exc' ? ' Chaser' : '' }}"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Ex{{ $video->rights == 'exc' ? ' Chaser' : '' }}
 									@endif
 								@endif
 							</div>
@@ -220,9 +200,15 @@
 									</a>
 									@endif
 									@if($video->state != 'new')
-									<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
-										<i class="fa fa-print"></i>
-									</a>
+										@if($video->rights == 'ex')
+										<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
+											<i class="fa fa-print"></i>
+										</a>
+										@else
+										<a href="{{ route('contract.download', $video->id) }}" title="Download Contract">
+											<i class="fa fa-print"></i>
+										</a>
+										@endif
 									@endif
 									<a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}" title="Edit Video">
 										<i class="fa fa-pencil"></i>

@@ -50,6 +50,7 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     | Download Routes
     |--------------------------------------------------------------------------
     */
+    Route::get('download/contract/{reference}', 'ThemeDownloadController@contractDownloader');
     Route::get('download/{id}/{type}', 'ThemeDownloadController@index');
 
     /*
@@ -129,8 +130,6 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 Route::group(array('prefix' => 'admin'), function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
-    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
-    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
 
     // Admin Video Functionality
@@ -209,31 +208,20 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::post('mailers/update', array('uses' => 'Admin\AdminClientMailerController@update'));
     Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 
-    Route::get('clients', 'Admin\AdminClientController@index');
-    Route::get('clients/create', 'Admin\AdminClientController@create');
-    Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
-    Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
-    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
-    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
+	Route::resource('clients', 'Admin\AdminClientController');
+    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
+    //Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
+
+//    Route::get('clients', 'Admin\AdminClientController@index');
+//    Route::get('clients/create', 'Admin\AdminClientController@create');
+//    Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
+//    Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
+//    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
+//    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
     Route::resource('contacts', 'Contact\ContactController');
 
-    Route::get('campaigns', 'Admin\AdminCampaignController@index')->name('admin_campaigns');
-    Route::get('campaigns/create', 'Admin\AdminCampaignController@create');
-    Route::post('campaigns/store', array('uses' => 'Admin\AdminCampaignController@store'));
-    Route::get('campaigns/edit/{id}', 'Admin\AdminCampaignController@edit');
-    Route::post('campaigns/update', array('uses' => 'Admin\AdminCampaignController@update'));
-    Route::get('campaigns/delete/{id}', array('uses' => 'Admin\AdminCampaignController@destroy'));
-    Route::get('campaigns/{id}', array('uses' => 'Admin\AdminCampaignController@show'));
-
-    Route::resource('users', 'Admin\AdminUsersController', ['only'=> ['index','create','store','edit','update']]);
-
-    /*Route::get('users', 'Admin\AdminUsersController@index');
-    Route::get('user/create', 'Admin\AdminUsersController@create');
-    Route::post('user/store', array('uses' => 'Admin\AdminUsersController@store'));
-    Route::get('user/edit/{id}', 'Admin\AdminUsersController@edit');
-    Route::post('user/update', array('uses' => 'Admin\AdminUsersController@update'));
-    Route::get('user/delete/{id}', array('uses' => 'Admin\AdminUsersController@destroy'));*/
+    Route::resource('users', 'Admin\AdminUsersController', ['only'=> ['index','create','store','edit','update','destroy']]);
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');

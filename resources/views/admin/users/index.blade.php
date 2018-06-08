@@ -65,12 +65,8 @@
 							<span class="fa fa-edit"></span>
 							Edit
 						</a>
-						<a href="{{ url('user.delete', ['id' => $user->id]) }}" class="btn btn-xs btn-danger delete">
-							<span class="fa fa-trash"></span>
-							Delete
-						</a>
 						@if($user->client_id)
-							<a href="{{ route('users.stories.sent', ['id' => $user->id]) }}" class="btn btn-xs btn-info">
+							<a href="{{ route('users.stories.sent', ['id' => $user->id]) }}" class="btn btn-xs btn-warning">
 								<span class="fa fa-edit"></span>
 								Stories Sent
 							</a>

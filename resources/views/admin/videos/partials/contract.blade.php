@@ -111,47 +111,40 @@
                     </div>
                 @endif
             </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="input-group pull-right">
+                @if($video->currentContract->signed_at)
+                <a href="{{ route('contract.download', ['id' => $video->id]) }}" class="btn btn-info">
+                    Download Contract
+                </a>
+                @else
+                    @if($video->currentContract->sent_at)
+                    <p>{{ 'Sent:' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $video->currentContract->sent_at)->diffForHumans().' ' }}
+                        <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">
+                            Resend Contract
+                        </a>
+                    </p>
+                    @else
+                    <p>
+                        <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">
+                            Send Contract
+                        </a>
+                    </p>
+                    @endif
+                @endif
+            </div>
+
             @if(!$video->currentContract->signed_at)
                 <div class="input-group text-center">
                     <a href="{{ route('contract.delete', ['id' => $video->currentContract->id]) }}"
-                       class="btn btn-warning btn-lg">
+                       class="btn btn-danger">
                         Delete
                     </a>
                 </div>
             @endif
         </div>
-
-        @if($video->currentContract->signed_at)
-            <div class="col-md-4 text-center">
-                <div class="">
-                    <a href="{{ route('contract.download', ['id' => $video->id]) }}" class="btn btn-info btn-lg">
-                        Download Contract
-                    </a>
-                </div>
-            </div>
-        @else
-            <div class="col-md-4 text-center">
-                <div class="">
-                    <h4>Send Contract to {{ $video->contact->email }}</h4>
-
-                    <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg" id="sendContract"  onclick="clickAndDisable(this);">
-                        Send
-                    </a>
-                </div>
-            </div>
-            <hr>
-            <div class="col-md-4 text-center">
-                <div class="">
-                    <h4 class="text-center">
-                        {{
-                        ($video->currentContract->sent_at) ?
-                        'Sent: ' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $video->currentContract->sent_at)->diffForHumans()
-                        : ''
-                        }}
-                    </h4>
-                </div>
-            </div>
-        @endif
     </div>
 @elseif($video->contact)
     @if($video->source)
@@ -161,7 +154,7 @@
             </a>
         </div>
     @else
-        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#contract_modal">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#contract_modal">
             Create Contract
         </button>
     @endif

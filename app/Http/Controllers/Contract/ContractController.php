@@ -53,6 +53,10 @@ class ContractController extends Controller
      */
     public function store(CreateContractRequest $request)
     {
+        $video = Video::find($request->input('video_id'));
+        $video->rights = 'exc';
+        $video->save();
+
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
         $contract = new \App\Contract();
         $contract->upfront_payment = $request->input('upfront_payment');
@@ -67,6 +71,8 @@ class ContractController extends Controller
         $contract->token = md5(uniqid($request->input('video_id'), true));
         $contract->reference_id = $uuid->toString();
         $contract->save();
+
+
 
         return redirect()->route('admin_video_edit', [
             'id' => $request->input('video_alpha_id')

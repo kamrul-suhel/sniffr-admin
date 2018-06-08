@@ -41,21 +41,5 @@
 	<div class="clear"></div>
 
 	<div class="text-center"><?= $pages->render(); ?></div>
-
-
-	@section('javascript')
-	<script>
-		$ = jQuery;
-		$(document).ready(function(){
-			$('.delete').click(function(e){
-				e.preventDefault();
-				if (confirm("Are you sure you want to delete this page?")) {
-			       window.location = $(this).attr('href');
-			    }
-			    return false;
-			});
-		});
-	</script>
-	@stop
 @stop
 
