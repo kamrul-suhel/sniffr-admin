@@ -14,7 +14,7 @@
 
     <div>&nbsp;</div>
 
-    <div><a href="{{ url('download/contract/'.$video->contracts->first()->reference_id) }}">{{ url('download/contract/'.$video->contracts->first()->reference_id) }}</a></div>
+    <div><a href="{{ route('contract.download', ['id' => $video->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$video->contracts->first()->reference_id) }}</a></div>
 
     <div>&nbsp;</div>
     
