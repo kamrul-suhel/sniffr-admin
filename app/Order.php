@@ -28,4 +28,9 @@ class Order extends Model
     {
         return $this->hasOne('App\Story', 'id');
     }
+
+    public function video()
+    {
+        return $this->hasOne('App\Video', 'id');
+    }
 }

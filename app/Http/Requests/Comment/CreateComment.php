@@ -23,9 +23,18 @@ class CreateComment extends FormRequest
      */
     public function rules()
     {
-        return [
+        $validate = [
             'comment' => 'required|string',
-            'video_id' => 'required|exists:videos,id',
         ];
+
+        if(request()->has('video_id')) {
+            $validate['video_id'] = 'required|exists:videos,id';
+        }
+
+        if(request()->has('contact_id')) {
+            $validate['contact_id'] = 'required|exists:contacts,id';
+        }
+
+        return $validate;
     }
 }

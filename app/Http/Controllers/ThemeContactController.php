@@ -22,7 +22,7 @@ class ThemeContactController extends Controller
             if ($contact) {
                 return $this->successResponse($data);
             }
-            return $this->errorResponse("Sorry, we cannot find the email associated with your account. Please contact <u>submissions@unilad.co.uk</u>");
+            return $this->errorResponse("Sorry, we cannot find the email associated with your account. Please contact <u>licensing@unilad.co.uk</u>");
         }
         return view('frontend.master');
     }

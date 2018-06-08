@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Video;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\Order;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use App\Page;
 use App\User;
@@ -117,8 +117,8 @@ class VideoController extends Controller
 
         //handle file upload to S3 and Youtube ingestion
         $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->file)
-            : $this->videoService->saveVideoLink($video, Input::get('url'));
+            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
+            : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         // Slack notification
         if (env('APP_ENV') == 'prod') {
@@ -216,8 +216,9 @@ class VideoController extends Controller
     {
         if ($request->ajax() || $request->isJson()) {
             $video = new Video;
-            $page = Input::get('page', 1);
-            $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+            $videos = $video->where('state', 'licensed')
+                ->orderBy('id', 'DESC')
+                ->paginate($this->videos_per_page);
 
             $data = [
                 'videos' => $videos,
@@ -254,16 +255,20 @@ class VideoController extends Controller
         $isJson = $request->ajax() || $request->isJson();
 
         //Make sure video is active
-        if (($video) && ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed')) {
+        if ((Auth::check()) && (($video) && ((Auth::user()->role == 'admin' || Auth::user()->role == 'client') || $video->state == 'licensed'))) {
             $favorited = false;
             $downloaded = false;
             $iFrame = $this->getVideoHtml($video, true);
+            $ordered = Order::where('video_id', $video->id)
+                ->where('client_id', Auth::user()->client_id)
+                ->first();
 
             $view_increment = $this->handleViewCount($id);
 
             $data = [
                 'video' => $video,
                 'iframe' => $iFrame,
+                'ordered' => $ordered ? true : false,
                 'view_increment' => $view_increment,
                 'favorited' => $favorited,
                 'downloaded' => $downloaded,
@@ -392,45 +397,4 @@ class VideoController extends Controller
 
         return false;
     }
-
-    /**
-     * TODO: where are we using this?
-     *
-     * @codeCoverageIgnore
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function dailiesIndex()
-    {
-        if (\Auth::guest()) {
-            return \Redirect::to('videos');
-        }
-
-        $page = Input::get('page', 1);
-        $user = \Auth::user();
-        $client = $user->client();
-
-        if (!$client) {
-            return \Redirect::to('videos');
-        }
-
-        $video = new Video();
-        $videos = $video->clientVideos($client);
-
-        // TODO: ADD Client name to the title
-        $data = [
-            'day_sort' => true,
-            'videos' => $videos,
-            'page_title' => ucfirst(\Auth::user()->username) . '\'s Daily Videos',
-            'current_page' => $page,
-            'page_description' => 'Page ' . $page,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/favorites',
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'pages' => Page::where('active', '=', 1)->get(),
-        ];
-
-        return view('Theme::video-list', $data);
-    }
-
 }

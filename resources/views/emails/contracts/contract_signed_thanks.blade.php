@@ -9,20 +9,15 @@
 
     <div>&nbsp;</div>
 
-    <div>Video Ref: {{ $video->alpha_id }}</div>
+    <div>Thank you for signing the contract.</div>
+    <div>If you need it you can download it from this link.</div>
 
     <div>&nbsp;</div>
 
-    <div>You are receiving this email in reference to licensing your video. Before we can use your video <strong>we need to you to agree to an agreement</strong> which includes specific terms.</div>
+    <div><a href="{{ route('contract.download', ['id' => $video->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$video->contracts->first()->reference_id) }}</a></div>
 
     <div>&nbsp;</div>
-
-    <div>Please click the following link and then agree to the terms provided on the page: <a
-                href="{{ route('contract.accept', ['contract_id' => $contract->token]) }}">{{
-                route('contract.accept', ['contract_id' => $contract->token]) }}</a></div>
-
-    <div>&nbsp;</div>
-
+    
     <div>If you have any questions you&rsquo;re more than welcome to contact the team here: <a
                 href="mailto:licensing@unilad.co.uk">licensing@unilad.co.uk</a></div>
 
@@ -33,4 +28,8 @@
     <div>&nbsp;</div>
 
     <div>The UNILAD Team.</div>
+
+    <div>&nbsp;</div>
+
+    <div>Video Ref: {{ $video->alpha_id }}</div>
 @endsection
