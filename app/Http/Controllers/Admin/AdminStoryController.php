@@ -40,8 +40,9 @@ class AdminStoryController extends Controller
         //increase execution time
         ini_set('max_execution_time', 1800);
 
-        $posts_pending = $this->apiRequest('posts?status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
-        $posts_publish = $this->apiRequest('posts?status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $version = VideoHelper::quickRandom(); // set random version for cache busting
+        $posts_pending = $this->apiRequest('posts?version='.$version.'&status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_publish = $this->apiRequest('posts?version='.$version.'&status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
         $posts = array_merge($posts_pending, $posts_publish);
 
         $stories_wp = [];
@@ -80,7 +81,7 @@ class AdminStoryController extends Controller
 
         // store stories from wordpress in database
         foreach($stories_wp as $story_wp){
-
+            
             // checks if wp post already exists within sniffr stories
             $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
 
