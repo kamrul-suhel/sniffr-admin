@@ -13,13 +13,13 @@
             <!--</div>-->
         <!--</div>-->
         <div class="dialog-box-switch prev">
-            <v-btn color="dark ma-0" fab small  dark @click="onPreviousVideo()" :disabled="!previousPageExists">
+            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onPreviousVideo()" :disabled="!previousPageExists" >
                 <v-icon>chevron_left</v-icon>
             </v-btn>
         </div>
 
         <div class="dialog-box-switch next">
-            <v-btn color="dark ma-0" fab small  dark @click="onNextVideo()" :disabled="!nextPageExists">
+            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onNextVideo()" :disabled="!nextPageExists" >
                 <v-icon>chevron_right</v-icon>
             </v-btn>
         </div>
@@ -29,7 +29,7 @@
                 <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title><!-- {{ current_video.title ? current_video.title : ''}} --></v-toolbar-title>
+                <!--<v-toolbar-title>Swipe Direction: {{ swipeDirection }}</v-toolbar-title>-->
 
             </v-toolbar>
 
@@ -37,7 +37,12 @@
                 <v-layout row wrap>
                     <div class="video-dialog-loading"></div>
 
-                    <v-container grid-list-xs fluid>
+                    <v-container grid-list-xs fluid
+                                 v-touch="{
+                                      left: () => swipe('Left'),
+                                      right: () => swipe('Right')
+                                }"
+                    >
                         <video-dialog-component></video-dialog-component>
                     </v-container>
 
@@ -65,7 +70,9 @@
                 nextPageAlphaId: '',
 
                 previousPageExists: true,
-                previousPageAlphaId: ''
+                previousPageAlphaId: '',
+                swipeDirection:'',
+
             }
         },
 
@@ -124,6 +131,17 @@
         },
 
         methods: {
+            swipe (direction) {
+                this.swipeDirection = direction;
+                if(direction === 'Right'){
+                    this.onPreviousVideo();
+                }
+
+                if(direction === 'Left'){
+                    this.onNextVideo();
+                }
+            },
+
             onPreviousVideo(){
                 let alpha_id = this.$store.getters.getPrevVideoAlphaId;
                 let url = '/videos/'+alpha_id;
