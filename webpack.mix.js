@@ -77,12 +77,12 @@ if (!mix.inProduction()) {
 
 /*
 * *********************************************
-* Frontend script and scss
+* admin script and scss
 * *********************************************
 */
 mix.sass(
-    'resources/assets/frontend/scss/styles.scss',
-    'public/assets/frontend/css/styles.css')
+    'resources/assets/admin/scss/styles.scss',
+    'public/assets/admin/css/styles.css')
     .options({
         processCssUrls: false,
     })
@@ -93,8 +93,8 @@ if (mix.inProduction()) {
 }
 
 mix.js([
-    'resources/assets/frontend/scripts/main.js',
-], 'public/assets/frontend/scripts/scripts.js')
+    'resources/assets/admin/scripts/main.js',
+], 'public/assets/admin/scripts/scripts.js')
     .sourceMaps();
 
 if (mix.inProduction()) {
