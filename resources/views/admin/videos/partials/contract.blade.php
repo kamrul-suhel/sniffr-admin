@@ -134,7 +134,7 @@
                 <div class="">
                     <h4>Send Contract to {{ $video->contact->email }}</h4>
 
-                    <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg" id="sendContract">
+                    <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info btn-lg" id="sendContract"  onclick="clickAndDisable(this);">
                         Send
                     </a>
                 </div>
