@@ -3,8 +3,6 @@
 @section('content')
 
 <div id="admin-container">
-<!-- This is where -->
-
 	<ol class="breadcrumb"> <li> <a href="/admin/mailers"><i class="fa fa-tasks"></i> All Client Mailers</a> </li> <li class="active">@if(!empty($mailer->id)) <strong>Mailer Id {{ $mailer->alpha_id }}</strong> @else <strong>New Client Mailer</strong> @endif</li> </ol>
 
 	<form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data" id="form-mailer">

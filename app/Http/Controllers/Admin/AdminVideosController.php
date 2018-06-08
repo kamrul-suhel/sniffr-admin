@@ -92,16 +92,21 @@ class AdminVideosController extends Controller
             $videos = $videos->where('rights', $rights);
         }
 
+        $orderColumn = 'created_at';
+
         if ($state != 'all') {
             if ($state == 'deleted') {
                 $videos = $videos->onlyTrashed();
+            }
+            if ($state == 'licensed') {
+                $orderColumn = 'licensed_at';
             }
             $videos = $videos->where('state', $state);
 
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('created_at', 'DESC')->paginate(24);
+        $videos = $videos->orderBy($orderColumn, 'DESC')->paginate(24);
 
         $data = [
             'state' => $state,
@@ -344,7 +349,7 @@ class AdminVideosController extends Controller
         }
 
         $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->get('file'))
+            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
             : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         $duration = $request->input('duration', null);
