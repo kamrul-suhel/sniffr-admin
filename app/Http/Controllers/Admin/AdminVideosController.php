@@ -352,7 +352,7 @@ class AdminVideosController extends Controller
         }
 
         $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->get('file'))
+            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
             : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         if($request->input('campaigns')) {
