@@ -1,5 +1,10 @@
 
 <script type="text/javascript">
+    function clickAndDisable(link) {
+        link.onclick = function(event) {
+            event.preventDefault();
+        }
+    }
     $(document).ready(function(){
         $("#sendContract").click(function () {
             $("#sendContract").attr("disabled", true);
