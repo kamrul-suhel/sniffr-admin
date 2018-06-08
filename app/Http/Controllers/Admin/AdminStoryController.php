@@ -94,56 +94,69 @@ class AdminStoryController extends Controller
      * @param string $description
      * @return array
      */
-    public function createAssets($featured_media, $description) {
-        $asset_ids = [];
+     public function createAssets($featured_media, $description) {
+         $asset_ids = [];
 
-        // get featured image
-        if($featured_media != 0) {
-            $thumb = $this->apiRequest('media/' . $featured_media, true);
-            $asset = new Asset();
-            $asset->alpha_id = VideoHelper::quickRandom();
-            $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url);
-            $asset->save();
-            $asset_ids[] = $asset->id;
-        }
+         // get featured image
+         if($featured_media != 0) {
+             $thumb = $this->apiRequest('media/' . $featured_media, true);
 
-        // get all other assets
-        if($description){
-            $jwPlayerCode = $this->getJwPlayerCode($description);
+             $asset = Asset::where([['url', preg_replace("/^http:/i", "https:", $thumb->source_url)]])->first();
+             if (!$asset){
+                 $asset = new Asset();
+                 $asset->alpha_id = VideoHelper::quickRandom();
+                 $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url);
+                 $asset->save();
+             }
 
-            if ($jwPlayerCode) {
-                $jwVideoFileUrl = $this->getJwPlayerFile($jwPlayerCode);
+             $asset_ids[] = $asset->id;
+         }
 
-                $asset = new Asset();
-                $asset->alpha_id = VideoHelper::quickRandom();
-                $asset->url = $jwVideoFileUrl;
-                $asset->jw_player_code = $jwPlayerCode;
-                $asset->mime_type = 'video/mp4';
-                $asset->thumbnail = 'https://assets-jpcust.jwpsrv.com/thumbs/' . $jwPlayerCode . '.jpg';
-                $asset->save();
-                $asset_ids[] = $asset->id;
-            }
+         // get all other assets
+         if($description){
+             $jwPlayerCode = $this->getJwPlayerCode($description);
 
-            preg_match_all('/wp-image-(\d+)/', $description, $imageMatches);
+             if ($jwPlayerCode) {
+                 $jwVideoFileUrl = $this->getJwPlayerFile($jwPlayerCode);
 
-            if(isset($imageMatches[1])){
-                foreach($imageMatches[1] as $key => $imageId){
-                    // Fetch all the assets from wp
-                    $image = $this->apiRequest('media/' . $imageId, true);
+                 $asset = Asset::where([['url', $jwVideoFileUrl]])->first();
+                 if (!$asset){
+                     $asset = new Asset();
+                     $asset->alpha_id = VideoHelper::quickRandom();
+                     $asset->url = $jwVideoFileUrl;
+                     $asset->jw_player_code = $jwPlayerCode;
+                     $asset->mime_type = 'video/mp4';
+                     $asset->thumbnail = 'https://assets-jpcust.jwpsrv.com/thumbs/' . $jwPlayerCode . '.jpg';
+                     $asset->save();
+                 }
 
-                    if($image->source_url) {
-                        $asset = new Asset();
-                        $asset->alpha_id = VideoHelper::quickRandom();
-                        $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
-                        $asset->save();
-                        $asset_ids[] = $asset->id;
-                    }
-                }
-            }
-        }
+                 $asset_ids[] = $asset->id;
+             }
 
-        return $asset_ids;
-    }
+             preg_match_all('/wp-image-(\d+)/', $description, $imageMatches);
+
+             // Fetch all the assets from wp
+             if(isset($imageMatches[1])){
+                 foreach($imageMatches[1] as $key => $imageId){
+
+                     $image = $this->apiRequest('media/' . $imageId, true);
+
+                     if($image->source_url) {
+                         $asset = Asset::where([['url', preg_replace("/^http:/i", "https:", $image->source_url)]])->first();
+                         if (!$asset){
+                             $asset = new Asset();
+                             $asset->alpha_id = VideoHelper::quickRandom();
+                             $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
+                             $asset->save();
+                         }
+                         $asset_ids[] = $asset->id;
+                     }
+                 }
+             }
+         }
+
+         return $asset_ids;
+     }
 
     /**
      * @param array $story_data
