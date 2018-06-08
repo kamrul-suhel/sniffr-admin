@@ -98,7 +98,7 @@
                     this.youtubeVideo = true;
                     setTimeout(()=>{
                         $('.plyr__control.plyr__control--overlaid').click();
-                    }, 2000);
+                    }, 1500);
                 }
 
 

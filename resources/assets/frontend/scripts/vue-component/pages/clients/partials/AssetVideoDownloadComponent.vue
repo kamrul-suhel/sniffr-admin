@@ -72,11 +72,11 @@
                     dark
                     large
                     color="dark"
-                    @click.native="onBuyVideo()"
+                    @click.native="onLiscenseVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
-                BUY VIDEO
+                LICENSE VIDEO
             </v-btn>
         </v-flex>
 
@@ -106,7 +106,6 @@
             if (this.video.order && this.video.order.id) {
                 this.order = true;
             }
-            console.log(this.video);
         },
 
         watch: {
@@ -152,15 +151,11 @@
                 return image;
             },
 
-            onBuyVideo() {
-                var url = '/client/orders';
-                var formData = new FormData();
-                formData.append('video_id', this.video.id);
-                formData.append('user_agent', navigator.userAgent);
-                formData.append('user_id', this.$store.getters.getUser.id);
+            onLiscenseVideo() {
+                var url = '/client/video/'+this.video.id+'/license';
 
-                axios.post(url, formData).then((response) => {
-                    console.log(response);
+                axios.get(url).then((response) => {
+
                 });
             }
         }

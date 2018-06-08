@@ -90,6 +90,12 @@
                 setTimeout(() => (this[l] = false), 3000)
 
                 this.loader = null
+            },
+
+            story_dialog(val){
+                if(!val){
+                    this.showVideo = false;
+                }
             }
         },
 
@@ -156,8 +162,13 @@
                             this.previousImgExists = true;
                         }
 
-                        if (!this.previousImgObj) {
+                        else if (!this.previousImgObj) {
                             this.previousImgExists = false;
+                            this.nextImgExists = true;
+                        }
+
+                        else{
+                            this.previousImgExists = true;
                             this.nextImgExists = true;
                         }
                     }
@@ -179,8 +190,13 @@
                             this.previousImgExists = true;
                         }
 
-                        if (!this.previousImgObj) {
+                        else if (!this.previousImgObj) {
                             this.previousImgExists = false;
+                            this.nextImgExists = true;
+                        }
+
+                        else{
+                            this.previousImgExists = true;
                             this.nextImgExists = true;
                         }
                     }
@@ -198,14 +214,12 @@
                 });
 
                 promise.then(() =>{
-                    console.log('frefs ');
                     setTimeout(()=> {
-                        console.log(this.$refs.playerVideo.play());
+                        this.$refs.playerVideo.play();
                     }, 100);
 
                 });
 
-                console.log('Play the video '+ this.current_item.url);
             }
         }
     }

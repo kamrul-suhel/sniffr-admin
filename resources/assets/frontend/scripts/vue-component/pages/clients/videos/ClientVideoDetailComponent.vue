@@ -8,11 +8,11 @@
                     <v-flex xs12 sm12 md7 lg7 x7 pt-0>
                         <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm12 md5 lg5 xl5 pt-0 class="text-right">
-                        <div :class="{'pl-4' : content_padding}">
-                            <v-btn dark block @click="onGoback()" class="ml-0 dark" large>License Video</v-btn>
-                        </div>
-                    </v-flex>
+                    <!--<v-flex xs12 sm12 md5 lg5 xl5 pt-0 class="text-right">-->
+                        <!--<div :class="{'pl-4' : content_padding}">-->
+                            <!--<v-btn dark block @click="onGoback()" class="ml-0 dark" large>License Video</v-btn>-->
+                        <!--</div>-->
+                    <!--</v-flex>-->
                 </v-layout>
 
                 <v-layout row wrap>
@@ -40,16 +40,10 @@
                                 </div>
 
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
-                                <div class="video-detail-tags" v-if="tags.length > 0">
-                                    <h3 id="tags">Tags:</h3>
-                                    <ul>
-                                        <li v-for="tag in tags">
-                                            <router-link :to="'/videos/tag/'+tag.name">
-                                                #{{ tag.name }}
-                                            </router-link>
-                                        </li>
-                                    </ul>
-                                </div>
+
+
+                                <v-btn dark block @click="onGoback()" class="dark" large>License Video</v-btn>
+
                             </v-flex>
 
                         </v-layout>

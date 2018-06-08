@@ -6,7 +6,6 @@
             scrollable
             class="video-dialog-container"
             content-class="video-dialog-container"
-            max-width="1000px"
     >
         <!--<div class="dialog-box-loading">-->
             <!--<div class="dialog-box-loading-content">-->
@@ -14,13 +13,13 @@
             <!--</div>-->
         <!--</div>-->
         <div class="dialog-box-switch prev">
-            <v-btn color="dark ma-0" fab small  light @click="onPreviousVideo()" :disabled="!previousPageExists">
+            <v-btn color="dark ma-0" fab small  dark @click="onPreviousVideo()" :disabled="!previousPageExists">
                 <v-icon>chevron_left</v-icon>
             </v-btn>
         </div>
 
         <div class="dialog-box-switch next">
-            <v-btn color="dark ma-0" fab small  light @click="onNextVideo()" :disabled="!nextPageExists">
+            <v-btn color="dark ma-0" fab small  dark @click="onNextVideo()" :disabled="!nextPageExists">
                 <v-icon>chevron_right</v-icon>
             </v-btn>
         </div>

@@ -24,8 +24,6 @@
                         :key="index"
                         :story="story"></asset-download-component>
             <!--</div>-->
-
-
         </v-container>
 
         <v-container grid-list-lg v-if="stories && stories.total > stories.per_page">

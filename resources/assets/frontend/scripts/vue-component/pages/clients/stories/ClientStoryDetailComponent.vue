@@ -112,7 +112,6 @@
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
-                        console.log(this.story);
                         if (this.story.orders && this.story.orders.id) {
                             this.order = true;
                         }

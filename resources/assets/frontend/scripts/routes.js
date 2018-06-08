@@ -14,7 +14,8 @@ import Notfound from './vue-component/pages/404Component.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
-import ClientDownloadedStoriesComponent from './vue-component/pages/clients/stories/ClientDownloadedStoriesComponent.vue';
+import ClientDownloadedStoriesComponent
+    from './vue-component/pages/clients/stories/ClientDownloadedStoriesComponent.vue';
 
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
@@ -107,19 +108,19 @@ export const routes = [
         component: UnsubscribeComponent
     },
     {
-      path: '/terms',
-      name: 'termsconditions',
-      component: TermsConditionsComponent
+        path: '/terms',
+        name: 'termsconditions',
+        component: TermsConditionsComponent
     },
 
     {
         path: '/client',
         component: ClientComponent,
-        children:[
+        children: [
             {
                 path: '',
                 name: 'client',
-                component:ClientVideosComponent
+                component: ClientVideosComponent
             },
 
             {
@@ -147,7 +148,7 @@ export const routes = [
             },
 
             {
-              path: 'videos/show/:alpha_id',
+                path: 'videos/show/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
             }

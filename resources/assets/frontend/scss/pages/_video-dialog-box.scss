@@ -2,6 +2,25 @@
   border-radius: 0px;
   position: relative;
   overflow:unset;
+  width:95%;
+
+  @include small-device {
+    width:95%;
+  }
+
+  @include medium-device {
+    width:70%;
+  }
+
+  @include large-device {
+    width:80%;
+  }
+
+  @include extra-large-device {
+    width:80%;
+  }
+
+
 
   .dialog-box-switch {
     position: absolute;

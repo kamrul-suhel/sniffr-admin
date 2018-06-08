@@ -94,4 +94,6 @@ class FrontendStoryController extends Controller
         return view('frontend.master');
     }
 
+
+
 }
