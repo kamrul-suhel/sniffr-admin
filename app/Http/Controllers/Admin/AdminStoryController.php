@@ -270,7 +270,7 @@ class AdminStoryController extends Controller
             'stories' => $stories,
             'videos' => $videos,
         ];
-        
+
         /*'users' => User::all(),
             'user' => Auth::user()*/
 

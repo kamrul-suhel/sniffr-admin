@@ -49,8 +49,4 @@ class Story extends Model
     public function orders(){
         return $this->hasOne(Order::class);
     }
-
-    public function client_mailer(){
-        return $this->belongsToMany(ClientMailer::class);
-    }
 }

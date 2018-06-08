@@ -74,6 +74,44 @@ if (!mix.inProduction()) {
   ******************************************
 */
 
+
+/*
+* *********************************************
+* Frontend script and scss
+* *********************************************
+*/
+mix.sass(
+    'resources/assets/frontend/scss/styles.scss',
+    'public/assets/frontend/css/styles.css')
+    .options({
+        processCssUrls: false,
+    })
+    .sourceMaps();
+
+if (mix.inProduction()) {
+    mix.version();
+}
+
+mix.js([
+    'resources/assets/frontend/scripts/main.js',
+], 'public/assets/frontend/scripts/scripts.js')
+    .sourceMaps();
+
+if (mix.inProduction()) {
+    mix.version();
+}
+
+if (!mix.inProduction()) {
+    mix.webpackConfig({devtool: 'inline-source-map'})
+}
+
+/*
+* *********************************************
+* End admin script and scss for vue
+* *********************************************
+*/
+
+
 mix.copy(
     'node_modules/tinymce/themes',
     'public/assets/admin/js/themes'

@@ -239,7 +239,7 @@ class VideoController extends Controller
         $video = Video::where('state', 'licensed')
             ->where('alpha_id', $alpha_id)
             ->orderBy('id', 'DESC')
-            ->paginate();
+            ->first();
     }
 
     /**
