@@ -99,26 +99,38 @@ class AdminStoryController extends Controller
 
          // get featured image
          if($featured_media != 0) {
-             $thumb = $this->apiRequest('media/' . $featured_media, true);
 
-             $asset = Asset::where([['url', preg_replace("/^http:/i", "https:", $thumb->source_url)]])->first();
-             if (!$asset){
+             // check if wp asset already exists within db
+             $checkAsset = Asset::where([['wp_asset_id', $featured_media]])->first();
+             if(!$checkAsset) {
+                 // get WP asset details
+                 $thumb = $this->apiRequest('media/' . $featured_media, true);
+
+                 // create new asset in db
                  $asset = new Asset();
                  $asset->alpha_id = VideoHelper::quickRandom();
-                 $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url);
+                 $asset->wp_asset_id = $thumb->id;
+                 $asset->mime_type = $thumb->mime_type;
+                 $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url); //might be useful to check if URL has changed
                  $asset->save();
-             }
 
-             $asset_ids[] = $asset->id;
+                 // save asset id for syncing story->assets relationships
+                 $asset_ids[] = $asset->id;
+             } else {
+                 $asset_ids[] = $checkAsset->id;
+             }
          }
 
          // get all other assets
          if($description){
+             // get the JW Player unique code
              $jwPlayerCode = $this->getJwPlayerCode($description);
 
              if ($jwPlayerCode) {
+                 // get the JW Player video URL
                  $jwVideoFileUrl = $this->getJwPlayerFile($jwPlayerCode);
 
+                 // check if JW Player video already exists in db
                  $asset = Asset::where([['url', $jwVideoFileUrl]])->first();
                  if (!$asset){
                      $asset = new Asset();
@@ -130,6 +142,7 @@ class AdminStoryController extends Controller
                      $asset->save();
                  }
 
+                 // save asset id for syncing story->assets relationships
                  $asset_ids[] = $asset->id;
              }
 
@@ -139,17 +152,26 @@ class AdminStoryController extends Controller
              if(isset($imageMatches[1])){
                  foreach($imageMatches[1] as $key => $imageId){
 
-                     $image = $this->apiRequest('media/' . $imageId, true);
+                     // check if wp asset already exists within db
+                     $checkAsset = Asset::where([['wp_asset_id', $imageId]])->first();
+                     if(!$checkAsset) {
+                         // get WP asset details
+                         $image = $this->apiRequest('media/' . $imageId, true);
 
-                     if($image->source_url) {
-                         $asset = Asset::where([['url', preg_replace("/^http:/i", "https:", $image->source_url)]])->first();
-                         if (!$asset){
+                         if($image->source_url) {
+                             // create new asset in db
                              $asset = new Asset();
                              $asset->alpha_id = VideoHelper::quickRandom();
-                             $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
+                             $asset->wp_asset_id = $image->id;
+                             $asset->mime_type = $image->mime_type;
+                             $asset->url = preg_replace("/^http:/i", "https:", $image->source_url); //might be useful to check if URL has changed
                              $asset->save();
+
+                             // save asset id for syncing story->assets relationships
+                             $asset_ids[] = $asset->id;
                          }
-                         $asset_ids[] = $asset->id;
+                     } else {
+                         $asset_ids[] = $checkAsset->id;
                      }
                  }
              }
