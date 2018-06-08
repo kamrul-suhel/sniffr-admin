@@ -184,26 +184,21 @@ class ContractController extends Controller
     }
 
     /**
-     * @param string $video_id
+     * @param string $reference_id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function generatePdf(string $video_id)
+    public function generatePdf(string $reference_id)
     {
-        $video = Video::find($video_id);
-
-        if (!$video) {
-            return Redirect::to('admin/videos/')->with([
-                'note' => 'Sorry, we could not find the video',
-                'note_type' => 'error',
-            ]);
-        }
-        $contract = Contract::where('video_id', $video_id)->first();
+        $contract = Contract::where('reference_id', $reference_id)->first();
 
         if (!$contract) {
-            return Redirect::to('admin/videos/')->with([
-                'note' => 'Sorry, we could not find the contract',
-                'note_type' => 'error',
-            ]);
+            abort(404);
+        }
+
+        $video = Video::find($contract->video_id);
+
+        if (!$video) {
+            abort(404);
         }
 
         $contract_text = $this->getContractText($contract, $video);
