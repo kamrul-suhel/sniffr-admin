@@ -117,7 +117,7 @@ class VideoController extends Controller
 
         //handle file upload to S3 and Youtube ingestion
         $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->get('file'))
+            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
             : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         // Slack notification
