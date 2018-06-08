@@ -93,7 +93,7 @@ class AdminStoryController extends Controller
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 // if wp post is updated 5mins after our own story record
-                if($differenceTime>300) {
+                if($differenceTime>150) {
                     QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
                         ->delay(now()->addSeconds(5));
                 }
