@@ -107,20 +107,28 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
-        $stories = new Story;
-        $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
-        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])->orderBy('licensed_at', 'DESC')->paginate(10);
+    public function index(Request $request){
+        $stories = Story::orderBy('date_ingested', 'DESC')
+            ->paginate(2);
 
-        $data = [
-            'stories' => $stories,
-            'videos' => $videos,
-        ];
+        if($request->ajax()){
+            return $this->successResponse($stories);
+        }
 
-        /*'users' => User::all(),
-            'user' => Auth::user()*/
+        return view('admin.stories.index'); //return response()->json($formatted_posts);
+    }
 
-        return view('admin.stories.index', $data); //return response()->json($formatted_posts);
+
+    public function getMailerVideos(Request $request){
+
+        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])
+            ->orderBy('licensed_at', 'DESC')
+            ->paginate(2);
+
+        if($request->ajax()){
+            return $this->successResponse($videos);
+        }
+
     }
 
     /**
