@@ -16,6 +16,7 @@ class AddClientOnboardingFieldsToUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('full_name')->nullable()->after('username');
             $table->string('tel')->nullable()->after('email');
+            $table->integer('is_client_admin')->unsigned()->nullable()->default(0)->after('role');
             $table->string('job_title')->nullable()->after('role');
         });
     }
