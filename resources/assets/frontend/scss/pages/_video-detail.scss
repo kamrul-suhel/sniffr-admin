@@ -109,6 +109,15 @@
       text-transform:uppercase;
       margin-top:0;
     }
+
+    .video-title-caption{
+      padding: 5px 0;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      margin: 10px 0;
+      color: #777;
+      font-style: italic;
+    }
   }
 
   .video-detail-tags{

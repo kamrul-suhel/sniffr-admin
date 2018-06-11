@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\VideoService;
 use Auth;
 use Illuminate\Http\UploadedFile;
 use Youtube;
@@ -16,12 +17,10 @@ use App\Tag;
 use App\Video;
 use App\Contact;
 use App\Comment;
-use App\Campaign;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\VideoShotType;
 use App\Jobs\QueueEmail;
-use App\Jobs\QueueVideo;
 use App\Jobs\QueueVideoImport;
 use App\Jobs\QueueVideoYoutubeUpload;
 use App\Jobs\QueueVideoAnalysis;
@@ -34,12 +33,19 @@ use Carbon\Carbon as Carbon;
 class AdminVideosController extends Controller
 {
     /**
+     * @var VideoService
+     */
+    private $videoService;
+
+    /**
      * AdminVideosController constructor.
      * @param Request $request
+     * @param VideoService $videoService
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, VideoService $videoService)
     {
         $this->middleware('admin');
+        $this->videoService = $videoService;
     }
 
     /**
@@ -86,16 +92,21 @@ class AdminVideosController extends Controller
             $videos = $videos->where('rights', $rights);
         }
 
+        $orderColumn = 'created_at';
+
         if ($state != 'all') {
             if ($state == 'deleted') {
                 $videos = $videos->onlyTrashed();
+            }
+            if ($state == 'licensed') {
+                $orderColumn = 'licensed_at';
             }
             $videos = $videos->where('state', $state);
 
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy('created_at', 'DESC')->paginate(24);
+        $videos = $videos->orderBy($orderColumn, 'DESC')->paginate(24);
 
         $data = [
             'state' => $state,
@@ -223,7 +234,7 @@ class AdminVideosController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
-    {
+	{
         $data = [
             'user' => Auth::user(),
             'contact' => null,
@@ -231,7 +242,6 @@ class AdminVideosController extends Controller
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
-            'video_campaigns' => Campaign::all(),
             'users' => User::all(),
             'creators' => Contact::orderBy('created_at', 'desc')->get(),
             'video' => null,
@@ -253,9 +263,10 @@ class AdminVideosController extends Controller
         $video->description = $request->input('description');
         $video->contact_id = $request->input('creator_id');
         $video->user_id = Auth::user()->id;
+        $video->state = 'new';
         $video->save();
 
-        return redirect()->route('videos.index')->with([
+        return redirect()->route('admin_video_edit', ['id' => $video->alpha_id])->with([
             'note' => 'New Video Successfully Added!',
             'note_type' => 'success',
         ]);
@@ -303,7 +314,6 @@ class AdminVideosController extends Controller
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
-            'video_campaigns' => Campaign::all(),
             'users' => User::all(),
             'creators' => Contact::orderBy('created_at', 'desc')->get(),
         ];
@@ -338,19 +348,9 @@ class AdminVideosController extends Controller
             $video->image = $imageUrl;
         }
 
-        //handle file upload to S3 and Youtube ingestion
-        if ($request->hasFile('file')) {
-            $videoFile = $request->file('file');
-            $video->file = $this->saveVideoFile($videoFile);
-            $video->mime = $videoFile->getMimeType();
-            //TODO: should the old video in youtube be removed?
-            $video->youtube_id = null;
-        }
-
-        if($request->input('campaigns')) {
-            $campaigns = $this->saveCampaigns($request->input('campaigns'), $video);
-            $video->campaigns()->sync($campaigns);
-        }
+        $filePath = $request->hasFile('file')
+            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
+            : $this->videoService->saveVideoLink($video, $request->get('url'));
 
         $duration = $request->input('duration', null);
         $video->duration = $this->getDuration($video, $duration);
@@ -365,16 +365,11 @@ class AdminVideosController extends Controller
         $video->contact_id = $request->input('creator_id', null);
         $video->title = $request->input('title');
         $video->embed_code = $request->input('embed_code');
-        $video->url = $request->input('url');
         $video->location = $request->input('location');
         $video->details = $request->input('details');
         $video->description = $request->input('description');
 
         $video->save();
-
-        if ($request->hasFile('file')) {
-            QueueVideo::dispatch($video->id, true)->delay(now()->addSeconds(5));
-        }
 
         return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
             'note' => 'Successfully Updated Video!',
@@ -438,6 +433,7 @@ class AdminVideosController extends Controller
                         $video->rights = $select_rights;
                         $video->video_collection_id = count($collection) ? $collection->id : null;
 
+                        // IAN:  Why is this not in the link checker?
                         if (strpos($link, 'jotform') || strpos($link, 'drive.google.com') || strpos($link, 'dropbox')) { // Check if link is jotform
                             if ($select_type == 'both' || $select_type == 'files') {
                                 $video->url = $link;
@@ -732,9 +728,22 @@ class AdminVideosController extends Controller
         }
     }
 
+    /**
+     * This license is only for submited videos
+     * @param $alpha_id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function pdfview($alpha_id)
     {
-        $video = Video::where('alpha_id', $alpha_id)->first();
+        $video = Video::where('alpha_id', $alpha_id)
+            ->first();
+
+        if (!$video) {
+            return Redirect::to('admin/videos/')->with([
+                'note' => 'Sorry, we could not find the video',
+                'note_type' => 'error',
+            ]);
+        }
 
         $data = [
             'terms' => config('settings.terms'),
@@ -743,10 +752,7 @@ class AdminVideosController extends Controller
 
         $pdf = PDF::loadView('admin.videos.pdfview', $data);
 
-        return (!empty($video) ? $pdf->download($alpha_id . '.pdf') : Redirect::to('admin/videos/')->with([
-            'note' => 'Sorry, we could not find the video',
-            'note_type' => 'error',
-        ]));
+        return $pdf->download($alpha_id . '.pdf');
     }
 
     public function nsfw($alpha_id = null)
@@ -846,28 +852,4 @@ class AdminVideosController extends Controller
 
         return \Storage::disk('s3')->url($imageFileName);
     }
-
-    /**
-     * @param array $new_campaigns
-     * @param Video $video
-     * @return array
-     */
-    public function saveCampaigns(array $new_campaigns, Video $video): array
-    {
-        $campaigns = [];
-        $current_campaigns = $video->campaigns->pluck('id')->all();
-
-        // IAN:  Hmm, tough one, only want to set their state to new if their new.
-        if ($new_campaigns) {
-            foreach ($new_campaigns as $key => $campaign) {
-                if (in_array($campaign, $current_campaigns)) {
-                    $campaigns[$campaign] = $campaign;
-                } else {
-                    $campaigns[$campaign]['state'] = 'new';
-                }
-            }
-        }
-        return $campaigns;
-    }
-
 }

@@ -17,18 +17,13 @@
 
             @if($contact)
                 <li>
-                    <a href="#comments" role="tab" data-toggle="tab">
-                        Comments
-                    </a>
-                </li>
-                <li>
                     <a href="#stories" role="tab" data-toggle="tab">
                         Stories
                     </a>
                 </li>
                 <li>
-                    <a href="#delete" role="tab" data-toggle="tab">
-                        Delete
+                    <a href="{{ route('contacts.destroy', ['id' => $contact->id]) }}" onclick="return confirm('Are you sure you want to delete this contact?');" style="background-color: #d32f2f; color:white;">
+                        Delete  <i class="fa fa-trash-o"></i>
                     </a>
                 </li>
             @endif
@@ -36,14 +31,14 @@
 
         <div class="panel-body tab-content">
             @include('admin.contacts.partials.errors')
-            <div class="tab-pane active" id="contact">
+            <div class="tab-pane @if(!request()->has('tab')) active @endif" id="contact">
                 @include('admin.contacts.partials.form')
+                @if($contact)
+                    @include('admin.contacts.partials.comments')
+                @endif
             </div>
 
             @if($contact)
-                <div class="tab-pane" id="comments">
-                    @include('admin.contacts.partials.comments')
-                </div>
                 <div class="tab-pane" id="stories">
                     @include('admin.contacts.partials.stories')
                 </div>

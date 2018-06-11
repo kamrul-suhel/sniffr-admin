@@ -37,6 +37,8 @@
 
 
 // Small devices (landscape phones, 576px and up)
+
+
 @mixin small-device{
   @media (min-width: 576px) {
     @content

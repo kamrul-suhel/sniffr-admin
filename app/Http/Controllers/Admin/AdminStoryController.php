@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Traits\FrontendResponse;
+use App\Traits\WordpressAPI;
 use Auth;
 use Validator;
 use Redirect;
@@ -16,12 +17,11 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 
+use App\Jobs\QueueStory;
+
 class AdminStoryController extends Controller
 {
-    use FrontendResponse;
-
-	public $api_path = 'wp-json/wp/v2/';
-	public $token_path = 'wp-json/jwt-auth/v1/token';
+    use FrontendResponse, WordpressAPI;
 
     protected $rules = [
         'title' => 'required'
@@ -32,231 +32,77 @@ class AdminStoryController extends Controller
         $this->middleware(['admin:admin,manager,editorial']);
     }
 
-    private function getToken()
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function refresh()
     {
-        $curl = curl_init();
+        //increase execution time
+        ini_set('max_execution_time', 1800);
 
-        curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL') . $this->token_path . '?username=' . env('UNILAD_WP_USER') . '&password=' . env('UNILAD_WP_PASS'));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_POST, 1);
+        $version = VideoHelper::quickRandom(); // set random version for cache busting
+        $posts_pending = $this->apiRequest('posts?version='.$version.'&status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_publish = $this->apiRequest('posts?version='.$version.'&status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts = array_merge($posts_pending, $posts_publish);
 
-        $response = json_decode(curl_exec($curl));
+        $stories_wp = [];
+        $story_ids = [];
 
-        curl_close($curl);
-
-        if (!$response) {
-            exit('Unable to connect');
-        }
-
-        return $response->token;
-    }
-
-	/**
-	 * @get Makes curl request
-	 * @param string $request
-	 * @param bool $req_token
-	 * @return JSON Object
-	 */
-	private function apiRequest($request, $req_token = false){
-		if($req_token){
-			$token = $this->getToken();
-		}
-
-		$curl = curl_init();
-
-		curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL').$this->api_path.$request);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		if($req_token){
-			curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
-		}
-
-		$response = json_decode(curl_exec($curl)); //or abort(502);
-		$err = curl_error($curl);
-		curl_close($curl);
-
-		return $response;
-	}
-
-    /**
-     * @get URLs from string (string maybe a url)
-     * @param string $string
-     * @return array
-     */
-    private function getUrls($string) {
-        $regex = '/https?\:\/\/[^\" ]+/i';
-        preg_match_all($regex, $string, $matches);
-        //return (array_reverse($matches[0]));
-        return ($matches[0]);
-    }
-
-    /**
-     * @param string $featured_media
-     * @param string $description
-     * @return array
-     */
-    public function createAssets($featured_media, $description) {
-        $asset_ids = [];
-
-        // get featured image
-        if($featured_media != 0) {
-            $thumb = $this->apiRequest('media/' . $featured_media, true);
-            $asset = new Asset();
-            $asset->alpha_id = VideoHelper::quickRandom();
-            $asset->url = preg_replace("/^http:/i", "https:", $thumb->source_url);
-            $asset->save();
-            $asset_ids[] = $asset->id;
-        }
-
-        // get all other assets
-        if($description){
-            $jwPlayerCode = $this->getJwPlayerCode($description);
-
-            if ($jwPlayerCode) {
-                $jwVideoFileUrl = $this->getJwPlayerFile($jwPlayerCode);
-
-                $asset = new Asset();
-                $asset->alpha_id = VideoHelper::quickRandom();
-                $asset->url = $jwVideoFileUrl;
-                $asset->jw_player_code = $jwPlayerCode;
-                $asset->mime_type = 'video/mp4';
-                $asset->thumbnail = 'https://assets-jpcust.jwpsrv.com/thumbs/' . $jwPlayerCode . '.jpg';
-                $asset->save();
-                $asset_ids[] = $asset->id;
-            }
-
-            preg_match_all('/wp-image-(\d+)/', $description, $imageMatches);
-
-            if(isset($imageMatches[1])){
-                foreach($imageMatches[1] as $key => $imageId){
-                    // Fetch all the assets from wp
-                    $image = $this->apiRequest('media/' . $imageId, true);
-
-                    if($image->source_url) {
-                        $asset = new Asset();
-                        $asset->alpha_id = VideoHelper::quickRandom();
-                        $asset->url = preg_replace("/^http:/i", "https:", $image->source_url);
-                        $asset->save();
-                        $asset_ids[] = $asset->id;
-                    }
-                }
-            }
-        }
-
-        return $asset_ids;
-    }
-
-	/**
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function refresh()
-	{
-		$posts = $this->apiRequest('posts?status=draft,publish&tags='.env('UNILAD_WP_TAG_ID'), true);
-
-		$stories_wp = [];
-		$story_ids = [];
-
-		foreach($posts as $post){
-			// create array for curl stories objects
+        foreach($posts as $post){
+            // create array for curl stories objects
             $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
 
             $curpost = [
-				"wp_id" => $post->id,
-				"status" => $post->status,
-				"title" => trim(strip_tags($post->title->rendered)),
-				"excerpt" => $excerpt,
-				"description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
-				"url" => $post->link,
-				"date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
-				"author" => ''
-			];
+                "wp_id" => $post->id,
+                "status" => $post->status,
+                "title" => trim(strip_tags($post->title->rendered)),
+                "excerpt" => $excerpt,
+                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
+                "url" => $post->link,
+                "date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
+                "author" => ''
+            ];
 
-			// find assets within post content (old way but could be useful in the future)
-			//$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
+            // find assets within post content (old way but could be useful in the future)
+            //$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
 
-			//get the post categories
-			$cat_list = [];
-			foreach($post->categories as $tax_obj){
-				$cat_list[] = $tax_obj;
-			}
-			$curpost["categories"] = $cat_list;
+            //get the post categories
+            $cat_list = [];
+            foreach($post->categories as $tax_obj){
+                $cat_list[] = $tax_obj;
+            }
+            $curpost["categories"] = $cat_list;
 
             $curpost["featured_media"] = $post->featured_media;
             $curpost["author"] = $post->author;
-			$stories_wp[] = $curpost;
-			$story_ids[] = $post->id;
-		}
+            $stories_wp[] = $curpost;
+            $story_ids[] = $post->id;
+        }
 
-		// store stories from wordpress in database
-		foreach($stories_wp as $story_wp){
+        // store stories from wordpress in database
+        foreach($stories_wp as $story_wp){
+            
+            // checks if wp post already exists within sniffr stories
+            $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
 
-			// checks if wp post already exists within sniffr stories
-			$story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
-
-			if(!$story_find) {
-				$story = new Story();
-
-                // get assets from curl request (as a function)
-                $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
-                if(count($asset_ids)) {
-                    $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
-                }
-
-                // get author from curl request
-    			if($story_wp['author']) {
-    				$author = $this->apiRequest('users/' . $story_wp['author']);
-    				$story->author = isset($author->name) ? $author->name : NULL;
-                }
-
-				$story->alpha_id = VideoHelper::quickRandom();
-				$story->wp_id = $story_wp['wp_id'];
-				$story->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-				$story->date_ingested = $story_wp['date'];
-				$story->categories = implode("|",$story_wp['categories']);
-				$story->status = $story_wp['status'];
-				$story->state = 'licensed';
-				$story->title = $story_wp['title'];
-                $story->url = $story_wp['url'];
-				$story->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
-				$story->user_id = (Auth::user() ? Auth::user()->id : 0);
-				$story->active = 1;
-				$story->save();
-				$story->assets()->sync($asset_ids);
-			} else {
-                // if wp post is updated 5mins after our own story record
+            if(!$story_find) {
+                QueueStory::dispatch($story_wp, 'new', (Auth::user() ? Auth::user()->id : 0))
+                    ->delay(now()->addSeconds(5));
+            } else {
                 $storyTime = Carbon::parse($story_find->date_ingested);
                 $postTime = Carbon::parse($story_wp['date']);
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
-                if($differenceTime>300) {
-                    // get assets from curl request (as a function)
-                    $asset_ids = $this->createAssets($story_wp['featured_media'], $story_wp['description']);
-                    if(count($asset_ids)) {
-                        $story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
-                    }
-
-                    // update the author
-                    if($story_wp['author']) {
-        				$author = $this->apiRequest('users/' . $story_wp['author']);
-        				$story->author = isset($author->name) ? $author->name : NULL;
-                    }
-
-                    // update the rest of the story record in Sniffr
-                    $story_find->excerpt = ($story_wp['excerpt'] ? $story_wp['excerpt'] : NULL);
-    				$story_find->date_ingested = $story_wp['date'];
-    				$story_find->categories = implode("|",$story_wp['categories']);
-    				$story_find->status = $story_wp['status'];
-    				$story_find->title = $story_wp['title'];
-                    $story_find->url = $story_wp['url'];
-    				$story_find->description = ($story_wp['description'] ? $story_wp['description'] : NULL);
-    				$story_find->user_id = (Auth::user() ? Auth::user()->id : $story_find->user_id);
-    				$story_find->save();
-                    $story->assets()->sync($asset_ids);
+                // if wp post is updated 5mins after our own story record
+                if($differenceTime>150) {
+                    QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
+                        ->delay(now()->addSeconds(5));
                 }
             }
-		}
+        }
 
-		return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
-	}
+        return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -264,12 +110,15 @@ class AdminStoryController extends Controller
     public function index(){
         $stories = new Story;
         $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
+        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])->orderBy('licensed_at', 'DESC')->paginate(10);
 
         $data = [
             'stories' => $stories,
-            'users' => User::all(),
-            'user' => Auth::user()
+            'videos' => $videos,
         ];
+
+        /*'users' => User::all(),
+            'user' => Auth::user()*/
 
         return view('admin.stories.index', $data); //return response()->json($formatted_posts);
     }

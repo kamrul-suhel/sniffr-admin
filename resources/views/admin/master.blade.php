@@ -100,6 +100,17 @@
 <!-- Notifications -->
 <script>
 	(function($){
+		// Delete handler
+	    $('.delete').click(function (e) {
+	        e.preventDefault();
+	        if (confirm("Are you sure you want to delete this?")) {
+	            console.log($(this).data('form'));
+	            //window.location = $(this).attr('href');
+	            $('#form-delete-' + $(this).data('form')).submit();
+	        }
+	        return false;
+	    });
+
 		var opts = {
 			"closeButton": true,
 			"debug": false,

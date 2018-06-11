@@ -23,14 +23,9 @@
                         <span class="fa fa-bar-chart"></span>
                         Orders
                     </a>
-                    <a href="{{ url('admin/clients/edit') . '/' . $client->id }}" class="btn btn-xs btn-info">
+                    <a href="{{ route('clients.edit', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
                         <span class="fa fa-edit"></span>
                         Edit
-                    </a>
-                    <a href="{{ url('admin/clients/delete') . '/' . $client->id }}"
-                       class="btn btn-xs btn-danger delete">
-                        <span class="fa fa-trash"></span>
-                        Delete
                     </a>
 				</td>
 			</tr>
@@ -40,19 +35,4 @@
 	<div class="clear"></div>
 
 	<div class="text-center"><?= $clients->render(); ?></div>
-
-	@section('javascript')
-	<script>
-		$ = jQuery;
-		$(document).ready(function(){
-			$('.delete').click(function(e){
-				e.preventDefault();
-				if (confirm("Are you sure you want to delete this client?")) {
-			       window.location = $(this).attr('href');
-			    }
-			    return false;
-			});
-		});
-	</script>
-	@stop
 @stop
