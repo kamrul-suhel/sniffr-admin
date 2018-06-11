@@ -237,8 +237,11 @@ class ContractController extends Controller
         $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
         $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
-		$contract_text = $contract->upfront_payment_currency_id != 1 ? str_replace('£', config('currencies')[$contract->upfront_payment_currency_id]['symbol'], $contract_text) : '';
 
+        $currencies = config('currencies');
+        if (key_exists($contract->upfront_payment_currency_id, $currencies)) {
+            $contract_text = str_replace('£', [$contract->upfront_payment_currency_id]['symbol'], $contract_text);
+        }
 
         return $contract_text;
     }
