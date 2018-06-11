@@ -55,9 +55,6 @@
                 error: false
             }
         },
-        beforeRouteEnter(to, from, next) {
-            next();
-        },
 
         created() {
             this.token = this.$route.params.token;

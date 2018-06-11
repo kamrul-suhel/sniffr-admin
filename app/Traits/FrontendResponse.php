@@ -32,8 +32,6 @@ trait FrontendResponse
             'image',
             'thumb',
             'mime',
-            'file_watermark',
-            'file_watermark_dirty',
             'link',
             'vertical',
             'youtube_id',
