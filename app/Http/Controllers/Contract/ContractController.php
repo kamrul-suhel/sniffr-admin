@@ -129,10 +129,14 @@ class ContractController extends Controller
         $contract = Contract::where('token', '=', $token)->first();
 
         if (!$contract) {
-            abort(404);
+            if($request->ajax() || $request->isJson()){
+                return $this->errorResponse("This contract is no longer available");
+            }
+            return view('frontend.master');
         }
 
-        $video = Video::with('contact')->find($contract->video_id);
+        $video = Video::with('contact')
+            ->find($contract->video_id);
 
         $contract_text = $this->getContractText($contract, $video);
 
