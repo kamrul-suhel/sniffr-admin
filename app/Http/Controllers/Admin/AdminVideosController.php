@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Services\VideoService;
+use App\VideoSocialLink;
+use App\VideoStats;
 use Auth;
 use Illuminate\Http\UploadedFile;
 use Youtube;
@@ -329,7 +331,7 @@ class AdminVideosController extends Controller
     {
         $video = Video::where('alpha_id', $request->input('id'))->first();
 
-        if(!$video) {
+        if (!$video) {
             abort(404);
         }
 
@@ -346,6 +348,25 @@ class AdminVideosController extends Controller
             $imageFile = $request->file('image');
             $imageUrl = $this->saveImageFile($imageFile);
             $video->image = $imageUrl;
+        }
+
+        if ($request->has('new_social_link')) {
+            $videoStats = new VideoStats();
+            $validate = $videoStats->validateUrl(request()->get('new_social_link'));
+
+            if(isset($validate->message)) {
+                return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
+                    'note' => 'Url does not exist',
+                    'note_type' => 'error',
+                ]);
+            }
+
+            $videoSocialLink = new VideoSocialLink();
+            $videoSocialLink->create([
+                'video_id' => $video->id,
+                'platform' => 'facebook',
+                'link' => $request->get('new_social_link')
+            ]);
         }
 
         $filePath = $request->hasFile('file')
