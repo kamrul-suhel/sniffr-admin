@@ -9,7 +9,7 @@
     @foreach($stories as $story)
         <tr>
             <td>
-                <img src="{{ ($story['thumb']) ?: '/assets/frontend/images/placeholder.png' }}" class="story_pic"/>
+                <img src="{{ $story['thumb'] ?: '/assets/frontend/images/placeholder.png' }}" class="story_pic"/>
             </td>
             <td>
                 <strong>{{ TextHelper::shorten($story['title'], 250) }}</strong>
