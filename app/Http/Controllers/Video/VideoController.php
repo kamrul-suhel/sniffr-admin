@@ -215,9 +215,9 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax() || $request->isJson()) {
-            $video = new Video;
-            $videos = $video->where('state', 'licensed')
+            $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
                 ->orderBy('id', 'DESC')
                 ->paginate($this->videos_per_page);
 
@@ -243,7 +243,8 @@ class VideoController extends Controller
     {
         $isJson = $request->ajax() || $request->isJson();
         if ($isJson) {
-            $video = Video::where('state', 'licensed')
+            $video = Video::select($this->getVideoFieldsForFrontend())
+                ->where('state', 'licensed')
                 ->with('tags')
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
@@ -328,7 +329,8 @@ class VideoController extends Controller
                 return redirect()->to('video_index');
             }
 
-            $videos = Video::where('state', 'licensed')
+            $videos = Video::select($this->getVideoFieldsForFrontend())
+                ->where('state', 'licensed')
                 ->whereHas('tags', function ($query) use ($tagName) {
                     $query->where('name', '=', $tagName);
                 })
@@ -356,7 +358,8 @@ class VideoController extends Controller
         if (!empty($parent_cat->id)) {
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
             if (!empty($parent_cat2->id)) {
-                $videos = Video::where('state', 'licensed')
+                $videos = Video::select($this->getVideoFieldsForFrontend())
+                    ->where('state', 'licensed')
                     ->where('video_category_id', '=', $cat->id)
                     ->orWhere('video_category_id', '=', $parent_cat->id)
                     ->orWhere('video_category_id', '=', $parent_cat2->id)
