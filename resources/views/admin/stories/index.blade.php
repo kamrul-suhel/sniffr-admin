@@ -1,37 +1,41 @@
 @extends('admin.master')
 
 @section('css')
-
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 @endsection
 
 @section('content')
     <div id="admin-mailer">
+        <v-app>
+            <v-content>
 
-        <ol class="breadcrumb">
-            <li><a href="/admin/stories"><i class="fa fa-tasks"></i> All Stories</a></li>
-        </ol>
+                <ol class="breadcrumb">
+                    <li><a href="/admin/stories"><i class="fa fa-tasks"></i> All Stories</a></li>
+                </ol>
 
-        <div class="admin-section-title bottom-padding">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h3>
-                        <i class="fa fa-users"></i> Stories
-                        <a href="#" class="btn btn-primary pull-right js-create-mailer">
-                            <i class="fa fa-plus-circle"></i> Create Mailer
-                        </a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right"
-                                style="margin-right:10px;">
-                            <i class="fa fa-refresh"></i> Refresh Stories
-                        </a>
-                    <!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
-                            <i class="fa fa-plus-circle"></i> Add New Story
-                        </a> -->
-                    </h3>
+                <div class="admin-section-title bottom-padding">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>
+                                <i class="fa fa-users"></i> Stories
+                                <a href="#" class="btn btn-primary pull-right js-create-mailer">
+                                    <i class="fa fa-plus-circle"></i> Create Mailer
+                                </a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right"
+                                        style="margin-right:10px;">
+                                    <i class="fa fa-refresh"></i> Refresh Stories
+                                </a>
+                            <!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
+                                <i class="fa fa-plus-circle"></i> Add New Story
+                            </a> -->
+                            </h3>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="clear"></div>
+                <div class="clear"></div>
 
-        <mailer-component></mailer-component>
+                <mailer-component></mailer-component>
+            </v-content>
+        </v-app>
     </div>
 
 @endsection
@@ -87,7 +91,6 @@
             });
         });
     </script>
-
 
     <!-- Vue injection -->
     <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>

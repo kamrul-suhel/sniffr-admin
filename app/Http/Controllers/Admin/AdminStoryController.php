@@ -108,11 +108,15 @@ class AdminStoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request){
-        $stories = Story::orderBy('date_ingested', 'DESC')
-            ->paginate(2);
 
         if($request->ajax()){
-            return $this->successResponse($stories);
+            $stories = Story::orderBy('date_ingested', 'DESC')
+                ->paginate(6);
+
+            $data = [
+                'stories' => $stories
+            ];
+            return $this->successResponse($data);
         }
 
         return view('admin.stories.index'); //return response()->json($formatted_posts);

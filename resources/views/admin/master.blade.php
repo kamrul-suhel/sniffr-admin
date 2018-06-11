@@ -28,6 +28,9 @@
 		<script src="https://oss.maxcdn.com/libs/respond.js') }}/1.4.2/respond.min.js') }}"></script>
 	<![endif]-->
 
+	<!-- Mailer stories & video style -->
+	<link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
+
 </head>
 <body class="page-body skin-black">
 
@@ -152,6 +155,7 @@
 	fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 <!-- End Notifications -->
+
 
 @yield('javascript')
 
