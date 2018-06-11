@@ -240,7 +240,7 @@ class ContractController extends Controller
 
         $currencies = config('currencies');
         if (key_exists($contract->upfront_payment_currency_id, $currencies)) {
-            $contract_text = str_replace('£', [$contract->upfront_payment_currency_id]['symbol'], $contract_text);
+            $contract_text = str_replace('£', $currencies[$contract->upfront_payment_currency_id]['symbol'], $contract_text);
         }
 
         return $contract_text;
