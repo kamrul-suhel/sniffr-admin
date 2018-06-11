@@ -135,11 +135,15 @@
 
 					<div class="panel-body" style="display: block;">
 						<select name="clients[]" id="clients" class="form-control" multiple style="height:400px;">
-							@if(!empty($clients))
-								@foreach($clients as $client)
-									<option value="{{ $client->id }}"{{ isset($mailer) && $mailer->users()->get()->contains($client->id)  ? " selected" : "" }}>{{ $client->username }} ({{ $client->email }})</option>
-								@endforeach
-							@endif
+                            @foreach(\App\Client::all() as $client)
+                            	@if($client->users()->count())
+                                <optgroup label="{{ $client->name }}">
+                                @foreach($client->users()->get() as $user)
+                                    <option value="{{ $user->id }}"{{ isset($mailer) && $mailer->users()->get()->contains($user->id)  ? " selected" : "" }}>{{ $user->username }} ({{ $user->email }})</option>
+                                @endforeach
+                                </optgroup>
+                                @endif
+                            @endforeach
 						</select>
 
 					</div>
