@@ -1,19 +1,19 @@
 <table class="table table-striped pages-table">
     <tr class="table-header">
-        <th style="width: 25%">Title</th>
-        <th style="width: 30%">Excerpt</th>
-        <th>Assigned To</th>
-        <th>Created At</th>
+        <th style="width: 25%">Thumbnail</th>
+        <th style="width: 30%">Title / Excerpt</th>
+        <th>Author</th>
+        <th>Updated At</th>
         <th>Actions</th>
     </tr>
     @foreach($stories as $story)
         <tr>
             <td>
-                <strong>{{ TextHelper::shorten($story['title'], 250) }}</strong>
                 <img src="{{ ($story['thumb']) ?: '/assets/frontend/images/placeholder.png' }}" class="story_pic"/>
             </td>
             <td>
-                {{ $story['excerpt'] }}
+                <strong>{{ TextHelper::shorten($story['title'], 250) }}</strong>
+                <p><br />{{ $story['excerpt'] }}</p>
             </td>
             <td>
                 {{ $story['author'] }}
@@ -34,3 +34,7 @@
         </tr>
     @endforeach
 </table>
+
+<div class="text-center">
+    {{ $stories->appends(request()->except('page'))->render() }}
+</div>

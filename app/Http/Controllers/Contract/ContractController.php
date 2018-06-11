@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Contract;
 
 use App\Contract;
 use App\Http\Requests\Contract\DeleteContractRequest;
-use App\Mail\ContractMailable;
-use App\Mail\ContractSignedThanks;
 use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
 use App\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
+use App\Jobs\QueueVideoYoutubeUpload;
+use App\Jobs\QueueEmail;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -107,7 +107,8 @@ class ContractController extends Controller
         $contract->sent_at = now();
         $contract->save();
 
-        \Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
+		// Send contract signed notification email
+		QueueEmail::dispatch($video->id, 'sign_contract');
 
         return redirect()->route('admin_video_edit', [
             'id' => $video->alpha_id
@@ -128,10 +129,14 @@ class ContractController extends Controller
         $contract = Contract::where('token', '=', $token)->first();
 
         if (!$contract) {
-            abort(404);
+            if($request->ajax() || $request->isJson()){
+                return $this->errorResponse("This contract is no longer available");
+            }
+            return view('frontend.master');
         }
 
-        $video = Video::with('contact')->find($contract->video_id);
+        $video = Video::with('contact')
+            ->find($contract->video_id);
 
         $contract_text = $this->getContractText($contract, $video);
 
@@ -167,7 +172,14 @@ class ContractController extends Controller
         $video->state = 'licensed';
         $video->save();
 
-        \Mail::to($video->contact->email)->send(new ContractSignedThanks($video, $video->currentContract));
+		// Set to process for youtube and analysis
+		if (empty($video->youtube_id) && $video->file) {
+			QueueVideoYoutubeUpload::dispatch($video->id)
+				->delay(now()->addSeconds(5));
+		}
+
+		// Send contract signed notification email
+		QueueEmail::dispatch($video->id, 'contract_signed');
 
         if (env('APP_ENV') != 'local') {
             $video->notify(new ContractSigned($video));
@@ -229,6 +241,11 @@ class ContractController extends Controller
         $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
         $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
+
+        $currencies = config('currencies');
+        if (($contract->upfront_payment_currency_id != 1) && (key_exists($contract->upfront_payment_currency_id, $currencies))) {
+            $contract_text = str_replace('£', $currencies[$contract->upfront_payment_currency_id]['symbol'], $contract_text);
+        }
 
         return $contract_text;
     }

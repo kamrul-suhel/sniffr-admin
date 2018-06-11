@@ -24,8 +24,6 @@
                         :key="index"
                         :story="story"></asset-download-component>
             <!--</div>-->
-
-
         </v-container>
 
         <v-container grid-list-lg v-if="stories && stories.total > stories.per_page">
@@ -35,8 +33,8 @@
 </template>
 
 <script>
-    import AssetDownloadComponent from './partials/AssetDownloadComponent'
-    import PaginationComponent from '../../includes/PaginationComponent'
+    import AssetDownloadComponent from '../partials/AssetStoryDownloadComponent'
+    import PaginationComponent from '../../../includes/PaginationComponent'
     export default {
         components: {
             assetDownloadComponent: AssetDownloadComponent,

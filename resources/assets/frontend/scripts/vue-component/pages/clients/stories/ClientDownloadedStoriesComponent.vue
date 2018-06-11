@@ -33,8 +33,8 @@
 </template>
 
 <script>
-    import AssetDownloadComponent from './partials/AssetDownloadComponent'
-    import PaginationComponent from '../../includes/PaginationComponent'
+    import AssetDownloadComponent from '../partials/AssetStoryDownloadComponent'
+    import PaginationComponent from '../../../includes/PaginationComponent'
     export default {
         components: {
             assetDownloadComponent: AssetDownloadComponent,
@@ -74,6 +74,7 @@
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
                         this.ini_state = true;
+                        console.log(this.stories);
                     });
             }
         }

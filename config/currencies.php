@@ -11,6 +11,6 @@ return [
         'id' => 2,
         'abbreviation' => 'USD',
         'name' => 'U.S. Dollar',
-        'symbol' => '&dollar;'
+        'symbol' => '$'
     ]
 ];

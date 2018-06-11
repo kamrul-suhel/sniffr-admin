@@ -14,6 +14,9 @@ class ClientVideosController extends Controller
 {
     use FrontendResponse;
     use VideoHelper;
+
+    const PAGINATE_PER_PAGE = 6;
+
     /**
      * @var int
      */
@@ -37,30 +40,32 @@ class ClientVideosController extends Controller
      */
     public function videosSent(Request $request)
     {
-        $user_id = $request->get('user_id');
-        $client_mailer = ClientMailer::with('videos')
-            ->whereHas('users', function ($query) use ($user_id) {
-                $query->where('users.id', '=', $user_id);
-            })
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        dd($client_mailer);
-
-        $video = new Video;
-
-        $videos = $video->where('state', 'licensed')
-            ->orderBy('id', 'DESC')
-            ->paginate($this->videos_per_page);
-
-        $data = [
-            'videos' => $videos,
-        ];
+        if(!Auth::check()){
+            return view('frontend.master');
+        }
 
         if ($request->ajax() || $request->isJson()) {
+            $user_id = Auth::user()->id;
+            $client_videos_mailer = ClientMailer::with('videos.order')
+                ->whereHas('users', function ($query) use ($user_id) {
+                    $query->where('users.id', '=', 3);
+                })
+                ->whereHas('videos', function ($query) {
+                    $query->where('state', 'licensed');
+                })
+                ->orderBy('created_at', 'DESC')
+                ->get()
+                ->pluck('videos')
+                ->collapse();
+
+            $client_videos_mailer = $this->paginate($client_videos_mailer, self::PAGINATE_PER_PAGE);
+
+            $data = [
+                'videos' => $client_videos_mailer
+            ];
             return $this->successResponse($data);
         }
 
-        return view('client.videos.index', $data);
+        return view('frontend.master');
     }
 }

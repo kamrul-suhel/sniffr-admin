@@ -43,16 +43,21 @@
             },
 
             current_page(){
+                switch(this.page){
+                    case 'client_stories':
+                        this.$router.push({name: 'client_stories', query:{ page: this.current_page}});
+                        break;
 
-                //Go to the top
-                if(this.page === 'client_stories'){
-                    let page =  this.current_page;
-                    this.$router.push({name: 'client_stories', query:{ page: page}});
-                }else if(this.page === 'client_stories_download'){
-                    let page =  this.current_page;
-                    this.$router.push({name: 'client_downloaded_stories', query:{ page: page}});
-                }else{
-                    this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
+                    case 'client_stories_download':
+                        this.$router.push({name: 'client_downloaded_stories', query:{ page: this.current_page}});
+                        break;
+
+                    case 'client_videos':
+                        this.$router.push({name: 'client_videos', query:{ page: this.current_page}});
+                        break;
+
+                    default:
+                        this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
                 }
 
                 setTimeout(() => {
