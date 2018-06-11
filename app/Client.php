@@ -31,6 +31,14 @@ class Client extends Model
     public static $rules = [];
     protected $table = 'clients';
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
+    public function users()
+	{
+		return $this->hasMany(User::class);
+	}
+
     public function routeNotificationForSlack()
     {
         return 'https://hooks.slack.com/services/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';
