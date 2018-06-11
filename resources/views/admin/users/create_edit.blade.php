@@ -250,6 +250,9 @@
 							<option value="client"{{ ((($user) && ($user->role == 'client')) || (old('role') == 'client')) ? ' selected' : '' }}>
 								Client
 							</option>
+							<option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
+								Client Admin
+							</option>
 						</select>
 					</div>
 				</div>
@@ -283,27 +286,6 @@
 								}}>{{ $client->name }}</option>
 								@endforeach
 							@endif
-						</select>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="col-sm-4" id="client-admin">
-
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading">
-						<div class="panel-title">Is this user an Admin</div>
-
-						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-						</div>
-					</div>
-
-					<div class="panel-body" style="display: block;">
-						<select id="is_client_admin" name="is_client_admin">
-							<option value="0" @if(isset($user->is_client_admin)&&$user->is_client_admin==0) selected @endif>No</option>
-							<option value="1" @if(isset($user->is_client_admin)&&$user->is_client_admin==1) selected @endif>Yes</option>				
 						</select>
 					</div>
 				</div>
@@ -344,17 +326,8 @@
 				}
 			});
 
-			$('#role').change(function(){
-				if($(this).val() == 'client'){
-					$('#client-admin').show();
-				} else {
-					$('#client-admin').hide();
-				}
-			});
-
 			if($('#role').val() != 'client'){
 				$('#client-box').hide();
-				$('#client-admin').hide();
 			}
 
 			$('#active, #disabled').change(function() {

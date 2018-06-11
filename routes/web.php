@@ -212,12 +212,12 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
     //Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
 
-//    Route::get('clients', 'Admin\AdminClientController@index');
-//    Route::get('clients/create', 'Admin\AdminClientController@create');
-//    Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
-//    Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
-//    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
-//    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
+    Route::get('clients', 'Admin\AdminClientController@index');
+    Route::get('clients/create', 'Admin\AdminClientController@create');
+    Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
+    Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
+    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
+    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
     Route::resource('contacts', 'Contact\ContactController');
 

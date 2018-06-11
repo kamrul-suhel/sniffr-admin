@@ -39,7 +39,7 @@
 					</td>
 					<td>{{ $user->email }}</td>
 					<td>
-						@if($user->role == 'client')
+						@if($user->role == 'client' || $user->role == 'client_admin')
 							<div class="label label-success"><i class="fa fa-users"></i>
 								Client
 							</div>

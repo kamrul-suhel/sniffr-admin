@@ -47,8 +47,8 @@
                     </div>
                 </div>
 
-                @if(!empty($client->created_at))
-                    <div class="col-sm-3">
+                @if(empty($client->created_at))
+                    <!-- <div class="col-sm-3">
                         <div class="panel panel-primary" data-collapsed="0">
                             <div class="panel-heading">
                                 <div class="panel-title">Created Date</div>
@@ -61,8 +61,202 @@
                                        value="@if(!empty($client->created_at)){{ $client->created_at }}@endif"/>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 @endif
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Building Name</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add Building Name in the textbox below:</p>
+                            <input type="text" class="form-control" name="address_line1" id="address_line1" placeholder="Building Name"
+                                   value="@if(!empty($client->address_line1)){{ $client->address_line1 }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Street Address</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add Street Address in the textbox below:</p>
+                            <input type="text" class="form-control" name="address_line2" id="address_line2" placeholder="Street Address"
+                                   value="@if(!empty($client->address_line2)){{ $client->address_line2 }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">City</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add City in the textbox below:</p>
+                            <input type="text" class="form-control" name="city" id="city" placeholder="City"
+                                   value="@if(!empty($client->city)){{ $client->city }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Postcode / Zip Code</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add Postcode / Zip Code in the textbox below:</p>
+                            <input type="text" class="form-control" name="postcode" id="postcode" placeholder="Postcode"
+                                   value="@if(!empty($client->postcode)){{ $client->postcode }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Country</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add Country in the textbox below:</p>
+                            <input type="text" class="form-control" name="country" id="country" placeholder="Country"
+                                   value="@if(!empty($client->country)){{ $client->country }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-12">
+
+                    <hr >
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Billing Phone Number</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add Billing Phone Number in the textbox below:</p>
+                            <input type="text" class="form-control" name="billing_tel" id="billing_tel" placeholder="Billing Phone Number"
+                                   value="@if(!empty($client->billing_tel)){{ $client->billing_tel }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Billing Email Address</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add Email Address in the textbox below:</p>
+                            <input type="text" class="form-control" name="billing_email" id="billing_email" placeholder="Billing Email Address"
+                                   value="@if(!empty($client->billing_email)){{ $client->billing_email }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-12">
+
+                    <hr >
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">VAT Number</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add VAT Number in the textbox below:</p>
+                            <input type="text" class="form-control" name="vat_number" id="vat_number" placeholder="VAT Number"
+                                   value="@if(!empty($client->vat_number)){{ $client->vat_number }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Usable domains</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Email domains usable with this account:</p>
+                            <input type="text" class="form-control" name="usable_domains" id="usable_domains" placeholder="bbc.co.uk, news.bbc.co.uk, etc"
+                                   value="@if(!empty($client->usable_domains)){{ $client->usable_domains }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
             @if(isset($client->id))

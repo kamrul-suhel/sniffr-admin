@@ -81,7 +81,6 @@ class AdminUsersController extends Controller
         $user->full_name = $request->input('full_name');
         $user->tel = $request->input('tel');
         $user->job_title = $request->input('job_title');
-        $user->is_client_admin = $request->input('is_client_admin');
 
         $user->avatar = 'default.jpg';
 
@@ -136,7 +135,6 @@ class AdminUsersController extends Controller
             $user->password = Hash::make($request->input('password'));
         }
 
-        $user->is_client_admin = $request->input('is_client_admin', $user->is_client_admin);
         $user->role = $request->input('role', $user->role);
         $user->active = $request->input('active', $user->active);
         if($user->client_id) {
