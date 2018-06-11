@@ -239,7 +239,7 @@ class ContractController extends Controller
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
 
         $currencies = config('currencies');
-        if (key_exists($contract->upfront_payment_currency_id, $currencies)) {
+        if (($contract->upfront_payment_currency_id != 1) && (key_exists($contract->upfront_payment_currency_id, $currencies))) {
             $contract_text = str_replace('£', $currencies[$contract->upfront_payment_currency_id]['symbol'], $contract_text);
         }
 
