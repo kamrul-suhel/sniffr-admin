@@ -35,6 +35,17 @@
                 </v-card>
             </v-form>
         </v-layout>
+
+        <v-layout align-center justify-center v-else>
+            <v-card width="800">
+                <v-card-text>
+                    <v-flex xs12 text-xs-center>
+                        <span v-if="showMessage" :class="[error ? 'red--text' : 'green--text','text-uppercase']">{{message}}</span>
+                    </v-flex>
+                </v-card-text>
+            </v-card>
+        </v-layout>
+
     </v-container>
 </template>
 <script>
@@ -61,10 +72,18 @@
 
             axios.get('/contract/' + this.token + '/accept')
                 .then(response => {
-                    this.contract = response.data.contract
-                    this.video = response.data.video
-                    this.signed = response.data.signed
-                    this.display_thank_you = true
+
+                    if(!response.data.error){
+                        this.contract = response.data.contract
+                        this.video = response.data.video
+                        this.signed = response.data.signed
+                        this.display_thank_you = true
+                    }else{
+                        this.error = true;
+                        this.showMessage = true;
+                        this.message = response.data.error_message;
+                    }
+
                 })
         },
 
