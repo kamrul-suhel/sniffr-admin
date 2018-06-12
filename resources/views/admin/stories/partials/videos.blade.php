@@ -9,7 +9,7 @@
     @foreach($videos as $video)
         <tr>
             <td>
-                <img src="{{ $video['image'] ? $video['image'] : $video['thumb'] ? $video['thumb'] : '/assets/frontend/images/placeholder.png'  }}" class="story_pic"/>
+                <img src="@if($video['image']) {{ $video['image'] }} @elseif($video['thumb']) {{ $video['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" class="story_pic"/>
             </td>
             <td>
                 <strong>{{ TextHelper::shorten($video['title'], 250) }}</strong>
