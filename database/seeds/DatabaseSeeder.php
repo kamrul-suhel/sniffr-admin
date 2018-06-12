@@ -6,6 +6,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+		App\Client::truncate();
+		App\User::truncate();
+		App\Tag::truncate();
+		DB::table('youtube_access_tokens')->truncate();
+
         $this->call([
             ClientsTableSeeder::class,
             UsersTableSeeder::class,
@@ -14,8 +19,6 @@ class DatabaseSeeder extends Seeder
             VideoCollectionsTableSeeder::class,
             VideoShotTypesTableSeeder::class,
             VideosTableSeeder::class,
-            CampaignsTableSeeder::class,
-            CampaignVideoTableSeeder::class,
             CommentsTableSeeder::class,
             DownloadsTableSeeder::class,
             FavoritesTableSeeder::class,

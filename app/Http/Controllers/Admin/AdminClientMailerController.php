@@ -3,24 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
-use Validator;
 use Redirect;
-use App\Asset;
 use App\User;
 use App\Story;
-use App\Video;
 use App\Client;
-use App\Comment;
 use App\ClientMailer;
 use App\Download;
-use App\Libraries\TimeHelper;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon as Carbon;
 use App\Jobs\QueueClientMailer;
 use App\Notifications\ClientMailerAlert;
 
@@ -71,26 +63,35 @@ class AdminClientMailerController extends Controller
     }
 
     /**
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
     {
-        $stories = json_decode($request->stories,true);
+        $stories = json_decode($request->stories, true);
+        $videos = json_decode($request->videos, true);
 
-        if($stories){
+        if ($stories || $videos) {
             $mailer = new ClientMailer();
             $mailer->alpha_id = VideoHelper::quickRandom();
             $mailer->user_id = (Auth::user() ? Auth::user()->id : NULL);
             $mailer->active = 1;
             $mailer->save();
-            $mailer->stories()->sync(json_decode($request->stories,true));
+
+            $mailer->stories()->sync($stories);
+            $mailer->videos()->sync($videos);
+
+            return response()->json([
+                'status' => 'success',
+                'mailer_id' => $mailer->id,
+                'message' => 'all good',
+            ]);
         }
 
-        if($stories){
-            return response()->json(['status' => 'success', 'mailer_id' => $mailer->id, 'message' => 'all good']);
-        } else {
-            return response()->json(['status' => 'failed', 'message' => 'dammit']);
-        }
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'dammit'
+        ]);
     }
 
     /**
@@ -101,13 +102,14 @@ class AdminClientMailerController extends Controller
     {
         $mailer = ClientMailer::find($id);
 
-        $users = User::where([['role', 'client']])
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        $users = User::where('role', 'client')
+			->orWhere('role','client_admin')
+			->orderBy('created_at', 'DESC')
+			->get();
 
         $downloads = Download::where([['mailer_id', $id]])
-        ->orderBy('created_at', 'DESC')
-        ->get();
+			->orderBy('created_at', 'DESC')
+			->get();
 
         $data = [
             'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id '.$mailer->alpha_id,
@@ -131,9 +133,10 @@ class AdminClientMailerController extends Controller
     {
         $mailer = ClientMailer::find($id);
 
-        $clients = User::where([['role', 'client']])
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        $clients = User::where('role', 'client')
+			->orWhere('role','client_admin')
+			->orderBy('created_at', 'DESC')
+			->get();
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Review Client Mailer',

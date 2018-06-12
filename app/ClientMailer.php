@@ -23,6 +23,14 @@ class ClientMailer extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function videos()
+    {
+        return $this->belongsToMany(Video::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users()

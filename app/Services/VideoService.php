@@ -29,6 +29,8 @@ class VideoService
         QueueVideo::dispatch($video->id)->delay(now()->addSeconds(5));
 
         $video->file = $filePath;
+        //TODO: should we remove the url if a file is uploaded?
+        //$video->url = null;
         $video->mime = $fileMimeType;
         $video->save();
 
@@ -37,10 +39,10 @@ class VideoService
 
     /**
      * @param Video $video
-     * @param String $videoUrl
+     * @param string $videoUrl
      * @return string
      */
-    public function saveVideoLink(Video $video, String $videoUrl)
+    public function saveVideoLink(Video $video, string $videoUrl)
     {
         $linkDetails = VideoHelper::videoLinkChecker($videoUrl);
 

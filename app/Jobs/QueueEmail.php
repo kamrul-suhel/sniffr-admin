@@ -18,6 +18,8 @@ use App\Mail\SubmissionLicensed;
 use App\Mail\SubmissionRejected;
 use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
+use App\Mail\ContractMailable;
+use App\Mail\ContractSignedThanks;
 
 
 class QueueEmail implements ShouldQueue
@@ -79,6 +81,11 @@ class QueueEmail implements ShouldQueue
                     case 'details_thanks':
                         Mail::to($video->contact->email)->send(new DetailsThanks($video));
                         break;
+					case 'contract_signed':
+						Mail::to($video->contact->email)->send(new ContractSignedThanks($video, $video->currentContract));
+						break;
+					case 'sign_contract':
+						Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
                 }
             }
         }

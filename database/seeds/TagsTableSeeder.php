@@ -7,7 +7,7 @@ class TagsTableSeeder extends Seeder
 {
     public function run()
     {
-        $sampleTagNames = ['dog', 'cat', 'funny', 'tv', 'accident'];
+        $sampleTagNames = ['dog', 'cat'];
 
         foreach ($sampleTagNames as $tag) {
             Tag::create([

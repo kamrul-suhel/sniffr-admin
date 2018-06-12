@@ -14,7 +14,6 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $deleted_at
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Campaign[] $campaigns
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereDeletedAt($value)
@@ -32,10 +31,13 @@ class Client extends Model
     public static $rules = [];
     protected $table = 'clients';
 
-    public function campaigns()
-    {
-        return $this->hasMany(Campaign::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
+    public function users()
+	{
+		return $this->hasMany(User::class);
+	}
 
     public function routeNotificationForSlack()
     {

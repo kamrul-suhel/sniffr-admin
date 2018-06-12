@@ -13,12 +13,10 @@ use Illuminate\Support\Facades\Cache;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property Comment[] $cached_comments
- * @property Campaign[] $cached_campaigns
  * @property Download[] $cached_downloads
  * @property-read \App\Tag|null $tags
  * @property-read \App\Contact|null $contact
  * @property-read \App\Comment|null $comments
- * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
  * @property string $alpha_id
  * @property int $contact_id
@@ -129,9 +127,12 @@ class Video extends Model
         return $this->hasMany(Download::class);
     }
 
-    public function campaigns()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function socialLinks()
     {
-        return $this->belongsToMany(Campaign::class)->withTimestamps()->withPivot('state', 'created_at');
+        return $this->hasMany(VideoSocialLink::class);
     }
 
     public function routeNotificationForSlack()
@@ -142,6 +143,7 @@ class Video extends Model
     /**
      * @param int $page
      * @return string
+     * @codeCoverageIgnore
      */
     public function cacheKey(int $page = 0)
     {
@@ -156,6 +158,8 @@ class Video extends Model
      * @param int $videos_per_page
      * @param $page
      * @return mixed
+     * TODO: Not being used
+     * @codeCoverageIgnore
      */
     public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
     {
@@ -170,6 +174,7 @@ class Video extends Model
 
     /**
      * @return Comment[]
+     * @codeCoverageIgnore
      */
     public function getCachedComments()
     {
@@ -179,17 +184,8 @@ class Video extends Model
     }
 
     /**
-     * @return Campaign[]
-     */
-    public function getCachedCampaigns()
-    {
-        return Cache::remember($this->cacheKey() . ':campaigns', self::CACHE_EXPIRATION, function () {
-            return $this->campaigns->toArray();
-        });
-    }
-
-    /**
      * @return Download[]
+     * @codeCoverageIgnore
      */
     public function getCachedDownloads()
     {
@@ -200,6 +196,7 @@ class Video extends Model
 
     /**
      * @return Contact[]
+     * @codeCoverageIgnore
      */
     public function getCachedContact()
     {
@@ -210,6 +207,7 @@ class Video extends Model
 
     /**
      * @return Tag[]
+     * @codeCoverageIgnore
      */
     public function getCachedTags()
     {
@@ -226,14 +224,22 @@ class Video extends Model
         return $this->belongsToMany(Story::class);
     }
 
+    public function order(){
+        return $this->hasOne(Order::class);
+    }
+
     /**
      * @param Client $client
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function clientVideos(Client $client)
     {
-        return Video::whereHas('campaigns', function ($q) use ($client) {
-            $q->where('id', $client->id);
-        })->orderBy('licensed_at', 'desc')->paginate(12);
+        $user_id = $request->user_id;
+        $client_mailer = ClientMailer::with('stories.orders')
+            ->whereHas('users', function ($query) use ($user_id) {
+                $query->where('users.id', '=', $user_id);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
     }
 }

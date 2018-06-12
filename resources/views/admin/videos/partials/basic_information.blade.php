@@ -12,7 +12,7 @@
         <div class="col-md-6">
             <h2>2- Initial Copy</h2>
             @include('admin.videos.partials.copy')
-            <input type="submit" class="btn btn-primary btn-lg" value="Save &rarr;"/>
+            <input type="submit" class="btn btn-primary" value="Save &rarr;"/>
         </div>
     </div>
     {{ csrf_field() }}

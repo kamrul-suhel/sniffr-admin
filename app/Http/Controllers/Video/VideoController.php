@@ -7,9 +7,7 @@ use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use App\Page;
 use App\User;
@@ -116,9 +114,13 @@ class VideoController extends Controller
         $fileSize = $filePath = '';
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->file)
-            : $this->videoService->saveVideoLink($video, Input::get('url'));
+        if ($request->hasFile('file')) {
+            $filePath = $this->videoService->saveUploadedVideoFile($video, $request->file('file'));
+        }
+
+        if ($request->get('url')) {
+            $filePath = $this->videoService->saveVideoLink($video, $request->get('url'));
+        }
 
         // Slack notification
         if (env('APP_ENV') == 'prod') {
@@ -214,10 +216,11 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax() || $request->isJson()) {
-            $video = new Video;
-            $page = Input::get('page', 1);
-            $videos = $video->getCachedVideosLicensedPaginated($this->videos_per_page, $page);
+            $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
+                ->orderBy('id', 'DESC')
+                ->paginate($this->videos_per_page);
 
             $data = [
                 'videos' => $videos,
@@ -232,12 +235,6 @@ class VideoController extends Controller
         return view('frontend.master');
     }
 
-    public function getVideoForVideoDialog($alpha_id){
-        $video = Video::where('state', 'licensed')
-            ->where('alpha_id', $alpha_id)
-            ->orderBy('id', 'DESC')->paginate();
-    }
-
     /**
      * @param Request $request
      * @param string $id
@@ -245,49 +242,81 @@ class VideoController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $video = Video::where('state', 'licensed')
-            ->with('tags')
-            ->orderBy('licensed_at', 'DESC')
-            ->where('alpha_id', $id)
-            ->first();
-
         $isJson = $request->ajax() || $request->isJson();
-
-        //Make sure video is active
-        if (($video) && ((!Auth::guest() && Auth::user()->role == 'admin') || $video->state == 'licensed')) {
-            $favorited = false;
-            $downloaded = false;
+        if ($isJson) {
+            $video = Video::select($this->getVideoFieldsForFrontend())
+                ->where('state', 'licensed')
+                ->with('tags')
+                ->orderBy('licensed_at', 'DESC')
+                ->where('alpha_id', $id)
+                ->first();
             $iFrame = $this->getVideoHtml($video, true);
-
             $view_increment = $this->handleViewCount($id);
-
             $data = [
                 'video' => $video,
                 'iframe' => $iFrame,
                 'view_increment' => $view_increment,
-                'favorited' => $favorited,
-                'downloaded' => $downloaded,
-                'video_categories' => VideoCategory::all(),
-                'theme_settings' => config('settings.theme'),
-                'pages' => Page::where('active', '=', 1)->get(),
             ];
 
-            if ($isJson) {
-                return $this->successResponse($data);
-            }
-
-            return view('frontend.master', $data);
+            return $this->successResponse($data);
         }
-
-        if ($isJson) {
-            return $this->errorResponse('Sorry, this video is no longer active');
-        }
-
-        return Redirect::to('videos')->with([
-            'note' => 'Sorry, this video is no longer active.',
-            'note_type' => 'error'
-        ]);
+        return view('frontend.master');
     }
+
+    /**
+     * @param Request $request
+     * @param string $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * Letter we will remove this code it is for frontend not client video show method
+     */
+//    public function show(Request $request, string $id)
+//    {
+//        $video = Video::where('state', 'licensed')
+//            ->with('tags')
+//            ->orderBy('licensed_at', 'DESC')
+//            ->where('alpha_id', $id)
+//            ->first();
+//        $isJson = $request->ajax() || $request->isJson();
+//
+//        //Make sure video is active
+//        if ((Auth::check()) && (($video) && ((Auth::user()->role == 'admin' || Auth::user()->role == 'client') || $video->state == 'licensed'))) {
+//            $favorited = false;
+//            $downloaded = false;
+//            $iFrame = $this->getVideoHtml($video, true);
+//            $ordered = Order::where('video_id', $video->id)
+//                ->where('client_id', Auth::user()->client_id)
+//                ->first();
+//
+//            $view_increment = $this->handleViewCount($id);
+//
+//            $data = [
+//                'video' => $video,
+//                'iframe' => $iFrame,
+//                'ordered' => $ordered ? true : false,
+//                'view_increment' => $view_increment,
+//                'favorited' => $favorited,
+//                'downloaded' => $downloaded,
+//                'video_categories' => VideoCategory::all(),
+//                'theme_settings' => config('settings.theme'),
+//                'pages' => Page::where('active', '=', 1)->get(),
+//            ];
+//
+//            if ($isJson) {
+//                return $this->successResponse($data);
+//            }
+//
+//            return view('frontend.master', $data);
+//        }
+//
+//        if ($isJson) {
+//            return $this->errorResponse('Sorry, this video is no longer active');
+//        }
+//
+//        return Redirect::to('videos')->with([
+//            'note' => 'Sorry, this video is no longer active.',
+//            'note_type' => 'error'
+//        ]);
+//    }
 
     /**
      * @param Request $request
@@ -301,9 +330,11 @@ class VideoController extends Controller
                 return redirect()->to('video_index');
             }
 
-            $videos = Video::where('state', 'licensed')->whereHas('tags', function ($query) use ($tagName) {
-                $query->where('name', '=', $tagName);
-            })
+            $videos = Video::select($this->getVideoFieldsForFrontend())
+                ->where('state', 'licensed')
+                ->whereHas('tags', function ($query) use ($tagName) {
+                    $query->where('name', '=', $tagName);
+                })
                 ->paginate($this->videos_per_page);
 
             return $this->successResponse(['videos' => $videos]);
@@ -328,7 +359,8 @@ class VideoController extends Controller
         if (!empty($parent_cat->id)) {
             $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
             if (!empty($parent_cat2->id)) {
-                $videos = Video::where('state', 'licensed')
+                $videos = Video::select($this->getVideoFieldsForFrontend())
+                    ->where('state', 'licensed')
                     ->where('video_category_id', '=', $cat->id)
                     ->orWhere('video_category_id', '=', $parent_cat->id)
                     ->orWhere('video_category_id', '=', $parent_cat2->id)
@@ -392,45 +424,4 @@ class VideoController extends Controller
 
         return false;
     }
-
-    /**
-     * TODO: where are we using this?
-     *
-     * @codeCoverageIgnore
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function dailiesIndex()
-    {
-        if (\Auth::guest()) {
-            return \Redirect::to('videos');
-        }
-
-        $page = Input::get('page', 1);
-        $user = \Auth::user();
-        $client = $user->client();
-
-        if (!$client) {
-            return \Redirect::to('videos');
-        }
-
-        $video = new Video();
-        $videos = $video->clientVideos($client);
-
-        // TODO: ADD Client name to the title
-        $data = [
-            'day_sort' => true,
-            'videos' => $videos,
-            'page_title' => ucfirst(\Auth::user()->username) . '\'s Daily Videos',
-            'current_page' => $page,
-            'page_description' => 'Page ' . $page,
-            'menu' => Menu::orderBy('order', 'ASC')->get(),
-            'pagination_url' => '/favorites',
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'pages' => Page::where('active', '=', 1)->get(),
-        ];
-
-        return view('Theme::video-list', $data);
-    }
-
 }

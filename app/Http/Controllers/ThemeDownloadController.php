@@ -6,6 +6,8 @@ use Auth;
 use Redirect;
 use App\Download;
 use App\Video;
+use App\Contract;
+use PDF;
 
 class ThemeDownloadController extends Controller
 {

@@ -21,7 +21,7 @@
               		</div>
 
               		<div v-if="contactNotFound">
-              			<p>Sorry, we cannot find the email associated with your account. Please contact <u>submissions@unilad.co.uk</u></p>
+              			<p>Sorry, we cannot find the email associated with your account. Please contact <u>licensing@unilad.co.uk</u></p>
               		</div>
 	              </v-card-text>
 	            </v-card>
