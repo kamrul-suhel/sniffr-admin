@@ -90,7 +90,7 @@ class AdminStoryController extends Controller
 
             if(!$story_find) {
                 QueueStory::dispatch($story_wp, 'new', (Auth::user() ? Auth::user()->id : 0))
-                    ->delay(now()->addSeconds(5));
+                    ->delay(now()->addSeconds(2));
                 $dispatched = true;
             } else {
                 $storyTime = Carbon::parse($story_find->date_ingested);
@@ -100,7 +100,7 @@ class AdminStoryController extends Controller
                 // if wp post is updated 5mins after our own story record
                 if($differenceTime>150) {
                     QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
-                        ->delay(now()->addSeconds(5));
+                        ->delay(now()->addSeconds(2));
                     $dispatched = true;
                 }
             }
