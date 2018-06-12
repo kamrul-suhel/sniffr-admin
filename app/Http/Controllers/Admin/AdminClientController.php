@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Jobs\QueueEmail;
+use App\Jobs\QueueEmailCompany;
+use App\Libraries\VideoHelper;
+use App\Mail\NewCompany;
 use App\Order;
+use App\User;
 use Auth;
 use Validator;
 use Redirect;
@@ -10,7 +15,6 @@ use App\Client;
 use App\Users;
 use App\Story;
 use App\Download;
-use App\Asset;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -21,7 +25,7 @@ class AdminClientController extends Controller
     use Slug;
 
     protected $rules = [
-        'name' => 'required'
+        'company_name' => 'required'
     ];
 
     public function __construct(Request $request)
@@ -49,18 +53,17 @@ class AdminClientController extends Controller
      */
     public function create()
     {
-        $data = [
-            'post_route' => url('admin/clients/store'),
-            'button_text' => 'Add New Client',
-        ];
-
-        return view('admin.clients.create_edit', $data);
+        return view('admin.clients.create_edit', [
+            'client' => null,
+            'user' => null,
+        ]);
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store()
+    public function store(Request $request)
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
 
@@ -69,12 +72,32 @@ class AdminClientController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        $data['slug'] = $this->slugify($data['name']);
+        $company_id = Client::insertGetId([
+            'name' => $request->get('company_name'),
+            'slug' => $this->slugify($request->get('company_name')),
+        ]);
 
-        Client::create($data);
+        $password = VideoHelper::quickRandom();
+
+        $user_id = User::insertGetId([
+            'username' => $this->slugify($request->get('company_name')),
+            'email' => $request->get('user_email'),
+            'first_name' => $request->get('user_first_name'),
+            'last_name' => $request->get('user_last_name'),
+            'password' => \Hash::make($password),
+            'client_id' => $company_id
+        ]);
+
+        $client = Client::find($company_id);
+        $client->account_owner_id = $user_id;
+        $client->save();
+
+        if ($request->get('send_invitation')) {
+            QueueEmailCompany::dispatch($company_id, $request->get('user_email'));
+        }
 
         return Redirect::to('admin/clients')->with([
-            'note' => 'New Client Successfully Added!',
+            'note' => 'New Company Successfully Added!',
             'note_type' => 'success'
         ]);
     }
@@ -88,11 +111,7 @@ class AdminClientController extends Controller
         $client = Client::find($id);
 
         $data = [
-            'headline' => '<i class="fa fa-edit"></i> Edit Client',
-            'client' => $client,
-            'post_route' => url('admin/clients/update'),
-            'button_text' => 'Update Client',
-            'user' => Auth::user()
+            'client' => $client
         ];
 
         return view('admin.clients.create_edit', $data);

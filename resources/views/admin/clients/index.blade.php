@@ -1,11 +1,17 @@
 @extends('admin.master')
 
 @section('content')
-
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
-				<h3><i class="fa fa-users"></i> Clients <a href="{{ url('admin/clients/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
+				<h3>
+                    <i class="fa fa-users"></i>
+                    Clients
+                    <a href="{{ url('admin/clients/create') }}" class="btn btn-success pull-right">
+                        <i class="fa fa-plus-circle"></i>
+                        Add New
+                    </a>
+                </h3>
 			</div>
 		</div>
 	</div>

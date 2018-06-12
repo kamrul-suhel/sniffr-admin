@@ -2,83 +2,156 @@
 
 @section('content')
     <div id="admin-container">
-
         <ol class="breadcrumb">
-            <li><a href="/admin/clients"><i class="fa fa-newspaper-o"></i>All Clients</a></li>
-            <li class="active">@if(!empty($client->id)) <strong>{{ $client->name }}</strong> @else <strong>New
-                    Client</strong> @endif</li>
+            <li>
+                <a href="/admin/clients">
+                    <i class="fa fa-newspaper-o"></i>
+                    All Clients
+                </a>
+            </li>
+            <li class="active">
+                <strong>
+                    {{ ($client) ? $client->name : 'New Client' }}
+                </strong>
+            </li>
         </ol>
 
         <div class="admin-section-title">
-            @if(!empty($client->id))
-                <h3>{{ $client->name }}</h3>
-            @else
-                <h3><i class="fa fa-plus"></i> Add New Client</h3>
-            @endif
+            <h3>
+                {!! ($client) ? $client->name : '<i class="fa fa-plus"></i> Add New Client' !!}
+            </h3>
         </div>
         <div class="clear"></div>
 
-        <form method="POST" action="{{ $post_route }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+        <form method="POST" action="{{
+        ($client) ? route('clients.update', ['id' => $client->id]) : route('clients.store')
+        }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
             <div class="row">
 
-                <div class="@if(!empty($client->created_at)) col-sm-6 @else col-sm-8 @endif">
+                <div class="{{ ($client) ? 'col-sm-6' : 'col-sm-8' }}">
 
-                    <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <div class="panel-title">Client Name</div>
-                            <div class="panel-options">
-                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                            </div>
+                            <div class="panel-title">Basic Details</div>
                         </div>
-                        <div class="panel-body" style="display: block;">
-                            <?php if($errors->first('name')): ?>
+
+                        <div class="panel-body">
+                            @if($errors->first('company_name'))
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <strong>Oh snap!</strong>
-                                <?= $errors->first('name'); ?>
+                                <strong>Error:</strong>
+                                {{ $errors->first('company_name') }}
                             </div>
-                            <?php endif; ?>
+                            @endif
 
-                            <p>Add the client name in the textbox below:</p>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Client Name"
-                                   value="@if(!empty($client->name)){{ $client->name }}@endif"/>
+                            <div class="input-group">
+                                <label for="company_name" class="input-group-addon">Company Name</label>
+                                <input type="text" class="form-control" name="company_name" id="company_name" value="{{
+                                ($client) ? $client->company_name : ''
+                                }}"/>
+                            </div>
                         </div>
+
+                        <div class="panel-body">
+                            @if($errors->first('user_first_name'))
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <strong>Error:</strong>
+                                {{ $errors->first('user_first_name') }}
+                            </div>
+                            @endif
+
+                            <div class="input-group">
+                                <label for="user_first_name" class="input-group-addon">Account Owner First Name</label>
+                                <input type="text" class="form-control" name="user_first_name" id="user_first_name" value="{{
+                                ($user) ? $client->user_first_name : ''
+                                }}"/>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            @if($errors->first('user_last_name'))
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <strong>Error:</strong>
+                                {{ $errors->first('user_last_name') }}
+                            </div>
+                            @endif
+
+                            <div class="input-group">
+                                <label for="user_last_name" class="input-group-addon">Account Owner Last Name</label>
+                                <input type="text" class="form-control" name="user_last_name" id="user_last_name" value="{{
+                                ($user) ? $user->user_last_name : ''
+                                }}"/>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            @if($errors->first('user_email'))
+                                <div class="alert alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <strong>Error:</strong>
+                                    {{ $user->first('user_email') }}
+                                </div>
+                            @endif
+
+                            <div class="input-group">
+                                <label for="user_email" class="input-group-addon">Account Owner Email</label>
+                                <input type="email" class="form-control" name="user_email" id="user_email" value="{{
+                                ($user) ? $user->user_email : ''
+                                }}"/>
+                            </div>
+                        </div>
+                        @if(!$client)
+                            <div class="panel-body">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="send_invitation" id="send_invitation">
+                                    Send Email Invitation
+                                </label>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
-                @if(!empty($client->created_at))
+                @if($client)
                     <div class="col-sm-3">
                         <div class="panel panel-primary" data-collapsed="0">
                             <div class="panel-heading">
                                 <div class="panel-title">Created Date</div>
-                                <div class="panel-options"><a href="#" data-rel="collapse"><i
-                                                class="fa fa-angle-down"></i></a></div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </div>
                             </div>
                             <div class="panel-body" style="display: block;">
                                 <p>Select Date/Time Below</p>
-                                <input type="text" class="form-control" name="created_at" id="created_at" placeholder=""
-                                       value="@if(!empty($client->created_at)){{ $client->created_at }}@endif"/>
+                                <input type="text" class="form-control" name="created_at" id="created_at" value="{{
+                                ($client) ? $client->created_at : ''
+                                }}"/>
                             </div>
                         </div>
                     </div>
                 @endif
             </div>
 
-            @if(isset($client->id))
+            @if($client)
                 <input type="hidden" id="id" name="id" value="{{ $client->id }}"/>
             @endif
 
-            <input type="hidden" name="_token" value="<?= csrf_token() ?>"/>
-            <input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right"/>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+            <input type="submit" value="{{ ($client) ? 'Edit Client' : 'Create Client' }}" class="btn btn-success pull-right"/>
         </form>
 
-        {!! Form::open(['method' => 'DELETE', 'route' => ['clients.destroy', $client->id], 'id' => 'form-delete-clients-' . $client->id]) !!}
-        <a href="" class="btn btn-danger delete" data-form="clients-{{ $client->id }} ">
-            <i class="fa fa-trash-o"></i>
-            Delete
-        </a>
-        {!! Form::close() !!}
+        @if($client)
+            {!! Form::open(['method' => 'DELETE', 'route' => ['clients.destroy', $client->id], 'id' => 'form-delete-clients-' . $client->id]) !!}
+            <button class="btn btn-danger delete" data-form="clients-{{ $client->id }} ">
+                <i class="fa fa-trash-o"></i>
+                Delete
+            </button>
+            {!! Form::close() !!}
+        @endif
 
         <div class="clear"></div>
     </div>
