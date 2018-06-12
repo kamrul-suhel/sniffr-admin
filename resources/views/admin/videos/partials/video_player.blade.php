@@ -5,12 +5,7 @@
                 {{ ucfirst($video->state) }}
                 @if($video->state=='licensed')
                     |
-                    @if($video->rights === 'nonex')
-                        <i class="fa fa-times-circle" title="Non-Exclusive"></i>
-                        Non-Exclusive
-                    @else
-                        <i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
-                    @endif
+                    <i class="fa fa-{{ $video->rights == 'nonexc' ? 'times' : 'check' }}-circle"></i> {{ $video->rights == 'nonexc' ? 'Non-' : '' }}Ex{{ $video->rights != 'ex' ? ' Chaser' : '' }}
                     Video
                 @endif
                 @if($video->trashed())

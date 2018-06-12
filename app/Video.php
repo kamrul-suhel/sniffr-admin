@@ -119,6 +119,11 @@ class Video extends Model
         return $this->hasOne('\App\Contract')->latest();
     }
 
+	public function hasContract()
+	{
+		return $this->hasOne('\App\Contract')->latest()->count() ? true : false;
+	}
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */

@@ -56,10 +56,12 @@
 				<div class="col-md-2">
 					<div class="form-group">
 						<select id="rights" name="rights" class="selectpicker form-control">
-							<option value="">Rights</option>
-							<option value="exc"{{ (app('request')->get('rights') == 'exc') ? ' selected="selected"' : '' }}>Exclusive Chaser</option>
-							<option value="ex"{{ (app('request')->get('rights') == 'ex') ? ' selected="selected"' : '' }}>Exclusive Submission</option>
-							<option value="nonex"{{ (app('request')->get('rights') == 'nonex') ? ' selected="selected"' : '' }}>Non Exclusive</option>
+							<option value="">License</option>
+							<option value="ex"{{ (app('request')->get('rights') == 'ex') ? ' selected="selected"' : '' }}>Ex Submission</option>
+							<option value="exc"{{ (app('request')->get('rights') == 'exc') ? ' selected="selected"' : '' }}>Ex Chaser</option>
+							<option value="excc"{{ (app('request')->get('rights') == 'excc') ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>
+							<option value="nonex"{{ (app('request')->get('rights') == 'nonex') ? ' selected="selected"' : '' }}>Non Ex</option>
+							<option value="nonexc"{{ (app('request')->get('rights') == 'nonexc') ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
 						</select>
 					</div>
 				</div>
@@ -143,10 +145,10 @@
 						<footer>
 							<div class="album-images-count">
 								@if(!$video->trashed())
-									@if($video->state == 'new' && $video->rights == 'ex')
+									@if($video->state == 'new' && ($video->rights == 'ex' || $video->rights == 'nonex'))
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i></a>
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
-									@elseif($video->state == 'pending' && $video->rights == 'ex')
+									@elseif($video->state == 'pending' && ($video->rights == 'ex' || $video->rights == 'nonex'))
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-success js-state licensed" title="License Video"><i class="fa fa-check"></i></a>
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
 										<a href="#" data-id="{{ $video->alpha_id }}" class="text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
@@ -174,7 +176,7 @@
 									@endif
 
 									@if($video->state != 'new' && $video->state != 'accepted')
-										| <i class="fa fa-{{ $video->rights == 'nonex' ? 'times' : 'check' }}-circle" title="{{ $video->rights == 'nonex' ? 'Non-' : '' }}-Ex{{ $video->rights == 'exc' ? ' Chaser' : '' }}"></i> {{ $video->rights == 'nonex' ? 'Non-' : '' }}Ex{{ $video->rights == 'exc' ? ' Chaser' : '' }}
+										| <i class="fa fa-{{ $video->rights == 'nonexc' ? 'times' : 'check' }}-circle"></i> {{ $video->rights == 'nonexc' ? 'Non-' : '' }}Ex{{ $video->rights != 'ex' ? ' Chaser' : '' }}
 									@endif
 								@endif
 							</div>
@@ -187,11 +189,11 @@
 								@else
 									@if($video->file_watermark)
 									<a href="{{ url('/download/'.$video->alpha_id) }}" title="Download Video" class="js-download">
-										<i class="fa fa-download"></i>
+										<i class="fa fa-cloud-download"></i>
 									</a>
 									@elseif($video->file)
 									<a href="{{ url('/download/'.$video->alpha_id.'/regular') }}" title="Download Video" download>
-										<i class="fa fa-download"></i>
+										<i class="fa fa-cloud-download"></i>
 									</a>
 									@endif
 									@if($video->state == 'problem' || $video->state == 'rejected')
@@ -200,13 +202,13 @@
 									</a>
 									@endif
 									@if($video->state != 'new')
-										@if($video->rights == 'ex')
+										@if($video->rights == 'ex' || $video->rights == 'nonex')
 										<a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" title="Download License">
-											<i class="fa fa-print"></i>
+											<i class="fa fa-arrow-circle-o-down"></i>
 										</a>
-										@elseif($video->rights == 'exc' && $video->currentContract)
+										@elseif($video->hasContract())
 										<a href="{{ route('contract.download', ['id' => $video->currentContract->reference_id]) }}" title="Download Contract">
-											<i class="fa fa-print"></i>
+											<i class="fa fa-arrow-circle-down"></i>
 										</a>
 										@endif
 									@endif

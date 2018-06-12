@@ -36,6 +36,13 @@ label{
     font-weight: 400;
 }
 
-.inner.open{
-  margin-top: 40px;
+#selectpicker-creator{
+  .inner.open{
+    margin-top: 40px;
+  }
+}
+
+.input-group .form-control {
+  position: relative;
+  z-index: inherit !important;
 }
