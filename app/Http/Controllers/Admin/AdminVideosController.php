@@ -350,7 +350,7 @@ class AdminVideosController extends Controller
             $video->image = $imageUrl;
         }
 
-        if ($request->has('new_social_link')) {
+        if ($request->get('new_social_link')) {
             $videoStats = new VideoStats();
             $validate = $videoStats->validateUrl(request()->get('new_social_link'));
 
