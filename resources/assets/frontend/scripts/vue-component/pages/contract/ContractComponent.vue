@@ -2,7 +2,7 @@
     <v-container fluid fill-height class="section-space">
         <v-layout align-center justify-center v-if="display_thank_you">
             <div v-if="signed">
-                Thank you my friend!
+                Thank you!
             </div>
             <v-form ref="contract_accept_form" @submit.prevent="onContractAcceptSubmit()" v-else>
                 <v-card width="800">
