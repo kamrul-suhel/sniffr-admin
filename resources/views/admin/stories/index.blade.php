@@ -12,28 +12,7 @@
                     <li><a href="/admin/stories"><i class="fa fa-tasks"></i> All Stories</a></li>
                 </ol>
 
-                <v-container grid-list-lg fluid >
-                    <v-layout row wrap>
-                        <v-flex xs-6>
-                            <h3>
-                                <i class="fa fa-users"></i> Mail
-                            <!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
-                                <i class="fa fa-plus-circle"></i> Add New Story
-                            </a> -->
-                            </h3>
-                        </v-flex>
 
-                        <v-flex xs6 class="text-xs-right">
-                            <v-btn dark raised tag="a" to="admin/stories/refresh" >
-                                <v-icon>refresh</v-icon> Refresh Stories
-                            </v-btn>
-
-                            <v-btn dark raised>
-                                <v-icon>add</v-icon>Create Mailer
-                            </v-btn>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
 
                 <router-view></router-view>
 

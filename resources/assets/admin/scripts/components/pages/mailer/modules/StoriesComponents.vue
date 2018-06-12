@@ -53,7 +53,7 @@
         data() {
             return {
                 page: 1,
-                stories: {},
+                stories: '',
                 totalPage: 0,
             }
         },
