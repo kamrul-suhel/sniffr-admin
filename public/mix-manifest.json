@@ -1,10 +1,17 @@
 {
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/admin/css/styles.css": "/assets/admin/css/styles.css",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
-    "/assets/js/utils.js": "/assets/js/utils.js"
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=73544ed9a57e330330e8",
+    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=442838a1eaa59afc05c7",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=36e605face22f05a5978",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=74a0071733ccdc1b942f",
+    "/assets/js/app.js": "/assets/js/app.js?id=0c7069fafde8c31e38d8",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=e7b9945f9ed784ee3100",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=525fef64a554229f615b",
+    "/assets/admin/css/styles.css": "/assets/admin/css/styles.css?id=4a4271f4fad9e8b158f7",
+    "/assets/js/app.js.map": "/assets/js/app.js.map?id=ba31f42e313f46dcdf2b",
+    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=5c9ca00813bfb8e748f9",
+    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=64a37d70c0f6c190d3db",
+    "/assets/admin/css/styles.css.map": "/assets/admin/css/styles.css.map?id=c9527b3c9f7a524b2c29",
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=a8909769c7be9aa5d3ce",
+    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=56b226a3c4c3e8378493",
+    "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
 }
