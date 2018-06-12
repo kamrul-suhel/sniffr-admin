@@ -123,11 +123,18 @@ class AdminStoryController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getMailerVideos(Request $request){
+
+
         if($request->ajax()){
-            $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])
+            $videos = Video::with('createdUser')
+                ->where([['state', 'licensed'], ['file', '!=', NULL]])
                 ->orderBy('licensed_at', 'DESC')
-                ->paginate(2);
+                ->paginate(6);
             $data = [
                 'videos' => $videos
             ];

@@ -1,24 +1,8 @@
-.admin-mailer-section{
-  table{
-
-    tr{
-      &.table-header{
-        margin-top:20px;
-      }
-
-      display:block;
-      width:100%;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 20px;
-
-      th{
-        display:inline-block;
-      }
-
-      td{
-        display:inline-block;
-      }
-    }
+.admin-mailer-section {
+  .divider {
+    margin: 0;
+  }
+  .divider.header {
+    margin-bottom: 20px;
   }
 }

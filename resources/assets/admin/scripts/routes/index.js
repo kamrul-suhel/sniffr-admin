@@ -1,10 +1,9 @@
 import MailerComponent from '../components/pages/mailer/MailerComponent';
+
 export const routes = [
     {
-        path: 'admin/stories',
+        path:'/admin/stories',
         name: 'admin.stories',
-        components: {
-            MailerComponent
-        }
+        component: MailerComponent,
     }
 ];

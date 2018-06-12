@@ -1,24 +1,44 @@
 <template>
     <div class="mailer-stories">
-        <table class="table">
-            <tr class="table-header">
-                <th style="width:30%;">Thumbnail</th>
-                <th style="width:39%;">Title / Excerpt</th>
-                <th style="width:10%;">Author</th>
-                <th style="width:10%;">Updated At</th>
-                <th style="width:10%;">Actions</th>
-            </tr>
-            <story-loop-component v-for="(story, index)  in stories.data" :key="story.id" :index="index"
-                                  :story="story"></story-loop-component>
+        <v-layout row wrap>
+            <v-flex xs3>
+                <strong>Thumbnail</strong>
+            </v-flex>
 
-        </table>
+            <v-flex xs4>
+                <strong>Title / Excerpt</strong>
+            </v-flex>
+
+            <v-flex xs2>
+                <strong>Author</strong>
+            </v-flex>
+
+            <v-flex xs2>
+                <strong>Updated At</strong>
+            </v-flex>
+
+            <v-flex xs1>
+                <strong>Actions</strong>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap>
+            <v-divider class="header"></v-divider>
+        </v-layout>
+
+        <story-loop-component
+                v-for="(story, index)  in stories.data"
+                :key="story.id"
+                :index="index"
+                :story="story"></story-loop-component>
 
         <div class="text-xs-center">
             <v-pagination
                     :length="totalPage"
                     v-model="page"
                     :total-visible="7"
-                    dark color="black"></v-pagination>
+                    dark color="black">
+            </v-pagination>
         </div>
     </div>
 </template>

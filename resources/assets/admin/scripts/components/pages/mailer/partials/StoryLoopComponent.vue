@@ -1,24 +1,36 @@
 <template>
-    <tr >
-        <td style="width:30%;">
+    <v-layout row wrap>
+        <v-flex xs3>
             <v-card flat>
                 <v-card-media height="200px" :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
             </v-card>
-        </td>
-        <td style="width:39%;">
+        </v-flex>
+
+        <v-flex xs4>
             <strong>{{ story.title }}</strong>
             <p><br/>{{ story.excerpt | readmore(300, '...') }}</p>
-        </td>
-        <td style="width:10%;">
-            {{ story.user_id ? story.user_id : 'N/A' }}
-        </td>
-        <td style="width:10%;">
-            {{ story.created_at }}
-        </td>
-        <td style="width:10%;">
-            <input type="checkbox" v-model="selected">
-        </td>
-    </tr>
+        </v-flex>
+
+        <v-flex xs2>
+            {{ story.author }}
+        </v-flex>
+
+        <v-flex xs2>
+            {{ story.created_at | convertDate }}
+        </v-flex>
+
+        <v-flex xs1>
+            <!--<input type="checkbox" v-model="selected">-->
+            <v-switch
+                    color="black"
+                    v-model="selected"
+            ></v-switch>
+        </v-flex>
+
+        <v-flex xs12>
+            <v-divider></v-divider>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

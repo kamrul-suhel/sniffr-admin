@@ -1,34 +1,35 @@
 <template>
     <div class="admin-mailer-section">
+        <v-container fluid grid-list-lg>
+            <v-tabs
+                    v-model="active"
+                    color="dark"
+                    dark
+                    slider-color="yellow"
+            >
+                <v-tab>
+                    Stories
+                </v-tab>
+                <v-tab-item>
+                    <v-card>
+                        <v-card-text>
+                            <mailer-stories-component></mailer-stories-component>
+                        </v-card-text>
+                    </v-card>
+                </v-tab-item>
 
-        <v-tabs
-                v-model="active"
-                color="dark"
-                dark
-                slider-color="yellow"
-        >
-            <v-tab>
-                Stories
-            </v-tab>
-            <v-tab-item>
-                <v-card>
-                    <v-card-text>
-                        <mailer-stories-component></mailer-stories-component>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-
-            <v-tab>
-                Videos
-            </v-tab>
-            <v-tab-item>
-                <v-card>
-                    <v-card-text>
-                        <mailer-videos-component></mailer-videos-component>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-        </v-tabs>
+                <v-tab>
+                    Videos
+                </v-tab>
+                <v-tab-item>
+                    <v-card>
+                        <v-card-text>
+                            <mailer-videos-component></mailer-videos-component>
+                        </v-card-text>
+                    </v-card>
+                </v-tab-item>
+            </v-tabs>
+        </v-container>
 
     </div>
 </template>
@@ -49,6 +50,7 @@
         },
 
         created() {
+            console.log('asldkf');
         },
 
         methods: {

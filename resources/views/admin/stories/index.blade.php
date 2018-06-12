@@ -8,32 +8,35 @@
     <div id="admin-mailer">
         <v-app>
             <v-content>
-
                 <ol class="breadcrumb">
                     <li><a href="/admin/stories"><i class="fa fa-tasks"></i> All Stories</a></li>
                 </ol>
 
-                <div class="admin-section-title bottom-padding">
-                    <div class="row">
-                        <div class="col-xs-12">
+                <v-container grid-list-lg fluid >
+                    <v-layout row wrap>
+                        <v-flex xs-6>
                             <h3>
-                                <i class="fa fa-users"></i> Stories
-                                <a href="#" class="btn btn-primary pull-right js-create-mailer">
-                                    <i class="fa fa-plus-circle"></i> Create Mailer
-                                </a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right"
-                                        style="margin-right:10px;">
-                                    <i class="fa fa-refresh"></i> Refresh Stories
-                                </a>
+                                <i class="fa fa-users"></i> Mail
                             <!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
                                 <i class="fa fa-plus-circle"></i> Add New Story
                             </a> -->
                             </h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
+                        </v-flex>
 
-                <mailer-component></mailer-component>
+                        <v-flex xs6 class="text-xs-right">
+                            <v-btn dark raised tag="a" to="admin/stories/refresh" >
+                                <v-icon>refresh</v-icon> Refresh Stories
+                            </v-btn>
+
+                            <v-btn dark raised>
+                                <v-icon>add</v-icon>Create Mailer
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+
+                <router-view></router-view>
+
             </v-content>
         </v-app>
     </div>
@@ -44,13 +47,6 @@
     <script>
         $ = jQuery;
         $(document).ready(function () {
-            $('.js-delete').click(function (e) {
-                e.preventDefault();
-                if (confirm("Are you sure you want to delete this story?")) {
-                    window.location = $(this).attr('href');
-                }
-                return false;
-            });
 
             $('.js-create-mailer').click(function (e) {
                 e.preventDefault();

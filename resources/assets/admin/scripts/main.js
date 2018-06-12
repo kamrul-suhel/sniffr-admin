@@ -53,9 +53,9 @@ require('../../frontend/scripts/filters/filters');
  * Plugins & root Vue init
  ********************************************************
  */
-import {routes} from './routes';
 import {store} from './store/index';
 
+import {routes} from './routes';
 const router = new Vuerouter({
     mode: 'history',
     routes
@@ -66,9 +66,6 @@ new Vue({
     el:'#admin-mailer',
     store,
     router,
-    components: {
-      mailerComponent: MailerStoriesComponent
-    },
 
     data(){
         return {
@@ -76,7 +73,6 @@ new Vue({
     },
 
     created(){
-
     },
 
     methods: {

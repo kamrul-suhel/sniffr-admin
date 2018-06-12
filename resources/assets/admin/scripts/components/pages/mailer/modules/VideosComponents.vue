@@ -1,16 +1,37 @@
 <template>
     <div class="mailer-videos">
-        <table class="table">
-            <tr class="table-header">
-                <th style="width:30%;">Thumbnail</th>
-                <th style="width:39%;">Title / Excerpt</th>
-                <th style="width:10%;">Author</th>
-                <th style="width:10%;">Updated At</th>
-                <th style="width:10%;">Actions</th>
-            </tr>
-            <video-loop-component v-for="(video, index)  in videos.data" :key="video.id" :index="index" :video="video">
-            </video-loop-component>
-        </table>
+        <v-layout row wrap>
+            <v-flex xs3>
+                <strong>Thumbnail</strong>
+            </v-flex>
+
+            <v-flex xs4>
+                <strong>Title / Excerpt</strong>
+            </v-flex>
+
+            <v-flex xs2>
+                <strong>Author</strong>
+            </v-flex>
+
+            <v-flex xs2>
+                <strong>Updated At</strong>
+            </v-flex>
+
+            <v-flex xs1>
+                <strong>Actions</strong>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap>
+            <v-divider class="header"></v-divider>
+        </v-layout>
+
+        <video-loop-component
+                v-for="(video, index)  in videos.data"
+                :key="video.id"
+                :index="index"
+                :video="video">
+        </video-loop-component>
 
         <div class="text-xs-center">
             <v-pagination
