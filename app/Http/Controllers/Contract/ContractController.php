@@ -246,7 +246,7 @@ class ContractController extends Controller
     private function getContractText(Contract $contract, Video $video)
     {
         $contract_text = config('contracts')[$contract->contract_model_id]['text'];
-        $contract_text = $contract->upfront_payment ? str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
+        $contract_text = $contract->signed_at ? str_replace(':contract_date', '<strong>'.$contract->signed_at.'</strong>', $contract_text) : str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
         $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
