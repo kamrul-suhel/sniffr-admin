@@ -157,6 +157,24 @@
 
                 </div>
 
+                <div class="col-sm-6">
+
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">VAT Number</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: block;">
+                            <p>Add VAT Number in the textbox below:</p>
+                            <input type="text" class="form-control" name="vat_number" id="vat_number" placeholder="VAT Number"
+                                   value="@if(!empty($client->vat_number)){{ $client->vat_number }}@endif"/>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
             <div class="row">
@@ -224,18 +242,30 @@
                 <div class="col-sm-6">
 
                     <div class="panel panel-primary" data-collapsed="0">
-                        <div class="panel-heading">
-                            <div class="panel-title">VAT Number</div>
-                            <div class="panel-options">
-                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                            </div>
-                        </div>
-                        <div class="panel-body" style="display: block;">
-                            <p>Add VAT Number in the textbox below:</p>
-                            <input type="text" class="form-control" name="vat_number" id="vat_number" placeholder="VAT Number"
-                                   value="@if(!empty($client->vat_number)){{ $client->vat_number }}@endif"/>
-                        </div>
-                    </div>
+    					<div class="panel-heading">
+    						<div class="panel-title">Billing Contact / Owner</div>
+
+    						<div class="panel-options">
+    							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+    						</div>
+    					</div>
+
+    					<div class="panel-body" style="display: block;">
+    						<p>Select client user</p>
+    						<select id="billing_user_id" name="billing_user_id">
+    							@if(isset($client_users))
+    								<option value="">Please Select</option>
+    								@foreach($client_users as $client_user)
+        								<option value="{{ $client->id }}" {{
+        								($client->billing_user_id==$client_user->user_id) ? 'selected' : ''
+                                        }}>{{ ($client_user->full_name ? $client_user->full_name : $client_user->username) }}</option>
+    								@endforeach
+                                @else
+                                    <option value="">Create some users first</option>
+    							@endif
+    						</select>
+    					</div>
+    				</div>
 
                 </div>
 

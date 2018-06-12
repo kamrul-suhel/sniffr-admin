@@ -7,7 +7,7 @@ use Auth;
 use Validator;
 use Redirect;
 use App\Client;
-use App\Users;
+use App\User;
 use App\Story;
 use App\Download;
 use App\Asset;
@@ -92,7 +92,8 @@ class AdminClientController extends Controller
             'client' => $client,
             'post_route' => url('admin/clients/update'),
             'button_text' => 'Update Client',
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'client_users' => User::where('client_id', $client->id)->get()
         ];
 
         return view('admin.clients.create_edit', $data);
