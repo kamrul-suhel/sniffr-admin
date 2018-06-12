@@ -348,9 +348,14 @@ class AdminVideosController extends Controller
             $video->image = $imageUrl;
         }
 
-        $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
-            : $this->videoService->saveVideoLink($video, $request->get('url'));
+        //handle file upload to S3 and Youtube ingestion
+        if ($request->hasFile('file')) {
+            $this->videoService->saveUploadedVideoFile($video, $request->file('file'));
+        }
+
+        if ($request->get('url')) {
+            $this->videoService->saveVideoLink($video, $request->get('url'));
+        }
 
         $duration = $request->input('duration', null);
         $video->duration = $this->getDuration($video, $duration);
