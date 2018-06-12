@@ -41,16 +41,16 @@ class AdminStoryController extends Controller
         ini_set('max_execution_time', 1800);
 
         $version = VideoHelper::quickRandom(); // set random version for cache busting
-        $posts_pending = $this->apiRequest('posts?version='.$version.'&status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
-        $posts_publish = $this->apiRequest('posts?version='.$version.'&status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_pending = $this->apiRequest('posts?version=' . $version . '&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_publish = $this->apiRequest('posts?version=' . $version . '&status=publish&tags=' . env('UNILAD_WP_TAG_ID'), true);
         $posts = array_merge($posts_pending, $posts_publish);
 
         $stories_wp = [];
         $story_ids = [];
 
-        foreach($posts as $post){
+        foreach ($posts as $post) {
             // create array for curl stories objects
-            $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
+            $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)), 0, 700));
 
             $curpost = [
                 "wp_id" => $post->id,
@@ -68,7 +68,7 @@ class AdminStoryController extends Controller
 
             //get the post categories
             $cat_list = [];
-            foreach($post->categories as $tax_obj){
+            foreach ($post->categories as $tax_obj) {
                 $cat_list[] = $tax_obj;
             }
             $curpost["categories"] = $cat_list;
@@ -88,7 +88,7 @@ class AdminStoryController extends Controller
             // checks if wp post already exists within sniffr stories
             $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
 
-            if(!$story_find) {
+            if (!$story_find) {
                 QueueStory::dispatch($story_wp, 'new', (Auth::user() ? Auth::user()->id : 0))
                     ->delay(now()->addSeconds(2));
                 $dispatched = true;
@@ -98,7 +98,7 @@ class AdminStoryController extends Controller
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 // if wp post is updated 5mins after our own story record
-                if($differenceTime>150) {
+                if ($differenceTime > 150) {
                     QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
                         ->delay(now()->addSeconds(2));
                     $dispatched = true;
@@ -129,20 +129,42 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
-        $stories = new Story;
-        $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
-        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])->orderBy('licensed_at', 'DESC')->paginate(10);
+    public function index(Request $request)
+    {
 
-        $data = [
-            'stories' => $stories,
-            'videos' => $videos,
-        ];
+        if ($request->ajax()) {
+            $stories = Story::orderBy('date_ingested', 'DESC')
+                ->paginate(6);
 
-        /*'users' => User::all(),
-            'user' => Auth::user()*/
+            $data = [
+                'stories' => $stories
+            ];
+            return $this->successResponse($data);
+        }
 
-        return view('admin.stories.index', $data); //return response()->json($formatted_posts);
+        return view('admin.stories.index'); //return response()->json($formatted_posts);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMailerVideos(Request $request)
+    {
+
+
+        if ($request->ajax()) {
+            $videos = Video::with('createdUser')
+                ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                ->orderBy('licensed_at', 'DESC')
+                ->paginate(6);
+            $data = [
+                'videos' => $videos
+            ];
+            return $this->successResponse($data);
+        }
+
     }
 
     /**
@@ -168,8 +190,7 @@ class AdminStoryController extends Controller
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
@@ -183,7 +204,7 @@ class AdminStoryController extends Controller
         $story->active = 1;
         $story->save();
 
-        if(Input::get('videos')) {
+        if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
         }
 
@@ -227,28 +248,27 @@ class AdminStoryController extends Controller
 
         $validator = Validator::make($data, $this->rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        if(Input::get('title')) {
+        if (Input::get('title')) {
             $story->title = Input::get('title');
         }
 
         $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
 
-        if(Input::get('description')) {
+        if (Input::get('description')) {
             $story->description = Input::get('description');
         }
 
-        if(Input::get('notes')) {
+        if (Input::get('notes')) {
             $story->notes = Input::get('notes');
         }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
 
-        if(Input::get('videos')) {
+        if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
         }
 
@@ -268,7 +288,7 @@ class AdminStoryController extends Controller
     {
         $story = Story::find($id);
 
-        if(!$story){
+        if (!$story) {
             abort(404);
         }
 
@@ -304,7 +324,7 @@ class AdminStoryController extends Controller
 
         $sources = $response->playlist[0]->sources;
 
-        $videoUrl = array_filter($sources, function($k) {
+        $videoUrl = array_filter($sources, function ($k) {
             return $k->type == 'video/mp4';
         });
 
