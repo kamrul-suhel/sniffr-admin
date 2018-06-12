@@ -61,6 +61,10 @@
                         <li>
                             <a href="#admin" role="tab" data-toggle="tab">Admin</a>
                         </li>
+
+                        <li>
+                            <a href="#analytics" role="tab" data-toggle="tab">Analytics</a>
+                        </li>
                     @endif
                 </ul>
                 @if($video)
@@ -128,6 +132,12 @@
                                 @include('admin.videos.partials.assign_form')
                             </div>
                             @include('admin.videos.partials.delete_restore')
+                        </div>
+
+                        <div class="tab-pane" id="analytics">
+                            <div class="row">
+                                @include('admin.videos.partials.social_links')
+                            </div>
                         </div>
                     @endif
                 </div>

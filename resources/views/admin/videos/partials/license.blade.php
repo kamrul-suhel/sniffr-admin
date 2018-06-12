@@ -49,7 +49,7 @@
                             Problem
                         </a>
                     @endif
-                @elseif($video->state == 'new')
+                @elseif($video->state == 'new' && $video->rights == 'ex')
                     <a href="{{ url('admin/videos/status/accepted/' . $video->alpha_id ) }}"
                        class="btn btn-primary btn-success js-state-accept">
                         Accept

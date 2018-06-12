@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Validator;
 use Redirect;
 use App\Page;
-use App\Menu;
 use App\VideoCategory;
 
 /**
@@ -151,7 +150,6 @@ class AuthController extends Controller
         $settings =Setting::first();
 		$data = [
 		    'type' => 'forgot_password',
-			'menu' => Menu::orderBy('order', 'ASC')->get(),
 			'payment_settings' => config('settings.payments'),
 			'video_categories' => VideoCategory::all(),
 			'theme_settings' => config('settings.theme'),
