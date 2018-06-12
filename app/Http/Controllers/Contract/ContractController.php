@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Contract;
 
 use App\Contract;
 use App\Http\Requests\Contract\DeleteContractRequest;
-use App\Mail\ContractMailable;
-use App\Mail\ContractSignedThanks;
 use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
 use App\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
+use App\Jobs\QueueVideoYoutubeUpload;
+use App\Jobs\QueueEmail;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -107,7 +107,8 @@ class ContractController extends Controller
         $contract->sent_at = now();
         $contract->save();
 
-        \Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
+		// Send contract signed notification email
+		QueueEmail::dispatch($video->id, 'sign_contract');
 
         return redirect()->route('admin_video_edit', [
             'id' => $video->alpha_id
@@ -128,10 +129,14 @@ class ContractController extends Controller
         $contract = Contract::where('token', '=', $token)->first();
 
         if (!$contract) {
-            abort(404);
+            if($request->ajax() || $request->isJson()){
+                return $this->errorResponse("This contract is no longer available");
+            }
+            return view('frontend.master');
         }
 
-        $video = Video::with('contact')->find($contract->video_id);
+        $video = Video::with('contact')
+            ->find($contract->video_id);
 
         $contract_text = $this->getContractText($contract, $video);
 
@@ -167,7 +172,14 @@ class ContractController extends Controller
         $video->state = 'licensed';
         $video->save();
 
-        \Mail::to($video->contact->email)->send(new ContractSignedThanks($video, $video->currentContract));
+		// Set to process for youtube and analysis
+		if (empty($video->youtube_id) && $video->file) {
+			QueueVideoYoutubeUpload::dispatch($video->id)
+				->delay(now()->addSeconds(5));
+		}
+
+		// Send contract signed notification email
+		QueueEmail::dispatch($video->id, 'contract_signed');
 
         if (env('APP_ENV') != 'local') {
             $video->notify(new ContractSigned($video));
@@ -184,26 +196,21 @@ class ContractController extends Controller
     }
 
     /**
-     * @param string $video_id
+     * @param string $reference_id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function generatePdf(string $video_id)
+    public function generatePdf(string $reference_id)
     {
-        $video = Video::find($video_id);
-
-        if (!$video) {
-            return Redirect::to('admin/videos/')->with([
-                'note' => 'Sorry, we could not find the video',
-                'note_type' => 'error',
-            ]);
-        }
-        $contract = Contract::where('video_id', $video_id)->first();
+        $contract = Contract::where('reference_id', $reference_id)->first();
 
         if (!$contract) {
-            return Redirect::to('admin/videos/')->with([
-                'note' => 'Sorry, we could not find the contract',
-                'note_type' => 'error',
-            ]);
+            abort(404);
+        }
+
+        $video = Video::find($contract->video_id);
+
+        if (!$video) {
+            abort(404);
         }
 
         $contract_text = $this->getContractText($contract, $video);
@@ -226,11 +233,19 @@ class ContractController extends Controller
         $contract_text = str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
-        $contract_text = str_replace(':story_title', '<strong>'.$video->title.'</strong>', $contract_text);
-        $contract_text = str_replace(':story_link', '<strong>'.$video->url.'</strong>', $contract_text);
+        $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
+        $contract_text = $video->url ? str_replace(':story_link', 'URL: <strong>'.$video->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
+        $contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
+        $contract_text = $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the video on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
+        $contract_text = str_replace(':video_ref', '<strong>'.$video->alpha_id.'</strong>', $contract_text);
         $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
         $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
+
+        $currencies = config('currencies');
+        if (($contract->upfront_payment_currency_id != 1) && (key_exists($contract->upfront_payment_currency_id, $currencies))) {
+            $contract_text = str_replace('£', $currencies[$contract->upfront_payment_currency_id]['symbol'], $contract_text);
+        }
 
         return $contract_text;
     }

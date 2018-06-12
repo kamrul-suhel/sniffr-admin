@@ -116,7 +116,7 @@
         <div class="col-md-12">
             <div class="input-group pull-right">
                 @if($video->currentContract->signed_at)
-                <a href="{{ route('contract.download', ['id' => $video->id]) }}" class="btn btn-info">
+                <a href="{{ route('contract.download', ['id' => $video->currentContract->reference_id]) }}" class="btn btn-info">
                     Download Contract
                 </a>
                 @else
@@ -147,17 +147,9 @@
         </div>
     </div>
 @elseif($video->contact)
-    @if($video->source)
-        <div class="col-md-4 text-center">
-            <a href="{{ url('/admin/pdfview/' . $video->alpha_id) }}" class="btn btn-primary" title="Download License" download>
-                Download Submission Contract
-            </a>
-        </div>
-    @else
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#contract_modal">
-            Create Contract
-        </button>
-    @endif
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#contract_modal">
+        Create Contract
+    </button>
 @else
     <p>
         We cannot create a contract if the video is not assigned to a creator/contact. Perhaps the contact has unsubscribed.

@@ -7,7 +7,7 @@
                 <button @click="onUploadVideo()" class="btn btn-primary upload-video-button">Upload your video</button>
             </div>
 
-            <div class="second-navigation">
+            <div class="second-navigation hidden-xs-only">
                 <v-container grid-list-lg>
                     <v-layout row wrap>
                         <v-flex xs12 sm6 md4 lg4>
@@ -178,13 +178,13 @@
             var second_nav_height = $('.second-navigation').outerHeight();
             var hide_nav_position = browserheight - second_nav_height;
 
-            $(window).scroll(function(e){
-                if(window.pageYOffset > hide_nav_position){
-                    $('#nav').hide();
-                }else{
-                    $('#nav').show();
-                }
-            });
+            // $(window).scroll(function(e){
+            //     if(window.pageYOffset > hide_nav_position){
+            //         $('#nav').hide();
+            //     }else{
+            //         $('#nav').show();
+            //     }
+            // });
         }
 
     }

@@ -50,13 +50,19 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
+                                                <a @click.prevent.stop="onClientVideos()">
+                                                    <v-icon color="white" left size="20px">video_library</v-icon> Videos
+                                                </a>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
                                                 <router-link :to="{name: 'client_downloaded_stories'}">
                                                     <v-icon color="white" left size="20px">done</v-icon> Downloaded
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
-
-
 
                                         <v-list-tile>
                                             <v-list-tile-title>
@@ -211,6 +217,10 @@
 
             onClientStories(){
                 this.$router.push({name: 'client'});
+            },
+
+            onClientVideos(){
+                this.$router.push({name: 'client_videos'});
             }
         }
     }

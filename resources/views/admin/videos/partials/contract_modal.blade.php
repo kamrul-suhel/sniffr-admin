@@ -56,7 +56,7 @@
                                 <span class="input-group-addon">Success System</span>
                                 <select type="text" class="form-control" id="success_system" name="success_system"
                                         title="success system">
-                                    <option value="">--</option>
+                                    <option value="">None</option>
                                     @foreach(config('success_system') as $k => $success_system_option)
                                         <option value="{{ $k }}" {{ (old('success_system') == $k) ? 'selected="selected"' : '' }}>
                                             {{ $success_system_option }}

@@ -13,6 +13,9 @@ return [
         ],
     ],
     'clients' => [
+		'client_admin' => [
+			'name' => 'Client Admin',
+		],
         'client' => [
             'name' => 'Client',
         ],
