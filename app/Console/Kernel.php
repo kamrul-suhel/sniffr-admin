@@ -37,7 +37,9 @@ class Kernel extends ConsoleKernel
             ->between('8:00', '21:00')
             ->appendOutputTo($filePath);
         
-        $schedule->command('stats:getVideoPosts')->everyTenMinutes();
+        $schedule->command('stats:getVideoPosts')
+            ->everyTenMinutes()
+            ->appendOutputTo($filePath);
     }
 
     /**
