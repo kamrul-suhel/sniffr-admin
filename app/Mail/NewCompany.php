@@ -17,15 +17,16 @@ class NewCompany extends Mailable
     /**
      * @var integer
      */
-    public $company_id;
+    public $email_data;
 
     /**
      * ContractMailable constructor.
-     * @param int $company_id
+     * @param array $email_data
+     * @internal param int $company_id
      */
-    public function __construct(int $company_id)
+    public function __construct(array $email_data)
     {
-        $this->company_id = $company_id;
+        $this->email_data = $email_data;
     }
 
     /**

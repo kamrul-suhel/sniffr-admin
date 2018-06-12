@@ -3,7 +3,7 @@
 @section('content')
     <div>
     <span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;">
-        <b>Hey {{ $user_first_name }}!</b>
+        <b>Hey {{ $email_data['user_first_name'] }}!</b>
     </span>
     </div>
 
@@ -11,7 +11,7 @@
 
     <div>&nbsp;</div>
 
-    <div>We have created your new user as account manager for the company <strong>{{ $company_name }}</strong>.</div>
+    <div>We have created your new user as account manager for the company <strong>{{ $email_data['company_name'] }}</strong>.</div>
 
     <div>&nbsp;</div>
 
@@ -20,8 +20,12 @@
     <div>&nbsp;</div>
 
     <div>
-        username: {{ $username }}
-        password: {{ $password }}
+        username: {{ $email_data['username'] }}
+        <div>&nbsp;</div>
+        password: {{ $email_data['password'] }}
+        <div>&nbsp;</div>
+        URL
+        <div>&nbsp;</div>
         <a href="{{ route('home') }}">{{ route('home') }}</a>
     </div>
 

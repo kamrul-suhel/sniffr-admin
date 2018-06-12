@@ -72,15 +72,17 @@ class AdminClientController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
+        $company_slug = $this->slugify($request->get('company_name'));
+
         $company_id = Client::insertGetId([
             'name' => $request->get('company_name'),
-            'slug' => $this->slugify($request->get('company_name')),
+            'slug' => $company_slug,
         ]);
 
         $password = VideoHelper::quickRandom();
 
         $user_id = User::insertGetId([
-            'username' => $this->slugify($request->get('company_name')),
+            'username' => $company_slug,
             'email' => $request->get('user_email'),
             'first_name' => $request->get('user_first_name'),
             'last_name' => $request->get('user_last_name'),
@@ -93,7 +95,13 @@ class AdminClientController extends Controller
         $client->save();
 
         if ($request->get('send_invitation')) {
-            QueueEmailCompany::dispatch($company_id, $request->get('user_email'));
+            QueueEmailCompany::dispatch(
+                $company_id,
+                $request->get('user_email'),
+                $request->get('user_first_name'),
+                $company_slug,
+                $password
+            );
         }
 
         return Redirect::to('admin/clients')->with([

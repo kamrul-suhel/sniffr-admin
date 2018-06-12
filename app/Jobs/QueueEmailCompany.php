@@ -16,20 +16,36 @@ class QueueEmailCompany implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $company_id, $account_owner_email;
+    protected $company_id;
+    protected $account_owner_email;
+    protected $user_first_name;
+    protected $username;
+    protected $password;
 
     public $tries = 5;
     public $timeout = 120;
 
     /**
      * QueueEmail constructor.
-     * @param $company_id
-     * @param $account_owner_email
+     * @param int $company_id
+     * @param string $account_owner_email
+     * @param string $user_first_name
+     * @param string $username
+     * @param string $password
      */
-    public function __construct($company_id, $account_owner_email)
+    public function __construct(
+        int $company_id,
+        string $account_owner_email,
+        string $user_first_name,
+        string $username,
+        string $password
+    )
     {
         $this->company_id = $company_id;
         $this->account_owner_email = $account_owner_email;
+        $this->user_first_name = $user_first_name;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     /**
@@ -42,7 +58,13 @@ class QueueEmailCompany implements ShouldQueue
         $company = Client::find($this->company_id);
 
         if ($company) {
-            \Mail::to($this->account_owner_email)->send(new NewCompany($this->company_id));
+            \Mail::to($this->account_owner_email)->send(new NewCompany([
+                'company_name' => $company->name,
+                'user_first_name' => $this->user_first_name,
+                'account_owner_email' => $this->account_owner_email,
+                'username' => $this->username,
+                'password' => $this->password
+            ]));
         }
     }
 
