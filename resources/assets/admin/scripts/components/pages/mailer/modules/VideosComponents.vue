@@ -1,23 +1,23 @@
 <template>
     <div class="mailer-videos">
-        <v-layout row wrap class="hidden-xs-only">
-            <v-flex xs12 md3 lg3 xl3>
+        <v-layout row wrap class="hidden-sm-and-down">
+            <v-flex xs12 sm3 md3 lg3 xl3>
                 <strong>Thumbnail</strong>
             </v-flex>
 
-            <v-flex xs12 md3 lg3 xl3>
+            <v-flex xs12 sm3 md3 lg4 xl4>
                 <strong>Title / Excerpt</strong>
             </v-flex>
 
-            <v-flex xs12 md3 lg3 xl3>
+            <v-flex xs6 sm6 md6 lg2 xl2>
                 <strong>Author</strong>
             </v-flex>
 
-            <v-flex xs12 md6 lg2 xl2>
+            <v-flex xs12 sm6 md6 lg2 xl2>
                 <strong>Updated At</strong>
             </v-flex>
 
-            <v-flex xs12 md6 lg1 xl1>
+            <v-flex xs12 sm6 md6 lg1 xl1>
                 <strong>Actions</strong>
             </v-flex>
         </v-layout>
