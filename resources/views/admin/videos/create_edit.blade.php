@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-    <link rel="stylesheet" href="/css/modals.css">
-    <link rel="stylesheet" href="/css/tabs.css">
-@endsection
-
 @section('content')
     <div id="admin-container">
         @include('admin.videos.partials.breadcrumb')
@@ -30,6 +25,12 @@
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
                         </li>
 
+                        @if($video->more_details)
+                            <li>
+                                <a href="#moredetails" role="tab" data-toggle="tab">More Details</a>
+                            </li>
+                        @endif
+
                         <li>
                             <a href="#image_files" role="tab" data-toggle="tab">Image Files</a>
                         </li>
@@ -42,17 +43,15 @@
                             <a href="#sales" role="tab" data-toggle="tab">Sales</a>
                         </li>
 
-                        @if($video->more_details)
                         <li>
                             <a href="#rights" role="tab" data-toggle="tab">Rights</a>
                         </li>
-                        @endif
 
                         <li>
                             <a href="#creator" role="tab" data-toggle="tab">Creator</a>
                         </li>
 
-                        @if($video->rights != 'ex')
+                        @if($video->rights != 'ex' || $video->rights != 'nonex')
                         <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
                             <a href="#contract" role="tab" data-toggle="tab">Contract</a>
                         </li>
@@ -68,53 +67,56 @@
                     @endif
                 </ul>
                 @if($video)
-                    @include('admin.videos.partials.open_form')
-                @endif
-                <div class="panel-body tab-content">
-                    @if(!$video)
-                        <div class="tab-pane active" id="creator_search">
-                            @include('admin.videos.partials.basic_information')
-                        </div>
-                    @endif
-
-                    @if($video)
+                <form method="POST" action="{{ ($video) ? route('videos.update', ['id' => $video->id]) : route('videos.store') }}" id="video-form" name="video-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+                    <div class="panel-body tab-content">
                         <div class="tab-pane {{ (!session('active_tab')) ? 'active' : '' }}" id="copy">
                             @include('admin.videos.partials.copy')
                         </div>
+
                         <div class="tab-pane" id="metadata">
                             @include('admin.videos.partials.vertical')
                             @include('admin.videos.partials.collection')
-                            @include('admin.videos.partials.tags')
-
-                            @include('admin.videos.partials.location')
                             @include('admin.videos.partials.shotType')
+
+                            @include('admin.videos.partials.tags')
+                            @include('admin.videos.partials.location')
                             @include('admin.videos.partials.video_information')
                             @include('admin.videos.partials.duration')
                             @include('admin.videos.partials.details')
                         </div>
+
+                        <div class="tab-pane" id="moredetails">
+                            <div class="row">
+                                @if($video->more_details)
+                                    <div class="col-md-3">
+                                        @include('admin.videos.partials.rights_status')
+                                    </div>
+                                @endif
+
+                                @if($video->rights == 'nonexc')
+                                    <div class="col-md-6">
+                                        @include('admin.videos.partials.non_exclusive_fields')
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="tab-pane" id="image_files">
                             @include('admin.videos.partials.image_files')
                         </div>
+
                         <div class="tab-pane" id="video_files">
                             @include('admin.videos.partials.video_files')
                         </div>
 
+                        <div class="tab-pane" id="sales">
+                            <h1>Sales</h1>
+                        </div>
+
                         <div class="tab-pane" id="rights">
                             <div class="row">
-                                @if($video->more_details)
-                                <div class="col-md-3">
-                                    @include('admin.videos.partials.rights_status')
-                                </div>
-                                @endif
-
                                 <div class="col-md-3">
                                     @include('admin.videos.partials.license_selector')
-                                </div>
-
-                                <div class="col-md-6">
-                                    @if($video->rights == 'nonex')
-                                        @include('admin.videos.partials.non_exclusive_fields')
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -128,22 +130,36 @@
                         </div>
 
                         <div class="tab-pane" id="admin">
-                            <div class="row">
-                                @include('admin.videos.partials.assign_form')
-                            </div>
+                            @include('admin.videos.partials.assign_form')
+
                             @include('admin.videos.partials.delete_restore')
                         </div>
 
                         <div class="tab-pane" id="analytics">
-                            <div class="row">
-                                @include('admin.videos.partials.social_links')
-                            </div>
+                            @include('admin.videos.partials.social_links')
                         </div>
-                    @endif
-                </div>
+                    </div>
 
-                @if($video)
-                    @include('admin.videos.partials.close_form')
+                    <input type="hidden" id="id" name="id" value="{{ $video->alpha_id }}"/>
+                    <input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}"/>
+                    <input type="hidden" id="temp_state" name="temp_state" value="{{ basename($video->state) }}"/>
+
+                    {{ csrf_field() }}
+
+                    <div id="video-error" class="error"></div>
+
+                    <div class="form-group save_button">
+                        <div class="clearfix">
+                            <input type="submit" value="{{ ($video) ? 'Update Video' : 'Create Video' }}" class="btn btn-success pull-right"/>
+                        </div>
+                    </div>
+                </form>
+                @else
+                <div class="panel-body tab-content">
+                    <div class="tab-pane active" id="creator_search">
+                        @include('admin.videos.partials.basic_information')
+                    </div>
+                </div>
                 @endif
             </div>
             <div class="col-sm-3">

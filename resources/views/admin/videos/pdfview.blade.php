@@ -87,19 +87,6 @@ td.small {
             <td class="grey">Submitted Elsewhere:</td>
 			<td>{{ (!empty($video->submitted_elsewhere) ? $video->submitted_where : 'No') }}</td>
 		</tr>
-        @elseif($video->rights=='nonex')
-        <tr>
-            <td class="grey">Notes:</td>
-			<td>{{ (!empty($video->notes) ? $video->notes : 'Not provided') }}</td>
-		</tr>
-        <tr>
-            <td class="grey">Credit Link:</td>
-			<td>{{ (!empty($video->credit) ? $video->credit : 'Not provided') }}</td>
-		</tr>
-        <tr>
-            <td class="grey">UNILAD Referrer:</td>
-			<td>{{ (!empty($video->referrer) ? $video->referrer : 'Not provided') }}</td>
-		</tr>
         @endif
         <!-- More details end -->
 

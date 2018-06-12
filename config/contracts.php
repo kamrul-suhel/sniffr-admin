@@ -4,6 +4,7 @@ return [
     1 =>
         [
             'id' => 1,
+			'rights' => 'exc',
             'name' => 'License and Release',
             'text' => '
 Date: :contract_date
@@ -57,7 +58,8 @@ This license (“License”) is made and entered into as of :contract_date herei
     2 =>
         [
             'id' => 2,
-            'name' => 'LICENSE and RELASE Non-Exclusive with Distribution Rights',
+			'rights' => 'nonexc',
+            'name' => 'Non-Exclusive with Distribution Rights',
             'text' => '
 Date: :contract_date
 Licensor: :licensor_name
@@ -110,6 +112,7 @@ This license (“License”) is made and entered into as of :contract_date herei
     3 =>
         [
             'id' => 3,
+			'rights' => 'excc',
             'name' => 'Exclusive Channel With Distribution Rights',
             'text' => '
 Date: :contract_date
@@ -166,6 +169,7 @@ This license (“License”) is made and entered into as of :contract_date herei
     4 =>
         [
             'id' => 4,
+			'rights' => 'exc',
             'name' => 'License and Release (old)',
             'text' => '
 Date: :contract_date
