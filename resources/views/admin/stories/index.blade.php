@@ -87,8 +87,9 @@
                                     closeModal: true,
                                     closeOnClickOutside: true,
                                     closeOnEsc: true
+                                }).then(function() {
+                                    window.location.reload();
                                 });
-                                window.location.reload();
                             } else {
                                 // jobs are still in the queue, so run again
                                 checkJobs();
@@ -127,13 +128,14 @@
                         success: function (data) {
                             if (data.dispatched == false) {
                                 swal.close();
-                                $('.js-refresh-stories').css('display', 'block');
                                 swal({
                                     title: 'Stories are already up-to-date.',
                                     icon: 'success',
                                     closeModal: true,
                                     closeOnClickOutside: true,
                                     closeOnEsc: true
+                                }).then(function() {
+                                    $('.js-refresh-stories').css('display', 'block');
                                 });
                             } else {
                                 // jobs have been sent to queue so need to check the job queue
