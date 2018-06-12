@@ -1,12 +1,12 @@
 <template>
     <div class="mailer-stories">
-        <table class="table table-striped pages-table">
+        <table class="table">
             <tr class="table-header">
-                <th style="width: 25%">Thumbnail</th>
-                <th style="width: 30%">Title / Excerpt</th>
-                <th>Author</th>
-                <th>Updated At</th>
-                <th>Actions</th>
+                <th style="width:30%;">Thumbnail</th>
+                <th style="width:39%;">Title / Excerpt</th>
+                <th style="width:10%;">Author</th>
+                <th style="width:10%;">Updated At</th>
+                <th style="width:10%;">Actions</th>
             </tr>
             <story-loop-component v-for="(story, index)  in stories.data" :key="story.id" :index="index"
                                   :story="story"></story-loop-component>
