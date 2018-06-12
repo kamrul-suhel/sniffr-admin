@@ -19,7 +19,7 @@ Hi,
     @foreach($mailer->videos as $video)
         {{ TextHelper::shorten($video['title'], 250) }}
 
-        @if($video['thumb'])IMG: {{ $video['thumb'] }} @endif
+        @if($video['image'])IMG: {{ $video['image'] }} @endif
         {{ TextHelper::shorten($video['description'], 250) }}
         VIEW STORY: {{ url('client/video/show/'.$video['alpha_id'].'/?mailer_id='.$mailer->id) }}
         --------
