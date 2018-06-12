@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('story_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('client_id')->unsigned()->index();
+            $table->integer('client_id')->nullable()->unsigned()->index();
             $table->string('ip_address')->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamps();
