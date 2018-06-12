@@ -1,26 +1,26 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs3>
+        <v-flex xs12 md6 lg3 xl3>
             <v-card flat>
                 <v-card-media height="200px"
                               :src="video.thumb ? video.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
             </v-card>
         </v-flex>
 
-        <v-flex xs4>
+        <v-flex xs12 md6 lg4 xl4>
             <strong>{{ video.title }}</strong>
             <p><br/>{{ video.excerpt | readmore(300, '...') }}</p>
         </v-flex>
 
-        <v-flex xs2>
+        <v-flex xs6 md6 lg2 xl2>
             {{ getAuthor()}}
         </v-flex>
 
-        <v-flex xs2>
+        <v-flex xs6 md6 lg2 xl2>
             {{ video.created_at | convertDate }}
         </v-flex>
 
-        <v-flex xs1>
+        <v-flex xs6 md6 lg1 xl1>
             <v-switch
                     color="black"
                     v-model="selected"

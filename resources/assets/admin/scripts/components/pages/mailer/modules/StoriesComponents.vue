@@ -1,23 +1,23 @@
 <template>
     <div class="mailer-stories">
-        <v-layout row wrap>
-            <v-flex xs3>
+        <v-layout row wrap class="hidden-xs-only">
+            <v-flex xs12 md3 lg3 xl3>
                 <strong>Thumbnail</strong>
             </v-flex>
 
-            <v-flex xs4>
+            <v-flex xs12 md3 lg3 xl3>
                 <strong>Title / Excerpt</strong>
             </v-flex>
 
-            <v-flex xs2>
+            <v-flex xs12 md3 lg3 xl3>
                 <strong>Author</strong>
             </v-flex>
 
-            <v-flex xs2>
+            <v-flex xs12 md6 lg2 xl2>
                 <strong>Updated At</strong>
             </v-flex>
 
-            <v-flex xs1>
+            <v-flex xs12 md6 lg1 xl1>
                 <strong>Actions</strong>
             </v-flex>
         </v-layout>

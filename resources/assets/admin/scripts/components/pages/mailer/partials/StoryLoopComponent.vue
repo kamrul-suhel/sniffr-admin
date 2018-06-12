@@ -1,25 +1,25 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs3>
+        <v-flex xs12 md6 lg3 xl3>
             <v-card flat>
                 <v-card-media height="200px" :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
             </v-card>
         </v-flex>
 
-        <v-flex xs4>
+        <v-flex xs12 md6 lg4 xl4>
             <strong>{{ story.title }}</strong>
             <p><br/>{{ story.excerpt | readmore(300, '...') }}</p>
         </v-flex>
 
-        <v-flex xs2>
+        <v-flex xs6 md6 lg2 xl2>
             {{ story.author }}
         </v-flex>
 
-        <v-flex xs2>
+        <v-flex xs6 md6 lg2 xl2>
             {{ story.created_at | convertDate }}
         </v-flex>
 
-        <v-flex xs1>
+        <v-flex xs6 md6 lg1 xl1>
             <!--<input type="checkbox" v-model="selected">-->
             <v-switch
                     color="black"
