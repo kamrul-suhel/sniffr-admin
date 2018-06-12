@@ -81,7 +81,7 @@ class AdminStoryController extends Controller
 
         // store stories from wordpress in database
         foreach($stories_wp as $story_wp){
-            
+
             // checks if wp post already exists within sniffr stories
             $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
 
