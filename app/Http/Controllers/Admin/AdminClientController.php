@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Jobs\QueueEmail;
+use App\Client;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
-use App\Mail\NewCompany;
 use App\Order;
 use App\User;
 use Auth;
 use Validator;
 use Redirect;
-use App\Client;
 use App\Story;
 use App\Download;
 use App\Traits\Slug;
@@ -116,41 +114,40 @@ class AdminClientController extends Controller
      */
     public function edit($id)
     {
-        $client = Client::find($id);
+        $company = Client::find($id);
 
-        $data = [
-            'headline' => '<i class="fa fa-edit"></i> Edit Client',
-            'client' => $client,
+        return view('admin.clients.create_edit', [
+            'company' => $company,
             'post_route' => url('admin/clients/update'),
-            'button_text' => 'Update Client',
             'user' => Auth::user(),
-            'client_users' => User::where('client_id', $client->id)->get()
-        ];
-
-        return view('admin.clients.create_edit', $data);
+            'company_users' => User::where('client_id', $company->id)->get()
+        ]);
     }
 
     /**
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update()
+    public function update(Request $request)
     {
-        $data = Input::all();
-        $id = $data['id'];
-        $client = Client::findOrFail($id);
+        $company = Client::findOrFail($request->get('id'));
 
-        $validator = Validator::make($data, $this->rules);
+        $company->slug = $this->slugify($request->get('company_name'));
+        $company->name = $request->get('company_name');
+        $company->address_line1 = $request->get('address_line1');
+        $company->address_line2 = $request->get('address_line2');
+        $company->city = $request->get('city');
+        $company->postcode = $request->get('postcode');
+        $company->country = $request->get('country');
+        $company->vat_number = $request->get('vat_number');
+        $company->billing_tel = $request->get('billing_tel');
+        $company->billing_email = $request->get('billing_email');
+        $company->account_owner_id = $request->get('account_owner_id');
+        $company->usable_domains = $request->get('usable_domains');
 
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
+        $company->update();
 
-        $data['slug'] = $this->slugify($data['name']);
-
-        $client->update($data);
-
-        return Redirect::to('admin/clients/edit' . '/' . $id)->with([
+        return redirect('admin/clients/edit' . '/' . $company->id)->with([
             'note' => 'Successfully Updated Client!',
             'note_type' => 'success'
         ]);

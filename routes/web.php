@@ -217,7 +217,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('clients/create', 'Admin\AdminClientController@create');
     Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
     Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
-    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
+    Route::post('clients/update', 'Admin\AdminClientController@update')->name('admin.clients.update');
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
     Route::resource('contacts', 'Contact\ContactController');
