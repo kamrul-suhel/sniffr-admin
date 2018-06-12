@@ -23,7 +23,7 @@
                     <i class="fa fa-users"></i> Stories
                     <a href="#" class="btn btn-primary pull-right js-create-mailer">
                         <i class="fa fa-plus-circle"></i> Create Mailer
-                    </a> <a href="{{ url('admin/stories/refresh') }}" class="btn btn-warning pull-right"
+                    </a> <a href="#" class="btn btn-warning pull-right js-refresh-stories"
                             style="margin-right:10px;">
                         <i class="fa fa-refresh"></i> Refresh Stories
                     </a>
@@ -55,7 +55,7 @@
         </div>
         <div class="clear"></div>
     </div>
-    
+
 @endsection
 
 @section('javascript')
@@ -68,6 +68,80 @@
                     window.location = $(this).attr('href');
                 }
                 return false;
+            });
+
+            function checkJobs() {
+                setTimeout(
+                function() {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/admin/stories/checkjobs',
+                        data: {},
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.jobs == 0) {
+                                swal.close();
+                                swal({
+                                    title: 'Stories are now up-to-date.',
+                                    icon: 'success',
+                                    closeModal: true,
+                                    closeOnClickOutside: true,
+                                    closeOnEsc: true
+                                });
+                                window.location.reload();
+                            } else {
+                                // jobs are still in the queue, so run again
+                                checkJobs();
+                            }
+                        }
+                    });
+                }, 500);
+            }
+
+            $('.js-refresh-stories').click(function (e) {
+                e.preventDefault();
+                swal({
+                    title: 'Please wait while the stories update. This may take a few minutes.',
+                    icon: 'info',
+                    closeModal: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    buttons: {
+                        confirm: false,
+                        cancel: {
+                            text: "Cancel",
+                            value: null,
+                            visible: true,
+                            closeModal: true,
+                          }
+                    }
+                });
+                var refreshUrl = '/admin/stories/refresh';
+                if (refreshUrl) {
+                    $('.js-refresh-stories').css('display', 'none');
+                    $.ajax({
+                        type: 'GET',
+                        url: refreshUrl,
+                        data: {},
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.dispatched == false) {
+                                swal.close();
+                                $('.js-refresh-stories').css('display', 'block');
+                                swal({
+                                    title: 'Stories are already up-to-date.',
+                                    icon: 'success',
+                                    closeModal: true,
+                                    closeOnClickOutside: true,
+                                    closeOnEsc: true
+                                });
+                            } else {
+                                // jobs have been sent to queue so need to check the job queue
+                                checkJobs();
+                            }
+                        }
+                    });
+                }
             });
 
             $('.js-create-mailer').click(function (e) {

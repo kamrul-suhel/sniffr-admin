@@ -79,6 +79,9 @@ class AdminStoryController extends Controller
             $story_ids[] = $post->id;
         }
 
+        // set dispatched for sending response back to ajax
+        $dispatched = false;
+
         // store stories from wordpress in database
         foreach($stories_wp as $story_wp){
 
@@ -88,6 +91,7 @@ class AdminStoryController extends Controller
             if(!$story_find) {
                 QueueStory::dispatch($story_wp, 'new', (Auth::user() ? Auth::user()->id : 0))
                     ->delay(now()->addSeconds(5));
+                $dispatched = true;
             } else {
                 $storyTime = Carbon::parse($story_find->date_ingested);
                 $postTime = Carbon::parse($story_wp['date']);
@@ -97,11 +101,29 @@ class AdminStoryController extends Controller
                 if($differenceTime>150) {
                     QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
                         ->delay(now()->addSeconds(5));
+                    $dispatched = true;
                 }
             }
         }
 
-        return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+        //return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+        return response()->json([
+            'status' => 'success',
+            'dispatched' => $dispatched,
+            'message' => 'all good',
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function checkJobs() {
+        $jobs = \DB::table('jobs')->where('payload', 'LIKE' , '%QueueStory%')->count();
+        return response()->json([
+            'status' => 'success',
+            'jobs' => $jobs,
+            'message' => 'all good',
+        ]);
     }
 
     /**
