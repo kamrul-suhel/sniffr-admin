@@ -47,6 +47,22 @@ class ContractController extends Controller
         ]);
     }
 
+	/**
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function edit($id)
+	{
+		$contract = Contract::find($id);
+
+		$data = [
+			'headline' => '<i class="fa fa-edit"></i> Edit Contract',
+			'contract' => $contract,
+		];
+
+		return view('admin.contacts.create_edit', $data);
+	}
+
     /**
      * @param CreateContractRequest $request
      * @return \Illuminate\Http\RedirectResponse
@@ -230,7 +246,7 @@ class ContractController extends Controller
     private function getContractText(Contract $contract, Video $video)
     {
         $contract_text = config('contracts')[$contract->contract_model_id]['text'];
-        $contract_text = str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
+        $contract_text = $contract->upfront_payment ? str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
         $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
