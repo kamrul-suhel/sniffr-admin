@@ -127,6 +127,14 @@ class Video extends Model
         return $this->hasMany(Download::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function socialLinks()
+    {
+        return $this->hasMany(VideoSocialLink::class);
+    }
+
     public function routeNotificationForSlack()
     {
         return 'https://hooks.slack.com/services/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';
