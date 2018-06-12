@@ -1,5 +1,6 @@
 <template>
     <div class="mailer-videos">
+
         <v-layout row wrap class="hidden-sm-and-down">
             <v-flex xs12 sm3 md3 lg3 xl3>
                 <strong>Thumbnail</strong>
@@ -45,6 +46,7 @@
 
 <script>
     import VideoLoopComponent from '../partials/VidoeLoopComponent';
+
     export default {
         components: {
             VideoLoopComponent
@@ -53,7 +55,7 @@
         data() {
             return {
                 videos: {},
-                totalPage:0,
+                totalPage: 0,
                 page: 1,
             }
         },
@@ -65,7 +67,7 @@
         },
 
         created() {
-           this.getVideosData();
+            this.getVideosData();
         },
 
         methods: {
@@ -81,16 +83,5 @@
                     });
             }
         },
-
-
     }
 </script>
-
-<style>
-    .story_pic {
-        display: flex;
-        height: 200px;
-        width: auto;
-        border: none
-    }
-</style>

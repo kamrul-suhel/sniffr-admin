@@ -12,7 +12,6 @@
             </v-card>
         </v-dialog>
 
-
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
                 <v-flex xs-6>
@@ -68,7 +67,6 @@
                 </v-tab-item>
             </v-tabs>
         </v-container>
-
     </div>
 </template>
 
