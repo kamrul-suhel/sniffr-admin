@@ -86,6 +86,7 @@ class AdminClientController extends Controller
             'email' => $request->get('user_email'),
             'first_name' => $request->get('user_first_name'),
             'last_name' => $request->get('user_last_name'),
+            'role' => 'client',
             'password' => \Hash::make($password),
             'client_id' => $company_id
         ]);
