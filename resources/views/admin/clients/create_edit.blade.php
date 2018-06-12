@@ -297,12 +297,14 @@
             <input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right"/>
         </form>
 
-        {!! Form::open(['method' => 'DELETE', 'route' => ['clients.destroy', $client->id], 'id' => 'form-delete-clients-' . $client->id]) !!}
-        <a href="" class="btn btn-danger delete" data-form="clients-{{ $client->id }} ">
-            <i class="fa fa-trash-o"></i>
-            Delete
-        </a>
-        {!! Form::close() !!}
+        @if(isset($client->id))
+            {!! Form::open(['method' => 'DELETE', 'route' => ['clients.destroy', $client->id], 'id' => 'form-delete-clients-' . $client->id]) !!}
+            <a href="" class="btn btn-danger delete" data-form="clients-{{ $client->id }} ">
+                <i class="fa fa-trash-o"></i>
+                Delete
+            </a>
+            {!! Form::close() !!}
+        @endif
 
         <div class="clear"></div>
     </div>
