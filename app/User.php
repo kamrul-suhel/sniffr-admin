@@ -17,6 +17,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string password
  * @property string email
  * @property string username
+ * @property string first_name
+ * @property string last_name
  * @mixin \Eloquent
  */
 class User extends Authenticatable

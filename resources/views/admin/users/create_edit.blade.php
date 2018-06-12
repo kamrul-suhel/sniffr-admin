@@ -294,7 +294,7 @@
 
 		</div>
 
-		@if(isset($user->id))
+		@if($user)
 			<input type="hidden" id="id" name="id" value="{{ $user->id }}" />
 		@endif
 
@@ -303,6 +303,14 @@
 		<input type="submit" value="{{ ($user) ? 'Update' : 'Create' }} User" class="btn btn-success pull-right" />
 	</form>
 
+	@if($user)
+		{!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'form-delete-users-' . $user->id]) !!}
+		<button class="btn btn-danger delete" data-form="users-{{ $user->id }}">
+			<i class="fa fa-trash-o"></i>
+			Delete
+		</button>
+		{!! Form::close() !!}
+	@endif
 	@if(isset($user->id))
 		{!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'form-delete-users-' . $user->id]) !!}
 	    <a href="" class="btn btn-danger delete" data-form="users-{{ $user->id }}">
