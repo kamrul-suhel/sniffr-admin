@@ -181,12 +181,14 @@
 		<input type="submit" value="{{ ($user) ? 'Update' : 'Create' }} User" class="btn btn-success pull-right" />
 	</form>
 
+	@if(isset($user->id))
 	{!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'form-delete-users-' . $user->id]) !!}
     <a href="" class="btn btn-danger delete" data-form="users-{{ $user->id }}">
         <i class="fa fa-trash-o"></i>
         Delete
     </a>
     {!! Form::close() !!}
+	@endif
 </div>
 @endsection
 @section('javascript')
