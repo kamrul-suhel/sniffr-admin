@@ -3,8 +3,22 @@ const state = {
 }
 
 const mutations = {
-    setStory(state, story){
-        state.selectedStories.push(story);
+    setStory(state, curStory){
+        if(state.selectedStories.length <=0){
+            state.selectedStories.push(curStory);
+            return;
+        }
+
+        let foundStory = false;
+        state.selectedStories.forEach((story)=>{
+            if(story.id === curStory.id){
+                foundStory = true;
+            }
+        })
+
+        if(!foundStory){
+            state.selectedStories.push(curStory);
+        }
     },
 
     removeStory(state, currStory){

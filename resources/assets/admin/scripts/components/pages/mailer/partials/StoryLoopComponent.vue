@@ -38,6 +38,7 @@
         data(){
             return {
                 selected: false,
+                currStory: ''
             }
         },
 
@@ -46,15 +47,16 @@
         watch: {
           selected(selected){
               if(selected){
-                  this.$store.commit('setStory', this.story);
+                  this.$store.commit('setStory', this.currStory);
               }else{
-                  this.$store.commit('removeStory', this.story);
+                  this.$store.commit('removeStory', this.currStory);
               }
           }
         },
 
         created(){
             let stories = this.$store.getters.getAllSelectedStories;
+            this.currStory = this.story;
 
             stories.forEach((story)=>{
                 if(story.id === this.story.id){

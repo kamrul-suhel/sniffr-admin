@@ -45,7 +45,6 @@
 
         watch: {
             selected(selected) {
-                console.log(selected);
                 if (selected) {
                     this.$store.commit('addVideo', this.video);
                 } else {
@@ -56,8 +55,6 @@
 
         created() {
             let videos = this.$store.getters.getAllSelectedVideos;
-
-
             videos.forEach((video) => {
                 if (video.id === this.video.id) {
                     this.selected = true;

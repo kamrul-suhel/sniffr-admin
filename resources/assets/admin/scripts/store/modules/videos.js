@@ -3,10 +3,22 @@ const state = {
 }
 
 const mutations = {
-    addVideo(state, video){
-        state.selectedVideos.push(video);
-        console.log('videos is added');
-        console.log(state.selectedVideos);
+    addVideo(state, currVideo){
+        if(state.selectedVideos.length <=0){
+            state.selectedVideos.push(currVideo);
+            return;
+        }
+
+        let foundVideo = false;
+        state.selectedVideos.forEach((story)=>{
+            if(story.id === currVideo.id){
+                foundVideo = true;
+            }
+        })
+
+        if(!foundVideo){
+            state.selectedVideos.push(currVideo);
+        }
     },
 
     removeVideo(state, currVideo){
