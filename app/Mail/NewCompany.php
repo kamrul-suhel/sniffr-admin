@@ -36,7 +36,6 @@ class NewCompany extends Mailable
     public function build()
     {
         return $this->view('emails.companies.created')
-            ->text('emails.companies.created_text')
             ->subject('SNIFFR - New Company Created');
     }
 }

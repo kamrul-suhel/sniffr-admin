@@ -3461,7 +3461,7 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Return all of the created connections.
+         * Return all of the companies connections.
          *
          * @return array 
          * @static 
@@ -6119,7 +6119,7 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Get all of the created "drivers".
+         * Get all of the companies "drivers".
          *
          * @return array 
          * @static 
@@ -10012,7 +10012,7 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Get all of the created "drivers".
+         * Get all of the companies "drivers".
          *
          * @return array 
          * @static 

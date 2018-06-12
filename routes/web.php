@@ -132,6 +132,7 @@ Route::group(array('prefix' => 'admin'), function () {
 
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
     Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
+    Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');

@@ -40,7 +40,7 @@ class QueueEmailCompany implements ShouldQueue
     public function handle()
     {
         $company = Client::find($this->company_id);
-dd($company);
+
         if ($company) {
             \Mail::to($this->account_owner_email)->send(new NewCompany($this->company_id));
         }
