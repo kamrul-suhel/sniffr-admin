@@ -16,7 +16,7 @@
                 <p><br />{{ TextHelper::shorten($video['description'], 250) }}</p>
             </td>
             <td>
-                @if($video->contact()) {{ $video->contact->full_name }} @else N/A @endif
+                @if(isset($video->contact->full_name)) {{ $video->contact->full_name }} @else N/A @endif
             </td>
             <td>
                 {{ date('jS M Y h:i:s', strtotime($video['created_at'])) }}
