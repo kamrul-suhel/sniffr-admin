@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Video;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
-use App\Order;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Page;
@@ -116,9 +114,13 @@ class VideoController extends Controller
         $fileSize = $filePath = '';
 
         //handle file upload to S3 and Youtube ingestion
-        $filePath = $request->hasFile('file')
-            ? $this->videoService->saveUploadedVideoFile($video, $request->file('file'))
-            : $this->videoService->saveVideoLink($video, $request->get('url'));
+        if ($request->hasFile('file')) {
+            $filePath = $this->videoService->saveUploadedVideoFile($video, $request->file('file'));
+        }
+
+        if ($request->get('url')) {
+            $filePath = $this->videoService->saveVideoLink($video, $request->get('url'));
+        }
 
         // Slack notification
         if (env('APP_ENV') == 'prod') {

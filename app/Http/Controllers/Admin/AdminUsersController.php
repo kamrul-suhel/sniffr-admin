@@ -120,6 +120,7 @@ class AdminUsersController extends Controller
      */
     public function update(UpdateUserRequest $request)
     {
+
         $user = User::find($request->get('id'));
         if(!$user) {
             abort(404);

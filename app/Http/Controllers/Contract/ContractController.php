@@ -47,6 +47,22 @@ class ContractController extends Controller
         ]);
     }
 
+	/**
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function edit($id)
+	{
+		$contract = Contract::find($id);
+
+		$data = [
+			'headline' => '<i class="fa fa-edit"></i> Edit Contract',
+			'contract' => $contract,
+		];
+
+		return view('admin.contacts.create_edit', $data);
+	}
+
     /**
      * @param CreateContractRequest $request
      * @return \Illuminate\Http\RedirectResponse
@@ -129,10 +145,14 @@ class ContractController extends Controller
         $contract = Contract::where('token', '=', $token)->first();
 
         if (!$contract) {
-            abort(404);
+            if($request->ajax() || $request->isJson()){
+                return $this->errorResponse("This contract is no longer available");
+            }
+            return view('frontend.master');
         }
 
-        $video = Video::with('contact')->find($contract->video_id);
+        $video = Video::with('contact')
+            ->find($contract->video_id);
 
         $contract_text = $this->getContractText($contract, $video);
 
@@ -226,7 +246,7 @@ class ContractController extends Controller
     private function getContractText(Contract $contract, Video $video)
     {
         $contract_text = config('contracts')[$contract->contract_model_id]['text'];
-        $contract_text = str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
+        $contract_text = $contract->signed_at ? str_replace(':contract_date', '<strong>'.$contract->signed_at.'</strong>', $contract_text) : str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
         $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
         $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
@@ -237,8 +257,11 @@ class ContractController extends Controller
         $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
         $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
-		$contract_text = $contract->upfront_payment_currency_id != 1 ? str_replace('£', config('currencies')[$contract->upfront_payment_currency_id]['symbol'], $contract_text) : '';
 
+        $currencies = config('currencies');
+        if (($contract->upfront_payment_currency_id != 1) && (key_exists($contract->upfront_payment_currency_id, $currencies))) {
+            $contract_text = str_replace('£', $currencies[$contract->upfront_payment_currency_id]['symbol'], $contract_text);
+        }
 
         return $contract_text;
     }

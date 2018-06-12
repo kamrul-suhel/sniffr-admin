@@ -1,4 +1,5 @@
 import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
+import LoginComponent from './vue-component/pages/login/LoginComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
 import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
@@ -28,6 +29,16 @@ export const routes = [
         components: {
             default: HomeComponent,
         }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: LoginComponent
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: HomeComponent
     },
 
     {
