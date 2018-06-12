@@ -56,6 +56,7 @@ require('../../frontend/scripts/filters/filters');
 import {store} from './store/index';
 
 import {routes} from './routes';
+
 const router = new Vuerouter({
     mode: 'history',
     routes
@@ -63,19 +64,16 @@ const router = new Vuerouter({
 
 
 new Vue({
-    el:'#admin-mailer',
+    el: '#admin-mailer',
     store,
     router,
 
-    data(){
-        return {
-        }
+    data() {
+        return {}
     },
 
-    created(){
+    created() {
     },
 
-    methods: {
-
-    }
+    methods: {}
 })

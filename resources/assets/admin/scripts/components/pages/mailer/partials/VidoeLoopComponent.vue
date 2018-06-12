@@ -64,7 +64,7 @@
 
 
         methods: {
-            getAuthor(){
+            getAuthor() {
                 return this.video.created_user ? this.video.created_user.username : '';
             }
         }

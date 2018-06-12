@@ -2,7 +2,8 @@
     <v-layout row wrap>
         <v-flex xs12 sm6 md6 lg3 xl3>
             <v-card flat>
-                <v-card-media height="200px" :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
+                <v-card-media height="200px"
+                              :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
             </v-card>
         </v-flex>
 
@@ -35,39 +36,39 @@
 
 <script>
     export default {
-        data(){
+        data() {
             return {
                 selected: false,
                 currStory: ''
             }
         },
 
-        props:['story','index'],
+        props: ['story', 'index'],
 
         watch: {
-          selected(selected){
-              if(selected){
-                  this.$store.commit('setStory', this.currStory);
-              }else{
-                  this.$store.commit('removeStory', this.currStory);
-              }
-          }
+            selected(selected) {
+                if (selected) {
+                    this.$store.commit('setStory', this.currStory);
+                } else {
+                    this.$store.commit('removeStory', this.currStory);
+                }
+            }
         },
 
-        created(){
+        created() {
             let stories = this.$store.getters.getAllSelectedStories;
             this.currStory = this.story;
 
-            stories.forEach((story)=>{
-                if(story.id === this.story.id){
+            stories.forEach((story) => {
+                if (story.id === this.story.id) {
                     this.selected = true;
                 }
             });
         },
 
 
-        methods:{
-            onStorySelect(){
+        methods: {
+            onStorySelect() {
                 console.log(this.selected);
             }
         }

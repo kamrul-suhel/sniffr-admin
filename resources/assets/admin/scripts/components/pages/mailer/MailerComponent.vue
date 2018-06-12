@@ -13,7 +13,7 @@
         </v-dialog>
 
 
-        <v-container grid-list-lg fluid >
+        <v-container grid-list-lg fluid>
             <v-layout row wrap>
                 <v-flex xs-6>
                     <h3>
@@ -25,12 +25,14 @@
                 </v-flex>
 
                 <v-flex xs6 class="text-xs-right">
-                    <v-btn dark raised tag="a" href="/admin/stories/refresh" >
-                        <v-icon>refresh</v-icon> Refresh Stories
+                    <v-btn dark raised tag="a" href="/admin/stories/refresh">
+                        <v-icon>refresh</v-icon>
+                        Refresh Stories
                     </v-btn>
 
                     <v-btn dark raised @click="onCreateMailer()">
-                        <v-icon>add</v-icon>Create Mailer
+                        <v-icon>add</v-icon>
+                        Create Mailer
                     </v-btn>
                 </v-flex>
             </v-layout>
@@ -73,6 +75,7 @@
 <script>
     import MailerVideosComponent from './modules/VideosComponents';
     import MailerStoriesComponent from './modules/StoriesComponents';
+
     export default {
         components: {
             mailerVideosComponent: MailerVideosComponent,
@@ -83,7 +86,7 @@
             return {
                 active: null,
                 dialog: false,
-                errorMessage:''
+                errorMessage: ''
             }
         },
 
@@ -92,13 +95,13 @@
 
         methods: {
 
-            onCreateMailer(){
+            onCreateMailer() {
                 // get the selected stories
                 let stories = this.$store.getters.getAllSelectedStories;
                 let videos = this.$store.getters.getAllSelectedVideos;
                 console.log(stories);
                 console.log(videos);
-                if(stories.length === 0 && videos.length === 0){
+                if (stories.length === 0 && videos.length === 0) {
                     this.errorMessage = "this.Please select A story or video";
                     this.dialog = true;
                     return;
@@ -106,11 +109,11 @@
 
                 let storiesId = [];
                 let videosId = [];
-                stories.forEach((story)=>{
+                stories.forEach((story) => {
                     storiesId.push(story.id);
                 });
 
-                videos.forEach((video)=>{
+                videos.forEach((video) => {
                     videosId.push(video.id);
                 });
 
@@ -119,15 +122,15 @@
 
 
                 // send the data to mailer
-                let url = '/admin/mailers/create?videos='+videosString + '&stories='+storiesString;
+                let url = '/admin/mailers/create?videos=' + videosString + '&stories=' + storiesString;
 
                 axios.get(url)
                     .then((response) => {
-                        if(response.data.status === 'success'){
+                        if (response.data.status === 'success') {
                             window.location = '/admin/mailers/edit/' + response.data.mailer_id;
-                        }else{
-                           this.errorMessage = "Something went wrong";
-                           this.dialog = true;
+                        } else {
+                            this.errorMessage = "Something went wrong";
+                            this.dialog = true;
                         }
                     });
             }
@@ -136,5 +139,5 @@
 </script>
 
 <style lang="css" scoped>
-    @import"./plugins/vuetify.min.css";
+    @import "./plugins/vuetify.min.css";
 </style>
