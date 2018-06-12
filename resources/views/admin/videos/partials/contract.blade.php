@@ -77,7 +77,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">Signed</span>
                             <input type="text" class="form-control" disabled="disabled" value="{{
-                        date('l, jS F Y - h:i:s', strtotime($video->currentContract->signed_at))
+                        date('l, jS F Y - H:i:s', strtotime($video->currentContract->signed_at))
                         }}">
                         </div>
                     </div>

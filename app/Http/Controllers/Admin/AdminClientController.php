@@ -182,7 +182,7 @@ class AdminClientController extends Controller
         $insert = [];
         foreach ($orders as $order) {
             $insert['order_no'] = str_pad($count, 4, '0', STR_PAD_LEFT);
-            $insert['order_date'] = date('jS M Y h:i:s',strtotime($order->created_at));
+            $insert['order_date'] = date('jS M Y H:i:s',strtotime($order->created_at));
             $insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
             $insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
             if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
