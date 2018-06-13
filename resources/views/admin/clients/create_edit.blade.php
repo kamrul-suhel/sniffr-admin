@@ -24,13 +24,11 @@
         <div class="clear"></div>
 
         <form method="POST" action="{{
-        ($company) ? route('clients.update', ['id' => $company->id]) : route('clients.store')
+        ($company) ? route($update_path, ['id' => $company->id]) : route('clients.store')
         }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-            {{ method_field('PUT') }}
+            {{ ($company) ? method_field('PUT') : method_field('POST') }}
             <div class="row">
-
                 <div class="{{ ($company) ? 'col-sm-6' : 'col-sm-8' }}">
-
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="panel-title">Basic Details</div>
@@ -306,10 +304,6 @@
                         </div>
                     </div>
                 </div>
-            @endif
-
-            @if($company)
-                <input type="hidden" id="id" name="id" value="{{ $company->id }}"/>
             @endif
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
