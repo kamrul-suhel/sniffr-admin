@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Client;
+use App\Http\Requests\Company\CreateCompanyRequest;
+use App\Http\Requests\Company\EditCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
 use App\Order;
@@ -27,7 +30,7 @@ class AdminClientController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->middleware(['admin:admin,manager']);
+        //$this->middleware(['admin:admin,manager']);
     }
 
     /**
@@ -57,10 +60,10 @@ class AdminClientController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param CreateCompanyRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CreateCompanyRequest $request)
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
 
@@ -109,10 +112,28 @@ class AdminClientController extends Controller
     }
 
     /**
-     * @param $id
+     * @param EditCompanyRequest|Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @internal param $id
+     */
+    public function myAccount(EditCompanyRequest $request)
+    {
+        $company = Client::find(Auth::user()->client_id);
+
+        return view('admin.clients.create_edit', [
+            'company' => $company,
+            'user' => Auth::user(),
+            'update_path' => 'client.update',
+            'company_users' => User::where('client_id', $company->id)->get()
+        ]);
+    }
+
+    /**
+     * @param EditCompanyRequest $request
+     * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(EditCompanyRequest $request, int $id)
     {
         $company = Client::find($id);
 
@@ -120,34 +141,38 @@ class AdminClientController extends Controller
             'company' => $company,
             'post_route' => url('admin/clients/update'),
             'user' => Auth::user(),
+            'update_path' => 'clients.update',
             'company_users' => User::where('client_id', $company->id)->get()
         ]);
     }
 
     /**
-     * @param Request $request
+     * @param UpdateCompanyRequest $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update(UpdateCompanyRequest $request, int $id)
     {
-        $company = Client::findOrFail($request->get('id'));
+        $company = Client::findOrFail($id);
 
-        $company->slug = $this->slugify($request->get('company_name'));
-        $company->name = $request->get('company_name');
-        $company->address_line1 = $request->get('address_line1');
-        $company->address_line2 = $request->get('address_line2');
-        $company->city = $request->get('city');
-        $company->postcode = $request->get('postcode');
-        $company->country = $request->get('country');
-        $company->vat_number = $request->get('vat_number');
-        $company->billing_tel = $request->get('billing_tel');
-        $company->billing_email = $request->get('billing_email');
-        $company->account_owner_id = $request->get('account_owner_id');
-        $company->usable_domains = $request->get('usable_domains');
+        $company->slug = $this->slugify($request->input('company_name'));
+        $company->name = $request->input('company_name');
+        $company->address_line1 = $request->input('address_line1');
+        $company->address_line2 = $request->input('address_line2');
+        $company->city = $request->input('city');
+        $company->postcode = $request->input('postcode');
+        $company->country = $request->input('country');
+        $company->vat_number = $request->input('vat_number');
+        $company->billing_tel = $request->input('billing_tel');
+        $company->billing_email = $request->input('billing_email');
+        $company->account_owner_id = $request->input('account_owner_id');
+        $company->usable_domains = $request->input('usable_domains');
 
         $company->update();
 
-        return redirect('admin/clients/edit' . '/' . $company->id)->with([
+        $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
+
+        return redirect($redirect_path)->with([
             'note' => 'Successfully Updated Client!',
             'note_type' => 'success'
         ]);
