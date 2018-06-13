@@ -35,11 +35,6 @@ export const routes = [
         name: 'login',
         component: LoginComponent
     },
-    {
-        path: '/login',
-        name: 'login',
-        component: HomeComponent
-    },
 
     {
         path: '/videos',

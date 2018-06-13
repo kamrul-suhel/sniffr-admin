@@ -30,7 +30,8 @@ class AdminClientMailerController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
+    public function index()
+    {
 
         $mailers = ClientMailer::orderBy('updated_at', 'DESC')->paginate(10);
 
@@ -112,7 +113,7 @@ class AdminClientMailerController extends Controller
 			->get();
 
         $data = [
-            'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id '.$mailer->alpha_id,
+            'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id ' . $mailer->alpha_id,
             'mailer' => $mailer,
             'post_route' => url('admin/mailers/stats'),
             'button_text' => 'Send Client Mailer',
@@ -160,11 +161,11 @@ class AdminClientMailerController extends Controller
         $id = $data['id'];
         $mailer = ClientMailer::findOrFail($id);
 
-        if(Input::get('note')) {
+        if (Input::get('note')) {
             $mailer->note = Input::get('note');
         }
 
-        if(Input::get('clients')) {
+        if (Input::get('clients')) {
             $mailer->users()->sync(Input::get('clients'));
         }
 
@@ -175,7 +176,7 @@ class AdminClientMailerController extends Controller
         $mailer_status = 'Saved';
 
         // If send mailer (rather than just saved) then queue mailer to send
-        if(Input::get('send_mailer')==1) {
+        if (Input::get('send_mailer') == 1) {
             $mailer_status = 'Sent';
 
             // Slack notification (WIP: currently doesn't work)
@@ -188,15 +189,15 @@ class AdminClientMailerController extends Controller
             $mailer->save();
 
             // send mailer to selected clients (actually users which are linked to clients) via email
-			foreach($mailer->users()->get() as $client) {
+            foreach ($mailer->users()->get() as $client) {
                 $user = User::find($client->id);
                 $mailer->users()->where('user_id', $client->id)->update(['sent_at' => now(), 'user_client_id' => $user->client_id]);
-				QueueClientMailer::dispatch($client->id, $mailer->id);
-			}
+                QueueClientMailer::dispatch($client->id, $mailer->id);
+            }
         }
 
         return Redirect::to('admin/mailers')->with([
-            'note' => 'Successfully '.$mailer_status.' Client Mailer!',
+            'note' => 'Successfully ' . $mailer_status . ' Client Mailer!',
             'note_type' => 'success'
         ]);
     }
@@ -209,7 +210,7 @@ class AdminClientMailerController extends Controller
     {
         $mailer = ClientMailer::find($id);
 
-        if(!$mailer){
+        if (!$mailer) {
             abort(404);
         }
 

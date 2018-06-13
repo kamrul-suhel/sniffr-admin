@@ -9,6 +9,7 @@ use Validator;
 use Redirect;
 use App\User;
 use App\Story;
+use App\Asset;
 use App\Video;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
@@ -40,8 +41,8 @@ class AdminStoryController extends Controller
         ini_set('max_execution_time', 1800);
 
         $version = VideoHelper::quickRandom(); // set random version for cache busting
-        $posts_pending = $this->apiRequest('posts?version='.$version.'&status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
-        $posts_publish = $this->apiRequest('posts?version='.$version.'&status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_pending = $this->apiRequest('posts?version=' . $version . '&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_publish = $this->apiRequest('posts?version=' . $version . '&status=publish&tags=' . env('UNILAD_WP_TAG_ID'), true);
         $posts = array_merge($posts_pending, $posts_publish);
 
         // set dispatched for sending response back to ajax
@@ -93,20 +94,42 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
-        $stories = new Story;
-        $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
-        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])->orderBy('licensed_at', 'DESC')->paginate(10);
+    public function index(Request $request)
+    {
 
-        $data = [
-            'stories' => $stories,
-            'videos' => $videos,
-        ];
+        if ($request->ajax()) {
+            $stories = Story::orderBy('date_ingested', 'DESC')
+                ->paginate(6);
 
-        /*'users' => User::all(),
-            'user' => Auth::user()*/
+            $data = [
+                'stories' => $stories
+            ];
+            return $this->successResponse($data);
+        }
 
-        return view('admin.stories.index', $data); //return response()->json($formatted_posts);
+        return view('admin.stories.index'); //return response()->json($formatted_posts);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMailerVideos(Request $request)
+    {
+
+
+        if ($request->ajax()) {
+            $videos = Video::with('createdUser')
+                ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                ->orderBy('licensed_at', 'DESC')
+                ->paginate(6);
+            $data = [
+                'videos' => $videos
+            ];
+            return $this->successResponse($data);
+        }
+
     }
 
     /**
@@ -132,8 +155,7 @@ class AdminStoryController extends Controller
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
@@ -147,7 +169,7 @@ class AdminStoryController extends Controller
         $story->active = 1;
         $story->save();
 
-        if(Input::get('videos')) {
+        if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
         }
 
@@ -191,28 +213,27 @@ class AdminStoryController extends Controller
 
         $validator = Validator::make($data, $this->rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        if(Input::get('title')) {
+        if (Input::get('title')) {
             $story->title = Input::get('title');
         }
 
         $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
 
-        if(Input::get('description')) {
+        if (Input::get('description')) {
             $story->description = Input::get('description');
         }
 
-        if(Input::get('notes')) {
+        if (Input::get('notes')) {
             $story->notes = Input::get('notes');
         }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
 
-        if(Input::get('videos')) {
+        if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
         }
 
@@ -232,7 +253,7 @@ class AdminStoryController extends Controller
     {
         $story = Story::find($id);
 
-        if(!$story){
+        if (!$story) {
             abort(404);
         }
 

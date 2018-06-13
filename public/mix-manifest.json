@@ -1,10 +1,10 @@
 {
     "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
     "/assets/admin/js/app.js": "/assets/admin/js/app.js",
     "/assets/js/app.js": "/assets/js/app.js",
     "/assets/css/admin.css": "/assets/css/admin.css",
     "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
     "/assets/admin/css/styles.css": "/assets/admin/css/styles.css",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
     "/assets/js/utils.js": "/assets/js/utils.js"
 }
