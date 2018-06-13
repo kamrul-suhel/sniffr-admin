@@ -2,14 +2,17 @@
     <v-layout row wrap>
         <v-flex xs12 sm6 md6 lg3 xl3>
             <v-card flat>
-                <v-card-media height="200px"
-                              :src="video.thumb ? video.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
+                <v-card-media
+                        height="200px"
+                        :src="video.thumb ? video.thumb : '/assets/frontend/images/placeholder.png'"
+                        @click="onOpenVideoDialog()"
+                ></v-card-media>
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm6 md6 lg4 xl4>
-            <strong>{{ video.title }}</strong>
-            <p><br/>{{ video.excerpt | readmore(300, '...') }}</p>
+        <v-flex xs12 sm6 md6 lg4 xl4 class="mailer-title">
+            <strong @click="onOpenVideoDialog()">{{ video.title }}</strong>
+            <p>{{ video.excerpt | readmore(300, '...') }}</p>
         </v-flex>
 
         <v-flex xs6 sm6 md6 lg2 xl2>
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+    import VideoDialogBoxEventBus from '../../../../event-bus/video-dialog-box-event-bus';
     export default {
         data() {
             return {
@@ -42,7 +46,6 @@
         },
 
         props: ['video', 'index'],
-
         watch: {
             selected(selected) {
                 if (selected) {
@@ -66,6 +69,10 @@
         methods: {
             getAuthor() {
                 return this.video.created_user ? this.video.created_user.username : '';
+            },
+
+            onOpenVideoDialog(){
+                VideoDialogBoxEventBus.openVideoDialog(this.video.alpha_id);
             }
         }
     }

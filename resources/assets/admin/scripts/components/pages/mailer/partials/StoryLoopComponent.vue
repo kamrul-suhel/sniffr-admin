@@ -2,14 +2,16 @@
     <v-layout row wrap>
         <v-flex xs12 sm6 md6 lg3 xl3>
             <v-card flat>
-                <v-card-media height="200px"
-                              :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"></v-card-media>
+                <v-card-media
+                        height="200px"
+                        :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"
+                        @click="onOpenStoryDialog()"></v-card-media>
             </v-card>
         </v-flex>
 
         <v-flex xs12 sm6 md6 lg4 xl4>
-            <strong>{{ story.title }}</strong>
-            <p><br/>{{ story.excerpt | readmore(300, '...') }}</p>
+            <strong v-html="story.title"></strong>
+            <div v-html="story.excerpt"></div>
         </v-flex>
 
         <v-flex xs6 sm6 md6 lg2 xl2>
@@ -35,6 +37,7 @@
 </template>
 
 <script>
+    import StoryDialogBoxEventBus from '../../../../event-bus/story-dialog-box-event-bus';
     export default {
         data() {
             return {
@@ -70,6 +73,10 @@
         methods: {
             onStorySelect() {
                 console.log(this.selected);
+            },
+
+            onOpenStoryDialog(){
+                StoryDialogBoxEventBus.openStoryDialog(this.story.alpha_id);
             }
         }
     }

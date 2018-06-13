@@ -1,6 +1,15 @@
 <template>
     <div class="admin-mailer-section">
+        <!-- Video dialog -->
+        <video-in-dialog></video-in-dialog>
+
+        <!-- Story dialog -->
+        <story-in-dialog></story-in-dialog>
+
+
+
         <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
+            <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
 
                 <v-card-text>
@@ -15,8 +24,9 @@
                     <v-btn color="black darken-1" flat="flat" @click.native="dialog = false">Ok</v-btn>
                 </v-card-actions>
             </v-card>
+            <!-- End mail empty card -->
 
-            <!-- Refresh stories dialog box -->
+            <!-- Refresh stories card -->
             <v-card else>
                 <v-card-text>
                     <div class="text-xs-center my-4">
@@ -42,6 +52,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <!-- End refresh stories dialog box -->
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
@@ -106,11 +117,15 @@
     import MailerVideosComponent from './modules/VideosComponents';
     import MailerStoriesComponent from './modules/StoriesComponents';
     import MailerEventBus from '../../../event-bus/mailer-event-bus';
+    import VideoInDialog from './modules/VideoInDialog';
+    import StoryInDialog from './modules/StoryDialog';
 
     export default {
         components: {
             mailerVideosComponent: MailerVideosComponent,
-            mailerStoriesComponent: MailerStoriesComponent
+            mailerStoriesComponent: MailerStoriesComponent,
+            videoInDialog: VideoInDialog,
+            storyInDialog: StoryInDialog,
         },
 
         data() {
@@ -185,7 +200,11 @@
                         // jobs have been sent to queue so need to check the job queue
                         this.checkJobs();
                     }
-                });
+                },
+                    (error) => {
+                        this.checkJobs();
+                    }
+                )
             },
 
             checkJobs() {
@@ -193,8 +212,8 @@
                     let url = '/admin/stories/checkjobs';
                     axios.get(url)
                         .then((response) => {
-                            consolg.log('Sending checkjobs ');
-                            consolg.log(response);
+                            console.log('Sending checkjobs');
+                            console.log(response);
                             if (response.data.jobs == 0) {
                                 this.refreshTitle = 'Stories are now up-to-date.';
                                 this.indeterminate = false;

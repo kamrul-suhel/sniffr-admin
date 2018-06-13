@@ -34,7 +34,7 @@
                 :video="video">
         </video-loop-component>
 
-        <div class="text-xs-center">
+        <div class="text-xs-center" v-if="videos.total > videos.per_page">
             <v-pagination
                     :length="totalPage"
                     v-model="page"

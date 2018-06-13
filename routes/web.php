@@ -236,6 +236,16 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('nsfw/{id}', 'Admin\AdminVideosController@nsfw');
 
     Route::get('reminders', 'Admin\AdminLabelController@automateEmailReminders');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin story in dialog box
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('storydialogbox/{alpha_id}', 'SearchController@storyInDialog');
+
 });
 
 
@@ -288,6 +298,7 @@ Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
 Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
 Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
 Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+
 
 
 /*

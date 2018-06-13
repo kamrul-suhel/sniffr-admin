@@ -32,7 +32,7 @@
                 :index="index"
                 :story="story"></story-loop-component>
 
-        <div class="text-xs-center">
+        <div class="text-xs-center" v-if="stories.total > stories.per_page">
             <v-pagination
                     :length="totalPage"
                     v-model="page"
@@ -68,8 +68,9 @@
         created() {
             this.getStoriesData();
             MailerEventBus.$on('storiesUpdated', () => {
-                console.log('Now data is reloading');
-                this.getStoriesData();
+                setTimeout(() => {
+                    this.getStoriesData();
+                }, 1000)
             });
         },
 
@@ -80,11 +81,12 @@
                     url += '?page=' + page;
                 }
 
-                axios.get(url)
-                    .then((stories) => {
-                        this.stories = stories.data.stories;
-                        this.totalPage = stories.data.stories.last_page;
-                    });
+                this.$store.dispatch('getMailerStories', url)
+                    .then(() => {
+                        this.stories = this.$store.getters.getStories;
+                        this.totalPage = this.stories.last_page;
+                        this.totalPage = this.stories.last_page;
+                    })
             }
         },
     }
