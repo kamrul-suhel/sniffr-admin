@@ -9,7 +9,6 @@ use Validator;
 use Redirect;
 use App\User;
 use App\Story;
-use App\Asset;
 use App\Video;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
@@ -45,61 +44,26 @@ class AdminStoryController extends Controller
         $posts_publish = $this->apiRequest('posts?version='.$version.'&status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
         $posts = array_merge($posts_pending, $posts_publish);
 
-        $stories_wp = [];
-        $story_ids = [];
-
-        foreach($posts as $post){
-            // create array for curl stories objects
-            $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
-
-            $curpost = [
-                "wp_id" => $post->id,
-                "status" => $post->status,
-                "title" => trim(strip_tags($post->title->rendered)),
-                "excerpt" => $excerpt,
-                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
-                "url" => $post->link,
-                "date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
-                "author" => ''
-            ];
-
-            // find assets within post content (old way but could be useful in the future)
-            //$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
-
-            //get the post categories
-            $cat_list = [];
-            foreach($post->categories as $tax_obj){
-                $cat_list[] = $tax_obj;
-            }
-            $curpost["categories"] = $cat_list;
-
-            $curpost["featured_media"] = $post->featured_media;
-            $curpost["author"] = $post->author;
-            $stories_wp[] = $curpost;
-            $story_ids[] = $post->id;
-        }
-
         // set dispatched for sending response back to ajax
         $dispatched = false;
 
         // store stories from wordpress in database
-        foreach($stories_wp as $story_wp){
-
+        foreach($posts as $post){
             // checks if wp post already exists within sniffr stories
-            $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+            $story = Story::where([['wp_id', $post->id]])->first();
 
-            if(!$story_find) {
-                QueueStory::dispatch($story_wp, 'new', (Auth::user() ? Auth::user()->id : 0))
+            if(!$story) {
+                QueueStory::dispatch($post, 'new', (Auth::user() ? Auth::user()->id : 0))
                     ->delay(now()->addSeconds(2));
                 $dispatched = true;
             } else {
-                $storyTime = Carbon::parse($story_find->date_ingested);
-                $postTime = Carbon::parse($story_wp['date']);
+                $storyTime = Carbon::parse($story->date_ingested);
+                $postTime = Carbon::parse($post->date);
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 // if wp post is updated 5mins after our own story record
                 if($differenceTime>150) {
-                    QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
+                    QueueStory::dispatch($post, 'update', (Auth::user() ? Auth::user()->id : 0))
                         ->delay(now()->addSeconds(2));
                     $dispatched = true;
                 }
@@ -278,36 +242,5 @@ class AdminStoryController extends Controller
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);
-    }
-
-    /**
-     * @param string $postBody
-     * @return null|string
-     */
-    private function getJwPlayerCode(string $postBody)
-    {
-        $reg = 'jwplayer_([^_]+)';
-
-        if ($c = preg_match_all("/" . $reg . "/is", $postBody, $matches)) {
-            $alphanum = $matches[1][0];
-            return $alphanum;
-        }
-        return null;
-    }
-
-    /**
-     * @param string $jwPlayerCode
-     */
-    private function getJwPlayerFile(string $jwPlayerCode)
-    {
-        $response = \GuzzleHttp\json_decode(file_get_contents('https://content.jwplatform.com/feeds/' . $jwPlayerCode . '.json'));
-
-        $sources = $response->playlist[0]->sources;
-
-        $videoUrl = array_filter($sources, function($k) {
-            return $k->type == 'video/mp4';
-        });
-
-        return end($videoUrl)->file;
     }
 }
