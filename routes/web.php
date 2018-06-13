@@ -220,7 +220,9 @@ Route::group(array('prefix' => 'admin'), function () {
 //    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
 //    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
+	Route::get('contacts/autocomplete', 'Contact\ContactController@autocomplete')->name('contact.autocomplete');
     Route::resource('contacts', 'Contact\ContactController');
+
 
     Route::resource('users', 'Admin\AdminUsersController', ['only'=> ['index','create','store','edit','update','destroy']]);
 
