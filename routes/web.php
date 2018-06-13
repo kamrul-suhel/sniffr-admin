@@ -253,7 +253,10 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
 
     Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
-    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update')->prefix('');
+    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
+    Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
+    Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
+    Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
 
     /*
     |--------------------------------------------------------------------------

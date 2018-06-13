@@ -7,19 +7,22 @@
 				<h3>
 					<i class="fa fa-user-circle"></i>
 					Users
-					<a href="{{ route('users.create') }}" class="btn btn-success pull-right">
+					<a href="{{ (Auth::user()->role == 'client') ? route('client.users.create') : route('users.create') }}" class="btn btn-success ">
 						<i class="fa fa-plus-circle"></i>
 						Add New
 					</a>
 				</h3>
 			</div>
 			<div class="col-md-4">
-				<form method="get" role="form" class="search-form-full">
-					<div class="form-group">
-						<input type="text" class="form-control" name="s" id="search-input" value="{{ old('s') }}" placeholder="Search...">
-						<i class="fa fa-search"></i>
-					</div>
-				</form>
+				@if(Auth::user()->role != 'client')
+					<form method="get" role="form" class="search-form-full">
+						<div class="form-group">
+							<input type="text" class="form-control" name="s" id="search-input" value="{{ old('s') }}"
+								   placeholder="Search...">
+							<i class="fa fa-search"></i>
+						</div>
+					</form>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -31,7 +34,11 @@
 			<th>Email</th>
 			<th>User Type</th>
 			<th>Active</th>
-			<th>Actions</th>
+
+			@if(Auth::user()->isAdmin())
+				<th>Actions</th>
+			@endif
+
 			@foreach($users as $user)
 				<tr>
 					<td>
@@ -60,18 +67,21 @@
 					<td>
 						{{ $user->active }}
 					</td>
-					<td>
-						<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-xs btn-info">
-							<span class="fa fa-edit"></span>
-							Edit
-						</a>
-						@if($user->client_id)
-							<a href="{{ route('users.stories.sent', ['id' => $user->id]) }}" class="btn btn-xs btn-warning">
+
+					@if(Auth::user()->isAdmin())
+						<td>
+							<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-xs btn-info">
 								<span class="fa fa-edit"></span>
-								Stories Sent
+								Edit
 							</a>
-						@endif
-					</td>
+							@if($user->client_id)
+								<a href="{{ route('users.stories.sent', ['id' => $user->id]) }}" class="btn btn-xs btn-warning">
+									<span class="fa fa-edit"></span>
+									Stories Sent
+								</a>
+							@endif
+						</td>
+					@endif
 				</tr>
 			@endforeach
 	</table>

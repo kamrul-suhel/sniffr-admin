@@ -148,6 +148,7 @@ class AdminClientController extends Controller
         $company->billing_tel = $request->input('billing_tel');
         $company->billing_email = $request->input('billing_email');
 
+        $redirect_path = '';
         if ($company->account_owner_id != $request->input('account_owner_id')) {
             $redirect_path = 'client/stories';
             $company->account_owner_id = $request->input('account_owner_id');

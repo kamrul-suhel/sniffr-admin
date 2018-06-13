@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Libraries\VideoHelper;
 use Auth;
 use Hash;
 use Redirect;
@@ -18,33 +19,25 @@ use App\Http\Controllers\Controller;
 class AdminUsersController extends Controller
 {
     /**
-     * AdminUsersController constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->middleware(['admin:admin']);
-    }
-
-    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 	public function index()
 	{
         $search_value = Input::get('s');
 
-        if (!empty($search_value)) {
+        if ((!empty($search_value))&&(Auth::user()->role != 'client')) {
             $users = User::where('username', 'LIKE', '%' . $search_value . '%')
                 ->orWhere('email', 'LIKE', '%' . $search_value . '%')
                 ->orderBy('created_at', 'desc')->get();
+        } elseif((Auth::user()->role == 'client')&&(Auth::user()->client()->account_owner_id == Auth::user()->id)) {
+            $users = User::where('client_id', Auth::user()->client_id)->get();
         } else {
             $users = User::all();
         }
 
-        $data = [
+        return view('admin.users.index', [
             'users' => $users
-        ];
-        return view('admin.users.index', $data);
+        ]);
     }
 
     /**
@@ -74,10 +67,19 @@ class AdminUsersController extends Controller
         $user = new User();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->role = $request->input('role');
-        $user->active = $request->input('active');
-        $user->client_id = $request->input('client_id');
+
+        if (!$request->input('password')) {
+            $user->password = Hash::make(VideoHelper::quickRandom());
+        }
+
+        $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
+
+        $user->role = $role;
+        $user->active = $request->input('active', 0);
+
+        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id');
+
+        $user->client_id = $client_id;
         $user->full_name = $request->input('full_name');
         $user->tel = $request->input('tel');
         $user->job_title = $request->input('job_title');
@@ -90,7 +92,9 @@ class AdminUsersController extends Controller
 
         $user->save();
 
-        return Redirect::to('admin/users')->with([
+        $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
+
+        return Redirect::to($redirect_path)->with([
             'note' => 'Successfully Created New User',
             'note_type' => 'success'
         ]);

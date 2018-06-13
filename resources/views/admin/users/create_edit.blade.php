@@ -4,20 +4,29 @@
 
 <div id="admin-container">
 	<div class="admin-section-title">
-	@if($user)
-		<h3>
-			<i class="fa fa-users"></i> {{ $user->username }}
-		</h3>
-	@else
-		<h3><i class="fa fa-users"></i> Add New User</h3>
-	@endif
+		@if($user)
+			<h3>
+				<i class="fa fa-users"></i> {{ $user->username }}
+			</h3>
+		@else
+			<h3><i class="fa fa-users"></i> Add New User</h3>
+		@endif
 	</div>
 
 	@include('admin.users.partials.errors')
 
 	<div class="clear"></div>
+	<?php
+	if (Auth::user()->role == 'client') {
+		$update_path = 'client.users.update';
+		$store_path = 'client.users.store';
+	} else {
+		$update_path = 'users.update';
+		$store_path = 'users.store';
+	}
+	?>
 
-	<form method="POST" action="{{ ($user) ? route('users.update', ['id' => $user->id]) : route('users.store') }}" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<form method="POST" action="{{ ($user) ? route($update_path, ['id' => $user->id]) : route($store_path) }}" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div id="user-badge">
 			<img src="{{ Config::get('site.uploads_url') }}{{ ($user && $user->avatar) ? $user->avatar : 'default.jpg' }}" />
 			<label for="avatar">{{ ($user) ? ucfirst($user->username) . '\'s' : '' }} Profile Image</label>
@@ -180,119 +189,113 @@
 
 		</div>
 
-		<div class="row">
-
-			<div class="col-sm-4">
-
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading">
-						<div class="panel-title">Password</div>
-						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+		@if(Auth::user()->role != 'client')
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="panel panel-primary" data-collapsed="0">
+						<div class="panel-heading">
+							<div class="panel-title">Password</div>
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+							</div>
 						</div>
-					</div>
 
-					<div class="panel-body" style="display: block;">
-		                @if($errors->first('password'))
-		                    <div class="alert alert-danger">
-		                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-		                        {{ $errors->first('password') }}
-		                    </div>
-		                @endif
-
-		                <p>
-		                    {{ ($user) ? '(leave empty to keep your original password)' : 'Enter users password:' }}
-		                </p>
-						<input type="password" class="form-control" name="password" id="password" autocomplete="off" value=""
-		                       readonly onfocus="this.removeAttribute('readonly');"  title="password"/>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="col-sm-4">
-
-				<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
-					<div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
-					<div class="panel-body" style="display: block;">
-						<label>Active</label>
-						<input type="checkbox" id="active" name="active" {{ ((($user) && ($user->active)) || (!$user)) ? 'checked="checked" value=1' : '' }} />
-					</div>
-				</div>
-
-			</div>
-
-		</div>
-
-		<div class="row">
-			<div class="col-sm-4">
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading">
-						<div class="panel-title">User Role</div>
-
-						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-						</div>
-					</div>
-
-					<div class="panel-body" style="display: block;">
-						<p>Select the user's role below</p>
-						<select id="role" name="role">
-							<option value="editorial"{{ ((($user) && ($user->role == 'editorial')) || (old('role') == 'editorial')) ? ' selected' : '' }}>
-								Editorial
-							</option>
-							<option value="manager"{{ ((($user) && ($user->role == 'manager')) || (old('role') == 'manager')) ? ' selected' : '' }}>
-								Manager
-							</option>
-							<option value="admin"{{ ((($user) && ($user->role == 'admin')) || (old('role') == 'admin')) ? ' selected' : '' }}>
-								Admin
-							</option>
-							<option value="client"{{ ((($user) && ($user->role == 'client')) || (old('role') == 'client')) ? ' selected' : '' }}>
-								Client
-							</option>
-							<option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
-								Client Admin
-							</option>
-						</select>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-4" id="client-box">
-
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading">
-						<div class="panel-title">Client</div>
-
-						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-						</div>
-					</div>
-
-					<div class="panel-body" style="display: block;">
-                        @if($errors->first('client_id'))
-                            <div class="alert alert-danger">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                {{ $errors->first('client_id') }}
-                            </div>
-                        @endif
-						<p>Select user client</p>
-						<select id="client_id" name="client_id">
-							@if(isset($clients))
-								<option value="">Please Select</option>
-								@foreach($clients as $client)
-								<option value="{{ $client->id }}" {{
-								(($user) && ($client->id == $user->client_id) || (($client->id == old('client_id')))) ? 'selected' : ''
-								}}>{{ $client->name }}</option>
-								@endforeach
+						<div class="panel-body" style="display: block;">
+							@if($errors->first('password'))
+								<div class="alert alert-danger">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									{{ $errors->first('password') }}
+								</div>
 							@endif
-						</select>
+
+							<p>
+								{{ ($user) ? '(leave empty to keep your original password)' : 'Enter users password:' }}
+							</p>
+							<input type="password" class="form-control" name="password" id="password" autocomplete="off" value=""
+								   readonly onfocus="this.removeAttribute('readonly');"  title="password"/>
+						</div>
 					</div>
 				</div>
 
+				<div class="col-sm-4">
+					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+						<div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+						<div class="panel-body" style="display: block;">
+							<label>Active</label>
+							<input type="checkbox" id="active" name="active" {{ ((($user) && ($user->active)) || (!$user)) ? 'checked="checked" value=1' : '' }} />
+						</div>
+					</div>
+				</div>
 			</div>
 
-		</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="panel panel-primary" data-collapsed="0">
+						<div class="panel-heading">
+							<div class="panel-title">User Role</div>
+
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+							</div>
+						</div>
+
+						<div class="panel-body" style="display: block;">
+							<p>Select the user's role below</p>
+							<select id="role" name="role">
+								<option value="editorial"{{ ((($user) && ($user->role == 'editorial')) || (old('role') == 'editorial')) ? ' selected' : '' }}>
+									Editorial
+								</option>
+								<option value="manager"{{ ((($user) && ($user->role == 'manager')) || (old('role') == 'manager')) ? ' selected' : '' }}>
+									Manager
+								</option>
+								<option value="admin"{{ ((($user) && ($user->role == 'admin')) || (old('role') == 'admin')) ? ' selected' : '' }}>
+									Admin
+								</option>
+								<option value="client"{{ ((($user) && ($user->role == 'client')) || (old('role') == 'client')) ? ' selected' : '' }}>
+									Client
+								</option>
+								<option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
+									Client Admin
+								</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4" id="client-box">
+
+					<div class="panel panel-primary" data-collapsed="0">
+						<div class="panel-heading">
+							<div class="panel-title">Client</div>
+
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+							</div>
+						</div>
+
+						<div class="panel-body" style="display: block;">
+							@if($errors->first('client_id'))
+								<div class="alert alert-danger">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									{{ $errors->first('client_id') }}
+								</div>
+							@endif
+							<p>Select user client</p>
+							<select id="client_id" name="client_id">
+								@if(isset($clients))
+									<option value="">Please Select</option>
+									@foreach($clients as $client)
+									<option value="{{ $client->id }}" {{
+									(($user) && ($client->id == $user->client_id) || (($client->id == old('client_id')))) ? 'selected' : ''
+									}}>{{ $client->name }}</option>
+									@endforeach
+								@endif
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		@endif
 
 		@if($user)
 			<input type="hidden" id="id" name="id" value="{{ $user->id }}" />
