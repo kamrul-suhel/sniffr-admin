@@ -43,17 +43,31 @@
 									<tr>
 										<td style="padding:18px 0px 18px 0px;line-height:22px;text-align:inherit;" height="100%" valign="top" bgcolor="">
 
-                                            @if($mailer->stories->count())
-                                                <table class="table table-striped pages-table">
+											@if($mailer->stories->count())
+										        <hr style="height:1px;background:#999;">
+										        <h2 style="font-size:24px;font-weight:600;">Stories</h2>
+										        <p>
+										            <a href="#" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">
+										                Checkout all your stories here
+										            </a>
+										        </p>
+												<table class="table table-striped pages-table">
                                                     @include('admin.mailers.partials.stories')
                                                 </table>
-											@endif
+										    @endif
 
-                                            @if($mailer->videos->count())
-                                                <table class="table table-striped pages-table">
+											@if($mailer->videos->count())
+										        <hr style="height:1px;background:#999;">
+										        <h2 style="font-size:24px;font-weight:600;">Videos</h2>
+										        <p>
+										            <a href="#" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">
+										                Checkout all your videos here
+										            </a>
+										        </p>
+												<table class="table table-striped pages-table">
                                                     @include('admin.mailers.partials.videos')
                                                 </table>
-											@endif
+										    @endif
 
                                             @if((!$mailer->stories->count()) && (!$mailer->videos->count()))
                                                 <strong>No Stories or Videos have been selected</strong>

@@ -1,15 +1,11 @@
 <div class="row">
     <div class="col-md-4">
-        <div class="input-group">
+        <div class="input-group" id="selectpicker-creator">
             <span class="input-group-addon">Creator</span>
             <select type="text" class="selectpicker form-control selected" id="creator_id" name="creator_id"
-                    title="search" data-live-search="true"
-                    @if(session('note_type') == 'success') data-style="btn-success" @endif>
-                <option value="">--</option>
-                <option value="">UNILAD</option>
-                <option value="">--</option>
-                <option value="">Unassigned</option>
-                <option value="">--</option>
+                title="search" data-live-search="true"
+                @if(session('note_type') == 'success') data-style="btn-success" @endif>
+
                 @foreach($creators as $creator)
                     <option value="{{ $creator->id }}" {{
                     ((($video) && ($video->contact_id == $creator->id)) || (old('creator_id') == $creator->id) || (session('contact_id') == $creator->id)) ? 'selected="selected"' : ''

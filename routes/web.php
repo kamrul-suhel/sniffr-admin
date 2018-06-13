@@ -193,6 +193,7 @@ Route::group(array('prefix' => 'admin'), function () {
 
     Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('admin.stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
+    Route::get('stories/checkjobs', 'Admin\AdminStoryController@checkJobs');
     Route::get('stories/create', 'Admin\AdminStoryController@create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');

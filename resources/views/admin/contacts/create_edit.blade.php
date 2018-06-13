@@ -1,9 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-    <link rel="stylesheet" href="/css/tabs.css">
-@endsection
-
 @section('content')
     <div id="admin-container">
         @include('admin.contacts.partials.breadcrumb')

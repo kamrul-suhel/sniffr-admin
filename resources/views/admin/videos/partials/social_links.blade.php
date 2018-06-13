@@ -1,4 +1,4 @@
-<div class="col-lg-12">
+<div class="row">
     <div class="col-lg-12">
         <span class="input-group">
             <span class="input-group-addon">New Social Link</span>
@@ -38,5 +38,4 @@
             </table>
         </div>
     @endforeach
-
 </div>
