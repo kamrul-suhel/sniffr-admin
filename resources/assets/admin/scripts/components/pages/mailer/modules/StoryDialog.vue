@@ -2,7 +2,6 @@
     <!-- Dialog box -->
     <v-dialog
             v-model="story_dialog"
-            transition="dialog-bottom-transition"
             scrollable
             content-class="video-dialog-container"
     >
@@ -71,7 +70,6 @@
 
         watch: {
             story_dialog() {
-                console.log('Dialog box freset');
                 console.log(this.story_dialog);
                 if(this.story_dialog === false){
                     setTimeout(() => {
@@ -121,6 +119,7 @@
             });
 
         },
+        
 
         methods: {
             swipe (direction) {
