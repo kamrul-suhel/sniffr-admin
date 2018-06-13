@@ -1,13 +1,44 @@
 <template>
     <div class="admin-mailer-section">
-        <v-dialog v-model="dialog" max-width="290">
-            <v-card>
+        <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
+            <v-card v-if="notSelectedError">
+
                 <v-card-text>
-                    <div class="text-xs-center"><h3 class="red--text text-uppercase">{{errorMessage}}</h3></div>
+                    <div class="text-xs-center">
+                        <v-icon size="80px" color="black">error_outline</v-icon>
+                    </div>
+                    <div class="text-xs-center"><h4 class="text-uppercase">{{errorMessage}}</h4></div>
                 </v-card-text>
+
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="black darken-1" flat="flat" @click.native="dialog = false">Ok</v-btn>
+                </v-card-actions>
+            </v-card>
+
+            <!-- Refresh stories dialog box -->
+            <v-card else>
+                <v-card-text>
+                    <div class="text-xs-center my-4">
+                        <v-progress-circular
+                                :size="50"
+                                :width="4"
+                                color="black"
+                                :indeterminate="indeterminate"
+                                :value="!indeterminate ? 100 : 0"
+                        >
+                            <v-icon color="black" v-if="!indeterminate">done</v-icon>
+                        </v-progress-circular>
+                    </div>
+
+                    <div class="text-xs-center">
+                        <h4 class="text-uppercase">{{ refreshTitle }}</h4>
+                    </div>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false">Cancel</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -17,14 +48,15 @@
                 <v-flex xs-6>
                     <h3>
                         <i class="fa fa-users"></i> Mail
-                        <!-- <a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
-                            <i class="fa fa-plus-circle"></i> Add New Story
-                        </a> -->
+                        <v-btn tag="a" href="admin/stories/create" primary>
+                            <v-icon>add</v-icon>
+                            Add New Story
+                        </v-btn>
                     </h3>
                 </v-flex>
 
                 <v-flex xs6 class="text-xs-right">
-                    <v-btn dark raised tag="a" href="/admin/stories/refresh">
+                    <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
                         Refresh Stories
                     </v-btn>
@@ -73,6 +105,7 @@
 <script>
     import MailerVideosComponent from './modules/VideosComponents';
     import MailerStoriesComponent from './modules/StoriesComponents';
+    import MailerEventBus from '../../../event-bus/mailer-event-bus';
 
     export default {
         components: {
@@ -84,7 +117,13 @@
             return {
                 active: null,
                 dialog: false,
-                errorMessage: ''
+
+                notSelectedError: false,
+                errorMessage: '',
+
+                indeterminate:true,
+                refreshTitle: 'Please wait while the stories update. This may take a few minutes.',
+                refreshIcon: 'done'
             }
         },
 
@@ -97,10 +136,9 @@
                 // get the selected stories
                 let stories = this.$store.getters.getAllSelectedStories;
                 let videos = this.$store.getters.getAllSelectedVideos;
-                console.log(stories);
-                console.log(videos);
                 if (stories.length === 0 && videos.length === 0) {
                     this.errorMessage = "this.Please select A story or video";
+                    this.notSelectedError = true;
                     this.dialog = true;
                     return;
                 }
@@ -118,7 +156,6 @@
                 let storiesString = JSON.stringify(storiesId);
                 let videosString = JSON.stringify(videosId);
 
-
                 // send the data to mailer
                 let url = '/admin/mailers/create?videos=' + videosString + '&stories=' + storiesString;
 
@@ -131,7 +168,45 @@
                             this.dialog = true;
                         }
                     });
-            }
+            },
+
+            onRefreshStories() {
+                this.dialog = true;
+
+                let refreshUrl = '/admin/stories/refresh';
+
+                axios.get(refreshUrl).then((response) => {
+                    console.log("sending refresh stories");
+                    console.log(response);
+                    if (response.data.dispatched == false) {
+                        this.refreshTitle = 'Stories are already up-to-date.';
+                        this.indeterminate = false;
+                    } else {
+                        // jobs have been sent to queue so need to check the job queue
+                        this.checkJobs();
+                    }
+                });
+            },
+
+            checkJobs() {
+                setTimeout(() => {
+                    let url = '/admin/stories/checkjobs';
+                    axios.get(url)
+                        .then((response) => {
+                            consolg.log('Sending checkjobs ');
+                            consolg.log(response);
+                            if (response.data.jobs == 0) {
+                                this.refreshTitle = 'Stories are now up-to-date.';
+                                this.indeterminate = false;
+                                MailerEventBus.storiesUpdated();
+
+                            } else {
+                                // jobs are still in the queue, so run again
+                                this.checkJobs();
+                            }
+                        });
+                }, 500);
+            },
         },
     }
 </script>

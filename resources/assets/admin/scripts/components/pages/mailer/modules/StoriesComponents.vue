@@ -45,6 +45,7 @@
 
 <script>
     import StoryLoopComponent from '../partials/StoryLoopComponent';
+    import MailerEventBus from '../../../../event-bus/mailer-event-bus';
 
     export default {
         components: {
@@ -66,6 +67,10 @@
 
         created() {
             this.getStoriesData();
+            MailerEventBus.$on('storiesUpdated', () => {
+                console.log('Now data is reloading');
+                this.getStoriesData();
+            });
         },
 
         methods: {
