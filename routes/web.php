@@ -127,7 +127,7 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'admin'), function () {
+Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
@@ -217,7 +217,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('clients/create', 'Admin\AdminClientController@create');
     Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
     Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
-    Route::post('clients/update', 'Admin\AdminClientController@update')->name('admin.clients.update');
+    Route::post('clients/update/{client}', 'Admin\AdminClientController@update')->name('admin.clients.update');
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
     Route::resource('contacts', 'Contact\ContactController');
@@ -243,7 +243,7 @@ Route::group(array('prefix' => 'admin'), function () {
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'client'), function () {
+Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::resource('orders', 'OrderController');
     Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('client.stories.download');
     Route::get('stories/{id}/download_pdf', 'StoryController@getPdf')->name('client.stories.download_pdf');
@@ -252,6 +252,8 @@ Route::group(array('prefix' => 'client'), function () {
 
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
 
+    Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
+    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update')->prefix('');
 
     /*
     |--------------------------------------------------------------------------
