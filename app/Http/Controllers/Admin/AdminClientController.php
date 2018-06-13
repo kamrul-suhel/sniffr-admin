@@ -11,27 +11,16 @@ use App\Libraries\VideoHelper;
 use App\Order;
 use App\User;
 use Auth;
-use Validator;
 use Redirect;
 use App\Story;
 use App\Download;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminClientController extends Controller
 {
     use Slug;
-
-    protected $rules = [
-        'company_name' => 'required'
-    ];
-
-    public function __construct(Request $request)
-    {
-        //$this->middleware(['admin:admin,manager']);
-    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -54,7 +43,7 @@ class AdminClientController extends Controller
     public function create()
     {
         return view('admin.clients.create_edit', [
-            'client' => null,
+            'company' => null,
             'user' => null,
         ]);
     }
@@ -65,13 +54,6 @@ class AdminClientController extends Controller
      */
     public function store(CreateCompanyRequest $request)
     {
-        $validator = Validator::make($data = Input::all(), $this->rules);
-
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-
         $company_slug = $this->slugify($request->get('company_name'));
 
         $company_id = Client::insertGetId([
@@ -165,12 +147,19 @@ class AdminClientController extends Controller
         $company->vat_number = $request->input('vat_number');
         $company->billing_tel = $request->input('billing_tel');
         $company->billing_email = $request->input('billing_email');
-        $company->account_owner_id = $request->input('account_owner_id');
+
+        if ($company->account_owner_id != $request->input('account_owner_id')) {
+            $redirect_path = 'client/stories';
+            $company->account_owner_id = $request->input('account_owner_id');
+        }
+
         $company->usable_domains = $request->input('usable_domains');
 
         $company->update();
 
-        $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
+        if (!$redirect_path) {
+            $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
+        }
 
         return redirect($redirect_path)->with([
             'note' => 'Successfully Updated Client!',
