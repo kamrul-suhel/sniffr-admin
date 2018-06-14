@@ -1,4 +1,4 @@
-@extends('emails.template')
+@extends('emails.template_sniffr')
 
 @section('content')
     <div>

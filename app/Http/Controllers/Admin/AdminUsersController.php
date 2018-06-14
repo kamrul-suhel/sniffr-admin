@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Jobs\QueueEmailClient;
 use App\Libraries\VideoHelper;
 use Auth;
+use Carbon\Carbon;
 use Hash;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Redirect;
 use App\Client;
 use App\User;
@@ -18,6 +21,7 @@ use App\Http\Controllers\Controller;
 
 class AdminUsersController extends Controller
 {
+    use ResetsPasswords;
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -77,13 +81,12 @@ class AdminUsersController extends Controller
         $user->role = $role;
         $user->active = $request->input('active', 0);
 
-        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id');
+        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id', null);
 
         $user->client_id = $client_id;
         $user->full_name = $request->input('full_name');
         $user->tel = $request->input('tel');
         $user->job_title = $request->input('job_title');
-
         $user->avatar = 'default.jpg';
 
         if ($request->hasFile('avatar')) {
@@ -92,12 +95,40 @@ class AdminUsersController extends Controller
 
         $user->save();
 
+        if (Auth::user()->role == 'client') {
+            $email = $user->getEmailForPasswordReset();
+            $this->deleteExisting($user);
+
+            $token = app('auth.password.broker')->createToken($user);
+
+            \DB::table('password_resets')->insert($this->getPayload($email, $token));
+
+            QueueEmailClient::dispatch(
+                $client_id,
+                $request->get('email'),
+                $request->get('full_name'),
+                $token
+            );
+        }
+
         $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
 
         return Redirect::to($redirect_path)->with([
             'note' => 'Successfully Created New User',
             'note_type' => 'success'
         ]);
+    }
+
+    protected function deleteExisting(User $user)
+    {
+        return \DB::table('password_resets')
+            ->where('email', $user->getEmailForPasswordReset())
+            ->delete();
+    }
+
+    protected function getPayload($email, $token)
+    {
+        return ['email' => $email, 'token' => $token, 'created_at' => new Carbon];
     }
 
     /**
