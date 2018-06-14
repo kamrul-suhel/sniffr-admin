@@ -20,7 +20,7 @@ class QueueEmailCompany implements ShouldQueue
     protected $account_owner_email;
     protected $user_first_name;
     protected $username;
-    protected $password;
+    protected $token;
 
     public $tries = 5;
     public $timeout = 120;
@@ -31,21 +31,21 @@ class QueueEmailCompany implements ShouldQueue
      * @param string $account_owner_email
      * @param string $user_first_name
      * @param string $username
-     * @param string $password
+     * @param string $token
      */
     public function __construct(
         int $company_id,
         string $account_owner_email,
         string $user_first_name,
         string $username,
-        string $password
+        string $token
     )
     {
         $this->company_id = $company_id;
         $this->account_owner_email = $account_owner_email;
         $this->user_first_name = $user_first_name;
         $this->username = $username;
-        $this->password = $password;
+        $this->token = $token;
     }
 
     /**
@@ -61,9 +61,8 @@ class QueueEmailCompany implements ShouldQueue
             \Mail::to($this->account_owner_email)->send(new NewCompany([
                 'company_name' => $company->name,
                 'user_first_name' => $this->user_first_name,
-                'account_owner_email' => $this->account_owner_email,
-                'username' => $this->username,
-                'password' => $this->password
+                'email' => $this->account_owner_email,
+                'token' => $this->token
             ]));
         }
     }

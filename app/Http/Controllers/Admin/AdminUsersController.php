@@ -99,9 +99,7 @@ class AdminUsersController extends Controller
             $email = $user->getEmailForPasswordReset();
             $this->deleteExisting($user);
 
-            $token = app('auth.password.broker')->createToken($user);
-
-            \DB::table('password_resets')->insert($this->getPayload($email, $token));
+            $token = $this->getToken($email, $user);
 
             QueueEmailClient::dispatch(
                 $client_id,
@@ -217,5 +215,14 @@ class AdminUsersController extends Controller
             'note' => 'Successfully Deleted User',
             'note_type' => 'success'
         ]);
+    }
+
+    public function getToken($email, $user)
+    {
+        $token = app('auth.password.broker')->createToken($user);
+
+        \DB::table('password_resets')->insert($this->getPayload($email, $token));
+
+        return $token;
     }
 }

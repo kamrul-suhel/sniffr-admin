@@ -73,17 +73,21 @@ class AdminClientController extends Controller
             'client_id' => $company_id
         ]);
 
+        $user = User::find($user_id);
+
         $client = Client::find($company_id);
         $client->account_owner_id = $user_id;
         $client->save();
+
+        $token = app('App\Http\Controllers\Admin\AdminUsersController')->getToken($request->get('user_email'), $user);
 
         if ($request->get('send_invitation')) {
             QueueEmailCompany::dispatch(
                 $company_id,
                 $request->get('user_email'),
                 $request->get('user_first_name'),
-                $company_slug,
-                $password
+                $request->get('user_email'),
+                $token
             );
         }
 

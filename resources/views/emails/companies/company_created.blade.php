@@ -20,11 +20,12 @@
     <div>&nbsp;</div>
 
     <div>
-        username: {{ $email_data['username'] }}
+        <strong>username</strong>: {{ $email_data['email'] }}
         <div>&nbsp;</div>
-        password: {{ $email_data['password'] }}
+        <strong>password</strong>: <a href="{{ route('password.reset', ['token' => $email_data['token']]) }}">click
+            here to set your password</a>
         <div>&nbsp;</div>
-        URL
+        Login here
         <div>&nbsp;</div>
         <a href="{{ route('home') }}">{{ route('home') }}</a>
     </div>
