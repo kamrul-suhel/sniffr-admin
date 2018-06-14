@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Company;
 
-use App\Traits\FrontendResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+class CreateCompanyRequest extends FormRequest
 {
-    use FrontendResponse;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,10 +24,7 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string|unique:users',
-            'email' => 'required|email|unique:users',
-            'client_id' => 'required_if:role,client',
-            'file' => 'file|mimes:jpg,gif,png|min:1|max:500000',
+            'company_name' => 'required|unique:clients,name',
         ];
     }
 }

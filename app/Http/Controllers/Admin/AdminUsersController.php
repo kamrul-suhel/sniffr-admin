@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Jobs\QueueEmailClient;
+use App\Libraries\VideoHelper;
 use Auth;
+use Carbon\Carbon;
 use Hash;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Redirect;
 use App\Client;
 use App\User;
@@ -17,15 +21,7 @@ use App\Http\Controllers\Controller;
 
 class AdminUsersController extends Controller
 {
-    /**
-     * AdminUsersController constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->middleware(['admin:admin']);
-    }
-
+    use ResetsPasswords;
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -33,18 +29,19 @@ class AdminUsersController extends Controller
 	{
         $search_value = Input::get('s');
 
-        if (!empty($search_value)) {
+        if ((!empty($search_value))&&(Auth::user()->role != 'client')) {
             $users = User::where('username', 'LIKE', '%' . $search_value . '%')
                 ->orWhere('email', 'LIKE', '%' . $search_value . '%')
                 ->orderBy('created_at', 'desc')->get();
+        } elseif((Auth::user()->role == 'client')&&(Auth::user()->client()->account_owner_id == Auth::user()->id)) {
+            $users = User::where('client_id', Auth::user()->client_id)->get();
         } else {
             $users = User::all();
         }
 
-        $data = [
+        return view('admin.users.index', [
             'users' => $users
-        ];
-        return view('admin.users.index', $data);
+        ]);
     }
 
     /**
@@ -74,11 +71,22 @@ class AdminUsersController extends Controller
         $user = new User();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->role = $request->input('role');
-        $user->active = $request->input('active');
-        $user->client_id = $request->input('client_id');
 
+        if (!$request->input('password')) {
+            $user->password = Hash::make(VideoHelper::quickRandom());
+        }
+
+        $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
+
+        $user->role = $role;
+        $user->active = $request->input('active', 0);
+
+        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id', null);
+
+        $user->client_id = $client_id;
+        $user->full_name = $request->input('full_name');
+        $user->tel = $request->input('tel');
+        $user->job_title = $request->input('job_title');
         $user->avatar = 'default.jpg';
 
         if ($request->hasFile('avatar')) {
@@ -87,10 +95,38 @@ class AdminUsersController extends Controller
 
         $user->save();
 
-        return Redirect::to('admin/users')->with([
+        if (Auth::user()->role == 'client') {
+            $email = $user->getEmailForPasswordReset();
+            $this->deleteExisting($user);
+
+            $token = $this->getToken($email, $user);
+
+            QueueEmailClient::dispatch(
+                $client_id,
+                $request->get('email'),
+                $request->get('full_name'),
+                $token
+            );
+        }
+
+        $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
+
+        return Redirect::to($redirect_path)->with([
             'note' => 'Successfully Created New User',
             'note_type' => 'success'
         ]);
+    }
+
+    protected function deleteExisting(User $user)
+    {
+        return \DB::table('password_resets')
+            ->where('email', $user->getEmailForPasswordReset())
+            ->delete();
+    }
+
+    protected function getPayload($email, $token)
+    {
+        return ['email' => $email, 'token' => $token, 'created_at' => new Carbon];
     }
 
     /**
@@ -125,6 +161,10 @@ class AdminUsersController extends Controller
 
         $user->username = $request->input('username', $user->username);
         $user->email = $request->input('email', $user->email);
+        $user->full_name = $request->input('full_name', $user->full_name);
+        $user->tel = $request->input('tel', $user->tel);
+        $user->job_title = $request->input('job_title', $user->job_title);
+
         if ($request->input('password', null)) {
             $user->password = Hash::make($request->input('password'));
         }
@@ -175,5 +215,14 @@ class AdminUsersController extends Controller
             'note' => 'Successfully Deleted User',
             'note_type' => 'success'
         ]);
+    }
+
+    public function getToken($email, $user)
+    {
+        $token = app('auth.password.broker')->createToken($user);
+
+        \DB::table('password_resets')->insert($this->getPayload($email, $token));
+
+        return $token;
     }
 }
