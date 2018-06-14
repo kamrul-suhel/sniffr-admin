@@ -264,7 +264,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::get('stories/{id}/download_pdf', 'StoryController@getPdf')->name('client.stories.download_pdf');
     Route::get('asset/{id}/download', 'StoryController@downloadAsset')->name('client.asset.download');
     Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
-
+    Route::get('video/{id}/license', 'StoryController@licenseVideo')->name('client.video.license');
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
 
     Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
@@ -292,7 +292,8 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('video/{id}/license', 'Frontend\client\MailVideoLicenseController@index')->name('mailer.video.license');
+    // NOT SURE WHAT YOU WERE TRYING TO DO HERE BUT IT DOESN'T WORK?
+    //Route::get('video/{id}/license', 'Frontend\client\MailVideoLicenseController@index')->name('mailer.video.license');
 });
 
 

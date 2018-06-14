@@ -48,8 +48,8 @@ class StoryController extends Controller
         $mailer_id = $story->mailers()->first()->id; //get mailer_id for better logs (which downloads relate to which mailer) - the story could be sent out in more that one email, but we just grab the first one
 
         // save the order
-        $this->logDownload($story_id, $mailer_id);
-        $this->saveDownloadToOrder($story_id, $mailer_id);
+        $this->logDownload($story_id, $mailer_id, 'story');
+        $this->saveDownloadToOrder($story_id, $mailer_id, 'story');
 
         Zipper::make($newZipFilePath)->add($files)->close();
         \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
@@ -60,16 +60,18 @@ class StoryController extends Controller
     /**
      * @param $story_id
      */
-    public function saveDownloadToOrder($story_id, $mailer_id)
+    public function saveDownloadToOrder($story_id, $mailer_id, $type)
     {
         $order = Order::where('story_id', '=', $story_id)
+            ->orWhere('video_id', '=', $story_id)
             ->where('client_id', '=', \Auth::user()->client_id)
             ->first();
         if ($order) {
             return;
         }
         $order = new Order();
-        $order->story_id = $story_id;
+        $order->story_id = ($type=='story' ? $story_id : 0);
+        $order->video_id = ($type=='video' ? $story_id : 0);
         $order->mailer_id = $mailer_id;
         $order->user_id = \Auth::user()->id;
         $order->client_id = \Auth::user()->client_id;
@@ -79,11 +81,11 @@ class StoryController extends Controller
     /**
      * @param $story_id
      */
-    public function logDownload($story_id, $mailer_id)
+    public function logDownload($story_id, $mailer_id, $type)
     {
         $download = new Download();
-        $download->story_id = $story_id;
-        $download->video_id = 0; // set to 0 until videos are eventually sent to clients (as well as stories)
+        $download->story_id = ($type=='story' ? $story_id : 0);
+        $download->video_id = ($type=='video' ? $story_id : 0);
         $download->mailer_id = $mailer_id;
         $download->user_id = \Auth::user()->id;
         $download->client_id = \Auth::user()->client_id ?: 0;
@@ -134,6 +136,35 @@ class StoryController extends Controller
         copy($video->file, $tempVideoFile);
 
         return response()->download($tempVideoFile);
+    }
+
+    public function licenseVideo($videoId)
+    {
+        $video = Video::find($videoId);
+        $mailer_id = $video->mailers()->first()->id;
+
+        // save the order
+        $this->logDownload($videoId, $mailer_id, 'video');
+        $this->saveDownloadToOrder($videoId, $mailer_id, 'video');
+
+        if (!$video) {
+            abort(404, 'Asset Not Found');
+        }
+
+        $newZipFileName = $video->alpha_id. time() . '.zip';
+        $newZipFilePath = '../storage/'.$newZipFileName;
+        $prefix = 'sniffr_';
+
+        $info = pathinfo($video->file);
+        $ext = $info['extension'];
+
+        $tempVideoFile = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
+        copy($video->file, $tempVideoFile);
+
+        Zipper::make($newZipFilePath)->add($tempVideoFile)->close();
+        \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
+
+        return response()->download($newZipFilePath)->deleteFileAfterSend(true);
     }
 
     /**
