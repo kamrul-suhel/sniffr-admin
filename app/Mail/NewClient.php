@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewCompany extends Mailable
+class NewClient extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class NewCompany extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.companies.company_created')
+        return $this->view('emails.companies.client_created')
             ->subject('SNIFFR - Invitation');
     }
 }
