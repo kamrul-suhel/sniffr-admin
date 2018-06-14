@@ -181,4 +181,28 @@ class ContactController extends Controller
 
         $contact->comments()->save($comment);
     }
+
+	/**
+	 * Contact autocomplete
+	 */
+	public function autocomplete(){
+		$term = Input::get('term');
+
+		$results = array();
+
+		$queries = Contact::where('full_name', 'LIKE', '%'.$term.'%')
+			->orWhere('email', 'LIKE', '%'.$term.'%')
+			->take(5)->get();
+
+		if(!count($queries)) {
+			$results[] = [ 'id' => '', 'value' => 'No results found' ];
+		}else{
+			foreach ($queries as $query)
+			{
+				$results[] = [ 'id' => $query->id, 'value' => $query->full_name.': '.$query->email ];
+			}
+		}
+
+		return response()->json($results);
+	}
 }

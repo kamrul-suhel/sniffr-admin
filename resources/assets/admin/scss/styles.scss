@@ -1,0 +1,39 @@
+@import "./variables";
+@import"./mixin";
+@import"./components/mailer_component";
+@import"./components/mailer-stories-component";
+@import"./components/mailer-video-component";
+@import"./pages/video-dialog-box";
+
+
+/*
+ ********************************************************
+ * Root label style go here
+ ********************************************************
+ */
+
+#admin-mailer{
+  .btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    padding:0;
+    background-image: none;
+    white-space: nowrap;
+    border:none;
+
+    i{
+      display:block;
+      margin-right:5px;
+    }
+  }
+
+  button{
+    outline:none;
+  }
+}

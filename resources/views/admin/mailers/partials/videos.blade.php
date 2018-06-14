@@ -2,7 +2,7 @@
     <tr>
         <td width="60%">
             <h4>{{ TextHelper::shorten($video['title'], 250) }}</h4>
-            <img src="{{ $story['image'] ? $story['image'] : $story['thumb'] ? $story['thumb'] : '/assets/frontend/images/placeholder.png' }}" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
+            <img src="@if($video['image']) {{ $video['image'] }} @elseif($video['thumb']) {{ $video['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
             <br />
             <div style="display:inline-block;">
                 <div style="display:inline-block;">

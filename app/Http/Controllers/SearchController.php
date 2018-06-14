@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\VideoHelper;
 use App\Setting;
+use App\Story;
 use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 use Redirect;
@@ -99,7 +100,6 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
-     * @param $alpha_id
      * @return \Illuminate\Http\JsonResponse
      */
     public function videosInDialog(Request $request)
@@ -137,6 +137,47 @@ class SearchController extends Controller
 
             return $this->successResponse($data);
     }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storyInDialog(Request $request)
+    {
+        $current_story = $this->getCurrentstory($request->alpha_id);
+
+
+        $next_alpha_id = '';
+        $next = Story::select('alpha_id')
+            ->where('id', '<', $current_story->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // Check if exists or no
+        if ($next) {
+            $next_alpha_id = $next->alpha_id;
+        }
+
+        $previous_alpha_id = '';
+        $previous = Story::select('alpha_id')
+            ->where('id', '>', $current_story->id)
+            ->orderBy('id', 'asc')
+            ->first();
+
+        if ($previous) {
+            $previous_alpha_id = $previous->alpha_id;
+        }
+
+        $data = [
+            'current_story' => $current_story,
+            'next_story_alpha_id' => $next_alpha_id,
+            'prev_story_alpha_id' => $previous_alpha_id
+        ];
+
+        return $this->successResponse($data);
+    }
+
 
     /**
      * @param Request $request
@@ -198,6 +239,14 @@ class SearchController extends Controller
         $current_video->iframe = $this->getVideoHtml($current_video, true);
 
         return $current_video;
+    }
+
+    private function getCurrentStory($alpha_id){
+        $current_story = Story::
+        where('alpha_id', '=', $alpha_id)
+            ->with('assets')
+            ->first();
+        return $current_story;
     }
 
     private function getNextPreviousAlphaId($current_video, $videos){

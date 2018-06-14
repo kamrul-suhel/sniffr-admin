@@ -119,12 +119,25 @@ class Video extends Model
         return $this->hasOne('\App\Contract')->latest();
     }
 
+	public function hasContract()
+	{
+		return $this->hasOne('\App\Contract')->latest()->count() ? true : false;
+	}
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function downloads()
     {
         return $this->hasMany(Download::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function socialLinks()
+    {
+        return $this->hasMany(VideoSocialLink::class);
     }
 
     public function routeNotificationForSlack()
@@ -218,6 +231,13 @@ class Video extends Model
 
     public function order(){
         return $this->hasOne(Order::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdUser(){
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

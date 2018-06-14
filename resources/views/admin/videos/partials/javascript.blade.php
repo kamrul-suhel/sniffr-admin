@@ -64,6 +64,18 @@ function videoAnalysis(tempFile) {
 
 }
 
+$(function()
+{
+    $( "#q" ).autocomplete({
+        source: "/admin/contacts/autocomplete",
+        minLength: 3,
+        select: function(event, ui) {
+            $('#q').val(ui.item.value);
+            $('#creator_id').val(ui.item.id);
+        }
+    });
+});
+
 (function($){
     var tagnames = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),

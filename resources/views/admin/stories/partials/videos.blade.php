@@ -9,14 +9,14 @@
     @foreach($videos as $video)
         <tr>
             <td>
-                <img src="{{ $video['image'] ? $video['image'] : $video['thumb'] ? $video['thumb'] : '/assets/frontend/images/placeholder.png'  }}" class="story_pic"/>
+                <img src="@if($video['image']) {{ $video['image'] }} @elseif($video['thumb']) {{ $video['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" class="story_pic"/>
             </td>
             <td>
                 <strong>{{ TextHelper::shorten($video['title'], 250) }}</strong>
                 <p><br />{{ TextHelper::shorten($video['description'], 250) }}</p>
             </td>
             <td>
-                @if($video->contact()) {{ $video->contact->full_name }} @else N/A @endif
+                @if(isset($video->contact->full_name)) {{ $video->contact->full_name }} @else N/A @endif
             </td>
             <td>
                 {{ date('jS M Y h:i:s', strtotime($video['created_at'])) }}

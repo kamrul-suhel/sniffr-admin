@@ -108,24 +108,10 @@
         </ul>
     </li>
 
-    <li class="{{ Request::segment(2) == 'pages' ? 'active' : '' }}">
-        <a href="{{ url('admin/pages') }}" class="tlink">
-            <i class="fa fa-book"></i>
-            <span class="title">Pages</span>
-        </a>
-    </li>
-
     <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
         <a href="{{ url('admin/media') }}">
             <i class="fa fa-picture-o"></i>
             <span class="title">Media</span>
-        </a>
-    </li>
-
-    <li class="{{ Request::segment(2) == 'menu' ? 'active' : '' }}">
-        <a href="{{ url('admin/menu') }}">
-            <i class="fa fa-bars"></i>
-            <span class="title">Menu</span>
         </a>
     </li>
     @endif
