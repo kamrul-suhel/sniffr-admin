@@ -116,6 +116,7 @@
 
         methods: {
             getVideoData(alpha_id) {
+                console.log(alpha_id);
 
                 this.$store.commit('setRouteObject', this.$route);
 

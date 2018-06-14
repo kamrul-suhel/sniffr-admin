@@ -153,6 +153,7 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 <!-- End Notifications -->
 
+
 @yield('javascript')
 
 </body>
