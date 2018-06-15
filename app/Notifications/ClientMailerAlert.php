@@ -2,17 +2,9 @@
 
 namespace App\Notifications;
 
-use App\ClientMailer;
-use App\Contact;
-use App\Story;
-use App\User;
 use App\Video;
-use App\Client;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 
 class ClientMailer extends Notification
@@ -20,13 +12,18 @@ class ClientMailer extends Notification
     use Queueable;
 
     /**
+     * @var Video
+     */
+    protected $mailer;
+
+    /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param Video $mailer
      */
-    public function __construct(Video $maier)
+    public function __construct(Video $mailer)
     {
-        $this->mailer = $maier;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -44,11 +41,11 @@ class ClientMailer extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return SlackMessage
      */
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('A client mailer has been sent: ' . $notifiable->alpha_id));
+           ->content('A client mailer has been sent: ' . $notifiable->alpha_id);
     }
 }

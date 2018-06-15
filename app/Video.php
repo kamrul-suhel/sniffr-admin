@@ -133,6 +133,14 @@ class Video extends Model
     }
 
     /**
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+	 */
+	public function mailers()
+	{
+		return $this->belongsToMany(ClientMailer::class);
+	}
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function socialLinks()

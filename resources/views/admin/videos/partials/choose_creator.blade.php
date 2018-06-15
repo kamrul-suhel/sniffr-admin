@@ -4,7 +4,7 @@
             <span class="input-group-addon">Creator</span>
             {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Enter name', 'class' => 'form-control'])}}
         </div>
-        <input type="hidden" id="creator_id" name="creator_id"/>
+        <input type="hidden" id="creator_id" name="creator_id" value="{{ $video ? $video->contact_id : '' }}" />
     </div>
     @if(!$video)
         <div class="col-md-4">

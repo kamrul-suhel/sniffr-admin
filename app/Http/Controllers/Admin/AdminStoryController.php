@@ -99,7 +99,7 @@ class AdminStoryController extends Controller
 
         if ($request->ajax()) {
             $stories = Story::orderBy('date_ingested', 'DESC')
-                ->paginate(6);
+                ->paginate(12);
 
             $data = [
                 'stories' => $stories
@@ -123,7 +123,7 @@ class AdminStoryController extends Controller
             $videos = Video::with('createdUser')
                 ->where([['state', 'licensed'], ['file', '!=', NULL]])
                 ->orderBy('licensed_at', 'DESC')
-                ->paginate(6);
+                ->paginate(12);
             $data = [
                 'videos' => $videos
             ];
