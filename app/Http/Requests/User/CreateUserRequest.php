@@ -27,7 +27,6 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string|unique:users',
             'email' => 'required|email|unique:users',
             'client_id' => 'required_if:role,client',
             'file' => 'file|mimes:jpg,gif,png|min:1|max:500000',
