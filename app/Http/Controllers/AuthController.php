@@ -161,7 +161,6 @@ class AuthController extends Controller
             $message->subject('Password Reset Info');
         });
 
-
 		switch ($response)
 		{
 			case PasswordBroker::RESET_LINK_SENT:
