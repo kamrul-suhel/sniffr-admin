@@ -1,28 +1,17 @@
 {
-<<<<<<< HEAD
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=ff2e2446b12742f43029",
-    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=ad8c24c064f80c8d96eb",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=36e605face22f05a5978",
-    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=4b4db6befa64603e8079",
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=0f5ff67bb21fa37622c9",
+    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=f7802a088586a2efead9",
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=7fd1f8e590009348348f",
+    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=b2e4c725638592a3cd6f",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=905b1fb2cd9a47fb0e93",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=755adb87f8dad9e9fcf0",
     "/assets/js/app.js": "/assets/js/app.js?id=0c7069fafde8c31e38d8",
-    "/assets/css/admin.css": "/assets/css/admin.css?id=e7b9945f9ed784ee3100",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=93a6df3cc813ec5c5ffa",
     "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=525fef64a554229f615b",
-    "/assets/admin/css/styles.css": "/assets/admin/css/styles.css?id=4a4271f4fad9e8b158f7",
-    "/assets/js/app.js.map": "/assets/js/app.js.map?id=1436fc0cefe108ab97b0",
-    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=5c9ca00813bfb8e748f9",
+    "/assets/admin/css/styles.css": "/assets/admin/css/styles.css?id=5606a2e09fa07b18b6f5",
+    "/assets/js/app.js.map": "/assets/js/app.js.map?id=405377a53a929238453c",
+    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=ad721179cb8958997ccb",
     "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=64a37d70c0f6c190d3db",
-    "/assets/admin/css/styles.css.map": "/assets/admin/css/styles.css.map?id=c9527b3c9f7a524b2c29",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=a8909769c7be9aa5d3ce",
-    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=d6899bc76d1de378c940",
+    "/assets/admin/css/styles.css.map": "/assets/admin/css/styles.css.map?id=a5e017a1ad64be44888c",
     "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
-=======
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/admin/css/styles.css": "/assets/admin/css/styles.css",
-    "/assets/js/utils.js": "/assets/js/utils.js"
->>>>>>> staging
 }
