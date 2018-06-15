@@ -14,7 +14,7 @@ class AddFlaggedToStories extends Migration
     public function up()
     {
         Schema::table('stories', function (Blueprint $table) {
-            $table->integer('flagged')->nullable()->unsigned()->after('active');
+            $table->integer('flagged')->nullable()->after('active')->default(0);
         });
     }
 
