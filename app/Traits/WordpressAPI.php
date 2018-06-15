@@ -10,7 +10,6 @@ trait WordpressAPI
     private function getToken()
     {
         $curl = curl_init();
-
         curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL') . $this->token_path . '?username=' . env('UNILAD_WP_USER') . '&password=' . env('UNILAD_WP_PASS'));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);

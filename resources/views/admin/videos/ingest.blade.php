@@ -71,17 +71,6 @@
 							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
-
-					<div class="panel-body" style="display: block;">
-						<div class="panel-body" style="display: block;">
-							<p>Select rights:</p>
-							<select id="rights" name="rights">
-								<option value="">Please Select</option>
-								<option value="ex">Exclusive</option>
-								<option value="nonex">Non Exclusive</option>
-							</select>
-						</div>
-					</div>
 				</div>
 			</div>
 

@@ -168,6 +168,7 @@
                             // Set the user store
                             this.$store.dispatch('getLoginStatus').then((response) => {
                                 // Check is client
+                                console.log(response);
                                 if(data.redirect_url === 'client'){
                                     let redirect_url = this.$store.getters.getAttepmtRoute;
                                     console.log(redirect_url);

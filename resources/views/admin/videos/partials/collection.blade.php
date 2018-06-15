@@ -1,5 +1,5 @@
 <div class="row">
-    <span class="col-md-6">
+    <span class="form-group col-md-6">
         <span class="input-group">
             <span class="input-group-addon">
                 Collection
@@ -9,7 +9,7 @@
                     <option value="{{ $collection->id }}"
                             @if(!empty($video->video_collection_id) && $video->video_collection_id == $collection->id)selected="selected"@endif>{{ $collection->name }}</option>
                 @endforeach
-                </select>
+            </select>
         </span>
     </span>
 </div>

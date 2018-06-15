@@ -10,7 +10,7 @@
                     </v-flex>
                     <!--<v-flex xs12 sm12 md5 lg5 xl5 pt-0 class="text-right">-->
                         <!--<div :class="{'pl-4' : content_padding}">-->
-                            <!--<v-btn dark block @click="onGoback()" class="ml-0 dark" large>License Video</v-btn>-->
+                            <!--<v-btn dark block @click="onGoback()" class="ml-0 dark" large>Download Video</v-btn>-->
                         <!--</div>-->
                     <!--</v-flex>-->
                 </v-layout>
@@ -42,7 +42,7 @@
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
 
-                                <v-btn dark block @click="onGoback()" class="dark" large>License Video</v-btn>
+                                <v-btn dark block @click="onGoback()" class="dark" large>Download Video</v-btn>
 
                             </v-flex>
 

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
@@ -15,12 +16,13 @@ use Illuminate\Notifications\Notifiable;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Client whereUpdatedAt($value)
+ * @property int account_owner_id
+ * @method static Builder|Client whereCreatedAt($value)
+ * @method static Builder|Client whereDeletedAt($value)
+ * @method static Builder|Client whereId($value)
+ * @method static Builder|Client whereName($value)
+ * @method static Builder|Client whereSlug($value)
+ * @method static Builder|Client whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Client extends Model

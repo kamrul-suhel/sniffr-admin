@@ -127,10 +127,12 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'admin'), function () {
+Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
+    Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
+    Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
 
     // Admin Video Functionality
     Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
@@ -163,6 +165,7 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('videos/shottypes/delete/{id}', array('uses' => 'Admin\AdminVideoShotTypeController@destroy'));
 
     Route::get('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
+
     Route::post('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
     Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
@@ -193,6 +196,8 @@ Route::group(array('prefix' => 'admin'), function () {
 
     Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('admin.stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
+    Route::get('stories/checkjobs', 'Admin\AdminStoryController@checkJobs');
+    Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');
     Route::get('stories/create', 'Admin\AdminStoryController@create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
@@ -210,16 +215,17 @@ Route::group(array('prefix' => 'admin'), function () {
 
 	Route::resource('clients', 'Admin\AdminClientController');
     Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
-    //Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
+    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
+    Route::get('clients', 'Admin\AdminClientController@index');
+    Route::get('clients/create', 'Admin\AdminClientController@create');
+    Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
+    Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
+    Route::post('clients/update/{client}', 'Admin\AdminClientController@update')->name('admin.clients.update');
+    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
-//    Route::get('clients', 'Admin\AdminClientController@index');
-//    Route::get('clients/create', 'Admin\AdminClientController@create');
-//    Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
-//    Route::get('clients/edit/{id}', 'Admin\AdminClientController@edit');
-//    Route::post('clients/update', array('uses' => 'Admin\AdminClientController@update'));
-//    Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
-
+	Route::get('contacts/autocomplete', 'Contact\ContactController@autocomplete')->name('contact.autocomplete');
     Route::resource('contacts', 'Contact\ContactController');
+
 
     Route::resource('users', 'Admin\AdminUsersController', ['only'=> ['index','create','store','edit','update','destroy']]);
 
@@ -233,6 +239,16 @@ Route::group(array('prefix' => 'admin'), function () {
     Route::get('nsfw/{id}', 'Admin\AdminVideosController@nsfw');
 
     Route::get('reminders', 'Admin\AdminLabelController@automateEmailReminders');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin story in dialog box
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('storydialogbox/{alpha_id}', 'SearchController@storyInDialog');
+
 });
 
 
@@ -242,15 +258,20 @@ Route::group(array('prefix' => 'admin'), function () {
 |--------------------------------------------------------------------------
 */
 
-Route::group(array('prefix' => 'client'), function () {
+Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::resource('orders', 'OrderController');
     Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('client.stories.download');
     Route::get('stories/{id}/download_pdf', 'StoryController@getPdf')->name('client.stories.download_pdf');
     Route::get('asset/{id}/download', 'StoryController@downloadAsset')->name('client.asset.download');
     Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
-
+    Route::get('video/{id}/license', 'StoryController@licenseVideo')->name('client.video.license');
     Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
 
+    Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
+    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
+    Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
+    Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
+    Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
 
     /*
     |--------------------------------------------------------------------------
@@ -271,7 +292,8 @@ Route::group(array('prefix' => 'client'), function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('video/{id}/license', 'Frontend\client\MailVideoLicenseController@index')->name('mailer.video.license');
+    // NOT SURE WHAT YOU WERE TRYING TO DO HERE BUT IT DOESN'T WORK?
+    //Route::get('video/{id}/license', 'Frontend\client\MailVideoLicenseController@index')->name('mailer.video.license');
 });
 
 
@@ -285,6 +307,7 @@ Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
 Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
 Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
 Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+
 
 
 /*

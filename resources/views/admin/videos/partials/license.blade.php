@@ -4,12 +4,7 @@
             {{ ucfirst($video->state) }}
             @if($video->state=='licensed')
                 |
-                @if($video->rights === 'nonex')
-                    <i class="fa fa-times-circle" title="Non-Exclusive"></i>
-                    Non-Exclusive
-                @else
-                    <i class="fa fa-check-circle" title="Exclusive"></i> Exclusive
-                @endif
+                <i class="fa fa-{{ $video->rights == 'nonexc' ? 'times' : 'check' }}-circle"></i> {{ $video->rights == 'nonexc' ? 'Non-' : '' }}Ex{{ $video->rights != 'ex' ? ' Chaser' : '' }}
                 Video
             @endif
             @if($video->trashed())
@@ -29,7 +24,8 @@
 
     <div class="panel-footer">
         <div class="text-right">
-            @if($video->rights != 'exc')
+            @if(!$video->hasContract())
+
                 @if($video->state == 'pending' || $video->state == 'problem' || $video->state == 'licensed' || $video->state=='restricted')
                     @if($video->state != 'licensed')
                         <a href="{{ url('admin/videos/status/licensed/' . $video->alpha_id ) }}"
@@ -49,13 +45,14 @@
                             Problem
                         </a>
                     @endif
-                @elseif($video->state == 'new' && $video->rights == 'ex')
+                @elseif($video->state == 'new' && ($video->rights == 'ex' || $video->rights == 'nonex'))
                     <a href="{{ url('admin/videos/status/accepted/' . $video->alpha_id ) }}"
                        class="btn btn-primary btn-success js-state-accept">
                         Accept
                     </a>
                     <a href="{{ url('admin/videos/status/rejected/' . $video->alpha_id ) }}"
-                       class="btn btn-primary btn-danger">Reject</a>
+                       class="btn btn-primary btn-danger">Reject
+                    </a>
                 @elseif($video->state == 'accepted')
                     <div class="pull-left">
                         @if($video->reminders)
@@ -88,13 +85,17 @@
 
             @if($video->file)
                 <a href="{{ url('/download/'.$video->alpha_id) }}" class="btn btn-primary{{ $video->file_watermark ? ' js-download' : '' }}" title="Download Video" download>
-                    <i class="fa fa-download"></i>
+                    <i class="fa fa-cloud-download"></i>
                 </a>
             @endif
 
-            @if(($video->state == 'licensed') && ($video->rights != 'exc'))
-                <a href="{{ url('/admin/pdfview/' . $video->alpha_id) }}" class="btn btn-primary" title="Download Terms And Conditions" download>
-                    <i class="fa fa-print"></i>
+            @if($video->rights == 'ex')
+                <a href="{{ url('admin/pdfview/'.$video->alpha_id) }}" class="btn btn-primary" title="Download License">
+                    <i class="fa fa-arrow-circle-o-down"></i>
+                </a>
+            @elseif($video->hasContract())
+                <a href="{{ route('contract.download', ['id' => $video->currentContract->reference_id]) }}" class="btn btn-primary" title="Download Contract">
+                    <i class="fa fa-arrow-circle-down"></i>
                 </a>
             @endif
 

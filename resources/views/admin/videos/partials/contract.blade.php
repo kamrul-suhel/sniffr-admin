@@ -7,7 +7,7 @@
             </h2>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="input-group">
+                    <div class="form-group input-group">
                         <span class="input-group-addon">Upfront Payment</span>
                         <input type="text" class="form-control" disabled="disabled" value="{{
                                $video->currentContract->upfront_payment }} {{
@@ -21,7 +21,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="input-group">
+                    <div class="form-group input-group">
                         <span class="input-group-addon">Revenue Share</span>
                         <input type="text" class="form-control" disabled="disabled"
                                value="{{ $video->currentContract->revenue_share }}%">
@@ -31,7 +31,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="input-group">
+                    <div class="form-group input-group">
                         <span class="input-group-addon">Success System</span>
                         <textarea class="form-control" disabled="disabled">{{
                 (key_exists($video->currentContract->success_system, config('success_system'))) ?
@@ -43,7 +43,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="input-group">
+                    <div class="form-group input-group">
                         <span class="input-group-addon">Credit</span>
                         <textarea class="form-control" disabled="disabled">{{
                         $video->currentContract->credit
@@ -53,7 +53,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="input-group">
+                    <div class="form-group input-group">
                         <span class="input-group-addon">Notes</span>
                         <textarea class="form-control" disabled="disabled">{{
                         $video->currentContract->notes
@@ -63,7 +63,7 @@
 
                 @if(key_exists($video->currentContract->contract_model_id, config('contracts')))
                     <div class="col-md-12">
-                        <div class="input-group">
+                        <div class="form-group input-group">
                             <span class="input-group-addon">Contract Template</span>
                             <input type="text" class="form-control" disabled="disabled" value="{!!
                             config('contracts')[$video->currentContract->contract_model_id]['name']
@@ -74,7 +74,7 @@
 
                 @if($video->currentContract->signed_at)
                     <div class="col-md-12">
-                        <div class="input-group">
+                        <div class="form-group input-group">
                             <span class="input-group-addon">Signed</span>
                             <input type="text" class="form-control" disabled="disabled" value="{{
                         date('l, jS F Y - H:i:s', strtotime($video->currentContract->signed_at))
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <div class="input-group">
+                        <div class="form-group input-group">
                             <span class="input-group-addon">IP Address</span>
                             <input type="text" class="form-control" disabled="disabled" value="{{
                         $video->currentContract->ip
@@ -92,7 +92,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <div class="input-group">
+                        <div class="form-group input-group">
                             <span class="input-group-addon">User Agent</span>
                             <textarea class="form-control" disabled="disabled" rows="4">{{
                         $video->currentContract->user_agent
@@ -102,7 +102,7 @@
 
                 @else
                     <div class="col-md-12">
-                        <div class="input-group">
+                        <div class="form-group input-group">
                             <span class="input-group-addon">Contract Link</span>
                             <textarea class="form-control" disabled="disabled" rows="2">{{
                         route('contract.accept', ['token' => $video->currentContract->token])
@@ -115,11 +115,7 @@
 
         <div class="col-md-12">
             <div class="input-group pull-right">
-                @if($video->currentContract->signed_at)
-                <a href="{{ route('contract.download', ['id' => $video->currentContract->reference_id]) }}" class="btn btn-info">
-                    Download Contract
-                </a>
-                @else
+                @if(!$video->currentContract->signed_at)
                     @if($video->currentContract->sent_at)
                     <p>{{ 'Sent:' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $video->currentContract->sent_at)->diffForHumans().' ' }}
                         <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">

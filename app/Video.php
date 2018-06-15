@@ -119,6 +119,11 @@ class Video extends Model
         return $this->hasOne('\App\Contract')->latest();
     }
 
+	public function hasContract()
+	{
+		return $this->hasOne('\App\Contract')->latest()->count() ? true : false;
+	}
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
@@ -126,6 +131,14 @@ class Video extends Model
     {
         return $this->hasMany(Download::class);
     }
+
+    /**
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+	 */
+	public function mailers()
+	{
+		return $this->belongsToMany(ClientMailer::class);
+	}
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -226,6 +239,13 @@ class Video extends Model
 
     public function order(){
         return $this->hasOne(Order::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdUser(){
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

@@ -60,11 +60,11 @@
                     dark
                     large
                     color="dark"
-                    @click.native="onDownloadAllAssets()"
+                    @click.native="onLicenseVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
-                Download assets
+                DOWNLOAD VIDEO
             </v-btn>
 
             <v-btn v-if="!video.order"
@@ -72,11 +72,11 @@
                     dark
                     large
                     color="dark"
-                    @click.native="onLiscenseVideo()"
+                    @click.native="onLicenseVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
-                LICENSE VIDEO
+                DOWNLOAD VIDEO
             </v-btn>
         </v-flex>
 
@@ -151,12 +151,10 @@
                 return image;
             },
 
-            onLiscenseVideo() {
+            onLicenseVideo() {
                 var url = '/client/video/'+this.video.id+'/license';
 
-                axios.get(url).then((response) => {
-
-                });
+                window.location = url;
             }
         }
     }

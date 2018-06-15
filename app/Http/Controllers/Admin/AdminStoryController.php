@@ -41,86 +41,95 @@ class AdminStoryController extends Controller
         ini_set('max_execution_time', 1800);
 
         $version = VideoHelper::quickRandom(); // set random version for cache busting
-        $posts_pending = $this->apiRequest('posts?version='.$version.'&status=pending&tags='.env('UNILAD_WP_TAG_ID'), true);
-        $posts_publish = $this->apiRequest('posts?version='.$version.'&status=publish&tags='.env('UNILAD_WP_TAG_ID'), true);
+        $posts_pending = $this->apiRequest('posts?version=' . $version . '&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_publish = $this->apiRequest('posts?version=' . $version . '&status=publish&tags=' . env('UNILAD_WP_TAG_ID'), true);
         $posts = array_merge($posts_pending, $posts_publish);
 
-        $stories_wp = [];
-        $story_ids = [];
-
-        foreach($posts as $post){
-            // create array for curl stories objects
-            $excerpt = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', substr(trim(strip_tags($post->excerpt->rendered)),0,700));
-
-            $curpost = [
-                "wp_id" => $post->id,
-                "status" => $post->status,
-                "title" => trim(strip_tags($post->title->rendered)),
-                "excerpt" => $excerpt,
-                "description" => preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered),
-                "url" => $post->link,
-                "date" => Carbon::parse($post->date)->format('Y-m-d H:i:s'),
-                "author" => ''
-            ];
-
-            // find assets within post content (old way but could be useful in the future)
-            //$curpost["assets"] = $this->getUrls(preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $post->content->rendered));
-
-            //get the post categories
-            $cat_list = [];
-            foreach($post->categories as $tax_obj){
-                $cat_list[] = $tax_obj;
-            }
-            $curpost["categories"] = $cat_list;
-
-            $curpost["featured_media"] = $post->featured_media;
-            $curpost["author"] = $post->author;
-            $stories_wp[] = $curpost;
-            $story_ids[] = $post->id;
-        }
+        // set dispatched for sending response back to ajax
+        $dispatched = false;
 
         // store stories from wordpress in database
-        foreach($stories_wp as $story_wp){
-
+        foreach($posts as $post){
             // checks if wp post already exists within sniffr stories
-            $story_find = Story::where([['wp_id', $story_wp['wp_id']]])->first();
+            $story = Story::where([['wp_id', $post->id]])->first();
 
-            if(!$story_find) {
-                QueueStory::dispatch($story_wp, 'new', (Auth::user() ? Auth::user()->id : 0))
-                    ->delay(now()->addSeconds(5));
+            if(!$story) {
+                QueueStory::dispatch($post, 'new', (Auth::user() ? Auth::user()->id : 0))
+                    ->delay(now()->addSeconds(2));
+                $dispatched = true;
             } else {
-                $storyTime = Carbon::parse($story_find->date_ingested);
-                $postTime = Carbon::parse($story_wp['date']);
+                $storyTime = Carbon::parse($story->date_ingested);
+                $postTime = Carbon::parse($post->date);
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 // if wp post is updated 5mins after our own story record
                 if($differenceTime>150) {
-                    QueueStory::dispatch($story_wp, 'update', (Auth::user() ? Auth::user()->id : 0))
-                        ->delay(now()->addSeconds(5));
+                    QueueStory::dispatch($post, 'update', (Auth::user() ? Auth::user()->id : 0))
+                        ->delay(now()->addSeconds(2));
+                    $dispatched = true;
                 }
             }
         }
 
-        return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+        //return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+        return response()->json([
+            'status' => 'success',
+            'dispatched' => $dispatched,
+            'message' => 'all good',
+        ]);
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
-        $stories = new Story;
-        $stories = $stories->orderBy('date_ingested', 'DESC')->paginate(10);
-        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])->orderBy('licensed_at', 'DESC')->paginate(10);
+    public function checkJobs() {
+        $jobs = \DB::table('jobs')->where('payload', 'LIKE' , '%QueueStory%')->count();
+        return response()->json([
+            'status' => 'success',
+            'jobs' => $jobs,
+            'message' => 'all good',
+        ]);
+    }
 
-        $data = [
-            'stories' => $stories,
-            'videos' => $videos,
-        ];
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
 
-        /*'users' => User::all(),
-            'user' => Auth::user()*/
+        if ($request->ajax()) {
+            $stories = Story::orderBy('date_ingested', 'DESC')
+                ->paginate(12);
 
-        return view('admin.stories.index', $data); //return response()->json($formatted_posts);
+            $data = [
+                'stories' => $stories
+            ];
+            return $this->successResponse($data);
+        }
+
+        return view('admin.stories.index'); //return response()->json($formatted_posts);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMailerVideos(Request $request)
+    {
+
+
+        if ($request->ajax()) {
+            $videos = Video::with('createdUser')
+                ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                ->orderBy('licensed_at', 'DESC')
+                ->paginate(12);
+            $data = [
+                'videos' => $videos
+            ];
+            return $this->successResponse($data);
+        }
+
     }
 
     /**
@@ -146,8 +155,7 @@ class AdminStoryController extends Controller
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
@@ -161,7 +169,7 @@ class AdminStoryController extends Controller
         $story->active = 1;
         $story->save();
 
-        if(Input::get('videos')) {
+        if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
         }
 
@@ -205,28 +213,27 @@ class AdminStoryController extends Controller
 
         $validator = Validator::make($data, $this->rules);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        if(Input::get('title')) {
+        if (Input::get('title')) {
             $story->title = Input::get('title');
         }
 
         $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
 
-        if(Input::get('description')) {
+        if (Input::get('description')) {
             $story->description = Input::get('description');
         }
 
-        if(Input::get('notes')) {
+        if (Input::get('notes')) {
             $story->notes = Input::get('notes');
         }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
 
-        if(Input::get('videos')) {
+        if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
         }
 
@@ -246,7 +253,7 @@ class AdminStoryController extends Controller
     {
         $story = Story::find($id);
 
-        if(!$story){
+        if (!$story) {
             abort(404);
         }
 
@@ -256,36 +263,5 @@ class AdminStoryController extends Controller
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);
-    }
-
-    /**
-     * @param string $postBody
-     * @return null|string
-     */
-    private function getJwPlayerCode(string $postBody)
-    {
-        $reg = 'jwplayer_([^_]+)';
-
-        if ($c = preg_match_all("/" . $reg . "/is", $postBody, $matches)) {
-            $alphanum = $matches[1][0];
-            return $alphanum;
-        }
-        return null;
-    }
-
-    /**
-     * @param string $jwPlayerCode
-     */
-    private function getJwPlayerFile(string $jwPlayerCode)
-    {
-        $response = \GuzzleHttp\json_decode(file_get_contents('https://content.jwplatform.com/feeds/' . $jwPlayerCode . '.json'));
-
-        $sources = $response->playlist[0]->sources;
-
-        $videoUrl = array_filter($sources, function($k) {
-            return $k->type == 'video/mp4';
-        });
-
-        return end($videoUrl)->file;
     }
 }

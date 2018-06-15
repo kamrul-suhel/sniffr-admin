@@ -147,16 +147,7 @@ class AuthController extends Controller
      */
 	public function password_reset()
 	{
-        $settings =Setting::first();
-		$data = [
-		    'type' => 'forgot_password',
-			'payment_settings' => config('settings.payments'),
-			'video_categories' => VideoCategory::all(),
-			'theme_settings' => config('settings.theme'),
-			'pages' => Page::where('active', '=', 1)->get(),
-            'settings'  => $settings
-        ];
-        return view('frontend.pages.login.reset_password', $data);
+        return view('frontend.pages.login.reset_password');
 	}
 
     /**
@@ -239,7 +230,6 @@ class AuthController extends Controller
             $user->password = \Hash::make($password);
             $user->save();
         });
-
 
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:

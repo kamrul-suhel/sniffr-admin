@@ -1,6 +1,6 @@
 <div class="row">
-    <span class="col-md-6">
-        <span class="input-group">
+    <div class="col-md-6">
+        <span class="form-group input-group">
             <span class="input-group-addon">
                 Filmed Date
             </span>
@@ -8,11 +8,8 @@
             ($video) ? $video->date_filmed : ''
             }}" title="date filmed"/>
         </span>
-    </span>
-</div>
-<div class="row">
-    <span class="col-md-6">
-        <span class="input-group">
+
+        <span class="form-group input-group">
             <span class="input-group-addon">
                 Uploaded Date
             </span>
@@ -20,5 +17,5 @@
             ($video) ? ($video->created_at)->format('d/m/Y') : ''
             }}"/>
         </span>
-    </span>
+    </div>
 </div>
