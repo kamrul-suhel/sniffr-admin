@@ -2,14 +2,27 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property int $id
+ * @property int $client_id
+ * @property Client $client
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property mixed role
+ * @property int active
+ * @property string password
+ * @property string email
+ * @property string username
+ * @property string first_name
+ * @property string last_name
+ * @property string full_name
+ * @property string tel
+ * @property string job_title
+ * @property string avatar
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -32,6 +45,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function client()
     {
         return $this->belongsTo(Client::class)->first();
@@ -44,7 +60,7 @@ class User extends Authenticatable
 
     public function canAccessClient()
     {
-        return ($this->role == 'client' || $this->role == 'admin');
+        return ($this->role == 'client_admin' || $this->role == 'client' || $this->role == 'admin');
     }
 
     public function isAdmin()

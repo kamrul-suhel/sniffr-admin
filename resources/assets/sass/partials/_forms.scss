@@ -1,14 +1,19 @@
 
-.search-form-full .form-group, 
-.search-form-full .form-group 
+.search-form-full .form-group,
+.search-form-full .form-group
 .form-control{
     margin:0px;
+}
+
+.input-group-addon {
+    min-width: 150px;
+    text-align: left !important;
 }
 
 #new-menu-form{
     input[type="radio"]{
         margin-left:10px;
-    }   
+    }
 
     input[type="radio"]:first-child{
         margin-left:0px;
@@ -29,4 +34,15 @@
 
 label{
     font-weight: 400;
+}
+
+#selectpicker-creator{
+  .inner.open{
+    margin-top: 40px;
+  }
+}
+
+.input-group .form-control {
+  position: relative;
+  z-index: inherit !important;
 }

@@ -1,0 +1,80 @@
+@import "./basic-reset";
+@import "./variables";
+@import "./fonts";
+@import "./mixin";
+@import "./global";
+@import "./plugin";
+@import "../../../../node_modules/vuetify/dist/vuetify.min.css";
+
+
+/* ************************* Animation css ******************* */
+@import "./animation";
+
+
+/* ************************* Header style ******************* */
+@import "layout/header";
+
+
+/* ************************* NAV style ******************* */
+@import "./layout/nav";
+
+
+/* ************************* Home Page style ******************* */
+@import "pages/home";
+
+
+/* ************************* Login Page style ******************* */
+@import "pages/login";
+
+
+/* ************************* Videos Page style ******************* */
+@import "pages/videos";
+
+/* ************************* Video loop style ******************* */
+@import "layout/video-loop";
+
+/* ************************* Video loop section style ******************* */
+@import "video-loop";
+
+/* ************************* Video dialog box section style ******************* */
+@import "pages/video-dialog-box";
+
+
+/* ************************* Video detail style ******************* */
+@import "pages/video-detail";
+
+
+/* ************************* Video upload page style ******************* */
+@import "pages/video-upload";
+
+
+/* ************************* Footer style ******************* */
+@import "layout/footer";
+
+
+/* ************************* Pagination style ******************* */
+@import "layout/pagination";
+
+
+/* ************************* Submission form page ******************* */
+@import "pages/submission-form";
+
+/* ************************* More detail form page ******************* */
+@import "form/more-detail";
+
+
+/* ************************* Client section style ******************* */
+@import "pages/client/index";
+
+
+@include small-device{
+}
+
+@include medium-device{
+
+}
+@include large-device{
+
+}
+@include extra-large-device{
+}

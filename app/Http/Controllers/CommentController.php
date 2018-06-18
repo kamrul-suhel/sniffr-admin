@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
-use App\Http\Requests\CreateComment;
-use App\Http\Requests\DeleteComment;
+use App\Http\Requests\Comment\CreateComment;
+use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -16,20 +16,25 @@ class CommentController extends Controller
     public function store(CreateComment $request)
     {
         $comment = new Comment();
-        $comment->comment = $request->get('comment');
-        $comment->video_id = $request->get('video_id');
+        $comment->comment = $request->get('comment') ?? null;
+        $comment->video_id = $request->get('video_id') ?? null;
+        $comment->contact_id = $request->get('contact_id') ?? null;
         $comment->user_id = Auth::id();
         $comment->save();
 
-        return redirect()->route('admin.video.edit', [
-            'id' => $request->get('alpha_id')
-        ]);
+        //If comment is from contacts/{id}/edit
+        if($request->has('contact_id')) {
+            return redirect('admin/contacts/'.$request->get('contact_id').'/edit');
+        }
+
+        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')]);
     }
 
     /**
      * @param DeleteComment $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy(DeleteComment $request, $id)
     {
@@ -45,7 +50,7 @@ class CommentController extends Controller
             $note_type = 'success';
         }
 
-        return redirect()->route('admin.video.edit', ['id' => $request->get('alpha_id')])->with([
+        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')])->with([
             'note' => $note,
             'note_type' => $note_type
         ]);

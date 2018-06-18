@@ -80,11 +80,11 @@
 					<?php $depth = 0; ?>
 					@foreach($menu as $menu_item)
 
-						@if( (isset($previous_item->id) && $menu_item->parent_id == $previous_item->parent_id) || $menu_item->parent_id == NULL )
+						@if( (isset($previous_item->id) && $menu_item->parent_id == $previous_item->parent_id) || $menu_item->parent_id == NULL ))
 							</li>
 						@endif
 
-						@if( (isset($previous_item->parent_id) && $previous_item->parent_id !== $menu_item->parent_id) && $previous_item->id != $menu_item->parent_id )
+						@if((isset($previous_item->parent_id) && $previous_item->parent_id !== $menu_item->parent_id) && $previous_item->id != $menu_item->parent_id ))
 							@if($depth == 2)
 								</li></ol>
 								<?php $depth -= 1; ?>
@@ -204,8 +204,6 @@
 
 		</script>
 
+	@endsection
 
-
-	@stop
-
-@stop
+@endsection

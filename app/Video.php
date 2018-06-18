@@ -13,13 +13,40 @@ use Illuminate\Support\Facades\Cache;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property Comment[] $cached_comments
- * @property Campaign[] $cached_campaigns
  * @property Download[] $cached_downloads
  * @property-read \App\Tag|null $tags
  * @property-read \App\Contact|null $contact
  * @property-read \App\Comment|null $comments
- * @property-read \App\Campaign|null $campaigns
  * @property-read \App\Download|null $downloads
+ * @property string $alpha_id
+ * @property int $contact_id
+ * @property int $contract_id
+ * @property string $title
+ * @property string $state
+ * @property string $rights
+ * @property string $source
+ * @property string $ip
+ * @property string $user_agent
+ * @property string $url
+ * @property string $file
+ * @property null|string $mime
+ * @property string $youtube_id
+ * @property string $image
+ * @property string $thumb
+ * @property string $embed_code
+ * @property int $vertical
+ * @property string $description
+ * @property int $video_category_id
+ * @property int $video_collection_id
+ * @property int $video_shottype_id
+ * @property int $user_id
+ * @property int $featured
+ * @property int $active
+ * @property string $details
+ * @property string $location
+ * @property string date_filmed
+ * @property int $is_exclusive
+ * @property int $creator_id
  * @mixin \Eloquent
  */
 class Video extends Model
@@ -82,14 +109,43 @@ class Video extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    public function currentContract()
+    {
+        return $this->hasOne('\App\Contract')->latest();
+    }
+
+	public function hasContract()
+	{
+		return $this->hasOne('\App\Contract')->latest()->count() ? true : false;
+	}
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function downloads()
     {
         return $this->hasMany(Download::class);
     }
 
-    public function campaigns()
+    /**
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+	 */
+	public function mailers()
+	{
+		return $this->belongsToMany(ClientMailer::class);
+	}
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function socialLinks()
     {
-        return $this->belongsToMany(Campaign::class)->withTimestamps()->withPivot('state', 'created_at');
+        return $this->hasMany(VideoSocialLink::class);
     }
 
     public function routeNotificationForSlack()
@@ -100,6 +156,7 @@ class Video extends Model
     /**
      * @param int $page
      * @return string
+     * @codeCoverageIgnore
      */
     public function cacheKey(int $page = 0)
     {
@@ -114,19 +171,23 @@ class Video extends Model
      * @param int $videos_per_page
      * @param $page
      * @return mixed
+     * TODO: Not being used
+     * @codeCoverageIgnore
      */
     public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
     {
-        if (\App::environment() !== 'production') {
+        if (config('settings.cache.cache_enabled')) {
             return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
-                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
             });
         }
-        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->simplePaginate($videos_per_page);
+
+        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
     }
 
     /**
      * @return Comment[]
+     * @codeCoverageIgnore
      */
     public function getCachedComments()
     {
@@ -136,17 +197,8 @@ class Video extends Model
     }
 
     /**
-     * @return Campaign[]
-     */
-    public function getCachedCampaigns()
-    {
-        return Cache::remember($this->cacheKey() . ':campaigns', self::CACHE_EXPIRATION, function () {
-            return $this->campaigns->toArray();
-        });
-    }
-
-    /**
      * @return Download[]
+     * @codeCoverageIgnore
      */
     public function getCachedDownloads()
     {
@@ -157,6 +209,7 @@ class Video extends Model
 
     /**
      * @return Contact[]
+     * @codeCoverageIgnore
      */
     public function getCachedContact()
     {
@@ -167,11 +220,46 @@ class Video extends Model
 
     /**
      * @return Tag[]
+     * @codeCoverageIgnore
      */
     public function getCachedTags()
     {
         return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
             return $this->tags->toArray();
         });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function stories()
+    {
+        return $this->belongsToMany(Story::class);
+    }
+
+    public function order(){
+        return $this->hasOne(Order::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdUser(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @param Client $client
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function clientVideos(Client $client)
+    {
+        $user_id = $request->user_id;
+        $client_mailer = ClientMailer::with('stories.orders')
+            ->whereHas('users', function ($query) use ($user_id) {
+                $query->where('users.id', '=', $user_id);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
     }
 }

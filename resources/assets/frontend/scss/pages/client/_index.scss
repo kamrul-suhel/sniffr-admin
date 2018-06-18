@@ -1,0 +1,40 @@
+@import './asset_component';
+
+@import './client_story_detail';
+
+@import './client_video_download';
+@import './client_mail';
+
+@import './client_downloaded_stories';
+@import 'client_soty_in_dialog';
+
+@import './asset_video_download_component';
+@import './client_video_detail_component';
+
+.client-content{
+  .speed-dial {
+    position: absolute;
+    left: -5px;
+  }
+
+  .btn--floating {
+    position: relative;
+  }
+
+  .no-stories{
+    margin-top:40px;
+  }
+  a{
+    color:#000;
+  }
+}
+.client-sub-menu{
+  top: 150px !important;
+}
+
+.client-nav{
+  position:relative;
+  width:100%;
+  height:20px;
+}
+

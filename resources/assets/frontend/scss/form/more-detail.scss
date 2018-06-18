@@ -1,0 +1,30 @@
+.video-more-detail-component{
+  .video-js{
+    height:250px;
+  }
+
+  @include small-device {
+    .video-js{
+      height:250px;
+    }
+  }
+
+  @include medium-device {
+    .video-js{
+      height:350px;
+    }
+  }
+
+  @include large-device {
+    .video-js{
+      height:450px;
+    }
+  }
+
+  @include extra-large-device {
+    .video-js{
+      height:450px;
+    }
+  }
+
+}

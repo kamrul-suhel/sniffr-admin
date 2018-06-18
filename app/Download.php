@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Download
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $user_id
  * @property int $client_id
- * @property int $video_id
+ * @property int story_id
  * @property string|null $type
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -27,10 +28,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Download extends Model
 {
+    //use SoftDeletes;
     protected $table = 'downloads';
     protected $guarded = [];
     public static $rules = [];
-    protected $fillable = ['user_id', 'video_id'];
+    protected $fillable = ['user_id', 'video_id', 'client_id'];
 
     public function user()
     {

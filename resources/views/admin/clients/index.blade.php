@@ -1,16 +1,21 @@
 @extends('admin.master')
 
 @section('content')
-
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
-				<h3><i class="fa fa-users"></i> Clients <a href="{{ url('admin/clients/create') }}" class="btn btn-success pull-right"><i class="fa fa-plus-circle"></i> Add New</a></h3>
+				<h3>
+                    <i class="fa fa-users"></i>
+                    Clients
+                    <a href="{{ url('admin/clients/create') }}" class="btn btn-success pull-right">
+                        <i class="fa fa-plus-circle"></i>
+                        Add New
+                    </a>
+                </h3>
 			</div>
 		</div>
 	</div>
 	<div class="clear"></div>
-
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
@@ -20,10 +25,14 @@
 			<tr>
 				<td>{{ TextHelper::shorten($client->name, 250) }}</td>
 				<td>
-					<p>
-						<a href="{{ url('admin/clients/edit') . '/' . $client->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a>
-						<a href="{{ url('admin/clients/delete') . '/' . $client->id }}" class="btn btn-xs btn-danger delete"><span class="fa fa-trash"></span> Delete</a>
-					</p>
+                    <a href="{{ route('clients.orders', ['id' => $client->id]) }}" class="btn btn-xs btn-warning">
+                        <span class="fa fa-bar-chart"></span>
+                        Orders
+                    </a>
+                    <a href="{{ route('clients.edit', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
+                        <span class="fa fa-edit"></span>
+                        Edit
+                    </a>
 				</td>
 			</tr>
 			@endforeach
@@ -32,19 +41,4 @@
 	<div class="clear"></div>
 
 	<div class="text-center"><?= $clients->render(); ?></div>
-
-	@section('javascript')
-	<script>
-		$ = jQuery;
-		$(document).ready(function(){
-			$('.delete').click(function(e){
-				e.preventDefault();
-				if (confirm("Are you sure you want to delete this client?")) {
-			       window.location = $(this).attr('href');
-			    }
-			    return false;
-			});
-		});
-	</script>
-	@stop
 @stop

@@ -9,6 +9,7 @@
         "aws/aws-sdk-php-laravel": "~3.0",
         "baopham/dynamodb": "^4.1",
         "barryvdh/laravel-dompdf": "^0.8.2",
+        "chumper/zipper": "^1.0",
         "comocode/laravel-ab": "dev-master",
         "doctrine/dbal": "^2.6",
         "dumpk/elastcoder": "^0.9.1",
@@ -29,7 +30,8 @@
         "pbmedia/laravel-ffmpeg": "^1.3.0",
         "predis/predis": "^1.1",
         "ralouphie/mimey": "^1.0",
-        "schooch/youtube": "^5.0.3",
+        "ramsey/uuid": "^3.7",
+        "schooch/youtube": "^5.0.5",
         "talvbansal/media-manager": "^2.5",
         "thujohn/twitter": "^2.2"
     },
@@ -56,7 +58,6 @@
             "app/Libraries/ImageHandler.php",
             "app/Libraries/NestedHelper.php",
             "app/Libraries/TextHelper.php",
-            "app/Libraries/ThemeHelper.php",
             "app/Libraries/TimeHelper.php"
         ]
     },

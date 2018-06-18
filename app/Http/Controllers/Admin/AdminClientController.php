@@ -2,171 +2,246 @@
 
 namespace App\Http\Controllers\Admin;
 
-use View;
-use Auth;
-use Validator;
-use Redirect;
-
 use App\Client;
-use App\Campaign;
-
+use App\Http\Requests\Company\CreateCompanyRequest;
+use App\Http\Requests\Company\EditCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Jobs\QueueEmailCompany;
+use App\Libraries\VideoHelper;
+use App\Order;
+use App\User;
+use Auth;
+use Redirect;
+use App\Story;
+use App\Download;
 use App\Traits\Slug;
-use App\Libraries\ThemeHelper;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-
 use App\Http\Controllers\Controller;
 
 class AdminClientController extends Controller
 {
     use Slug;
 
-    protected $rules = [
-        'name' => 'required'
-    ];
-    //
-    public function __construct(Request $request)
-    {
-        $this->middleware(['admin:admin,manager']);
-    }
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
-        $user = Auth::user();
 
-        $data = array(
+        $data = [
             'clients' => $clients,
-            'user' => $user,
-            'admin_user' => Auth::user()
-        );
+            'user' => Auth::user()
+        ];
 
          return view('admin.clients.index', $data);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        $data = array(
-            'post_route' => url('admin/clients/store'),
-            'button_text' => 'Add New Client',
-            'admin_user' => Auth::user()
-        );
-
-        return view('admin.clients.create_edit', $data);
+        return view('admin.clients.create_edit', [
+            'company' => null,
+            'user' => null,
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CreateCompanyRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-
-    public function store()
+    public function store(CreateCompanyRequest $request)
     {
-        $validator = Validator::make($data = Input::all(), $this->rules);
+        $company_slug = $this->slugify($request->get('company_name'));
 
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
+        $company_id = Client::insertGetId([
+            'name' => $request->get('company_name'),
+            'slug' => $company_slug,
+        ]);
+
+        $password = VideoHelper::quickRandom();
+
+        $user_id = User::insertGetId([
+            'username' => $company_slug,
+            'email' => $request->get('user_email'),
+            'first_name' => $request->get('user_first_name'),
+            'last_name' => $request->get('user_last_name'),
+            'role' => 'client',
+            'password' => \Hash::make($password),
+            'client_id' => $company_id
+        ]);
+
+        $user = User::find($user_id);
+
+        $client = Client::find($company_id);
+        $client->account_owner_id = $user_id;
+        $client->save();
+
+        $token = app('App\Http\Controllers\Admin\AdminUsersController')->getToken($request->get('user_email'), $user);
+
+        if ($request->get('send_invitation')) {
+            QueueEmailCompany::dispatch(
+                $company_id,
+                $request->get('user_email'),
+                $request->get('user_first_name'),
+                $request->get('user_email'),
+                $token
+            );
         }
 
-        $data['slug'] = $this->slugify($data['name']);
-
-        $client = Client::create($data);
-
-        return Redirect::to('admin/clients')->with(array('note' => 'New Client Successfully Added!', 'note_type' => 'success') );
+        return Redirect::to('admin/clients')->with([
+            'note' => 'New Company Successfully Added!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @param EditCompanyRequest|Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @internal param $id
      */
-    public function show(Client $client)
+    public function myAccount(EditCompanyRequest $request)
     {
-        //
+        $company = Client::find(Auth::user()->client_id);
+
+        return view('admin.clients.create_edit', [
+            'company' => $company,
+            'user' => Auth::user(),
+            'update_path' => 'client.update',
+            'company_users' => User::where('client_id', $company->id)->get()
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @param EditCompanyRequest $request
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-
-    public function edit($id)
+    public function edit(EditCompanyRequest $request, int $id)
     {
-        $client = Client::find($id);
+        $company = Client::find($id);
 
-        $data = array(
-            'headline' => '<i class="fa fa-edit"></i> Edit Client',
-            'client' => $client,
+        return view('admin.clients.create_edit', [
+            'company' => $company,
             'post_route' => url('admin/clients/update'),
-            'button_text' => 'Update Client',
-            'admin_user' => Auth::user()
-        );
-
-        return view('admin.clients.create_edit', $data);
+            'user' => Auth::user(),
+            'update_path' => 'clients.update',
+            'company_users' => User::where('client_id', $company->id)->get()
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @param UpdateCompanyRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-
-    public function update()
+    public function update(UpdateCompanyRequest $request, int $id)
     {
-        $data = Input::all();
-        $id = $data['id'];
-        $client = Client::findOrFail($id);
+        $company = Client::findOrFail($id);
 
-        $validator = Validator::make($data, $this->rules);
+        $company->slug = $this->slugify($request->input('company_name'));
+        $company->name = $request->input('company_name');
+        $company->address_line1 = $request->input('address_line1');
+        $company->address_line2 = $request->input('address_line2');
+        $company->city = $request->input('city');
+        $company->postcode = $request->input('postcode');
+        $company->country = $request->input('country');
+        $company->vat_number = $request->input('vat_number');
+        $company->billing_tel = $request->input('billing_tel');
+        $company->billing_email = $request->input('billing_email');
 
-        if ($validator->fails())
-        {
-            return Redirect::back()->withErrors($validator)->withInput();
+        $redirect_path = '';
+        if ($company->account_owner_id != $request->input('account_owner_id')) {
+            $redirect_path = 'client/stories';
+            $company->account_owner_id = $request->input('account_owner_id');
         }
 
-        $data['slug'] = $this->slugify($data['name']);
+        $company->usable_domains = $request->input('usable_domains');
 
-        // if(!isset($data['active']) || $data['active'] == ''){
-        //     $data['active'] = 0;
-        // }
+        $company->update();
 
-        $client->update($data);
+        if (!$redirect_path) {
+            $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
+        }
 
-        return Redirect::to('admin/clients/edit' . '/' . $id)->with(array('note' => 'Successfully Updated Client!', 'note_type' => 'success') );
+        return redirect($redirect_path)->with([
+            'note' => 'Successfully Updated Client!',
+            'note_type' => 'success'
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-
     public function destroy($id)
     {
         $client = Client::find($id);
 
-        Client::destroy($id);
+        if(!$client){
+            abort(404);
+        }
 
-        return Redirect::to('admin/clients')->with(array('note' => 'Successfully Deleted Client', 'note_type' => 'success') );
+        $client->destroy($id);
+
+        return Redirect::to('admin/clients')->with([
+            'note' => 'Successfully Deleted Client',
+            'note_type' => 'success'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $client_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function orders(Request $request, $client_id)
+    {
+        $client = Client::find($client_id);
+        $orders = Order::where('client_id', '=', $client_id)
+            ->get();
+        $downloads = Download::where('client_id', '=', $client_id)
+            ->get();
+
+        return view('admin.clients.orders', [
+            'orders' => $orders,
+            'client' => $client,
+            'stories' => Story::all(),
+            'downloads' => $downloads
+        ]);
+    }
+
+    public function orders_csv(Request $request, $client_id)
+    {
+        $client = Client::find($client_id);
+        $orders = Order::where('client_id', '=', $client_id)
+            ->get();
+        $downloads = Download::where('client_id', '=', $client_id)
+            ->get();
+        $stories = Story::all();
+
+        $csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
+
+        $csv->insertOne(['Order No.', 'Order Date', 'Story', 'Author', 'Wordpress Url', 'Downloaded']);
+
+        $count = 1;
+        $insert = [];
+        foreach ($orders as $order) {
+            $insert['order_no'] = str_pad($count, 4, '0', STR_PAD_LEFT);
+            $insert['order_date'] = date('jS M Y H:i:s',strtotime($order->created_at));
+            $insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
+            $insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
+            if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
+                $insert['wordpress_url'] = 'Not yet published';
+            } else {
+                $insert['wordpress_url'] = $stories->where('id', $order->story_id)->pluck('url')->first();
+            }
+            $insert['downloaded'] = $downloads->where('story_id', $order->story_id)->count();
+            $csv->insertOne($insert);
+        }
+
+        $csv->output('orders.csv');
     }
 }

@@ -19,6 +19,7 @@ Start adding in jquery libraries
 
 require('jquery-validation');
 require('jquery-validation/dist/additional-methods.js');
+require('jquery-ui/ui/widgets/autocomplete.js');
 require('jvectormap-next');
 require('gsap');
 require('joinable');

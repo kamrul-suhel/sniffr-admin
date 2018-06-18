@@ -2,122 +2,227 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Hash;
+use App\ClientMailer;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Jobs\QueueEmailClient;
+use App\Libraries\VideoHelper;
 use Auth;
+use Carbon\Carbon;
+use Hash;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Redirect;
-
 use App\Client;
 use App\User;
-
 use App\Libraries\ImageHandler;
-
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
-class AdminUsersController extends Controller {
-
+class AdminUsersController extends Controller
+{
+    use ResetsPasswords;
     /**
-     * constructor.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function __construct(Request $request)
-    {
-        $this->middleware(['admin:admin']);
-    }
-
-	/**
-	 * Setup the layout used by the controller.
-	 *
-	 * @return void
-	 */
-
 	public function index()
 	{
         $search_value = Input::get('s');
 
-        if(!empty($search_value)):
-            $users = User::where('username', 'LIKE', '%'.$search_value.'%')->orWhere('email', 'LIKE', '%'.$search_value.'%')->orderBy('created_at', 'desc')->get();
-        else:
+        if ((!empty($search_value))&&(Auth::user()->role != 'client')) {
+            $users = User::where('username', 'LIKE', '%' . $search_value . '%')
+                ->orWhere('email', 'LIKE', '%' . $search_value . '%')
+                ->orderBy('created_at', 'desc')->get();
+        } elseif((Auth::user()->role == 'client')&&(Auth::user()->client()->account_owner_id == Auth::user()->id)) {
+            $users = User::where('client_id', Auth::user()->client_id)->get();
+        } else {
             $users = User::all();
-        endif;
+        }
 
-		$data = array(
-			'users' => $users
-		);
-		return view('admin.users.index', $data);
-	}
+        return view('admin.users.index', [
+            'users' => $users
+        ]);
+    }
 
-    public function create(){
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
         $clients = Client::get();
 
-        $data = array(
+        $data = [
             'post_route' => url('admin/user/store'),
             'admin_user' => Auth::user(),
             'button_text' => 'Create User',
-            'clients' => $clients
-        );
+            'clients' => $clients,
+            'user' => null
+        ];
 
         return view('admin.users.create_edit', $data);
     }
 
-    public function store(){
-        $input = Input::all();
+    /**
+     * @param CreateUserRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(CreateUserRequest $request)
+    {
+        $user = new User();
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
 
-        if(Input::hasFile('avatar')){
-            $input['avatar'] = ImageHandler::uploadImage(Input::file('avatar'), 'avatars');
-        } else{ $input['avatar'] = 'default.jpg'; }
+        if (!$request->input('password')) {
+            $user->password = Hash::make(VideoHelper::quickRandom());
+        }
 
-        $input['password'] = Hash::make('password');
+        $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
 
-        $user = User::create($input);
-        return Redirect::to('admin/users')->with(array('note' => 'Successfully Created New User', 'note_type' => 'success') );
+        $user->role = $role;
+        $user->active = $request->input('active', 0);
+
+        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id', null);
+
+        $user->client_id = $client_id;
+        $user->full_name = $request->input('full_name');
+        $user->tel = $request->input('tel');
+        $user->job_title = $request->input('job_title');
+        $user->avatar = 'default.jpg';
+
+        if ($request->hasFile('avatar')) {
+            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
+        }
+
+        $user->save();
+
+        if (Auth::user()->role == 'client') {
+            $email = $user->getEmailForPasswordReset();
+            $this->deleteExisting($user);
+
+            $token = $this->getToken($email, $user);
+
+            QueueEmailClient::dispatch(
+                $client_id,
+                $request->get('email'),
+                $request->get('full_name'),
+                $token
+            );
+        }
+
+        $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
+
+        return Redirect::to($redirect_path)->with([
+            'note' => 'Successfully Created New User',
+            'note_type' => 'success'
+        ]);
     }
 
-	public function edit($id){
-    	$user = User::find($id);
-
-    	$data = array(
-    		'user' => $user,
-            'clients' => Client::get(),
-    		'post_route' => url('admin/user/update'),
-    		'admin_user' => Auth::user(),
-    		'button_text' => 'Update User',
-		);
-
-    	return view('admin.users.create_edit', $data);
+    protected function deleteExisting(User $user)
+    {
+        return \DB::table('password_resets')
+            ->where('email', $user->getEmailForPasswordReset())
+            ->delete();
     }
 
-    public function update(Request $request){
-    	$input = Input::all();
-        $id = $input['id'];
+    protected function getPayload($email, $token)
+    {
+        return ['email' => $email, 'token' => $token, 'created_at' => new Carbon];
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id)
+    {
         $user = User::find($id);
 
-    	if(Input::hasFile('avatar')){
-        	$input['avatar'] = ImageHandler::uploadImage(Input::file('avatar'), 'avatars');
-        } else {
-            $input['avatar'] = $user->avatar;
-        }
+        $data = [
+            'clients' => Client::get(),
+            'post_route' => url('admin/user/update'),
+            'user' => $user,
+            'button_text' => 'Update User',
+        ];
 
-        if(empty($input['active'])){
-            $input['active'] = 0;
-        }
-
-        if($input['password'] == ''){
-        	$input['password'] = $user->password;
-        } else{ $input['password'] = Hash::make($input['password']); }
-
-    	$user->update($input);
-
-    	return Redirect::to('admin/user/edit/' . $id)->with(array('note' => 'Successfully Updated User Settings', 'note_type' => 'success') );
+        return view('admin.users.create_edit', $data);
     }
 
-    public function destroy($id)
+    /**
+     * @param UpdateUserRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(UpdateUserRequest $request)
     {
 
-        User::destroy($id);
-        return Redirect::to('admin/users')->with(array('note' => 'Successfully Deleted User', 'note_type' => 'success') );
+        $user = User::find($request->get('id'));
+        if(!$user) {
+            abort(404);
+        }
+
+        $user->username = $request->input('username', $user->username);
+        $user->email = $request->input('email', $user->email);
+        $user->full_name = $request->input('full_name', $user->full_name);
+        $user->tel = $request->input('tel', $user->tel);
+        $user->job_title = $request->input('job_title', $user->job_title);
+
+        if ($request->input('password', null)) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        $user->role = $request->input('role', $user->role);
+        $user->active = $request->input('active', $user->active);
+        if($user->client_id) {
+             $user->client_id = $request->input('client_id', $user->client_id);
+        }
+
+        if ($request->hasFile('avatar')) {
+            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
+        }
+        $user->update();
+
+        return redirect()->route('users.edit', ['id' => $user->id])->with([
+            'note' => 'Successfully Updated User Settings',
+            'note_type' => 'success'
+        ]);
     }
 
+    /**
+     * @param Request $request
+     * @param int $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function storiesSent(Request $request, $user_id)
+    {
+        $user = User::find($user_id);
+        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) use ($user_id) {
+            $query->where('users.id', '=', $user_id);
+        })->orderBy('sent_at', 'DESC')->get();
+
+        return view('admin.users.stories_sent', [
+            'client_mailers' => $client_mailers,
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id)
+    {
+        User::destroy($id);
+        return Redirect::to('admin/users')->with([
+            'note' => 'Successfully Deleted User',
+            'note_type' => 'success'
+        ]);
+    }
+
+    public function getToken($email, $user)
+    {
+        $token = app('auth.password.broker')->createToken($user);
+
+        \DB::table('password_resets')->insert($this->getPayload($email, $token));
+
+        return $token;
+    }
 }

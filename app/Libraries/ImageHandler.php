@@ -2,8 +2,6 @@
 
 namespace App\Libraries;
 
-use App\Setting;
-
 trait ImageHandler {
 
 	public static function uploadImage($image, $folder, $filename = '', $type = 'upload'){
@@ -76,7 +74,7 @@ trait ImageHandler {
 
 			$uploadSuccess = $image->move($upload_folder, $filename);
 		
-			$settings = Setting::first();
+			$settings = config('settings.site');
 
 			$img = \Image::make($upload_folder . $filename);
 
@@ -159,7 +157,7 @@ trait ImageHandler {
 			}
 		   
 		
-			$settings = Setting::first();
+			$settings = config('settings.site');
 
 			$img = \Image::make($upload_folder . $filename);
 

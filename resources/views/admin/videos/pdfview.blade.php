@@ -1,4 +1,4 @@
-<?php $settings = App\Setting::first(); ?>
+<?php $settings = config('settings.site'); ?>
 <style type="text/css">
 body {
     font-family: Arial;
@@ -40,12 +40,14 @@ td.small {
 			<td>{{ $video->contact->full_name }}</td>
 		</tr>
 
+        @if(isset($video->contact->email))
         <tr>
             <td class="grey">Email:</td>
 			<td>{{ $video->contact->email }}</td>
 		</tr>
+        @endif
 
-        @if(!empty($video->contact->tel))
+        @if(isset($video->contact->tel))
         <tr>
             <td class="grey">Phone:</td>
 			<td>{{ $video->contact->tel }}</td>
@@ -85,19 +87,6 @@ td.small {
             <td class="grey">Submitted Elsewhere:</td>
 			<td>{{ (!empty($video->submitted_elsewhere) ? $video->submitted_where : 'No') }}</td>
 		</tr>
-        @elseif($video->rights=='nonex')
-        <tr>
-            <td class="grey">Notes:</td>
-			<td>{{ (!empty($video->notes) ? $video->notes : 'Not provided') }}</td>
-		</tr>
-        <tr>
-            <td class="grey">Credit Link:</td>
-			<td>{{ (!empty($video->credit) ? $video->credit : 'Not provided') }}</td>
-		</tr>
-        <tr>
-            <td class="grey">UNILAD Referrer:</td>
-			<td>{{ (!empty($video->referrer) ? $video->referrer : 'Not provided') }}</td>
-		</tr>
         @endif
         <!-- More details end -->
 
@@ -106,16 +95,16 @@ td.small {
         <tr>
             <td class="grey">I confirm:</td>
 			<td>
-                <p>{{ $settings->terms_ex_contact_is_owner }}</p>
-                <p>{{ $settings->terms_ex_allow_publish }}</p>
-                <p>{{ $settings->terms_ex_is_exclusive }}</p>
+                <p>{{ $terms['contact_is_owner'] }}</p>
+                <p>{{ $terms['allow_publish'] }}</p>
+                <p>{{ $terms['is_exclusive'] }}</p>
             </td>
 		</tr>
         @endif
         <tr>
             <td class="grey">Terms and Conditions Accepted:</td>
 			<td class="small">
-                {!! ($video->rights=='ex' ? $settings->terms_ex : $settings->terms_non_ex) !!}
+                {!! ($video->rights=='ex' ? $terms['terms_ex'] : $terms['terms_non_ex']) !!}
             </td>
 		</tr>
         <!-- Terms end -->

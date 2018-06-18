@@ -2,9 +2,9 @@
 var preview = (function () {
   'use strict';
 
-  var PluginManager = tinymce.util.Tools.resolve('tinymce.PluginManager');
+  var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
-  var Env = tinymce.util.Tools.resolve('tinymce.Env');
+  var global$1 = tinymce.util.Tools.resolve('tinymce.Env');
 
   var getPreviewDialogWidth = function (editor) {
     return parseInt(editor.getParam('plugin_preview_width', '650'), 10);
@@ -15,24 +15,24 @@ var preview = (function () {
   var getContentStyle = function (editor) {
     return editor.getParam('content_style', '');
   };
-  var $_5xjdyrhwjd09ewu9 = {
+  var $_1grwcliljfuw8pxt = {
     getPreviewDialogWidth: getPreviewDialogWidth,
     getPreviewDialogHeight: getPreviewDialogHeight,
     getContentStyle: getContentStyle
   };
 
-  var Tools = tinymce.util.Tools.resolve('tinymce.util.Tools');
+  var global$2 = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
   var getPreviewHtml = function (editor) {
     var previewHtml;
     var headHtml = '';
     var encode = editor.dom.encode;
-    var contentStyle = $_5xjdyrhwjd09ewu9.getContentStyle(editor);
+    var contentStyle = $_1grwcliljfuw8pxt.getContentStyle(editor);
     headHtml += '<base href="' + encode(editor.documentBaseURI.getURI()) + '">';
     if (contentStyle) {
       headHtml += '<style type="text/css">' + contentStyle + '</style>';
     }
-    Tools.each(editor.contentCSS, function (url) {
+    global$2.each(editor.contentCSS, function (url) {
       headHtml += '<link type="text/css" rel="stylesheet" href="' + encode(editor.documentBaseURI.toAbsolute(url)) + '">';
     });
     var bodyId = editor.settings.body_id || 'tinymce';
@@ -61,16 +61,16 @@ var preview = (function () {
       iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(previewHtml);
     }
   };
-  var $_avioi2hxjd09ewua = {
+  var $_fzmri3imjfuw8pxx = {
     getPreviewHtml: getPreviewHtml,
     injectIframeContent: injectIframeContent
   };
 
   var open = function (editor) {
-    var sandbox = !Env.ie;
-    var dialogHtml = '<iframe src="javascript:\'\'" frameborder="0"' + (sandbox ? ' sandbox="allow-scripts"' : '') + '></iframe>';
-    var dialogWidth = $_5xjdyrhwjd09ewu9.getPreviewDialogWidth(editor);
-    var dialogHeight = $_5xjdyrhwjd09ewu9.getPreviewDialogHeight(editor);
+    var sandbox = !global$1.ie;
+    var dialogHtml = '<iframe src="" frameborder="0"' + (sandbox ? ' sandbox="allow-scripts"' : '') + '></iframe>';
+    var dialogWidth = $_1grwcliljfuw8pxt.getPreviewDialogWidth(editor);
+    var dialogHeight = $_1grwcliljfuw8pxt.getPreviewDialogHeight(editor);
     editor.windowManager.open({
       title: 'Preview',
       width: dialogWidth,
@@ -84,18 +84,18 @@ var preview = (function () {
       },
       onPostRender: function (e) {
         var iframeElm = e.control.getEl('body').firstChild;
-        $_avioi2hxjd09ewua.injectIframeContent(editor, iframeElm, sandbox);
+        $_fzmri3imjfuw8pxx.injectIframeContent(editor, iframeElm, sandbox);
       }
     });
   };
-  var $_2e2y76hujd09ewu8 = { open: open };
+  var $_e6srydijjfuw8pxr = { open: open };
 
   var register = function (editor) {
     editor.addCommand('mcePreview', function () {
-      $_2e2y76hujd09ewu8.open(editor);
+      $_e6srydijjfuw8pxr.open(editor);
     });
   };
-  var $_347uuyhtjd09ewu7 = { register: register };
+  var $_dnevifiijfuw8pxq = { register: register };
 
   var register$1 = function (editor) {
     editor.addButton('preview', {
@@ -108,11 +108,11 @@ var preview = (function () {
       context: 'view'
     });
   };
-  var $_c88l5ihzjd09ewud = { register: register$1 };
+  var $_8qveptiojfuw8py0 = { register: register$1 };
 
-  PluginManager.add('preview', function (editor) {
-    $_347uuyhtjd09ewu7.register(editor);
-    $_c88l5ihzjd09ewud.register(editor);
+  global.add('preview', function (editor) {
+    $_dnevifiijfuw8pxq.register(editor);
+    $_8qveptiojfuw8py0.register(editor);
   });
   function Plugin () {
   }
@@ -120,4 +120,4 @@ var preview = (function () {
   return Plugin;
 
 }());
-})()
+})();
