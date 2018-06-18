@@ -34,13 +34,11 @@
 		</div>
 
 		<div class="row">
-
 			<div class="col-sm-4">
-
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">
-							Username
+							First Name
 						</div>
 						<div class="panel-options">
 							<a href="#" data-rel="collapse">
@@ -50,27 +48,25 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						@if($errors->first('username'))
+						@if($errors->first('first_name'))
 							<div class="alert alert-danger">
 								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-								{{ $errors->first('username') }}
+								{{ $errors->first('first_name') }}
 							</div>
 						@endif
-						<p>User's Username</p>
-						<input type="text" class="form-control" name="username" id="username" autocomplete="off" value="{{
-						($user) ? $user->username : old('username')
+						<label for="first_name">First Name</label>
+						<input type="text" class="form-control" name="first_name" id="first_name" autocomplete="off" value="{{
+						($user) ? $user->first_name : old('first_name')
 						}}" />
 					</div>
 				</div>
-
 			</div>
 
 			<div class="col-sm-4">
-
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">
-							Full Name
+							Last Name
 						</div>
 						<div class="panel-options">
 							<a href="#" data-rel="collapse">
@@ -80,23 +76,21 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						@if($errors->first('full_name'))
+						@if($errors->first('last_name'))
 							<div class="alert alert-danger">
 								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-								{{ $errors->first('full_name') }}
+								{{ $errors->first('last_name') }}
 							</div>
 						@endif
-						<p>User's Full Name</p>
-						<input type="text" class="form-control" name="full_name" id="full_name" autocomplete="off" value="{{
-						($user) ? $user->full_name : old('full_name')
+						<label for="last_name">Last Name</label>
+						<input type="text" class="form-control" name="last_name" id="last_name" autocomplete="off" value="{{
+						($user) ? $user->last_name : old('last_name')
 						}}" />
 					</div>
 				</div>
-
 			</div>
 
 			<div class="col-sm-4">
-
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">
@@ -122,15 +116,11 @@
 						}}" />
 					</div>
 				</div>
-
 			</div>
-
 		</div>
 
 		<div class="row">
-
 			<div class="col-sm-4">
-
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Email</div>

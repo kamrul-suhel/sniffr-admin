@@ -19,3 +19,7 @@ public/assets/admin/js/app.js
 database/migrations/new/2018_05_15_115441_create_stories_table.php
 database/migrations/new/2018_05_15_115441_create_stories_table.php
 public/assets/admin/js/app.js
+*.js
+*.js
+*.js
+*.js
