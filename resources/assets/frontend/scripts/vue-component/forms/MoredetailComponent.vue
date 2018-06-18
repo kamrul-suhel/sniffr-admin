@@ -16,9 +16,9 @@
                         <h1 class="heading text-xs-center text-uppercase">{{video.title}}</h1>
                     </v-flex>
 
-                    <v-flex xs12 class="text-xs-center">
+                    <!--<v-flex xs12 class="text-xs-center">
                         <div v-html="video.iframe"></div>
-                    </v-flex>
+                    </v-flex>-->
 
                     <v-flex xs12 v-if="video.more_details == 1">
                         <div class="item-video text-xs-center green--text">
