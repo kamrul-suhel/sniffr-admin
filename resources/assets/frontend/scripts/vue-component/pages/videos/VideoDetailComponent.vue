@@ -73,6 +73,9 @@
     import VideoPlayer from './VideoPlayerComponent'
 
     export default {
+        components: {
+            VideoPlayer
+        },
 
         data() {
             return {
@@ -102,7 +105,7 @@
             let id = this.$route.params.id;
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
-                console.log(this.video_detail);
+                this.video_detail.video.iframe = this.video_detail.iframe;
                 this.ini = true;
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
@@ -126,8 +129,6 @@
 
         destroyed() {
         },
-        components: {
-            VideoPlayer
-        },
+
     }
 </script>

@@ -6,8 +6,8 @@
 
                     <div class="cdi-label" v-if="video.order">
                         <v-tooltip top>
-                            <v-btn slot="activator" fab dark raised color="dark">
-                                <v-icon dark size="20px">done</v-icon>
+                            <v-btn slot="activator" fab outline dark raised light>
+                                <v-icon color="white"  size="20px">cloud_done</v-icon>
                             </v-btn>
                             <span>Downloaded</span>
                         </v-tooltip>
@@ -21,17 +21,6 @@
                     </div>
                 </v-card-media>
             </v-card>
-            <!--<div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(video.thumb) + ')' }">-->
-            <!--<div class="cdi-label" v-if="order">-->
-            <!--<v-tooltip top>-->
-            <!--<v-btn slot="activator" fab small raised dark color="dark">-->
-            <!--<v-icon light small>done</v-icon>-->
-            <!--</v-btn>-->
-            <!--<span>Downloaded</span>-->
-            <!--</v-tooltip>-->
-
-            <!--</div>-->
-            <!--</div>-->
         </v-flex>
 
         <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
@@ -55,24 +44,12 @@
                 View
             </v-btn>
 
-            <v-btn v-if="video.order"
+            <v-btn
                     block
                     dark
                     large
                     color="dark"
-                    @click.native="onLicenseVideo()"
-                    :loading="loading"
-                    :disabled="loading"
-            >
-                DOWNLOAD VIDEO
-            </v-btn>
-
-            <v-btn v-if="!video.order"
-                    block
-                    dark
-                    large
-                    color="dark"
-                    @click.native="onLicenseVideo()"
+                    @click.native="onDownloadVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
@@ -151,9 +128,9 @@
                 return image;
             },
 
-            onLicenseVideo() {
+            onDownloadVideo() {
+                this.loader = 'loading';
                 var url = '/client/video/'+this.video.id+'/license';
-
                 window.location = url;
             }
         }

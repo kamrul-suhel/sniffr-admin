@@ -9,8 +9,8 @@
                 <div v-html="video.iframe"></div>
             </div>
 
-            <div class="video" v-else>
-                <div v-html="video.iframe"></div>
+            <div class="video" v-else-if="video.url === null && video.file_watermark_dirty !== null">
+                <div id="cdn_video" v-html="video.iframe"></div>
             </div>
         </div>
 
@@ -79,8 +79,6 @@
         },
 
         created() {
-            console.log(this.video);
-
             if (this.video.youtube_id != null) {
                 this.youtubeID = this.video.youtube_id;
             }
@@ -108,7 +106,6 @@
 
 
                 if(new RegExp('instagram', 'i').test(this.video.url)){
-                    console.log('Trigaring');
 
                     let promise = new Promise((resolve, reject)=>{
                         this.socialVideo = true;
@@ -120,7 +117,6 @@
                 }
 
                 if(new RegExp('twitter','i').test(this.video.url)){
-                    console.log('Trigaring');
                     var promise  = new Promise((resolve, reject)=>{
                         this.socialVideo = true;
                         resolve();
@@ -132,7 +128,6 @@
                 }
 
                 if(new RegExp('facebook', 'i').test(this.video.url)){
-                    console.log('Trigaring');
                     this.socialVideo = true;
                     var promise = new Promise((resolve, reject)=>{
                         this.socialVideo = true;
@@ -155,11 +150,6 @@
                     if (m.index === regex.lastIndex) {
                         regex.lastIndex++;
                     }
-
-                    // The result can be accessed through the `m`-variable.
-                    m.forEach((match, groupIndex) => {
-                        console.log(`Found match, group ${groupIndex}: ${match}`);
-                    });
                 }
             },
 

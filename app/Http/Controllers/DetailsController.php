@@ -90,6 +90,8 @@ class DetailsController extends Controller
     {
         $video = Video::where('more_details_code', $code)->first();
 
+        dd($request->all());
+
         $validator = Validator::make(Input::all(), $this->rules);
         $this->validate($request, $this->rules);
 
