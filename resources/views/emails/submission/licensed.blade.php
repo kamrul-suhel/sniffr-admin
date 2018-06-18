@@ -15,7 +15,7 @@
 
 <div>Thanks for sending over more details about your video, and confirming this with us!</div>
 
-<div>Your video is now licensed: <a href="{{ url('videos/' . $video->alpha_id) }}">check it out here</a></div>
+<div>Your video is now licensed.</div>
 
 <div>&nbsp;</div>
 

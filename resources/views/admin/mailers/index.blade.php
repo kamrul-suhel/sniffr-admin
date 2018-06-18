@@ -31,11 +31,11 @@
 			@foreach($mailers as $mailer)
 			<tr>
 				<td>{{ $mailer->alpha_id }}</td>
-				<td>@foreach($users as $user2)
+				<td>@if($mailer->user_id!=0) @foreach($users as $user2)
 			                @if(!empty($user2->id == $mailer->user_id))
-			                    {{ $user2->username }}
+			                    {{ ($user2->full_name ? $user2->full_name : $user2->username) }}
 			                @endif
-			            @endforeach
+			            @endforeach @else Default @endif
 				</td>
 				<td>{{ date('jS M Y h:i:s',strtotime($mailer->created_at)) }}</td>
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
