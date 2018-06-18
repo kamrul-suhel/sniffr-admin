@@ -17,7 +17,6 @@
         data() {
             return {
                 content_show: false,
-
             }
         },
 

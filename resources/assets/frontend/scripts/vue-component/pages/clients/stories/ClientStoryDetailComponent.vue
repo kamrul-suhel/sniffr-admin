@@ -52,6 +52,18 @@
                         <v-divider style="margin: 15px 0"></v-divider>
 
                         <div v-html="story.description"></div>
+
+                        <v-flex xs12 class="text-xs-right">
+                            <v-btn
+                                    dark
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    medium
+                                    @click.native="onDownloadAllAssets()"
+                                    color="dark">Download story
+
+                            </v-btn>
+                        </v-flex>
                     </div>
                 </v-flex>
 
