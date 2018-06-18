@@ -70,8 +70,6 @@
                 this.$store.dispatch('getMailStories', mail_obj)
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
-
-                        console.log(this.stories);
                         this.ini_state = true;
                     });
             }

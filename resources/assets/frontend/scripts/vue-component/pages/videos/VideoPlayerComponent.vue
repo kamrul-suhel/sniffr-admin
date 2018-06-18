@@ -5,11 +5,13 @@
                 <plyr-youtube :id="this.youtubeID" :pe="false" :options="youtubeVideoPlayerOption"/>
             </div>
 
-            <div class="youtube-video" v-else-if="socialVideo">
+            <div class="social-video" v-else-if="socialVideo">
                 <div v-html="video.iframe"></div>
             </div>
 
-
+            <div class="video" v-else>
+                <div v-html="video.iframe"></div>
+            </div>
         </div>
 
         <div xs12 v-else
@@ -30,12 +32,14 @@
 
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
+    import {Plyr} from './player/videoPlayer'
     import '../../../../scss/plugins/video-plyr.css';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default {
         components: {
-            PlyrYoutube
+            PlyrYoutube,
+            Plyr
         },
 
         data() {
@@ -75,6 +79,7 @@
         },
 
         created() {
+            console.log(this.video);
 
             if (this.video.youtube_id != null) {
                 this.youtubeID = this.video.youtube_id;
@@ -103,18 +108,19 @@
 
 
                 if(new RegExp('instagram', 'i').test(this.video.url)){
+                    console.log('Trigaring');
 
                     let promise = new Promise((resolve, reject)=>{
                         this.socialVideo = true;
                         resolve();
                     });
-
                     promise.then(() => {
                         this.reloadInstagrm()
                     });
                 }
 
                 if(new RegExp('twitter','i').test(this.video.url)){
+                    console.log('Trigaring');
                     var promise  = new Promise((resolve, reject)=>{
                         this.socialVideo = true;
                         resolve();
@@ -126,6 +132,7 @@
                 }
 
                 if(new RegExp('facebook', 'i').test(this.video.url)){
+                    console.log('Trigaring');
                     this.socialVideo = true;
                     var promise = new Promise((resolve, reject)=>{
                         this.socialVideo = true;
