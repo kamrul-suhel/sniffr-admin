@@ -70,7 +70,7 @@ class QueueStory implements ShouldQueue
 		}
 
 		if($this->post->content->rendered){
-			$description = str_replace('copyrightHolder">UNILAD<','copyrightHolder"><',$this->post->content->rendered); // Remove UNILAD
+			$description = preg_replace('/copyrightHolder\">([^<]+)</is','copyrightHolder"><',$this->post->content->rendered); // Remove UNILAD
 			$description = preg_replace('/<script(.*?)>(.*?)<\/script>/is', '', $description); // Remove scripts
 			$description = strip_tags($description, '<p><blockquote>'); // Strip tags (except p and blockquote)
 			$description = str_replace('If you have a story you want to tell send it to UNILAD via stories@unilad.co.uk. To license this article contact licensing@unilad.co.uk','',$description); // Need to remove last line

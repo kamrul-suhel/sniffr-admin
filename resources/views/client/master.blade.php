@@ -78,7 +78,7 @@
 
         <!-- Footer -->
         <footer class="main">
-            &copy; {{ date('Y') }} <strong>Unilad</strong> Video Licensing Platform
+            &copy; {{ date('Y') }} <strong>UNILAD</strong> Video Licensing Platform
         </footer>
     </div>
 </div>
