@@ -16,15 +16,12 @@
                         <h1 class="heading text-xs-center text-uppercase">{{video.title}}</h1>
                     </v-flex>
 
-<<<<<<< HEAD
                     <!--<v-flex xs12 class="text-xs-center">
                         <div v-html="video.iframe"></div>
                     </v-flex>-->
-=======
                     <v-flex xs12 class="text-xs-center">
                         <div v-html="video.iframe"></div>
                     </v-flex>
->>>>>>> masterFrontendVideoAmend
 
                     <v-flex xs12 v-if="video.more_details == 1">
                         <div class="item-video text-xs-center green--text">
@@ -407,7 +404,7 @@
                 form.append('filmed_by_me', this.filmed_by_me);
                 form.append('permission', this.permission);
 
-                if(!this.submitted_where){
+                if (!this.submitted_where) {
                     this.submitted_elsewhere = 0;
                 }
 

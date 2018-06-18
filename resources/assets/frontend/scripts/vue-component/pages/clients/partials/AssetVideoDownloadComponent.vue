@@ -4,21 +4,21 @@
             <v-card>
                 <v-card-media :src="video.thumb" height="200px" class="client-video-thumbnail">
 
-                    <div class="cdi-label" v-if="video.order">
+                    <div class="cdi-label" v-if="video.order || newOrder">
                         <v-tooltip top>
-                            <v-btn slot="activator" fab outline dark raised light>
-                                <v-icon color="white"  size="20px">cloud_done</v-icon>
+                            <v-btn slot="activator" flat icon raised light color="white">
+                                <v-icon size="25px">cloud_done</v-icon>
                             </v-btn>
                             <span>Downloaded</span>
                         </v-tooltip>
 
                     </div>
 
-                    <div class="open-video-dialog">
-                        <v-btn flat fab white color="white">
-                            <v-icon color="white" size="60px">play_circle_outline</v-icon>
-                        </v-btn>
-                    </div>
+                    <!--<div class="open-video-dialog">-->
+                        <!--<v-btn flat fab white color="white">-->
+                            <!--<v-icon color="white" size="60px">play_circle_outline</v-icon>-->
+                        <!--</v-btn>-->
+                    <!--</div>-->
                 </v-card-media>
             </v-card>
         </v-flex>
@@ -67,6 +67,7 @@
     export default {
         data() {
             return {
+                newOrder: false,
                 loading: false,
                 loader: null,
                 showButton: false,
@@ -90,7 +91,10 @@
                 const l = this.loader
                 this[l] = !this[l]
 
-                setTimeout(() => (this[l] = false), 3000)
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000)
 
                 this.loader = null
             }

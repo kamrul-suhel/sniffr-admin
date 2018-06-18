@@ -273,18 +273,6 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
     Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Client Frontend Routes
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
-    Route::get('stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
-    Route::get('stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
-    Route::get('story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
-    Route::get('video/show/{alpha_id}', 'Video\VideoController@show');
-    Route::get('videos', 'Client\ClientVideosController@videosSent');
 
     /*
     |--------------------------------------------------------------------------
@@ -307,6 +295,20 @@ Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
 Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
 Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
 Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+
+
+/*
+|--------------------------------------------------------------------------
+| Client Frontend Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('client/stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
+Route::get('client/stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
+Route::get('client/stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
+Route::get('client/story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
+Route::get('client/video/show/{alpha_id}', 'Video\VideoController@show');
+Route::get('client/videos', 'Client\ClientVideosController@videosSent');
 
 
 

@@ -64,11 +64,7 @@
         data() {
             return {
                 ini:false,
-                video_detail: {
-                    video: {
-                        title: ''
-                    }
-                },
+                video_detail: {},
                 tags: [],
 
                 ready_to_show : true,
