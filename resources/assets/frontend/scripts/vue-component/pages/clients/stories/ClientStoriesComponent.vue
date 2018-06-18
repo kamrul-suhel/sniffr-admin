@@ -1,6 +1,6 @@
 <template>
     <div class="client-mail-section" v-if="ini_state">
-        <v-container grid-list-xl v-if="stories == ''">
+        <v-container grid-list-xl v-if="stories.data.length < 0">
             <v-layout row wrap>
                 <h2 class="text-xs-center no-stories">
                     Sorry, we cannot find any stories associated with your account.  Please contact <a
@@ -70,6 +70,8 @@
                 this.$store.dispatch('getMailStories', mail_obj)
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
+
+                        console.log(this.stories);
                         this.ini_state = true;
                     });
             }
