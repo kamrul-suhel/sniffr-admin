@@ -92,7 +92,8 @@ class QueueVideoYoutubeUpload implements ShouldQueue
                         false
                     );
 
-                    $response = Youtube::upload($file_watermark, ['title' => $video->title], 'unlisted');
+					$title = str_replace(['<','>'], '', $video->title); // Youtube title can't have square brackets
+					$response = Youtube::upload($file_watermark, ['title' => $title], 'unlisted');
                     $youtubeId  = $response->getVideoId();
 
 					$video->youtube_id = $youtubeId;
