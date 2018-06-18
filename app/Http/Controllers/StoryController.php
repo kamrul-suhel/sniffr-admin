@@ -20,9 +20,9 @@ class StoryController extends Controller
      * @param $story_id
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadStory($story_id)
+    public function downloadStory($storyId)
     {
-        $story = Story::find($story_id);
+        $story = Story::find($storyId);
         if (!$story || !$story->assets()->count()) {
             abort(404, 'No Story or Assets Found');
         }
@@ -32,7 +32,7 @@ class StoryController extends Controller
         $prefix = 'sniffr_';
         $files = [];
 
-        $pdf = $this->getPdf($story_id, false);
+        $pdf = $this->getStoryPdf($storyId, false);
 
         $files[] = $pdf;
 
@@ -48,8 +48,8 @@ class StoryController extends Controller
         $mailer_id = $story->mailers()->first()->id; //get mailer_id for better logs (which downloads relate to which mailer) - the story could be sent out in more that one email, but we just grab the first one
 
         // save the order
-        $this->logDownload($story_id, $mailer_id, 'story');
-        $this->saveDownloadToOrder($story_id, $mailer_id, 'story');
+        $this->logDownload($storyId, $mailer_id, 'story');
+        $this->saveDownloadToOrder($storyId, $mailer_id, 'story');
 
         Zipper::make($newZipFilePath)->add($files)->close();
         \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
@@ -141,15 +141,18 @@ class StoryController extends Controller
     public function licenseVideo($videoId)
     {
         $video = Video::find($videoId);
+
+		if (!$video) {
+			abort(404, 'Asset Not Found');
+		}
+
         $mailer_id = $video->mailers()->first()->id;
+
+		$files[] = $this->getVideoPdf($videoId, false);
 
         // save the order
         $this->logDownload($videoId, $mailer_id, 'video');
         $this->saveDownloadToOrder($videoId, $mailer_id, 'video');
-
-        if (!$video) {
-            abort(404, 'Asset Not Found');
-        }
 
         $newZipFileName = $video->alpha_id. time() . '.zip';
         $newZipFilePath = '../storage/'.$newZipFileName;
@@ -160,8 +163,9 @@ class StoryController extends Controller
 
         $tempVideoFile = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
         copy($video->file, $tempVideoFile);
+        $files[] = $tempVideoFile;
 
-        Zipper::make($newZipFilePath)->add($tempVideoFile)->close();
+        Zipper::make($newZipFilePath)->add($files)->close();
         \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
 
         return response()->download($newZipFilePath)->deleteFileAfterSend(true);
@@ -172,7 +176,7 @@ class StoryController extends Controller
      * @param bool $download
      * @return string
      */
-    public function getPdf(int $storyId, bool $download = true)
+    public function getStoryPdf(int $storyId, bool $download = true)
     {
         $story = Story::find($storyId);
 
@@ -180,7 +184,7 @@ class StoryController extends Controller
             abort(404, 'Story Not Found');
         }
 
-        $html = view("stories.pdf")->with([
+        $html = view("pdf.story")->with([
             "title" => $story['title'],
             "author" => $story['author'],
             "description" => $story['description'],
@@ -204,4 +208,42 @@ class StoryController extends Controller
 
         return $tempPdf;
     }
+
+	/**
+	 * @param int $storyId
+	 * @param bool $download
+	 * @return string
+	 */
+	public function getVideoPdf(int $videoId, bool $download = true)
+	{
+		$video = Video::find($videoId);
+
+		if (!$video) {
+			abort(404, 'Video Not Found');
+		}
+
+		$html = view("pdf.video")->with([
+			"title" => $video['title'],
+			"description" => $video['description'],
+			"credit" => $video['credit'],
+		]);
+
+		$pdf = App::make('dompdf.wrapper');
+		$pdf->loadHTML($html);
+
+		if ($download) {
+			return $pdf->download();
+		}
+
+		$pdfName = \Ramsey\Uuid\Uuid::uuid4()->toString();
+		$pdfUrl = 'downloads/' . $pdfName . '.pdf';
+
+		\Storage::disk('s3')->put($pdfUrl, $pdf->output(), 'public');
+		$pdfUrl = \Storage::disk('s3')->url($pdfUrl);
+
+		$tempPdf = tempnam(sys_get_temp_dir(), $pdfName) . '.pdf';
+		copy($pdfUrl, $tempPdf);
+
+		return $tempPdf;
+	}
 }
