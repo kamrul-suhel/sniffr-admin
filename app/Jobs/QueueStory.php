@@ -79,6 +79,8 @@ class QueueStory implements ShouldQueue
 			$description = NULL;
 		}
 
+        $story->flagged = (is_int(array_search(env('UNILAD_WP_FLAGGED_ID'), $this->post->tags)) ? 1 : 0); // if tag in WP is also 'flagged' then display as hot story in stories view 
+
 		$story->excerpt = ($this->post->excerpt ? substr(trim(strip_tags($this->post->excerpt->rendered)),0,700) : NULL);
 		$story->date_ingested = Carbon::parse($this->post->date)->format('Y-m-d H:i:s');
 		$story->categories = implode(",",$this->post->categories);

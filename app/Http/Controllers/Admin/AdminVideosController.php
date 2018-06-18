@@ -94,21 +94,16 @@ class AdminVideosController extends Controller
             $videos = $videos->where('rights', $rights);
         }
 
-        $orderColumn = 'created_at';
-
         if ($state != 'all') {
             if ($state == 'deleted') {
                 $videos = $videos->onlyTrashed();
-            }
-            if ($state == 'licensed') {
-                $orderColumn = 'licensed_at';
             }
             $videos = $videos->where('state', $state);
 
             session(['state' => $state]);
         }
 
-        $videos = $videos->orderBy($orderColumn, 'DESC')->paginate(24);
+        $videos = $videos->orderByRaw('CASE WHEN licensed_at IS NULL THEN created_at ELSE licensed_at END DESC')->paginate(24);
 
         $data = [
             'state' => $state,
@@ -342,7 +337,8 @@ class AdminVideosController extends Controller
         }
 
         // update video information in Youtube
-        $this->setSnippet($video, $request->input('title'), $request->input('description'), $tags);
+		$title = str_replace(['<','>'], '', $request->input('title'));
+        $this->setSnippet($video, $title, $request->input('description'), $tags);
 
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
@@ -389,7 +385,7 @@ class AdminVideosController extends Controller
         $video->video_shottype_id = $request->input('video_shottype_id', null);
         $video->video_category_id = $request->input('video_category_id', null);
         $video->contact_id = $request->input('creator_id', null);
-        $video->title = $request->input('title');
+        $video->title = $title;
         $video->embed_code = $request->input('embed_code');
         $video->location = $request->input('location');
         $video->details = $request->input('details');
