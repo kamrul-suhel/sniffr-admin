@@ -12,6 +12,7 @@ use App\Order;
 use App\User;
 use Auth;
 use Redirect;
+use App\Video;
 use App\Story;
 use App\Download;
 use App\Traits\Slug;
@@ -209,6 +210,7 @@ class AdminClientController extends Controller
             'orders' => $orders,
             'client' => $client,
             'stories' => Story::all(),
+            'videos' => Video::all(),
             'downloads' => $downloads
         ]);
     }
@@ -221,24 +223,37 @@ class AdminClientController extends Controller
         $downloads = Download::where('client_id', '=', $client_id)
             ->get();
         $stories = Story::all();
+        $videos = Video::all();
 
         $csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
 
-        $csv->insertOne(['Order No.', 'Order Date', 'Story', 'Author', 'Wordpress Url', 'Downloaded']);
+        $csv->insertOne(['Order No.', 'Order Date', 'Story / Video', 'Author', 'Url', 'Downloaded']);
 
         $count = 1;
         $insert = [];
         foreach ($orders as $order) {
             $insert['order_no'] = str_pad($count, 4, '0', STR_PAD_LEFT);
             $insert['order_date'] = date('jS M Y H:i:s',strtotime($order->created_at));
-            $insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
-            $insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
-            if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
-                $insert['wordpress_url'] = 'Not yet published';
+            if($order->story_id!=0) {
+                $insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
+                $insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
+                if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
+                    $insert['url'] = 'Not yet published';
+                } else {
+                    $insert['url'] = $stories->where('id', $order->story_id)->pluck('url')->first();
+                }
+                $insert['downloaded'] = $downloads->where('story_id', $order->story_id)->where('client_id', $order->client_id)->count();
             } else {
-                $insert['wordpress_url'] = $stories->where('id', $order->story_id)->pluck('url')->first();
+                $insert['story'] = $videos->where('id', $order->video_id)->pluck('title')->first();
+                $insert['author'] = $videos->where('id', $order->video_id)->pluck('contact.full_name')->first();
+                if($videos->where('id', $order->video_id)->pluck('state')->first()!='licensed') {
+                    $insert['url'] = 'Not yet licensed';
+                } else {
+                    $insert['url'] = $videos->where('id', $order->video_id)->pluck('file_watermark')->first();
+                }
+                $insert['downloaded'] = $downloads->where('video_id', $order->video_id)->where('client_id', $order->client_id)->count();
             }
-            $insert['downloaded'] = $downloads->where('story_id', $order->story_id)->count();
+
             $csv->insertOne($insert);
         }
 
