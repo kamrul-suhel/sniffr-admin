@@ -115,61 +115,38 @@ class StoryController extends Controller
         return response()->download($tempImage);
     }
 
-    /**
-     * @param $videoId
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function downloadVideo($videoId)
-    {
-        $video = Video::find($videoId);
-
-        if (!$video) {
-            abort(404, 'Asset Not Found');
-        }
-
-        $prefix = 'sniffr_';
-
-        $info = pathinfo($video->file);
-        $ext = $info['extension'];
-
-        $tempVideoFile = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
-        copy($video->file, $tempVideoFile);
-
-        return response()->download($tempVideoFile);
-    }
-
-    public function licenseVideo($videoId)
-    {
-        $video = Video::find($videoId);
+	public function downloadVideo($videoId)
+	{
+		$video = Video::find($videoId);
 
 		if (!$video) {
 			abort(404, 'Asset Not Found');
 		}
 
-        $mailer_id = $video->mailers()->first()->id;
+		$mailer_id = $video->mailers()->first()->id;
 
 		$files[] = $this->getVideoPdf($videoId, false);
 
-        // save the order
-        $this->logDownload($videoId, $mailer_id, 'video');
-        $this->saveDownloadToOrder($videoId, $mailer_id, 'video');
+		// save the order
+		$this->logDownload($videoId, $mailer_id, 'video');
+		$this->saveDownloadToOrder($videoId, $mailer_id, 'video');
 
-        $newZipFileName = $video->alpha_id. time() . '.zip';
-        $newZipFilePath = '../storage/'.$newZipFileName;
-        $prefix = 'sniffr_';
+		$newZipFileName = $video->alpha_id. time() . '.zip';
+		$newZipFilePath = '../storage/'.$newZipFileName;
+		$prefix = 'sniffr_';
 
-        $info = pathinfo($video->file);
-        $ext = $info['extension'];
+		$info = pathinfo($video->file);
+		$ext = $info['extension'];
 
-        $tempVideoFile = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
-        copy($video->file, $tempVideoFile);
-        $files[] = $tempVideoFile;
+		$tempVideoFile = tempnam(sys_get_temp_dir(), $prefix) . '.' . $ext;
+		copy($video->file, $tempVideoFile);
+		$files[] = $tempVideoFile;
 
-        Zipper::make($newZipFilePath)->add($files)->close();
-        \Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
+		Zipper::make($newZipFilePath)->add($files)->close();
+		\Storage::disk('s3')->put('downloads/'.$newZipFileName, $newZipFilePath, 'public');
 
-        return response()->download($newZipFilePath)->deleteFileAfterSend(true);
-    }
+		return response()->download($newZipFilePath)->deleteFileAfterSend(true);
+	}
 
     /**
      * @param int $storyId
@@ -225,7 +202,7 @@ class StoryController extends Controller
 		$html = view("pdf.video")->with([
 			"title" => $video['title'],
 			"description" => $video['description'],
-			"credit" => $video['credit'],
+			"credit" => ($video['credit'] ? 'Please Credit: '.$video['credit'] : ''),
 		]);
 
 		$pdf = App::make('dompdf.wrapper');

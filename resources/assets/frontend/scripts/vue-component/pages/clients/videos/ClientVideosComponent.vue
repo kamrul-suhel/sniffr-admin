@@ -59,6 +59,7 @@
         methods: {
             getClientMailVideos(){
                 var user = this.$store.getters.getUser;
+
                 var url = this.$route.query.page;
                 var mail_obj = {
                     user: user,

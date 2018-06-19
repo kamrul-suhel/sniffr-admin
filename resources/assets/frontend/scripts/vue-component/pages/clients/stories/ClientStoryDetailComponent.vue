@@ -21,17 +21,6 @@
                                          :assets="story.assets"
                                          :story_id="story.id"></asset-component>
                     </v-layout>
-
-                    <v-btn
-                            block
-                            dark
-                            :loading="loading"
-                            :disabled="loading"
-                            large
-                            @click.native="onDownloadAllAssets()"
-                            color="dark">Download assets
-
-                    </v-btn>
                 </v-flex>
 
                 <v-flex xs12 sm12 md7 lg8 xl8>

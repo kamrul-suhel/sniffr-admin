@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import VideoLoopComponent from '../partials/VidoeLoopComponent';
+    import VideoLoopComponent from '../partials/VideoLoopComponent';
 
     export default {
         components: {

@@ -2,23 +2,15 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <v-card>
-                <v-card-media :src="video.thumb" height="200px" class="client-video-thumbnail">
-
-                    <div class="cdi-label" v-if="video.order || newOrder">
+                <v-card-media :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')" height="200px" class="client-video-thumbnail">
+                    <div class="cdi-label" v-if="ordered || newOrder">
                         <v-tooltip top>
                             <v-btn slot="activator" flat icon raised light color="white">
                                 <v-icon size="25px">cloud_done</v-icon>
                             </v-btn>
                             <span>Downloaded</span>
                         </v-tooltip>
-
                     </div>
-
-                    <!--<div class="open-video-dialog">-->
-                        <!--<v-btn flat fab white color="white">-->
-                            <!--<v-icon color="white" size="60px">play_circle_outline</v-icon>-->
-                        <!--</v-btn>-->
-                    <!--</div>-->
                 </v-card-media>
             </v-card>
         </v-flex>
@@ -53,7 +45,7 @@
                     :loading="loading"
                     :disabled="loading"
             >
-                DOWNLOAD VIDEO
+                {{ button_text }}
             </v-btn>
         </v-flex>
 
@@ -67,11 +59,12 @@
     export default {
         data() {
             return {
+                button_text: 'Download Video',
                 newOrder: false,
                 loading: false,
                 loader: null,
                 showButton: false,
-                order: false,
+                ordered: false,
                 hide_download_button: false,
             }
         },
@@ -81,9 +74,24 @@
         ],
 
         created() {
-            if (this.video.order && this.video.order.id) {
-                this.order = true;
-            }
+            // IAN:  Need to check if value exists in multiu dim array
+            //var user = this.$store.getters.getUser;
+
+            // console.log('client id: '+user.client_id);
+            //
+            // var obj = { a: 'test1', b: 'test2' };
+            // if (Object.values(obj).indexOf('test1') > -1) {
+            //     console.log('has test1');
+            // }
+            //
+            // if(this.video.orders){
+            //     console.log(this.video.orders);
+            // }
+
+            // if (this.video.order && this.video.order.client_id == user.client_id) {
+            //     this.ordered = true;
+            //     this.button_text = 'Re-download video';
+            // }
         },
 
         watch: {
@@ -103,12 +111,6 @@
         methods: {
             showDownloadButton() {
                 this.showButton = !this.showButton;
-            },
-
-            onDownloadAllAssets() {
-                this.loader = 'loading';
-                var url = '/client/stories/' + this.video.id + '/download';
-                window.location = url;
             },
 
             goToDetail() {
@@ -134,7 +136,7 @@
 
             onDownloadVideo() {
                 this.loader = 'loading';
-                var url = '/client/video/'+this.video.id+'/license';
+                var url = '/client/video/'+this.video.id+'/download';
                 window.location = url;
             }
         }

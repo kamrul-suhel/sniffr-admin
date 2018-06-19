@@ -41,7 +41,15 @@
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
 
-                                <v-btn dark block @click="onGoback()" class="dark" large>Download Video</v-btn>
+                                <v-btn
+                                        dark
+                                        block
+                                        large
+                                        class="dark"
+                                        :loading="loading"
+                                        :disabled="loading"
+                                        @click="onDownloadVideo()"
+                                >{{ button_text }}</v-btn>
 
                             </v-flex>
 
@@ -66,9 +74,10 @@
                 ini:false,
                 video_detail: {},
                 tags: [],
-
+                loading: false,
+                loader: null,
                 ready_to_show : true,
-
+                button_text: 'Download Video',
                 previousPageUrl: '',
 
                 content_padding:true
@@ -76,7 +85,16 @@
         },
 
         watch: {
-            '$route'(to, from, next) {
+            loader() {
+                const l = this.loader
+                this[l] = !this[l]
+
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000)
+
+                this.loader = null
             }
         },
 
@@ -85,6 +103,11 @@
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;
             }
+
+            // IAN:  Need to check if value exists in multiu dim array
+            // if (this.video_detail.video.order && this.video_detail.video.order.id) {
+            //     this.button_text = 'Re-download video';
+            // }
 
         },
 
@@ -177,6 +200,13 @@
                 $('body').append(videojs1);
                 $('body').append(vimeo);
 
+            },
+
+            onDownloadVideo() {
+                this.loader = 'loading';
+                var url = '/client/video/'+this.video_detail.video.id+'/download';
+
+                window.location = url;
             }
         },
 

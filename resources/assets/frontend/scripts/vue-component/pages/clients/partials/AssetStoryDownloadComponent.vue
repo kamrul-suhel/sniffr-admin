@@ -44,7 +44,7 @@
                     :loading="loading"
                     :disabled="loading"
             >
-                Download assets
+                Download Story
             </v-btn>
         </v-flex>
 

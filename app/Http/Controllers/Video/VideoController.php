@@ -216,7 +216,6 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->ajax() || $request->isJson()) {
             $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
                 ->orderBy('id', 'DESC')
@@ -247,6 +246,7 @@ class VideoController extends Controller
             $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
+				->with('order')
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
                 ->first();
