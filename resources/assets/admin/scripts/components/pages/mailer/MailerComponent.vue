@@ -27,7 +27,7 @@
             <!-- End mail empty card -->
 
             <!-- Refresh stories card -->
-            <v-card else>
+            <v-card v-else>
                 <v-card-text>
                     <div class="text-xs-center my-4">
                         <v-progress-circular
@@ -57,13 +57,13 @@
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
                 <v-flex xs-6>
-                    <h3>
-                        <i class="fa fa-users"></i> Mail
-                        <v-btn tag="a" href="admin/stories/create" primary>
-                            <v-icon>add</v-icon>
-                            Add New Story
-                        </v-btn>
-                    </h3>
+                    <!--<h3>-->
+                        <!--<i class="fa fa-users"></i> Mail-->
+                        <!--<v-btn tag="a" href="admin/stories/create" primary>-->
+                            <!--<v-icon>add</v-icon>-->
+                            <!--Add New Story-->
+                        <!--</v-btn>-->
+                    <!--</h3>-->
                 </v-flex>
 
                 <v-flex xs6 class="text-xs-right">
@@ -152,7 +152,7 @@
                 let stories = this.$store.getters.getAllSelectedStories;
                 let videos = this.$store.getters.getAllSelectedVideos;
                 if (stories.length === 0 && videos.length === 0) {
-                    this.errorMessage = "this.Please select A story or video";
+                    this.errorMessage = "Please select A story or video";
                     this.notSelectedError = true;
                     this.dialog = true;
                     return;

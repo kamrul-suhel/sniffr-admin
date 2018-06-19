@@ -5,11 +5,13 @@
                 <plyr-youtube :id="this.youtubeID" :pe="false" :options="youtubeVideoPlayerOption"/>
             </div>
 
-            <div class="youtube-video" v-else-if="socialVideo">
+            <div class="social-video" v-else-if="socialVideo">
                 <div v-html="video.iframe"></div>
             </div>
 
-
+            <div class="video" v-else-if="video.url === null && video.file_watermark_dirty !== null">
+                <div id="cdn_video" v-html="video.iframe"></div>
+            </div>
         </div>
 
         <div xs12 v-else
@@ -30,12 +32,14 @@
 
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
+    import {Plyr} from './player/videoPlayer'
     import '../../../../scss/plugins/video-plyr.css';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default {
         components: {
-            PlyrYoutube
+            PlyrYoutube,
+            Plyr
         },
 
         data() {
@@ -75,7 +79,6 @@
         },
 
         created() {
-
             if (this.video.youtube_id != null) {
                 this.youtubeID = this.video.youtube_id;
             }
@@ -108,7 +111,6 @@
                         this.socialVideo = true;
                         resolve();
                     });
-
                     promise.then(() => {
                         this.reloadInstagrm()
                     });
@@ -148,11 +150,6 @@
                     if (m.index === regex.lastIndex) {
                         regex.lastIndex++;
                     }
-
-                    // The result can be accessed through the `m`-variable.
-                    m.forEach((match, groupIndex) => {
-                        console.log(`Found match, group ${groupIndex}: ${match}`);
-                    });
                 }
             },
 
