@@ -10,6 +10,8 @@
             Author: {{ $author }}
         </div>
 
+        <br><br>
+
         <div class="pdf_story_description bottom-padding">
             {!! $description !!}
         </div>
