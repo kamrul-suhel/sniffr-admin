@@ -48,7 +48,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false">Cancel</v-btn>
+                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false" :disabled="disableButton">Ok</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -85,7 +85,7 @@
                     v-model="active"
                     color="dark"
                     dark
-                    slider-color="white"
+                    slider-color="primary"
             >
                 <v-tab>
                     Stories
@@ -138,7 +138,9 @@
 
                 indeterminate:true,
                 refreshTitle: 'Please wait while the stories update. This may take a few minutes.',
-                refreshIcon: 'done'
+                refreshIcon: 'done',
+
+                disableButton:true,
             }
         },
 
@@ -196,6 +198,7 @@
                     if (response.data.dispatched == false) {
                         this.refreshTitle = 'Stories are already up-to-date.';
                         this.indeterminate = false;
+                        this.disableButton = false
                     } else {
                         // jobs have been sent to queue so need to check the job queue
                         this.checkJobs();
@@ -218,6 +221,7 @@
                                 this.refreshTitle = 'Stories are now up-to-date.';
                                 this.indeterminate = false;
                                 MailerEventBus.storiesUpdated();
+                                this.disableButton = false
 
                             } else {
                                 // jobs are still in the queue, so run again
