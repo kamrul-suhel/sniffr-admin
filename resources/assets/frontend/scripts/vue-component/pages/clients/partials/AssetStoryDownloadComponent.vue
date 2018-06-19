@@ -2,10 +2,10 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }">
-                <div class="cdi-label" v-if="order">
+                <div class="cdi-label" v-if="order || newOrder">
                     <v-tooltip top>
-                        <v-btn slot="activator" fab small raised dark color="dark">
-                            <v-icon light small>done</v-icon>
+                        <v-btn slot="activator" flat icon raised light color="white">
+                            <v-icon size="25px">cloud_done</v-icon>
                         </v-btn>
                         <span>Downloaded</span>
                     </v-tooltip>
@@ -58,6 +58,7 @@
     export default {
         data () {
             return {
+                newOrder: false,
                 loading: false,
                 loader: null,
                 showButton: false,
@@ -81,7 +82,10 @@
                 const l = this.loader
                 this[l] = !this[l]
 
-                setTimeout(() => (this[l] = false), 3000)
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000)
 
                 this.loader = null
             }

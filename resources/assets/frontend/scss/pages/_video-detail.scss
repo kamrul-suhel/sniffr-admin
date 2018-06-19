@@ -3,6 +3,32 @@
 
 .videos-detail-section{
 
+  #cdn_video{
+    .video-container {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      height: 350px;
+      align-items: center;
+      justify-content: center;
+      padding:0;
+    }
+  }
+
+  //.social-video{
+  //  .video-container {
+  //    display: block;
+  //    height: auto;
+  //    background: #fff;
+  //    padding:0;
+  //
+  //    iframe{
+  //      position: initial;
+  //
+  //    }
+  //  }
+  //}
+
   .btn .btn__content .icon {
     margin-left: -8px;
   }
@@ -192,5 +218,26 @@
   .loading {
     animation: loader 1s infinite;
     display: flex;
+  }
+
+
+  .card.video-player-poster{
+    position:relative;
+
+    .card__media{
+      padding-top:56.26%;
+    }
+
+    .player-play{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -28px;
+      margin-left: -28px;
+
+      i{
+        margin-left:0;
+      }
+    }
   }
 }
