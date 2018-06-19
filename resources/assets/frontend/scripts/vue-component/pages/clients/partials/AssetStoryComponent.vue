@@ -4,14 +4,6 @@
             <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
                 <v-icon dark medium>play_circle_outline</v-icon>
             </div>
-            <!--<div class="download_asset" :class="{show: showButton}">-->
-                <!--<v-btn fab dark small color="dark"-->
-                <!--:loading="loading"-->
-                <!--:disabled="loading"-->
-                <!--@click.native="downloadAsset()">-->
-                <!--<v-icon dark>cloud_download</v-icon>-->
-                <!--</v-btn>-->
-            <!--</div>-->
         </div>
 
         <!-- Image or Video in dialog -->

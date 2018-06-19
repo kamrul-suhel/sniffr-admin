@@ -10,7 +10,6 @@ const state = {
 const mutations = {
     setVideoDialogBox(state, data) {
         state.video_dialog_box = true;
-        console.log(data);
         state.video_dialog_current_video = data.current_video.alpha_id;
         state.video_dialog_current_video = data.current_video;
         state.video_dialog_next_alpha_id = data.next_video_alpha_id;
