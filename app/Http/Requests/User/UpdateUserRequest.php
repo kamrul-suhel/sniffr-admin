@@ -27,7 +27,6 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string',
             'password' => 'nullable|string|min:6',
             'email' => 'required|email',
             'client_id' => 'required_if:role,client',

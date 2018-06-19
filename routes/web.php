@@ -81,8 +81,12 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
 
     Route::get('password/reset', ['uses' => 'AuthController@password_reset', 'as' => 'password.remind']);
     Route::post('password/reset', ['uses' => 'AuthController@password_request', 'as' => 'password.request']);
+
     Route::get('password/reset/{token}', ['uses' => 'AuthController@password_reset_token', 'as' => 'password.reset']);
     Route::post('password/reset/{token}', ['uses' => 'AuthController@password_reset_post', 'as' => 'password.update']);
+
+    Route::get('password/set/{token}/{email}', ['uses' => 'AuthController@setPassword', 'as' => 'password.set_password']);
+    Route::post('password/set/{token}/{email}', ['uses' => 'AuthController@setPasswordPost', 'as' => 'password.set_password_post']);
 
     Route::get('verify/{activation_code}', 'AuthController@verify');
 

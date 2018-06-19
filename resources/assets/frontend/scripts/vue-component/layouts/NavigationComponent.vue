@@ -144,7 +144,7 @@
                     this.is_login = this.$store.getters.isUserLogin;
                     if(this.is_login){
                         this.user = this.$store.getters.getUser;
-                        if(this.user.role === 'client_admin'){
+                        if(this.user.role === 'client_admin' || this.user.role=== 'client_owner' || this.user.role === 'client'){
                             this.client_login = true;
                         }
                     }
@@ -161,7 +161,7 @@
                     this.is_login = this.$store.getters.isUserLogin;
                     if(this.is_login){
                         this.user = this.$store.getters.getUser;
-                        if(this.user.role === 'client_admin'){
+                        if(this.user.role === 'client_admin' || this.user.role === 'client_owner' || this.user.role === 'client'){
                             this.client_login = true;
                         }
                     }
@@ -172,7 +172,7 @@
                 this.is_login = this.$store.getters.isUserLogin;
                 if(this.is_login){
                     this.user = this.$store.getters.getUser;
-                    if(this.user.role === 'client_admin'){
+                    if(this.user.role === 'client_admin' || this.user.role === 'client_owner' || this.user.role === 'client'){
                         this.client_login = true;
                     }
                 }
