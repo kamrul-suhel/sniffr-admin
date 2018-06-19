@@ -23,7 +23,17 @@ trait VideoHelper{
 				</div>';
         }
 
-        if($video->youtube_id){ // Youtube
+        if(is_null($video->url) && $video->file_watermark_dirty !== null) {
+            $sHTML .= '<video 
+                id="video_player" 
+                preload="auto" controls autoplay x-webkit-airplay="allow" 
+                class="video-js vjs-default-skin vjs-big-play-centered" 
+                src="https://cdn.sniffrmedia.co.uk/'.basename($video->file_watermark_dirty).'">
+            </video>';
+
+        }
+
+        else if($video->youtube_id){ // Youtube
             if($embed){
                 $sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?autoplay=1&playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0"  allowfullscreen></iframe>';
             }else{
@@ -133,15 +143,7 @@ trait VideoHelper{
         }else if(!empty($video->image) && !$embed) {
             $sHTML .= '<a class="video-thumb" href="' . $path . '/' . $video->alpha_id . '" style="background-image:url(' . $video->image . ')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
 
-        } else if(is_null($video->url) && $video->file_watermark_dirty !== null) {
-            $sHTML .= '<video 
-                id="video_player" 
-                preload="auto" controls autoplay x-webkit-airplay="allow" 
-                class="video-js vjs-default-skin vjs-big-play-centered" 
-                src="https://cdn.sniffrmedia.co.uk/'.basename($video->file_watermark_dirty).'">
-            </video>';
-
-        }else{
+        } else{
             dd($video);
             $sHTML .= '<p style="color:white;">There appears to be an issue with this video</p>';
 

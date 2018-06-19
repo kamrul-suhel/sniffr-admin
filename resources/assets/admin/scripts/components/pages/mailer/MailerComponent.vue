@@ -7,7 +7,6 @@
         <story-in-dialog></story-in-dialog>
 
 
-
         <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
             <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
@@ -48,7 +47,9 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false" :disabled="disableButton">Ok</v-btn>
+                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false" :disabled="disableButton">
+                        Ok
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -56,16 +57,6 @@
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
-                <v-flex xs-6>
-                    <!--<h3>-->
-                        <!--<i class="fa fa-users"></i> Mail-->
-                        <!--<v-btn tag="a" href="admin/stories/create" primary>-->
-                            <!--<v-icon>add</v-icon>-->
-                            <!--Add New Story-->
-                        <!--</v-btn>-->
-                    <!--</h3>-->
-                </v-flex>
-
                 <v-flex xs6 class="text-xs-right">
                     <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
@@ -136,11 +127,11 @@
                 notSelectedError: false,
                 errorMessage: '',
 
-                indeterminate:true,
+                indeterminate: true,
                 refreshTitle: 'Please wait while the stories update. This may take a few minutes.',
                 refreshIcon: 'done',
 
-                disableButton:true,
+                disableButton: true,
             }
         },
 
@@ -193,17 +184,17 @@
                 let refreshUrl = '/admin/stories/refresh';
 
                 axios.get(refreshUrl).then((response) => {
-                    console.log("sending refresh stories");
-                    console.log(response);
-                    if (response.data.dispatched == false) {
-                        this.refreshTitle = 'Stories are already up-to-date.';
-                        this.indeterminate = false;
-                        this.disableButton = false
-                    } else {
-                        // jobs have been sent to queue so need to check the job queue
-                        this.checkJobs();
-                    }
-                },
+                        console.log("sending refresh stories");
+                        console.log(response);
+                        if (response.data.dispatched == false) {
+                            this.refreshTitle = 'Stories are already up-to-date.';
+                            this.indeterminate = false;
+                            this.disableButton = false
+                        } else {
+                            // jobs have been sent to queue so need to check the job queue
+                            this.checkJobs();
+                        }
+                    },
                     (error) => {
                         this.checkJobs();
                     }
