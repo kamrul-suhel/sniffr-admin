@@ -389,6 +389,8 @@ class AdminVideosController extends Controller
         $video->embed_code = $request->input('embed_code');
         $video->location = $request->input('location');
         $video->details = $request->input('details');
+		$video->notes = $request->input('notes');
+		$video->credit = $request->input('credit');
         $video->description = $request->input('description');
 
         $video->save();
