@@ -14,6 +14,10 @@ class EditCompanyRequest extends FormRequest
      */
     public function authorize()
     {
+        if(auth()->user()->role === 'admin') {
+            return redirect('admin/clients/');
+        }
+
         $company = Client::find($this->user()->client_id);
 
         return (($company && ($this->user()->id == $company->account_owner_id)));

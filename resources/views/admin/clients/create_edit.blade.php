@@ -4,9 +4,9 @@
     <div id="admin-container">
         <ol class="breadcrumb">
             <li>
-                <a href="/admin/clients">
-                    <i class="fa fa-newspaper-o"></i>
-                    All Clients
+                <a href="/">
+                    <i class="fa fa-home"></i>
+                    Home
                 </a>
             </li>
             <li class="active">
@@ -28,8 +28,9 @@
         }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             {{ ($company) ? method_field('PUT') : method_field('POST') }}
             <div class="row">
-                <div class="{{ ($company) ? 'col-sm-6' : 'col-sm-8' }}">
+                <div class="{{ 'col-lg-12' }}">
                     <div class="panel panel-primary">
+
                         <div class="panel-heading">
                             <div class="panel-title">Basic Details</div>
                         </div>

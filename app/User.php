@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     public function canAccessClient()
     {
-        return ($this->role == 'client_admin' || $this->role == 'client' || $this->role == 'admin');
+        return ($this->role == 'client_admin' || $this->role == 'client' || $this->role == 'admin' || $this->role == 'client_owner');
     }
 
     public function isAdmin()

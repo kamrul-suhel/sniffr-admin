@@ -216,7 +216,7 @@ class AuthController extends Controller
      */
 	public function setPassword($token, $email)
     {
-        //Auth::logout();
+        Auth::logout();
 
         return view('frontend.pages.login.password_set_form')
             ->with('token', $token)
