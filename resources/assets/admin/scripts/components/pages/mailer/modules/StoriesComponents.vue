@@ -1,5 +1,18 @@
 <template>
     <div class="mailer-stories">
+        <v-layout row wrap>
+            <v-flex xs12 class="text-xs-right">
+                <v-text-field
+                    color="dark"
+                    hint="Search by title"
+                    append-icon="search"
+                    v-model="searchTerm"
+                    label="Search">
+
+                </v-text-field>
+            </v-flex>
+        </v-layout>
+
         <v-layout row wrap class="hidden-sm-and-down">
             <v-flex xs12 sm3 md3 lg3 xl3>
                 <strong>Thumbnail</strong>
@@ -56,17 +69,24 @@
                 page: 1,
                 stories: '',
                 totalPage: 0,
+                searchTerm:''
             }
         },
 
         watch: {
-            page(page) {
-                this.getStoriesData(page);
+            page() {
+                this.getStoriesData(this.getQueryObject());
+            },
+
+            searchTerm(){
+                this.page = 1;
+                this.getStoriesData(this.getQueryObject());
             }
         },
 
         created() {
-            this.getStoriesData();
+            this.getStoriesData(this.getQueryObject());
+
             MailerEventBus.$on('storiesUpdated', () => {
                 setTimeout(() => {
                     this.getStoriesData();
@@ -75,18 +95,28 @@
         },
 
         methods: {
-            getStoriesData(page = null) {
+            getStoriesData(queryObject = null) {
                 let url = '/admin/stories';
-                if (page != null) {
-                    url += '?page=' + page;
+                if (queryObject.page != null) {
+                    url += '?page=' + queryObject.page;
+                }
+
+                if(queryObject.searchTerm != ''){
+                    url += '&search='+ queryObject.searchTerm;
                 }
 
                 this.$store.dispatch('getMailerStories', url)
                     .then(() => {
                         this.stories = this.$store.getters.getStories;
                         this.totalPage = this.stories.last_page;
-                        this.totalPage = this.stories.last_page;
                     })
+            },
+
+            getQueryObject(){
+                return  {
+                    page: this.page,
+                    searchTerm: this.searchTerm
+                };
             }
         },
     }

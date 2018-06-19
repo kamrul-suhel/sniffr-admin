@@ -100,10 +100,15 @@ class AdminStoryController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
-            $stories = Story::orderBy('date_ingested', 'DESC')
-                ->paginate(12);
+            if($request->search){
+                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
+                    ->orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }else{
+                $stories = Story::orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }
 
             $data = [
                 'stories' => $stories
@@ -124,10 +129,19 @@ class AdminStoryController extends Controller
 
 
         if ($request->ajax()) {
-            $videos = Video::with('createdUser')
-                ->where([['state', 'licensed'], ['file', '!=', NULL]])
-                ->orderBy('licensed_at', 'DESC')
-                ->paginate(12);
+
+            if($request->search){
+                $videos = Video::with('createdUser')
+                    ->where('title', 'LIKE', '%'. $request->search. '%')
+                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                    ->orderBy('licensed_at', 'DESC')
+                    ->paginate(12);
+            }else{
+                $videos = Video::with('createdUser')
+                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                    ->orderBy('licensed_at', 'DESC')
+                    ->paginate(12);
+            }
             $data = [
                 'videos' => $videos
             ];
