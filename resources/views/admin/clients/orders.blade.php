@@ -81,6 +81,7 @@
                             <a href="{{ url('/admin/videos/edit/'.$order->video->alpha_id) }}">{{ $order->video->title }}</a>
                         </td>
                         <td>
+
                             <a href="{{ url('/admin/contacts/'.$order->video->contact->id.'/edit') }}">{{ $order->video->contact->full_name }}</a>
                         </td>
                         <td>

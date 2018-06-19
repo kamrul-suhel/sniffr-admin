@@ -176,6 +176,12 @@
                 $('body').append(videojs1);
                 $('body').append(vimeo);
 
+            },
+
+            onDownloadVideo() {
+                var url = '/client/video/'+this.video.id+'/download';
+
+                window.location = url;
             }
         },
 

@@ -59,7 +59,7 @@
                     dark
                     large
                     color="dark"
-                    @click.native="onLicenseVideo()"
+                    @click.native="onDownloadVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
@@ -71,7 +71,7 @@
                     dark
                     large
                     color="dark"
-                    @click.native="onLicenseVideo()"
+                    @click.native="onDownloadVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
@@ -150,8 +150,8 @@
                 return image;
             },
 
-            onLicenseVideo() {
-                var url = '/client/video/'+this.video.id+'/license';
+            onDownloadVideo() {
+                var url = '/client/video/'+this.video.id+'/download';
 
                 window.location = url;
             }

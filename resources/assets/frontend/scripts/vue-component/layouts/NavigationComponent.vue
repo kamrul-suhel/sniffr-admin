@@ -43,7 +43,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientEmail()">
-                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> Stories
+                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> My Stories
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -51,7 +51,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientVideos()">
-                                                    <v-icon color="white" left size="20px">video_library</v-icon> Videos
+                                                    <v-icon color="white" left size="20px">video_library</v-icon> My Videos
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -59,7 +59,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <router-link :to="{name: 'client_downloaded_stories'}">
-                                                    <v-icon color="white" left size="20px">done</v-icon> Downloaded
+                                                    <v-icon color="white" left size="20px">done</v-icon> My Downloads
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
