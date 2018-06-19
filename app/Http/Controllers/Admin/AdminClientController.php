@@ -255,6 +255,7 @@ class AdminClientController extends Controller
             }
 
             $csv->insertOne($insert);
+            $count++;
         }
 
         $csv->output('orders.csv');
