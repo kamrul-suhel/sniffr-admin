@@ -75,8 +75,6 @@ class ContractController extends Controller
         $contract->upfront_payment_currency_id = $request->input('upfront_payment_currency_id');
         $contract->revenue_share = $request->input('revenue_share');
         $contract->success_system = $request->input('success_system');
-        $contract->credit = $request->input('credit');
-        $contract->notes = $request->input('notes');
         $contract->user_id = \Auth::id();
         $contract->video_id = $request->input('video_id');
         $contract->contract_model_id = $request->input('contract_model_id');

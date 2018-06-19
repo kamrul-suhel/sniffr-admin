@@ -77,12 +77,14 @@
                             @include('admin.videos.partials.vertical')
                             @include('admin.videos.partials.collection')
                             @include('admin.videos.partials.shotType')
-
                             @include('admin.videos.partials.tags')
                             @include('admin.videos.partials.location')
                             @include('admin.videos.partials.video_information')
                             @include('admin.videos.partials.duration')
+                            @include('admin.videos.partials.credit')
+                            @include('admin.videos.partials.notes')
                             @include('admin.videos.partials.details')
+                            @include('admin.videos.partials.featured')
                         </div>
 
                         <div class="tab-pane" id="moredetails">
