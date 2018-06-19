@@ -2,8 +2,7 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <v-card>
-                <v-card-media :src="video.thumb" height="200px" class="client-video-thumbnail">
-
+                <v-card-media :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')" height="200px" class="client-video-thumbnail">
                     <div class="cdi-label" v-if="video.order">
                         <v-tooltip top>
                             <v-btn slot="activator" fab dark raised color="dark">
