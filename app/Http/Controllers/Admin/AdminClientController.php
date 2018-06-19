@@ -208,7 +208,6 @@ class AdminClientController extends Controller
         return view('admin.clients.orders', [
             'orders' => $orders,
             'client' => $client,
-            'stories' => Story::all(),
             'downloads' => $downloads
         ]);
     }

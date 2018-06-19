@@ -10,8 +10,10 @@
             {{ $description }}
         </div>
 
+        <br><br>
+
         <div class="pdf_video_credit bottom-padding">
-            <strong>Please Credit: {!! $credit !!}</strong>
+            <strong>{!! $credit !!}</strong>
         </div>
     </div>
 @endsection

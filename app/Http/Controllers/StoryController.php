@@ -225,7 +225,7 @@ class StoryController extends Controller
 		$html = view("pdf.video")->with([
 			"title" => $video['title'],
 			"description" => $video['description'],
-			"credit" => $video['credit'],
+			"credit" => ($video['credit'] ? 'Please Credit: '.$video['credit'] : ''),
 		]);
 
 		$pdf = App::make('dompdf.wrapper');
