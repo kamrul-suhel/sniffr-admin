@@ -8,7 +8,7 @@
                 <v-card width="400">
                     <v-card-text>
                         <v-flex xs12 align-center>
-                            <h2 class="text-xs-center">RESEST PASSWORD</h2>
+                            <h2 class="text-xs-center">RESET PASSWORD</h2>
                         </v-flex>
 
                         <v-flex xs12>
