@@ -11,7 +11,7 @@
 
     <div>&nbsp;</div>
 
-    <div>We have created your new user as account manager for the company <strong>{{ $email_data['company_name'] }}</strong>.
+    <div>We have created you a new account for the company <strong>{{ $email_data['company_name'] }}</strong>.
     </div>
 
     <div>&nbsp;</div>

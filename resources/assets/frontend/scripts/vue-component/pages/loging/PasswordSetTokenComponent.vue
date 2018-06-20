@@ -132,13 +132,25 @@
                             this.showMessage = true;
                             this.buttonDisable = true;
                             if(!response.data.error){
+                                let data = response.data;
                                 this.message = response.data.success_message;
 
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
-                                    this.$router.push({name: 'videos'});
-                                    LoginEventBus.clientLoginChange();
+                                    // Check is client
+                                    if(data.redirect_url === 'client'){
+                                        let redirect_url = this.$store.getters.getAttepmtRoute;
+                                        console.log(redirect_url);
+                                        if(!redirect_url){
+                                            this.$router.push({name: 'client_stories'});
+                                        }
+                                        LoginEventBus.clientLoginChange();
+                                        return;
+                                    }
 
+                                    if(data.redirect_url){
+                                        window.location.href = data.redirect_url;
+                                    }
                                 });
                             }else{
                                 this.error = true;

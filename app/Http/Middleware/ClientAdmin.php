@@ -9,12 +9,12 @@ class ClientAdmin {
 
     public function handle($request, Closure $next)
     {
-        if ( Auth::check() && Auth::user()->role == 'client') {
-            return redirect('/client/profile/'.auth()->user()->client->slug.'/users/'.auth()->user()->id.'/edit');
+
+        if(auth()->check() && auth()->user()->role != 'client_owner') {
+            return redirect('client/profile/'.auth()->user()->client->slug.'/users/'.auth()->user()->id.'/edit');
         }
 
-        if ( Auth::check() && Auth::user()->canAccessClientAdmin() )
-        {
+        if (Auth::check() && Auth::user()->canAccessClientAdmin()) {
             return $next($request);
         }
 

@@ -185,13 +185,13 @@ class AuthController extends Controller
 	}
 
     /**
-     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function isLogin(){
        if(Auth::user()){
            return $this->successResponse(Auth::user());
        }
-        return $this->errorResponse('Your are not login');
+       return $this->errorResponse('Your are not login');
     }
 
     /**
@@ -223,6 +223,12 @@ class AuthController extends Controller
             ->with('email', $email);
     }
 
+    /**
+     * @param Request $request
+     * @param $token
+     * @param $email
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function setPasswordPost(Request $request, $token, $email)
     {
 
@@ -274,7 +280,6 @@ class AuthController extends Controller
                 ]);
         }
     }
-
 
     /**
      * @param Request $request
