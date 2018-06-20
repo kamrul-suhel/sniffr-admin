@@ -15,7 +15,7 @@
             </td>
             <td valign="top" style="padding: 20px;">
                 <br />{{ TextHelper::shorten($video['description'], 350) }}
-                <br /><br /><a href="{{ url('client/video/show/'.$video['alpha_id']) }}" style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;display:inherit;margin-top:20px;margin-bottom:10px;font-weight:bold;">
+                <br /><br /><a href="{{ url('videos/'.$video['alpha_id']) }}" style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;display:inherit;margin-top:20px;margin-bottom:10px;font-weight:bold;">
                     View Video
                 </a>
             </td>

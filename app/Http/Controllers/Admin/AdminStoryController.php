@@ -121,8 +121,6 @@ class AdminStoryController extends Controller
      */
     public function getMailerVideos(Request $request)
     {
-
-
         if ($request->ajax()) {
             $videos = Video::with('createdUser')
                 ->where([['state', 'licensed'], ['file', '!=', NULL]])
@@ -133,7 +131,6 @@ class AdminStoryController extends Controller
             ];
             return $this->successResponse($data);
         }
-
     }
 
     /**

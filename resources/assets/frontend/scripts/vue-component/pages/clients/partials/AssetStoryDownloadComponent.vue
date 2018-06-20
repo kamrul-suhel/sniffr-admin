@@ -2,10 +2,10 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }">
-                <div class="cdi-label" v-if="order">
+                <div class="cdi-label" v-if="ordered || newOrder">
                     <v-tooltip top>
-                        <v-btn slot="activator" fab small raised dark color="dark">
-                            <v-icon light small>done</v-icon>
+                        <v-btn slot="activator" flat icon raised light color="white">
+                            <v-icon size="25px">cloud_done</v-icon>
                         </v-btn>
                         <span>Downloaded</span>
                     </v-tooltip>
@@ -44,7 +44,7 @@
                     :loading="loading"
                     :disabled="loading"
             >
-                Download assets
+                Download Story
             </v-btn>
         </v-flex>
 
@@ -55,13 +55,17 @@
 </template>
 
 <script>
+    import ComponentServices from '../../../../services/ComponentServices';
+
     export default {
         data () {
             return {
+                newOrder: false,
                 loading: false,
                 loader: null,
                 showButton: false,
                 order: false,
+                ordered: false,
                 hide_download_button: false,
             }
         },
@@ -71,9 +75,11 @@
         ],
 
         created() {
-            if (this.story.orders && this.story.orders.id) {
-                this.order = true;
-            }
+            var user = this.$store.getters.getUser;
+
+            var componentServices = new ComponentServices();
+
+            this.ordered = componentServices.checkOrderExists(this.story.orders, user);
         },
 
         watch: {
@@ -81,7 +87,10 @@
                 const l = this.loader
                 this[l] = !this[l]
 
-                setTimeout(() => (this[l] = false), 3000)
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000)
 
                 this.loader = null
             }
@@ -99,16 +108,6 @@
             },
 
             goToDetail(){
-                var mailer_id = '';
-                var route_name = this.$route.name;
-                if(route_name == 'client_downloaded_stories'){
-                    mailer_id = this.story.orders.mailer_id;
-                }else{
-                    mailer_id = this.story.client_mailer_id;
-                }
-
-
-                this.$store.commit('setClient_mailer_id', mailer_id);
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
 
