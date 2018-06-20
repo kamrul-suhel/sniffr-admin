@@ -41,7 +41,7 @@
                 <th>Downloaded</th>
                 @foreach($orders as $order)
 
-                    @if($order->story_id != 0)
+                    @if($order->story_id != 0 && $order->story)
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>{{ date('jS M Y h:i:s',strtotime($order->created_at)) }}</td>
@@ -77,8 +77,7 @@
                 <th>Contributor</th>
                 <th>Downloaded</th>
                 @foreach($orders as $order)
-
-                    @if($order->video_id != 0)
+                    @if($order->video_id != 0 && $order->video)
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>{{ date('jS M Y H:i:s',strtotime($order->created_at)) }}</td>
