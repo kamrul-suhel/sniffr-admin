@@ -46,10 +46,16 @@ class Story extends Model
         return $this->belongsToMany(Asset::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
     public function orders(){
-        return $this->hasOne(Order::class);
+        return $this->hasMany(Order::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+	 */
     public function user(){
         return $this->belongsTo(User::class);
     }

@@ -2,7 +2,6 @@ const state = {
     stories: '',
     currentStory: '',
     mailStories: '',
-    client_mailer_id:'',
     client_goback_route_name:''
 }
 
@@ -15,10 +14,6 @@ const mutations = {
         state.currentStory = story.story;
     },
 
-    setClient_mailer_id(state, client_mailer_id){
-        state.client_mailer_id = client_mailer_id;
-    },
-
     setClientGobBckRoute(state, route_name){
         state.client_goback_route_name = route_name;
     }
@@ -28,7 +23,7 @@ const actions = {
 
     getMailStories({commit}, mail_obj){
         return new Promise((resolve, reject) => {
-            let url = '/client/stories/mail/' + mail_obj.user.id;
+            let url = '/client/stories';
             if (mail_obj.page > 0) {
                 url += '?page=' + mail_obj.page;
             }
@@ -49,7 +44,7 @@ const actions = {
 
     getCurrentStory({commit}, alpha_id){
         return new Promise((resolve, reject) => {
-            let url = '/client/story/show/' + alpha_id;
+            let url = '/stories/' + alpha_id;
 
             axios.get(url)
                 .then((response) => {
@@ -94,10 +89,6 @@ const getters = {
 
     getCurrentStory(state){
         return state.currentStory;
-    },
-
-    getClientMailerId(state){
-        return state.client_mailer_id;
     },
 
     getClientGoBackRoute(state){

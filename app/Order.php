@@ -31,6 +31,6 @@ class Order extends Model
 
     public function video()
     {
-        return $this->hasOne('App\Video', 'id');
+        return $this->belongsTo('App\Video', 'id');
     }
 }

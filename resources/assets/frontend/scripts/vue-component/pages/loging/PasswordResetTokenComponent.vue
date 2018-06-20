@@ -27,9 +27,9 @@
                                     label="Enter your password"
                                     hint="At least 8 characters"
                                     v-model="password"
-                                    :append-icon="password ? 'visibility' : 'visibility_off'"
-                                    :append-icon-cb="() => (password = !password)"
-                                    :type="password ? 'password' : 'text'"
+                                    :append-icon="passwordType ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (passwordType = !passwordType)"
+                                    :type="passwordType ? 'password' : 'text'"
                                     :counter="counter"
                                     :rules="passwordRules"
                                     required
@@ -42,9 +42,9 @@
                                     color="dark"
                                     label="Confirm your password"
                                     v-model="confirm_password"
-                                    :append-icon="confirm_password ? 'visibility' : 'visibility_off'"
-                                    :append-icon-cb="() => (confirm_password = !confirm_password)"
-                                    :type="confirm_password ? 'password' : 'text'"
+                                    :append-icon="passwordTypeConfirm ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (passwordTypeConfirm = !passwordTypeConfirm)"
+                                    :type="passwordTypeConfirm ? 'password' : 'text'"
                                     :counter="counter"
                                     :rules="passwordConfirmationRules"
                                     required
@@ -81,6 +81,10 @@
                 email:'',
                 password:'',
                 confirm_password:'',
+
+                passwordType: true,
+                passwordTypeConfirm: true,
+
                 counter:30,
                 valid:false,
 
@@ -102,9 +106,6 @@
                 message: '',
                 error: false
             }
-        },
-        beforeRouteEnter(to, from, next){
-          next();
         },
 
         created() {

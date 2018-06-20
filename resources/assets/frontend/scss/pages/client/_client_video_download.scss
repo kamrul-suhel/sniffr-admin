@@ -16,8 +16,8 @@
 
     .cdi-label {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 0;
+      right: 0;
 
       button.btn--floating.btn--small {
         width: 30px;
@@ -36,6 +36,10 @@
     color: #777;
     margin-bottom: 10px;
   }
+}
+
+.application .videos-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
+  background-color: hsla(0, 0%, 0%, 1) !important;
 }
 
 .application .cd-box .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {

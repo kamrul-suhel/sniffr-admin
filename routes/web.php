@@ -9,17 +9,16 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     });
     Route::get('/', 'HomeController@index')->name('home');
 
-    Route::get('videos', 'Video\VideoController@index')->name('videos_index');
-    Route::get('dailies', 'Video\VideoController@dailiesIndex')->name('dailies_index');
-    Route::get('videos/category/{category}', 'Video\VideoController@category' )->name('videos_category_index');
-    Route::get('videos/tag/{tag}', 'Video\VideoController@findByTag' )->name('videos_tag_index');
-    Route::get('videos/{id}', 'Video\VideoController@show')->name('videos_show');
-    Route::post('upload', 'Video\VideoController@store')->name('videos_store');
-    Route::get('upload', 'Video\VideoController@upload')->name('upload')->name('videos_upload');
+    Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
+    Route::get('videos/category/{category}', 'Frontend\VideoController@category' )->name('videos_category_index');
+    Route::get('videos/tag/{tag}', 'Frontend\VideoController@findByTag' )->name('videos_tag_index');
+    Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
+    Route::post('upload', 'Frontend\VideoController@store')->name('videos_store');
+    Route::get('upload', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
     // TODO: remove this form route
-    Route::get('upload/form', 'Video\VideoController@form')->name('videos_upload_form');
-    Route::post('issue', 'Video\VideoController@issueAlert');
-    Route::post('videocheck', 'Video\VideoController@videoCheck');
+    Route::get('upload/form', 'Frontend\VideoController@form')->name('videos_upload_form');
+    Route::post('issue', 'Frontend\VideoController@issueAlert');
+    Route::post('videocheck', 'Frontend\VideoController@videoCheck');
     Route::get('details/{code}', 'DetailsController@show')->name('details_show');
     Route::post('details/{code}', 'DetailsController@store')->name('details_store');
     // TODO: remove this form route
@@ -264,41 +263,40 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 */
 
 Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
+	/* Frontend */
     Route::resource('orders', 'OrderController');
-    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('client.stories.download');
-    Route::get('stories/{id}/download_pdf', 'StoryController@getPdf')->name('client.stories.download_pdf');
-    Route::get('asset/{id}/download', 'StoryController@downloadAsset')->name('client.asset.download');
-    Route::get('video/{id}/download', 'StoryController@downloadVideo')->name('client.video.download');
-    Route::get('videos', 'Client\ClientVideosController@index')->name('client.videos');
 
+    /* Videos */
+    Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
+	Route::get('videos/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+
+
+	/* Stories */
+	Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
+	Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+
+	/* Admin */
     Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
     Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
     Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
     Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
     Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Client Frontend Routes
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('stories', 'Frontend\FrontendStoryController@getMailerStories')->name('client.stories');
-    Route::get('stories/mail/{user_id}', 'Frontend\FrontendStoryController@getMailerStories')->name('client.story.mail.user_id');
-    Route::get('stories/downloaded', 'Frontend\FrontendStoryController@getDownloadedStories')->name('client.downloaded.stories');
-    Route::get('story/show/{alpha_id}', 'Frontend\FrontendStoryController@show');
-    Route::get('video/show/{alpha_id}', 'Video\VideoController@show');
-    Route::get('videos', 'Client\ClientVideosController@videosSent');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Client License video & story route
-    |--------------------------------------------------------------------------
-    */
-
-    // NOT SURE WHAT YOU WERE TRYING TO DO HERE BUT IT DOESN'T WORK?
-    //Route::get('video/{id}/license', 'Frontend\client\MailVideoLicenseController@index')->name('mailer.video.license');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Client Frontend Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
+Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show');
+Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+
+Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
+Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
+Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show');
+//Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 
 
 /*
@@ -311,6 +309,10 @@ Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
 Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
 Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
 Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+
+
+
+
 
 
 
