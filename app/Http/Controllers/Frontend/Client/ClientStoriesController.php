@@ -94,7 +94,8 @@ class ClientStoriesController extends Controller
 		if ($request->ajax()) {
 			$user = Auth::user();
 			$order_stories = Order::with('story.orders')
-				->where('client_id', '=', $user->client_id)
+				->where('client_id', $user->client_id)
+				->where('story_id', '!=', 0)
 				->get()
 				->pluck('story');
 
