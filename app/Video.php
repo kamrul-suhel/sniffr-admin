@@ -114,14 +114,35 @@ class Video extends Model
         return $this->hasMany(Contract::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
+	 */
     public function currentContract()
     {
         return $this->hasOne('\App\Contract')->latest();
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
+	 */
 	public function hasContract()
 	{
 		return $this->hasOne('\App\Contract')->latest()->count() ? true : false;
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+	 */
+	public function stories()
+	{
+		return $this->belongsToMany(Story::class);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
+	 */
+	public function orders(){
+		return $this->hasMany(Order::class);
 	}
 
     /**
@@ -230,36 +251,9 @@ class Video extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
-     */
-    public function stories()
-    {
-        return $this->belongsToMany(Story::class);
-    }
-
-    public function order(){
-        return $this->hasOne(Order::class);
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function createdUser(){
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @param Client $client
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function clientVideos(Client $client)
-    {
-        $user_id = $request->user_id;
-        $client_mailer = ClientMailer::with('stories.orders')
-            ->whereHas('users', function ($query) use ($user_id) {
-                $query->where('users.id', '=', $user_id);
-            })
-            ->orderBy('created_at', 'DESC')
-            ->get();
     }
 }

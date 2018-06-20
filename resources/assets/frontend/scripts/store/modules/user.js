@@ -7,7 +7,10 @@ const state = {
     email: '',
     user_login: false,
     user_id:'',
-    user_role: ''
+    client_id:'',
+    user_role: '',
+
+    route_url: ''
 }
 
 const mutations = {
@@ -28,6 +31,7 @@ const mutations = {
             state.avatar = user.avatar;
             state.user_login = true;
             state.user_id = user.id;
+            state.client_id = user.client_id;
             state.user_role = user.role;
         } else {
             state.username = '';
@@ -35,8 +39,14 @@ const mutations = {
             state.email = '';
             state.user_id = '';
             state.user_login = false;
-            state.user_role = ''
+            state.user_role = '';
+            state.client_id = ''
         }
+    },
+
+    setRouteUrl(state, currUrl){
+        console.log(currUrl)
+        state.route_url = currUrl;
     }
 }
 
@@ -83,9 +93,14 @@ const getters = {
             email: state.email,
             avatar: state.avatar,
             id: state.user_id,
+            client_id: state.client_id,
             role: state.user_role
         }
     },
+
+    getRouteUrl(state){
+        return state.route_url;
+    }
 }
 
 export default {

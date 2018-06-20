@@ -25,10 +25,15 @@
 			<th>Created At</th>
 			<th>Sent At</th>
 			<th>Sends <span class="fa fa-bar-chart"></span></th>
+			<th>Opens <span class="fa fa-envelope"></span></th>
 			<th>Stories <span class="fa fa-tasks"></span></th>
+			<th>Videos <span class="fa fa-youtube-play"></span></th>
 			<th>Downloads <span class="fa fa-download"></span></th>
 			<th>Actions</th>
 			@foreach($mailers as $mailer)
+				@php
+					$downloads_count = $downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $mailer->videos()->pluck('videos.id'))->count() + $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $mailer->stories()->pluck('stories.id'))->count()
+				@endphp
 			<tr>
 				<td>{{ $mailer->alpha_id }}</td>
 				<td>@if($mailer->user_id!=0) @foreach($users as $user2)
@@ -40,8 +45,10 @@
 				<td>{{ date('jS M Y h:i:s',strtotime($mailer->created_at)) }}</td>
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
 				<td>{{ $mailer->users()->where('sent_at', '!=', NULL)->count() }}</td>
+				<td>{{ $opens->where('client_mailer_id', $mailer->id)->count() }}</td>
 				<td>{{ $mailer->stories()->count() }}</td>
-				<td>@if($mailer['sent_at']) {{ $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $mailer->stories()->pluck('stories.id'))->count() }}@else 0 @endif</td>
+				<td>{{ $mailer->videos()->count() }}</td>
+				<td>@if($mailer['sent_at']) {{ $downloads_count }}@else 0 @endif</td>
 				<td>
 					<p>
 						@if(!$mailer['sent_at'])<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-primary"><span class="fa fa-plus-circle"></span> Send</a>@endif

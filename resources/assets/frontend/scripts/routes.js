@@ -141,7 +141,7 @@ export const routes = [
             },
 
             {
-                path: 'story/show/:alpha_id',
+                path: 'stories/:alpha_id',
                 name: 'client_story_detail',
                 component: ClientStoryDetailComponent
             },
@@ -159,7 +159,7 @@ export const routes = [
             },
 
             {
-                path: 'videos/show/:alpha_id',
+                path: 'videos/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
             }

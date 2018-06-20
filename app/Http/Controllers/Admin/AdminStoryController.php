@@ -32,6 +32,25 @@ class AdminStoryController extends Controller
         $this->middleware(['admin:admin,manager,editorial']);
     }
 
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function index(Request $request)
+	{
+
+		if ($request->ajax()) {
+			$stories = Story::orderBy('date_ingested', 'DESC')
+				->paginate(12);
+
+			$data = [
+				'stories' => $stories
+			];
+			return $this->successResponse($data);
+		}
+
+		return view('admin.stories.index'); //return response()->json($formatted_posts);
+	}
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -96,33 +115,11 @@ class AdminStoryController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-
-        if ($request->ajax()) {
-            $stories = Story::orderBy('date_ingested', 'DESC')
-                ->paginate(12);
-
-            $data = [
-                'stories' => $stories
-            ];
-            return $this->successResponse($data);
-        }
-
-        return view('admin.stories.index'); //return response()->json($formatted_posts);
-    }
-
-
-    /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getMailerVideos(Request $request)
     {
-
-
         if ($request->ajax()) {
             $videos = Video::with('createdUser')
                 ->where([['state', 'licensed'], ['file', '!=', NULL]])
@@ -133,7 +130,6 @@ class AdminStoryController extends Controller
             ];
             return $this->successResponse($data);
         }
-
     }
 
     /**

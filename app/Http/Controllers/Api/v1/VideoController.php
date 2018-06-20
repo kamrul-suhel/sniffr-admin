@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Traits\FrontendResponse;
 use Response;
 use App\Video;
 use Auth;
@@ -13,8 +14,9 @@ use Illuminate\Support\Facades\Input;
 
 class VideoController extends Controller {
 
+	use FrontendResponse;
+
 	private $default_limit = 50;
-	private $public_columns = array('id', 'video_category_id', 'rights', 'access', 'details', 'description', 'featured', 'duration', 'views', 'image', 'created_at', 'updated_at');
 	/**
 	 * Show all videos.
 	 *

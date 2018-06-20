@@ -43,7 +43,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientEmail()">
-                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> Stories
+                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> My Stories
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -51,7 +51,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientVideos()">
-                                                    <v-icon color="white" left size="20px">video_library</v-icon> Videos
+                                                    <v-icon color="white" left size="20px">video_library</v-icon> My Videos
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -59,7 +59,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <router-link :to="{name: 'client_downloaded_stories'}">
-                                                    <v-icon color="white" left size="20px">done</v-icon> Downloaded
+                                                    <v-icon color="white" size="20px">cloud_done</v-icon> My Downloads
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -132,6 +132,9 @@
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
+
+                this.setPrevRoute();
+
                 if(to.name != 'home'){
                     this.nav_background = true;
                 }else{
@@ -152,6 +155,10 @@
             }
         },
         created(){
+
+            this.setPrevRoute();
+
+
             LoginEventBus.$on('logoutChangeState', () => {
                 this.is_login = false;
             });
@@ -184,6 +191,19 @@
             }
         },
         methods: {
+            setPrevRoute(){
+                let routeUrl = this.$store.getters.getRouteUrl;
+                if(routeUrl === '' ){
+                    if(this.$route.name === 'client_story_detail'){
+                        this.$store.commit('setRouteUrl', 'client_stories')
+                    }else if(this.$route.name === 'client_video_detail'){
+                        this.$store.commit('setRouteUrl', 'client_videos')
+                    }
+                }else{
+                    this.$store.commit('setRouteUrl', this.$route.name)
+                }
+            },
+
             onLogout(){
                 this.$store.dispatch('userLogout')
                     .then((response) => {
