@@ -21,11 +21,34 @@ class FrontendStoryController extends Controller
      */
     public function getMailerStories(Request $request)
     {
+        $user_client_id = Auth::user()->client_id;
+        $client_mailer = ClientMailer::with('stories.orders')
+            ->whereHas('users', function ($query) use ($user_client_id) {
+                $query->where('users.client_id', '=', $user_client_id);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->pluck('stories')
+            ->collapse();
+
+        $stories = $this->paginate($client_mailer, self::PAGINATE_PER_PAGE, $request->page);
+        $collect_stories = collect($stories->items());
+
+        $items = $collect_stories->each(function($item) use($user_client_id){
+            if(isset($item->orders->client_id) && $item->orders->client_id === $user_client_id){
+                $item['order'] = 1;
+            }else{
+                $item['order'] = 0;
+            }
+        });
+
+        dd($items);
+
         if ($request->ajax() || $request->isJson()) {
-            $user_id = $request->user_id;
+            $user_client_id = Auth::user()->client_id;
             $client_mailer = ClientMailer::with('stories.orders')
-                ->whereHas('users', function ($query) use ($user_id) {
-                    $query->where('users.id', '=', $user_id);
+                ->whereHas('users', function ($query) use ($user_client_id) {
+                    $query->where('users.client_id', '=', $user_client_id);
                 })
                 ->orderBy('created_at', 'DESC')
                 ->get()

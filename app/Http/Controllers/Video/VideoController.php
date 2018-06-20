@@ -242,11 +242,15 @@ class VideoController extends Controller
      */
     public function show(Request $request, string $id)
     {
+
         $isJson = $request->ajax() || $request->isJson();
         if ($isJson) {
             $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
+                ->whereHas('order', function($query){
+                    $query->where('order.user_id', 3);
+                })
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
                 ->first();

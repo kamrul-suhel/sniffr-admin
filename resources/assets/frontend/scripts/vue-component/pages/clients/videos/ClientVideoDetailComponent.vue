@@ -41,7 +41,12 @@
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
 
-                                <v-btn dark block @click="onGoback()" class="dark" large>Download Video</v-btn>
+                                <v-btn
+                                        dark
+                                        block
+                                        @click="onGoback()"
+                                        class="dark"
+                                        large>Download Video</v-btn>
 
                             </v-flex>
 

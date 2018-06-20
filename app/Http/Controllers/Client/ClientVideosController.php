@@ -48,7 +48,7 @@ class ClientVideosController extends Controller
             $user_id = Auth::user()->id;
             $client_videos_mailer = ClientMailer::with('videos.order')
                 ->whereHas('users', function ($query) use ($user_id) {
-                    $query->where('users.id', '=', 3);
+                    $query->where('users.id', '=', $user_id);
                 })
                 ->whereHas('videos', function ($query) {
                     $query->where('state', 'licensed');
@@ -57,7 +57,6 @@ class ClientVideosController extends Controller
                 ->get()
                 ->pluck('videos')
                 ->collapse();
-
             $client_videos_mailer = $this->paginate($client_videos_mailer, self::PAGINATE_PER_PAGE);
 
             $data = [
