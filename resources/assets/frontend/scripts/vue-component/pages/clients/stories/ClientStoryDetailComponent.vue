@@ -99,7 +99,8 @@
 
         methods: {
             onGoback() {
-                this.$router.go(-1);
+                console.log(this.$store.getters.getRouteUrl);
+                this.$router.push({name : this.$store.getters.getRouteUrl});
             },
 
             getStoryDetail(){

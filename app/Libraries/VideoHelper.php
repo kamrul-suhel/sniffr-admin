@@ -23,7 +23,7 @@ trait VideoHelper{
 				</div>';
         }
 
-        if(is_null($video->url) && $video->file_watermark_dirty !== null) {
+        if($video->file_watermark_dirty !== null) {
             $sHTML .= '<video 
                 id="video_player" 
                 preload="auto" controls autoplay x-webkit-airplay="allow" 

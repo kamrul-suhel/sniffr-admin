@@ -197,7 +197,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
-    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('admin.stories.download');
+    Route::get('stories/{id}/download', 'Frontend\StoryController@downloadStory')->name('admin.stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
     Route::get('stories/checkjobs', 'Admin\AdminStoryController@checkJobs');
     Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');

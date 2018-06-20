@@ -52,6 +52,7 @@ trait FrontendResponse
             'permission',
             'is_exclusive',
             'terms',
+            'views',
             'licensed_at'
         ];
 
