@@ -266,18 +266,13 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::resource('orders', 'OrderController');
 
     /* Videos */
-
-	Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
 	Route::get('videos/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
 
 
 	/* Stories */
-	Route::get('stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 	Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
 	Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
-
-
 
 	/* Admin */
     Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
@@ -294,7 +289,12 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 */
 
 Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
+Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show');
+Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+
 Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
+Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
+Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show');
 //Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 
 
