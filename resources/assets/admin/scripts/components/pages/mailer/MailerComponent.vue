@@ -57,7 +57,7 @@
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
-                <v-flex xs6 class="text-xs-right">
+                <v-flex xs12 class="text-xs-right">
                     <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
                         Refresh Stories
