@@ -104,11 +104,6 @@
                 this.content_padding = false;
             }
 
-            // IAN:  Need to check if value exists in multiu dim array
-            // if (this.video_detail.video.order && this.video_detail.video.order.id) {
-            //     this.button_text = 'Re-download video';
-            // }
-
         },
 
         mounted() {

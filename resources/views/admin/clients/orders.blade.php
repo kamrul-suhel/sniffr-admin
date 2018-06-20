@@ -57,7 +57,7 @@
 
                         </td>
                         <td>
-                            {{ $downloads->where('video_id', $order->video_id)->where('client_id', $order->client_id)->count() }}
+                            {{ $downloads->where('story_id', $order->story_id)->where('client_id', $order->client_id)->count() }}
                         </td>
                     </tr>
                     @endif
@@ -89,7 +89,7 @@
                             <a href="{{ url('/admin/contacts/'.$order->video->contact->id.'/edit') }}">{{ $order->video->contact->full_name }}</a>
                         </td>
                         <td>
-                            {{ $downloads->where('video_id', $order->video_id)->count() }}
+                            {{ $downloads->where('video_id', $order->video_id)->where('client_id', $order->client_id)->count() }}
                         </td>
                     </tr>
                     @endif
