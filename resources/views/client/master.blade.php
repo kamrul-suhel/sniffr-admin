@@ -8,10 +8,10 @@
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 
-    <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}"/>
+    {{--<link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}"/>--}}
+    <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}"/>
     <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/nav-styles.css') }}">
     <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/footer-styles.css') }}">
-    <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}"/>
     <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
 
 
@@ -39,9 +39,9 @@
     <section id="nav" class="section-space nav-background">
         <div class="container grid-list-lg">
             <div class="layout row wrap">
-                <div class="flex xs12 sm6 md4 lg4">
+                <div class="flex xs12 sm6 md4 lg4" style="margin: -10px;">
                     <div class="logo"><a href="/" class="router-link-active">
-                            <img src="/assets/frontend/images/logo-sniffr-white.png"></a><p style="color:white; margin: 0px;">Client Portal</p></div>
+                            <img src="/assets/frontend/images/logo-sniffr-white.png"></a><p style="color:white;">Client Portal</p></div>
                 </div>
                 <div class="flex xs12 sm6 md8 lg8">
                     <nav class="navigation">
@@ -50,58 +50,22 @@
                             <li><a href="/client/stories" class=""><i aria-hidden="true" class=" white--text material-icons"></i><i class="fa fa-at"></i> Stories</a></li>
 
                             @if(in_array(auth()->user()->role, ['client', 'client_admin', 'client_owner']))
-                                <li><a href="/client/profile" class="">
+                                <li>
+                                    <a href="/client/profile" class="">
                                         <i aria-hidden="true" class="icon icon--right white--text material-icons"></i>
-                                        <i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Company Settings' }}</a>
+                                        <i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Company Settings' }}
+                                    </a>
                                 </li>
                             @else
-                                <li><a href="/client/profile/{{auth()->user()->client->slug}}/users/{{auth()->user()->id}}/edit" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-user"></i> {{ auth()->user()->username ?? 'Profile' }}</a></li>
+                                <li>
+                                    <a href="/client/profile/{{auth()->user()->client->slug}}/users/{{auth()->user()->id}}/edit" class="">
+                                        <i aria-hidden="true" class="icon icon--right white--text material-icons"></i>
+                                        <i class="fa fa-user"></i> {{ auth()->user()->username ?? 'Profile' }}
+                                    </a>
+                                </li>
                             @endif
                         </ul>
                     </nav>
-                </div>
-            </div>
-        </div>
-        <div class="login-dialog">
-            <div class="dialog__container login-section" style="display: block;">
-            </div>
-        </div>
-        <div class="dialog__container" style="display: block;">
-        </div>
-        <div class="menu__content"
-             style="min-width: 140px; top: 57px; left: 658px; transform-origin: left top 0px; z-index: 12; display: none;">
-            <div class="list"><!---->
-                <div>
-                    <div class="list__tile">
-                        <div class="list__tile__title"><a><i aria-hidden="true"
-                                                             class="icon icon--left white--text material-icons"
-                                                             style="font-size: 20px;">alternate_email</i> Stories
-                            </a></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="list__tile">
-                        <div class="list__tile__title"><a><i aria-hidden="true"
-                                                             class="icon icon--left white--text material-icons"
-                                                             style="font-size: 20px;">video_library</i> Videos
-                            </a></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="list__tile">
-                        <div class="list__tile__title"><a href="/client/stories/downloaded" class=""><i
-                                        aria-hidden="true" class="icon icon--left white--text material-icons"
-                                        style="font-size: 20px;">done</i> Downloaded
-                            </a></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="list__tile">
-                        <div class="list__tile__title"><a><i aria-hidden="true"
-                                                             class="icon icon--left white--text material-icons"
-                                                             style="font-size: 20px;">lock_out</i> Logout
-                            </a></div>
-                    </div>
                 </div>
             </div>
         </div>

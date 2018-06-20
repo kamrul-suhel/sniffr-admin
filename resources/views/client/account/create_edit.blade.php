@@ -2,9 +2,8 @@
 
 @section('content')
     <div id="container">
-
         <div class="section-title">
-            <h1>{!! ($company) ? $company->name : '<i class="fa fa-plus"></i> Add New Client' !!}</h1>
+            <h1>{!! ($company) ? ' <i class="fa fa-industry"></i> '. $company->name : '<i class="fa fa-plus"></i> Add New Client' !!}</h1>
         </div>
         <div class="clear"></div>
 
@@ -54,14 +53,14 @@
                                     <div class="panel-title">Address Line 1</div>
                                     <input type="text" class="form-control" name="address_line1" id="address_line1"
                                            placeholder="Building Name"
-                                           value="{{ ($company) ? $company->address_line1 : '' }}"/>
+                                           value="{{ ($company) ? $company->address_line1 : old('address_line1') }}"/>
                                     <br>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="panel-title">VAT Number</div>
                                     <input type="text" class="form-control" name="vat_number" id="vat_number"
-                                           value="{{($company->vat_number) ? $company->vat_number : '' }}"/>
+                                           value="{{($company->vat_number) ? $company->vat_number : old('vat_number') }}"/>
                                     <br>
                                 </div>
 
@@ -69,42 +68,42 @@
                                     <div class="panel-title">Address Line 2</div>
                                     <input type="text" class="form-control" name="address_line2" id="address_line2"
                                            placeholder="Street Address"
-                                           value="{{ ($company->address_line2) ? $company->address_line2 : '' }}"/>
+                                           value="{{ ($company->address_line2) ? $company->address_line2 : old('address_line2') }}"/>
                                     <br>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="panel-title">Billing Phone Number</div>
-                                    <input type="text" class="form-control" name="billing_tel" id="billing_tel" value="{{($company->billing_tel) ? $company->billing_tel : '' }}"/>
+                                    <input type="text" class="form-control" name="billing_tel" id="billing_tel" value="{{($company->billing_tel) ? $company->billing_tel : old('billing_tel') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="panel-title">City</div>
                                     <input type="text" class="form-control" name="city" id="city" placeholder="City"
-                                           value="{{ ($company->city) ? $company->city : '' }}"/>
+                                           value="{{ ($company->city) ? $company->city : old('city') }}"/>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="panel-title">Billing Email Address</div>
-                                    <input type="text" class="form-control" name="billing_email" id="billing_email" value="{{($company->billing_email) ? $company->billing_email : '' }}"/>
+                                    <input type="text" class="form-control" name="billing_email" id="billing_email" value="{{($company->billing_email) ? $company->billing_email : old('billing_email') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="panel-title">Postcode / Zip Code</div>
                                     <input type="text" class="form-control" name="postcode" id="postcode"
-                                           value="{{($company->postcode) ? $company->postcode : '' }}"/>
+                                           value="{{($company->postcode) ? $company->postcode : old('postcode') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="panel-title">Billing Contact / Owner</div>
                                     <input type="text" disabled class="form-control" name="fullname" id="fullname"
-                                           value="{{($company->owner->full_name) ? $company->owner->full_name : '' }}"/>
+                                           value="{{($company->owner->full_name) ? $company->owner->full_name : old('full_name') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
                                     <br>
                                     <div class="panel-title">Country</div>
                                     <input type="text" class="form-control" name="country" id="country"
-                                           value="{{($company->country) ? $company->country : ''}}"/>
+                                           value="{{($company->country) ? $company->country : old('country')}}"/>
                                     <br>
                                 </div>
 

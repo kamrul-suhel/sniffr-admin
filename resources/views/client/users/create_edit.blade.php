@@ -1,12 +1,11 @@
 @extends('client.master')
 
 @section('content')
-
     <div id="container">
         <div class="section-title">
             @if($user)
                 <h1>
-                    <i class="fa fa-users"></i> {{ $user->username ?? 'New User' }}
+                    <i class="fa fa-user"></i> {{ $user->username ?? 'New User' }}
                 </h1>
             @else
                 <h3><i class="fa fa-users"></i> Add New User</h3>
