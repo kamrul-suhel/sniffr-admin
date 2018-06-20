@@ -103,6 +103,7 @@ class AdminStoryController extends Controller
         if ($request->ajax()) {
             if($request->search){
                 $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
+                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
                     ->orderBy('date_ingested', 'DESC')
                     ->paginate(12);
             }else{
@@ -129,9 +130,9 @@ class AdminStoryController extends Controller
         if ($request->ajax()) {
 
             if($request->search){
-                $videos = Video::with('createdUser')
-                    ->where('title', 'LIKE', '%'. $request->search. '%')
-                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                $search_value = $request->search;
+                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%'. $search_value . '%']])
+                    ->orWhere('alpha_id', $search_value)
                     ->orderBy('licensed_at', 'DESC')
                     ->paginate(12);
             }else{

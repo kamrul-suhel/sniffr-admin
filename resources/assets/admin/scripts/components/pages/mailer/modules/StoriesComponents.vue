@@ -4,7 +4,6 @@
             <v-flex xs12 class="text-xs-right">
                 <v-text-field
                     color="dark"
-                    hint="Search by title"
                     append-icon="search"
                     v-model="searchTerm"
                     label="Search">
