@@ -32,25 +32,6 @@ class AdminStoryController extends Controller
         $this->middleware(['admin:admin,manager,editorial']);
     }
 
-	/**
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function index(Request $request)
-	{
-
-		if ($request->ajax()) {
-			$stories = Story::orderBy('date_ingested', 'DESC')
-				->paginate(12);
-
-			$data = [
-				'stories' => $stories
-			];
-			return $this->successResponse($data);
-		}
-
-		return view('admin.stories.index'); //return response()->json($formatted_posts);
-	}
-
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -115,16 +96,51 @@ class AdminStoryController extends Controller
     }
 
     /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            if($request->search){
+                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
+                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
+                    ->orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }else{
+                $stories = Story::orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }
+
+            $data = [
+                'stories' => $stories
+            ];
+            return $this->successResponse($data);
+        }
+
+        return view('admin.stories.index'); //return response()->json($formatted_posts);
+    }
+
+
+    /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getMailerVideos(Request $request)
     {
         if ($request->ajax()) {
-            $videos = Video::with('createdUser')
-                ->where([['state', 'licensed'], ['file', '!=', NULL]])
-                ->orderBy('licensed_at', 'DESC')
-                ->paginate(12);
+
+            if($request->search){
+                $search_value = $request->search;
+                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%'. $search_value . '%']])
+                    ->orWhere('alpha_id', $search_value)
+                    ->orderBy('licensed_at', 'DESC')
+                    ->paginate(12);
+            }else{
+                $videos = Video::with('createdUser')
+                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                    ->orderBy('licensed_at', 'DESC')
+                    ->paginate(12);
+            }
             $data = [
                 'videos' => $videos
             ];

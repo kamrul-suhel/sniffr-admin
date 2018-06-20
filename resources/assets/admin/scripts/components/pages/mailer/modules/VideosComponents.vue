@@ -1,5 +1,16 @@
 <template>
     <div class="mailer-videos">
+        <v-layout row wrap>
+            <v-flex xs12 class="text-xs-right">
+                <v-text-field
+                        color="dark"
+                        append-icon="search"
+                        v-model="searchTerm"
+                        label="Search">
+
+                </v-text-field>
+            </v-flex>
+        </v-layout>
 
         <v-layout row wrap class="hidden-sm-and-down">
             <v-flex xs12 sm3 md3 lg3 xl3>
@@ -57,30 +68,48 @@
                 videos: {},
                 totalPage: 0,
                 page: 1,
+                searchTerm:''
             }
         },
 
         watch: {
-            page(page) {
-                this.getVideosData(page);
+            page() {
+                this.getVideosData(this.getQueryObject());
+            },
+
+            searchTerm(){
+                this.page = 1;
+                this.getVideosData(this.getQueryObject());
             }
+
         },
 
         created() {
-            this.getVideosData();
+            this.getVideosData(this.getQueryObject());
         },
 
         methods: {
-            getVideosData(page = null) {
+            getVideosData(queryObject = null) {
                 let url = '/admin/mailers/videos';
-                if (page != null) {
-                    url += '?page=' + page;
+                if (queryObject.page != null) {
+                    url += '?page=' + queryObject.page;
+                }
+
+                if(queryObject.searchTerm != ''){
+                    url += '&search='+ queryObject.searchTerm;
                 }
                 axios.get(url)
                     .then((videos) => {
                         this.videos = videos.data.videos;
                         this.totalPage = videos.data.videos.last_page;
                     });
+            },
+
+            getQueryObject(){
+                return  {
+                    page: this.page,
+                    searchTerm: this.searchTerm
+                };
             }
         },
     }

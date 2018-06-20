@@ -1,6 +1,7 @@
 const state = {
     selectedStories: [],
-    stories: {}
+    stories: {},
+    queryObject: {}
 }
 
 const mutations = {
@@ -28,6 +29,10 @@ const mutations = {
                 state.selectedStories.splice(index, 1);
             }
         })
+    },
+
+    setQueryObject(state, queryObject){
+        state.queryObject = queryObject;
     }
 }
 
@@ -53,6 +58,10 @@ const getters = {
 
     getStories(state) {
         return state.stories;
+    },
+
+    getQueryObject(state){
+        return state.queryObject;
     }
 }
 
