@@ -286,15 +286,13 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 | Client Frontend Routes
 |--------------------------------------------------------------------------
 */
-
 Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
-Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show');
+Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
 Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 
 Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
 Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show');
-//Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('client.videos.show');;
 
 
 /*
