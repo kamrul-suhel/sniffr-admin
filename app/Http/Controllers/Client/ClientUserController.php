@@ -82,7 +82,7 @@ class ClientUserController extends Controller
 
         $user->save();
 
-        if (in_array(Auth::user()->role, ['client_owner', 'client_admin'])) {
+        if (in_array($user->role, ['client_owner', 'client_admin', 'client'])) {
             $email = $user->getEmailForPasswordReset();
             $this->deleteExisting($user);
 
@@ -190,8 +190,15 @@ class ClientUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug, $id)
     {
-        dd('here');
+        $user = User::find($id);
+
+        $user->delete();
+
+        return redirect('client/profile')->with([
+            'note' => 'User Deleted',
+            'note_type' => 'success',
+        ]);
     }
 }

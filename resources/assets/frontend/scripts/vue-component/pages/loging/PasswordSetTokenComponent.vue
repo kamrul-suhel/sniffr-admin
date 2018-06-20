@@ -13,7 +13,6 @@
 
                         <v-flex xs12>
                             <v-text-field
-                                    value="email"
                                     name="email"
                                     color="dark"
                                     label="Email"
@@ -28,9 +27,9 @@
                                     label="Enter your password"
                                     hint="At least 8 characters"
                                     v-model="password"
-                                    :append-icon="password ? 'visibility' : 'visibility_off'"
-                                    :append-icon-cb="() => (password = !password)"
-                                    :type="password ? 'password' : 'text'"
+                                    :append-icon="passwordType ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (passwordType = !passwordType)"
+                                    :type="passwordType ? 'password' : 'text'"
                                     :counter="counter"
                                     :rules="passwordRules"
                                     required
@@ -43,13 +42,13 @@
                                     color="dark"
                                     label="Confirm your password"
                                     v-model="confirm_password"
-                                    :append-icon="confirm_password ? 'visibility' : 'visibility_off'"
-                                    :append-icon-cb="() => (confirm_password = !confirm_password)"
-                                    :type="confirm_password ? 'password' : 'text'"
+                                    :append-icon="passwordTypeConfirm ? 'visibility' : 'visibility_off'"
+                                    :append-icon-cb="() => (passwordTypeConfirm = !passwordTypeConfirm)"
+                                    :type="passwordTypeConfirm ? 'password' : 'text'"
                                     :counter="counter"
                                     :rules="passwordConfirmationRules"
                                     required
-                                    @keyup.enter="onPasswordsetSubmit()"
+                                    @keyup.enter="onPasswordResetSubmit()"
                             ></v-text-field>
                         </v-flex>
 
@@ -84,6 +83,10 @@
                 email:'',
                 password:'',
                 confirm_password:'',
+
+                passwordType: true,
+                passwordTypeConfirm: true,
+
                 counter:30,
                 valid:false,
 
@@ -132,25 +135,13 @@
                             this.showMessage = true;
                             this.buttonDisable = true;
                             if(!response.data.error){
-                                let data = response.data;
                                 this.message = response.data.success_message;
 
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
-                                    // Check is client
-                                    if(data.redirect_url === 'client'){
-                                        let redirect_url = this.$store.getters.getAttepmtRoute;
-                                        console.log(redirect_url);
-                                        if(!redirect_url){
-                                            this.$router.push({name: 'client_stories'});
-                                        }
-                                        LoginEventBus.clientLoginChange();
-                                        return;
-                                    }
+                                    this.$router.push({name: 'videos'});
+                                    LoginEventBus.clientLoginChange();
 
-                                    if(data.redirect_url){
-                                        window.location.href = data.redirect_url;
-                                    }
                                 });
                             }else{
                                 this.error = true;

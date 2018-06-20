@@ -128,27 +128,27 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-	public function logout(Request $request){
-		Auth::logout();
+    public function logout(Request $request){
+        Auth::logout();
         Session::flush();
 
         if($request->ajax()){
             $data = ['success' => 'You are successfully logout'];
             return $this->successResponse($data);
         }
-		return Redirect::to('/')->with([
-		    'note' => 'You have been successfully logged out',
+        return Redirect::to('/')->with([
+            'note' => 'You have been successfully logged out',
             'note_type' => 'success'
         ]);
-	}
+    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function password_reset()
-	{
+    public function password_reset()
+    {
         return view('frontend.pages.login.reset_password');
-	}
+    }
 
     /**
      * @param Request $request
@@ -161,37 +161,37 @@ class AuthController extends Controller
             $message->subject('Password Reset Info');
         });
 
-		switch ($response)
-		{
-			case PasswordBroker::RESET_LINK_SENT:
-			    if($request->ajax()){
+        switch ($response)
+        {
+            case PasswordBroker::RESET_LINK_SENT:
+                if($request->ajax()){
                     $data = ['success_message' => 'We\'ve just sent you a reset password link, please check your email'];
                     return $this->successResponse($data);
                 }
-				return Redirect::to('login')->with([
-				    'note' => trans($response),
+                return Redirect::to('login')->with([
+                    'note' => trans($response),
                     'note_type' => 'success'
                 ]);
 
-			case PasswordBroker::INVALID_USER:
+            case PasswordBroker::INVALID_USER:
                 if($request->ajax()){
                     return $this->errorResponse('User is not found in our database');
                 }
-				return redirect()->back()->with([
-				    'note' => trans($response),
+                return redirect()->back()->with([
+                    'note' => trans($response),
                     'note_type' => 'error'
                 ]);
-		}
-	}
+        }
+    }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     *
      */
     public function isLogin(){
-       if(Auth::user()){
-           return $this->successResponse(Auth::user());
-       }
-       return $this->errorResponse('Your are not login');
+        if(Auth::user()){
+            return $this->successResponse(Auth::user());
+        }
+        return $this->errorResponse('Your are not login');
     }
 
     /**
@@ -199,36 +199,31 @@ class AuthController extends Controller
      * @param $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function password_reset_token(Request $request, $token)
-	{
-		$data = [
-			'token' => $token,
-			'theme_settings' => config('settings.theme'),
+    public function password_reset_token(Request $request, $token)
+    {
+        $data = [
+            'token' => $token,
+            'theme_settings' => config('settings.theme'),
         ];
 
-	  return view('frontend.master', $data);
-	}
+        return view('frontend.master', $data);
+    }
 
     /**
      * @param $token
      * @param $email
      * @return mixed
      */
-	public function setPassword($token, $email)
+    public function setPassword($token, $email)
     {
         Auth::logout();
+        Session::flush();
 
         return view('frontend.pages.login.password_set_form')
             ->with('token', $token)
             ->with('email', $email);
     }
 
-    /**
-     * @param Request $request
-     * @param $token
-     * @param $email
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     */
     public function setPasswordPost(Request $request, $token, $email)
     {
 
@@ -280,6 +275,7 @@ class AuthController extends Controller
                 ]);
         }
     }
+
 
     /**
      * @param Request $request

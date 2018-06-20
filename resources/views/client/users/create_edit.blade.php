@@ -38,20 +38,6 @@
                         </div>
 
                         <div class="panel-body" style="display: block;">
-                            @if($errors->first('username'))
-                                <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                                    </button>
-                                    {{ $errors->first('username') }}
-                                </div>
-                            @endif
-
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" autocomplete="off"
-                                   value="{{ ($user) ? $user->username : old('username')	}}"/>
-
-                            <br>
-
                             @if($errors->first('first_name'))
                                 <div class="alert alert-danger">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
@@ -159,10 +145,16 @@
             {{ ($user) ? method_field('PUT') : method_field('POST') }}
             <input type="submit" value="{{ ($user) ? 'Update' : 'Create' }} User" class="btn btn-success pull-right"/>
 
-            <label>Active</label>
-            <input type="checkbox" id="active" name="active" {{ ((($user) && ($user->active)) || (!$user)) ? 'checked="checked" value=1' : '' }} />
-
         </form>
+
+        @if($user)
+            <?php echo Form::open(['method' => 'DELETE', 'route' => ['clients.users.destroy', $user->client->slug , $user->id]]); ?>
+            <button class="btn btn-danger delete">
+                <i class="fa fa-trash-o"></i>
+                Delete
+            </button>
+            <?php echo Form::close(); ?>
+        @endif
 
 
     </div>

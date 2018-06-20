@@ -64,31 +64,11 @@
                                 @endif
 
                                 <div class="input-group">
-                                    <label for="user_first_name" class="input-group-addon">Account Owner First
+                                    <label for="user_full_name" class="input-group-addon">Account Owner Name
                                         Name</label>
-                                    <input type="text" class="form-control" name="user_first_name" id="user_first_name"
+                                    <input type="text" class="form-control" name="user_full_name" id="user_full_name"
                                            value="{{
-                                ($user) ? $company->user_first_name : ''
-                                }}"/>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                @if($errors->first('user_last_name'))
-                                    <div class="alert alert-danger">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                                        </button>
-                                        <strong>Error:</strong>
-                                        {{ $errors->first('user_last_name') }}
-                                    </div>
-                                @endif
-
-                                <div class="input-group">
-                                    <label for="user_last_name" class="input-group-addon">Account Owner Last
-                                        Name</label>
-                                    <input type="text" class="form-control" name="user_last_name" id="user_last_name"
-                                           value="{{
-                                ($user) ? $user->user_last_name : ''
+                                ($user) ? $company->user_full_name : ''
                                 }}"/>
                                 </div>
                             </div>
@@ -112,7 +92,7 @@
                             </div>
                             <div class="panel-body">
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" name="send_invitation" id="send_invitation">
+                                    <input type="checkbox" name="send_invitation" id="send_invitation" value="1" checked>
                                     Send Email Invitation
                                 </label>
                             </div>

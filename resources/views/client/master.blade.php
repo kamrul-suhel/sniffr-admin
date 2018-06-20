@@ -10,8 +10,10 @@
 
     {{--<link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}"/>--}}
     <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}"/>
+
     <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/nav-styles.css') }}">
     <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/footer-styles.css') }}">
+
     <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
 
 
