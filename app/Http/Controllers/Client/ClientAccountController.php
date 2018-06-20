@@ -23,6 +23,14 @@ class ClientAccountController extends Controller
     use Slug;
 
     /**
+     * ClientUserController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('client_admin');
+    }
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
@@ -106,7 +114,7 @@ class ClientAccountController extends Controller
     {
         $company = Client::find(Auth::user()->client_id);
 
-        return view('client.profile.create_edit', [
+        return view('client.account.create_edit', [
             'company' => $company,
             'user' => Auth::user(),
             'update_path' => 'client.update',
@@ -121,6 +129,7 @@ class ClientAccountController extends Controller
      */
     public function update(UpdateCompanyRequest $request, int $id)
     {
+
         $company = Client::findOrFail($id);
 
         $company->slug = $this->slugify($request->input('company_name'));
@@ -135,10 +144,6 @@ class ClientAccountController extends Controller
         $company->billing_email = $request->input('billing_email');
 
         $redirect_path = '';
-        if ($company->account_owner_id != $request->input('account_owner_id')) {
-            $redirect_path = 'client/stories';
-            $company->account_owner_id = $request->input('account_owner_id');
-        }
 
         $company->usable_domains = $request->input('usable_domains');
 
@@ -168,7 +173,7 @@ class ClientAccountController extends Controller
 
         $client->destroy($id);
 
-        return Redirect::to('admin/clients')->with([
+        return Redirect::to('client/profile')->with([
             'note' => 'Successfully Deleted Client',
             'note_type' => 'success'
         ]);

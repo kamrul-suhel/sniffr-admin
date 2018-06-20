@@ -24,7 +24,7 @@
             <strong>username: </strong> {{ $email_data['email'] }}
 
             <div>&nbsp;</div>
-            <strong>password</strong>: <a href="{{ route('password.reset', ['token' => $email_data['token']]) }}">click
+            <strong>password</strong>: <a href="{{ route('password.set_password', ['token' => $email_data['token'], 'email' => $email_data['email']]) }}">click
                 here to set your password</a>
             <div>&nbsp;</div>
             Login URL

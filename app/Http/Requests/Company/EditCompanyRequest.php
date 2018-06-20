@@ -20,7 +20,7 @@ class EditCompanyRequest extends FormRequest
 
         $company = Client::find($this->user()->client_id);
 
-        return (($company && ($this->user()->id == $company->account_owner_id)));
+        return ($company && ($this->user()->client_id == $company->id));
     }
 
     /**

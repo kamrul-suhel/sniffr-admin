@@ -50,7 +50,7 @@ class User extends Authenticatable
      */
     public function client()
     {
-        return $this->belongsTo(Client::class)->first();
+        return $this->belongsTo(Client::class);
     }
 
     public function canAccessAdmin()
@@ -61,6 +61,11 @@ class User extends Authenticatable
     public function canAccessClient()
     {
         return ($this->role == 'client_admin' || $this->role == 'client' || $this->role == 'admin' || $this->role == 'client_owner');
+    }
+
+    public function canAccessClientAdmin()
+    {
+        return ($this->role == 'client_admin' || $this->role == 'client_owner');
     }
 
     public function isAdmin()

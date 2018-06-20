@@ -41,30 +41,18 @@
             <div class="layout row wrap">
                 <div class="flex xs12 sm6 md4 lg4">
                     <div class="logo"><a href="/" class="router-link-active">
-                            <img src="/assets/frontend/images/logo-sniffr-white.png"></a></div>
+                            <img src="/assets/frontend/images/logo-sniffr-white.png"></a><p style="color:white; margin: 0px;">Client Portal</p></div>
                 </div>
                 <div class="flex xs12 sm6 md8 lg8">
                     <nav class="navigation">
                         <ul>
-                            <li><a href="/upload" class=""><i aria-hidden="true"
-                                                              class=" white--text material-icons"></i><i
-                                            class="fa fa-upload"></i> Upload</a>
-                            </li>
-                            <li>
-                                <a href="/videos" class="router-link-exact-active router-link-active"><i
-                                            aria-hidden="true" class="icon icon--right white--text material-icons"></i><i
-                                            class="fa fa-video-camera"></i> Videos</a>
-                            </li>
-                            <li>
-                                <div class="menu" style="display: inline-block;">
-                                    <div class="menu__activator">
-                                        <a href="/">
-                                            <i aria-hidden="true" class="icon white--text material-icons">face</i>
-                                            {{ auth()->user()->username }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
+                            <li><a href="/client/videos" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-video-camera"></i> Videos</a></li>
+                            <li><a href="/client/stories" class=""><i aria-hidden="true" class=" white--text material-icons"></i><i class="fa fa-at"></i> Stories</a></li>
+                            @if(auth()->user()->client->owner_account_id !== auth()->user()->id)
+                                <li><a href="/client/profile/{{auth()->user()->client->slug}}/users/{{auth()->user()->id}}/edit" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Profile' }}</a></li>
+                            @else
+                                <li><a href="/client/profile" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Profile' }}</a></li>
+                            @endif
                         </ul>
                     </nav>
                 </div>
@@ -120,8 +108,6 @@
         @yield('content')
     </div>
 
-
-    {{--<footer-component></footer-component>--}}
     <section class="footer-section section-space">
         <div class="container pt-0 pb-0 grid-list-lg">
             <div class="layout row wrap">
@@ -173,6 +159,9 @@
     </section>
 </section>
 
+<script src="{{ mix('/assets/admin/js/app.js') }}"></script>
+<script src="/assets/admin/js/video.js"></script>
+<script src="/assets/admin/js/videojs-vimeo.js"></script>
 <script src="{{mix('assets/admin/scripts/scripts.js')}}"></script>
 <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
 

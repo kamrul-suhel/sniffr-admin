@@ -21,12 +21,8 @@ class UpdateCompanyRequest extends FormRequest
     {
         if($this->user()->role === 'admin') return true;
 
-        if ((in_array($this->user()->role, ['client_owner', 'client'])) && ($this->route('client') != $this->user()->client_id)) {
-            return false;
-        }
-        $company = Client::find($this->user()->client_id);
+        if (in_array($this->user()->role, ['client_owner', 'client_admin'])) return true;
 
-        return (($company && ($this->user()->id == $company->account_owner_id)));
     }
 
     /**
