@@ -20,7 +20,7 @@ Vue.filter('readmore', function(text, length, suffix){
         }
         return text.substring(0, length);
     }
-})
+});
 
 
 Vue.filter('convertTime',function(duration){

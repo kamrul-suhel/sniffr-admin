@@ -22,8 +22,6 @@
                     v-for="(video, index) in videos.data"
                     :key="index"
                     :video="video"></asset-download-component>
-
-
         </v-container>
 
         <v-container grid-list-lg v-if="videos && videos.total > videos.per_page">
@@ -61,6 +59,7 @@
         methods: {
             getClientMailVideos(){
                 var user = this.$store.getters.getUser;
+
                 var url = this.$route.query.page;
                 var mail_obj = {
                     user: user,
@@ -70,7 +69,6 @@
                 this.$store.dispatch('getClientMailVideos', mail_obj)
                     .then(() => {
                         this.videos = this.$store.getters.getClientMailVideos;
-                        console.log(this.videos);
                         this.ini_state = true;
                     });
             }

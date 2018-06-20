@@ -1,6 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <section class="videos-section client-video-detail">
+    <section class="videos-section client-video-detail" v-if="ini">
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
             <v-container grid-list-xl pt-0>
@@ -16,10 +16,9 @@
                 </v-layout>
 
                 <v-layout row wrap>
-                    <v-flex :class="{'vertical': video_detail.vertical, 'horizontal': !video_detail.vertical}"
-                            align-content-center
-                            v-html="video_detail.iframe"
-                            xs12 sm12 md7 lg7 xl7></v-flex>
+                    <v-flex xs12 sm12 md7 lg7 xl7>
+                        <video-player :video="video_detail.video"></video-player>
+                    </v-flex>
 
                     <v-flex xs12 sm12 md5 lg5 xl5>
                         <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
@@ -42,7 +41,15 @@
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
 
-                                <v-btn dark block @click="onGoback()" class="dark" large>Download Video</v-btn>
+                                <v-btn
+                                        dark
+                                        block
+                                        large
+                                        class="dark"
+                                        :loading="loading"
+                                        :disabled="loading"
+                                        @click="onDownloadVideo()"
+                                >{{ button_text }}</v-btn>
 
                             </v-flex>
 
@@ -55,19 +62,22 @@
 </template>
 
 <script>
+    import VideoPlayer from '../../videos/VideoPlayerComponent'
 
     export default {
+        components: {
+            VideoPlayer
+        },
+
         data() {
             return {
-                video_detail: {
-                    video: {
-                        title: ''
-                    }
-                },
+                ini:false,
+                video_detail: {},
                 tags: [],
-
+                loading: false,
+                loader: null,
                 ready_to_show : true,
-
+                button_text: 'Download Video',
                 previousPageUrl: '',
 
                 content_padding:true
@@ -75,8 +85,16 @@
         },
 
         watch: {
-            '$route'(to, from, next) {
-                console.log("where is now " + to + ": Where is coming from " + from );
+            loader() {
+                const l = this.loader
+                this[l] = !this[l]
+
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000)
+
+                this.loader = null
             }
         },
 
@@ -85,6 +103,11 @@
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;
             }
+
+            // IAN:  Need to check if value exists in multiu dim array
+            // if (this.video_detail.video.order && this.video_detail.video.order.id) {
+            //     this.button_text = 'Re-download video';
+            // }
 
         },
 
@@ -95,7 +118,8 @@
 
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
-                console.log(this.video_detail);
+                this.video_detail.video.iframe = this.video_detail.iframe;
+                this.ini = true;
 
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
@@ -176,6 +200,13 @@
                 $('body').append(videojs1);
                 $('body').append(vimeo);
 
+            },
+
+            onDownloadVideo() {
+                this.loader = 'loading';
+                var url = '/client/videos/'+this.video_detail.video.id+'/download';
+
+                window.location = url;
             }
         },
 

@@ -69,24 +69,6 @@
 
                         <div class="col-md-12">
                             <div class="form-group input-group">
-                                <span class="input-group-addon">Credit</span>
-                                <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
-                                    $video->contract['credit'] or old('credit')
-                                    }}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group input-group">
-                                <span class="input-group-addon">Notes</span>
-                                <textarea class="form-control" name="notes" id="notes" rows="4" title="notes">{{
-                                    $video->contract['notes'] or old('notes')
-                                    }}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group input-group">
                                 <span class="input-group-addon">Contract Template</span>
                                 <select type="text" class="form-control" id="contract_model_id" name="contract_model_id"
                                         title="success system">

@@ -21,17 +21,6 @@
                                          :assets="story.assets"
                                          :story_id="story.id"></asset-component>
                     </v-layout>
-
-                    <v-btn
-                            block
-                            dark
-                            :loading="loading"
-                            :disabled="loading"
-                            large
-                            @click.native="onDownloadAllAssets()"
-                            color="dark">Download assets
-
-                    </v-btn>
                 </v-flex>
 
                 <v-flex xs12 sm12 md7 lg8 xl8>
@@ -52,6 +41,18 @@
                         <v-divider style="margin: 15px 0"></v-divider>
 
                         <div v-html="story.description"></div>
+
+                        <v-flex xs12 class="text-xs-right">
+                            <v-btn
+                                    dark
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    medium
+                                    @click.native="onDownloadAllAssets()"
+                                    color="dark">Download story
+
+                            </v-btn>
+                        </v-flex>
                     </div>
                 </v-flex>
 
@@ -98,12 +99,7 @@
 
         methods: {
             onGoback() {
-
-                if (this.$route.query.mailer_id !== undefined) {
-                    this.$router.push({name: 'client_stories'});
-                } else {
-                    this.$router.go(-1);
-                }
+                this.$router.go(-1);
             },
 
             getStoryDetail(){
@@ -119,13 +115,8 @@
             },
 
             onDownloadAllAssets(){
-                var client_mailer_id = this.$store.getters.getClientMailerId;
-                if (client_mailer_id == '') {
-                    client_mailer_id = this.$route.query.mailer_id;
-                }
-
                 this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download/?mailer_id=' + client_mailer_id;
+                var url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
             },
 

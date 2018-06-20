@@ -386,9 +386,10 @@ class AdminVideosController extends Controller
         $video->video_category_id = $request->input('video_category_id', null);
         $video->contact_id = $request->input('creator_id', null);
         $video->title = $title;
-        $video->embed_code = $request->input('embed_code');
         $video->location = $request->input('location');
         $video->details = $request->input('details');
+		$video->notes = $request->input('notes');
+		$video->credit = $request->input('credit');
         $video->description = $request->input('description');
 
         $video->save();
