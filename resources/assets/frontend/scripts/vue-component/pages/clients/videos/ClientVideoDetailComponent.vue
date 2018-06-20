@@ -204,7 +204,7 @@
 
             onDownloadVideo() {
                 this.loader = 'loading';
-                var url = '/client/video/'+this.video_detail.video.id+'/download';
+                var url = '/client/videos/'+this.video_detail.video.id+'/download';
 
                 window.location = url;
             }

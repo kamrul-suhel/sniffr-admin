@@ -41,7 +41,7 @@ const actions = {
 
     getClientCurrentVideo({commit}, alpha_id){
         return new Promise((resolve, reject) => {
-            let url = '/client/story/show/' + alpha_id;
+            let url = '/client/videos/' + alpha_id;
 
             axios.get(url)
                 .then((response) => {

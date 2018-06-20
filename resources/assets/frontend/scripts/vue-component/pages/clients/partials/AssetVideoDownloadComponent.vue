@@ -56,6 +56,8 @@
 </template>
 
 <script>
+    import ComponentServices from '../../../../services/ComponentServices';
+
     export default {
         data() {
             return {
@@ -74,24 +76,11 @@
         ],
 
         created() {
-            // IAN:  Need to check if value exists in multiu dim array
-            //var user = this.$store.getters.getUser;
+            var user = this.$store.getters.getUser;
 
-            // console.log('client id: '+user.client_id);
-            //
-            // var obj = { a: 'test1', b: 'test2' };
-            // if (Object.values(obj).indexOf('test1') > -1) {
-            //     console.log('has test1');
-            // }
-            //
-            // if(this.video.orders){
-            //     console.log(this.video.orders);
-            // }
+            var componentServices = new ComponentServices();
 
-            // if (this.video.order && this.video.order.client_id == user.client_id) {
-            //     this.ordered = true;
-            //     this.button_text = 'Re-download video';
-            // }
+            this.ordered = componentServices.checkOrderExists(this.video.orders, user);
         },
 
         watch: {
@@ -114,16 +103,6 @@
             },
 
             goToDetail() {
-                var mailer_id = '';
-                var route_name = this.$route.name;
-                if (route_name == 'client_downloaded_stories') {
-                    mailer_id = this.video.orders.mailer_id;
-                } else {
-                    mailer_id = this.video.client_mailer_id;
-                }
-
-
-                this.$store.commit('setClient_mailer_id', mailer_id);
                 this.$router.push({name: 'client_video_detail', params: {'alpha_id': this.video.alpha_id}})
             },
 

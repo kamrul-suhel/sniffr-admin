@@ -24,7 +24,7 @@
             </td>
             <td valign="top" style="padding: 20px;">
                 <br />{{ TextHelper::shorten($story['excerpt'], 350) }}..
-                <br /><br /><a href="{{ url('client/story/show/'.$story['alpha_id']) }}" style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;display:inherit;margin-top:20px;margin-bottom:10px;font-weight:bold;">View story</a>
+                <br /><br /><a href="{{ url('stories/'.$story['alpha_id']) }}" style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;display:inherit;margin-top:20px;margin-bottom:10px;font-weight:bold;">View story</a>
             </td>
         </tr>
         @php $count++ @endphp
