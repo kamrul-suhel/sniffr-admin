@@ -34,84 +34,74 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon">Success System</span>
                         <textarea class="form-control" disabled="disabled">{{
-                (key_exists($video->currentContract->success_system, config('success_system'))) ?
-                config('success_system')[$video->currentContract->success_system]
-                : ''
-                }}</textarea>
+                        (key_exists($video->currentContract->success_system, config('success_system'))) ?
+                        config('success_system')[$video->currentContract->success_system]
+                        : ''
+                        }}</textarea>
                     </div>
                 </div>
             </div>
+
+            @if(key_exists($video->currentContract->contract_model_id, config('contracts')))
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group input-group">
-                        <span class="input-group-addon">Credit</span>
-                        <textarea class="form-control" disabled="disabled">{{
-                        $video->currentContract->credit
-                        }}</textarea>
+                        <span class="input-group-addon">Contract Template</span>
+                        <input type="text" class="form-control" disabled="disabled" value="{!!
+                        config('contracts')[$video->currentContract->contract_model_id]['name']
+                        !!}">
                     </div>
                 </div>
             </div>
+            @endif
+
+            @if($video->currentContract->signed_at)
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group input-group">
-                        <span class="input-group-addon">Notes</span>
-                        <textarea class="form-control" disabled="disabled">{{
-                        $video->currentContract->notes
-                        }}</textarea>
+                        <span class="input-group-addon">Signed</span>
+                        <input type="text" class="form-control" disabled="disabled" value="{{
+                    date('l, jS F Y - H:i:s', strtotime($video->currentContract->signed_at))
+                    }}">
                     </div>
                 </div>
-
-                @if(key_exists($video->currentContract->contract_model_id, config('contracts')))
-                    <div class="col-md-12">
-                        <div class="form-group input-group">
-                            <span class="input-group-addon">Contract Template</span>
-                            <input type="text" class="form-control" disabled="disabled" value="{!!
-                            config('contracts')[$video->currentContract->contract_model_id]['name']
-                            !!}">
-                        </div>
-                    </div>
-                @endif
-
-                @if($video->currentContract->signed_at)
-                    <div class="col-md-12">
-                        <div class="form-group input-group">
-                            <span class="input-group-addon">Signed</span>
-                            <input type="text" class="form-control" disabled="disabled" value="{{
-                        date('l, jS F Y - H:i:s', strtotime($video->currentContract->signed_at))
-                        }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-group input-group">
-                            <span class="input-group-addon">IP Address</span>
-                            <input type="text" class="form-control" disabled="disabled" value="{{
-                        $video->currentContract->ip
-                        }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-group input-group">
-                            <span class="input-group-addon">User Agent</span>
-                            <textarea class="form-control" disabled="disabled" rows="4">{{
-                        $video->currentContract->user_agent
-                        }}</textarea>
-                        </div>
-                    </div>
-
-                @else
-                    <div class="col-md-12">
-                        <div class="form-group input-group">
-                            <span class="input-group-addon">Contract Link</span>
-                            <textarea class="form-control" disabled="disabled" rows="2">{{
-                        route('contract.accept', ['token' => $video->currentContract->token])
-                        }}</textarea>
-                        </div>
-                    </div>
-                @endif
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">IP Address</span>
+                        <input type="text" class="form-control" disabled="disabled" value="{{
+                    $video->currentContract->ip
+                    }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">User Agent</span>
+                        <textarea class="form-control" disabled="disabled" rows="4">{{
+                    $video->currentContract->user_agent
+                    }}</textarea>
+                    </div>
+                </div>
+            </div>
+            @else
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Contract Link</span>
+                        <textarea class="form-control" disabled="disabled" rows="2">{{
+                    route('contract.accept', ['token' => $video->currentContract->token])
+                    }}</textarea>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
+
 
         <div class="col-md-12">
             <div class="input-group pull-right">

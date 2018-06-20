@@ -4,7 +4,7 @@ Video Ref: {{ $video->alpha_id }}
 
 Thanks for sending over more details about your video, and confirming this with us!
 
-Your video is now licensed: check it out here: {{ url('videos/' . $video->alpha_id) }}
+Your video is now licensed.
 
 Regards,
 

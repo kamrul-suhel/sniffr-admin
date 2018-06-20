@@ -2,36 +2,17 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <v-card>
-                <v-card-media :src="video.thumb" height="200px" class="client-video-thumbnail">
-
-                    <div class="cdi-label" v-if="video.order">
+                <v-card-media :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')" height="200px" class="client-video-thumbnail">
+                    <div class="cdi-label" v-if="ordered || newOrder">
                         <v-tooltip top>
-                            <v-btn slot="activator" fab dark raised color="dark">
-                                <v-icon dark size="20px">done</v-icon>
+                            <v-btn slot="activator" flat icon raised light color="white">
+                                <v-icon size="25px">cloud_done</v-icon>
                             </v-btn>
                             <span>Downloaded</span>
                         </v-tooltip>
-
-                    </div>
-
-                    <div class="open-video-dialog">
-                        <v-btn flat fab white color="white">
-                            <v-icon color="white" size="60px">play_circle_outline</v-icon>
-                        </v-btn>
                     </div>
                 </v-card-media>
             </v-card>
-            <!--<div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(video.thumb) + ')' }">-->
-            <!--<div class="cdi-label" v-if="order">-->
-            <!--<v-tooltip top>-->
-            <!--<v-btn slot="activator" fab small raised dark color="dark">-->
-            <!--<v-icon light small>done</v-icon>-->
-            <!--</v-btn>-->
-            <!--<span>Downloaded</span>-->
-            <!--</v-tooltip>-->
-
-            <!--</div>-->
-            <!--</div>-->
         </v-flex>
 
         <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
@@ -55,28 +36,16 @@
                 View
             </v-btn>
 
-            <v-btn v-if="video.order"
+            <v-btn
                     block
                     dark
                     large
                     color="dark"
-                    @click.native="onLicenseVideo()"
+                    @click.native="onDownloadVideo()"
                     :loading="loading"
                     :disabled="loading"
             >
-                DOWNLOAD VIDEO
-            </v-btn>
-
-            <v-btn v-if="!video.order"
-                    block
-                    dark
-                    large
-                    color="dark"
-                    @click.native="onLicenseVideo()"
-                    :loading="loading"
-                    :disabled="loading"
-            >
-                DOWNLOAD VIDEO
+                {{ button_text }}
             </v-btn>
         </v-flex>
 
@@ -87,13 +56,17 @@
 </template>
 
 <script>
+    import ComponentServices from '../../../../services/ComponentServices';
+
     export default {
         data() {
             return {
+                button_text: 'Download Video',
+                newOrder: false,
                 loading: false,
                 loader: null,
                 showButton: false,
-                order: false,
+                ordered: false,
                 hide_download_button: false,
             }
         },
@@ -103,9 +76,11 @@
         ],
 
         created() {
-            if (this.video.order && this.video.order.id) {
-                this.order = true;
-            }
+            var user = this.$store.getters.getUser;
+
+            var componentServices = new ComponentServices();
+
+            this.ordered = componentServices.checkOrderExists(this.video.orders, user);
         },
 
         watch: {
@@ -113,7 +88,10 @@
                 const l = this.loader
                 this[l] = !this[l]
 
-                setTimeout(() => (this[l] = false), 3000)
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000)
 
                 this.loader = null
             }
@@ -124,23 +102,7 @@
                 this.showButton = !this.showButton;
             },
 
-            onDownloadAllAssets() {
-                this.loader = 'loading';
-                var url = '/client/stories/' + this.video.id + '/download';
-                window.location = url;
-            },
-
             goToDetail() {
-                var mailer_id = '';
-                var route_name = this.$route.name;
-                if (route_name == 'client_downloaded_stories') {
-                    mailer_id = this.video.orders.mailer_id;
-                } else {
-                    mailer_id = this.video.client_mailer_id;
-                }
-
-
-                this.$store.commit('setClient_mailer_id', mailer_id);
                 this.$router.push({name: 'client_video_detail', params: {'alpha_id': this.video.alpha_id}})
             },
 
@@ -151,9 +113,9 @@
                 return image;
             },
 
-            onLicenseVideo() {
-                var url = '/client/video/'+this.video.id+'/license';
-
+            onDownloadVideo() {
+                this.loader = 'loading';
+                var url = '/client/videos/'+this.video.id+'/download';
                 window.location = url;
             }
         }

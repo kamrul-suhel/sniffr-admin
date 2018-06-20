@@ -7,7 +7,6 @@
         <story-in-dialog></story-in-dialog>
 
 
-
         <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
             <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
@@ -27,7 +26,7 @@
             <!-- End mail empty card -->
 
             <!-- Refresh stories card -->
-            <v-card else>
+            <v-card v-else>
                 <v-card-text>
                     <div class="text-xs-center my-4">
                         <v-progress-circular
@@ -48,7 +47,9 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false">Cancel</v-btn>
+                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false" :disabled="disableButton">
+                        Ok
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -56,17 +57,7 @@
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
-                <v-flex xs-6>
-                    <h3>
-                        <i class="fa fa-users"></i> Mail
-                        <v-btn tag="a" href="admin/stories/create" primary>
-                            <v-icon>add</v-icon>
-                            Add New Story
-                        </v-btn>
-                    </h3>
-                </v-flex>
-
-                <v-flex xs6 class="text-xs-right">
+                <v-flex xs12 class="text-xs-right">
                     <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
                         Refresh Stories
@@ -85,7 +76,7 @@
                     v-model="active"
                     color="dark"
                     dark
-                    slider-color="white"
+                    slider-color="primary"
             >
                 <v-tab>
                     Stories
@@ -136,9 +127,11 @@
                 notSelectedError: false,
                 errorMessage: '',
 
-                indeterminate:true,
+                indeterminate: true,
                 refreshTitle: 'Please wait while the stories update. This may take a few minutes.',
-                refreshIcon: 'done'
+                refreshIcon: 'done',
+
+                disableButton: true,
             }
         },
 
@@ -152,7 +145,7 @@
                 let stories = this.$store.getters.getAllSelectedStories;
                 let videos = this.$store.getters.getAllSelectedVideos;
                 if (stories.length === 0 && videos.length === 0) {
-                    this.errorMessage = "this.Please select A story or video";
+                    this.errorMessage = "Please select A story or video";
                     this.notSelectedError = true;
                     this.dialog = true;
                     return;
@@ -191,16 +184,17 @@
                 let refreshUrl = '/admin/stories/refresh';
 
                 axios.get(refreshUrl).then((response) => {
-                    console.log("sending refresh stories");
-                    console.log(response);
-                    if (response.data.dispatched == false) {
-                        this.refreshTitle = 'Stories are already up-to-date.';
-                        this.indeterminate = false;
-                    } else {
-                        // jobs have been sent to queue so need to check the job queue
-                        this.checkJobs();
-                    }
-                },
+                        console.log("sending refresh stories");
+                        console.log(response);
+                        if (response.data.dispatched == false) {
+                            this.refreshTitle = 'Stories are already up-to-date.';
+                            this.indeterminate = false;
+                            this.disableButton = false
+                        } else {
+                            // jobs have been sent to queue so need to check the job queue
+                            this.checkJobs();
+                        }
+                    },
                     (error) => {
                         this.checkJobs();
                     }
@@ -218,6 +212,7 @@
                                 this.refreshTitle = 'Stories are now up-to-date.';
                                 this.indeterminate = false;
                                 MailerEventBus.storiesUpdated();
+                                this.disableButton = false
 
                             } else {
                                 // jobs are still in the queue, so run again

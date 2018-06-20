@@ -1,11 +1,11 @@
 <template>
-    <v-container fluid fill-height class="section-space">
+    <v-container grid-list-lg fill-height class="section-space">
         <v-layout align-center justify-center v-if="display_thank_you">
             <div v-if="signed">
                 Thank you!
             </div>
             <v-form ref="contract_accept_form" @submit.prevent="onContractAcceptSubmit()" v-else>
-                <v-card width="800">
+                <v-card>
                     <v-card-text>
                         <v-flex xs12 align-center>
                             <h2 class="text-xs-center">LICENSE AND RELEASE</h2>

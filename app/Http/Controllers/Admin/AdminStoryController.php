@@ -41,15 +41,19 @@ class AdminStoryController extends Controller
         ini_set('max_execution_time', 1800);
 
         $version = VideoHelper::quickRandom(); // set random version for cache busting
-        $posts_pending = $this->apiRequest('posts?version=' . $version . '&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
-        $posts_publish = $this->apiRequest('posts?version=' . $version . '&status=publish&tags=' . env('UNILAD_WP_TAG_ID'), true);
-        $posts = array_merge($posts_pending, $posts_publish);
+        $pages = mt_rand(100,200); // set random number over 100 for per page (if needed)
+
+        $posts_publish = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_draft = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=draft&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_pending = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts = array_merge(array_merge($posts_pending, $posts_publish), $posts_draft);
 
         // set dispatched for sending response back to ajax
         $dispatched = false;
 
         // store stories from wordpress in database
         foreach($posts as $post){
+
             // checks if wp post already exists within sniffr stories
             $story = Story::where([['wp_id', $post->id]])->first();
 
@@ -96,10 +100,16 @@ class AdminStoryController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
-            $stories = Story::orderBy('date_ingested', 'DESC')
-                ->paginate(12);
+            if($request->search){
+                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
+                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
+                    ->orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }else{
+                $stories = Story::orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }
 
             $data = [
                 'stories' => $stories
@@ -117,19 +127,25 @@ class AdminStoryController extends Controller
      */
     public function getMailerVideos(Request $request)
     {
-
-
         if ($request->ajax()) {
-            $videos = Video::with('createdUser')
-                ->where([['state', 'licensed'], ['file', '!=', NULL]])
-                ->orderBy('licensed_at', 'DESC')
-                ->paginate(12);
+
+            if($request->search){
+                $search_value = $request->search;
+                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%'. $search_value . '%']])
+                    ->orWhere('alpha_id', $search_value)
+                    ->orderBy('licensed_at', 'DESC')
+                    ->paginate(12);
+            }else{
+                $videos = Video::with('createdUser')
+                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
+                    ->orderBy('licensed_at', 'DESC')
+                    ->paginate(12);
+            }
             $data = [
                 'videos' => $videos
             ];
             return $this->successResponse($data);
         }
-
     }
 
     /**

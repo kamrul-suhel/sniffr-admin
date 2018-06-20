@@ -6,6 +6,7 @@ import VideoSearchComponent from './vue-component/pages/search/SearchComponent.v
 import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
 import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
+import PasswordSetTokenComponent from './vue-component/pages/loging/PasswordSetTokenComponent.vue';
 import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
@@ -15,9 +16,7 @@ import Notfound from './vue-component/pages/404Component.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
-import ClientDownloadedStoriesComponent
-    from './vue-component/pages/clients/stories/ClientDownloadedStoriesComponent.vue';
-
+import ClientDownloadedStoriesComponent from './vue-component/pages/clients/stories/ClientDownloadedStoriesComponent.vue';
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 
@@ -103,6 +102,12 @@ export const routes = [
     },
 
     {
+        path: '/password/set/:token/:email',
+        name: 'set_password',
+        component: PasswordSetTokenComponent
+    },
+
+    {
         path: '/password/reset/:token',
         name: 'password_reset_token',
         component: PasswordResetTokenComponent
@@ -136,7 +141,7 @@ export const routes = [
             },
 
             {
-                path: 'story/show/:alpha_id',
+                path: 'stories/:alpha_id',
                 name: 'client_story_detail',
                 component: ClientStoryDetailComponent
             },
@@ -154,7 +159,7 @@ export const routes = [
             },
 
             {
-                path: 'videos/show/:alpha_id',
+                path: 'videos/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
             }

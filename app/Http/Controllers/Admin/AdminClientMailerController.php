@@ -8,6 +8,7 @@ use App\User;
 use App\Story;
 use App\Client;
 use App\ClientMailer;
+use App\ClientMailerOpen;
 use App\Download;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
@@ -39,7 +40,8 @@ class AdminClientMailerController extends Controller
             'mailers' => $mailers,
             'users' => User::all(),
             'user' => Auth::user(),
-            'downloads' => Download::all()
+            'downloads' => Download::all(),
+            'opens' => ClientMailerOpen::all()
         ];
 
         return view('admin.mailers.index', $data); //return response()->json($formatted_posts);
@@ -169,7 +171,7 @@ class AdminClientMailerController extends Controller
             $mailer->users()->sync(Input::get('clients'));
         }
 
-        $mailer->user_id = (Auth::user() ? Auth::user()->id : $mailer->user_id);
+        $mailer->user_id = (Input::get('user_id') ? Input::get('user_id') : 0);
 
         $mailer->save();
 

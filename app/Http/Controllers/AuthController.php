@@ -161,7 +161,6 @@ class AuthController extends Controller
             $message->subject('Password Reset Info');
         });
 
-
 		switch ($response)
 		{
 			case PasswordBroker::RESET_LINK_SENT:
@@ -207,11 +206,75 @@ class AuthController extends Controller
 			'theme_settings' => config('settings.theme'),
         ];
 
-		if($request->ajax()){
-        }
-
 	  return view('frontend.master', $data);
 	}
+
+    /**
+     * @param $token
+     * @param $email
+     * @return mixed
+     */
+	public function setPassword($token, $email)
+    {
+        //Auth::logout();
+
+        return view('frontend.pages.login.password_set_form')
+            ->with('token', $token)
+            ->with('email', $email);
+    }
+
+    public function setPasswordPost(Request $request, $token, $email)
+    {
+
+        $credentials = $credentials = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'password_confirmation' => $request->input('password_confirmation'),
+            'token' => $request->input('token')
+        ];
+
+        $response = Password::reset($credentials, function ($user, $password) {
+            $user->password = \Hash::make($password);
+            $user->save();
+        });
+
+        switch ($response) {
+            case PasswordBroker::PASSWORD_RESET:
+                if($request->ajax()){
+
+                    if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                        return $this->successResponse([
+                            'success_message' => 'Your account is now active.'
+                        ]);
+                    } else {
+                        return $this->errorResponse([
+                            'error_message' => 'There was a problem logging you in. Please try again.'
+                        ]);
+                    }
+                }
+
+                // attempt login with new password
+                if(auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                    return redirect()->intended('videos');
+                }
+
+                return Redirect::to('videos')->with([
+                    'note' => 'Your account is now active. Please login to use Sniffr.',
+                    'note_type' => 'success'
+                ]);
+
+            default:
+                if($request->ajax()){
+                    return $this->errorResponse(trans($response));
+                }
+
+                return redirect()->back()->with([
+                    'note' => trans($response),
+                    'note_type' => 'error'
+                ]);
+        }
+    }
+
 
     /**
      * @param Request $request

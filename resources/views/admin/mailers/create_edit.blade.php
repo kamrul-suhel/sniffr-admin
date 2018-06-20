@@ -12,7 +12,7 @@
 			<div class="col-xs-12">
 				<h3>
 					<i class="fa fa-plus"></i> Review Client Mailer
-					<input type="submit" value="{{ $button_text }}" class="btn btn-primary pull-right" />
+					<a href="#" class="btn btn-primary pull-right js-send-mailer">Send Mailer</a>
 					<a href="#" class="btn btn-success pull-right js-save-mailer" style="margin-right:10px;">Save Mailer</a>
 				</h3>
 			</div>
@@ -126,6 +126,25 @@
 
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
+						<div class="panel-title">Send from</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<select id="user_id" name="user_id">
+							<option value="0">Default (noreply@sniffrmedia.co.uk)</option>
+							@foreach(\App\User::whereIn('role', ['admin', 'manager'])->get() as $user_from)
+								<option value="{{ $user_from->id }}" @if(isset($user_from)) @if(!empty($user_from->id == $mailer->user_id))selected="selected"@endif @endif>{{ ($user_from->full_name ? $user_from->full_name : $user_from->username) }} ({{ $user_from->email }})</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
 						<div class="panel-title">Add note</div>
 
 						<div class="panel-options">
@@ -187,6 +206,15 @@
 
 		$('#note').keyup(function(event) {
 			$('#show_note').text($(this).val());
+		});
+
+		$('.js-send-mailer').click(function(e){
+			e.preventDefault();
+			if($('#clients').val() == '') {
+				swal({  title: 'Please select some client users', text: '', icon: 'error', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
+			} else {
+				$('#form-mailer').submit();
+			}
 		});
 
 		$('.js-save-mailer').click(function(e){

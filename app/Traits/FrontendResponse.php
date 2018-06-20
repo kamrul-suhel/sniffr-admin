@@ -25,7 +25,9 @@ trait FrontendResponse
             'id',
             'alpha_id',
             'state',
+            'url',
             'user_id',
+            'file_watermark_dirty',
             'contact_id',
             'title',
             'active',
@@ -50,6 +52,7 @@ trait FrontendResponse
             'permission',
             'is_exclusive',
             'terms',
+            'views',
             'licensed_at'
         ];
 

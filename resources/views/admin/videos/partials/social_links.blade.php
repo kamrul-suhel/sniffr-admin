@@ -14,7 +14,7 @@
                 </span>
                 <input type="url" name="social_link[{{$link->id}}]" class="form-control" value="{{ $link->link }}">
             </span>
-            <table class="table table-condensed table-striped table-bordered" style="margin-top:-20px;">
+            <table class="table table-condensed table-striped table-bordered">
                 <thead>
                     <th class="text-center"><small>Likes</small></th>
                     <th class="text-center"><small>Comments</small></th>

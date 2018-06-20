@@ -1,15 +1,22 @@
 <template>
     <div class="video-player">
         <div v-if="showVideo">
-            <div class="youtube-video" v-if="youtubeVideo">
+            <!-- S3 lin -->
+            <div class="s3-video" v-if="s3_video">
+                <div id="cdn_video" v-html="video.iframe"></div>
+            </div>
+
+            <div class="youtube-video" v-else-if="youtubeVideo">
                 <plyr-youtube :id="this.youtubeID" :pe="false" :options="youtubeVideoPlayerOption"/>
             </div>
 
-            <div class="youtube-video" v-else-if="socialVideo">
+            <div class="social-video" v-else-if="socialVideo">
                 <div v-html="video.iframe"></div>
             </div>
 
-
+            <div class="video" v-else-if="video.url === null && video.file_watermark_dirty !== null">
+                <div id="cdn_video" v-html="video.iframe"></div>
+            </div>
         </div>
 
         <div xs12 v-else
@@ -30,12 +37,14 @@
 
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
+    import {Plyr} from './player/videoPlayer'
     import '../../../../scss/plugins/video-plyr.css';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default {
         components: {
-            PlyrYoutube
+            PlyrYoutube,
+            Plyr
         },
 
         data() {
@@ -43,6 +52,8 @@
                 defaultImage: '/assets/frontend/images/placeholder.png',
 
                 showVideo: false,
+
+                s3_video:false,
 
                 youtubeID: '',
                 youtubeVideo: false,
@@ -64,22 +75,12 @@
         props: ['video'],
 
         watch: {
-            video(val) {
-                if (this.video.youtube_id != null) {
-                    setTimeout(() => {
-                        this.youtubeID = this.video.youtube_id;
-                    }, 100);
-                }
+            video(val){
+                this.showVideo = false;
             }
-
         },
 
         created() {
-
-            if (this.video.youtube_id != null) {
-                this.youtubeID = this.video.youtube_id;
-            }
-
             VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
                 this.showVideo = false;
             });
@@ -94,10 +95,15 @@
                 this.showVideo = true;
                 this.resetShowVideo();
 
+                if(this.video.file_watermark_dirty !== null){
+                    this.s3_video = true;
+                    return;
+                }
+
                 if (this.video.youtube_id != null) {
                     this.youtubeVideo = true;
                     setTimeout(()=>{
-                        $('.plyr__control.plyr__control--overlaid').click();
+                        $('.plyr__control.plyr__control--overlaid').click()
                     }, 1500);
                 }
 
@@ -108,7 +114,6 @@
                         this.socialVideo = true;
                         resolve();
                     });
-
                     promise.then(() => {
                         this.reloadInstagrm()
                     });
@@ -148,15 +153,11 @@
                     if (m.index === regex.lastIndex) {
                         regex.lastIndex++;
                     }
-
-                    // The result can be accessed through the `m`-variable.
-                    m.forEach((match, groupIndex) => {
-                        console.log(`Found match, group ${groupIndex}: ${match}`);
-                    });
                 }
             },
 
             resetShowVideo() {
+                this.s3_video = false;
                 this.youtubeVideo = false;
                 this.vimeoVideo = false;
                 this.socialVideo = false;
