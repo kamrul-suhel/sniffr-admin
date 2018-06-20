@@ -8,7 +8,9 @@ const state = {
     user_login: false,
     user_id:'',
     client_id:'',
-    user_role: ''
+    user_role: '',
+
+    route_url: ''
 }
 
 const mutations = {
@@ -40,6 +42,11 @@ const mutations = {
             state.user_role = '';
             state.client_id = ''
         }
+    },
+
+    setRouteUrl(state, currUrl){
+        console.log(currUrl)
+        state.route_url = currUrl;
     }
 }
 
@@ -90,6 +97,10 @@ const getters = {
             role: state.user_role
         }
     },
+
+    getRouteUrl(state){
+        return state.route_url;
+    }
 }
 
 export default {
