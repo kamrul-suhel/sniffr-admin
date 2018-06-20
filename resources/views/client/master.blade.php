@@ -49,7 +49,7 @@
                             <li><a href="/client/videos" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-video-camera"></i> Videos</a></li>
                             <li><a href="/client/stories" class=""><i aria-hidden="true" class=" white--text material-icons"></i><i class="fa fa-at"></i> Stories</a></li>
                             @if(auth()->user()->client->owner_account_id !== auth()->user()->id)
-                                <li><a href="/client/profile/{{auth()->user()->client->slug}}/users/{{auth()->user()->id}}/edit" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Profile' }}</a></li>
+                                <li><a href="/client/profile/{{auth()->user()->client->slug}}/users/{{auth()->user()->id}}/edit" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-industry"></i> {{ auth()->user()->username ?? 'Profile' }}</a></li>
                             @else
                                 <li><a href="/client/profile" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Profile' }}</a></li>
                             @endif
