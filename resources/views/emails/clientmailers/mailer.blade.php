@@ -31,4 +31,6 @@
         <strong>No Stories or Videos have been selected</strong>
     @endif
 
+    <img src="{{ url('/mailer/track/'.$mailer->id.'/'.$user->id.'/') }}">
+
 @endsection

@@ -132,6 +132,9 @@
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
+
+                this.setPrevRoute();
+
                 if(to.name != 'home'){
                     this.nav_background = true;
                 }else{
@@ -152,6 +155,10 @@
             }
         },
         created(){
+
+            this.setPrevRoute();
+
+
             LoginEventBus.$on('logoutChangeState', () => {
                 this.is_login = false;
             });
@@ -184,6 +191,19 @@
             }
         },
         methods: {
+            setPrevRoute(){
+                let routeUrl = this.$store.getters.getRouteUrl;
+                if(routeUrl === '' ){
+                    if(this.$route.name === 'client_story_detail'){
+                        this.$store.commit('setRouteUrl', 'client_stories')
+                    }else if(this.$route.name === 'client_video_detail'){
+                        this.$store.commit('setRouteUrl', 'client_videos')
+                    }
+                }else{
+                    this.$store.commit('setRouteUrl', this.$route.name)
+                }
+            },
+
             onLogout(){
                 this.$store.dispatch('userLogout')
                     .then((response) => {

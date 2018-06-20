@@ -35,12 +35,13 @@
             <tr class="table-header">
                 <th>Order No.</th>
                 <th>Order Date</th>
-                <th>Story</th>
+                <th>Story / Video Title</th>
                 <th>Author</th>
-                <th>Wordpress Url</th>
+                <th>File Url</th>
                 <th>Downloaded</th>
                 @foreach($orders as $order)
-                    @if($order->story_id != 0)
+
+                    @if($order->story_id != 0 && $order->story)
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>{{ date('jS M Y h:i:s',strtotime($order->created_at)) }}</td>
@@ -51,13 +52,16 @@
                             {{ $order->story->author }}
                         </td>
                         <td>
+
                             @if( $order->story->status) Not yet published @else<a href="{{  $order->story->url }}" target="_blank">{{  $order->story->url }}</a>@endif
+
                         </td>
                         <td>
-                            {{ $downloads->where('story_id', $order->story_id)->count() }}
+                            {{ $downloads->where('story_id', $order->story_id)->where('client_id', $order->client_id)->count() }}
                         </td>
                     </tr>
                     @endif
+
                 @endforeach
         </table>
 
@@ -73,7 +77,7 @@
                 <th>Contributor</th>
                 <th>Downloaded</th>
                 @foreach($orders as $order)
-                    @if($order->video_id != 0)
+                    @if($order->video_id != 0 && $order->video)
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>{{ date('jS M Y H:i:s',strtotime($order->created_at)) }}</td>
@@ -85,10 +89,11 @@
                             <a href="{{ url('/admin/contacts/'.$order->video->contact->id.'/edit') }}">{{ $order->video->contact->full_name }}</a>
                         </td>
                         <td>
-                            {{ $downloads->where('video_id', $order->video_id)->count() }}
+                            {{ $downloads->where('video_id', $order->video_id)->where('client_id', $order->client_id)->count() }}
                         </td>
                     </tr>
                     @endif
+
                 @endforeach
         </table>
     </div>

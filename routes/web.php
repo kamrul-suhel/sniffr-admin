@@ -24,8 +24,9 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     // TODO: remove this form route
     Route::get('details/form/{code}', 'DetailsController@form')->name('details_form');
 
-    Route::get('tags', 'ThemeTagController@index');
+    Route::get('mailer/track/{mailer_id}/{client_id}', 'Frontend\MailerController@store')->name('mailer_track_store');
 
+    Route::get('tags', 'ThemeTagController@index');
 
     /*
     |--------------------------------------------------------------------------
@@ -197,7 +198,6 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
-    Route::get('stories/{id}/download', 'StoryController@downloadStory')->name('admin.stories.download');
     Route::get('stories', 'Admin\AdminStoryController@index');
     Route::get('stories/checkjobs', 'Admin\AdminStoryController@checkJobs');
     Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');
@@ -287,15 +287,13 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 | Client Frontend Routes
 |--------------------------------------------------------------------------
 */
-
 Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
-Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show');
+Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
 Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 
 Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
 Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show');
-//Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('client.videos.show');;
 
 
 /*
