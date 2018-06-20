@@ -23,17 +23,14 @@ trait VideoHelper{
 				</div>';
         }
 
-        if(is_null($video->url) && $video->file_watermark_dirty !== null) {
+        if($video->file_watermark_dirty) {
             $sHTML .= '<video 
                 id="video_player" 
-                preload="auto" controls autoplay x-webkit-airplay="allow" 
+                preload="auto" controls x-webkit-airplay="allow" 
                 class="video-js vjs-default-skin vjs-big-play-centered" 
                 src="https://cdn.sniffrmedia.co.uk/'.basename($video->file_watermark_dirty).'">
             </video>';
-
-        }
-
-        else if($video->youtube_id){ // Youtube
+        }else if($video->youtube_id){ // Youtube
             if($embed){
                 $sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?autoplay=1&playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0"  allowfullscreen></iframe>';
             }else{

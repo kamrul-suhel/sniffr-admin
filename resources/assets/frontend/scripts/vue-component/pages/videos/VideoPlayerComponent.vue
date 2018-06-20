@@ -97,7 +97,6 @@
 
                 if(this.video.file_watermark_dirty !== null){
                     this.s3_video = true;
-
                     return;
                 }
 

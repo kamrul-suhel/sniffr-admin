@@ -32,6 +32,25 @@ class AdminStoryController extends Controller
         $this->middleware(['admin:admin,manager,editorial']);
     }
 
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function index(Request $request)
+	{
+
+		if ($request->ajax()) {
+			$stories = Story::orderBy('date_ingested', 'DESC')
+				->paginate(12);
+
+			$data = [
+				'stories' => $stories
+			];
+			return $this->successResponse($data);
+		}
+
+		return view('admin.stories.index'); //return response()->json($formatted_posts);
+	}
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -94,26 +113,6 @@ class AdminStoryController extends Controller
             'message' => 'all good',
         ]);
     }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-
-        if ($request->ajax()) {
-            $stories = Story::orderBy('date_ingested', 'DESC')
-                ->paginate(12);
-
-            $data = [
-                'stories' => $stories
-            ];
-            return $this->successResponse($data);
-        }
-
-        return view('admin.stories.index'); //return response()->json($formatted_posts);
-    }
-
 
     /**
      * @param Request $request

@@ -28,12 +28,12 @@
                                 <div class="video-title-caption">
                                     <v-layout row wrap justify-center>
                                         <v-flex xs6>
-                                            <v-icon small>alarm</v-icon> {{video_detail.video.duration | convertTime}}
+                                            <div v-if="video_detail.video.duration !== 'undefined'"><v-icon small>alarm</v-icon> {{video_detail.video.duration | convertTime}}</div>
                                         </v-flex>
                                         <v-spacer></v-spacer>
 
                                         <v-flex xs6 class="text-xs-right">
-                                            <v-icon small >remove_red_eye</v-icon> {{ video_detail.video.views+1}} views
+                                            <div v-if="video_detail.video.views != ''"><v-icon small >remove_red_eye</v-icon> {{ video_detail.video.views+1}} views</div>
                                         </v-flex>
                                     </v-layout>
                                 </div>
@@ -119,6 +119,7 @@
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
                 this.video_detail.video.iframe = this.video_detail.iframe;
+
                 this.ini = true;
 
                 if (this.video_detail.video.tags.length > 0) {
@@ -139,8 +140,10 @@
 
         methods: {
             onGoback() {
-                this.$router.go(-1);
+                this.$router.push({name: this.$store.getters.getRouteUrl});
             },
+
+
 
             reloadInstagrm(src) {
                 var s = document.createElement("script");
