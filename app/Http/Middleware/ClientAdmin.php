@@ -10,7 +10,7 @@ class ClientAdmin {
     public function handle($request, Closure $next)
     {
 
-        if(auth()->check() && auth()->user()->role != 'client_owner') {
+        if(auth()->check() && !in_array(auth()->user()->role, ['client_owner', 'client_admin'])) {
             return redirect('client/profile/'.auth()->user()->client->slug.'/users/'.auth()->user()->id.'/edit');
         }
 
