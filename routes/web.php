@@ -24,8 +24,9 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function(){
     // TODO: remove this form route
     Route::get('details/form/{code}', 'DetailsController@form')->name('details_form');
 
-    Route::get('tags', 'ThemeTagController@index');
+    Route::get('mailer/track/{mailer_id}/{client_id}', 'Frontend\MailerController@store')->name('mailer_track_store');
 
+    Route::get('tags', 'ThemeTagController@index');
 
     /*
     |--------------------------------------------------------------------------
