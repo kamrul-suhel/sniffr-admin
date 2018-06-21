@@ -69,9 +69,7 @@ class ClientUserController extends Controller
             : $request->input('client_id', null);
 
         $user->client_id = $client_id;
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->full_name = $request->input('first_name') . ' ' . $request->input('last_name');
+        $user->full_name = $request->input('full_name');
         $user->tel = $request->input('tel');
         $user->job_title = $request->input('job_title');
         $user->avatar = 'default.jpg';
@@ -156,9 +154,7 @@ class ClientUserController extends Controller
 
         $user->username = $request->input('username', $user->username);
         $user->email = $request->input('email', $user->email);
-        $user->full_name = $request->input('first_name', $user->first_name) . ' ' . $request->input('last_name', null);
-        $user->first_name = $request->input('first_name', $user->first_name);
-        $user->last_name = $request->input('last_name', $user->last_name);
+        $user->full_name = $request->input('full_name', $user->first_name);
         $user->tel = $request->input('tel', $user->tel);
         $user->job_title = $request->input('job_title', $user->job_title);
 

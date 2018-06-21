@@ -38,30 +38,16 @@
                         </div>
 
                         <div class="panel-body" style="display: block;">
-                            @if($errors->first('first_name'))
+                            @if($errors->first('full_name'))
                                 <div class="alert alert-danger">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
                                     </button>
-                                    {{ $errors->first('first_name') }}
+                                    {{ $errors->first('full_name') }}
                                 </div>
                             @endif
-
-                            <label for="first_name">First Name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" autocomplete="off"
-                                   value="{{ ($user) ? $user->first_name : old('first_name')	}}"/>
-
-                            <br>
-
-                            @if($errors->first('last_name'))
-                                <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                                    </button>
-                                    {{ $errors->first('last_name') }}
-                                </div>
-                            @endif
-                            <label for="last_name">Last Name</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name" autocomplete="off"
-                                   value="{{($user) ? $user->last_name : old('last_name') }}"/>
+                            <label for="full_name">Full Name</label>
+                            <input type="text" class="form-control" name="full_name" id="full_name" autocomplete="off"
+                                   value="{{($user) ? $user->full_name : old('full_name') }}"/>
 
                             <br>
 
