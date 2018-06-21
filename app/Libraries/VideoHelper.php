@@ -139,9 +139,7 @@ trait VideoHelper{
 
         }else if(!empty($video->image) && !$embed) {
             $sHTML .= '<a class="video-thumb" href="' . $path . '/' . $video->alpha_id . '" style="background-image:url(' . $video->image . ')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
-
         } else{
-            dd($video);
             $sHTML .= '<p style="color:white;">There appears to be an issue with this video</p>';
 
             //if(\Auth::user()->role == 'admin'){
