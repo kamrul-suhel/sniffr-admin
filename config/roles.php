@@ -19,5 +19,8 @@ return [
         'client' => [
             'name' => 'Client',
         ],
+        'client_owner' => [
+            'name' => 'Client Owner',
+        ]
     ],
 ];
