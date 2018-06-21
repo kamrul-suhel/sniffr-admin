@@ -27,6 +27,7 @@
                 <label for="avatar">{{ ($user) ? ucfirst($user->first_name) . '\'s' : '' }} Profile Image</label>
                 <input type="file" multiple="true" class="form-control" name="avatar" id="avatar"/>
             </div>
+
             <div class="row">
                 <div class="col-sm-12">
                     <div class="panel panel-primary" data-collapsed="0">
