@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <label for="is_exclusive">Select if the video is exclusive or non-exclusive</label>
+        <label for="rights">Select if the video is exclusive or non-exclusive</label>
 
         <select name="rights" class="selectpicker form-control">
             <option value="">License</option>
