@@ -116,7 +116,7 @@ class AdminClientMailerController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id ' . $mailer->alpha_id,
-            'mailer' => $mailer,
+            'downloaded' => $mailer,
             'post_route' => url('admin/mailers/stats'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),
@@ -143,7 +143,7 @@ class AdminClientMailerController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Review Client Mailer',
-            'mailer' => $mailer,
+            'downloaded' => $mailer,
             'post_route' => url('admin/mailers/update'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),
@@ -177,20 +177,20 @@ class AdminClientMailerController extends Controller
 
         $mailer_status = 'Saved';
 
-        // If send mailer (rather than just saved) then queue mailer to send
+        // If send downloaded (rather than just saved) then queue downloaded to send
         if (Input::get('send_mailer') == 1) {
             $mailer_status = 'Sent';
 
             // Slack notification (WIP: currently doesn't work)
             // if (env('APP_ENV') == 'prod') {
-            //     $mailer->notify(new ClientMailer($mailer));
+            //     $downloaded->notify(new ClientMailer($downloaded));
             // }
 
             // set sent_at
             $mailer->sent_at = now();
             $mailer->save();
 
-            // send mailer to selected clients (actually users which are linked to clients) via email
+            // send downloaded to selected clients (actually users which are linked to clients) via email
             foreach ($mailer->users()->get() as $client) {
                 $user = User::find($client->id);
                 $mailer->users()->where('user_id', $client->id)->update(['sent_at' => now(), 'user_client_id' => $user->client_id]);

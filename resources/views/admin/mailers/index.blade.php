@@ -75,7 +75,7 @@
 			    return false;
 			});
 
-			$('.js-stats-mailer').click(function(e){
+			$('.js-stats-downloaded').click(function(e){
 				e.preventDefault();
 				var mailer = $(this).attr('href')
 				if(mailer) {
