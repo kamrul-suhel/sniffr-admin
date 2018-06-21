@@ -64,12 +64,9 @@
                                 @endif
 
                                 <div class="input-group">
-                                    <label for="user_full_name" class="input-group-addon">Account Owner Name
-                                        Name</label>
+                                    <label for="user_full_name" class="input-group-addon">Account Owner Name</label>
                                     <input type="text" class="form-control" name="user_full_name" id="user_full_name"
-                                           value="{{
-                                ($user) ? $company->user_full_name : ''
-                                }}"/>
+                                           value="{{ ($user) ? $company->user_full_name : ''}}"/>
                                 </div>
                             </div>
 

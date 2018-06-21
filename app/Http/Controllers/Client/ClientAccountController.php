@@ -142,6 +142,7 @@ class ClientAccountController extends Controller
         $company->vat_number = $request->input('vat_number');
         $company->billing_tel = $request->input('billing_tel');
         $company->billing_email = $request->input('billing_email');
+        $company->billing_name = $request->input('billing_name');
 
         $redirect_path = '';
 

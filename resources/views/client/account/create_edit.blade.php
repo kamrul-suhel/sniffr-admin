@@ -74,7 +74,8 @@
 
                                 <div class="col-lg-6">
                                     <div class="panel-title">Billing Phone Number</div>
-                                    <input type="text" class="form-control" name="billing_tel" id="billing_tel" value="{{($company->billing_tel) ? $company->billing_tel : old('billing_tel') }}"/>
+                                    <input type="text" class="form-control" name="billing_tel" id="billing_tel"
+                                           value="{{($company->billing_tel) ? $company->billing_tel : old('billing_tel') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
@@ -84,7 +85,8 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="panel-title">Billing Email Address</div>
-                                    <input type="text" class="form-control" name="billing_email" id="billing_email" value="{{($company->billing_email) ? $company->billing_email : old('billing_email') }}"/>
+                                    <input type="text" class="form-control" name="billing_email" id="billing_email"
+                                           value="{{($company->billing_email) ? $company->billing_email : old('billing_email') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
@@ -94,9 +96,9 @@
                                     <br>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="panel-title">Billing Contact / Owner</div>
-                                    <input type="text" disabled class="form-control" name="fullname" id="fullname"
-                                           value="{{($company->owner->full_name) ? $company->owner->full_name : old('full_name') }}"/>
+                                    <div class="panel-title">Billing Contact Name</div>
+                                    <input type="text" class="form-control" name="billing_name" id="billing_name"
+                                           value="{{ $company->billing_name ? $company->billing_name: old('billing_name') }}"/>
                                     <br>
                                 </div>
                                 <div class="col-lg-6">

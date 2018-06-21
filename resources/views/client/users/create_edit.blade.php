@@ -123,15 +123,19 @@
 
                             <br>
 
-                            <label>Select the user's role below</label>
-                            <select id="role" class="form-control" name="role">
-                                <option value="client"{{ ((($user) && ($user->role == 'client')) || (old('role') == 'client')) ? ' selected' : '' }}>
-                                    Client
-                                </option>
-                                <option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
-                                    Client Admin
-                                </option>
-                            </select>
+                            @if(auth()->user()->role == 'client_admin' || auth()->user()->role == 'client_owner')
+                                {{--@if($user && auth()->user()->id !== $user->id)--}}
+                                    <label>Select the user's role below</label>
+                                    <select id="role" class="form-control" name="role">
+                                        <option value="client"{{ ((($user) && ($user->role == 'client')) || (old('role') == 'client')) ? ' selected' : '' }}>
+                                            Client
+                                        </option>
+                                        <option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
+                                            Client Admin
+                                        </option>
+                                    </select>
+                                {{--@endif--}}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -147,7 +151,7 @@
 
         </form>
 
-        @if($user)
+        @if($user && $user->id !== auth()->user()->id)
             <?php echo Form::open(['method' => 'DELETE', 'route' => ['clients.users.destroy', $user->client->slug , $user->id]]); ?>
             <button class="btn btn-danger delete">
                 <i class="fa fa-trash-o"></i>

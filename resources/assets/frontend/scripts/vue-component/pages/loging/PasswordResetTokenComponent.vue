@@ -73,6 +73,9 @@
     </v-container>
 </template>
 <script>
+
+    import LoginEventBus from '../../../event-bus/login-event-bus';
+
     export default {
         data() {
             return {
@@ -110,6 +113,7 @@
 
         created() {
             this.token = this.$route.params.token;
+            this.email = this.$route.params.email;
         },
 
         methods: {
@@ -130,6 +134,13 @@
                             this.buttonDisable = true;
                             if(!response.data.error){
                                 this.message = response.data.success_message;
+
+                                // Set the user store
+                                this.$store.dispatch('getLoginStatus').then((response) => {
+                                    this.$router.push({name: 'videos'});
+                                    LoginEventBus.clientLoginChange();
+
+                                });
                             }else{
                                 this.error = true;
                                 this.message = response.data.error_message;

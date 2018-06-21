@@ -46,6 +46,11 @@ class Client extends Model
         return $this->belongsTo(User::class, 'account_owner_id', 'id');
     }
 
+    public function billingUser()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function routeNotificationForSlack()
     {
         return 'https://hooks.slack.com/services/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';

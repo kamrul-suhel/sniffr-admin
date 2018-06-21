@@ -94,7 +94,7 @@
                 this.showVideo = true;
                 this.resetShowVideo();
 
-                if (this.video.youtube_id != null) {
+                if (this.video.youtube_id != null || this.video.youtube_id !== "") {
                     this.youtubeVideo = true;
                     setTimeout(()=>{
                         $('.plyr__control.plyr__control--overlaid').click();

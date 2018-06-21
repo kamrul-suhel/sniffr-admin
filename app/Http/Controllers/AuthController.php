@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\QueueEmail;
 use App\User;
 use App\Traits\FrontendResponse;
 use Auth;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Password;
 use Session;
@@ -157,6 +159,7 @@ class AuthController extends Controller
     public function password_request(Request $request)
     {
         $credentials = ['email' => $request->input('email')];
+
         $response = Password::sendResetLink($credentials, function($message){
             $message->subject('Password Reset Info');
         });
@@ -195,21 +198,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param $token
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function password_reset_token(Request $request, $token)
-    {
-        $data = [
-            'token' => $token,
-            'theme_settings' => config('settings.theme'),
-        ];
-
-        return view('frontend.master', $data);
-    }
-
-    /**
      * @param $token
      * @param $email
      * @return mixed
@@ -224,6 +212,12 @@ class AuthController extends Controller
             ->with('email', $email);
     }
 
+    /**
+     * @param Request $request
+     * @param $token
+     * @param $email
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function setPasswordPost(Request $request, $token, $email)
     {
 
@@ -277,6 +271,26 @@ class AuthController extends Controller
     }
 
 
+
+    /**
+     * @param Request $request
+     * @param $token
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function password_reset_token(Request $request, $token)
+    {
+
+        Auth::logout();
+        Session::flush();
+
+        $data = [
+            'token' => $token,
+            'theme_settings' => config('settings.theme'),
+        ];
+
+        return view('frontend.master', $data);
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -297,16 +311,28 @@ class AuthController extends Controller
 
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
+
                 if($request->ajax()){
-                    return $this->successResponse([
-                        'success_message' => 'Your password has been successfully reset. Please login'
+
+                    if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                        return $this->successResponse([
+                            'success_message' => 'You password has been reset.'
+                        ]);
+                    } else {
+                        return $this->errorResponse([
+                            'error_message' => 'There was a problem logging you in. Please try again.'
+                        ]);
+                    }
+                }
+
+                // attempt login with new password
+                if(auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                    return redirect()->intended('videos')->with([
+                        'note' => 'Your password has been successfully reset. Please login ',
+                        'note_type' => 'success'
                     ]);
                 }
 
-                return Redirect::to('login')->with([
-                    'note' => 'Your password has been successfully reset. Please login ',
-                    'note_type' => 'success'
-                ]);
 
             default:
                 if($request->ajax()){
