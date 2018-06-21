@@ -16,6 +16,18 @@
 
     <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
 
+    <style>
+        .container.grid-list-lg .layout .flex {
+            padding: 8px;
+        }
+        .navigation ul li a i {
+            font-size: 15px;
+            margin-top: -5px;
+            width: 20px;
+            display: inline-block;
+        }
+    </style>
+
 
     <!-- Hotjar Tracking Code for https://sniffrmedia.co.uk/ -->
     <script>
@@ -49,13 +61,12 @@
                     <nav class="navigation">
                         <ul>
                             <li><a href="/client/videos" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-video-camera"></i> Videos</a></li>
-                            <li><a href="/client/stories" class=""><i aria-hidden="true" class=" white--text material-icons"></i><i class="fa fa-at"></i> Stories</a></li>
 
                             @if(in_array(auth()->user()->role, ['client', 'client_admin', 'client_owner']))
                                 <li>
                                     <a href="/client/profile" class="">
                                         <i aria-hidden="true" class="icon icon--right white--text material-icons"></i>
-                                        <i class="fa fa-industry"></i> {{ auth()->user()->client->name ?? 'Company Settings' }}
+                                        <i class="fa fa-user"></i> {{ auth()->user()->client->name ?? 'Company Settings' }}
                                     </a>
                                 </li>
                             @else
