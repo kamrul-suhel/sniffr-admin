@@ -9,7 +9,6 @@ const MailerEventBus = new Vue({
 
     methods: {
         storiesUpdated(){
-            console.log('Event working');
             this.$emit('storiesUpdated')
         }
     }

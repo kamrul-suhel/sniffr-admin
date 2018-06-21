@@ -24,6 +24,7 @@
                                         required
                                         validate-on-blur
                                         :error="validation.error"
+                                        lazy-validation="true"
                                 >
                                 </v-text-field>
                             </v-flex>
