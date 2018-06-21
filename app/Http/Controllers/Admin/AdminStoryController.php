@@ -180,13 +180,26 @@ class AdminStoryController extends Controller
         $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
         $story->title = Input::get('title');
         $story->description = (Input::get('description') ? Input::get('description') : NULL);
-        $story->notes = (Input::get('notes') ? Input::get('notes') : NULL);
-        $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
+        //$story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : NULL);
+        $story->user_id = (Input::get('user_id') ? Input::get('user_id') : Auth::user()->id);
+        //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
         $story->save();
 
         if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
+        }
+
+        // post story to WP
+        $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
+        $result = $this->apiPost('posts', $parameters, true);
+
+        // update stories record with WP response from post
+        if($result->id){
+            $story->wp_id = $result->id;
+            $story->status = $result->status;
+            $story->date_ingested = $story->created_at;
+            $story->save();
         }
 
         return Redirect::to('admin/stories')->with([
@@ -243,11 +256,12 @@ class AdminStoryController extends Controller
             $story->description = Input::get('description');
         }
 
-        if (Input::get('notes')) {
-            $story->notes = Input::get('notes');
-        }
+        // if (Input::get('excerpt')) {
+        //     $story->excerpt = Input::get('excerpt');
+        // }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
+        $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
 
         if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
