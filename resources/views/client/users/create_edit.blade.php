@@ -24,7 +24,7 @@
             {{ method_field($user ? 'PATCH' : 'POST') }}
             <div id="user-badge">
                 <img src="{{ Config::get('site.uploads_url') }}{{ ($user && $user->avatar) ? $user->avatar : 'default.jpg' }}"/>
-                <label for="avatar">{{ ($user) ? ucfirst($user->username) . '\'s' : '' }} Profile Image</label>
+                <label for="avatar">{{ ($user) ? ucfirst($user->first_name) . '\'s' : '' }} Profile Image</label>
                 <input type="file" multiple="true" class="form-control" name="avatar" id="avatar"/>
             </div>
 
