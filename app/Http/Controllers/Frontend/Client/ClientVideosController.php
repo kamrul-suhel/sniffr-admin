@@ -75,6 +75,35 @@ class ClientVideosController extends Controller
         return view('frontend.master');
     }
 
+
+	public function getDownloadedVideos(Request $request)
+	{
+		if ($request->ajax()) {
+			$client_id = Auth::user()->client_id;
+
+			if ($request->search) {
+				$ordered_videos = Video::with('orders')
+					->where('title', 'LIKE', '%' . $request->search . '%')
+					->whereHas('orders', function ($query) use ($client_id) {
+						$query->where('client_id', $client_id);
+					})->get();
+			} else {
+				$ordered_videos = Video::with('orders')
+					->whereHas('orders', function ($query) use ($client_id) {
+						$query->where('client_id', $client_id);
+					})->get();
+			}
+			//Paginate collection object
+			$videos = $this->paginate($ordered_videos, self::PAGINATE_PER_PAGE, $request->page);
+			$data = [
+				'videos' => $videos,
+			];
+			return $this->successResponse($data);
+		}
+		return view('frontend.master');
+	}
+
+
 	public function downloadVideo($videoId)
 	{
 		$video = Video::find($videoId);

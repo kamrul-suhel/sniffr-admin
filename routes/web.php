@@ -267,13 +267,12 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
     /* Videos */
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-    Route::get('videos/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+    Route::get('videos/downloaded', 'Frontend\Client\ClientVideosController@getDownloadedVideos')->name('client.downloaded.stories');
 
 
     /* Stories */
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
     Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
-    Route::get('videos/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedVideos')->name('client.downloaded.videos');
 
     /* Admin */
     Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
