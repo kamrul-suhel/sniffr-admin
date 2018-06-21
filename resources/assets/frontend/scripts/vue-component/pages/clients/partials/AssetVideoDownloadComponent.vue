@@ -4,7 +4,7 @@
             <v-card>
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
-                        height="200px" class="client-video-thumbnail">
+                        height="200px" class="client-video-thumbnail cdi-content">
                     <div class="cdi-label" v-if="ordered || newOrder">
                         <v-tooltip top>
                             <v-btn slot="activator" flat icon raised light color="white">
