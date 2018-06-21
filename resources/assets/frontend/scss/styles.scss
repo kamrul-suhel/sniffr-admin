@@ -16,7 +16,7 @@
 
 
 /* ************************* NAV style ******************* */
-@import "./layout/nav";
+//@import "./layout/nav";
 
 
 /* ************************* Home Page style ******************* */
@@ -49,7 +49,7 @@
 
 
 /* ************************* Footer style ******************* */
-@import "layout/footer";
+//@import "layout/footer";
 
 
 /* ************************* Pagination style ******************* */
@@ -61,10 +61,6 @@
 
 /* ************************* More detail form page ******************* */
 @import "form/more-detail";
-
-
-/* ************************* Client section style ******************* */
-@import "pages/client/index";
 
 
 @include small-device{

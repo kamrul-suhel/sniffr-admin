@@ -67,9 +67,8 @@ class AdminClientController extends Controller
         $user_id = User::insertGetId([
             'username' => $company_slug,
             'email' => $request->get('user_email'),
-            'first_name' => $request->get('user_first_name'),
-            'last_name' => $request->get('user_last_name'),
-            'role' => 'client',
+            'full_name' => $request->get('user_full_name'),
+            'role' => 'client_owner',
             'password' => \Hash::make($password),
             'client_id' => $company_id
         ]);
@@ -86,8 +85,8 @@ class AdminClientController extends Controller
             QueueEmailCompany::dispatch(
                 $company_id,
                 $request->get('user_email'),
-                $request->get('user_first_name'),
-                $request->get('user_email'),
+                $request->get('user_full_name'),
+                $request->get('user_full_name'),
                 $token
             );
         }
@@ -152,6 +151,8 @@ class AdminClientController extends Controller
         $company->vat_number = $request->input('vat_number');
         $company->billing_tel = $request->input('billing_tel');
         $company->billing_email = $request->input('billing_email');
+        $company->billing_name = $request->input('billing_name');
+
 
         $redirect_path = '';
         if ($company->account_owner_id != $request->input('account_owner_id')) {

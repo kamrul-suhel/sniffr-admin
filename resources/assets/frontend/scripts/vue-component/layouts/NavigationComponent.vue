@@ -42,6 +42,14 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
+                                                <a href="/client/profile">
+                                                    <v-icon color="white" left size="20px">settings</v-icon> Account Settings
+                                                </a>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientEmail()">
                                                     <v-icon color="white" left size="20px">alternate_email</v-icon> My Stories
                                                 </a>

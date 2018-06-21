@@ -262,26 +262,29 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 */
 
 Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
-	/* Frontend */
+    /* Frontend */
     Route::resource('orders', 'OrderController');
 
     /* Videos */
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-	Route::get('videos/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+    Route::get('videos/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
 
+    /* Stories */
+    Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
+    Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
 
-	/* Stories */
-	Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
-	Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+    /* Admin */
+    Route::get('profile', 'Client\ClientAccountController@myAccount')->name('client.profile.edit');
+    Route::put('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
+    Route::resource('profile/{slug}/users', 'Client\ClientUserController', ['as' => 'clients']);
 
-	/* Admin */
-    Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
-    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
-    Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
-    Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
-    Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
+//    Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
+//    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
+//    Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
+//    Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
+//    Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
+
 });
-
 /*
 |--------------------------------------------------------------------------
 | Client Frontend Routes
