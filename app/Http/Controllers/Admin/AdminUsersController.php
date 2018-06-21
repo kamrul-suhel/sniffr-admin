@@ -84,9 +84,9 @@ class AdminUsersController extends Controller
         $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id', null);
 
         $user->client_id = $client_id;
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->full_name = $request->input('first_name') . ' ' . $request->input('last_name');
+        $user->full_name = $request->input('full_name');
+//        $user->last_name = $request->input('last_name');
+//        $user->first_name = $request->input('first_name');
         $user->tel = $request->input('tel');
         $user->job_title = $request->input('job_title');
         $user->avatar = 'default.jpg';
