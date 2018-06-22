@@ -1,5 +1,30 @@
-/* Top laval element */
+#admin-mailer{
+  .btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    padding:0;
+    background-image: none;
+    white-space: nowrap;
+    border:none;
 
+    i{
+      display:block;
+      margin-right:5px;
+    }
+  }
+
+  button{
+    outline:none;
+  }
+}
+
+/* Top level element */
 #admin-mailer{
   .breadcrumb{
     a{
@@ -16,7 +41,6 @@
   }
 }
 
-
 .admin-mailer-section {
   .divider {
     margin: 0;
@@ -27,7 +51,6 @@
 }
 
 .mailer-dialog-error{
-
   .card__text{
     border-top: 5px solid #000;
   }

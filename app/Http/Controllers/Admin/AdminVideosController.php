@@ -378,7 +378,6 @@ class AdminVideosController extends Controller
         $video->duration = $this->getDuration($video, $duration);
 
         $video->user_id = Auth::id();
-        $video->is_exclusive = ($request->input('is_exclusive')) ?: 0;
         $video->active = ($request->input('active')) ?: 0;
         $video->featured = ($request->input('featured')) ?: 0;
         $video->video_collection_id = $request->input('video_collection_id', null);

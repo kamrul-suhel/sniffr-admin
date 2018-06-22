@@ -105,11 +105,6 @@ class AdminClientMailerController extends Controller
     {
         $mailer = ClientMailer::find($id);
 
-        $users = User::where('role', 'client')
-			->orWhere('role','client_admin')
-			->orderBy('created_at', 'DESC')
-			->get();
-
         $downloads = Download::where([['mailer_id', $id]])
 			->orderBy('created_at', 'DESC')
 			->get();
@@ -120,7 +115,6 @@ class AdminClientMailerController extends Controller
             'post_route' => url('admin/mailers/stats'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),
-            'users' => $users,
             'clients' => Client::all(),
             'downloads' => $downloads,
         ];
