@@ -41,7 +41,7 @@ class AdminStoryController extends Controller
         ini_set('max_execution_time', 1800);
 
         $version = VideoHelper::quickRandom(); // set random version for cache busting
-        $pages = mt_rand(100,200); // set random number over 100 for per page (if needed)
+        $pages = mt_rand(100, 200); // set random number over 100 for per page (if needed)
 
         $posts_publish = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&tags=' . env('UNILAD_WP_TAG_ID'), true);
         $posts_draft = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=draft&tags=' . env('UNILAD_WP_TAG_ID'), true);
@@ -52,12 +52,12 @@ class AdminStoryController extends Controller
         $dispatched = false;
 
         // store stories from wordpress in database
-        foreach($posts as $post){
+        foreach ($posts as $post) {
 
             // checks if wp post already exists within sniffr stories
             $story = Story::where([['wp_id', $post->id]])->first();
 
-            if(!$story) {
+            if (!$story) {
                 QueueStory::dispatch($post, 'new', (Auth::user() ? Auth::user()->id : 0))
                     ->delay(now()->addSeconds(2));
                 $dispatched = true;
@@ -67,7 +67,7 @@ class AdminStoryController extends Controller
                 $differenceTime = $postTime->diffInSeconds($storyTime);
 
                 // if wp post is updated 5mins after our own story record
-                if($differenceTime>150) {
+                if ($differenceTime > 150) {
                     QueueStory::dispatch($post, 'update', (Auth::user() ? Auth::user()->id : 0))
                         ->delay(now()->addSeconds(2));
                     $dispatched = true;
@@ -86,8 +86,9 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function checkJobs() {
-        $jobs = \DB::table('jobs')->where('payload', 'LIKE' , '%QueueStory%')->count();
+    public function checkJobs()
+    {
+        $jobs = \DB::table('jobs')->where('payload', 'LIKE', '%QueueStory%')->count();
         return response()->json([
             'status' => 'success',
             'jobs' => $jobs,
@@ -101,12 +102,12 @@ class AdminStoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            if($request->search){
-                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
-                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
+            if ($request->search) {
+                $stories = Story::where('title', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('alpha_id', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('date_ingested', 'DESC')
                     ->paginate(12);
-            }else{
+            } else {
                 $stories = Story::orderBy('date_ingested', 'DESC')
                     ->paginate(12);
             }
@@ -129,13 +130,13 @@ class AdminStoryController extends Controller
     {
         if ($request->ajax()) {
 
-            if($request->search){
+            if ($request->search) {
                 $search_value = $request->search;
-                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%'. $search_value . '%']])
+                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%' . $search_value . '%']])
                     ->orWhere('alpha_id', $search_value)
                     ->orderBy('licensed_at', 'DESC')
                     ->paginate(12);
-            }else{
+            } else {
                 $videos = Video::with('createdUser')
                     ->where([['state', 'licensed'], ['file', '!=', NULL]])
                     ->orderBy('licensed_at', 'DESC')

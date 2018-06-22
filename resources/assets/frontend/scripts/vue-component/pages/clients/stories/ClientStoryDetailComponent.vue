@@ -99,8 +99,12 @@
 
         methods: {
             onGoback() {
-                console.log(this.$store.getters.getRouteUrl);
-                this.$router.push({name : this.$store.getters.getRouteUrl});
+                let prevRoute = this.$store.getters.getRouteUrl;
+                if(prevRoute != ''){
+                    this.$router.push({name : this.$store.getters.getRouteUrl});
+                }else{
+                    this.$router.go(-1);
+                }
             },
 
             getStoryDetail(){

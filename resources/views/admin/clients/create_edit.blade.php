@@ -4,9 +4,9 @@
     <div id="admin-container">
         <ol class="breadcrumb">
             <li>
-                <a href="/admin/clients">
-                    <i class="fa fa-newspaper-o"></i>
-                    All Clients
+                <a href="/">
+                    <i class="fa fa-home"></i>
+                    Home
                 </a>
             </li>
             <li class="active">
@@ -28,8 +28,9 @@
         }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             {{ ($company) ? method_field('PUT') : method_field('POST') }}
             <div class="row">
-                <div class="{{ ($company) ? 'col-sm-6' : 'col-sm-8' }}">
+                <div class="{{ 'col-lg-12' }}">
                     <div class="panel panel-primary">
+
                         <div class="panel-heading">
                             <div class="panel-title">Basic Details</div>
                         </div>
@@ -63,32 +64,9 @@
                                 @endif
 
                                 <div class="input-group">
-                                    <label for="user_first_name" class="input-group-addon">Account Owner First
-                                        Name</label>
-                                    <input type="text" class="form-control" name="user_first_name" id="user_first_name"
-                                           value="{{
-                                ($user) ? $company->user_first_name : ''
-                                }}"/>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                @if($errors->first('user_last_name'))
-                                    <div class="alert alert-danger">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                                        </button>
-                                        <strong>Error:</strong>
-                                        {{ $errors->first('user_last_name') }}
-                                    </div>
-                                @endif
-
-                                <div class="input-group">
-                                    <label for="user_last_name" class="input-group-addon">Account Owner Last
-                                        Name</label>
-                                    <input type="text" class="form-control" name="user_last_name" id="user_last_name"
-                                           value="{{
-                                ($user) ? $user->user_last_name : ''
-                                }}"/>
+                                    <label for="user_full_name" class="input-group-addon">Account Owner Name</label>
+                                    <input type="text" class="form-control" name="user_full_name" id="user_full_name"
+                                           value="{{ ($user) ? $company->user_full_name : ''}}"/>
                                 </div>
                             </div>
 
@@ -111,7 +89,7 @@
                             </div>
                             <div class="panel-body">
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" name="send_invitation" id="send_invitation">
+                                    <input type="checkbox" name="send_invitation" id="send_invitation" value="1" checked>
                                     Send Email Invitation
                                 </label>
                             </div>

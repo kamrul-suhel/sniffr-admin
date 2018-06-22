@@ -42,6 +42,14 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
+                                                <a href="/client/profile">
+                                                    <v-icon color="white" left size="20px">settings</v-icon> Account Settings
+                                                </a>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
                                                 <a @click.prevent.stop="onClientEmail()">
                                                     <v-icon color="white" left size="20px">alternate_email</v-icon> My Stories
                                                 </a>
@@ -58,7 +66,7 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link :to="{name: 'client_downloaded_stories'}">
+                                                <router-link :to="{name: 'client_downloaded_assets'}">
                                                     <v-icon color="white" size="20px">cloud_done</v-icon> My Downloads
                                                 </router-link>
                                             </v-list-tile-title>
@@ -133,7 +141,7 @@
             // Detach which page and set navigation background
             $route(to, from, next){
 
-                this.setPrevRoute();
+                this.onResetPrevRoute();
 
                 if(to.name != 'home'){
                     this.nav_background = true;
@@ -200,8 +208,12 @@
                         this.$store.commit('setRouteUrl', 'client_videos')
                     }
                 }else{
-                    this.$store.commit('setRouteUrl', this.$route.name)
+                    this.$store.commit('setRouteUrl', '')
                 }
+            },
+
+            onResetPrevRoute(){
+                this.$store.commit('setRouteUrl', '');
             },
 
             onLogout(){
