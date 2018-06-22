@@ -131,6 +131,22 @@
                 });
             },
 
+            getRecommendedData(alpha_id) {
+                this.$store.commit('setRouteObject', this.$route);
+
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
+                    this.video_detail = this.$store.getters.getCurrentRecommendedForDialog;
+                    if (this.video_detail.tags.length > 0) {
+                        this.tags.push(...this.video_detail.tags);
+                    } else {
+                        this.tags = [];
+                    }
+
+                    VideoDialogBoxEventBus.$emit('setNextPrevButton');
+
+                });
+            },
+
             goToTagSearch(tag) {
                 VideoDialogBoxEventBus.closeDialogByTagSearch(tag);
             },

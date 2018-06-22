@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\RecommendedAsset;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
@@ -221,8 +222,14 @@ class VideoController extends Controller
                 ->orderBy('id', 'DESC')
                 ->paginate($this->videos_per_page);
 
+            $recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+            $recommended = Video::select($this->getVideoFieldsForFrontend())
+                ->whereIn('id', $recommendedVids)
+                ->paginate(10);
+
             $data = [
                 'videos' => $videos,
+                'recommended' => $recommended,
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => config('settings.theme'),
                 'pages' => (new Page)->where('active', '=', 1)->get(),
