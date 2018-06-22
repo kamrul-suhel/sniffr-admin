@@ -106,6 +106,7 @@ class VideoController extends Controller
         $video->title = $request->input('title') ?: ('Untitled ' . $video->alpha_id);
         $video->state = 'new';
         $video->rights = 'ex';
+        $video->terms = Input::get('terms') ? 1 : 0;
         $video->source = Input::get('source');
         $video->ip = $request->ip();
         $video->user_agent = $request->header('User-Agent');

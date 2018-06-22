@@ -1,10 +1,9 @@
-
 <script>
     (function ($) {
-        var ctx = $('#video-traffic');
-        ctx.height(285);
 
-        new Chart($("#video-traffic"), {
+        var ctx = $('#video-sub-stacked-graph');
+        ctx.height(285);
+        new Chart($("#video-sub-stacked-graph"), {
             "type": "bar",
             "data": {
                 "labels": [
@@ -13,23 +12,52 @@
                 }?>
                 ],
                 "datasets": [{
+                    "label": 'Ex Submission',
                     "data": [
                         <?php foreach ($video_traffic as $video) {
-                        echo count($video) . ',';
+                        echo count($video->where('rights', 'ex')) . ',';
                     }?>
                     ],
                     "fill": false,
-                    "backgroundColor": "rgba(48, 54, 65, 0.8)",
+                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
                     "borderWidth": 1
-                }]
+                },
+                    {
+                        "label": 'Ex Chaser Channel',
+                        "data": [
+                            <?php foreach ($video_traffic as $video) {
+                            echo count($video->where('rights', 'excc')) . ',';
+                        }?>
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(0, 160, 90, 0.2)",
+                        "borderWidth": 1
+                    },
+                    {
+                        "label": 'Non Ex Chaser',
+                        "data": [
+                            <?php foreach ($video_traffic as $video) {
+                            echo count($video->where('rights', 'nonexc')) . ',';
+                        }?>
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(100, 155, 72, 0.2)",
+                        "borderWidth": 1
+                    },
+
+                ]
             },
             "options": {
                 maintainAspectRatio: false,
                 legend: {
-                    display: false
+                    display: true
                 },
                 "scales": {
+                    "xAxes": [{
+                        stacked: true
+                    }],
                     "yAxes": [{
+                        stacked: true,
                         "ticks": {
                             "beginAtZero": true
                         }
@@ -38,9 +66,9 @@
             }
         });
 
+
         var ctx = $('#sub-state-overview');
         ctx.height(285);
-
         new Chart($("#sub-state-overview"), {
             "type": "doughnut",
             "data": {
@@ -84,9 +112,9 @@
             }
         });
 
+
         var ctx = $('#sub-breakdown-graph');
         ctx.height(285);
-
         new Chart($("#sub-breakdown-graph"), {
             "type": "bar",
             "data": {
@@ -154,7 +182,7 @@
             "options": {
                 maintainAspectRatio: false,
                 legend: {
-                    display: false
+                    display: true
                 },
                 "scales": {
                     "xAxes": [{

@@ -2,7 +2,8 @@ const state = {
     stories: '',
     currentStory: '',
     mailStories: '',
-    client_goback_route_name:''
+    client_goback_route_name:'',
+    downloaded_stories:''
 }
 
 const mutations = {
@@ -58,25 +59,17 @@ const actions = {
         })
     },
 
-    getDownloadedStories({commit}, downloaded_obj){
+    setDownloadedStories({commit}, payload){
         return new Promise((resolve, reject) => {
-            let url = '/client/stories/downloaded';
-            if (downloaded_obj.page > 0) {
-                url += '?page=' + downloaded_obj.page;
-            }
-            console.log(url);
 
-            axios.get(url)
-                .then((response) => {
-                    let data = response.data;
-                    commit('setStories', data);
-                    resolve();
-                })
-                .catch((error) => {
-                    reject();
-                    console.log(error);
-                });
-
+            axios.get(payload)
+                .then((stories) => {
+                        state.downloaded_stories = stories.data.stories;
+                        resolve();
+                    },
+                    (error) => {
+                        return reject();
+                    });
         })
     }
 
@@ -93,6 +86,10 @@ const getters = {
 
     getClientGoBackRoute(state){
         return state.client_goback_route_name;
+    },
+
+    getDownloadedStories(state){
+        return state.downloaded_stories;
     }
 }
 

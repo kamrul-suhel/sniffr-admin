@@ -9,8 +9,9 @@
                         </v-btn>
                         <span>Downloaded</span>
                     </v-tooltip>
-
                 </div>
+
+
             </div>
         </v-flex>
 

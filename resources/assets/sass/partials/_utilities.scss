@@ -26,6 +26,13 @@
     border-top-right-radius: 0px;
 }
 
+.single-line{
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .toast-top-right{
     top:5px;
 }
