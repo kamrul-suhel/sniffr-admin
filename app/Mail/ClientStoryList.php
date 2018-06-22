@@ -38,6 +38,6 @@ class ClientStoryList extends Mailable
             ->from($this->from_email, $this->from_name)
             ->view('emails.clientmailers.downloaded')
             ->text('emails.clientmailers.mailer_plain')
-            ->subject('SNIFFR Video Suggestions');
+            ->subject('SNIFFR: Today\'s Recommendations');
     }
 }
