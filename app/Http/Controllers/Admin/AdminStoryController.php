@@ -35,91 +35,21 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function refresh()
+    public function index()
     {
-        //increase execution time
-        ini_set('max_execution_time', 1800);
+        $state = '';
 
-        $version = VideoHelper::quickRandom(); // set random version for cache busting
-        $pages = mt_rand(100,200); // set random number over 100 for per page (if needed)
+        $stories = Story::orderBy('updated_at', 'DESC')->paginate(12);
 
-        $posts_publish = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&tags=' . env('UNILAD_WP_TAG_ID'), true);
-        $posts_draft = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=draft&tags=' . env('UNILAD_WP_TAG_ID'), true);
-        $posts_pending = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
-        $posts = array_merge(array_merge($posts_pending, $posts_publish), $posts_draft);
+        $data = [
+            'stories' => $stories,
+            'state' => $state,
+            'users' => User::all(),
+            'user' => Auth::user(),
+        ];
 
-        // set dispatched for sending response back to ajax
-        $dispatched = false;
-
-        // store stories from wordpress in database
-        foreach($posts as $post){
-
-            // checks if wp post already exists within sniffr stories
-            $story = Story::where([['wp_id', $post->id]])->first();
-
-            if(!$story) {
-                QueueStory::dispatch($post, 'new', (Auth::user() ? Auth::user()->id : 0))
-                    ->delay(now()->addSeconds(2));
-                $dispatched = true;
-            } else {
-                $storyTime = Carbon::parse($story->date_ingested);
-                $postTime = Carbon::parse($post->date);
-                $differenceTime = $postTime->diffInSeconds($storyTime);
-
-                // if wp post is updated 5mins after our own story record
-                if($differenceTime>150) {
-                    QueueStory::dispatch($post, 'update', (Auth::user() ? Auth::user()->id : 0))
-                        ->delay(now()->addSeconds(2));
-                    $dispatched = true;
-                }
-            }
-        }
-
-        //return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
-        return response()->json([
-            'status' => 'success',
-            'dispatched' => $dispatched,
-            'message' => 'all good',
-        ]);
+        return view('admin.stories.index', $data);
     }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function checkJobs() {
-        $jobs = \DB::table('jobs')->where('payload', 'LIKE' , '%QueueStory%')->count();
-        return response()->json([
-            'status' => 'success',
-            'jobs' => $jobs,
-            'message' => 'all good',
-        ]);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-        if ($request->ajax()) {
-            if($request->search){
-                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
-                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
-                    ->orderBy('date_ingested', 'DESC')
-                    ->paginate(12);
-            }else{
-                $stories = Story::orderBy('date_ingested', 'DESC')
-                    ->paginate(12);
-            }
-
-            $data = [
-                'stories' => $stories
-            ];
-            return $this->successResponse($data);
-        }
-
-        return view('admin.stories.index'); //return response()->json($formatted_posts);
-    }
-
 
     /**
      * @param Request $request

@@ -199,16 +199,17 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
     Route::get('stories', 'Admin\AdminStoryController@index');
-    Route::get('stories/checkjobs', 'Admin\AdminStoryController@checkJobs');
-    Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');
     Route::get('stories/create', 'Admin\AdminStoryController@create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
-	Route::get('stories/refresh', array('uses' => 'Admin\AdminStoryController@refresh'));
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');
+    Route::get('mailers/create_mailer', 'Admin\AdminClientMailerController@create_mailer');
+    Route::get('mailers/refresh', array('uses' => 'Admin\AdminClientMailerController@refresh'));
+    Route::get('mailers/checkjobs', 'Admin\AdminClientMailerController@checkJobs');
+    Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');
     Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
     Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
     Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');

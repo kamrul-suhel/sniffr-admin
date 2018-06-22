@@ -187,7 +187,7 @@
             onRefreshStories() {
                 this.dialog = true;
 
-                let refreshUrl = '/admin/stories/refresh';
+                let refreshUrl = '/admin/mailers/refresh';
 
                 axios.get(refreshUrl).then((response) => {
                         console.log("sending refresh stories");
@@ -209,7 +209,7 @@
 
             checkJobs() {
                 setTimeout(() => {
-                    let url = '/admin/stories/checkjobs';
+                    let url = '/admin/mailers/checkjobs';
                     axios.get(url)
                         .then((response) => {
                             console.log('Sending checkjobs');
