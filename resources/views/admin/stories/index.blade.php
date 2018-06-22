@@ -80,7 +80,7 @@
 					<article class="album {{ $panelColour }}">
 						<header>
                             <div class="video-container">
-                                <a class="video-thumb" href="#" style="background-image:url({{ $story->thumb }})">
+                                <a class="video-thumb" href="#" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/frontend/images/placeholder.png') }})">
                                     <span class="thumbnail-overlay"></span>
                                 </a>
                             </div>
