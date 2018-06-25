@@ -15,14 +15,17 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg>
 
-                Your Recommended Videos
-                <hr>
-                <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="recommended.length > 0">
-                    <videoloop-component v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
-                </transition-group>
+                <div v-if="recommended.length > 0">
+                    <h3 class="sub-heading">Your Recommended Videos</h3>
+                    <hr>
+                    <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="recommended.length > 0">
+                        <videoloop-component v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
+                    </transition-group>
+                    <br>
+                </div>
 
+                <h3 class="sub-heading">All Videos</h3>
                 <hr>
-
                 <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
                     <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
                 </transition-group>
