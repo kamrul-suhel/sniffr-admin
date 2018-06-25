@@ -82,7 +82,7 @@
                     v-model="active"
                     color="dark"
                     dark
-                    slider-color="primary"
+                    slider-color="black"
             >
                 <v-tab>
                     Stories
