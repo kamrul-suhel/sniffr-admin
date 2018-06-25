@@ -31,7 +31,7 @@ const mutations = {
         })
     },
 
-    setQueryObject(state, queryObject){
+    setQueryObject(state, queryObject) {
         state.queryObject = queryObject;
     }
 }
@@ -60,7 +60,7 @@ const getters = {
         return state.stories;
     },
 
-    getQueryObject(state){
+    getQueryObject(state) {
         return state.queryObject;
     }
 }

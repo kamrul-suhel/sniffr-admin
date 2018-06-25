@@ -46,6 +46,6 @@ class ClientMailer extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('A client mailer has been sent: ' . $notifiable->alpha_id);
+           ->content('A client downloaded has been sent: ' . $notifiable->alpha_id);
     }
 }

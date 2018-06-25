@@ -2,7 +2,7 @@
 import {Plyr, PlyrAudio, PlyrVideo, PlyrVimeo} from "vue-plyr";
 
 var PlyrYoutube = { render: function () {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.pe ? _c('div', { staticClass: "plyr__youtube-embed", attrs: { "id": ("js-player-yt-" + (_vm.idNumber)) } }, [_c('iframe', { attrs: { "src": ("https://www.youtube.com/embed/" + (_vm.id)), "allowfullscreen": "", "allowtransparency": "", "allow": "autoplay" } })]) : _c('div', { attrs: { "id": ("js-player-yt-" + (_vm.idNumber)), "data-plyr-provider": "youtube", "data-plyr-embed-id": _vm.id } });
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.pe ? _c('div', { staticClass: "plyr__youtube-embed", attrs: { "id": ("js-player-yt-" + (_vm.idNumber)) } }, [_c('iframe', { attrs: { "src": ("http://www.youtube.com/embed/" + (_vm.id)), "allowfullscreen": "", "allowtransparency": "", "allow": "autoplay" } })]) : _c('div', { attrs: { "id": ("js-player-yt-" + (_vm.idNumber)), "data-plyr-provider": "youtube", "data-plyr-embed-id": _vm.id } });
     }, staticRenderFns: [],
     name: 'PlyrYoutube',
     props: {
