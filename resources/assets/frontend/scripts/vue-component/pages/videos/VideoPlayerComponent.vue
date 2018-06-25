@@ -4,6 +4,8 @@
             <!-- S3 lin -->
             <div class="s3-video" v-if="s3_video">
                 <div id="cdn_video" v-html="video.iframe"></div>
+                <!--<plyr-video poster="path/to/poster.png" :videos="videos">-->
+                <!--</plyr-video>-->
             </div>
 
             <div class="youtube-video" v-else-if="youtubeVideo">
@@ -37,14 +39,14 @@
 
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
-    import {Plyr} from './player/videoPlayer'
+    import {PlyrVideo} from './player/videoPlayer'
     import '../../../../scss/plugins/video-plyr.css';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default {
         components: {
             PlyrYoutube,
-            Plyr
+            PlyrVideo
         },
 
         data() {
@@ -54,6 +56,7 @@
                 showVideo: false,
 
                 s3_video:false,
+                videos: [],
 
                 youtubeID: '',
                 youtubeVideo: false,
@@ -88,6 +91,8 @@
             VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
                 this.showVideo = false;
             })
+
+            console.log(this.video);
         },
 
         methods: {
@@ -97,10 +102,18 @@
 
                 if(this.video.file_watermark_dirty !== null){
                     this.s3_video = true;
+                    let video = { src: this.video.file_watermark_dirty};
+
+                    this.videos.push(video);
+
+                    setTimeout(()=>{
+                        $('.plyr__control.plyr__control--overlaid').click()
+                    }, 1500);
                     return;
                 }
 
-                if (this.video.youtube_id != null) {
+                if (this.video.youtube_id != null && this.video.youtube_id != '') {
+                    this.youtubeID = this.video.youtube_id;
                     this.youtubeVideo = true;
                     setTimeout(()=>{
                         $('.plyr__control.plyr__control--overlaid').click()
@@ -114,9 +127,10 @@
                         this.socialVideo = true;
                         resolve();
                     });
-                    promise.then(() => {
+                    setTimeout(() => {
                         this.reloadInstagrm()
-                    });
+                    }, 1500)
+
                 }
 
                 if(new RegExp('twitter','i').test(this.video.url)){
@@ -125,9 +139,9 @@
                         resolve();
                     });
 
-                    promise.then(()=>{
+                    setTimeout(() => {
                         this.reloadTwitter()
-                    })
+                    }, 1500)
                 }
 
                 if(new RegExp('facebook', 'i').test(this.video.url)){
@@ -137,9 +151,10 @@
                         resolve();
                     })
 
-                    promise.then(()=>{
+                    setTimeout(() => {
                         this.reloadFacebook();
-                    });
+                    }, 1500)
+
                 }
             },
 
@@ -161,6 +176,8 @@
                 this.youtubeVideo = false;
                 this.vimeoVideo = false;
                 this.socialVideo = false;
+                this.youtubeID = ''
+                this.videos = [];
             },
 
             reloadFacebook() {

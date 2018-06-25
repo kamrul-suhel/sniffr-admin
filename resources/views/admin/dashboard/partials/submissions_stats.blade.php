@@ -48,7 +48,7 @@
 <br/>
 
 <div class="row">
-    <div class="col-sm-12">
+      <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Video Submissions</div>
@@ -56,11 +56,12 @@
 
             <div class="panel-body">
                 <div class="tab-content">
-                    <canvas id="video-traffic"></canvas>
+                    <canvas id="video-sub-stacked-graph"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="col-sm-12">
         <div class="panel panel-primary">

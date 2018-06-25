@@ -59,13 +59,13 @@ class AdminStoryController extends Controller
     {
         if ($request->ajax()) {
 
-            if($request->search){
+            if ($request->search) {
                 $search_value = $request->search;
-                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%'. $search_value . '%']])
+                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%' . $search_value . '%']])
                     ->orWhere('alpha_id', $search_value)
                     ->orderBy('licensed_at', 'DESC')
                     ->paginate(12);
-            }else{
+            } else {
                 $videos = Video::with('createdUser')
                     ->where([['state', 'licensed'], ['file', '!=', NULL]])
                     ->orderBy('licensed_at', 'DESC')

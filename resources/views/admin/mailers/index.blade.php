@@ -20,20 +20,14 @@
 
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
-			<th style="width: 25%">Mailer Id</th>
+			<th>Mailer Id</th>
 			<th>Created By</th>
-			<th>Created At</th>
 			<th>Sent At</th>
-			<th>Sends <span class="fa fa-bar-chart"></span></th>
-			<th>Opens <span class="fa fa-envelope"></span></th>
-			<th>Stories <span class="fa fa-tasks"></span></th>
-			<th>Videos <span class="fa fa-youtube-play"></span></th>
-			<th>Downloads <span class="fa fa-download"></span></th>
+			<th>Sent to <span class="fa fa-bar-chart"></span></th>
+			<th class="single-line">Stories <span class="fa fa-tasks"></span></th>
+			<th class="single-line">Videos <span class="fa fa-youtube-play"></span></th>
 			<th>Actions</th>
 			@foreach($mailers as $mailer)
-				@php
-					$downloads_count = $downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $mailer->videos()->pluck('videos.id'))->count() + $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $mailer->stories()->pluck('stories.id'))->count()
-				@endphp
 			<tr>
 				<td>{{ $mailer->alpha_id }}</td>
 				<td>@if($mailer->user_id!=0) @foreach($users as $user2)
@@ -42,19 +36,28 @@
 			                @endif
 			            @endforeach @else Default @endif
 				</td>
-				<td>{{ date('jS M Y h:i:s',strtotime($mailer->created_at)) }}</td>
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
-				<td>{{ $mailer->users()->where('sent_at', '!=', NULL)->count() }}</td>
-				<td>{{ $opens->where('client_mailer_id', $mailer->id)->count() }}</td>
-				<td>{{ $mailer->stories()->count() }}</td>
-				<td>{{ $mailer->videos()->count() }}</td>
-				<td>@if($mailer['sent_at']) {{ $downloads_count }}@else 0 @endif</td>
+				<td>
+					@foreach($mailer->users()->where('sent_at', '!=', NULL)->get() as $user)
+						{!! $opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() ? '<span class="fa fa-envelope-open-o"></span>&nbsp;'.$opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() : '<span class="fa fa-envelope-o"></span>'  !!}&nbsp;:&nbsp;{{ $user->email }}<br>
+					@endforeach
+				</td>
+				<td class="single-line">
+					@foreach($mailer->stories()->get() as $story)
+						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count().'&nbsp;:&nbsp;' : '' !!}<span title="{{ $story->title }}">{{ $story->title }}</span><br>
+					@endforeach
+				</td>
+				<td class="single-line">
+					@foreach($mailer->videos()->get() as $video)
+						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $video->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $video->id)->count().'&nbsp;:&nbsp;' : '' !!}<span title="{{ $video->title }}">{{ $video->title }}</span><br>
+					@endforeach
+				</td>
 				<td>
 					<p>
 						@if(!$mailer['sent_at'])<a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-primary"><span class="fa fa-plus-circle"></span> Send</a>@endif
 						@if($mailer['sent_at'])<a href="{{ url('admin/mailers/stats') . '/' . $mailer->id }}" class="btn btn-xs btn-warning"><span class="fa fa-bar-chart"></span> Stats</a>@endif
 						<!-- <a href="{{ url('admin/mailers/edit') . '/' . $mailer->id }}" class="btn btn-xs btn-info"><span class="fa fa-edit"></span> Edit</a> -->
-						<a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger js-delete"><span class="fa fa-trash"></span> Delete</a>
+						<a href="{{ url('admin/mailers/delete') . '/' . $mailer->id }}" class="btn btn-xs btn-danger js-delete-mailer"><span class="fa fa-trash"></span> Delete</a>
 					</p>
 				</td>
 			</tr>
@@ -67,15 +70,15 @@
 	<script>
 		$ = jQuery;
 		$(document).ready(function(){
-			$('.js-delete').click(function(e){
+			$('.js-delete-mailer').click(function(e){
 				e.preventDefault();
-				if (confirm("Are you sure you want to delete this story?")) {
+				if (confirm("Are you sure you want to delete this mailer?")) {
 			       window.location = $(this).attr('href');
 			    }
 			    return false;
 			});
 
-			$('.js-stats-mailer').click(function(e){
+			$('.js-stats-downloaded').click(function(e){
 				e.preventDefault();
 				var mailer = $(this).attr('href')
 				if(mailer) {

@@ -95,7 +95,7 @@ class AdminUsersController extends Controller
 
         $user->save();
 
-        if (Auth::user()->role == 'client') {
+        if (in_array($user->role, ['client_owner', 'client_admin', 'client'])) {
             $email = $user->getEmailForPasswordReset();
             $this->deleteExisting($user);
 
@@ -104,7 +104,7 @@ class AdminUsersController extends Controller
             QueueEmailClient::dispatch(
                 $client_id,
                 $request->get('email'),
-                $request->get('full_name'),
+                $request->get('full_name') ?? 'New User',
                 $token
             );
         }
