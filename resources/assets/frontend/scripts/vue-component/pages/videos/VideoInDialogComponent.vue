@@ -49,9 +49,9 @@
 
                     <v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
-                            <!--<div class="video-detail-social-share">-->
-                            <!--<v-btn dark block class="dark">License</v-btn>-->
-                            <!--</div>-->
+                            <div class="video-detail-social-share">
+                                <v-btn href="/" dark block class="dark">Add to basket</v-btn>
+                            </div>
                         </v-layout>
                     </v-flex>
 

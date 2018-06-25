@@ -1,5 +1,10 @@
 @extends('admin.master')
 
+@section('css')
+    <!-- Mailer stories & video style -->
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
+@endsection
+
 @section('content')
     <div id="admin-container">
         <ol class="breadcrumb">
@@ -28,7 +33,7 @@
         }}" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             {{ ($company) ? method_field('PUT') : method_field('POST') }}
             <div class="row">
-                <div class="{{ 'col-lg-12' }}">
+                <div class="col-lg-12">
                     <div class="panel panel-primary">
 
                         <div class="panel-heading">
@@ -97,6 +102,38 @@
                     </div>
                 </div>
             </div>
+
+            @if(!$company)
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Add Recommended Videos or Stories</div>
+                            <div class="panel-body">
+                                <div class="col-lg-6">
+                                    <div id="admin-mailer">
+                                        Videos
+                                        <select class="form-control" name="recommend-videos[]" multiple="multiple" style="height:200px;">
+                                            @foreach($videos as $video)
+                                                <option value="{{ $video->id }}">{{ $video->title }} - {{ date('d/m/Y', strtotime($video->created_at)) }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div id="admin-mailer">
+                                        Stories
+                                        <select class="form-control" name="recommend-stories[]" multiple="multiple" style="height:200px;">
+                                            @foreach($stories as $story)
+                                                <option value="{{ $story->id }}">{{ $story->title }} - {{ date('d/m/Y', strtotime($story->created_at)) }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             @if($company)
                 <div class="row">
@@ -282,6 +319,7 @@
                         </div>
                     </div>
                 </div>
+
             @endif
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
@@ -303,33 +341,94 @@
 @endsection
 
 @section('javascript')
-    <script type="text/javascript">
+    <!-- Vue scripts -->
+    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
+    <script>
         $ = jQuery;
-
         $(document).ready(function () {
-
-            $('#duration').mask('00:00:00');
-
-            $('input[type="checkbox"]').change(function () {
-                if ($(this).is(":checked")) {
-                    $(this).val(1);
-                } else {
-                    $(this).val(0);
+            $('.js-delete').click(function (e) {
+                e.preventDefault();
+                if (confirm("Are you sure you want to delete this story?")) {
+                    window.location = $(this).attr('href');
                 }
-                console.log('test ' + $(this).is(':checked'));
+                return false;
             });
 
-            tinymce.init({
-                relative_urls: false,
-                selector: '#body',
-                toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor | code",
-                plugins: [
-                    "advlist autolink link image code lists charmap print preview hr anchor pagebreak spellchecker code fullscreen",
-                    "save table contextmenu directionality emoticons template paste textcolor code"
-                ],
-                menubar: false,
-            });
+            function checkJobs() {
+                setTimeout(
+                    function() {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/admin/stories/checkjobs',
+                            data: {},
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.jobs == 0) {
+                                    swal.close();
+                                    swal({
+                                        title: 'Stories are now up-to-date.',
+                                        icon: 'success',
+                                        closeModal: true,
+                                        closeOnClickOutside: true,
+                                        closeOnEsc: true
+                                    }).then(function() {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    // jobs are still in the queue, so run again
+                                    checkJobs();
+                                }
+                            }
+                        });
+                    }, 500);
+            }
 
+            $('.js-refresh-stories').click(function (e) {
+                e.preventDefault();
+                swal({
+                    title: 'Please wait while the stories update. This may take a few minutes.',
+                    icon: 'info',
+                    closeModal: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    buttons: {
+                        confirm: false,
+                        cancel: {
+                            text: "Cancel",
+                            value: null,
+                            visible: true,
+                            closeModal: true,
+                        }
+                    }
+                });
+                var refreshUrl = '/admin/stories/refresh';
+                if (refreshUrl) {
+                    $('.js-refresh-stories').css('display', 'none');
+                    $.ajax({
+                        type: 'GET',
+                        url: refreshUrl,
+                        data: {},
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.dispatched == false) {
+                                swal.close();
+                                swal({
+                                    title: 'Stories are already up-to-date.',
+                                    icon: 'success',
+                                    closeModal: true,
+                                    closeOnClickOutside: true,
+                                    closeOnEsc: true
+                                }).then(function() {
+                                    $('.js-refresh-stories').css('display', 'block');
+                                });
+                            } else {
+                                // jobs have been sent to queue so need to check the job queue
+                                checkJobs();
+                            }
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endsection
