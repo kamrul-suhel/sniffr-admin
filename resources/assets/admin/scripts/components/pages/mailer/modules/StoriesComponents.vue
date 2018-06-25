@@ -94,7 +94,7 @@
         },
 
         methods: {
-            getStoriesData(queryObject = null) {
+            getStoriesData(queryObject = {page: 1, searchTerm: ''}) {
                 let url = '/admin/mailers/create_mailer/';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;

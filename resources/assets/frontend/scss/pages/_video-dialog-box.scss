@@ -301,6 +301,10 @@
     .video-detail-social-share {
       width: 150px;
       text-align: center;
+
+      .btn__content{
+        margin-bottom:-5px;
+      }
     }
 
     .video-license {
