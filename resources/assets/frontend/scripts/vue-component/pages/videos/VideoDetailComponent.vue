@@ -92,8 +92,6 @@
         },
 
         watch: {
-            '$route'(to, from, next) {
-            }
         },
 
         created() {

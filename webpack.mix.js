@@ -101,7 +101,7 @@ if (!mix.inProduction()) {
 
 /*
 * *********************************************
-* admin script and scss
+* Admin script and scss
 * *********************************************
 */
 mix.sass(
