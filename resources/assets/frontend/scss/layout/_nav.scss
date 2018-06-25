@@ -115,7 +115,8 @@
 
 .menu__content{
   box-shadow:none;
-  top:120px !important;
+  margin-top: 10px;
+  //top:120px !important;
 
   .list{
     background: rgba(0,0,0,.5);
@@ -138,19 +139,12 @@
 }
 
 @include small-device{
-  .menu__content{
-    top:62px !important;
-  }
   .navigation{
     text-align:center;
   }
 }
 
 @include medium-device{
-  .menu__content{
-    top:62px !important;
-  }
-
   .navigation{
     text-align:right;
   }
@@ -159,16 +153,8 @@
   .navigation{
     text-align:right;
   }
-
-  .menu__content{
-    top:62px !important;
-  }
 }
 @include extra-large-device{
-  .menu__content{
-    top:62px !important;
-  }
-
   .navigation{
     text-align:right;
   }

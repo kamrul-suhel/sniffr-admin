@@ -97,6 +97,10 @@
         <forgot-password-component></forgot-password-component>
         <!-- End password reset -->
 
+        <!-- Buy Component -->
+        <buy-component></buy-component>
+        <!-- End buy component -->
+
         <!-- Logout snackbars -->
         <v-snackbar
                 top="top"
@@ -111,11 +115,13 @@
 <script>
     import LoginComponent from '../includes/LoginComponent';
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent';
+    import BuyComponent from '../includes/BuyComponent';
     import LoginEventBus from '../../event-bus/login-event-bus.js';
     export default {
         components: {
             LoginComponent,
-            ForgotPasswordComponent
+            ForgotPasswordComponent,
+            BuyComponent
         },
         data() {
             return {

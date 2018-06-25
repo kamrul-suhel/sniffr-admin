@@ -50,7 +50,7 @@
                     <v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
                             <div class="video-detail-social-share">
-                                <v-btn href="/" dark block class="dark">Buy Now</v-btn>
+                                <v-btn dark block class="dark" @click.stop="onBuyClick()">{{ button_text }}</v-btn>
                             </div>
                         </v-layout>
                     </v-flex>
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+    import BuyDialogBoxEventBus from '../../../event-bus/buy-dialog-box-event-bus';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
@@ -74,7 +75,7 @@
             return {
                 video_detail: '',
                 tags: [],
-
+                button_text: 'Buy Now',
                 ready_to_show: true,
 
                 content_padding: true,
@@ -121,6 +122,9 @@
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
+
+                    this.button_text = this.video_detail.class == 6 ? 'Request Quote' : 'Buy Now';
+
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
                     } else {
@@ -138,6 +142,10 @@
 
             goToDetail() {
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
+            },
+
+            onBuyClick() {
+                BuyDialogBoxEventBus.openBuyDialog(this.video);
             }
         },
 

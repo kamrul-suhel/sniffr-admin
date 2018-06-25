@@ -82,6 +82,38 @@ return [
 			'modifier' => 2
 		]
 	],
+	'class' => [
+		1 => [
+			'slug' => 'neutral',
+			'name' => 'Neutral',
+			'modifier' => 1
+		],
+		2 => [
+			'slug' => 'random',
+			'name' => 'Random',
+			'modifier' => 0.25
+		],
+		3 => [
+			'slug' => 'story',
+			'name' => 'Story Video',
+			'modifier' => 0.5
+		],
+		4 => [
+			'slug' => 'nuker',
+			'name' => 'Nuker',
+			'modifier' => 1
+		],
+		5 => [
+			'slug' => 'big-vid',
+			'name' => 'Big Vid',
+			'modifier' => 7
+		],
+		6 => [
+			'slug' => 'exceptional',
+			'name' => 'Exceptional',
+			'modifier' => 0
+		]
+	],
 	'length' => [
 		1 => [
 			'slug' => 'neutral',
