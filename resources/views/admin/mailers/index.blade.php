@@ -9,7 +9,7 @@
 			<div class="col-xs-12">
 				<h3>
 					<i class="fa fa-users"></i> Client Mailers
-					<a href="/admin/stories/" class="btn btn-success pull-right">
+					<a href="/admin/mailers/create_mailer/" class="btn btn-success pull-right">
 						<i class="fa fa-plus-circle"></i> Create Mailer
 					</a>
 				</h3>

@@ -84,36 +84,26 @@
     @endif
 
     @if(Auth::user()->isAdmin())
-    <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
+    <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
         <a href="{{ url('admin/stories') }}" class="tlink">
             <i class="fa fa-tasks"></i>
             <span class="title">Stories</span>
         </a>
-        <ul>
-            <li>
-                <a href="{{ url('admin/mailers') }}">
-                    <span class="title">Mailers</span>
-                </a>
-            </li>
-            <!-- li>
-                <a href="{{ url('admin/mailers') }}">
-                    <span class="title">Edit Client Mailers</span>
-                </a>
-            </li -->
-            <!-- <li>
-                <a href="{{ url('admin/stories/trello') }}">
-                    <span class="title">Stories Board</span>
-                </a>
-            </li> -->
-        </ul>
     </li>
 
-    <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
+    <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
+        <a href="{{ url('admin/mailers') }}" class="tlink">
+            <i class="fa fa-envelope-open"></i>
+            <span class="title">Mailers</span>
+        </a>
+    </li>
+
+    <!-- <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
         <a href="{{ url('admin/media') }}">
             <i class="fa fa-picture-o"></i>
             <span class="title">Media</span>
         </a>
-    </li>
+    </li> -->
     @endif
 
     @if(Auth::user()->role != 'client')
