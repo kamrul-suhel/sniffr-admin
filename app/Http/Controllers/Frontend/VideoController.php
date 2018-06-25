@@ -217,19 +217,22 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
+    	$recommended = [];
         if ($request->ajax() || $request->isJson()) {
             $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
                 ->orderBy('id', 'DESC')
                 ->paginate($this->videos_per_page);
 
-            $recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
-            $recommended = Video::select($this->getVideoFieldsForFrontend())
-                ->whereIn('id', $recommendedVids)
-                ->paginate(10);
+            if(Auth::user()){
+				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+				$recommended = Video::select($this->getVideoFieldsForFrontend())
+					->whereIn('id', $recommendedVids)
+					->paginate(10);
+			}
 
             $data = [
                 'videos' => $videos,
-                'recommended' => $recommended,
+				'recommended' => $recommended,
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => config('settings.theme'),
                 'pages' => (new Page)->where('active', '=', 1)->get(),
