@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\QueueEmailClient;
 use App\Libraries\VideoHelper;
 use Auth;
+use Password;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -102,11 +103,13 @@ class AdminUsersController extends Controller
             $token = $this->getToken($email, $user);
 
             QueueEmailClient::dispatch(
-                $client_id,
+                ($client_id ? $client_id : 0),
                 $request->get('email'),
                 $request->get('full_name') ?? 'New User',
                 $token
             );
+        } else {
+            Password::sendResetLink(['email' => $request->input('email')]);
         }
 
         $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';

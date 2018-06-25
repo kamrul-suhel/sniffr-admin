@@ -55,30 +55,11 @@
 
 				<div class="col-sm-6 col-md-4" id="video-{{ $story->alpha_id }}">
 
-                    @switch($story->state)
-						@case('rejected')
-						@case('problem')
-							@php
-								$panelColour = 'danger';
-							@endphp
-							@break
-						@case('licensed')
-							@php
-								$panelColour = 'success';
-							@endphp
-							@break
-						@case('restricted')
-							@php
-								$panelColour = 'warning';
-							@endphp
-							@break
-						@default
-							@php
-								$panelColour = 'default';
-							@endphp
-					@endswitch
+                    @php
+        				$panelColour = config('stories.colors');
+        			@endphp
 
-					<article class="album {{ $panelColour }}">
+					<article class="album {{ $panelColour[$story->state] }}">
 						<header>
                             <div class="video-container">
                                 <a class="video-thumb" href="#" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/frontend/images/placeholder.png') }})">
