@@ -5,7 +5,11 @@
                 <v-card-media
                         height="200px"
                         :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"
-                        @click="onOpenStoryDialog()"></v-card-media>
+                        @click="onOpenStoryDialog()">
+                    <div class="hot-story" v-if="story.flagged === 1">
+                        <div class="hot-story-content">HOT</div>
+                    </div>
+                </v-card-media>
             </v-card>
         </v-flex>
 
@@ -24,11 +28,18 @@
 
         <v-flex xs6 sm6 md6 lg1 xl1>
             <!--<input type="checkbox" v-model="selected">-->
-            <v-switch
+            <v-checkbox
                     color="black"
                     v-model="selected"
-            ></v-switch>
+            ></v-checkbox>
         </v-flex>
+
+        <!--<v-flex xs6 sm6 md6 lg1 xl1>
+            <v-btn @click="onEditStories()">
+                <v-icon>edit</v-icon>
+                Edit
+            </v-btn>
+        </v-flex>-->
 
         <v-flex xs12>
             <v-divider></v-divider>
@@ -77,7 +88,11 @@
 
             onOpenStoryDialog(){
                 StoryDialogBoxEventBus.openStoryDialog(this.story.alpha_id);
-            }
+            },
+
+            onEditStories() {
+                window.location.href = '/admin/stories/edit/'+this.story.id;
+            },
         }
     }
 </script>

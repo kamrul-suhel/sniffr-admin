@@ -2,8 +2,7 @@
     <section class="cliend-downloaded-stories">
         <v-container grid-list-xl v-if="stories == ''">
             <v-layout row wrap>
-                <h2 class="text-xs-center no-stories">
-                    Sorry, you did not download any story.</h2>
+                <h2 class="text-xs-center no-stories">Sorry, you have not downloaded anything yet.</h2>
             </v-layout>
         </v-container>
 

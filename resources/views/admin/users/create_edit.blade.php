@@ -171,10 +171,11 @@
 							@endif
 
 							<p>
-								{{ ($user) ? '(leave empty to keep your original password)' : 'Enter users password:' }}
+								{{ ($user) ? '(leave empty to keep your original password)' : 'Password will be generated automatically' }}
 							</p>
 							<input type="password" class="form-control" name="password" id="password" autocomplete="off" value=""
-								   readonly onfocus="this.removeAttribute('readonly');"  title="password"/>
+								   readonly onfocus="this.removeAttribute('readonly');" title="password" @if(!$user) disabled @endif/>
+							<span id="result"></span>
 						</div>
 					</div>
 				</div>
@@ -218,6 +219,9 @@
 								</option>
 								<option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
 									Client Admin
+								</option>
+								<option value="client_owner"{{ ((($user) && ($user->role == 'client_owner')) || (old('role') == 'client_owner')) ? ' selected' : '' }}>
+									Client Owner
 								</option>
 							</select>
 						</div>
@@ -303,6 +307,66 @@
 			    }
 			    console.log('test ' + $(this).is( ':checked' ));
 			});
+
+			$('#password').keyup(function() {
+				$('#result').html(checkStrength($('#password').val()))
+			});
+
+			function checkStrength(password) {
+				var strength = 0
+				var field = 'Password is ';
+				if (password.length < 6) {
+					$('#result').removeClass()
+					$('#result').addClass('short')
+					return field+'Too short'
+				}
+				if (password.length > 7) strength += 1
+					// If password contains both lower and uppercase characters, increase strength value.
+				if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1
+					// If it has numbers and characters, increase strength value.
+				if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1
+					// If it has one special character, increase strength value.
+				if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+					// If it has two special characters, increase strength value.
+				if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+					// Calculated strength value, we can return messages
+					// If value is less than 2
+				if (strength < 2) {
+					$('#result').removeClass()
+					$('#result').addClass('weak')
+					return field+'Weak'
+				} else if (strength == 2) {
+					$('#result').removeClass()
+					$('#result').addClass('good')
+					return field+'Good'
+				} else {
+					$('#result').removeClass()
+					$('#result').addClass('strong')
+					return field+'Strong'
+				}
+			}
 		});
 	</script>
+	<style>
+	.short{
+		font-weight:bold;
+		color:#FF0000;
+		font-size:larger;
+	}
+	.weak{
+		font-weight:bold;
+		color:orange;
+		font-size:larger;
+	}
+	.good{
+		font-weight:bold;
+		color:#2D98F3;
+		font-size:larger;
+	}
+	.strong{
+		font-weight:bold;
+		color: limegreen;
+		font-size:larger;
+	}
+	</style>
 @endsection
