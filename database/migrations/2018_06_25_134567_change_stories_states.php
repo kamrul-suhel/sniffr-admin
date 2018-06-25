@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeUsernameNullable extends Migration
+class ChangeStoriesStates extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class ChangeUsernameNullable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('stories', function (Blueprint $table) {
             $table->string('username')->nullable()->change();
+            $table->enum('state', ['unapproved', 'approved', 'rejected', 'unlicensed', 'licensing', 'licensed', 'hacks-unassigned', 'writing-inprogress', 'writing-completed', 'subs-unassigned', 'subs-inprogress', 'subs-approved', 'subs-rejected', 'edits-unassigned', 'edits-inprogress', 'edits-approved', 'edits-rejected', 'published'])->nullable()->default('licensed');
         });
     }
 
@@ -25,8 +26,8 @@ class ChangeUsernameNullable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('username')->nullable(false)->change();
+        Schema::table('stories', function (Blueprint $table) {
+            $table->enum('state', ['sourced','approved','contacted','conversation','bumping','bump1','bump2','licensed','writing','subbing','ready','pushed'])->nullable()->default('licensed');
         });
     }
 }
