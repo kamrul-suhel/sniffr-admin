@@ -215,7 +215,7 @@ class AdminClientMailerController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Review Client Mailer',
-            'downloaded' => $mailer,
+            'mailer' => $mailer,
             'post_route' => url('admin/mailers/update'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),

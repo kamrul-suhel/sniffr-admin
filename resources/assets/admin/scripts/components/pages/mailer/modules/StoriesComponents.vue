@@ -95,7 +95,7 @@
 
         methods: {
             getStoriesData(queryObject = null) {
-                let url = '/admin/mailers/create_mailer/';
+                let url = '/admin/mailers/create_mailer';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
                 }
