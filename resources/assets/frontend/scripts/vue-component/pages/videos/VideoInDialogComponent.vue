@@ -13,7 +13,7 @@
                             <h2>{{ video_detail.title }}</h2>
                             <div class="video-title-caption">
                                 <v-layout row wrap justify-center>
-                                    <v-flex xs6>
+                                    <v-flex xs6 v-if="this.video_detail.duration != null">
                                         <v-icon small>alarm</v-icon> {{video_detail.duration | convertTime}}
                                     </v-flex>
                                     <v-spacer></v-spacer>

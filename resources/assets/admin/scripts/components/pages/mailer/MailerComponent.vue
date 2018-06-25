@@ -164,7 +164,7 @@
                 let storiesString = JSON.stringify(storiesId);
                 let videosString = JSON.stringify(videosId);
 
-                // send the data to mailer
+                // send the data to downloaded
                 let url = '/admin/mailers/create?videos=' + videosString + '&stories=' + storiesString;
 
                 axios.get(url)
@@ -184,8 +184,6 @@
                 let refreshUrl = '/admin/stories/refresh';
 
                 axios.get(refreshUrl).then((response) => {
-                        console.log("sending refresh stories");
-                        console.log(response);
                         if (response.data.dispatched == false) {
                             this.refreshTitle = 'Stories are already up-to-date.';
                             this.indeterminate = false;
@@ -206,8 +204,6 @@
                     let url = '/admin/stories/checkjobs';
                     axios.get(url)
                         .then((response) => {
-                            console.log('Sending checkjobs');
-                            console.log(response);
                             if (response.data.jobs == 0) {
                                 this.refreshTitle = 'Stories are now up-to-date.';
                                 this.indeterminate = false;
@@ -219,7 +215,7 @@
                                 this.checkJobs();
                             }
                         });
-                }, 500);
+                }, 5000);
             },
         },
     }

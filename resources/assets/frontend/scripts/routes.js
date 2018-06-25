@@ -16,9 +16,9 @@ import Notfound from './vue-component/pages/404Component.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
-import ClientDownloadedStoriesComponent from './vue-component/pages/clients/stories/ClientDownloadedStoriesComponent.vue';
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
+import ClientDownloadedAssetsComponent from './vue-component/pages/clients/downloaded/ClientDownloadedAssetsComponent';
 
 
 export const routes = [
@@ -147,12 +147,6 @@ export const routes = [
             },
 
             {
-                path: 'stories/downloaded',
-                name: 'client_downloaded_stories',
-                component: ClientDownloadedStoriesComponent
-            },
-
-            {
                 path: 'videos',
                 name: 'client_videos',
                 component: ClientVideosComponent,
@@ -162,7 +156,13 @@ export const routes = [
                 path: 'videos/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
-            }
+            },
+
+            {
+                path: 'downloaded',
+                name: 'client_downloaded_assets',
+                component: ClientDownloadedAssetsComponent
+            },
 
         ],
     },

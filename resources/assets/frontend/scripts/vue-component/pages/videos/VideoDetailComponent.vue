@@ -38,12 +38,12 @@
 
                                 <div class="video-title-caption">
                                     <v-layout row wrap justify-center>
-                                        <v-flex xs6>
-                                            <v-icon small>alarm</v-icon> {{video_detail.video.duration | convertTime}}
+                                        <v-flex xs6 v-if="this.video_detail.video.duration != null">
+                                            <v-icon small>alarm</v-icon>{{video_detail.video.duration | convertTime}}
                                         </v-flex>
                                         <v-spacer></v-spacer>
 
-                                        <v-flex xs6 class="text-xs-right">
+                                        <v-flex xs6 class="text-xs-right" v-if="video_detail.video.views">
                                             <v-icon small >remove_red_eye</v-icon> {{ video_detail.video.views+1}} views
                                         </v-flex>
                                     </v-layout>
