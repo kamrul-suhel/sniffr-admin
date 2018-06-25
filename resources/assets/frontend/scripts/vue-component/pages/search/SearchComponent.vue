@@ -20,8 +20,9 @@
                         <hr/>
                     </v-flex>
                 </v-layout>
+
                 <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
-                        <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
+                        <videoloop-component v-for="(video, index) in videos"            :video="video"       :key="video.alpha_id"></videoloop-component>
                 </transition-group>
 
                 <v-layout row wrap v-else align-content-center>
