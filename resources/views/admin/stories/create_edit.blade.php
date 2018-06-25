@@ -80,18 +80,9 @@
 
 							<div class="panel-body" style="display: block;">
 								<select name="state" id="state" class="form-control">
-									<option value="sourced" @if (isset($story) && $story->state == 'sourced') {{ 'selected' }} @endif>Sourced</option>
-									<option value="approved" @if (isset($story) && $story->state == 'approved') {{ 'selected' }} @endif>Approved</option>
-									<option value="contacted" @if (isset($story) && $story->state == 'contacted') {{ 'selected' }} @endif>Contacted</option>
-									<option value="conversation" @if (isset($story) && $story->state == 'conversation') {{ 'selected' }} @endif>Conversation</option>
-									<option value="bumping" @if (isset($story) && $story->state == 'bumping') {{ 'selected' }} @endif>Bumping</option>
-									<option value="bump1" @if (isset($story) && $story->state == 'bump1') {{ 'selected' }} @endif>Bump1</option>
-									<option value="bump2" @if (isset($story) && $story->state == 'bump2') {{ 'selected' }} @endif>Bump2</option>
-									<option value="licensed" @if (isset($story) && $story->state == 'licensed') {{ 'selected' }} @endif>Licensed</option>
-									<option value="writing" @if (isset($story) && $story->state == 'writing') {{ 'selected' }} @endif>Writing</option>
-									<option value="subbing" @if (isset($story) && $story->state == 'subbing') {{ 'selected' }} @endif>Subbing</option>
-									<option value="ready" @if (isset($story) && $story->state == 'ready') {{ 'selected' }} @endif>Ready</option>
-									<option value="pushed" @if (isset($story) && $story->state == 'pushed') {{ 'selected' }} @endif>Pushed</option>
+									@foreach(config('stories.states') as $state)
+									<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+									@endforeach
 								</select>
 
 							</div>

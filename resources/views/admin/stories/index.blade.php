@@ -22,8 +22,10 @@
 			<form id="search-form" method="get" role="form" class="search-form-full">
 				<div class="col-md-4">
 					<div class="form-group">
-						<select id="category" name="category" class="selectpicker form-control" title="Vertical">
-							<option value="">--</option>
+						<select id="state" name="state" class="selectpicker form-control" title="State">
+                            @foreach(config('stories.states') as $state)
+							<option value="{{ $state }}">{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+                            @endforeach
 						</select>
 					</div>
 				</div>
@@ -40,7 +42,7 @@
 	<div class="clear"></div>
 
 	@if(!count($stories))
-		<p>Sorry, there are no videos to show.</p>
+		<p>Sorry, there are no stories to show.</p>
 	@else
 
 	<div class="gallery-env">
@@ -50,7 +52,6 @@
 			@endphp
 
 			@foreach($stories as $story)
-
 
 				<div class="col-sm-6 col-md-4" id="video-{{ $story->alpha_id }}">
 
