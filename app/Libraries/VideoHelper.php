@@ -81,9 +81,11 @@ trait VideoHelper{
         }
 
         else if(str_contains($video->url, 'instagram')){
+
             if($embed && $video->embed_code){
                 $sHTML .= $video->embed_code;
             }else{
+
                 if (@getimagesize($video->image)) {
                     $insta_thumb = $video->image;
                 } else {
