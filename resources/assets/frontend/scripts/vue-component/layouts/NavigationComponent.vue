@@ -189,6 +189,10 @@
                 });
             });
 
+            this.$store.dispatch('setSettingObjectFromServer').then(() => {
+                this.settings = this.$store.getters.getSettingsObject;
+            });
+
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;
                 if(this.is_login){

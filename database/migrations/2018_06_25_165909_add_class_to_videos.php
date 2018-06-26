@@ -14,7 +14,7 @@ class AddClassToVideos extends Migration
     public function up()
     {
         Schema::table('videos', function (Blueprint $table) {
-			$table->integer('class')->nullable()->unsigned()->after('state')->default(1);
+			$table->string('class')->nullable()->after('state')->default();
         });
     }
 

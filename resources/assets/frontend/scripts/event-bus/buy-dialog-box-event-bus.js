@@ -7,10 +7,9 @@ const BuyDialogBoxEventBus = new Vue({
       }
     },
     methods: {
-        openBuyDialog(video){
+        openBuyDialog(collection, video){
             this.openBuyDialogBox = true;
-            console.log(video);
-            this.$emit('buyDialogStateChange', video);
+            this.$emit('buyDialogStateChange', collection, video);
         },
 
         closeBuyDialog(video){

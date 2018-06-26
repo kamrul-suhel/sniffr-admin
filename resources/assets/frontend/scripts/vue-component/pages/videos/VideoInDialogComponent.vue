@@ -50,7 +50,7 @@
                     <v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
                             <div class="video-detail-social-share">
-                                <v-btn dark block class="dark" @click.stop="onBuyClick()">{{ button_text }}</v-btn>
+                                <v-btn dark block class="dark" @click.stop="createCollection()">{{ button_text }}</v-btn>
                             </div>
                         </v-layout>
                     </v-flex>
@@ -123,7 +123,7 @@
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
 
-                    this.button_text = this.video_detail.class == 6 ? 'Request Quote' : 'Buy Now';
+                    this.button_text = this.video_detail.class == 'exceptional' ? 'Request Quote' : 'Buy Now';
 
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
@@ -144,8 +144,20 @@
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
             },
 
-            onBuyClick() {
-                BuyDialogBoxEventBus.openBuyDialog(this.video);
+            createCollection() {
+                axios.post('/clients/collections/store', {
+                        params: {
+                            video_id: this.video_detail.id
+                        }
+                    })
+                    .then(response => {
+                        BuyDialogBoxEventBus.openBuyDialog(response.data, this.video_detail);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+
+
             }
         },
 

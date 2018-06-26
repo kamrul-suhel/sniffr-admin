@@ -8,7 +8,7 @@
                 @keydown.esc="onLoginDialogClose()">
             <v-card raised>
                 <v-card-text class="buy-section">
-                    <v-form method="post" v-model="valid" ref="login_form">
+                    <v-form method="post" v-model="valid" ref="buy_form">
                         <v-layout row wrap id="buy-section">
 
                             <v-flex xs12>
@@ -17,28 +17,42 @@
 
                             <v-flex xs12>
                                 <v-select
+                                        label="License Type"
                                         color="dark"
                                         :items="licenses"
+                                        v-model="license_type"
+                                        item-value="slug"
                                         item-text="name"
-                                        label="License Type"
+                                        :rules="licenseRules"
+                                        :error="validation.error"
                                         required
                                 ></v-select>
                             </v-flex>
 
                             <v-flex xs12>
                                 <v-select
-                                        color="dark"
                                         label="Platform"
+                                        color="dark"
                                         :items="platforms"
+                                        v-model="license_platform"
+                                        item-value="slug"
+                                        item-text="name"
+                                        :rules="platformRules"
+                                        :error="validation.error"
                                         required
                                 ></v-select>
                             </v-flex>
 
                             <v-flex xs12>
                                 <v-select
-                                        color="dark"
                                         label="License Length"
-                                        :items="length"
+                                        color="dark"
+                                        :items="lengths"
+                                        v-model="license_length"
+                                        item-value="slug"
+                                        item-text="name"
+                                        :rules="lengthRules"
+                                        :error="validation.error"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -50,7 +64,13 @@
                             </v-flex>
                         </v-layout>
 
-                        <v-layout row justify-center>
+                        <v-layout row left>
+                            <v-flex xs3>
+                                <span>£{{ price }}</span>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-layout row rigth>
                             <v-flex xs3>
                                 <div class="buy-button">
                                     <input type="hidden" name="_token"/>
@@ -59,8 +79,8 @@
                                         dark
                                         :loading="loading"
                                         :disabled="loading"
-                                        @click="onSubmit()">
-                                        Get Quote
+                                        @click="getPrice()">
+                                        Get Price
                                     </v-btn>
                                 </div>
                             </v-flex>
@@ -77,12 +97,28 @@
 	export default {
 		data() {
 			return {
+			    settings: {},
+                price: 0,
+                video: {},
+                collection: [],
                 open_buy_dialog: false,
                 valid:false,
-                licenses: ['Exclusive', 'Non-Exclusive'],
-                platforms: ['TV', 'Web'],
-                length: ['1-4 Years', '5-10 Years', "In Perpetuity"],
-                buy_progress:false,
+                license_type: null,
+                license_platform: null,
+                license_length: null,
+                licenses: [],
+                platforms: [],
+                lengths: [],
+                licenseRules: [
+                    v => !!v || 'License is required'
+                ],
+                platformRules: [
+                    v => !!v || 'Platform is required'
+                ],
+                lengthRules: [
+                    v => !!v || 'Length is required'
+                ],
+
                 validation:{
                     error: false,
                     message:''
@@ -91,22 +127,35 @@
                 //Loading button
                 loading: false,
                 loader: null,
+                buy_progress:false,
 			}
 		},
 
 		watch: {
             open_login_dialog() {
 				this.$emit('changeLogin_dialog', this.open_login_dialog);
-			},
+			}
 		},
 
 		created() {
-            BuyEventBus.$on('buyDialogStateChange', (video) =>{
+            BuyEventBus.$on('buyDialogStateChange', (collection, video) =>{
                 this.open_buy_dialog = true;
+                this.settings = this.$store.getters.getSettingsObject;
+                this.video = video;
+                this.collection = collection;
+
+                Object.values(this.settings.pricing.type).forEach((type) =>{
+                    this.licenses.push(type);
+                });
+
+                Object.values(this.settings.pricing.platform).forEach((platform) =>{
+                    this.platforms.push(platform);
+                });
+
+                Object.values(this.settings.pricing.length).forEach((length) =>{
+                    this.lengths.push(length);
+                });
             });
-            // LoginEventBus.$on('closeLoginDialog', () => {
-            //     this.open_login_dialog = false;
-            // });
 		},
 
 		methods: {
@@ -120,8 +169,18 @@
               this.$refs.buy_form.reset();
             },
 
-            onSubmit() {
-                if(this.$refs.login_form.validate()){
+            getInitialPrice(){
+                axios.get('/clients/collections/get_initial_price/'+this.collection.collection_id+'/'+this.coillection.collection_video_id)
+                    .then(response => {
+                        this.price = response.data.price;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+
+            getPrice() {
+                if(this.$refs.buy_form.validate()){
 
                     // make spinner visible
                     this.login_progress = true;
@@ -129,45 +188,49 @@
 
                     // prepare submitting data
                     let form_data = new FormData();
+                    form_data.append('video_id', this.video.id);
+                    form_data.append('license_type', this.license_type);
+                    form_data.append('license_platform', this.license_platform);
+                    form_data.append('license_length', this.license_length);
 
                     // submit data with ajax request
-                    // axios.post('/login', form_data)
-                    //     .then(response => {
-                    //         this.login_progress = true;
-                    //         this.loading = false;
-                    //
-                    //         let data = response.data;
-                    //         if(data.error){
-                    //             this.login_progress = false;
-                    //             this.loading = false;
-                    //             this.validation.error = true;
-                    //             this.validation.message = data.error_message;
-                    //             return;
-                    //         }
-                    //
-                    //         // Set the user store
-                    //         this.$store.dispatch('getLoginStatus').then((response) => {
-                    //             // Check is client
-                    //             console.log(response);
-                    //             if(data.redirect_url === 'client'){
-                    //                 let redirect_url = this.$store.getters.getAttepmtRoute;
-                    //                 console.log(redirect_url);
-                    //                 if(!redirect_url){
-                    //                     this.$router.push({name: 'client_stories'});
-                    //                 }
-                    //                 LoginEventBus.clientLoginChange();
-                    //                 return;
-                    //             }
-                    //
-                    //             if(data.redirect_url){
-                    //                 window.location.href = data.redirect_url;
-                    //             }
-                    //         });
-                    //
-                    //     })
-                    //     .catch(error => {
-                    //         console.log(error);
-                    //     });
+                    axios.post('/collections/store', form_data)
+                        .then(response => {
+                            this.login_progress = true;
+                            this.loading = false;
+
+                            let data = response.data;
+                            if(data.error){
+                                this.login_progress = false;
+                                this.loading = false;
+                                this.validation.error = true;
+                                this.validation.message = data.error_message;
+                                return;
+                            }
+
+                            // Set the user store
+                            this.$store.dispatch('getLoginStatus').then((response) => {
+                                // Check is client
+                                console.log(response);
+                                if(data.redirect_url === 'client'){
+                                    let redirect_url = this.$store.getters.getAttepmtRoute;
+                                    console.log(redirect_url);
+                                    if(!redirect_url){
+                                        this.$router.push({name: 'client_stories'});
+                                    }
+                                    LoginEventBus.clientLoginChange();
+                                    return;
+                                }
+
+                                if(data.redirect_url){
+                                    window.location.href = data.redirect_url;
+                                }
+                            });
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
                 }
             },
 

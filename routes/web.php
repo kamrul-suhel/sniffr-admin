@@ -5,7 +5,9 @@
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', function () {
-        return response(config('settings.public'));
+    	$settings['public'] = config('settings.public');
+    	$settings['pricing'] = config('pricing');
+        return response($settings);
     });
     Route::get('/', 'HomeController@index')->name('home');
 
