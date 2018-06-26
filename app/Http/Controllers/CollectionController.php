@@ -106,7 +106,7 @@ class CollectionController extends Controller
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collection = $collectionVideo->collection;
 
-        $collectionVideo->status = "accepted";
+        $collectionVideo->status = "purchased";
         $collectionVideo->save();
 
         $collection->status = "closed";
