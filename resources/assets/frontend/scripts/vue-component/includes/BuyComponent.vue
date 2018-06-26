@@ -64,15 +64,13 @@
                             </v-flex>
                         </v-layout>
 
-                        <v-layout row left>
-                            <v-flex xs3>
-                                <span>£{{ price }}</span>
+                        <v-layout row>
+                            <v-flex xs6>
+                                <h2>£{{ price }}</h2>
                             </v-flex>
-                        </v-layout>
 
-                        <v-layout row rigth>
-                            <v-flex xs3>
-                                <div class="buy-button">
+                            <v-flex xs6>
+                                <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
                                     <v-btn
                                         raised
@@ -132,9 +130,7 @@
 		},
 
 		watch: {
-            open_login_dialog() {
-				this.$emit('changeLogin_dialog', this.open_login_dialog);
-			}
+
 		},
 
 		created() {
@@ -143,7 +139,6 @@
                 this.settings = this.$store.getters.getSettingsObject;
                 this.video = video;
                 this.collection = collection;
-
                 Object.values(this.settings.pricing.type).forEach((type) =>{
                     this.licenses.push(type);
                 });
@@ -155,6 +150,8 @@
                 Object.values(this.settings.pricing.length).forEach((length) =>{
                     this.lengths.push(length);
                 });
+
+                this.getInitialPrice();
             });
 		},
 
@@ -170,7 +167,7 @@
             },
 
             getInitialPrice(){
-                axios.get('/clients/collections/get_initial_price/'+this.collection.collection_id+'/'+this.coillection.collection_video_id)
+                axios.get('/client/collections/get_initial_price/'+this.collection.collection_id+'/'+this.coillection.collection_video_id)
                     .then(response => {
                         this.price = response.data.price;
                     })
@@ -232,15 +229,7 @@
                             console.log(error);
                         });
                 }
-            },
-
-            onForgotforgotDialog(){
-                this.open_login_dialog = false;
-                setTimeout(() => {
-                    LoginEventBus.openPasswordResetDialog();
-                }, 500);
-                
-            },
+            }
 		}
 	}
 </script>
