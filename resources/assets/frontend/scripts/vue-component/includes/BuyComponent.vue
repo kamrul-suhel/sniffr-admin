@@ -64,11 +64,13 @@
                             </v-flex>
                         </v-layout>
 
-                        <v-layout row>
-                            <v-flex xs6>
-                                <h2>£{{ price }}</h2>
+                        <v-layout row align-center>
+                            <v-flex xs6 >
+                                <div v-if="license_type || license_platform || license_length">
+                                    <p>Current Quote: <strong>£{{ price }}</strong></p>
+                                </div>
                             </v-flex>
-
+                            
                             <v-flex xs6>
                                 <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
@@ -97,8 +99,9 @@
 			return {
 			    settings: {},
                 price: 0,
+                show_price: false,
                 video: {},
-                collection: [],
+                collection: {},
                 open_buy_dialog: false,
                 valid:false,
                 license_type: null,
@@ -156,6 +159,10 @@
 		},
 
 		methods: {
+		    showPrice(){
+
+            },
+
             openBuyDialog(event){
                 this.open_buy_dialog = event;
             },
@@ -167,7 +174,7 @@
             },
 
             getInitialPrice(){
-                axios.get('/client/collections/get_initial_price/'+this.collection.collection_id+'/'+this.coillection.collection_video_id)
+                axios.get('/client/collections/get_initial_price/'+this.collection.collection_id+'/'+this.collection.collection_video_id)
                     .then(response => {
                         this.price = response.data.price;
                     })
