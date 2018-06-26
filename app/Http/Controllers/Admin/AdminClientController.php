@@ -30,18 +30,8 @@ class AdminClientController extends Controller
     {
         $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
 
-        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])
-            ->orderBy('licensed_at', 'DESC')
-            ->limit(50);
-
-        $stories = Story::where([['state', 'licensed']])
-            ->orderBy('updated_at', 'DESC')
-            ->limit(50);
-
         $data = [
             'clients' => $clients,
-            'videos' => $videos,
-            'stories' => $stories,
             'user' => Auth::user()
         ];
 
@@ -53,9 +43,19 @@ class AdminClientController extends Controller
      */
     public function create()
     {
+        $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL]])
+            ->orderBy('licensed_at', 'DESC')
+            ->limit(50);
+
+        $stories = Story::where([['state', 'licensed']])
+            ->orderBy('updated_at', 'DESC')
+            ->limit(50);
+
         return view('admin.clients.create_edit', [
             'company' => null,
             'user' => null,
+            'videos' => $videos,
+            'stories' => $stories,
         ]);
     }
 
