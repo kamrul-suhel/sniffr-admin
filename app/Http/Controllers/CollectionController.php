@@ -117,20 +117,9 @@ class CollectionController extends Controller
 
         $currentPrice = $collectionVideo->final_price;
 
-        //Get types for dropdown
-        if($request->has('licence_type')) {
-            $currentPrice = $currentPrice * config('pricing.type.'.$request->get('licence_type').'.modifier');
-        }
-
-        //Get platforms for dropdown
-        if($request->has('licence_platform')) {
-            $currentPrice = $currentPrice * config('pricing.platform.'.$request->get('licence_platform').'.modifier');
-        }
-
-        //Get lengths for dropdown
-        if($request->has('licence_length')) {
-            $currentPrice = $currentPrice * config('pricing.length.'.$request->get('licence_length').'.modifier');
-        }
+        $currentPrice = $currentPrice * config('pricing.type.'.$request->get('licence_type').'.modifier');
+        $currentPrice = $currentPrice * config('pricing.platform.'.$request->get('licence_platform').'.modifier');
+        $currentPrice = $currentPrice * config('pricing.length.'.$request->get('licence_length').'.modifier');
 
         $collectionVideo->final_price = $currentPrice;
         $collectionVideo->save();
