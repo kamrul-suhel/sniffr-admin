@@ -19,7 +19,7 @@ class ClientVideosController extends Controller
     use FrontendResponse;
     use VideoHelper;
 
-    const PAGINATE_PER_PAGE = 6;
+    const PAGINATE_PER_PAGE = 12;
 
     /**
      * @var int
@@ -94,10 +94,11 @@ class ClientVideosController extends Controller
 					->where('status', 'closed')
 					->orderBy('created_at', 'DESC')
 					->get()
-					->pluck('collectionVideos');
+					->pluck('collectionVideos')->all();
 
 			//Paginate collection object
-			$videos = $this->paginate($purchased_videos, 3, $request->page);
+			$videos = $this->paginate($purchased_videos, self::PAGINATE_PER_PAGE, $request->page);
+
 			$data = [
 				'videos' => $videos,
 			];

@@ -12,11 +12,10 @@
             </v-flex>
         </v-layout>
 
-        <asset-video-downloaded-component
+        <asset-video-download-component
                 v-for="(video, index) in videos"
                 :key="index"
-                :video="video"></asset-video-downloaded-component>
-
+                :video="video"></asset-video-download-component>
 
         <div class="text-xs-center" v-if="totalVideos > videosPerPage">
             <v-pagination
@@ -30,11 +29,11 @@
 </template>
 
 <script>
-    import AssetVideoDownloadedComponent from '../../partials/AssetVideoDownloadComponent';
+    import AssetVideoDownloadComponent from '../../partials/AssetVideoDownloadComponent';
 
     export default {
         components: {
-            AssetVideoDownloadedComponent
+            AssetVideoDownloadComponent
         },
 
         data() {
@@ -76,7 +75,10 @@
                 }
                 axios.get(url)
                     .then((videos) => {
-                        console.log(videos.data.videos);
+                        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
+                        if(typeof videos.data.videos.data == 'object'){
+                            videos.data.videos.data = Object.values(videos.data.videos.data);
+                        }
                         videos.data.videos.data.forEach((video) => {
                             this.videos.push(video[0].video);
                         });
@@ -85,8 +87,6 @@
                         this.totalVideos = videos.data.videos.total;
                         this.numberOfPages = videos.data.videos.last_page
                     });
-
-
             },
 
             getQueryObject(){

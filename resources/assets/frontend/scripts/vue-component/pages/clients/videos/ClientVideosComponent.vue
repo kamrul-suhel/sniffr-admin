@@ -36,7 +36,7 @@
     import PaginationComponent from '../../../includes/PaginationComponent'
     export default {
         components: {
-            assetDownloadComponent: AssetVideoDownloadComponent,
+            assetPurchasedComponent: AssetVideoDownloadComponent,
             paginationComponent: PaginationComponent
         },
 

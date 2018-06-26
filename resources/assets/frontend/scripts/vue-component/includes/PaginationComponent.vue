@@ -8,7 +8,7 @@
                             class="dark"
                             :length="pagination.last_page"
                             v-model="current_page"
-                            :total-visible="total_visiable"
+                            :total-visible="total_visible"
                         ></v-pagination>
                 </v-flex>
             </v-layout>
@@ -21,7 +21,7 @@
         data() {
             return {
                 current_page: 1,
-                total_visiable: 10,
+                total_visible: 12,
             }
         },
 
@@ -88,7 +88,7 @@
             let device = this.$vuetify.breakpoint.name;
 
             if(device === 'xs'){
-                this.total_visiable = 5;
+                this.total_visible = 5;
             }
         },
 
