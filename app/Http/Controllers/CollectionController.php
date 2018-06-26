@@ -97,26 +97,11 @@ class CollectionController extends Controller
 
 		$price = config('pricing.base');
 
-		if($client->location){
-			$price = $price * config('pricing.locations.'.$client->location.'.modifier');
-		}
-
-		if($client->tier){
-			$price = $price * config('pricing.tier.'.$client->tier.'.modifier');
-		}
-
-		if($request->input('license_type')) {
-			$price = $price * config('pricing.type.' . $request->input('license_type') . '.modifier');
-		}
-
-		if($request->input('license_platform')) {
-			$price = $price * config('pricing.platform.'.$request->input('license_platform').'.modifier');
-		}
-
-		if($request->input('license_length')) {
-
-			$price = $price * config('pricing.length.'.$request->input('license_length').'.modifier');
-		}
+		$price = $price * (config('pricing.locations.'.$client->location.'.modifier') ?: 1);
+		$price = $price * (config('pricing.tier.'.$client->tier.'.modifier') ?: 1);
+		$price = $price * (config('pricing.type.' . $request->input('license_type') . '.modifier') ?: 1);
+		$price = $price * (config('pricing.platform.'. $request->input('license_platform') . '.modifier') ?: 1);
+		$price = $price * (config('pricing.length.' . $request->input('license_length') . '.modifier') ?: 1);
 
 		$collectionVideo->final_price = $price;
 		$collectionVideo->save();
