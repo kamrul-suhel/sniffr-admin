@@ -12,20 +12,6 @@ use Illuminate\Http\Response;
 
 class CollectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    public function addToCollection(Request $request)
-    {
-        //
-    }
 
     /**
      * @param  \Illuminate\Http\Request  $request
@@ -115,10 +101,10 @@ class CollectionController extends Controller
      * @param $collection_video_id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function acceptFinalPrice(Request $request, $collection_id, $collection_video_id)
+    public function acceptFinalPrice(Request $request, $collection_video_id)
     {
         $collectionVideo = CollectionVideo::find($collection_video_id);
-        $collection = Collection::find($collection_id);
+        $collection = $collectionVideo->collection;
 
         $collectionVideo->status = "accepted";
         $collectionVideo->save();
@@ -130,17 +116,5 @@ class CollectionController extends Controller
             'collection' => $collection,
             'message' => 'final price has been accepted'
         ], 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 }

@@ -302,7 +302,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     |--------------------------------------------------------------------------
     */
     Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
-    Route::post('collections/accept_price/{collection_id}/{collection_video_id}', 'CollectionController@acceptFinalPrice')->name('client.accept_price');
+    Route::post('collections/accept_price/{collection_video_id}', 'CollectionController@acceptFinalPrice')->name('client.accept_price');
 
     Route::resource('collections', 'CollectionController', ['as' => 'clients']);
 });
