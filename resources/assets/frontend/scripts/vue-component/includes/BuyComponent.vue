@@ -197,25 +197,13 @@
 
             acceptPrice() {
                 if(this.$refs.buy_form.validate()){
-                    // make spinner visible
-                    this.login_progress = true;
-                    this.loading = true;
-
-                    // prepare submitting data
-                    let form_data = new FormData();
-                    form_data.append('video_id', this.video.id);
-                    form_data.append('license_type', this.license_type);
-                    form_data.append('license_platform', this.license_platform);
-                    form_data.append('license_length', this.license_length);
-
                     // submit data with ajax request
-                    axios.post('/collections/store', form_data)
+                    axios.post('/client/collections/accept_price/'+this.collection.collection_video_id)
                         .then(response => {
                             this.login_progress = true;
                             this.loading = false;
-
-
-
+                            console.log('LICENSED VIDEO SUCCESSFULLY');
+                            //TODO WHAT HAPPENS AFTER IT'S LICENCED
                         })
                         .catch(error => {
                             console.log(error);
