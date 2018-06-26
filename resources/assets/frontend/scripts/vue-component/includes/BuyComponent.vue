@@ -25,6 +25,7 @@
                                         item-text="name"
                                         :rules="licenseRules"
                                         :error="validation.error"
+                                        @onBlur="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -39,6 +40,7 @@
                                         item-text="name"
                                         :rules="platformRules"
                                         :error="validation.error"
+                                        @onBlur="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -53,6 +55,7 @@
                                         item-text="name"
                                         :rules="lengthRules"
                                         :error="validation.error"
+                                        @onBlur="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -70,7 +73,7 @@
                                     <p>Current Quote: <strong>£{{ price }}</strong></p>
                                 </div>
                             </v-flex>
-                            
+
                             <v-flex xs6>
                                 <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
@@ -79,8 +82,8 @@
                                         dark
                                         :loading="loading"
                                         :disabled="loading"
-                                        @click="getPrice()">
-                                        Get Price
+                                        @click="acceptPrice()">
+                                        Accept Price
                                     </v-btn>
                                 </div>
                             </v-flex>
@@ -159,10 +162,6 @@
 		},
 
 		methods: {
-		    showPrice(){
-
-            },
-
             openBuyDialog(event){
                 this.open_buy_dialog = event;
             },
@@ -183,9 +182,25 @@
                     });
             },
 
-            getPrice() {
-                if(this.$refs.buy_form.validate()){
+            updatePrice() {
+                let form_data = new FormData();
+                form_data.append('video_id', this.video.id);
+                form_data.append('license_type', this.license_type);
+                form_data.append('license_platform', this.license_platform);
+                form_data.append('license_length', this.license_length);
 
+                // submit data with ajax request
+                axios.post('/client/collections/update_price/'+this.collection.collection_id+'/'+this.collection.collection_video_id, form_data)
+                    .then(response => {
+                        this.price = response.data.price;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+
+            acceptPrice() {
+                if(this.$refs.buy_form.validate()){
                     // make spinner visible
                     this.login_progress = true;
                     this.loading = true;
@@ -203,33 +218,7 @@
                             this.login_progress = true;
                             this.loading = false;
 
-                            let data = response.data;
-                            if(data.error){
-                                this.login_progress = false;
-                                this.loading = false;
-                                this.validation.error = true;
-                                this.validation.message = data.error_message;
-                                return;
-                            }
 
-                            // Set the user store
-                            this.$store.dispatch('getLoginStatus').then((response) => {
-                                // Check is client
-                                console.log(response);
-                                if(data.redirect_url === 'client'){
-                                    let redirect_url = this.$store.getters.getAttepmtRoute;
-                                    console.log(redirect_url);
-                                    if(!redirect_url){
-                                        this.$router.push({name: 'client_stories'});
-                                    }
-                                    LoginEventBus.clientLoginChange();
-                                    return;
-                                }
-
-                                if(data.redirect_url){
-                                    window.location.href = data.redirect_url;
-                                }
-                            });
 
                         })
                         .catch(error => {
