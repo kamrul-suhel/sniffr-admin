@@ -145,10 +145,8 @@
             },
 
             createCollection() {
-                axios.post('/clients/collections/store', {
-                        params: {
-                            video_id: this.video_detail.id
-                        }
+                axios.post('/client/collections', {
+                        'video_id': this.video_detail.id
                     })
                     .then(response => {
                         BuyDialogBoxEventBus.openBuyDialog(response.data, this.video_detail);

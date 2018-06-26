@@ -132,9 +132,7 @@
 		},
 
 		watch: {
-            open_login_dialog() {
-				this.$emit('changeLogin_dialog', this.open_login_dialog);
-			}
+
 		},
 
 		created() {
@@ -143,7 +141,6 @@
                 this.settings = this.$store.getters.getSettingsObject;
                 this.video = video;
                 this.collection = collection;
-
                 Object.values(this.settings.pricing.type).forEach((type) =>{
                     this.licenses.push(type);
                 });
@@ -155,6 +152,8 @@
                 Object.values(this.settings.pricing.length).forEach((length) =>{
                     this.lengths.push(length);
                 });
+
+                this.getInitialPrice();
             });
 		},
 
@@ -170,7 +169,7 @@
             },
 
             getInitialPrice(){
-                axios.get('/clients/collections/get_initial_price/'+this.collection.collection_id+'/'+this.coillection.collection_video_id)
+                axios.get('/client/collections/get_initial_price/'+this.collection.collection_id+'/'+this.coillection.collection_video_id)
                     .then(response => {
                         this.price = response.data.price;
                     })
@@ -232,15 +231,7 @@
                             console.log(error);
                         });
                 }
-            },
-
-            onForgotforgotDialog(){
-                this.open_login_dialog = false;
-                setTimeout(() => {
-                    LoginEventBus.openPasswordResetDialog();
-                }, 500);
-                
-            },
+            }
 		}
 	}
 </script>
