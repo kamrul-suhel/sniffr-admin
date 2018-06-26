@@ -117,9 +117,17 @@ class CollectionController extends Controller
 
         $currentPrice = $collectionVideo->final_price;
 
-        $currentPrice = $currentPrice * config('pricing.type.'.$request->get('licence_type').'.modifier');
-        $currentPrice = $currentPrice * config('pricing.platform.'.$request->get('licence_platform').'.modifier');
-        $currentPrice = $currentPrice * config('pricing.length.'.$request->get('licence_length').'.modifier');
+        if($request->has('licence_type') && $request->get('licence_type') !== null) {
+            $currentPrice = $currentPrice * config('pricing.type.' . $request->get('licence_type') . '.modifier');
+        }
+
+        if($request->has('licence_platform') && $request->get('licence_platform') !== null) {
+            $currentPrice = $currentPrice * config('pricing.platform.'.$request->get('licence_platform').'.modifier');
+        }
+
+        if($request->has('licence_length') && $request->get('licence_platform') !== null) {
+            $currentPrice = $currentPrice * config('pricing.length.'.$request->get('licence_length').'.modifier');
+        }
 
         $collectionVideo->final_price = $currentPrice;
         $collectionVideo->save();
