@@ -64,15 +64,13 @@
                             </v-flex>
                         </v-layout>
 
-                        <v-layout row left>
-                            <v-flex xs3>
-                                <span>£{{ price }}</span>
+                        <v-layout row>
+                            <v-flex xs6>
+                                <h2>£{{ price }}</h2>
                             </v-flex>
-                        </v-layout>
 
-                        <v-layout row rigth>
-                            <v-flex xs3>
-                                <div class="buy-button">
+                            <v-flex xs6>
+                                <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
                                     <v-btn
                                         raised
