@@ -90,7 +90,7 @@ class ClientStoriesController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function getDownloadedStories(Request $request)
+    public function getPurchasedStories(Request $request)
     {
 
         if ($request->ajax()) {

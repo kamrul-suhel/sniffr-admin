@@ -115,12 +115,14 @@
 
 .menu__content{
   box-shadow:none;
-  margin-top: 10px;
+  margin-top:10px;
   //top:120px !important;
 
   .list{
-    background: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.5);
+    padding: 1px 0;
   }
+
   a{
     color:#fff;
     text-decoration:none;
@@ -136,7 +138,28 @@
       width:24px;
     }
   }
+
+  &.menu__content--select{
+    margin-top:0;
+
+    .list{
+      background-color: #fff;
+      color: rgba(255,255,255,0.5);
+      padding: 0;
+    }
+
+    a{
+      color:#888;
+      background-color:rgba(0,0,0,0.1);
+
+      &:hover{
+        color:#fff;
+        background-color:#000 !important;
+      }
+    }
+  }
 }
+
 
 @include small-device{
   .navigation{

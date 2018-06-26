@@ -10,6 +10,7 @@ use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 use App\Video;
+use App\Collection;
 use App\Http\Controllers\Controller;
 use App;
 
@@ -76,25 +77,27 @@ class ClientVideosController extends Controller
     }
 
 
-	public function getDownloadedVideos(Request $request)
+	public function getPurchasedVideos(Request $request)
 	{
 		if ($request->ajax()) {
 			$client_id = Auth::user()->client_id;
 
-			if ($request->search) {
-				$ordered_videos = Video::with('orders')
-					->where('title', 'LIKE', '%' . $request->search . '%')
-					->whereHas('orders', function ($query) use ($client_id) {
-						$query->where('client_id', $client_id);
-					})->get();
-			} else {
-				$ordered_videos = Video::with('orders')
-					->whereHas('orders', function ($query) use ($client_id) {
-						$query->where('client_id', $client_id);
-					})->get();
-			}
+				$purchased_videos = Collection::with('collectionVideos.video');
+				// If search passed through
+				if ($request->search) {
+					$search = $request->search;
+					$purchased_videos = $purchased_videos->whereHas('collectionVideos.video', function ($query) use ($search) {
+						$query->where('title', 'LIKE', '%' . $search . '%');
+					});
+				}
+				$purchased_videos = $purchased_videos->where('client_id', $client_id)
+					->where('status', 'closed')
+					->orderBy('created_at', 'DESC')
+					->get()
+					->pluck('collectionVideos');
+
 			//Paginate collection object
-			$videos = $this->paginate($ordered_videos, self::PAGINATE_PER_PAGE, $request->page);
+			$videos = $this->paginate($purchased_videos, 3, $request->page);
 			$data = [
 				'videos' => $videos,
 			];

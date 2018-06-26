@@ -5,12 +5,12 @@
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
                         height="200px" class="client-video-thumbnail cdi-content">
-                    <div class="cdi-label" v-if="ordered || newOrder">
+                    <div class="cdi-label" v-if="purchased">
                         <v-tooltip top>
                             <v-btn slot="activator" flat icon raised light color="white">
-                                <v-icon size="25px">cloud_done</v-icon>
+                                <v-icon size="25px">money</v-icon>
                             </v-btn>
-                            <span>Downloaded</span>
+                            <span>Download</span>
                         </v-tooltip>
                     </div>
                 </v-card-media>
@@ -64,11 +64,10 @@
         data() {
             return {
                 button_text: 'Download Video',
-                newOrder: false,
+                purchased: false,
                 loading: false,
                 loader: null,
                 showButton: false,
-                ordered: false,
                 hide_download_button: false,
             }
         },
@@ -81,8 +80,6 @@
             var user = this.$store.getters.getUser;
 
             var componentServices = new ComponentServices();
-
-            this.ordered = componentServices.checkOrderExists(this.video.orders, user);
         },
 
         watch: {

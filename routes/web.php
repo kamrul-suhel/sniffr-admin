@@ -277,7 +277,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     |--------------------------------------------------------------------------
     */
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-    Route::get('videos/downloaded', 'Frontend\Client\ClientVideosController@getDownloadedVideos')->name('client.downloaded.videos');
+    Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
 
     /*
     |--------------------------------------------------------------------------
@@ -285,7 +285,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     |--------------------------------------------------------------------------
     */
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
-    Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+    Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
 
     /*
     |--------------------------------------------------------------------------

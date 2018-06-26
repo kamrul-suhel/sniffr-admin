@@ -15,7 +15,7 @@ class CollectionVideo extends Model
 
     public function video()
     {
-        return $this->hasOne(Video::class);
+        return $this->belongsTo(Video::class);
     }
 
 }

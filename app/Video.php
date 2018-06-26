@@ -99,6 +99,14 @@ class Video extends Model
         return $this->belongsTo(Contact::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function collectionVideo()
+	{
+		return $this->belongsTo(CollectionVideo::class);
+	}
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */

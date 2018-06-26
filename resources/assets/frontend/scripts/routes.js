@@ -18,7 +18,7 @@ import ClientStoriesComponent from './vue-component/pages/clients/stories/Client
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
-import ClientDownloadedAssetsComponent from './vue-component/pages/clients/downloaded/ClientDownloadedAssetsComponent';
+import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
 
 
 export const routes = [
@@ -159,9 +159,9 @@ export const routes = [
             },
 
             {
-                path: 'downloaded',
-                name: 'client_downloaded_assets',
-                component: ClientDownloadedAssetsComponent
+                path: 'purchased',
+                name: 'client_purchased_assets',
+                component: ClientPurchasedAssetsComponent,
             },
 
         ],

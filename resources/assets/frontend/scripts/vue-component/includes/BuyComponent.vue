@@ -220,7 +220,7 @@
                             this.loading = false;
                             console.log('LICENSED VIDEO SUCCESSFULLY');
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
-                            this.$router.push('client/videos');
+                            this.$router.push('client/purchased');
                         })
                         .catch(error => {
                             console.log(error);

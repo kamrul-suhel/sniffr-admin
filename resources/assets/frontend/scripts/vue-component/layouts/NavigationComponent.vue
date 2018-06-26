@@ -66,8 +66,8 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link :to="{name: 'client_downloaded_assets'}">
-                                                    <v-icon color="white" size="20px">cloud_done</v-icon> My Downloads
+                                                <router-link :to="{name: 'client_purchased_assets'}">
+                                                    <v-icon color="white" size="20px">cloud_done</v-icon> My Purchases
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
