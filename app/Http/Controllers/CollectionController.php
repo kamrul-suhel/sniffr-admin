@@ -139,11 +139,28 @@ class CollectionController extends Controller
 
     }
 
-    public function acceptFinalPrice(Request $request, $videoId)
+    /**
+     * @param Request $request
+     * @param $collection_id
+     * @param $collection_video_id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function acceptFinalPrice(Request $request, $collection_id, $collection_video_id)
     {
+        $collectionVideo = CollectionVideo::find($collection_video_id);
+        $collection = Collection::find($collection_id);
 
+        $collectionVideo->status = "accepted";
+        $collectionVideo->save();
+
+        $collection->status = "closed";
+        $collection->save();
+
+        return response([
+            'collection' => $collection,
+            'message' => 'final price has been accepted'
+        ], 200);
     }
-
 
     /**
      * Update the specified resource in storage.
