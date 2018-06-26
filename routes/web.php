@@ -301,9 +301,11 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     | Collections Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('collections/get_initial_price/{collection_id}/{collection_video_id}', 'CollectionController@getInitialVideoPrice')->name('clients.get_initial_price');
+    Route::get('collections/get_initial_price/{collection_id}/{collection_video_id}', 'CollectionController@getInitialVideoPrice')->name('client.get_initial_price');
 
-    Route::post('collections/update_price/{collection_id}/{collection_video_id}', 'CollectionController@updatePrice')->name('clients.update_price');
+    Route::post('collections/update_price/{collection_id}/{collection_video_id}', 'CollectionController@updatePrice')->name('client.update_price');
+
+    Route::post('collections/accept_price/{collection_id}/{collection_video_id}', 'CollectionController@acceptFinalPrice')->name('client.accept_price');
 
     Route::resource('collections', 'CollectionController', ['as' => 'clients']);
 });

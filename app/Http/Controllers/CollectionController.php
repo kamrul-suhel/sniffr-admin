@@ -96,8 +96,8 @@ class CollectionController extends Controller
         $collectionVideo = CollectionVideo::find($collectionVideoId);
 
         $price = config('pricing.base');
-        $price += config('pricing.locations.'.$client->location.'.modifier');
-        $price += config('pricing.tier.'.$client->tier.'.modifier');
+        $price = $price * config('pricing.locations.'.$client->location.'.modifier');
+        $price = $price * config('pricing.tier.'.$client->tier.'.modifier');
 
         $collectionVideo->final_price = $price;
         $collectionVideo->save();
@@ -119,17 +119,17 @@ class CollectionController extends Controller
 
         //Get types for dropdown
         if($request->has('licence_type')) {
-            $currentPrice += config('pricing.type.'.$request->get('licence_type'));
+            $currentPrice = $currentPrice * config('pricing.type.'.$request->get('licence_type').'.modifier');
         }
 
         //Get platforms for dropdown
         if($request->has('licence_platform')) {
-            $currentPrice += config('pricing.platform.'.$request->get('licence_platform'));
+            $currentPrice = $currentPrice * config('pricing.platform.'.$request->get('licence_platform').'.modifier');
         }
 
         //Get lengths for dropdown
         if($request->has('licence_length')) {
-            $currentPrice += config('pricing.length.'.$request->get('licence_length'));
+            $currentPrice = $currentPrice * config('pricing.length.'.$request->get('licence_length').'.modifier');
         }
 
         $collectionVideo->final_price = $currentPrice;
@@ -139,11 +139,28 @@ class CollectionController extends Controller
 
     }
 
-    public function acceptFinalPrice(Request $request, $videoId)
+    /**
+     * @param Request $request
+     * @param $collection_id
+     * @param $collection_video_id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function acceptFinalPrice(Request $request, $collection_id, $collection_video_id)
     {
+        $collectionVideo = CollectionVideo::find($collection_video_id);
+        $collection = Collection::find($collection_id);
 
+        $collectionVideo->status = "accepted";
+        $collectionVideo->save();
+
+        $collection->status = "closed";
+        $collection->save();
+
+        return response([
+            'collection' => $collection,
+            'message' => 'final price has been accepted'
+        ], 200);
     }
-
 
     /**
      * Update the specified resource in storage.
