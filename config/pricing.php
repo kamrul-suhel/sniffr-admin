@@ -163,13 +163,13 @@ return [
 		]
 	],
 	'length' => [
-		'1-4' => [
-			'slug' => '1-4',
+		'under_four' => [
+			'slug' => 'under_four',
 			'name' => '1 - 4 years',
 			'modifier' => 1
 		],
-		'5+' => [
-			'slug' => '5+',
+		'five_plus' => [
+			'slug' => 'five_plus',
 			'name' => '5+ years',
 			'modifier' => 1.25
 		],

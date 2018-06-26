@@ -25,7 +25,6 @@
                                         item-text="name"
                                         :rules="licenseRules"
                                         :error="validation.error"
-                                        @change="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -40,7 +39,6 @@
                                         item-text="name"
                                         :rules="platformRules"
                                         :error="validation.error"
-                                        @change="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -55,7 +53,6 @@
                                         item-text="name"
                                         :rules="lengthRules"
                                         :error="validation.error"
-                                        @change="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -136,7 +133,17 @@
 		},
 
 		watch: {
+            license_type(){
+                this.getVideoPrice();
+            },
 
+            license_platform(){
+                this.getVideoPrice();
+            },
+
+            license_length(){
+                this.getVideoPrice();
+            }
 		},
 
 		created() {
@@ -157,7 +164,7 @@
                     this.lengths.push(length);
                 });
 
-                this.getInitialPrice();
+                this.getVideoPrice();
             });
 		},
 
@@ -172,25 +179,14 @@
               this.$refs.buy_form.reset();
             },
 
-            getInitialPrice(){
-                axios.get('/client/collections/get_initial_price/'+this.collection.collection_id+'/'+this.collection.collection_video_id)
-                    .then(response => {
-                        this.price = response.data.price;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
-
-            updatePrice() {
+            getVideoPrice(){
                 let form_data = new FormData();
                 form_data.append('video_id', this.video.id);
                 form_data.append('license_type', this.license_type);
                 form_data.append('license_platform', this.license_platform);
                 form_data.append('license_length', this.license_length);
 
-                // submit data with ajax request
-                axios.post('/client/collections/update_price/'+this.collection.collection_id+'/'+this.collection.collection_video_id, form_data)
+                axios.post('/client/collections/get_video_price/'+this.collection.collection_video_id, form_data)
                     .then(response => {
                         this.price = response.data.price;
                     })

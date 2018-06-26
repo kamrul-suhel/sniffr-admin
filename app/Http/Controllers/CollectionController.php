@@ -89,51 +89,39 @@ class CollectionController extends Controller
      * @param $videoId
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function getInitialVideoPrice(Request $request, $collectionId, $collectionVideoId)
+    public function getVideoPrice(Request $request, $collectionVideoId)
     {
         $user = auth()->user();
         $client = $user->client;
-        $collectionVideo = CollectionVideo::find($collectionVideoId);
+		$collectionVideo = CollectionVideo::find($collectionVideoId);
 
-        $price = $collectionVideo->final_price;
-        $price = $price * config('pricing.locations.'.$client->location.'.modifier') ?? 1;
-        $price = $price * config('pricing.tier.'.$client->tier.'.modifier') ?? 1;
+		$price = config('pricing.base');
 
-        $collectionVideo->final_price = $price;
-        $collectionVideo->save();
+		if($client->location){
+			$price = $price * config('pricing.locations.'.$client->location.'.modifier');
+		}
+
+		if($client->tier){
+			$price = $price * config('pricing.tier.'.$client->tier.'.modifier');
+		}
+
+		if($request->input('license_type')) {
+			$price = $price * config('pricing.type.' . $request->input('license_type') . '.modifier');
+		}
+
+		if($request->input('license_platform')) {
+			$price = $price * config('pricing.platform.'.$request->input('license_platform').'.modifier');
+		}
+
+		if($request->input('license_length')) {
+
+			$price = $price * config('pricing.length.'.$request->input('license_length').'.modifier');
+		}
+
+		$collectionVideo->final_price = $price;
+		$collectionVideo->save();
 
         return response(['price' => $price], 200);
-    }
-
-    /**
-     * @param Request $request
-     * @param $videoId
-     * @param $param
-     */
-    public function updatePrice(Request $request, $collectionId, $collectionVideoId)
-    {
-        $collectionVideo = CollectionVideo::find($collectionVideoId);
-        $collection = Collection::find($collectionId);
-
-        $currentPrice = $collectionVideo->final_price;
-
-        if($request->has('licence_type') && $request->get('licence_type') !== null) {
-            $currentPrice = $currentPrice * (config('pricing.type.' . $request->get('licence_type') . '.modifier') ?? 1);
-        }
-
-        if($request->has('licence_platform') && $request->get('licence_platform') !== null) {
-            $currentPrice = $currentPrice * (config('pricing.platform.'.$request->get('licence_platform').'.modifier') ?? 1);
-        }
-
-        if($request->has('licence_length') && $request->get('licence_platform') !== null) {
-            $currentPrice = $currentPrice * (config('pricing.length.'.$request->get('licence_length').'.modifier') ?? 1);
-        }
-
-        $collectionVideo->final_price = $currentPrice;
-        $collectionVideo->save();
-
-        return response(['price' => $currentPrice], 200);
-
     }
 
     /**
