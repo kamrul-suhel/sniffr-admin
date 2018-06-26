@@ -13,7 +13,7 @@ class CreateQuotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('quotes', function (Blueprint $table) {
+        Schema::create('collection_quotes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->comment('must be admin user');
             $table->integer('video_id')->unsigned();
