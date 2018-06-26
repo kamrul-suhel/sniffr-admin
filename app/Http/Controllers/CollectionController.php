@@ -96,8 +96,8 @@ class CollectionController extends Controller
         $collectionVideo = CollectionVideo::find($collectionVideoId);
 
         $price = $collectionVideo->final_price;
-        $price = $price * config('pricing.locations.'.$client->location.'.modifier');
-        $price = $price * config('pricing.tier.'.$client->tier.'.modifier');
+        $price = $price * config('pricing.locations.'.$client->location.'.modifier') ?? 1;
+        $price = $price * config('pricing.tier.'.$client->tier.'.modifier') ?? 1;
 
         $collectionVideo->final_price = $price;
         $collectionVideo->save();
@@ -118,15 +118,15 @@ class CollectionController extends Controller
         $currentPrice = $collectionVideo->final_price;
 
         if($request->has('licence_type') && $request->get('licence_type') !== null) {
-            $currentPrice = $currentPrice * config('pricing.type.' . $request->get('licence_type') . '.modifier');
+            $currentPrice = $currentPrice * (config('pricing.type.' . $request->get('licence_type') . '.modifier') ?? 1);
         }
 
         if($request->has('licence_platform') && $request->get('licence_platform') !== null) {
-            $currentPrice = $currentPrice * config('pricing.platform.'.$request->get('licence_platform').'.modifier');
+            $currentPrice = $currentPrice * (config('pricing.platform.'.$request->get('licence_platform').'.modifier') ?? 1);
         }
 
         if($request->has('licence_length') && $request->get('licence_platform') !== null) {
-            $currentPrice = $currentPrice * config('pricing.length.'.$request->get('licence_length').'.modifier');
+            $currentPrice = $currentPrice * (config('pricing.length.'.$request->get('licence_length').'.modifier') ?? 1);
         }
 
         $collectionVideo->final_price = $currentPrice;
