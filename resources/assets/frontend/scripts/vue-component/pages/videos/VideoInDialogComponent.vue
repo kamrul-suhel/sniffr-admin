@@ -49,13 +49,13 @@
                         </div>
                     </v-flex>
 
-                    <v-flex xs12>
+                    <!--<v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
                             <div class="video-detail-social-share">
                                 <v-btn href="/" dark block class="dark">Buy Now</v-btn>
                             </div>
                         </v-layout>
-                    </v-flex>
+                    </v-flex>-->
 
                 </v-layout>
             </v-flex>
