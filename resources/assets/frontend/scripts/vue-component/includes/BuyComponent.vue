@@ -8,7 +8,7 @@
                 @keydown.esc="onLoginDialogClose()">
             <v-card raised>
                 <v-card-text class="buy-section">
-                    <v-form method="post" v-model="valid" ref="buy_form">
+                    <v-form method="post" v-model="valid" lazy-validation ref="buy_form">
                         <v-layout row wrap id="buy-section">
 
                             <v-flex xs12>
@@ -78,7 +78,7 @@
                                         raised
                                         dark
                                         :loading="loading"
-                                        :disabled="loading"
+                                        :disabled="disabled"
                                         @click="acceptPrice()">
                                         Accept Price
                                     </v-btn>
@@ -97,6 +97,7 @@
 	export default {
 		data() {
 			return {
+			    disabled: true,
 			    settings: {},
                 price: 0,
                 show_price: false,
@@ -179,7 +180,15 @@
               this.$refs.buy_form.reset();
             },
 
+            disabledCheck(){
+                if(this.license_type && this.license_platform && this.license_length){
+                    this.disabled = false;
+                }
+            },
+
             getVideoPrice(){
+                this.disabledCheck();
+
                 let form_data = new FormData();
                 form_data.append('video_id', this.video.id);
                 form_data.append('license_type', this.license_type);
