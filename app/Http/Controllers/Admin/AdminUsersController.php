@@ -70,7 +70,7 @@ class AdminUsersController extends Controller
     public function store(CreateUserRequest $request)
     {
         $user = new User();
-        $user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email'));
+        $user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom();
         $user->email = $request->input('email');
 
         if (!$request->input('password')) {
@@ -166,7 +166,7 @@ class AdminUsersController extends Controller
             abort(404);
         }
 
-        $user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'1' : $user->username);
+        $user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom() : $user->username);
         $user->email = $request->input('email', $user->email);
         $user->full_name = $request->input('full_name', $user->full_name);
         $user->tel = $request->input('tel', $user->tel);
