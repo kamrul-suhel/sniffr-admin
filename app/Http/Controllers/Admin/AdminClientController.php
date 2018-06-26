@@ -47,6 +47,8 @@ class AdminClientController extends Controller
             ->orderBy('licensed_at', 'DESC')
             ->limit(50);
 
+            dd($videos);
+
         $stories = Story::where([['state', 'licensed']])
             ->orderBy('updated_at', 'DESC')
             ->limit(50);
