@@ -189,7 +189,7 @@ class AdminClientMailerController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id ' . $mailer->alpha_id,
-            'downloaded' => $mailer,
+            'mailer' => $mailer,
             'post_route' => url('admin/mailers/stats'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),
