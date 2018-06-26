@@ -55,7 +55,7 @@ class CollectionController extends Controller
             $collectionVideo->platform = null;
             $collectionVideo->length = null;
             $collectionVideo->class = $video->class;
-            $collectionVideo->final_price = 0;
+            $collectionVideo->final_price = config('pricing.base');
             $collectionVideo->company_location = $user->client->location;
             $collectionVideo->company_tier = $user->client->tier;
             $collectionVideo->status = 'received';
@@ -95,7 +95,7 @@ class CollectionController extends Controller
         $client = $user->client;
         $collectionVideo = CollectionVideo::find($collectionVideoId);
 
-        $price = config('pricing.base');
+        $price = $collectionVideo->final_price;
         $price = $price * config('pricing.locations.'.$client->location.'.modifier');
         $price = $price * config('pricing.tier.'.$client->tier.'.modifier');
 
