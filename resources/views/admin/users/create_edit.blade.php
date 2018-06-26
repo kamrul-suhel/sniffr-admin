@@ -171,10 +171,10 @@
 							@endif
 
 							<p>
-								{{ ($user) ? '(leave empty to keep your original password)' : 'Password will be generated automatically' }}
+								{{ ($user) ? '(leave empty to keep your original password)' : 'Enter a password' }}
 							</p>
 							<input type="password" class="form-control" name="password" id="password" autocomplete="off" value=""
-								   readonly onfocus="this.removeAttribute('readonly');" title="password" @if(!$user) disabled @endif/>
+								   readonly onfocus="this.removeAttribute('readonly');" title="password"/>
 							<span id="result"></span>
 						</div>
 					</div>

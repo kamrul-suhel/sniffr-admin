@@ -70,11 +70,13 @@ class AdminUsersController extends Controller
     public function store(CreateUserRequest $request)
     {
         $user = new User();
-        $user->username = $request->input('username');
+        $user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email'));
         $user->email = $request->input('email');
 
         if (!$request->input('password')) {
             $user->password = Hash::make(VideoHelper::quickRandom());
+        } else {
+            $user->password = Hash::make($request->input('password'));
         }
 
         $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
@@ -109,7 +111,9 @@ class AdminUsersController extends Controller
                 $token
             );
         } else {
-            Password::sendResetLink(['email' => $request->input('email')]);
+            if (!$request->input('password', null)) {
+                Password::sendResetLink(['email' => $request->input('email')]);
+            }
         }
 
         $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
@@ -162,7 +166,7 @@ class AdminUsersController extends Controller
             abort(404);
         }
 
-        $user->username = $request->input('username', $user->username);
+        $user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'1' : $user->username);
         $user->email = $request->input('email', $user->email);
         $user->full_name = $request->input('full_name', $user->full_name);
         $user->tel = $request->input('tel', $user->tel);
