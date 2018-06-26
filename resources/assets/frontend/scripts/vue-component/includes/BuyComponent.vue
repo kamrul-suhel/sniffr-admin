@@ -25,7 +25,7 @@
                                         item-text="name"
                                         :rules="licenseRules"
                                         :error="validation.error"
-                                        @onBlur="updatePrice"
+                                        @change="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -40,7 +40,7 @@
                                         item-text="name"
                                         :rules="platformRules"
                                         :error="validation.error"
-                                        @onBlur="updatePrice"
+                                        @change="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
@@ -55,7 +55,7 @@
                                         item-text="name"
                                         :rules="lengthRules"
                                         :error="validation.error"
-                                        @onBlur="updatePrice"
+                                        @change="updatePrice"
                                         required
                                 ></v-select>
                             </v-flex>
