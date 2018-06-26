@@ -208,19 +208,19 @@
 			$('#show_note').text($(this).val());
 		});
 
-		$('.js-send-downloaded').click(function(e){
+		$('.js-send-mailer').click(function(e){
 			e.preventDefault();
 			if($('#clients').val() == '') {
-				swal({  title: 'Please select some client users', text: '', icon: 'error', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
+				swal({  title: 'Please select some clients', text: '', icon: 'error', closeModal: false, closeOnClickOutside: true, closeOnEsc: true });
 			} else {
-				$('#form-downloaded').submit();
+				$('#form-mailer').submit();
 			}
 		});
 
-		$('.js-save-downloaded').click(function(e){
+		$('.js-save-mailer').click(function(e){
 			e.preventDefault();
 			$('#send_mailer').val(0);
-			$('#form-downloaded').submit();
+			$('#form-mailer').submit();
 		});
 
 	});
