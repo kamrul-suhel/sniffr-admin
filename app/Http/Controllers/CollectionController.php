@@ -72,13 +72,11 @@ class CollectionController extends Controller
         }
 
         return response([
-            'data' => [
-                'collection_id' => $collection->id,
-                'collection_video_id' => $collectionVideo->id,
-                'collection_story_id' => $collectionStory ?? null,
-                ],
-            'message' => "Congratulations. Your Licence has been granted"],
-            200);
+            'collection_id' => $collection->id,
+            'collection_video_id' => $collectionVideo->id,
+            'collection_story_id' => $collectionStory ?? null,
+            'message' => "New collection created."
+        ], 200);
     }
 
     /**
@@ -104,11 +102,7 @@ class CollectionController extends Controller
         $collectionVideo->final_price = $price;
         $collectionVideo->save();
 
-        return response([
-            'data' => [
-                'price' => $price
-            ],
-        ], 200);
+        return response(['price' => $price], 200);
     }
 
     /**
@@ -118,12 +112,30 @@ class CollectionController extends Controller
      */
     public function updatePrice(Request $request, $collectionId, $collectionVideoId)
     {
+        $collectionVideo = CollectionVideo::find($collectionVideoId);
+        $collection = Collection::find($collectionId);
 
-        //TODO - Get licence types for dropdown
+        $currentPrice = $collectionVideo->final_price;
 
-        //TODO - Get platforms for dropdown
+        //Get types for dropdown
+        if($request->has('licence_type')) {
+            $currentPrice += config('pricing.type.'.$request->get('licence_type'));
+        }
 
-        //TODO - Get Licence Lengths for dropdown
+        //Get platforms for dropdown
+        if($request->has('licence_platform')) {
+            $currentPrice += config('pricing.platform.'.$request->get('licence_platform'));
+        }
+
+        //Get lengths for dropdown
+        if($request->has('licence_length')) {
+            $currentPrice += config('pricing.length.'.$request->get('licence_length'));
+        }
+
+        $collectionVideo->final_price = $currentPrice;
+        $collectionVideo->save();
+
+        return response(['price' => $currentPrice], 200);
 
     }
 
