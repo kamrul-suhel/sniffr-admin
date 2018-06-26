@@ -25,9 +25,6 @@
         <strong>password</strong>: <a href="{{ route('password.set_password', ['token' => $email_data['token'], 'email' => $email_data['email']]) }}">click
             here to set your password</a>
         <div>&nbsp;</div>
-        Login here
-        <div>&nbsp;</div>
-        <a href="{{ route('home') }}">{{ route('home') }}</a>
     </div>
 
     <div>&nbsp;</div>

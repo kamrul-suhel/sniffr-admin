@@ -24,10 +24,10 @@
         </v-flex>
 
         <v-flex xs6 sm6 md6 lg1 xl1>
-            <v-switch
+            <v-checkbox
                     color="black"
                     v-model="selected"
-            ></v-switch>
+            ></v-checkbox>
         </v-flex>
 
         <v-flex xs12>

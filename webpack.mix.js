@@ -10,21 +10,47 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js(['resources/assets/js/app.js','resources/assets/js/custom.js'], 'public/assets/js')
-   .js([
-       'resources/assets/admin/js/app.js',
-       'resources/assets/admin/js/custom.js',
-       'resources/assets/admin/js/switch.js'],
-       'public/assets/admin/js'
-   )
-   .sass(
-       'resources/assets/sass/admin.scss',
-       'public/assets/css/admin.css'
-   );
+mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/assets/js')
+    .js([
+            'resources/assets/admin/js/app.js',
+            'resources/assets/admin/js/custom.js',
+            'resources/assets/admin/js/switch.js'],
+        'public/assets/admin/js'
+    )
+    .sass(
+        'resources/assets/sass/admin.scss',
+        'public/assets/css/admin.css'
+    );
 
-    if (mix.inProduction()) {
-        mix.version();
-    }
+if (mix.inProduction()) {
+    mix.version();
+}
+
+/*
+* *********************************************
+* Navigation styles
+* *********************************************
+*/
+mix.sass(
+    'resources/assets/frontend/scss/nav-styles.scss',
+    'public/assets/frontend/css/client/nav-styles.css')
+    .options({
+        processCssUrls: false,
+    })
+    .sourceMaps();
+
+/*
+* *********************************************
+* Footer styles
+* *********************************************
+*/
+mix.sass(
+    'resources/assets/frontend/scss/footer-styles.scss',
+    'public/assets/frontend/css/client/footer-styles.css')
+    .options({
+        processCssUrls: false,
+    })
+    .sourceMaps();
 
 /*
 * *********************************************
@@ -39,20 +65,18 @@ mix.sass(
     })
     .sourceMaps();
 
-    if (mix.inProduction()) {
-        mix.version();
-    }
-
-
+if (mix.inProduction()) {
+    mix.version();
+}
 
 mix.js([
     'resources/assets/frontend/scripts/main.js',
 ], 'public/assets/frontend/scripts/scripts.js')
     .sourceMaps();
 
-    if (mix.inProduction()) {
-        mix.version();
-    }
+if (mix.inProduction()) {
+    mix.version();
+}
 
 if (!mix.inProduction()) {
     mix.webpackConfig({devtool: 'inline-source-map'})
@@ -77,7 +101,7 @@ if (!mix.inProduction()) {
 
 /*
 * *********************************************
-* admin script and scss
+* Admin script and scss
 * *********************************************
 */
 mix.sass(

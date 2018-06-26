@@ -2,7 +2,7 @@
     <v-flex xs12 sm6 md4 lg4 xl3>
         <v-card class="block">
             <v-card-media class="sniffr-media-thumbnail"
-                :src="video.image.includes('instagram.com') ? getInstagramImage(video) : video.image">
+                :src="onGetThumbnailImage()">
                 <a
                 @click.stop="openVideoDialog(video)"
                 class="block-thumbnail"
@@ -58,8 +58,14 @@
                 this.video_image = '/assets/frontend/images/placeholder.png';
             },
 
-            getInstagramImage(){
-                return '/assets/frontend/images/placeholder.png';
+            onGetThumbnailImage(){
+                let thumb = '';
+                if(new RegExp('instagram', 'i').test(this.video.image)){
+                    thumb = '/assets/frontend/images/placeholder.png';
+                }else{
+                    thumb = this.video.image;
+                }
+                return thumb;
             },
 
             goToDetail() {

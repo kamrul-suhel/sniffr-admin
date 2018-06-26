@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\QueueEmailClient;
 use App\Libraries\VideoHelper;
 use Auth;
+use Password;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -69,11 +70,13 @@ class AdminUsersController extends Controller
     public function store(CreateUserRequest $request)
     {
         $user = new User();
-        $user->username = $request->input('username');
+        $user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom();
         $user->email = $request->input('email');
 
         if (!$request->input('password')) {
             $user->password = Hash::make(VideoHelper::quickRandom());
+        } else {
+            $user->password = Hash::make($request->input('password'));
         }
 
         $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
@@ -95,18 +98,22 @@ class AdminUsersController extends Controller
 
         $user->save();
 
-        if (Auth::user()->role == 'client') {
+        if (in_array($user->role, ['client_owner', 'client_admin', 'client'])) {
             $email = $user->getEmailForPasswordReset();
             $this->deleteExisting($user);
 
             $token = $this->getToken($email, $user);
 
             QueueEmailClient::dispatch(
-                $client_id,
+                ($client_id ? $client_id : 0),
                 $request->get('email'),
-                $request->get('full_name'),
+                $request->get('full_name') ?? 'New User',
                 $token
             );
+        } else {
+            if (!$request->input('password', null)) {
+                Password::sendResetLink(['email' => $request->input('email')]);
+            }
         }
 
         $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
@@ -159,7 +166,7 @@ class AdminUsersController extends Controller
             abort(404);
         }
 
-        $user->username = $request->input('username', $user->username);
+        $user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom() : $user->username);
         $user->email = $request->input('email', $user->email);
         $user->full_name = $request->input('full_name', $user->full_name);
         $user->tel = $request->input('tel', $user->tel);

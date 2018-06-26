@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
+use App\RecommendedAsset;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use Illuminate\Support\Facades\Auth;
@@ -106,6 +107,7 @@ class VideoController extends Controller
         $video->title = $request->input('title') ?: ('Untitled ' . $video->alpha_id);
         $video->state = 'new';
         $video->rights = 'ex';
+        $video->terms = Input::get('terms') ? 1 : 0;
         $video->source = Input::get('source');
         $video->ip = $request->ip();
         $video->user_agent = $request->header('User-Agent');
@@ -216,13 +218,22 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
+    	$recommended = [];
         if ($request->ajax() || $request->isJson()) {
             $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
                 ->orderBy('id', 'DESC')
                 ->paginate($this->videos_per_page);
 
+            if(Auth::user()){
+				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+				$recommended = Video::select($this->getVideoFieldsForFrontend())
+					->whereIn('id', $recommendedVids)
+					->paginate(10);
+			}
+
             $data = [
                 'videos' => $videos,
+				'recommended' => $recommended,
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => config('settings.theme'),
                 'pages' => (new Page)->where('active', '=', 1)->get(),

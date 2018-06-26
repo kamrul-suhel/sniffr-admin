@@ -29,7 +29,7 @@
 	<form method="POST" action="{{ ($user) ? route($update_path, ['id' => $user->id]) : route($store_path) }}" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div id="user-badge">
 			<img src="{{ Config::get('site.uploads_url') }}{{ ($user && $user->avatar) ? $user->avatar : 'default.jpg' }}" />
-			<label for="avatar">{{ ($user) ? ucfirst($user->username) . '\'s' : '' }} Profile Image</label>
+			<label for="avatar">{{ ($user) ? ucfirst($user->full_name) . '\'s' : '' }} Profile Image</label>
 			<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
 		</div>
 
@@ -38,7 +38,7 @@
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">
-							First Name
+							Full Name
 						</div>
 						<div class="panel-options">
 							<a href="#" data-rel="collapse">
@@ -48,43 +48,15 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						@if($errors->first('first_name'))
+						@if($errors->first('full_name'))
 							<div class="alert alert-danger">
 								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-								{{ $errors->first('first_name') }}
+								{{ $errors->first('full_name') }}
 							</div>
 						@endif
-						<label for="first_name">First Name</label>
-						<input type="text" class="form-control" name="first_name" id="first_name" autocomplete="off" value="{{
-						($user) ? $user->first_name : old('first_name')
-						}}" />
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-4">
-				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading">
-						<div class="panel-title">
-							Last Name
-						</div>
-						<div class="panel-options">
-							<a href="#" data-rel="collapse">
-								<i class="fa fa-angle-down"></i>
-							</a>
-						</div>
-					</div>
-
-					<div class="panel-body" style="display: block;">
-						@if($errors->first('last_name'))
-							<div class="alert alert-danger">
-								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-								{{ $errors->first('last_name') }}
-							</div>
-						@endif
-						<label for="last_name">Last Name</label>
-						<input type="text" class="form-control" name="last_name" id="last_name" autocomplete="off" value="{{
-						($user) ? $user->last_name : old('last_name')
+						<label for="full_name">Full Name</label>
+						<input type="text" class="form-control" name="full_name" id="full_name" autocomplete="off" value="{{
+						($user) ? $user->full_name : old('full_name')
 						}}" />
 					</div>
 				</div>
@@ -199,10 +171,11 @@
 							@endif
 
 							<p>
-								{{ ($user) ? '(leave empty to keep your original password)' : 'Enter users password:' }}
+								{{ ($user) ? '(leave empty to keep your original password)' : 'Enter a password' }}
 							</p>
 							<input type="password" class="form-control" name="password" id="password" autocomplete="off" value=""
-								   readonly onfocus="this.removeAttribute('readonly');"  title="password"/>
+								   readonly onfocus="this.removeAttribute('readonly');" title="password"/>
+							<span id="result"></span>
 						</div>
 					</div>
 				</div>
@@ -246,6 +219,9 @@
 								</option>
 								<option value="client_admin"{{ ((($user) && ($user->role == 'client_admin')) || (old('role') == 'client_admin')) ? ' selected' : '' }}>
 									Client Admin
+								</option>
+								<option value="client_owner"{{ ((($user) && ($user->role == 'client_owner')) || (old('role') == 'client_owner')) ? ' selected' : '' }}>
+									Client Owner
 								</option>
 							</select>
 						</div>
@@ -296,14 +272,6 @@
 		<input type="submit" value="{{ ($user) ? 'Update' : 'Create' }} User" class="btn btn-success pull-right" />
 	</form>
 
-	@if($user)
-		{!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'form-delete-users-' . $user->id]) !!}
-		<button class="btn btn-danger delete" data-form="users-{{ $user->id }}">
-			<i class="fa fa-trash-o"></i>
-			Delete
-		</button>
-		{!! Form::close() !!}
-	@endif
 	@if(isset($user->id))
 		{!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'form-delete-users-' . $user->id]) !!}
 	    <a href="" class="btn btn-danger delete" data-form="users-{{ $user->id }}">
@@ -339,6 +307,66 @@
 			    }
 			    console.log('test ' + $(this).is( ':checked' ));
 			});
+
+			$('#password').keyup(function() {
+				$('#result').html(checkStrength($('#password').val()))
+			});
+
+			function checkStrength(password) {
+				var strength = 0
+				var field = 'Password is ';
+				if (password.length < 6) {
+					$('#result').removeClass()
+					$('#result').addClass('short')
+					return field+'Too short'
+				}
+				if (password.length > 7) strength += 1
+					// If password contains both lower and uppercase characters, increase strength value.
+				if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1
+					// If it has numbers and characters, increase strength value.
+				if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1
+					// If it has one special character, increase strength value.
+				if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+					// If it has two special characters, increase strength value.
+				if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+					// Calculated strength value, we can return messages
+					// If value is less than 2
+				if (strength < 2) {
+					$('#result').removeClass()
+					$('#result').addClass('weak')
+					return field+'Weak'
+				} else if (strength == 2) {
+					$('#result').removeClass()
+					$('#result').addClass('good')
+					return field+'Good'
+				} else {
+					$('#result').removeClass()
+					$('#result').addClass('strong')
+					return field+'Strong'
+				}
+			}
 		});
 	</script>
+	<style>
+	.short{
+		font-weight:bold;
+		color:#FF0000;
+		font-size:larger;
+	}
+	.weak{
+		font-weight:bold;
+		color:orange;
+		font-size:larger;
+	}
+	.good{
+		font-weight:bold;
+		color:#2D98F3;
+		font-size:larger;
+	}
+	.strong{
+		font-weight:bold;
+		color: limegreen;
+		font-size:larger;
+	}
+	</style>
 @endsection

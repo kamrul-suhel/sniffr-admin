@@ -57,7 +57,13 @@
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
-                <v-flex xs12 class="text-xs-right">
+                <v-flex xs4 class="text-xs-left">
+                    <v-btn @click="onAddStories()">
+                        <v-icon>add</v-icon>
+                        Add Stories
+                    </v-btn>
+                </v-flex>
+                <v-flex xs8 class="text-xs-right">
                     <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
                         Refresh Stories
@@ -76,7 +82,7 @@
                     v-model="active"
                     color="dark"
                     dark
-                    slider-color="primary"
+                    slider-color="black"
             >
                 <v-tab>
                     Stories
@@ -164,7 +170,7 @@
                 let storiesString = JSON.stringify(storiesId);
                 let videosString = JSON.stringify(videosId);
 
-                // send the data to mailer
+                // send the data to downloaded
                 let url = '/admin/mailers/create?videos=' + videosString + '&stories=' + storiesString;
 
                 axios.get(url)
@@ -181,11 +187,9 @@
             onRefreshStories() {
                 this.dialog = true;
 
-                let refreshUrl = '/admin/stories/refresh';
+                let refreshUrl = '/admin/mailers/refresh';
 
                 axios.get(refreshUrl).then((response) => {
-                        console.log("sending refresh stories");
-                        console.log(response);
                         if (response.data.dispatched == false) {
                             this.refreshTitle = 'Stories are already up-to-date.';
                             this.indeterminate = false;
@@ -203,11 +207,9 @@
 
             checkJobs() {
                 setTimeout(() => {
-                    let url = '/admin/stories/checkjobs';
+                    let url = '/admin/mailers/checkjobs';
                     axios.get(url)
                         .then((response) => {
-                            console.log('Sending checkjobs');
-                            console.log(response);
                             if (response.data.jobs == 0) {
                                 this.refreshTitle = 'Stories are now up-to-date.';
                                 this.indeterminate = false;
@@ -219,7 +221,11 @@
                                 this.checkJobs();
                             }
                         });
-                }, 500);
+                }, 5000);
+            },
+
+            onAddStories() {
+                window.location.href = '/admin/stories/create';
             },
         },
     }

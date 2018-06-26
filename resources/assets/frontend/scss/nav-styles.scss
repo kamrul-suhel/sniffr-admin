@@ -1,0 +1,13 @@
+@import "./basic-reset";
+@import "./variables";
+@import "./fonts";
+@import "./mixin";
+@import "./global";
+@import "./plugin";
+@import "../../../../node_modules/vuetify/dist/vuetify.min.css";
+
+/* ************************* NAV style ******************* */
+@import "./layout/nav";
+
+/* ************************* Client section style ******************* */
+@import "pages/client/index";
