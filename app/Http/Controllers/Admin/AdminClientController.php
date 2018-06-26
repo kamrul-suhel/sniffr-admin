@@ -43,9 +43,21 @@ class AdminClientController extends Controller
      */
     public function create()
     {
+        $videos = Video::where('state', 'licensed')
+            ->orderBy('licensed_at', 'DESC')
+            ->limit(50)
+            ->get();
+
+        $stories = Story::where('state', 'licensed')
+            ->orderBy('updated_at', 'DESC')
+            ->limit(50)
+            ->get();
+
         return view('admin.clients.create_edit', [
             'company' => null,
             'user' => null,
+            'videos' => $videos,
+            'stories' => $stories,
         ]);
     }
 
