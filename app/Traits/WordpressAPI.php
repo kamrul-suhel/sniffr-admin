@@ -51,6 +51,29 @@ trait WordpressAPI
 		return $response;
 	}
 
+    private function apiPost($post, $parameters, $req_token = false){
+		if($req_token){
+			$token = $this->getToken();
+		}
+
+		$curl = curl_init();
+
+		curl_setopt($curl, CURLOPT_URL, env('UNILAD_WP_URL').$this->api_path.$post);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
+		if($req_token){
+			curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$token));
+		}
+
+		$response = json_decode(curl_exec($curl)); //or abort(502);
+		$err = curl_error($curl);
+		curl_close($curl);
+
+		return $response;
+	}
+
     /**
      * @get URLs from string (string maybe a url)
      * @param string $string

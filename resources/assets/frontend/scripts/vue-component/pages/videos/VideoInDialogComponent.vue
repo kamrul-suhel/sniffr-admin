@@ -14,12 +14,14 @@
                             <div class="video-title-caption">
                                 <v-layout row wrap justify-center>
                                     <v-flex xs6 v-if="this.video_detail.duration != null">
-                                        <v-icon small>alarm</v-icon> {{video_detail.duration | convertTime}}
+                                        <v-icon small>alarm</v-icon>
+                                        {{video_detail.duration | convertTime}}
                                     </v-flex>
                                     <v-spacer></v-spacer>
 
                                     <v-flex xs6 class="text-xs-right" v-if="video_detail.views">
-                                        <v-icon small >remove_red_eye</v-icon> {{ video_detail.views + 1}} views
+                                        <v-icon small>remove_red_eye</v-icon>
+                                        {{ video_detail.views + 1}} views
                                     </v-flex>
                                 </v-layout>
                             </div>
@@ -47,13 +49,13 @@
                         </div>
                     </v-flex>
 
-                    <v-flex xs12>
+                    <!--<v-flex xs12>
                         <v-layout column wrap align-end class="video-detail-sidebar">
-                            <!--<div class="video-detail-social-share">-->
-                            <!--<v-btn dark block class="dark">License</v-btn>-->
-                            <!--</div>-->
+                            <div class="video-detail-social-share">
+                                <v-btn href="/" dark block class="dark">Buy Now</v-btn>
+                            </div>
                         </v-layout>
-                    </v-flex>
+                    </v-flex>-->
 
                 </v-layout>
             </v-flex>
@@ -67,7 +69,7 @@
     import VideoPlayer from './VideoPlayerComponent';
 
     export default {
-        components:{
+        components: {
             videoPlayer: VideoPlayer
         },
         data() {

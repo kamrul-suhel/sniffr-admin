@@ -14,12 +14,22 @@
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg>
-                <transition-group name="slide-fade" tag="div" class="layout row wrap">
-                    <videoloop-component
-                            v-for="(video, index) in videos"
-                            :video="video"
-                            :key="video.alpha_id">
-                    </videoloop-component>
+
+                <div v-if="logged_in">
+                    <div v-if="recommended.length > 0">
+                        <h3 class="sub-heading">Your Recommended Videos</h3>
+                        <hr>
+                        <transition-group name="slide-fade" tag="div" class="layout row wrap">
+                            <videoloop-component v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
+                        </transition-group>
+                        <br>
+                    </div>
+                </div>
+
+                <h3 class="sub-heading">All Videos</h3>
+                <hr>
+                <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
+                    <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
                 </transition-group>
             </v-container>
         </section>
@@ -45,8 +55,10 @@
             return {
                 data: '',
                 videos: '',
+                recommended: '',
                 paginate: '',
                 current_page: 0,
+                logged_in : false,
 
             }
         },
@@ -58,6 +70,8 @@
         },
 
         created(){
+            this.checkLogin();
+
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
@@ -65,16 +79,35 @@
 
         },
         methods: {
+            checkLogin(){
+                // see user status
+                this.$store.dispatch('getLoginStatus').then((response) => {
+                    this.is_login = this.$store.getters.isUserLogin;
+                    if(this.is_login){
+                        this.user = this.$store.getters.getUser;
+                        this.logged_in = true;
+                    }
+                });
+            },
             setAlldata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                     this.paginate = this.$store.getters.getPaginateObject;
+                });
+
+
+                this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
+                    this.recommended = this.$store.getters.getRecommendedData;
                 });
             },
 
             updateVideodata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
+                });
+
+                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
+                    this.recommended = this.$store.getters.getRecommendedData;
                 });
             },
         }

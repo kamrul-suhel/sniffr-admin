@@ -81,6 +81,10 @@ const getters = {
         return state.video_dialog_current_video;
     },
 
+    getCurrentRecommendedForDialog(state) {
+        return state.video_dialog_current_video;
+    },
+
     getCurrentVideoAlphaId() {
         return state.video_dialog_current_alpha_id;
     },

@@ -22,6 +22,14 @@
   button{
     outline:none;
   }
+
+  .material-icons{
+    font-family: 'Material Icons' !important;
+  }
+
+  .radio, .checkbox{
+    margin-top:0;
+  }
 }
 
 /* Top level element */
