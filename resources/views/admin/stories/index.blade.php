@@ -23,8 +23,8 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<select id="state" name="state" class="selectpicker form-control" title="State">
-                            @foreach(config('stories.states') as $state)
-							<option value="{{ $state }}">{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+                            @foreach(config('stories.states') as $current_state)
+							<option value="{{ $current_state }}" @if($state==@$current_state) selected @endif>{{ ucwords(str_replace('-', ' ', $current_state)) }}</option>
                             @endforeach
 						</select>
 					</div>
@@ -32,7 +32,7 @@
 
 				<div class="col-md-8">
 					<div class="form-group">
-						<input type="text" class="form-control" name="search_value" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+						<input type="text" class="form-control" name="search_value" id="search-input" placeholder="Search..." value="{{ Request::get('search_value') }}"> <i class="fa fa-search"></i>
 					</div>
 				</div>
 			</form>

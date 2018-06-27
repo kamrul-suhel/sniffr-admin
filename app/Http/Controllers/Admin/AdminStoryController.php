@@ -35,11 +35,29 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $state = '';
+        $search_value = $request->input('search_value', null);
+        $state = ($request->input('state', 'all') ? $request->input('state', 'all') : 'all');
 
-        $stories = Story::orderBy('updated_at', 'DESC')->paginate(12);
+        $stories = new Story;
+
+        if ($search_value) {
+            $stories = $stories->where(function ($query) use ($search_value) {
+                $query->where('title', 'LIKE', '%' . $search_value . '%')
+                    ->orWhere('author', 'LIKE', '%' . $search_value . '%')
+                    ->orWhere('excerpt', 'LIKE', '%' . $search_value . '%')
+                    ->orWhere('description', 'LIKE', '%' . $search_value . '%')
+                    ->orWhere('alpha_id', $search_value);
+            });
+        }
+
+        if ($state != 'all') {
+            $stories = $stories->where('state', $state);
+            //session(['state' => $state]); not sure what this does?
+        }
+
+        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
 
         $data = [
             'stories' => $stories,
