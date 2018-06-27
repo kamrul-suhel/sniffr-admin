@@ -308,6 +308,9 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::resource('collections', 'CollectionController', ['as' => 'clients']);
 });
 
+Route::post('client/collections/register_user/{collection_id}', ['as' => 'clients.collections.register_user']);
+Route::post('client/collections/send_pending_email/{$collection_video_id}', ['as' => 'clients.collections.send_pending_email']);
+
 /*
 |--------------------------------------------------------------------------
 | Client Frontend Routes
