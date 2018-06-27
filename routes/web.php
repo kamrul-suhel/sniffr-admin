@@ -271,6 +271,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
    */
     Route::resource('orders', 'OrderController');
 	Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
+	Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
 
     /*
     |--------------------------------------------------------------------------
