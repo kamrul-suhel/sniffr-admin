@@ -14,7 +14,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md6 lg4 xl4>
-            <strong v-html="story.title"></strong>
+            <h4 v-html="story.title"></h4>
             <div v-html="story.excerpt"></div>
         </v-flex>
 

@@ -5,9 +5,13 @@
             <v-flex xs12 sm12 md7 lg7 xl7>
                 <v-container grid-list-sm fluid>
                     <v-layout row wrap>
-                        <v-flex xs6 v-for="asset in assets" :key="asset.id">
+                        <v-flex xs12 sm12 md6 lg6 xl6 v-for="asset in assets" :key="asset.id">
                             <v-card>
-                                <v-card-media :src="asset.url" height="200px"></v-card-media>
+                                <v-card-media :src="getThumbImage(asset)" height="200px" @click="onOpenVideoPlayerDialog(asset)">
+                                    <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
+                                        <v-icon color="light" dark>videocam</v-icon>
+                                    </div>
+                                </v-card-media>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -18,7 +22,13 @@
                 <v-layout row wrap class="video-detail-content">
                     <v-flex xs12>
                         <div clas="video-title">
-                            <h2 v-html="story_detail.title"></h2>
+                            <v-badge left color="dark story-in-dialog-badge" dark v-if="story_detail.flagged == 1">
+                                <v-icon color="red" slot="badge" dark small>whatshot</v-icon>
+                                <h2 v-html="story_detail.title"></h2>
+                            </v-badge>
+
+                            <h2 v-html="story_detail.title" v-else></h2>
+
                             <div class="video-title-caption">
                                 <v-layout row wrap justify-center>
                                     <v-flex xs6>
@@ -28,7 +38,7 @@
                                     <v-spacer></v-spacer>
 
                                     <v-flex xs6 class="text-xs-right">
-                                        <v-icon small>remove_red_eye</v-icon>
+                                        <v-icon small>edit</v-icon>
                                         {{ story_detail.author }}
                                     </v-flex>
                                 </v-layout>
@@ -49,6 +59,7 @@
 <script>
     import StoryDialogBoxEventBus from '../event-bus/story-dialog-box-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
+    import VideoPlayerDialogBoxEventBus from '../event-bus/video-player-dialog-box-event-bus';
 
     export default {
         components: {
@@ -117,6 +128,20 @@
                     StoryDialogBoxEventBus.$emit('setNextPrevButton');
 
                 });
+            },
+
+            onOpenVideoPlayerDialog(asset){
+                if(asset.mime_type === "video/mp4"){
+                    VideoPlayerDialogBoxEventBus.openPlayerDialogBox(asset);
+                }
+            },
+
+            getThumbImage(asset){
+                if(asset.mime_type === "video/mp4") {
+                    return asset.thumbnail;
+                }
+
+                return asset.url;
             },
 
             goToTagSearch(tag) {

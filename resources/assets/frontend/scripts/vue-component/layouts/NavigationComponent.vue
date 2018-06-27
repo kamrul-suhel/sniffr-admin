@@ -26,6 +26,12 @@
                             </li>
 
                             <li>
+                                <router-link to="/stories">
+                                    <v-icon color="white" left>art_track</v-icon> Stories
+                                </router-link>
+                            </li>
+
+                            <li>
                                 <a  @click.stop.prevent="onLoginClick()" v-if="!is_login">
                                     <v-icon color="white" left>lock_open</v-icon> Login
                                 </a>

@@ -28,6 +28,7 @@ trait FrontendResponse
 			'class',
             'url',
             'user_id',
+            'featured',
             'file_watermark_dirty',
             'contact_id',
             'title',

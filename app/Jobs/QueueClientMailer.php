@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\ClientMailer;
 use App\Contact;
+use App\Notifications\SubmissionAlert;
 use App\Story;
 use App\User;
 use App\Asset;
@@ -60,7 +61,7 @@ class QueueClientMailer implements ShouldQueue
         }
 
         //check if user has unsubcribed (user_id!=0)
-		Mail::to($user->email)->send(new ClientStoryList($mailer, $user, $from_name, $from_email));
+		mail()->to($user->email)->send(new ClientStoryList($mailer, $user, $from_name, $from_email));
     }
 
     /**
@@ -73,6 +74,6 @@ class QueueClientMailer implements ShouldQueue
     {
         // Send user notification of failure, etc...
         $user = new User();
-        $user->notify(new ClientMailer('Failed to send an email within a client downloaded, please check user (Id: ' . $this->client_id . ')'));
+        $user->notify(new SubmissionAlert('Failed to send an email within a client downloaded, please check user (Id: ' . $this->client_id . ')'));
     }
 }
