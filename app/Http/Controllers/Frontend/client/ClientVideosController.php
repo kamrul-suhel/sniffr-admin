@@ -116,7 +116,7 @@ class ClientVideosController extends Controller
 			abort(404, 'Asset Not Found');
 		}
 
-		$mailer_id = $video->mailers()->first()->id;
+		$mailer_id = $video->mailers()->first() ? $video->mailers()->first()->id : 0;
 
 		$files[] = $this->getVideoPdf($videoId, false);
 

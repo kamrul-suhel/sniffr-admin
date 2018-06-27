@@ -123,7 +123,7 @@
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
 
-                    this.button_text = this.video_detail.class == 'exceptional' ? 'Request Quote' : 'Buy Now';
+                    this.button_text = this.video_detail.class == 'exceptional' || this.video_detail.class == '' ? 'Request Quote' : 'Buy Now';
 
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);

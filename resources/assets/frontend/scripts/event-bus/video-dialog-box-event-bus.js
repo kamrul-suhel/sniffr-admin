@@ -18,6 +18,11 @@ const VideoDialogBoxEventBus = new Vue({
             this.$emit('videoDialogBoxClose', video);
         },
 
+        closeVideoDialogFromBuy(){
+            this.openVideoDialogBox = false;
+            this.$emit('videoDialogBoxCloseFromBuy');
+        },
+
         closeDialogByTagSearch(tag){
           this.openVideoDialogBox = false;
           this.$emit('videoDialogBoxCloseByTag', tag);

@@ -27,14 +27,14 @@ class SearchController extends Controller
             $settings = config('settings.site');
 
             $videos = Video::where(function ($query) use ($search_value) {
-                $query->where('state', '=', 'licensed')
-                    ->where('title', 'LIKE', '%' . $search_value . '%');
-            })
+                $query->where('title', 'LIKE', '%' . $search_value . '%');
+            	})
                 ->orWhereHas('tags', function ($q) use ($search_value) {
-                    $q->where('state', '=', 'licensed')
-                        ->where('name', 'LIKE', '%' . $search_value . '%');
+                    $q->where('name', 'LIKE', '%' . $search_value . '%');
                 })
-                ->orderBy('licensed_at', 'DESC')
+				->where('state', '=', 'licensed')
+				->where('file', '!=', NULL)
+				->orderBy('licensed_at', 'DESC')
                 ->paginate($settings['posts_per_page']);
 
             $data = [
@@ -58,11 +58,10 @@ class SearchController extends Controller
             $current_video = $this->getCurrentVideo($request->alpha_id);
 
 
-            $featured_videos = Video::where(function ($query) {
-                $query->where([['state', 'licensed'], ['active', 1], ['featured', 1]])
-                    ->orWhere('state', 'licensed')->orderBy('licensed_at', 'DESC');
-            })
-                ->orderBy('featured', 'DESC')
+            $featured_videos = Video::where('state', 'licensed')
+                ->where('featured', 1)
+				->where('file', '!=', NULL)
+				->orderBy('featured', 'DESC')
                 ->orderBy('licensed_at', 'DESC')
                 ->limit(12)
                 ->get();

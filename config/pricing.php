@@ -156,9 +156,14 @@ return [
 			'name' => 'Singapore',
 			'modifier' => 2
 		],
-		'america' => [
-			'slug' => 'america',
-			'name' => 'America',
+		'latin-america' => [
+			'slug' => 'latin-america',
+			'name' => 'Latin America',
+			'modifier' => 2
+		],
+		'north-america' => [
+			'slug' => 'north-america',
+			'name' => 'North America',
 			'modifier' => 2
 		]
 	],

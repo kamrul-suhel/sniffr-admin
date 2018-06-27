@@ -76,23 +76,32 @@ class CollectionController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function getVideoPrice(Request $request, $collectionVideoId)
-    {
-        $user = auth()->user();
-        $client = $user->client;
-		$collectionVideo = CollectionVideo::find($collectionVideoId);
+	{
+		$user = auth()->user();
+		$video = Video::find($request->input('video_id'));
 
-		$price = config('pricing.base');
+		if ($video && $video->class != 'exceptional'){
+			$client = $user->client;
+			$collectionVideo = CollectionVideo::find($collectionVideoId);
 
-		$price = $price * (config('pricing.locations.'.$client->location.'.modifier') ?: 1);
-		$price = $price * (config('pricing.tier.'.$client->tier.'.modifier') ?: 1);
-		$price = $price * (config('pricing.type.' . $request->input('license_type') . '.modifier') ?: 1);
-		$price = $price * (config('pricing.platform.'. $request->input('license_platform') . '.modifier') ?: 1);
-		$price = $price * (config('pricing.length.' . $request->input('license_length') . '.modifier') ?: 1);
+			$price = config('pricing.base');
 
-		$collectionVideo->final_price = $price;
-		$collectionVideo->save();
+			$price = $price * (config('pricing.class.' . $video->class . '.modifier') ?: 1);
+			$price = $price * (config('pricing.locations.' . $client->location . '.modifier') ?: 1);
+			$price = $price * (config('pricing.tier.' . $client->tier . '.modifier') ?: 1);
+			$price = $price * (config('pricing.type.' . $request->input('license_type') . '.modifier') ?: 1);
+			$price = $price * (config('pricing.platform.' . $request->input('license_platform') . '.modifier') ?: 1);
+			$price = $price * (config('pricing.length.' . $request->input('license_length') . '.modifier') ?: 1);
 
-        return response(['price' => $price], 200);
+			$price = round($price, 2);
+
+			$collectionVideo->final_price = $price;
+			$collectionVideo->save();
+
+			return response(['price' => $price], 200);
+		}
+
+		return response(['price' => ''], 200);
     }
 
     /**

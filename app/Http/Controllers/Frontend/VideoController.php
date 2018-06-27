@@ -61,7 +61,43 @@ class VideoController extends Controller
         $this->videoService = $videoService;
     }
 
-    /**
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function index(Request $request)
+	{
+		$recommended = [];
+		if ($request->ajax() || $request->isJson()) {
+			$videos = Video::select($this->getVideoFieldsForFrontend())
+				->where('file', '!=', NULL)
+				->where('state', 'licensed')
+				->orderBy('id', 'DESC')
+				->paginate($this->videos_per_page);
+
+			if(Auth::user()){
+				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+				$recommended = Video::select($this->getVideoFieldsForFrontend())
+					->whereIn('id', $recommendedVids)
+					->paginate(10);
+			}
+
+			$data = [
+				'videos' => $videos,
+				'recommended' => $recommended,
+				'video_categories' => VideoCategory::all(),
+				'theme_settings' => config('settings.theme'),
+				'pages' => (new Page)->where('active', '=', 1)->get(),
+			];
+
+			return $this->successResponse($data);
+		}
+
+		return view('frontend.master');
+	}
+
+
+	/**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function upload()
@@ -210,39 +246,6 @@ class VideoController extends Controller
         }
         // TODO: error response
         response()->json([]);
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-    	$recommended = [];
-        if ($request->ajax() || $request->isJson()) {
-            $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
-                ->orderBy('id', 'DESC')
-                ->paginate($this->videos_per_page);
-
-            if(Auth::user()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
-				$recommended = Video::select($this->getVideoFieldsForFrontend())
-					->whereIn('id', $recommendedVids)
-					->paginate(10);
-			}
-
-            $data = [
-                'videos' => $videos,
-				'recommended' => $recommended,
-                'video_categories' => VideoCategory::all(),
-                'theme_settings' => config('settings.theme'),
-                'pages' => (new Page)->where('active', '=', 1)->get(),
-            ];
-
-            return $this->successResponse($data);
-        }
-
-        return view('frontend.master');
     }
 
     /**

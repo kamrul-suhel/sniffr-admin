@@ -13,6 +13,12 @@
                 <v-flex xs12 sm6 md8 lg8>
                     <nav class="navigation">
                         <ul>
+                            <li v-if="client_login">
+                                <router-link :to="{name: 'client_purchased_assets'}">
+                                    <v-icon color="white" left>money</v-icon> Purchases
+                                </router-link>
+                            </li>
+
                             <li>
                                 <router-link to="/upload">
                                     <v-icon color="white" left>file_upload</v-icon> Upload
@@ -61,14 +67,6 @@
                                                 <a @click.prevent.stop="onClientVideos()">
                                                     <v-icon color="white" left size="20px">video_library</v-icon> My Videos
                                                 </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <router-link :to="{name: 'client_purchased_assets'}">
-                                                    <v-icon color="white" size="20px">cloud_done</v-icon> My Purchases
-                                                </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 

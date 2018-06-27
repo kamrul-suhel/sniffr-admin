@@ -128,6 +128,10 @@
 
             });
 
+            VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
+                this.video_dialog = false;
+            });
+
         },
 
         methods: {

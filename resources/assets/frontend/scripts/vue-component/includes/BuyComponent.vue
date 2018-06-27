@@ -66,7 +66,7 @@
 
                         <v-layout row align-center>
                             <v-flex xs6 >
-                                <div v-if="license_type || license_platform || license_length">
+                                <div v-if="price && (license_type || license_platform || license_length)">
                                     <span>Current Quote: <strong>£{{ price }}</strong></span>
                                 </div>
                             </v-flex>
@@ -80,7 +80,7 @@
                                         :loading="loading"
                                         :disabled="disabled"
                                         @click="acceptPrice()">
-                                        Accept Price
+                                        {{ button_text }}
                                     </v-btn>
                                 </div>
                             </v-flex>
@@ -93,14 +93,16 @@
 </template>
 <script>
     import BuyEventBus from '../../event-bus/buy-dialog-box-event-bus.js';
+    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
 
 	export default {
 		data() {
 			return {
 			    disabled: true,
 			    settings: {},
-                price: 0,
+                price: false,
                 show_price: false,
+                button_text: '',
                 video: {},
                 collection: {},
                 open_buy_dialog: false,
@@ -159,6 +161,8 @@
                 this.settings = this.$store.getters.getSettingsObject;
                 this.video = video;
                 this.collection = collection;
+                this.button_text = this.video.class == 'exceptional' ? 'Request Quote' : 'Accept Price';
+
                 Object.values(this.settings.pricing.type).forEach((type) =>{
                     this.licenses.push(type);
                 });
@@ -172,6 +176,10 @@
                 });
 
                 this.getVideoPrice();
+
+                VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
+                    this.$router.push('client/purchased');
+                });
             });
 		},
 
@@ -204,7 +212,7 @@
 
                 axios.post('/client/collections/get_video_price/'+this.collection.collection_video_id, form_data)
                     .then(response => {
-                        this.price = response.data.price;
+                        this.price = response.data.price ? response.data.price : false;
                     })
                     .catch(error => {
                         console.log(error);
@@ -220,7 +228,30 @@
                             this.loading = false;
                             console.log('LICENSED VIDEO SUCCESSFULLY');
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
-                            this.$router.push('client/purchased');
+
+                            // CLose dialog boxes
+                            this.open_buy_dialog = false;
+                            VideoDialogBoxEventBus.closeVideoDialogFromBuy();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            },
+
+            requestQuote() {
+                if(this.$refs.buy_form.validate()){
+                    // submit data with ajax request
+                    axios.post('/client/collections/accept_price/'+this.collection.collection_video_id)
+                        .then(response => {
+                            this.login_progress = true;
+                            this.loading = false;
+                            console.log('LICENSED VIDEO SUCCESSFULLY');
+                            //TODO WHAT HAPPENS AFTER IT'S LICENCED
+
+                            // CLose dialog boxes
+                            this.open_buy_dialog = false;
+                            VideoDialogBoxEventBus.closeVideoDialogFromBuy();
                         })
                         .catch(error => {
                             console.log(error);
