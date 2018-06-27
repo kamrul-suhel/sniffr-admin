@@ -114,7 +114,7 @@
                                         Videos
                                         <select class="form-control" name="recommend-videos[]" multiple="multiple" style="height:200px;">
                                             @foreach($videos as $video)
-                                                <option value="{{ $video->id }}">{{ $video->title }} - {{ date('d/m/Y', strtotime($video->created_at)) }}</option>
+                                                <option value="{{ $video->id }}">{{ $video->title }} - {{ date('d/m/Y', strtotime($video->licensed_at)) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
