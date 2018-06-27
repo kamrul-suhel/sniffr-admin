@@ -5,7 +5,9 @@
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', function () {
-        return response(config('settings.public'));
+    	$settings['public'] = config('settings.public');
+    	$settings['pricing'] = config('pricing');
+        return response($settings);
     });
     Route::get('/', 'HomeController@index')->name('home');
 
@@ -262,27 +264,48 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
-    /* Frontend */
+
+    /*
+   |--------------------------------------------------------------------------
+   | Orders Controller
+   |--------------------------------------------------------------------------
+   */
     Route::resource('orders', 'OrderController');
 
-    /* Videos */
+    /*
+    |--------------------------------------------------------------------------
+    | Download Videos
+    |--------------------------------------------------------------------------
+    */
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
     Route::get('videos/downloaded', 'Frontend\Client\ClientVideosController@getDownloadedVideos')->name('client.downloaded.videos');
 
-    /* Stories */
+    /*
+    |--------------------------------------------------------------------------
+    | Download Stories
+    |--------------------------------------------------------------------------
+    */
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
     Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
 
-	/* Admin */
+    /*
+    |--------------------------------------------------------------------------
+    | Account and Profile Management
+    |--------------------------------------------------------------------------
+    */
 	Route::get('profile', 'Client\ClientAccountController@myAccount')->name('client.profile.edit');
 	Route::put('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
 	Route::resource('profile/{slug}/users', 'Client\ClientUserController', ['as' => 'clients']);
 
-//    Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
-//    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
-//    Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
-//    Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
-//    Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
+    /*
+    |--------------------------------------------------------------------------
+    | Collections Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
+    Route::post('collections/accept_price/{collection_video_id}', 'CollectionController@acceptFinalPrice')->name('client.accept_price');
+
+    Route::resource('collections', 'CollectionController', ['as' => 'clients']);
 });
 
 /*

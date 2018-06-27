@@ -165,10 +165,6 @@
 
             var browserheight = window.innerHeight;
             this.fullwidth_height = browserheight+'px';
-
-            this.$store.dispatch('setSettingObjectFromServer').then(() => {
-                this.settings = this.$store.getters.getSettingsObject;
-            });
         },
 
         mounted() {

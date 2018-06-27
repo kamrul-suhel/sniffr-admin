@@ -112,6 +112,7 @@ class VideosTableSeeder extends Seeder
                 'maybe' => NULL,
                 'user_id' => NULL,
                 'state' => $state,
+                'class' => $faker->randomElement(['random', 'story', 'nuker', 'big-story', 'exceptional', NULL]),
                 'contact_id' => $faker->randomElement($contactIds),
                 'video_category_id' => $faker->randomElement($videoCategoryIds),
                 'video_collection_id' => $faker->randomElement($videoCollectionIds),

@@ -25,6 +25,7 @@ trait FrontendResponse
             'id',
             'alpha_id',
             'state',
+			'class',
             'url',
             'user_id',
             'file_watermark_dirty',
