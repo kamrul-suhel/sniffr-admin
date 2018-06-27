@@ -7,11 +7,11 @@ use App\Http\Requests\Video\CreateVideoRequest;
 use App\RecommendedAsset;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use App\Page;
+use Auth;
 use App\User;
+use App\Page;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
@@ -162,7 +162,8 @@ class VideoController extends Controller
 
         // Slack notification
         if (env('APP_ENV') == 'prod') {
-            $video->notify(new SubmissionNew($video));
+			$user = new User();
+			$user->slackChannel('submissions')->notify(new SubmissionNew($video));
         }
 
         // thanks notification email
@@ -202,8 +203,8 @@ class VideoController extends Controller
         File: ' . Input::get('user_file') . ',
         Url: ' . Input::get('user_url') . ',
         UserAgent: ' . $_SERVER['HTTP_USER_AGENT'] . '';
-        $user = new User();
-        $user->notify(new SubmissionAlert($alert));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert($alert));
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 
@@ -229,8 +230,8 @@ class VideoController extends Controller
                 abort('404');
             }
 
-            $user = new User();
-            $user->notify(new SubmissionAlert(
+			$user = new User();
+			$user->slackChannel('alerts')->notify(new SubmissionAlert(
                 'watermark test ' . $postHeader .
                 ' (jobId: ' . $postFile->jobId .
                 ', input: ' . $postFile->input->key .

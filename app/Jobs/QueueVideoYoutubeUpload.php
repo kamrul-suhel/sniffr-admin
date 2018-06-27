@@ -2,28 +2,14 @@
 
 namespace App\Jobs;
 
+use App\User;
 use App\Video;
-
-use Redirect;
-use Validator;
-use DateTime;
-use DateInterval;
 use Youtube;
-use Google_Client;
-use Google_Service_YouTube;
-
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
@@ -106,7 +92,8 @@ class QueueVideoYoutubeUpload implements ShouldQueue
                     $disk->move(''.basename($video->file), 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.basename($video->file));
                 }
             } else {
-                $video->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube as no file exists (Id: '.$this->video_id.')'));
+				$user = new User();
+				$user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube as no file exists (Id: '.$this->video_id.')'));
             }
         }
     }
@@ -120,7 +107,7 @@ class QueueVideoYoutubeUpload implements ShouldQueue
      public function failed($exception)
      {
          // Send user notification of failure, etc...
-         $video = new Video();
-         $video->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube (Id: '.$this->video_id.')'));
+		 $user = new User();
+		 $user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to upload to YouTube (Id: '.$this->video_id.')'));
      }
 }

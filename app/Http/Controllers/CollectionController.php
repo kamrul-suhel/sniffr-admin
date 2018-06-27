@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Client;
 use App\Collection;
 use App\CollectionStory;
@@ -12,6 +13,7 @@ use App\Libraries\VideoHelper;
 use App\Traits\Slug;
 use App\User;
 use App\Video;
+use App\Notifications\RequestVideoQuote;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -192,18 +194,25 @@ class CollectionController extends Controller
      * @param $collection_video_id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function sendPendingQuoteEmail(Request $request, $collection_video_id)
+    public function requestVideoQuote(Request $request, $collection_video_id)
     {
+    	$user = Auth::user();
+
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collectionVideo->status = 'requested';
         $collectionVideo->save();
         $collection = $collectionVideo->collection;
 
+		$video = Video::find($collectionVideo->video_id);
+		$client = $collection->client;
+
         QueueEmailPendingQuote::dispatch(
-            $request->get('user_name'),
-            $request->get('user_email'),
+			is_null($user->full_name) ? $user->username : $user->full_name,
+			$user->email,
             $collection
         );
+
+		$user->slackChannel('quotes')->notify(new RequestVideoQuote($user, $video, $client));
 
         return response([
             'message' => 'Email has been sent to new user'

@@ -53,12 +53,11 @@ class SearchController extends Controller
      */
     public function featureVideosInDialog(Request $request)
     {
-
         if ($request->ajax() || $request->isJson()) {
             $current_video = $this->getCurrentVideo($request->alpha_id);
 
-
-            $featured_videos = Video::where('state', 'licensed')
+            $featured_videos = Video::select($this->getVideoFieldsForFrontend())
+				->where('state', 'licensed')
                 ->where('featured', 1)
 				->where('file', '!=', NULL)
 				->orderBy('featured', 'DESC')
@@ -66,14 +65,10 @@ class SearchController extends Controller
                 ->limit(12)
                 ->get();
 
-
             $next_alpha_id = '';
             $previous_alpha_id = '';
 
-            $position = $featured_videos
-                ->pluck('id')
-                ->search($current_video->id);
-
+            $position = $featured_videos->pluck('id')->search($current_video->id);
 
             $check_previous_id = $position - 1;
             if ($check_previous_id >= 0) {
@@ -81,10 +76,9 @@ class SearchController extends Controller
             }
 
             $check_next_id = $position + 1;
-            if ($check_next_id <= 11) {
+            if ($check_next_id < $featured_videos->count()) {
                 $next_alpha_id = $featured_videos[$check_next_id]->alpha_id;
             }
-
 
             $data = [
                 'current_video' => $current_video,

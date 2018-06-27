@@ -4,34 +4,14 @@ namespace App\Jobs;
 
 use App\Video;
 use App\User;
-
 use Youtube;
-
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\Mail\DetailsReminder;
-use App\Mail\DetailsThanks;
-use App\Mail\SubmissionAccepted;
-use App\Mail\SubmissionLicensed;
-use App\Mail\SubmissionRejected;
-use App\Mail\SubmissionThanks;
-use App\Mail\SubmissionThanksNonEx;
-
-use Dumpk\Elastcoder\ElastcoderAWS;
-
 use App\Notifications\SubmissionAlert;
 
 class QueueVideoCheck implements ShouldQueue
@@ -180,8 +160,8 @@ class QueueVideoCheck implements ShouldQueue
 
                 $job_complete = 0;
                 if($this->tries_loop_count==3) { // IF fails after 3 tries then alert
-                    $user = new User();
-                    $user->notify(new SubmissionAlert('a job in the queue has failed to create a watermark file (Id: '.$this->video_id.')'));
+					$user = new User();
+					$user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to create a watermark file (Id: '.$this->video_id.')'));
                 }
             } else {
 
@@ -209,8 +189,8 @@ class QueueVideoCheck implements ShouldQueue
      {
          // Send user notification of failure, etc...
          if($this->tries_loop_count==3) { // IF fails after 3 tries then alert
-             $user = new User();
-             $user->notify(new SubmissionAlert('a job in the queue has failed to find the watermarked file (Id: '.$this->video_id.')'));
+			 $user = new User();
+			 $user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to find the watermarked file (Id: '.$this->video_id.')'));
          }
      }
 }

@@ -27,4 +27,8 @@ class CollectionQuote extends Model
         return $this->hasOne(Story::class);
     }
 
+	public function routeNotificationForSlack()
+	{
+		return 'https://hooks.slack.com/services/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';
+	}
 }

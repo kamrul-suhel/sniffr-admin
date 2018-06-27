@@ -7,7 +7,31 @@
                 class="login-section"
                 @keydown.esc="onBuyDialogClose()">
             <v-card raised>
-                <v-card-text class="buy-section">
+                <v-card-text v-if="show_thanks">
+                    <v-layout row wrap>
+
+                        <v-flex xs12 text-xs-center>
+                            <h2 class="buy-title">Thanks</h2>
+
+                            <p>Thanks for your request, someone from our licensing team will be in touch shortly</p>
+                        </v-flex>
+
+                        <v-flex xs12 text-xs-center>
+                            <div class="buy-button">
+                                <input type="hidden" name="_token"/>
+                                <v-btn
+                                        raised
+                                        dark
+                                        :loading="loading"
+                                        :disabled="disabled"
+                                        @click="closeDialogBoxes()">
+                                    OK
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-card-text>
+                <v-card-text v-else class="buy-section">
                     <v-form method="post" v-model="valid" lazy-validation ref="buy_form">
                         <v-layout row wrap id="buy-section">
 
@@ -79,7 +103,7 @@
                                         dark
                                         :loading="loading"
                                         :disabled="disabled"
-                                        @click="acceptPrice()">
+                                        @click="buttonClicked()">
                                         {{ button_text }}
                                     </v-btn>
                                 </div>
@@ -102,6 +126,7 @@
 			    settings: {},
                 price: false,
                 show_price: false,
+                show_thanks: false,
                 button_text: '',
                 video: {},
                 collection: {},
@@ -178,7 +203,7 @@
                 this.getVideoPrice();
 
                 VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
-                    this.$router.push('client/purchased');
+                    //this.$router.push('client/purchased');
                 });
             });
 		},
@@ -189,10 +214,11 @@
             },
 
 			onBuyDialogClose() {
+                this.show_thanks = false;
                 this.disabled = true;
                 this.buy_dialog = false;
                 this.loading = false;
-                this.$refs.buy_form.reset();
+                //this.$refs.buy_form.reset();
             },
 
             disabledCheck(){
@@ -219,12 +245,25 @@
                     });
             },
 
+            buttonClicked(){
+                if(this.price){
+                    this.acceptPrice();
+                }else{
+                    this.requestQuote();
+                }
+            },
+
+            closeDialogBoxes(){
+                this.open_buy_dialog = false;
+                VideoDialogBoxEventBus.closeVideoDialogFromBuy();
+            },
+
             acceptPrice() {
                 if(this.$refs.buy_form.validate()){
+                    this.loading = true;
                     // submit data with ajax request
                     axios.post('/client/collections/accept_price/'+this.collection.collection_video_id)
                         .then(response => {
-                            this.login_progress = true;
                             this.loading = false;
                             console.log('LICENSED VIDEO SUCCESSFULLY');
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
@@ -241,17 +280,17 @@
 
             requestQuote() {
                 if(this.$refs.buy_form.validate()){
+                    this.loading = true;
+
                     // submit data with ajax request
-                    axios.post('/client/collections/accept_price/'+this.collection.collection_video_id)
+                    axios.post('/client/collections/request_video_quote/'+this.collection.collection_video_id)
                         .then(response => {
-                            this.login_progress = true;
                             this.loading = false;
-                            console.log('LICENSED VIDEO SUCCESSFULLY');
+                            console.log('QUOTE SENT');
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
 
-                            // CLose dialog boxes
-                            this.open_buy_dialog = false;
-                            VideoDialogBoxEventBus.closeVideoDialogFromBuy();
+                            this.show_thanks = true;
+
                         })
                         .catch(error => {
                             console.log(error);

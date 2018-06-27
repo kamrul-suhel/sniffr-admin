@@ -6,6 +6,7 @@ use App\Contract;
 use App\Http\Requests\Contract\DeleteContractRequest;
 use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
+use App\User;
 use App\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
@@ -195,7 +196,8 @@ class ContractController extends Controller
 		QueueEmail::dispatch($video->id, 'contract_signed');
 
         if (env('APP_ENV') != 'local') {
-            $video->notify(new ContractSigned($video));
+			$user = new User();
+			$user->slackChannel('contracts')->notify(new ContractSigned($video));
         }
 
         if ($request->ajax() || $request->isJson()) {

@@ -304,12 +304,19 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     */
     Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
     Route::post('collections/accept_price/{collection_video_id}', 'CollectionController@acceptFinalPrice')->name('client.accept_price');
+	Route::post('collections/request_video_quote/{collection_video_id}', 'CollectionController@requestVideoQuote')->name( 'client.request_video_quote');
 
     Route::resource('collections', 'CollectionController', ['as' => 'clients']);
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Collection Routes
+|--------------------------------------------------------------------------
+*/
 Route::post('client/collections/register_user/{collection_id}', ['as' => 'clients.collections.register_user']);
-Route::post('client/collections/send_pending_email/{$collection_video_id}', ['as' => 'clients.collections.send_pending_email']);
+
 
 /*
 |--------------------------------------------------------------------------

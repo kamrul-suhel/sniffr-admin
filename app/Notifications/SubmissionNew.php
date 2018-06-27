@@ -19,7 +19,7 @@ class SubmissionNew extends Notification
      *
      * @return void
      */
-    public function __construct(Video $video)
+    public function __construct()
     {
         $this->video = $video;
     }
