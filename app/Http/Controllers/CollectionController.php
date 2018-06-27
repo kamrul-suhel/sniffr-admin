@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\Collection;
 use App\CollectionStory;
 use App\CollectionVideo;
+use App\Jobs\QueueEmailCompany;
+use App\Jobs\QueueEmailPendingQuote;
 use App\Libraries\VideoHelper;
+use App\Traits\Slug;
+use App\User;
 use App\Video;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CollectionController extends Controller
 {
+
+    use Slug;
 
     /**
      * @param  \Illuminate\Http\Request  $request
@@ -106,7 +113,6 @@ class CollectionController extends Controller
 
     /**
      * @param Request $request
-     * @param $collection_id
      * @param $collection_video_id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
@@ -126,4 +132,82 @@ class CollectionController extends Controller
             'message' => 'final price has been accepted'
         ], 200);
     }
+
+    /**
+     * Register new user, and email then set password email.
+     * @param Request $request
+     * @param $collection_id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function registerUser(Request $request, $collection_id)
+    {
+        $company_slug = $this->slugify($request->get('company_name'));
+
+        $company_id = Client::insertGetId([
+            'name' => $request->get('company_name'),
+            'slug' => $company_slug,
+        ]);
+
+        $password = VideoHelper::quickRandom();
+
+        $user_id = User::insertGetId([
+            'username' => $company_slug,
+            'email' => $request->get('user_email'),
+            'full_name' => $request->get('user_full_name'),
+            'role' => 'client_owner',
+            'password' => \Hash::make($password),
+            'client_id' => $company_id
+        ]);
+
+        $user = User::find($user_id);
+
+        $client = Client::find($company_id);
+        $client->account_owner_id = null; //set to null as we dont know this person will be the top dog.
+        $client->save();
+
+        $token = app('App\Http\Controllers\Admin\AdminUsersController')->getToken($request->get('user_email'), $user);
+
+        QueueEmailCompany::dispatch(
+            $company_id,
+            $request->get('user_email'),
+            $request->get('user_full_name'),
+            $request->get('user_full_name'),
+            $token
+        );
+
+        $collection = Collection::find($collection_id);
+        $collection->user_id = $user->id;
+        $collection->client_id = $client->id;
+        $collection->save();
+
+        return response([
+            'user' => $user,
+        ], 200);
+
+    }
+
+    /**
+     * Send a newly registered user an email telling them we are looking into their request.
+     * @param Request $request
+     * @param $collection_video_id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function sendPendingQuoteEmail(Request $request, $collection_video_id)
+    {
+        $collectionVideo = CollectionVideo::find($collection_video_id);
+        $collectionVideo->status = 'requested';
+        $collectionVideo->save();
+        $collection = $collectionVideo->collection;
+
+        QueueEmailPendingQuote::dispatch(
+            $request->get('user_name'),
+            $request->get('user_email'),
+            $collection
+        );
+
+        return response([
+            'message' => 'Email has been sent to new user'
+        ], 200);
+    }
+
 }
