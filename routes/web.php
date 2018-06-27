@@ -254,6 +254,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     Route::get('storydialogbox/{alpha_id}', 'SearchController@storyInDialog');
 
+
+    Route::resource('quotes', 'Admin\AdminQuoteController');
 });
 
 
