@@ -225,7 +225,7 @@ class VideoController extends Controller
                 ->paginate($this->videos_per_page);
 
             if(Auth::user()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('video_id');
 				$recommended = Video::select($this->getVideoFieldsForFrontend())
 					->whereIn('id', $recommendedVids)
 					->paginate(10);
