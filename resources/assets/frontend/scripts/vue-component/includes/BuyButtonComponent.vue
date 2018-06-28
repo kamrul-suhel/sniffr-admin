@@ -37,7 +37,10 @@
                 this.video_detail = this.video_detail.video;
             }
 
-            this.button_text = this.video_detail.class == 'exceptional' || this.video_detail.class == '' ? 'Request Quote' : 'Buy Now';
+            this.button_text = this.video_detail.class == 'exceptional'
+            || this.video_detail.class == ''
+                ? 'Request Quote'
+                : 'Buy Now';
         },
 
         mounted() {
@@ -46,7 +49,7 @@
         methods: {
             createCollection() {
                 axios.post('/client/collections', {
-                    'video_id': this.video_detail.id
+                    'video_alpha_id': this.video_detail.alpha_id
                 })
                 .then(response => {
                     BuyDialogBoxEventBus.openBuyDialog(response.data, this.video_detail);

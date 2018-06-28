@@ -22,7 +22,6 @@ const mutations = {
     },
 
     setRecommendedData(state, data){
-        console.log(data);
         state.recommended = data.recommended.data;
     },
 

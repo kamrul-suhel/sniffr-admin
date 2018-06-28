@@ -71,7 +71,6 @@
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
                         this.ini_state = true;
-                        console.log(this.stories);
                     });
             }
         }

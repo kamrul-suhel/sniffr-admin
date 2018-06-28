@@ -70,7 +70,6 @@
 
         watch: {
             story_dialog() {
-                console.log(this.story_dialog);
                 if(this.story_dialog === false){
                     setTimeout(() => {
                         this.$store.commit('setResetStoryDialogObject');

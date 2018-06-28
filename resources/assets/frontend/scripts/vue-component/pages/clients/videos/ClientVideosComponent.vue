@@ -50,8 +50,6 @@
         watch: {
             '$route'(to, from, next) {
                 this.getClientMailVideos();
-
-                console.log(videos);
             }
         },
 

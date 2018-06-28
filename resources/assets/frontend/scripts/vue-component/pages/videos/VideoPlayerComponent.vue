@@ -90,9 +90,7 @@
 
             VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
                 this.showVideo = false;
-            })
-
-            console.log(this.video);
+            });
         },
 
         methods: {

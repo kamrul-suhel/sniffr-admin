@@ -83,11 +83,12 @@
                     <div class="panel-heading">Offered Collections</div>
                     <div class="panel-body" style="">
                         @foreach($offeredCollections as $collection)
-                            <h4>Collection: <b>{{ $collection->name }}</b></h4>
+                            <h4>Collection: <b>{{ $collection->name }}</b> }}</h4>
                             @foreach($collection->collectionVideos as $videoCollection)
                                 <h5>Offered Videos ({{ $collection->collectionVideos->count() }})</h5>
                                 <table class="table table-condensed table-striped">
                                     <thead>
+                                    <th style="width: 10%;" class="text-center"><small>Time</small></th>
                                     <th style="width: 10%;" class="text-center"><small>User</small></th>
                                     <th style="width: 10%;" class="text-center"><small>Company</small></th>
                                     <th style="width: 10%;" class="text-center"><small>Video</small></th>
@@ -100,6 +101,7 @@
                                         {{ method_field('delete') }}
 
                                         <tr class="text-center">
+                                            <td>{{ date('d M Y at H:i:s', strtotime($videoCollection->updated_at)) }}</td>
                                             <td>
                                                 <small><b>{{ $videoCollection->collection->user->full_name ?? $videoCollection->collection->user->username }}</b></small> <br>
                                                 <small>Email: <b>{{ $videoCollection->collection->user->email }}</b> </small> <br>

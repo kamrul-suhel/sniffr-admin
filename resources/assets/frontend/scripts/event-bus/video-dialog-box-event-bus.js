@@ -9,7 +9,6 @@ const VideoDialogBoxEventBus = new Vue({
     methods: {
         openVideoDialog(alpha_id){
             this.openVideoDialogBox = true;
-            console.log(alpha_id);
             this.$emit('videoDialogStateChange', alpha_id);
         },
 
