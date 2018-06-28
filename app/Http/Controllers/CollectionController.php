@@ -125,8 +125,47 @@ class CollectionController extends Controller
     {
 		$isJson = $request->ajax();
 
+		$user = auth()->user();
+		$client = $user->client;
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collection = $collectionVideo->collection;
+
+        if($client->id !== $collection->client_id) {
+            if($isJson) {
+                return response([
+                    'collection' => null,
+                    'message' => 'You do not have permission to accept this quote',
+                    'error' => true,
+                ], 200);
+            }
+            return redirect('/videos');
+        }
+
+        if($user->id !== $collection->user_id) {
+            if($isJson) {
+                return response([
+                    'collection' => null,
+                    'message' => 'This quote does not belong to you',
+                    'error' => true
+                ], 200);
+            }
+
+            return redirect('/videos');
+        }
+
+        if($collection->status != 'open'
+            || $collectionVideo->status == 'purchased'
+            || $collectionVideo->status == 'downloaded') {
+            if($isJson) {
+                return response([
+                    'collection' => null,
+                    'message' => 'This collection has been closed',
+                    'error' => true
+                ], 200);
+            }
+
+            return redirect('/videos');
+        }
 
         $collectionVideo->status = "purchased";
         $collectionVideo->save();
