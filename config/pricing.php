@@ -90,7 +90,7 @@ return [
 			'modifier' => 0
 		]
 	],
-	'location' => [
+	'region' => [
 		'eastern-europe' => [
 			'slug' => 'eastern-europe',
 			'name' => 'Eastern Europe',

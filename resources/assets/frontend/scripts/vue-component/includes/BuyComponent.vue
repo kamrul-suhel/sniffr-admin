@@ -218,7 +218,6 @@
                 this.disabled = true;
                 this.buy_dialog = false;
                 this.loading = false;
-                //this.$refs.buy_form.reset();
             },
 
             disabledCheck(){
@@ -269,6 +268,7 @@
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
 
                             // CLose dialog boxes
+                            this.$refs.buy_form.reset();
                             this.open_buy_dialog = false;
                             VideoDialogBoxEventBus.closeVideoDialogFromBuy();
                         })
@@ -288,9 +288,8 @@
                             this.loading = false;
                             console.log('QUOTE SENT');
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
-
+                            this.$refs.buy_form.reset();
                             this.show_thanks = true;
-
                         })
                         .catch(error => {
                             console.log(error);

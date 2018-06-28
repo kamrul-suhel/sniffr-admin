@@ -128,7 +128,7 @@ class VideosTableSeeder extends Seeder
                 'referrer' => 0,
                 'credit' => NULL,
                 'active' => $faker->boolean(80),
-                'featured' => (($state == 'licensed') && !$social_video) ? $faker->boolean(4) : 0,
+                'featured' => (($state == 'licensed') && !$social_video) ? 1 : 0,
                 'views' => $faker->numberBetween(0, 1000),
                 'image' => $social_video ? $social_video_data['image'] : $video_data['image'],
                 'thumb' => $social_video ? $social_video_data['image'] : $video_data['image'],
