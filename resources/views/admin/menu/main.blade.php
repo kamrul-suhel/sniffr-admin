@@ -144,7 +144,7 @@
 
     <li class="{{ Request::segment(2) == 'quotes' ? 'active' : '' }}">
         <a href="{{ url('admin/quotes') }}" class="tlink">
-            <i class="fa fa-exclamation"></i><small class="badge">12</small>
+            <i class="fa fa-exclamation"></i><small class="badge">{{ \App\Collection::where('status', 'open')->count() }}</small>
             <span class="title">Quotes</span>
         </a>
     </li>
