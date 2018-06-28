@@ -5,11 +5,11 @@
 <div id="admin-container">
 <!-- This is where -->
 
-	<ol class="breadcrumb"> <li> <a href="/admin/stories"><i class="fa fa-newspaper-o"></i>All Stories</a> </li> <li class="active">@if(!empty($story->id)) <strong>{{ $story->title }}</strong> @else <strong>New Story</strong> @endif</li> </ol>
+	<ol class="breadcrumb"> <li> <a href="/admin/stories"><i class="fa fa-tasks"></i> Stories</a> </li> <li class="active">@if(!empty($story->id)) <strong>{{ $story->title }}</strong> @else <strong>New Story</strong> @endif</li> </ol>
 
-	<div class="admin-section-title" style="background:#1976d2;color:#fff;">
+	<!-- <div class="admin-section-title" style="background:#1976d2;color:#fff;">
 		<p>This feature is currently in development (please be gentle).</p>
-	</div>
+	</div> -->
 
 	<div class="admin-section-title">
 	@if(empty($story->id))
@@ -68,6 +68,22 @@
 
 					</div>
 
+					<div class="col-sm-12">
+
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Story Excerpt / Notes</div>
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+							<div class="panel-body" style="display: block;">
+								<textarea class="form-control" name="excerpt" id="excerpt">@if(!empty($story->excerpt)){{ htmlspecialchars($story->excerpt) }}@endif</textarea>
+							</div>
+						</div>
+
+					</div>
+
 					<div class="col-sm-6">
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
@@ -109,22 +125,6 @@
 						</div>
 					</div>
 
-					<div class="col-sm-12">
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Source URL</div>
-
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-								</div>
-							</div>
-
-							<div class="panel-body" style="display: block;">
-								<input type="text" class="form-control" name="source" id="source" placeholder="http://" value="@if(!empty($story->source)){{ $story->source }}@endif" />
-							</div>
-						</div>
-					</div>
-
 				</div>
 
 			</div>
@@ -136,7 +136,7 @@
 					<div class="col-sm-12">
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">Story Thumbnail (not yet working)</div>
+								<div class="panel-title">Source URL</div>
 
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
@@ -144,11 +144,29 @@
 							</div>
 
 							<div class="panel-body" style="display: block;">
+								<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="http://" value="@if(!empty($story->source)){{ $story->source }}@endif" />
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-12">
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Story Thumbnail</div>
+
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+
+							<div class="panel-body" style="display: block;">
+								<img id="story_image_source" src="@if(!empty($story->thumb)){{ $story->thumb }}@endif" border="0">
 								<span class="input-group">
 						            <span class="input-group-addon">
 						                Upload Image
 						            </span>
-						            <input type="file" multiple="true" class="form-control" name="image" id="image"/>
+									<input type="text" class="form-control" name="story_image_source_url" id="story_image_source_url" placeholder="" value="@if(!empty($story->thumb)){{ $story->thumb }}@endif" />
+						            <input type="file" multiple="true" class="form-control" name="story_image" id="story_image"/>
 						        </span>
 							</div>
 						</div>
@@ -183,6 +201,7 @@
 
 		@if(isset($story->id))
 			<input type="hidden" id="id" name="id" value="{{ $story->id }}" />
+			<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $story->alpha_id }}" />
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
@@ -200,6 +219,17 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		tinymce.init({
+			relative_urls: false,
+		    selector: '#description',
+		    toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor | code",
+		    plugins: [
+		         "advlist autolink link image code lists charmap print preview hr anchor pagebreak spellchecker code fullscreen",
+		         "save table contextmenu directionality emoticons template paste textcolor code"
+		   ],
+		   menubar:false,
+		 });
 
 	});
 

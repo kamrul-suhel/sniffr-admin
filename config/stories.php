@@ -21,6 +21,37 @@ return [
         'edits-rejected',
         'published'
     ],
+    'decisions' => [
+		'new' => [
+			'unapproved',
+		],
+        'pickup' => [
+			'approved',
+            'unlicensed',
+            'licensed',
+		],
+        'licensing' => [
+			'licensing',
+		],
+        'licensed' => [
+			'licensed',
+            'hacks-unassigned',
+		],
+        'editorial-pickup' => [
+			'writing-inprogress',
+            'writing-completed',
+            'subs-unassigned',
+            'subs-inprogress',
+            'subs-approved',
+            'subs-rejected',
+		],
+        'published' => [
+			'licensed',
+		],
+        'archived' => [
+			'rejected',
+		],
+    ],
     'priorities' => [
         'high',
         'medium',
@@ -32,7 +63,7 @@ return [
     ],
     'colors' => [
         'unapproved' => 'default',
-        'accepted' => 'default',
+        'approved' => 'default',
         'rejected' => 'danger',
         'unlicensed' => 'warning',
         'licensing' => 'warning',

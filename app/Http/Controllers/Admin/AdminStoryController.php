@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
+use Goutte;
 use Auth;
 use Validator;
 use Redirect;
@@ -39,6 +40,7 @@ class AdminStoryController extends Controller
     {
         $search_value = $request->input('search_value', null);
         $state = ($request->input('state', 'all') ? $request->input('state', 'all') : 'all');
+        $decision = $request->input('decision', null);
 
         $stories = new Story;
 
@@ -52,6 +54,25 @@ class AdminStoryController extends Controller
             });
         }
 
+        // create decision point and only display states within it
+        if($decision) {
+            $state = 'all';
+            foreach(config('stories.decisions') as $decision_state_key => $decision_state) {
+                if($decision==$decision_state_key) {
+                    $count=1;
+                    foreach($decision_state as $state_key => $state_value) {
+                        //echo $state_value. "<br />";
+                        if($count==0) {
+                            $stories = $stories->where('state', $state_value);
+                        } else {
+                            $stories = $stories->orWhere('state', $state_value);
+                        }
+                        $count++;
+                    }
+                }
+            }
+        }
+
         if ($state != 'all') {
             $stories = $stories->where('state', $state);
             //session(['state' => $state]); not sure what this does?
@@ -62,6 +83,7 @@ class AdminStoryController extends Controller
         $data = [
             'stories' => $stories,
             'state' => $state,
+            'decision' => $decision,
             'users' => User::all(),
             'user' => Auth::user(),
         ];
@@ -126,13 +148,18 @@ class AdminStoryController extends Controller
         $story = new Story();
         $story->alpha_id = VideoHelper::quickRandom();
         $story->state = (Input::get('state') ? Input::get('state') : 'unapproved');
-        $story->title = Input::get('title');
+        $story->title = ucwords(Input::get('title'));
         $story->description = (Input::get('description') ? Input::get('description') : NULL);
-        //$story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : NULL);
+        $story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : NULL);
         $story->source = (Input::get('source') ? Input::get('source') : NULL);
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : Auth::user()->id);
         //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
+
+        if (Input::get('story_image_source_url')) {
+            $story->thumb = Input::get('story_image_source_url');
+        }
+
         $story->save();
 
         if (Input::get('videos')) {
@@ -192,8 +219,16 @@ class AdminStoryController extends Controller
             $story->description = Input::get('description');
         }
 
+        if (Input::get('excerpt')) {
+            $story->excerpt = Input::get('excerpt');
+        }
+
         if (Input::get('source')) {
             $story->source = Input::get('source');
+        }
+
+        if (Input::get('story_image_source_url')) {
+            $story->thumb = Input::get('story_image_source_url');
         }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
@@ -205,7 +240,7 @@ class AdminStoryController extends Controller
 
         $story->save();
 
-        return Redirect::to('admin/stories/edit' . '/' . $story->alpha_id)->with([
+        return Redirect::to('admin/stories')->with([
             'note' => 'Successfully Updated Story!',
             'note_type' => 'success'
         ]);
@@ -264,9 +299,9 @@ class AdminStoryController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update_field(Request $request)
+    public function updateField(Request $request)
     {
         $isJson = $request->ajax();
         $id = $request->input('story_id');
@@ -310,6 +345,49 @@ class AdminStoryController extends Controller
                 'field_value' => ($field_value ? $field_value : NULL),
                 'story_id' => ($story ? $story->id : 0),
                 'story_alpha_id' => ($story ? $story->alpha_id : 0),
+            ]);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSource(Request $request)
+    {
+        $this->selected = NULL;
+        $id = $request->input('story_id');
+        $url = $request->input('url');
+
+        if($url) {
+            $crawler = Goutte::request('GET', $url);
+            $crawler->filter('img')->each(function($element){
+                if (strpos($element->attr('src'), 'jpg')||strpos($element->attr('src'), 'png')) {
+                    list($width, $height, $type, $attr) = getimagesize($element->attr('src'));
+                    if($width>400) {
+                       $this->selected = $element->attr('src');
+                    }
+                }
+            });
+        }
+
+        if($this->selected) {
+            if($id) {
+                $story = Story::where('alpha_id', $id)
+                    ->first();
+                $story->source = $this->selected;
+                $story->save();
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Success',
+                'url' => $this->selected,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error',
             ]);
         }
     }
