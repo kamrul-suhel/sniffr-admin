@@ -40,19 +40,8 @@
 
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
-
-                                <v-btn
-                                        dark
-                                        block
-                                        large
-                                        class="dark"
-                                        :loading="loading"
-                                        :disabled="loading"
-                                        @click="onDownloadVideo()"
-                                >{{ button_text }}</v-btn>
-
+                                <buy-button-component></buy-button-component>
                             </v-flex>
-
                         </v-layout>
                     </v-flex>
                 </v-layout>
@@ -62,11 +51,13 @@
 </template>
 
 <script>
-    import VideoPlayer from '../../videos/VideoPlayerComponent'
+    import VideoPlayer from '../../videos/VideoPlayerComponent';
+    import BuyButtonComponent from "../../../includes/BuyButtonComponent";
 
     export default {
         components: {
-            VideoPlayer
+            VideoPlayer,
+            BuyButtonComponent
         },
 
         data() {
