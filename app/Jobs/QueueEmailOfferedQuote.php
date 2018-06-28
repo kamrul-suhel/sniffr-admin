@@ -3,33 +3,34 @@
 namespace App\Jobs;
 
 use App\Collection;
-use App\Mail\Quotes\CollectionQuote;
+use App\CollectionVideo;
+use App\Mail\Quotes\OfferQuote;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class QueueCollectionQuote implements ShouldQueue
+class QueueEmailOfferedQuote implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-	protected $video;
-	protected $account_owner_email;
+    protected $username, $email, $collectionVideo;
 
 	public $tries = 5;
 	public $timeout = 120;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * QueueEmailOfferedQuote constructor.
+     * @param string $username
+     * @param string $email
+     * @param CollectionVideo $collection
      */
-    public function __construct(string $username, string $email, Collection $collection)
+    public function __construct(string $username, string $email, CollectionVideo $collection)
     {
     	$this->username = $username;
     	$this->email = $email;
-        $this->collection = $collection;
+        $this->collectionVideo = $collection;
     }
 
     /**
@@ -39,9 +40,9 @@ class QueueCollectionQuote implements ShouldQueue
      */
     public function handle()
     {
-		\Mail::to($this->email)->send(new CollectionQuote([
+		\Mail::to($this->email)->send(new OfferQuote([
 			'username' => $this->username,
-			'collection' => $this->collection
+			'collectionVideo' => $this->collectionVideo
 		]));
     }
 }
