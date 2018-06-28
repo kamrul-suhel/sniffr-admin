@@ -37,8 +37,8 @@
                                                 </td>
                                                 <td>
                                                     <small><b>{{ $videoCollection->collection->user->client->name ?? 'unknown' }} </b> <br></small>
-                                                    <small>Location: <b>{{ $videoCollection->company_location ?? 'unknown' }}</b><br></small>
-                                                    <small>Tier:     <b>{{ $videoCollection->compant_tier ?? 'unknown' }}    </b><br></small>
+                                                    <small>Location: <b>{{ $videoCollection->user->client->company_location ?? 'unknown' }}</b><br></small>
+                                                    <small>Tier:     <b>{{ $videoCollection->user->client->compant_tier ?? 'unknown' }}    </b><br></small>
                                                 </td>
                                                 <td>
                                                     <small>

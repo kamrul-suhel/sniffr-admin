@@ -5,17 +5,16 @@ namespace App\Mail\Quotes;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CollectionQuote extends Mailable
+class OfferQuote extends Mailable
 {
     use Queueable, SerializesModels;
 
     protected $data;
+
     /**
-     * Create a new message instance.
-     *
-     * @return void
+     * OfferQuote constructor.
+     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -29,7 +28,9 @@ class CollectionQuote extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.quotes.collection')
-            ->subject('SNIFFR - Your Request is being reviewed');
+
+        return $this->view('emails.quotes.offered')
+            ->subject('SNIFFR - You have a new quote!')
+            ->with('data', $this->data);
     }
 }

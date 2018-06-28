@@ -6,6 +6,8 @@ use App\Collection;
 use App\CollectionQuote;
 use App\CollectionVideo;
 use App\Http\Controllers\Controller;
+use App\Jobs\QueueEmailOfferedQuote;
+use App\Jobs\QueueEmailPendingQuote;
 use Illuminate\Http\Request;
 
 class AdminQuoteController extends Controller {
@@ -65,9 +67,14 @@ class AdminQuoteController extends Controller {
         $collectionQuote->price = $request->get('final_price');
         $collectionQuote->save();
 
-        //TODO email client of offer
+        QueueEmailOfferedQuote::dispatch(
+            $collectionVideo->collection->user->full_name ??
+            $collectionVideo->collection->user->first_name ??
+            $collectionVideo->collection->user->username,
+            $collectionVideo->collection->user->email,
+            $collectionVideo
+        );
 
-        //TODO redirect back to quotes page
         return redirect('admin/quotes');
     }
 
