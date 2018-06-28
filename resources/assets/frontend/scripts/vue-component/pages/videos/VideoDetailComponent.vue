@@ -61,13 +61,7 @@
                                     </ul>
                                 </div>
 
-                                <!--<v-flex xs12 class="mt-1">-->
-                                    <!--<v-layout column wrap align-end class="video-detail-sidebar">-->
-                                        <!--<div class="video-detail-social-share">-->
-                                            <!--<v-btn dark block class="dark">License</v-btn>-->
-                                        <!--</div>-->
-                                    <!--</v-layout>-->
-                                <!--</v-flex>-->
+                                <buy-button-component></buy-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
@@ -82,10 +76,12 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
+    import BuyButtonComponent from "../../includes/BuyButtonComponent";
 
     export default {
         components: {
-            VideoPlayer
+            BuyButtonComponent,
+            videoPlayer: VideoPlayer
         },
 
         data() {

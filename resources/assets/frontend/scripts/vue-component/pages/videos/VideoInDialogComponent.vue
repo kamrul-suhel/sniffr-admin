@@ -49,14 +49,7 @@
                         </div>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <v-layout column wrap align-end class="video-detail-sidebar">
-                            <div class="video-detail-social-share">
-                                <v-btn dark block class="dark" @click.stop="createCollection()">{{ button_text }}</v-btn>
-                            </div>
-                        </v-layout>
-                    </v-flex>
-
+                    <buy-button-component></buy-button-component>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -68,18 +61,18 @@
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
+    import BuyButtonComponent from "../../includes/BuyButtonComponent";
 
     export default {
         components: {
+            BuyButtonComponent,
             videoPlayer: VideoPlayer
         },
         data() {
             return {
                 video_detail: '',
                 tags: [],
-                button_text: 'Buy Now',
                 ready_to_show: true,
-
                 content_padding: true,
             }
         },
@@ -124,8 +117,6 @@
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
-
-                    this.button_text = this.video_detail.class == 'exceptional' || this.video_detail.class == '' ? 'Request Quote' : 'Buy Now';
 
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
