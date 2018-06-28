@@ -10,10 +10,10 @@
                 </v-flex>
             </v-layout>
 
-            <asset-download-component
+            <asset-video-download-component
                     v-for="(video, index) in videos.data"
                     :key="index"
-                    :video="video"></asset-download-component>
+                    :video="video"></asset-video-download-component>
         </v-container>
 
         <v-container grid-list-xl v-if="videos.data.length <= 0">
@@ -36,7 +36,7 @@
     import PaginationComponent from '../../../includes/PaginationComponent'
     export default {
         components: {
-            assetPurchasedComponent: AssetVideoDownloadComponent,
+            assetVideoDownloadComponent: AssetVideoDownloadComponent,
             paginationComponent: PaginationComponent
         },
 
@@ -50,6 +50,8 @@
         watch: {
             '$route'(to, from, next) {
                 this.getClientMailVideos();
+
+                console.log(videos);
             }
         },
 
