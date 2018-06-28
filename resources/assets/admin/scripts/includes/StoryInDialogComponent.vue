@@ -6,8 +6,9 @@
                 <v-container grid-list-sm fluid>
                     <v-layout row wrap>
                         <v-flex xs12 sm12 md6 lg6 xl6 v-for="asset in assets" :key="asset.id">
-                            <v-card>
-                                <v-card-media :src="getThumbImage(asset)" height="200px" @click="onOpenVideoPlayerDialog(asset)">
+                            <v-card :hover="onIsMovie(asset)">
+                                <v-card-media :src="getThumbImage(asset)" height="200px"
+                                              @click="onOpenVideoPlayerDialog(asset)">
                                     <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
                                         <v-icon color="light" dark>videocam</v-icon>
                                     </div>
@@ -77,9 +78,7 @@
             }
         },
 
-        watch: {
-
-        },
+        watch: {},
 
         created() {
             let breakpoint = this.$vuetify.breakpoint.name;
@@ -130,14 +129,14 @@
                 });
             },
 
-            onOpenVideoPlayerDialog(asset){
-                if(asset.mime_type === "video/mp4"){
+            onOpenVideoPlayerDialog(asset) {
+                if (asset.mime_type === "video/mp4") {
                     VideoPlayerDialogBoxEventBus.openPlayerDialogBox(asset);
                 }
             },
 
-            getThumbImage(asset){
-                if(asset.mime_type === "video/mp4") {
+            getThumbImage(asset) {
+                if (asset.mime_type === "video/mp4") {
                     return asset.thumbnail;
                 }
 
@@ -150,6 +149,13 @@
 
             goToDetail() {
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
+            },
+
+            onIsMovie(asset) {
+                if (asset.jw_player_code != null) {
+                    return true;
+                }
+                return false;
             }
         },
 

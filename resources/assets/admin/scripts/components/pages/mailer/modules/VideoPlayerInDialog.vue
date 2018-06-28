@@ -4,8 +4,9 @@
             v-model="videoPlayerDialog"
             max-width="500px"
             content-class="admin-video-player"
+            :style="{'line-height':0, overflow:'hidden'}"
     >
-            <video autoplay controls :src="video.url">
+            <video ref="video_player" autoplay controls :src="video.url">
             </video>
     </v-dialog>
 </template>
@@ -26,6 +27,7 @@
         watch: {
             videoPlayerDialog(val){
                 if(val === false){
+                    this.$refs.video_player.pause();
                     this.video = ''
                 }
             }
@@ -36,7 +38,6 @@
             VideoPlayerDialogBoxEventBus.$on('openPlayerDialogBox', (asset) => {
                 this.videoPlayerDialog = true;
                 this.video = asset;
-                console.log(this.video);
             });
 
 
@@ -50,8 +51,5 @@
 
         methods: {},
 
-        destroyed(){
-            console.log('this video is deleted');
-        }
     }
 </script>

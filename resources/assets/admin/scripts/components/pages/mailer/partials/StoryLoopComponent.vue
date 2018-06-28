@@ -1,7 +1,7 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12 sm6 md6 lg3 xl3>
-            <v-card flat>
+            <v-card flat hover>
                 <v-card-media
                         height="200px"
                         :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"

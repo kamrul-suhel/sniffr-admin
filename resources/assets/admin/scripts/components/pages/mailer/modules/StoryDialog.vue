@@ -22,8 +22,12 @@
                 <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <!--<v-toolbar-title>Swipe Direction: {{ swipeDirection }}</v-toolbar-title>-->
 
+                <v-spacer></v-spacer>
+
+                <v-toolbar-items>
+                    <v-checkbox v-model="selected"></v-checkbox>
+                </v-toolbar-items>
             </v-toolbar>
 
             <v-card-text class="video-dialog-box">
@@ -53,6 +57,8 @@
     export default {
         data() {
             return {
+                selected: false,
+
                 current_story: '',
                 story_dialog: false,
                 margin_content: true,

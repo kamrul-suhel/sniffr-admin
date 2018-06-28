@@ -8,9 +8,33 @@
         height:auto;
       }
   }
+
+  .card{
+    .toolbar{
+      button{
+        i{
+          margin:0 !important;
+        }
+      }
+    }
+  }
+
+  .toolbar{
+    .toolbar__items{
+      .checkbox{
+        margin:0;
+      }
+      .input-group__details{
+        display:none;
+      }
+    }
+  }
 }
 
 .admin-video-player{
+  line-height:0;
+  overflow-y:hidden !important;
+
   video{
     width:100%;
     height:auto;
