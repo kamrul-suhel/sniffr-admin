@@ -21,6 +21,15 @@ return [
         'edits-rejected',
         'published'
     ],
+    'priorities' => [
+        'high',
+        'medium',
+        'low',
+    ],
+    'destinations' => [
+        'for-sale',
+        'for-page',
+    ],
     'colors' => [
         'unapproved' => 'default',
         'accepted' => 'default',

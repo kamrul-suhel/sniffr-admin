@@ -84,7 +84,6 @@
 									<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
 									@endforeach
 								</select>
-
 							</div>
 						</div>
 					</div>
@@ -106,6 +105,22 @@
 										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
 									@endforeach
 								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-12">
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Source URL</div>
+
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+
+							<div class="panel-body" style="display: block;">
+								<input type="text" class="form-control" name="source" id="source" placeholder="http://" value="@if(!empty($story->source)){{ $story->source }}@endif" />
 							</div>
 						</div>
 					</div>
@@ -178,8 +193,6 @@
 </div>
 
 
-
-
 	@section('javascript')
 
 	<script type="text/javascript">
@@ -211,8 +224,6 @@
 		 });
 
 	});
-
-
 
 	</script>
 

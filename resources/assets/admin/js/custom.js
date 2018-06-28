@@ -23,6 +23,136 @@ var public_vars = public_vars || {};
 		// 	}
 		// });
 
+		$('.js-story-state').click(function(e){
+			e.preventDefault();
+			var state, alertType;
+			var storyId = $(this).attr("data-id");
+			var myClass = $(this).attr("class");
+
+			switch (true) {
+				case /unapproved/.test(myClass):
+					state = 'unapproved';
+					alertType = 'info';
+					break;
+				case /approved/.test(myClass):
+					state = 'approved';
+					alertType = 'success';
+					break;
+				case /rejected/.test(myClass):
+					state = 'rejected';
+					alertType = 'error';
+					break;
+				case /unlicensed/.test(myClass):
+					state = 'unlicensed';
+					alertType = 'error';
+					break;
+				case /licensing/.test(myClass):
+					state = 'licensing';
+					alertType = 'info';
+					break;
+				case /licensed/.test(myClass):
+					state = 'licensed';
+					alertType = 'success';
+					break;
+				case /hacks-unassigned/.test(myClass):
+					state = 'hacks-unassigned';
+					alertType = 'warning';
+					break;
+				case /writing-inprogress/.test(myClass):
+					state = 'writing-inprogress';
+					alertType = 'info';
+					break;
+				case /writing-completed/.test(myClass):
+					state = 'writing-completed';
+					alertType = 'success';
+					break;
+				case /subs-unassigned/.test(myClass):
+					state = 'subs-unassigned';
+					alertType = 'warning';
+					break;
+				case /subs-inprogress/.test(myClass):
+					state = 'subs-inprogress';
+					alertType = 'info';
+					break;
+				case /subs-approved/.test(myClass):
+					state = 'subs-approved';
+					alertType = 'success';
+					break;
+				case /subs-rejected/.test(myClass):
+					state = 'subs-rejected';
+					alertType = 'error';
+					break;
+				case /published/.test(myClass):
+					state = 'published';
+					alertType = 'success';
+					break;
+			}
+
+			$(this).removeClass('js-story-state');
+
+			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+			$('.swal-button-container').css('display','none');
+
+			if(state&&storyId) {
+				console.log(state);
+				$.ajax({
+				    type: 'GET',
+				    url: '/admin/stories/status/'+state+'/'+storyId,
+				    data: {},
+				    dataType: 'json',
+				    success: function (data) {
+						if(data.status=='success') {
+							if(data.remove=='yes'){
+								$('#story-'+storyId).fadeOut();
+								$('#story-'+storyId).remove();
+							}
+							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
+							$('.swal-button-container').css('display','inline-block');
+						} else {
+							$('.swal-button-container').css('display','inline-block');
+						}
+				    }
+				});
+			}
+		});
+
+		$('.js-story-update').change(function(e) {
+            e.preventDefault();
+
+			var storyId = $(this).attr("data-id");
+            var fieldId = $(this).attr("id");
+			var fieldValue = $(this).val();
+
+            if(storyId&&fieldId&&fieldValue) {
+				$.ajax({
+				    type: 'GET',
+				    url: '/admin/stories/update_field',
+				    data: { story_id: storyId, field_id: fieldId, field_value: fieldValue },
+				    dataType: 'json',
+				    success: function (data) {
+                        //console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
+						if(data.status=='success') {
+                            $('#story-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+						} else {
+                            $('#story-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+						}
+				    }
+				});
+			}
+	    });
+
+		$('.js-story-source').click(function (e) {
+            e.preventDefault();
+            if($(this).attr("href")!='#') {
+                $('#sourceModal').modal('show')
+                $("#sourceFrame").attr('src', $(this).attr("href"));
+                $('.modal .modal-content').css('overflow-y', 'auto');
+                $('.modal .modal-dialog').css('width', '70%');
+                $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
+                $('#sourceFrame').css('height', $(window).height() * 0.7+'px');
+            }
+		});
+
 	    $('.js-state').click(function(e){
 			e.preventDefault();
 			var state, alertType;

@@ -125,10 +125,11 @@ class AdminStoryController extends Controller
 
         $story = new Story();
         $story->alpha_id = VideoHelper::quickRandom();
-        $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
+        $story->state = (Input::get('state') ? Input::get('state') : 'unapproved');
         $story->title = Input::get('title');
         $story->description = (Input::get('description') ? Input::get('description') : NULL);
         //$story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : NULL);
+        $story->source = (Input::get('source') ? Input::get('source') : NULL);
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : Auth::user()->id);
         //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
@@ -136,18 +137,6 @@ class AdminStoryController extends Controller
 
         if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
-        }
-
-        // post story to WP
-        $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
-        $result = $this->apiPost('posts', $parameters, true);
-
-        // update stories record with WP response from post
-        if($result->id){
-            $story->wp_id = $result->id;
-            $story->status = $result->status;
-            $story->date_ingested = $story->created_at;
-            $story->save();
         }
 
         return Redirect::to('admin/stories')->with([
@@ -162,7 +151,8 @@ class AdminStoryController extends Controller
      */
     public function edit($id)
     {
-        $story = Story::find($id);
+        $story = Story::where('alpha_id', $id)
+            ->first();
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
@@ -173,8 +163,6 @@ class AdminStoryController extends Controller
             'users' => User::all(),
             'videos' => Video::all()
         ];
-
-        //dd($story->videos);
 
         return view('admin.stories.create_edit', $data);
     }
@@ -204,9 +192,9 @@ class AdminStoryController extends Controller
             $story->description = Input::get('description');
         }
 
-        // if (Input::get('excerpt')) {
-        //     $story->excerpt = Input::get('excerpt');
-        // }
+        if (Input::get('source')) {
+            $story->source = Input::get('source');
+        }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
@@ -221,6 +209,109 @@ class AdminStoryController extends Controller
             'note' => 'Successfully Updated Story!',
             'note_type' => 'success'
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $state
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function status(Request $request, $state, $id)
+    {
+        $isJson = $request->ajax();
+
+        $story = Story::where('alpha_id', $id)->first();
+        $previous_state = $story->state;
+        $story->state = ($story->state!=$state ? $state : $story->state);
+
+        // post story to WP
+        if ($state == 'approved') {
+
+            $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
+            $result = $this->apiPost('posts', $parameters, true);
+
+            // update stories record with WP response from post
+            if($result->id){
+                $story->wp_id = $result->id;
+                $story->status = $result->status;
+                $story->date_ingested = $story->created_at;
+            }
+
+        }
+
+        // Save story data to database
+        $story->save();
+
+        if ($isJson) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Successfully ' . ucfirst($state) . ' Story',
+                'state' => $state,
+                'remove' => 'yes',
+                'story_id' => $story->id,
+                'story_alpha_id' => $story->alpha_id,
+                'previous_state' => $previous_state,
+            ]);
+        }
+
+        // return Redirect::to('admin/stories/edit/' . $id . '/?previous_state=' . $previous_state)
+        //     ->with([
+        //         'note' => 'Successfully Updated Story',
+        //         'note_type' => 'success',
+        //     ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function update_field(Request $request)
+    {
+        $isJson = $request->ajax();
+        $id = $request->input('story_id');
+        $field_id = $request->input('field_id');
+        $field_value = $request->input('field_value');
+        $story = Story::where('alpha_id', $id)
+            ->first();
+
+        if($field_id&&$field_value) {
+            switch (true) {
+                case ($field_id == 'priority'):
+                    $story->priority = ($field_value!='Priority' ? $field_value : $story->priority);
+                    break;
+                case ($field_id == 'destination'):
+                    $story->destination = ($field_value!='Destination' ? $field_value : $story->destination);
+                    break;
+                case ($field_id == 'state'):
+                    $story->state = ($field_value!='State' ? $field_value : $story->state);
+                    break;
+                case ($field_id == 'assign_to'):
+                    $story->user_id = ($field_value!='Assign To' ? $field_value : $story->user_id);
+                    break;
+            }
+
+            // Save story data to database
+            $story->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Updated',
+                'field_id' => ($field_id ? $field_id : 0),
+                'field_value' => ($field_value ? $field_value : NULL),
+                'story_id' => ($story ? $story->id : 0),
+                'story_alpha_id' => ($story ? $story->alpha_id : 0),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error',
+                'field_id' => ($field_id ? $field_id : 0),
+                'field_value' => ($field_value ? $field_value : NULL),
+                'story_id' => ($story ? $story->id : 0),
+                'story_alpha_id' => ($story ? $story->alpha_id : 0),
+            ]);
+        }
     }
 
     /**
