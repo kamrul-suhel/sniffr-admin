@@ -18,4 +18,9 @@ class CollectionVideo extends Model
         return $this->belongsTo(Video::class);
     }
 
+    public function quotes()
+    {
+        return $this->hasMany(CollectionQuote::class, 'collection_video_id', 'id');
+    }
+
 }

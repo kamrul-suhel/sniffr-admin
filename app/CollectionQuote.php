@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CollectionQuote extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'collection_quotes';
 
     /**
@@ -14,17 +17,17 @@ class CollectionQuote extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class); //
+        return $this->belongsTo(User::class);
     }
 
-    public function video()
+    public function collectionVideo()
     {
-        return $this->hasOne(Video::class);
+        return $this->hasOne(CollectionVideo::class);
     }
 
-    public function story()
+    public function collectionStory()
     {
-        return $this->hasOne(Story::class);
+        return $this->hasOne(CollectionStory::class);
     }
 
 	public function routeNotificationForSlack()

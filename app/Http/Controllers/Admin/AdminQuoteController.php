@@ -20,12 +20,17 @@ class AdminQuoteController extends Controller {
      */
     public function index()
     {
-        $collections = Collection::whereHas('collectionVideos', function($query) {
+        $pendingCollections = Collection::whereHas('collectionVideos', function($query) {
            $query->where('status', 'requested');
         })->with('collectionVideos')->get();
 
+        $offeredCollections = Collection::whereHas('collectionVideos', function($query) {
+            $query->where('status', 'offered');
+        })->with('collectionVideos')->get();
+
         return view('admin.quotes.index')
-            ->with('collections', $collections);
+            ->with('pendingCollections', $pendingCollections)
+            ->with('offeredCollections', $offeredCollections);
     }
 
     /**
@@ -43,23 +48,42 @@ class AdminQuoteController extends Controller {
     /**
      * @param Request $request
      * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
     {
         //update collection video status, final_price
         $collectionVideo = CollectionVideo::find($id);
         $collectionVideo->final_price = $request->get('final_price');
+        $collectionVideo->status = 'offered';
         $collectionVideo->save();
 
         //create log of quoted amount for video
         $collectionQuote = new CollectionQuote();
-        $collectionQuote->video_id = $collectionVideo->video_id;
-        $collectionQuote->user_id = auth()->user()->id;
+        $collectionQuote->collection_video_id = $collectionVideo->id;
+        $collectionQuote->user_id = auth()->user()->id; //offered by the admin signed in
         $collectionQuote->price = $request->get('final_price');
-        $collectionQuote->discount = $request->get('discount');
         $collectionQuote->save();
 
         //TODO email client of offer
+
+        //TODO redirect back to quotes page
+        return redirect('admin/quotes');
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        //update collection to remove anything set
+        $collectionVideo = CollectionVideo::find($id);
+        $collectionVideo->final_price = null;
+        $collectionVideo->status = 'requested';
+        $collectionVideo->save();
+
+        //Soft delete quote made
+        $quotes = $collectionVideo->quotes->last();
+        $quotes->delete();
+
+        //TODO email client that we've retracted our offer
 
         //TODO redirect back to quotes page
         return redirect('admin/quotes');

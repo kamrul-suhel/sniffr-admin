@@ -26,7 +26,7 @@ class CreateCollectionVideosTable extends Migration
             $table->string('company_tier')->nullable()->comment('status and type of company');
 
             $table->integer('final_price')->nullable();
-            $table->enum('status', ['requested', 'received', 'accepted', 'purchased', 'closed']);
+            $table->enum('status', ['requested', 'received', 'offered', 'accepted', 'purchased', 'closed']);
             $table->timestamps();
             $table->softDeletes();
         });

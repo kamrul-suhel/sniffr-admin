@@ -17,4 +17,9 @@ class CollectionStory extends Model
     {
         return $this->hasOne(Story::class);
     }
+
+    public function quotes()
+    {
+        return $this->hasMany(CollectionQuote::class);
+    }
 }
