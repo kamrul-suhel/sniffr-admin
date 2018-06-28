@@ -13,7 +13,7 @@
                 <v-flex xs12 sm6 md8 lg8>
                     <nav class="navigation">
                         <ul>
-                            <li v-if="client_login">
+                            <li v-if="client_login && is_login">
                                 <router-link :to="{name: 'client_purchased_assets'}">
                                     <v-icon color="white" left>money</v-icon> Purchases
                                 </router-link>

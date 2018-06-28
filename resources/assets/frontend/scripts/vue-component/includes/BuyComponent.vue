@@ -182,6 +182,7 @@
 
 		created() {
             BuyEventBus.$on('buyDialogStateChange', (collection, video) =>{
+                this.$refs.buy_form.reset();
                 this.open_buy_dialog = true;
                 this.settings = this.$store.getters.getSettingsObject;
                 this.video = video;
@@ -268,7 +269,6 @@
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
 
                             // CLose dialog boxes
-                            this.$refs.buy_form.reset();
                             this.open_buy_dialog = false;
                             VideoDialogBoxEventBus.closeVideoDialogFromBuy();
                         })
@@ -282,13 +282,18 @@
                 if(this.$refs.buy_form.validate()){
                     this.loading = true;
 
+                    let form_data = new FormData();
+                    form_data.append('video_id', this.video.id);
+                    form_data.append('license_type', this.license_type);
+                    form_data.append('license_platform', this.license_platform);
+                    form_data.append('license_length', this.license_length);
+
                     // submit data with ajax request
                     axios.post('/client/collections/request_video_quote/'+this.collection.collection_video_id)
                         .then(response => {
                             this.loading = false;
                             console.log('QUOTE SENT');
                             //TODO WHAT HAPPENS AFTER IT'S LICENCED
-                            this.$refs.buy_form.reset();
                             this.show_thanks = true;
                         })
                         .catch(error => {
