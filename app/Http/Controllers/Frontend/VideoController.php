@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\CollectionVideo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\RecommendedAsset;
@@ -69,10 +70,17 @@ class VideoController extends Controller
 	{
 		$recommended = [];
 		if ($request->ajax() || $request->isJson()) {
+
+            //Remove any exclusive based collections that have been purchased and downloaded.
+            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
+                ->whereIn('status', ['purchased', 'downloaded'])
+                ->pluck('video_id');
+
 			$videos = Video::select($this->getVideoFieldsForFrontend())
 				->where('file', '!=', NULL)
 				->where('state', 'licensed')
 				->orderBy('id', 'DESC')
+                ->whereNotIn('id', $unsearchableVideos)
 				->paginate($this->videos_per_page);
 
 			if(Auth::user()){

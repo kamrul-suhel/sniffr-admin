@@ -51,7 +51,7 @@ class CollectionController extends Controller
             $collectionVideo->length = null;
             $collectionVideo->class = $video->class;
             $collectionVideo->final_price = config('pricing.base');
-            $collectionVideo->company_location = $user->client->location;
+            $collectionVideo->company_location = $user->client->region;
             $collectionVideo->company_tier = $user->client->tier;
             $collectionVideo->status = 'received';
             $collectionVideo->save();
@@ -107,8 +107,8 @@ class CollectionController extends Controller
 			$collectionVideo->type = $request->input('license_type') ?? $collectionVideo->type;
 			$collectionVideo->platform = $request->input('license_platform') ?? $collectionVideo->platform;
 			$collectionVideo->length = $request->input('license_length') ?? $collectionVideo->length;
-			$collectionVideo->company_location = $client->location; //TODO update db
-			$collectionVideo->company_tier = $client->tier; //TODO update db
+			$collectionVideo->company_location = $client->region;
+			$collectionVideo->company_tier = $client->tier;
 			$collectionVideo->final_price = $price;
 			$collectionVideo->save();
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CollectionVideo;
 use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Story;
@@ -26,6 +27,11 @@ class SearchController extends Controller
             $search_value = Input::get('value');
             $settings = config('settings.site');
 
+            //Remove any exclusive based collections that have been purchased and downloaded.
+            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
+                ->whereIn('status', ['purchased', 'downloaded'])
+                ->pluck('video_id');
+
             $videos = Video::where(function ($query) use ($search_value) {
                 $query->where('title', 'LIKE', '%' . $search_value . '%');
             	})
@@ -34,6 +40,7 @@ class SearchController extends Controller
                 })
 				->where('state', '=', 'licensed')
 				->where('file', '!=', NULL)
+                ->whereNotIn('id', $unsearchableVideos)
 				->orderBy('licensed_at', 'DESC')
                 ->paginate($settings['posts_per_page']);
 
