@@ -79,14 +79,13 @@ class CollectionController extends Controller
      * TODO - Add company_tier to base price
      * TODO - Add company_location to base price
      * @param Request $request
-     * @param $collectionId
      * @param $collectionVideoId
-     * @param $videoId
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function getVideoPrice(Request $request, $collectionVideoId)
 	{
-		$user = auth()->user();
+	    $user = auth()->user();
+
 		$video = Video::find($request->input('video_id'));
 
 		if ($video && $video->class != 'exceptional'){
@@ -104,9 +103,10 @@ class CollectionController extends Controller
 
 			$price = round($price, 2);
 
-			$collectionVideo->type = $request->input('license_type') ?? $collectionVideo->type;
+			$collectionVideo->type = $request->input('license_type') ??         $collectionVideo->type;
 			$collectionVideo->platform = $request->input('license_platform') ?? $collectionVideo->platform;
-			$collectionVideo->length = $request->input('license_length') ?? $collectionVideo->length;
+			$collectionVideo->length = $request->input('license_length') ??     $collectionVideo->length;
+
 			$collectionVideo->company_location = $client->region;
 			$collectionVideo->company_tier = $client->tier;
 			$collectionVideo->final_price = $price;
@@ -206,13 +206,14 @@ class CollectionController extends Controller
 
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collectionVideo->status = 'requested';
-        $collectionVideo->type = $request->input('license_type') ?? $collectionVideo->type;
+
+        $collectionVideo->type = $request->input('license_type') ??         $collectionVideo->type;
         $collectionVideo->platform = $request->input('license_platform') ?? $collectionVideo->platform;
-        $collectionVideo->length = $request->input('license_length') ?? $collectionVideo->length;
+        $collectionVideo->length = $request->input('license_length') ??     $collectionVideo->length;
         $collectionVideo->company_location = $client->region;
         $collectionVideo->company_tier = $client->tier;
-
         $collectionVideo->save();
+
         $collection = $collectionVideo->collection;
 
 		$video = Video::find($collectionVideo->video_id);

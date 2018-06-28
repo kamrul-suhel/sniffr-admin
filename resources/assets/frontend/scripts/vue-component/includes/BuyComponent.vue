@@ -266,7 +266,6 @@
                         .then(response => {
                             this.loading = false;
                             console.log('LICENSED VIDEO SUCCESSFULLY');
-                            //TODO WHAT HAPPENS AFTER IT'S LICENCED
 
                             // CLose dialog boxes
                             this.open_buy_dialog = false;
@@ -289,11 +288,10 @@
                     form_data.append('license_length', this.license_length);
 
                     // submit data with ajax request
-                    axios.post('/client/collections/request_video_quote/'+this.collection.collection_video_id)
+                    axios.post('/client/collections/request_video_quote/'+this.collection.collection_video_id, form_data)
                         .then(response => {
                             this.loading = false;
                             console.log('QUOTE SENT');
-                            //TODO WHAT HAPPENS AFTER IT'S LICENCED
                             this.show_thanks = true;
                         })
                         .catch(error => {
