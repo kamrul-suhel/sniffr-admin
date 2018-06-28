@@ -146,7 +146,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Building Name in the textbox below:</p>
                                 <input type="text" class="form-control" name="address_line1" id="address_line1"
                                        placeholder="Building Name"
                                        value="{{ ($company) ? $company->address_line1 : '' }}"/>
@@ -163,7 +162,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Street Address in the textbox below:</p>
                                 <input type="text" class="form-control" name="address_line2" id="address_line2"
                                        placeholder="Street Address"
                                        value="{{ ($company->address_line2) ? $company->address_line2 : '' }}"/>
@@ -180,12 +178,10 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add City in the textbox below:</p>
                                 <input type="text" class="form-control" name="city" id="city" placeholder="City"
                                        value="{{ ($company->city) ? $company->city : '' }}"/>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="col-sm-6">
@@ -197,7 +193,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Postcode / Zip Code in the textbox below:</p>
                                 <input type="text" class="form-control" name="postcode" id="postcode" value="{{
                                 ($company->postcode) ? $company->postcode : '' }}"/>
                             </div>
@@ -213,9 +208,44 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Country in the textbox below:</p>
                                 <input type="text" class="form-control" name="country" id="country" value="{{
                                        ($company->country) ? $company->country : ''}}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Region</div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="display: block;">
+                                <select name="tier" class="form-control" id="region">
+                                    @foreach(config('pricing.region') as $key => $value)
+                                        <option {{ $key === $company->region ? 'selected': '' }} value="{{ $key}}">{{ $value['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Tier</div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="display: block;">
+                                <select name="tier" class="form-control" id="tier">
+                                    @foreach(config('pricing.tier') as $key => $value)
+                                        <option {{ $key === $company->tier ? 'selected': '' }} value="{{ $key }}">{{ $value['name'] }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -229,7 +259,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add VAT Number in the textbox below:</p>
                                 <input type="text" class="form-control" name="vat_number" id="vat_number" value="{{
                                        ($company->vat_number) ? $company->vat_number : '' }}"/>
                             </div>
@@ -245,7 +274,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Billing Phone Number in the textbox below:</p>
                                 <input type="text" class="form-control" name="billing_tel" id="billing_tel" value="{{
                                 ($company->billing_tel) ? $company->billing_tel : '' }}"/>
                             </div>
@@ -263,7 +291,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Email Address in the textbox below:</p>
                                 <input type="text" class="form-control" name="billing_email" id="billing_email" value="{{
                                        ($company->billing_email) ? $company->billing_email : '' }}"/>
                             </div>
