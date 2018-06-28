@@ -1,10 +1,11 @@
 .content-thumb {
-    border:#999 solid 1px;
-    border-radius:4px;
-    width:100%;
-    height:180px;
-    background-repeat:no-repeat;
-    background-size:cover;
+    border: #999 solid 1px;
+    border-radius: 4px;
+    width: 100%;
+    height: 180px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
 }
 .thumb-overlay {
     padding:15px;
@@ -18,6 +19,9 @@
 }
 .album-grey {
     background: #fcfcfc;
+}
+.album-grey h3 a {
+    font-weight: 600;
 }
 .album-story-update {
     display: none;

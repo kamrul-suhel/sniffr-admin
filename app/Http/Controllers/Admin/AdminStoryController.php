@@ -106,7 +106,7 @@ class AdminStoryController extends Controller
             'button_text' => 'Add New Story',
             'user' => Auth::user(),
             'users' => User::all(),
-            'videos' => Video::all()
+            'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
         ];
 
         return view('admin.stories.create_edit', $data);
@@ -161,7 +161,7 @@ class AdminStoryController extends Controller
             'button_text' => 'Update Story',
             'user' => Auth::user(),
             'users' => User::all(),
-            'videos' => Video::all()
+            'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
         ];
 
         return view('admin.stories.create_edit', $data);
@@ -196,7 +196,7 @@ class AdminStoryController extends Controller
             $story->source = Input::get('source');
         }
 
-        $story->user_id = (Input::get('user_id') ? Input::get('user_id') : NULL);
+        $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
 
         if (Input::get('videos')) {
@@ -205,7 +205,7 @@ class AdminStoryController extends Controller
 
         $story->save();
 
-        return Redirect::to('admin/stories/edit' . '/' . $id)->with([
+        return Redirect::to('admin/stories/edit' . '/' . $story->alpha_id)->with([
             'note' => 'Successfully Updated Story!',
             'note_type' => 'success'
         ]);

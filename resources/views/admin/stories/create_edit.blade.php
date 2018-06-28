@@ -8,7 +8,7 @@
 	<ol class="breadcrumb"> <li> <a href="/admin/stories"><i class="fa fa-newspaper-o"></i>All Stories</a> </li> <li class="active">@if(!empty($story->id)) <strong>{{ $story->title }}</strong> @else <strong>New Story</strong> @endif</li> </ol>
 
 	<div class="admin-section-title" style="background:#1976d2;color:#fff;">
-		<p>This feature is currently in development to push new stories to Wordpress.</p>
+		<p>This feature is currently in development (please be gentle).</p>
 	</div>
 
 	<div class="admin-section-title">
@@ -163,7 +163,7 @@
 							</div>
 
 							<div class="panel-body" style="display: block;">
-								<select name="videos[]" id="videos" class="form-control" multiple style="height:200px;">
+								<select name="videos[]" id="videos" class="selectpicker" data-live-search="true" data-width="100%" title="Search and attach videos..." multiple>
 									@if(!empty($videos))
 										@foreach($videos as $video)
 											<option value="{{ $video->id }}"{{ isset($story) && $story->videos()->get()->contains($video->id)  ? " selected" : "" }}>{{ $video->title }}</option>
@@ -200,28 +200,6 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
-
-		$('#duration').mask('00:00:00');
-
-		$('input[type="checkbox"]').change(function() {
-			if($(this).is(":checked")) {
-		    	$(this).val(1);
-		    } else {
-		    	$(this).val(0);
-		    }
-		    console.log('test ' + $(this).is( ':checked' ));
-		});
-
-		tinymce.init({
-			relative_urls: false,
-		    selector: '#body',
-		    toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor | code",
-		    plugins: [
-		         "advlist autolink link image code lists charmap print preview hr anchor pagebreak spellchecker code fullscreen",
-		         "save table contextmenu directionality emoticons template paste textcolor code"
-		   ],
-		   menubar:false,
-		 });
 
 	});
 

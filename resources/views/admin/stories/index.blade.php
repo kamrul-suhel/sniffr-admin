@@ -3,6 +3,10 @@
 
 @section('content')
 
+    <div class="admin-section-title" style="background:#1976d2;color:#fff;">
+        <p>This feature is currently in development (please be gentle).</p>
+    </div>
+
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
@@ -66,7 +70,7 @@
 						<section class="album-info album-grey">
                             <div class="row padded-bottom">
                                 <div class="col-sm-12">
-                                    <h3><a href="{{ url('admin/videos/edit/'.$story->alpha_id) }}">{{ $story->title }}</a></h3>
+                                    <h3><a href="{{ url('admin/stories/edit/'.$story->alpha_id) }}">{{ $story->title }}</a></h3>
                                     <p><a href="@if($story->source) {{ $story->source }} @else # @endif" class="js-story-source btn btn-mini-info" title="Preview Source"><i class="fa fa-info"></i></a> <strong>Source:</strong> https://www.bbc.co.uk/news/technology-44628399</p>
                                 </div>
                             </div>
