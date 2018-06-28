@@ -181,6 +181,8 @@ class AdminClientController extends Controller
         $company->city = $request->input('city');
         $company->postcode = $request->input('postcode');
         $company->country = $request->input('country');
+        $company->region = $request->input('region');
+        $company->tier = $request->input('tier');
         $company->vat_number = $request->input('vat_number');
         $company->billing_tel = $request->input('billing_tel');
         $company->billing_email = $request->input('billing_email');
