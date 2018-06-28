@@ -202,9 +202,16 @@ class CollectionController extends Controller
     public function requestVideoQuote(Request $request, $collection_video_id)
     {
     	$user = Auth::user();
+    	$client = $user->client;
 
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collectionVideo->status = 'requested';
+        $collectionVideo->type = $request->input('license_type') ?? $collectionVideo->type;
+        $collectionVideo->platform = $request->input('license_platform') ?? $collectionVideo->platform;
+        $collectionVideo->length = $request->input('license_length') ?? $collectionVideo->length;
+        $collectionVideo->company_location = $client->region;
+        $collectionVideo->company_tier = $client->tier;
+
         $collectionVideo->save();
         $collection = $collectionVideo->collection;
 

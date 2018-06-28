@@ -6,8 +6,8 @@ use App\Collection;
 use App\CollectionQuote;
 use App\CollectionVideo;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Quote\CreateQuote;
 use App\Jobs\QueueEmailOfferedQuote;
-use App\Jobs\QueueEmailPendingQuote;
 use Illuminate\Http\Request;
 
 class AdminQuoteController extends Controller {
@@ -52,7 +52,7 @@ class AdminQuoteController extends Controller {
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public function update(CreateQuote $request, $id)
     {
         //update collection video status, final_price
         $collectionVideo = CollectionVideo::find($id);

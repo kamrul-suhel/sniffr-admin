@@ -15,6 +15,16 @@
                         @foreach($pendingCollections as $collection)
                             <h4>Collection: <b>{{ $collection->name }}</b></h4>
                             @foreach($collection->collectionVideos as $videoCollection)
+                                @if (count($errors) > 0)
+                                    <div class="alert alert-danger">
+                                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <h5>Pending Videos ({{ $collection->collectionVideos->count() }})</h5>
                                 <table class="table table-condensed table-striped">
                                     <thead>
