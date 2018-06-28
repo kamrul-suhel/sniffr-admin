@@ -13,6 +13,7 @@ use App\Libraries\VideoHelper;
 use App\Traits\Slug;
 use App\User;
 use App\Video;
+use Redirect;
 use App\Notifications\RequestVideoQuote;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -122,6 +123,8 @@ class CollectionController extends Controller
      */
     public function acceptFinalPrice(Request $request, $collection_video_id)
     {
+		$isJson = $request->ajax();
+
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collection = $collectionVideo->collection;
 
@@ -131,10 +134,18 @@ class CollectionController extends Controller
         $collection->status = "closed";
         $collection->save();
 
-        return response([
-            'collection' => $collection,
-            'message' => 'final price has been accepted'
-        ], 200);
+		if($isJson){
+			return response([
+				'collection' => $collection,
+				'message' => 'final price has been accepted'
+			], 200);
+		}
+
+		return Redirect::to('client/purchased')
+			->with([
+				'note' => 'Thanks for purchasing the video',
+				'note_type' => 'success',
+			]);
     }
 
     /**

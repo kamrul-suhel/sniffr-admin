@@ -262,7 +262,7 @@
                 if(this.$refs.buy_form.validate()){
                     this.loading = true;
                     // submit data with ajax request
-                    axios.post('/client/collections/accept_price/'+this.collection.collection_video_id)
+                    axios.get('/client/collections/accept_price/'+this.collection.collection_video_id)
                         .then(response => {
                             this.loading = false;
                             this.open_buy_dialog = false;
