@@ -24,10 +24,10 @@ trait VideoHelper{
         }
 
         if($video->file_watermark_dirty) {
-            $sHTML .= '<video 
-                id="video_player" 
-                preload="auto" controls x-webkit-airplay="allow" 
-                class="video-js vjs-default-skin vjs-big-play-centered" 
+            $sHTML .= '<video
+                id="video_player"
+                preload="auto" controls x-webkit-airplay="allow"
+                class="video-js vjs-default-skin vjs-big-play-centered"
                 src="https://cdn.sniffrmedia.co.uk/'.basename($video->file_watermark_dirty).'">
             </video>';
         }else if($video->youtube_id){ // Youtube
@@ -81,33 +81,42 @@ trait VideoHelper{
         }
 
         else if(str_contains($video->url, 'instagram')){
-            if($embed && $video->embed_code){
-                $sHTML .= $video->embed_code;
-            }else{
-                if (@getimagesize($video->image)) {
-                    $insta_thumb = $video->image;
-                } else {
+
+            if ($embed == true) { // if edit view
+
+                if($video->embed_code){
+                    $sHTML .= $video->embed_code;
+                }else{
+
                     $data = VideoHelper::getInstagramJSON($video->url);
 
                     if($data){
                         $video = Video::find($video->id);
                         $video->thumb = $data['thumbnail_url'];
                         $video->image = $data['thumbnail_url'];
+                        $video->embed_code = $data['html'];
                         $video->save();
                     }
 
-                    $insta_thumb = $data['thumbnail_url'];
+                    $sHTML .= $video->embed_code;
+
                 }
 
-                if($insta_thumb){
-                    $sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$insta_thumb.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
-                }else{
-                    $sHTML .= '<p>There appears to be an issue with this video</p>';
-                    //if(\Auth::user()->role == 'admin'){
-                    $sHTML .= '<p><a href="'.$video->url.'" target="_blank">'.$video->url.'</a></p>';
-                    //}
+            } else { // if index view
+
+                if (!$video->image) {
+                    $data = VideoHelper::getInstagramJSON($video->url);
+                    if($data){
+                        $video = Video::find($video->id);
+                        $video->thumb = $data['thumbnail_url'];
+                        $video->image = $data['thumbnail_url'];
+                        $video->save();
+                    }
                 }
+
+                $sHTML .= '<a class="video-thumb" href="'.$path.'/'.$video->alpha_id.'" style="background-image:url('.$video->image.')"><span class="thumbnail-overlay"></span><span class="play-button"></span></a>';
             }
+
         }
 
         else if(str_contains($video->url, 'vimeo')){

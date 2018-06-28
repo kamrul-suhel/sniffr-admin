@@ -81,16 +81,17 @@ if (mix.inProduction()) {
 if (!mix.inProduction()) {
     mix.webpackConfig({devtool: 'inline-source-map'})
 }
+
 //Copying file from resource folder to public
 
-// mix.copy(
-//     'resources/assets/frontend/images',
-//     'public/assets/frontend/images/'
-// );
-// mix.copy(
-//     'resources/assets/admin/images',
-//     'public/assets/admin/images/'
-// );
+mix.copy(
+    'resources/assets/frontend/images',
+    'public/assets/frontend/images/'
+);
+mix.copy(
+    'resources/assets/admin/images',
+    'public/assets/admin/images/'
+);
 
 /*
 * ******************************************
@@ -101,7 +102,7 @@ if (!mix.inProduction()) {
 
 /*
 * *********************************************
-* admin script and scss
+* Admin script and scss
 * *********************************************
 */
 mix.sass(

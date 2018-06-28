@@ -7,21 +7,10 @@
             class="video-dialog-container"
             content-class="video-dialog-container"
     >
-        <!--<div class="dialog-box-loading">-->
-            <!--<div class="dialog-box-loading-content">-->
-                <!--<v-progress-circular :size="50" indeterminate color="dark"></v-progress-circular>-->
-            <!--</div>-->
-        <!--</div>-->
-        <div class="dialog-box-switch prev">
-            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onPreviousVideo()" :disabled="!previousPageExists" >
-                <v-icon>chevron_left</v-icon>
-            </v-btn>
-        </div>
-
-        <div class="dialog-box-switch next">
-            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onNextVideo()" :disabled="!nextPageExists" >
-                <v-icon>chevron_right</v-icon>
-            </v-btn>
+        <div class="dialog-box-loading" v-if="!loadData">
+            <div class="dialog-box-loading-content">
+                <v-progress-circular :size="50" indeterminate color="dark"></v-progress-circular>
+            </div>
         </div>
 
         <v-card>
@@ -50,6 +39,18 @@
                 </v-layout>
             </v-card-text>
         </v-card>
+
+        <div class="dialog-box-switch prev">
+            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onPreviousVideo()" :disabled="!previousPageExists" >
+                <v-icon>chevron_left</v-icon>
+            </v-btn>
+        </div>
+
+        <div class="dialog-box-switch next">
+            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onNextVideo()" :disabled="!nextPageExists" >
+                <v-icon>chevron_right</v-icon>
+            </v-btn>
+        </div>
     </v-dialog>
 </template>
 
@@ -72,6 +73,8 @@
                 previousPageExists: true,
                 previousPageAlphaId: '',
                 swipeDirection:'',
+
+                loadData : false,
 
             }
         },
@@ -100,6 +103,7 @@
             }
 
             VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
+                this.loadData = false;
                 this.video_dialog = VideoDialogBoxEventBus.openVideoDialogBox;
             })
 
@@ -109,6 +113,9 @@
 
                 this.checkAlphaIdExists();
                 this.current_video = this.$store.getters.getCurrentVideoForDialog;
+
+                //Hide loading dialog
+                this.loadData = true;
 
             })
 
@@ -147,6 +154,7 @@
             },
 
             onPreviousVideo(){
+                this.loadData = false;
                 let alpha_id = this.$store.getters.getPrevVideoAlphaId;
                 let url = '/videos/'+alpha_id;
                 window.history.pushState(null, "page 2",url);
@@ -154,6 +162,7 @@
             },
 
             onNextVideo(){
+                this.loadData = false;
                 let alpha_id = this.$store.getters.getNextVideoAlphaId;
                 let url = '/videos/'+alpha_id;
                 window.history.pushState(null, "page 2",url);

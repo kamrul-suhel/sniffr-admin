@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Traits\FrontendResponse;
+use App\Traits\WordpressAPI;
 use Auth;
 use Redirect;
 use App\User;
@@ -14,11 +16,16 @@ use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon as Carbon;
 use App\Jobs\QueueClientMailer;
 use App\Notifications\ClientMailerAlert;
 
+use App\Jobs\QueueStory;
+
 class AdminClientMailerController extends Controller
 {
+    use FrontendResponse, WordpressAPI;
+
     protected $rules = [
         'title' => 'required'
     ];
@@ -48,21 +55,92 @@ class AdminClientMailerController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create_old()
+    public function create_mailer(Request $request)
     {
-        // Need to get details of stories from ajax call
+        if ($request->ajax()) {
+            if($request->search){
+                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
+                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
+                    ->orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }else{
+                $stories = Story::orderBy('date_ingested', 'DESC')
+                    ->paginate(12);
+            }
 
-        $data = [
-            'post_route' => url('admin/mailers/store'),
-            'button_text' => 'Add New Client Mailer',
-            'user' => Auth::user(),
-            'users' => User::all(),
-            'stories' => Story::all()
-        ];
+            $data = [
+                'stories' => $stories
+            ];
+            return $this->successResponse($data);
+        }
 
-        return view('admin.mailers.create_edit', $data);
+        return view('admin.mailers.create');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function refresh()
+    {
+        //increase execution time
+        ini_set('max_execution_time', 1800);
+
+        $version = VideoHelper::quickRandom(); // set random version for cache busting
+        $pages = mt_rand(100,200); // set random number over 100 for per page (if needed)
+
+        $posts_publish = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_draft = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=draft&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts_pending = $this->apiRequest('posts?version=' . $version . '&order=desc&per_page=100&status=pending&tags=' . env('UNILAD_WP_TAG_ID'), true);
+        $posts = array_merge(array_merge($posts_pending, $posts_publish), $posts_draft);
+
+        // set dispatched for sending response back to ajax
+        $dispatched = false;
+
+        // store stories from wordpress in database
+        foreach($posts as $post){
+
+            // checks if wp post already exists within sniffr stories
+            $story = Story::where([['wp_id', $post->id]])->first();
+
+            if(!$story) {
+                QueueStory::dispatch($post, 'new', (Auth::user() ? Auth::user()->id : 0))
+                    ->delay(now()->addSeconds(2));
+                $dispatched = true;
+            } else {
+                $storyTime = Carbon::parse($story->date_ingested);
+                $postTime = Carbon::parse($post->date);
+                $differenceTime = $postTime->diffInSeconds($storyTime);
+
+                // if wp post is updated 5mins after our own story record
+                if($differenceTime>150) {
+                    QueueStory::dispatch($post, 'update', (Auth::user() ? Auth::user()->id : 0))
+                        ->delay(now()->addSeconds(2));
+                    $dispatched = true;
+                }
+            }
+        }
+
+        //return Redirect::to('admin/stories'); //return response()->json($formatted_posts);
+        return response()->json([
+            'status' => 'success',
+            'dispatched' => $dispatched,
+            'message' => 'all good',
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function checkJobs() {
+        $jobs = \DB::table('jobs')->where('payload', 'LIKE' , '%QueueStory%')->count();
+        return response()->json([
+            'status' => 'success',
+            'jobs' => $jobs,
+            'message' => 'all good',
+        ]);
     }
 
     /**
@@ -111,7 +189,7 @@ class AdminClientMailerController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-bar-chart"></i> Stats for Mailer Id ' . $mailer->alpha_id,
-            'downloaded' => $mailer,
+            'mailer' => $mailer,
             'post_route' => url('admin/mailers/stats'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),
@@ -137,7 +215,7 @@ class AdminClientMailerController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Review Client Mailer',
-            'downloaded' => $mailer,
+            'mailer' => $mailer,
             'post_route' => url('admin/mailers/update'),
             'button_text' => 'Send Client Mailer',
             'user' => Auth::user(),
@@ -145,7 +223,7 @@ class AdminClientMailerController extends Controller
             'clients' => $clients,
         ];
 
-        return view('admin.mailers.create_edit', $data);
+        return view('admin.mailers.edit', $data);
     }
 
     /**

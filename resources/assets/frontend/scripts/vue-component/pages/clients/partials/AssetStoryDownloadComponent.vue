@@ -11,10 +11,13 @@
                     </v-tooltip>
                 </div>
 
+                <div class="hot-story" v-if="story.flagged === 1">
+                    <div class="hot-story-content">HOT</div>
+                </div>
+
 
             </div>
         </v-flex>
-
         <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
@@ -76,6 +79,7 @@
         ],
 
         created() {
+            console.log(this.story);
             var user = this.$store.getters.getUser;
 
             var componentServices = new ComponentServices();

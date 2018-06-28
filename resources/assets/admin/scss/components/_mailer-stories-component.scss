@@ -12,4 +12,17 @@
 
 .mailer-stories .card__media{
   cursor:pointer;
+
+  .hot-story{
+    position:absolute;
+    top:0;
+    right:0;
+    padding: 5px 15px;
+    background: #ff0000;
+  }
+
+  .hot-story-content{
+    color:#fff;
+  }
+
 }

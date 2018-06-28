@@ -60,9 +60,20 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                                <!--<v-flex xs12 class="mt-1">-->
+                                    <!--<v-layout column wrap align-end class="video-detail-sidebar">-->
+                                        <!--<div class="video-detail-social-share">-->
+                                            <!--<v-btn dark block class="dark">License</v-btn>-->
+                                        <!--</div>-->
+                                    <!--</v-layout>-->
+                                <!--</v-flex>-->
                             </v-flex>
                         </v-layout>
                     </v-flex>
+
+
+
                 </v-layout>
             </v-container>
         </div>
@@ -92,8 +103,6 @@
         },
 
         watch: {
-            '$route'(to, from, next) {
-            }
         },
 
         created() {

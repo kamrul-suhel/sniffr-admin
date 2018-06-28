@@ -44,13 +44,16 @@ class AdminClientController extends Controller
      */
     public function create()
     {
+        $videos = Video::where('state', 'licensed')
+            ->orderBy('licensed_at', 'DESC')
+            ->limit(50)
+            ->get();
 
-        $videos = Video::with('createdUser')
-            ->where([['state', 'licensed'], ['file', '!=', NULL]])
-            ->orderBy('licensed_at', 'DESC')->get();
+        $stories = Story::where('state', 'licensed')
+            ->orderBy('updated_at', 'DESC')
+            ->limit(50)
+            ->get();
 
-//        dd($videos);
-        $stories = Story::orderBy('date_ingested', 'DESC')->get();
         return view('admin.clients.create_edit', [
             'company' => null,
             'user' => null,
@@ -65,7 +68,6 @@ class AdminClientController extends Controller
      */
     public function store(CreateCompanyRequest $request)
     {
-
         $company_slug = $this->slugify($request->get('company_name'));
 
         $company_id = Client::insertGetId([
