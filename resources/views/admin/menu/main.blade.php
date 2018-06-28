@@ -153,6 +153,11 @@
             </small>
             <span class="title">Quotes</span>
         </a>
+        <ul>
+            <li>
+                <a href="{{ url('admin/collections') }}">Collections</a>
+            </li>
+        </ul>
     </li>
 
 </ul>
