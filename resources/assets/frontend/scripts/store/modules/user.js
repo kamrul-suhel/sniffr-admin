@@ -45,7 +45,6 @@ const mutations = {
     },
 
     setRouteUrl(state, currUrl){
-        console.log(currUrl)
         state.route_url = currUrl;
     }
 }

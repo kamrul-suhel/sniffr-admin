@@ -1,0 +1,13 @@
+.stories-component{
+  .stories {
+    h2{
+      height: 36px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .description{
+      height:120px;
+    }
+  }
+}

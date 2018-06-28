@@ -56,8 +56,9 @@
                         this.$router.push({name: 'client_videos', query:{ page: this.current_page}});
                         break;
 
+
                     default:
-                        this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
+                        this.$vuetify.goTo('.videos-section',{ duration: 1, easing:'easeInCubic' });
                 }
 
                 setTimeout(() => {
@@ -77,9 +78,13 @@
                         this.$router.push({name: 'videos_tag', params:{value: value}, query:{ page: page}});
                     }
 
+                    if(this.page === 'stories'){
+                        let value = this.$route.query.search;
+                        let page =  this.current_page;
+                        this.$router.push({name: 'stories', query:{search: value, page: page}});
+                    }
 
-
-                }, 500);
+                }, 1);
             }
         },
 

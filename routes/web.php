@@ -324,6 +324,15 @@ Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('c
 
 /*
 |--------------------------------------------------------------------------
+| Frontend Stories route
+|--------------------------------------------------------------------------
+*/
+Route::get('stories', 'Frontend\StoryCOntroller@index')->name('frontend.stories');
+
+
+
+/*
+|--------------------------------------------------------------------------
 | Frontend video dialog box, getting current video, next & previous link
 |--------------------------------------------------------------------------
 */

@@ -15,7 +15,7 @@ class StoryController extends Controller
     /**
      * @var int
      */
-    private $stories_per_page;
+    private $stories_per_page = 12;
 
     /**
      * @param Request $request
@@ -24,13 +24,19 @@ class StoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax() || $request->isJson()) {
-            $stories = Story::All()
-                ->orderBy('id', 'DESC')
-                ->paginate($this->stories_per_page);
+            $stories = '';
+            if($request->search){
+                $stories = Story::where('title', 'LIKE', '%'. $request->search. '%')
+                    ->orderBy('id', 'DESC')
+                    ->paginate($this->stories_per_page);
+
+            }else{
+                $stories = Story::orderBy('id', 'DESC')
+                    ->paginate($this->stories_per_page);
+            }
 
             $data = [
                 'stories' => $stories,
-                'pages' => (new Page)->where('active', '=', 1)->get(),
             ];
 
             return $this->successResponse($data);

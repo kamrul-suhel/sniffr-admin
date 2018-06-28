@@ -10,143 +10,66 @@
 
         <search-component @searchOption="searchOption($event)"></search-component>
 
-        <section class="section-space">
+        <section class="section-space videos-section">
             <v-container grid-list-lg class="stories">
                 <v-layout row wrap>
-                    <v-flex d-flex xs12 sm12 md6 lg6 xl6 class="pa-3">
-                        <v-layout row wrap>
-                            <v-flex xs5>
-                                <v-card height="100%">
-                                    <v-card-media src="/assets/frontend/images/placeholder.png" height="100%"/>
-                                </v-card>
-                            </v-flex>
-
-                            <v-flex xs7>
-                                <h2>Title</h2>
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dolorum enim laborum nobis obcaecati. Adipisci, architecto aut consequatur dolores enim in, magnam magni officiis, optio quidem quis quisquam recusandae repudiandae.</p>
-                                <v-layout row wrap align-end>
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                    <v-flex xs4 >
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
-                    </v-flex>
-
-                    <v-flex d-flex xs12 sm12 md6 lg6 xl6 class="pa-3">
-                        <v-layout row wrap>
-                            <v-flex xs5>
-                                <v-card height="100%">
-                                    <v-card-media src="/assets/frontend/images/placeholder.png" height="100%"/>
-                                </v-card>
-                            </v-flex>
-
-                            <v-flex xs7>
-                                <h2>Title</h2>
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dolorum enim laborum nobis obcaecati. Adipisci, architecto aut consequatur dolores enim in, magnam magni officiis, optio quidem quis quisquam recusandae repudiandae.</p>
-                                <v-layout row wrap align-end>
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                    <v-flex xs4 >
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
-                    </v-flex>
-
-                    <v-flex d-flex xs12 sm12 md6 lg6 xl6 class="pa-3">
-                        <v-layout row wrap>
-                            <v-flex xs5>
-                                <v-card height="100%">
-                                    <v-card-media src="/assets/frontend/images/placeholder.png" height="100%"/>
-                                </v-card>
-                            </v-flex>
-
-                            <v-flex xs7>
-                                <h2>Title</h2>
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dolorum enim laborum nobis obcaecati. Adipisci, architecto aut consequatur dolores enim in, magnam magni officiis, optio quidem quis quisquam recusandae repudiandae.</p>
-                                <v-layout row wrap align-end>
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                    <v-flex xs4 >
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
-                    </v-flex>
-
-                    <v-flex d-flex xs12 sm12 md6 lg6 xl6 class="pa-3">
-                        <v-layout row wrap>
-                            <v-flex xs5>
-                                <v-card height="100%">
-                                    <v-card-media src="/assets/frontend/images/placeholder.png" height="100%"/>
-                                </v-card>
-                            </v-flex>
-
-                            <v-flex xs7>
-                                <h2>Title</h2>
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dolorum enim laborum nobis obcaecati. Adipisci, architecto aut consequatur dolores enim in, magnam magni officiis, optio quidem quis quisquam recusandae repudiandae.</p>
-                                <v-layout row wrap align-end>
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-
-                                    <v-flex xs4>
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                    <v-flex xs4 >
-                                        <v-btn dark color="dark" block class="mb-0">Buy</v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
-                    </v-flex>
-
-
+                    <story-loop-component
+                            v-for="(story, index) in stories"
+                            :story="story"
+                            :key="story.id"></story-loop-component>
                 </v-layout>
             </v-container>
+
+            <pagination-component :pagination="paginateObj" :page="'stories'" v-if="stories.length > paginateObj.last_page"></pagination-component>
+
         </section>
     </div>
 </template>
 
 <script>
     import SearchComponent from '../../includes/SearchComponent'
+    import StoryLoopComponent from './modules/StoryLoopComponent'
+    import PaginationComponent from '../../includes/PaginationComponent'
+
     export default {
-        components :{
-            SearchComponent
+        components: {
+            SearchComponent,
+            StoryLoopComponent,
+            PaginationComponent
         },
 
-        data(){
+        data() {
             return {
-
+                stories: '',
+                paginateObj: '',
             }
         },
 
-        created(){
+        watch: {
+            '$route'(to, from, next) {
+                this.getStoriesData(this.getQueryParam());
+            }
+        },
 
+        created() {
+            this.getStoriesData(this.getQueryParam());
         },
 
         methods: {
+            getStoriesData(query = {page: 1, search:''}) {
+                this.$store.dispatch('getStoriesDataAsync', query)
+                    .then(() => {
+                        this.stories = this.$store.getters.getStoriesData;
+                        this.paginateObj = this.$store.getters.getStoriesPaginateData;
+                    })
+            },
 
+            getQueryParam() {
+                return {
+                    page: this.$route.query.page,
+                    search: this.$route.query.search
+                };
+            }
         }
     }
 </script>
