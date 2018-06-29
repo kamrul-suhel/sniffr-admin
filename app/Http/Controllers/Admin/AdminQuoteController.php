@@ -24,11 +24,11 @@ class AdminQuoteController extends Controller {
     {
         $pendingCollections = Collection::whereHas('collectionVideos', function($query) {
            $query->where('status', 'requested');
-        })->with('collectionVideos')->with('client')->with('user')->get();
+        })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'pending');
 
         $offeredCollections = Collection::whereHas('collectionVideos', function($query) {
             $query->where('status', 'offered');
-        })->with('collectionVideos')->with('client')->with('user')->get();
+        })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'offered');
 
         return view('admin.quotes.index')
             ->with('pendingCollections', $pendingCollections)

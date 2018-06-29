@@ -70,6 +70,7 @@
                                 <br>
                             @endforeach
                         @endforeach
+                        {{ $pendingCollections->links() }}
                     </div>
                 </div>
             </div>
@@ -130,6 +131,7 @@
                                 <br>
                             @endforeach
                         @endforeach
+                        {{ $offeredCollections->links() }}
                     </div>
                 </div>
             </div>
