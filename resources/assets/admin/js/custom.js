@@ -23,6 +23,229 @@ var public_vars = public_vars || {};
 		// 	}
 		// });
 
+		$('.js-story-state').click(function(e){
+			e.preventDefault();
+			var state, alertType;
+			var storyId = $(this).attr("data-id");
+			var myClass = $(this).attr("class");
+
+			switch (true) {
+				case /unapproved/.test(myClass):
+					state = 'unapproved';
+					alertType = 'info';
+					break;
+				case /approved/.test(myClass):
+					state = 'approved';
+					alertType = 'success';
+					break;
+				case /rejected/.test(myClass):
+					state = 'rejected';
+					alertType = 'error';
+					break;
+				case /unlicensed/.test(myClass):
+					state = 'unlicensed';
+					alertType = 'error';
+					break;
+				case /licensing/.test(myClass):
+					state = 'licensing';
+					alertType = 'info';
+					break;
+				case /licensed/.test(myClass):
+					state = 'licensed';
+					alertType = 'success';
+					break;
+				case /hacks-unassigned/.test(myClass):
+					state = 'hacks-unassigned';
+					alertType = 'warning';
+					break;
+				case /writing-inprogress/.test(myClass):
+					state = 'writing-inprogress';
+					alertType = 'info';
+					break;
+				case /writing-completed/.test(myClass):
+					state = 'writing-completed';
+					alertType = 'success';
+					break;
+				case /subs-unassigned/.test(myClass):
+					state = 'subs-unassigned';
+					alertType = 'warning';
+					break;
+				case /subs-inprogress/.test(myClass):
+					state = 'subs-inprogress';
+					alertType = 'info';
+					break;
+				case /subs-approved/.test(myClass):
+					state = 'subs-approved';
+					alertType = 'success';
+					break;
+				case /subs-rejected/.test(myClass):
+					state = 'subs-rejected';
+					alertType = 'error';
+					break;
+				case /published/.test(myClass):
+					state = 'published';
+					alertType = 'success';
+					break;
+			}
+
+			$(this).removeClass('js-story-state');
+
+			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+			$('.swal-button-container').css('display','none');
+
+			if(state&&storyId) {
+				console.log(state);
+				$.ajax({
+				    type: 'GET',
+				    url: '/admin/stories/status/'+state+'/'+storyId,
+				    data: {},
+				    dataType: 'json',
+				    success: function (data) {
+						if(data.status=='success') {
+							if(data.remove=='yes'){
+								$('#story-'+storyId).fadeOut();
+								$('#story-'+storyId).remove();
+							}
+							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
+							$('.swal-button-container').css('display','inline-block');
+						} else {
+							$('.swal-button-container').css('display','inline-block');
+						}
+				    }
+				});
+			}
+		});
+
+		$('.js-story-update').change(function(e) {
+            e.preventDefault();
+
+			var storyId = $(this).attr("data-id");
+            var fieldId = $(this).attr("id");
+			var fieldValue = $(this).val();
+
+            if(storyId&&fieldId&&fieldValue) {
+				$.ajax({
+				    type: 'GET',
+				    url: '/admin/stories/update_field',
+				    data: { story_id: storyId, field_id: fieldId, field_value: fieldValue },
+				    dataType: 'json',
+				    success: function (data) {
+                        //console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
+						if(data.status=='success') {
+                            $('#story-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+						} else {
+                            $('#story-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+						}
+				    }
+				});
+			}
+	    });
+
+		$('.js-story-show-source').click(function (e) {
+            e.preventDefault();
+            if($.trim($(this).attr("href"))!='#') {
+                $('#sourceModal').modal('show')
+                $("#sourceFrame").attr('src', $(this).attr("href"));
+                $('.modal .modal-content').css('overflow-y', 'auto');
+                $('.modal .modal-dialog').css('width', '70%');
+                $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
+                $('#sourceFrame').css('height', $(window).height() * 0.7+'px');
+            }
+		});
+
+		$('.js-story-get-source').change(function(e) {
+            e.preventDefault();
+
+			var storyId = $("#alpha_id").val();
+            var url = $(this).val();
+
+            if(url) {
+				$.ajax({
+				    type: 'GET',
+				    url: '/admin/stories/get_source',
+				    data: { story_id: storyId, url: url },
+				    dataType: 'json',
+				    success: function (data) {
+						if(data.url) {
+							$('#story_image_source').attr('src', data.url);
+							$('#story_image_source_url').val(data.url);
+						}
+				    }
+				});
+			}
+	    });
+
+		function checkJobs() {
+            setTimeout(
+            function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/mailers/checkjobs',
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.jobs == 0) {
+                            swal.close();
+                            swal({
+                                title: 'Stories are now up-to-date.',
+                                icon: 'success',
+                                closeModal: true,
+                                closeOnClickOutside: true,
+                                closeOnEsc: true
+                            }).then(function() {
+                                window.location.reload();
+                            });
+                        } else {
+                            // jobs are still in the queue, so run again
+                            checkJobs();
+                        }
+                    }
+                });
+            }, 500);
+        }
+
+        $('.js-story-refresh').click(function (e) {
+            e.preventDefault();
+            swal({
+                title: 'Please wait while the stories update. This may take a few minutes.',
+                icon: 'info',
+                closeModal: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                buttons: {
+                    confirm: false,
+                    cancel: false,
+                }
+            });
+            var refreshUrl = '/admin/mailers/refresh';
+            if (refreshUrl) {
+                $('.js-story-refresh').css('display', 'none');
+                $.ajax({
+                    type: 'GET',
+                    url: refreshUrl,
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.dispatched == false) {
+                            swal.close();
+                            swal({
+                                title: 'Stories are already up-to-date.',
+                                icon: 'success',
+                                closeModal: true,
+                                closeOnClickOutside: true,
+                                closeOnEsc: true
+                            }).then(function() {
+                                $('.js-story-refresh').css('display', 'block');
+                            });
+                        } else {
+                            // jobs have been sent to queue so need to check the job queue
+                            checkJobs();
+                        }
+                    }
+                });
+            }
+        });
+
 	    $('.js-state').click(function(e){
 			e.preventDefault();
 			var state, alertType;
@@ -58,7 +281,7 @@ var public_vars = public_vars || {};
 			$('.swal-button-container').css('display','none');
 
 			if(state&&videoId) {
-				console.log(state);
+				// console.log(state);
 				$.ajax({
 				    type: 'GET',
 				    url: '/admin/videos/status/'+state+'/'+videoId,
