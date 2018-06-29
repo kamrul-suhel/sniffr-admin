@@ -16,15 +16,17 @@
             <v-container grid-list-lg>
 
                 <div v-if="logged_in">
-                    <div v-if="recommended.length > 0">
-                        <h3 class="sub-heading">Your Recommended Videos</h3>
+                    <div v-if="mailer_videos && mailer_videos.length > 0">
+                        <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
                         <transition-group name="slide-fade" tag="div" class="layout row wrap">
-                            <videoloop-component v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
+                            <videoloop-component v-if="mailer_videos && mailer_videos.length > 0" v-for="(mailer, index) in mailer_videos" :video="mailer" :key="mailer.alpha_id"></videoloop-component>
+                            <videoloop-component v-if="recommended && recommended.length > 0" v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
                         </transition-group>
                         <br>
                     </div>
                 </div>
+
 
                 <h3 class="sub-heading">All Videos</h3>
                 <hr>
@@ -56,6 +58,7 @@
                 data: '',
                 videos: '',
                 recommended: '',
+                mailer_videos: '',
                 paginate: '',
                 current_page: 0,
                 logged_in : false,
@@ -76,7 +79,6 @@
                 this.current_page = this.$route.query.page;
             }
             this.setAlldata();
-
         },
         methods: {
             checkLogin(){
@@ -95,9 +97,12 @@
                     this.paginate = this.$store.getters.getPaginateObject;
                 });
 
-
                 this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
                     this.recommended = this.$store.getters.getRecommendedData;
+                });
+
+                this.$store.dispatch('getMailerVideoData', {page: 1}).then(() => {
+                    this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
             },
 
@@ -106,8 +111,12 @@
                     this.videos = this.$store.getters.getVideoData;
                 });
 
-                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
+                this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
                     this.recommended = this.$store.getters.getRecommendedData;
+                });
+
+                this.$store.dispatch('getMailerVideoData', {page: 1}).then(() => {
+                    this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
             },
         }

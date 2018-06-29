@@ -62,14 +62,6 @@
                                             </v-list-tile-title>
                                         </v-list-tile>
 
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <a @click.prevent.stop="onClientVideos()">
-                                                    <v-icon color="white" left size="20px">video_library</v-icon> My Videos
-                                                </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
                                         <v-list-tile>
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onLogout()">
