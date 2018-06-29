@@ -217,6 +217,7 @@ var public_vars = public_vars || {};
                     cancel: false,
                 }
             });
+			$('.swal-title').css('margin-bottom', '30px');
             var refreshUrl = '/admin/mailers/refresh';
             if (refreshUrl) {
                 $('.js-story-refresh').css('display', 'none');
