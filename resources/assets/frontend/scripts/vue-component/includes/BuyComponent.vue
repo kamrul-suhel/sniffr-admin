@@ -231,7 +231,7 @@
                 this.disabledCheck();
 
                 let form_data = new FormData();
-                form_data.append('video_id', this.video.id);
+                form_data.append('video_alpha_id', this.video.alpha_id);
                 form_data.append('license_type', this.license_type);
                 form_data.append('license_platform', this.license_platform);
                 form_data.append('license_length', this.license_length);
@@ -265,9 +265,6 @@
                     axios.get('/client/collections/accept_price/'+this.collection.collection_video_id)
                         .then(response => {
                             this.loading = false;
-                            console.log('LICENSED VIDEO SUCCESSFULLY');
-
-                            // CLose dialog boxes
                             this.open_buy_dialog = false;
                             VideoDialogBoxEventBus.closeVideoDialogFromBuy();
                         })
@@ -282,7 +279,7 @@
                     this.loading = true;
 
                     let form_data = new FormData();
-                    form_data.append('video_id', this.video.id);
+                    form_data.append('video_alpha_id', this.video.alpha_id);
                     form_data.append('license_type', this.license_type);
                     form_data.append('license_platform', this.license_platform);
                     form_data.append('license_length', this.license_length);
@@ -291,7 +288,6 @@
                     axios.post('/client/collections/request_video_quote/'+this.collection.collection_video_id, form_data)
                         .then(response => {
                             this.loading = false;
-                            console.log('QUOTE SENT');
                             this.show_thanks = true;
                         })
                         .catch(error => {

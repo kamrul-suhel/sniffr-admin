@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div v-if="video_detail.description != 'null'" class="content-description">
+                        <div v-if="video_detail.description !== 'null'" class="content-description">
                             <p>{{ video_detail.description | readmore(300, '...')}}</p>
                         </div>
 
@@ -93,7 +93,7 @@
 
             VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
                 this.getVideoData(alpha_id);
-            })
+            });
 
             VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
                 let alpha_id = this.$store.getters.getNextVideoAlphaId;
@@ -107,7 +107,7 @@
 
             LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
                 this.video_detail = '';
-            })
+            });
         },
 
         mounted() {
@@ -141,9 +141,7 @@
             },
 
             createCollection() {
-                axios.post('/client/collections', {
-                        'video_id': this.video_detail.id
-                    })
+                axios.post('/client/collections', {'video_alpha_id': this.video_detail.alpha_id})
                     .then(response => {
                         BuyDialogBoxEventBus.openBuyDialog(response.data, this.video_detail);
                     })

@@ -106,7 +106,6 @@
 
                 this.$store.dispatch('getStoryNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.story_detail = this.$store.getters.getCurrentStoryForDialog;
-                    console.log(this.story_detail);
                     if (this.story_detail.assets.length > 0) {
                         this.assets = [];
                         this.assets.push(...this.story_detail.assets);

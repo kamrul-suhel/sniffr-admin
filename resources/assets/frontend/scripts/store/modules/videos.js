@@ -1,5 +1,7 @@
 const state = {
     videos: null,
+    recommended: null,
+    mailer_videos: null,
     paginate: ''
 };
 
@@ -12,6 +14,10 @@ const getters = {
         return state.recommended;
     },
 
+    getMailerVideoData(state){
+        return state.mailer_videos;
+    },
+
     getPaginateObject(state){
         return state.paginate;
     },
@@ -22,8 +28,11 @@ const mutations = {
     },
 
     setRecommendedData(state, data){
-        console.log(data);
         state.recommended = data.recommended.data;
+    },
+
+    setMailerVideoData(state, data){
+        state.mailer_videos = data.mailer_videos.data;
     },
 
     setPaginationObject(state, paginate){
@@ -65,6 +74,27 @@ const actions = {
                     let data = response.data;
                     commit('setRecommendedData', data);
                     commit('setPaginationObject', data.recommended);
+                    resovle();
+                })
+                .catch((error) => {
+                    console.log('Not connect');
+                    reject();
+                });
+        });
+    },
+
+    getMailerVideoData({commit}, payload = {}){
+        return new Promise(function (resovle, reject) {
+            let url = '/videos';
+
+            if (payload.page && payload.page != 0) {
+                url = url + '?page=' + payload.page;
+            }
+            axios.get(url)
+                .then((response) => {
+                    let data = response.data;
+                    commit('setMailerVideoData', data);
+                    commit('setPaginationObject', data.mailer_videos);
                     resovle();
                 })
                 .catch((error) => {

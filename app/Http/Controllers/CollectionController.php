@@ -42,8 +42,8 @@ class CollectionController extends Controller
         $collection->status = "open";
         $collection->save();
 
-        if($request->has('video_id')) {
-            $video = Video::find($request->get('video_id'));
+        if($request->has('video_alpha_id')) {
+            $video = Video::where('alpha_id', $request->get('video_alpha_id'))->first();
             $collectionVideo = new CollectionVideo();
             $collectionVideo->collection_id = $collection->id;
             $collectionVideo->video_id = $video->id;
@@ -69,16 +69,13 @@ class CollectionController extends Controller
 
         return response([
             'collection_id' => $collection->id,
-            'collection_video_id' => $collectionVideo->id,
+            'collection_video_id' => $collectionVideo->id ?? null,
             'collection_story_id' => $collectionStory ?? null,
             'message' => "New collection created."
         ], 200);
     }
 
     /**
-     * TODO - Get base price
-     * TODO - Add company_tier to base price
-     * TODO - Add company_location to base price
      * @param Request $request
      * @param $collectionVideoId
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
@@ -87,7 +84,7 @@ class CollectionController extends Controller
 	{
 	    $user = auth()->user();
 
-		$video = Video::find($request->input('video_id'));
+        $video = Video::where('alpha_id', $request->get('video_alpha_id'))->first();
 
 		if ($video && $video->class != 'exceptional'){
 			$client = $user->client;
@@ -128,8 +125,47 @@ class CollectionController extends Controller
     {
 		$isJson = $request->ajax();
 
+		$user = auth()->user();
+		$client = $user->client;
         $collectionVideo = CollectionVideo::find($collection_video_id);
         $collection = $collectionVideo->collection;
+
+        if($client->id !== $collection->client_id) {
+            if($isJson) {
+                return response([
+                    'collection' => null,
+                    'message' => 'You do not have permission to accept this quote',
+                    'error' => true,
+                ], 200);
+            }
+            return redirect('/videos');
+        }
+
+        if($user->id !== $collection->user_id) {
+            if($isJson) {
+                return response([
+                    'collection' => null,
+                    'message' => 'This quote does not belong to you',
+                    'error' => true
+                ], 200);
+            }
+
+            return redirect('/videos');
+        }
+
+        if($collection->status != 'open'
+            || $collectionVideo->status == 'purchased'
+            || $collectionVideo->status == 'downloaded') {
+            if($isJson) {
+                return response([
+                    'collection' => null,
+                    'message' => 'This collection has been closed',
+                    'error' => true
+                ], 200);
+            }
+
+            return redirect('/videos');
+        }
 
         $collectionVideo->status = "purchased";
         $collectionVideo->save();
@@ -223,11 +259,12 @@ class CollectionController extends Controller
         $collectionVideo->length = $request->input('license_length') ??     $collectionVideo->length;
         $collectionVideo->company_location = $client->region;
         $collectionVideo->company_tier = $client->tier;
+        $collectionVideo->final_price = null;
         $collectionVideo->save();
 
         $collection = $collectionVideo->collection;
 
-		$video = Video::find($collectionVideo->video_id);
+		$video = $collectionVideo->video;
 		$client = $collection->client;
 
         QueueEmailPendingQuote::dispatch(
