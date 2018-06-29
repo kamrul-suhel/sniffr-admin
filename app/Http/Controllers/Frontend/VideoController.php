@@ -11,6 +11,7 @@ use App\Http\Requests\Video\CreateVideoRequest;
 use App\RecommendedAsset;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Auth;
@@ -88,7 +89,10 @@ class VideoController extends Controller
 				->paginate($this->videos_per_page);
 
 			if(Auth::check()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)
+                    ->whereNotNull('video_id')
+                    ->where('created_at', '>=', Carbon::today()->subDay(config('settings.stale_time'))->startOfDay())
+                    ->pluck('id');
 				$recommended = Video::select($this->getVideoFieldsForFrontend())
 					->whereIn('id', $recommendedVids)
 					->paginate(10);
