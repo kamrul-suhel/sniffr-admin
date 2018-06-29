@@ -26,7 +26,13 @@
                 <v-spacer></v-spacer>
 
                 <v-toolbar-items>
-                    <v-checkbox v-model="selected"></v-checkbox>
+                    <div class="mailer-label">
+                        Add to mailer
+                    </div>
+                    <v-checkbox
+                            v-model="selected"
+                            @click="onStoryClick()"
+                            ></v-checkbox>
                 </v-toolbar-items>
             </v-toolbar>
 
@@ -92,6 +98,7 @@
 
         created() {
             let current_device = this.$vuetify.breakpoint.name;
+
             if(current_device == 'sm' || current_device == 'xs'){
                 this.margin_content = false;
             }
@@ -106,6 +113,9 @@
 
                 this.checkAlphaIdExists();
                 this.current_story = this.$store.getters.getCurrentStoryForDialog;
+
+                //check story is selected or not
+                this.isStorySelected();
             })
 
             StoryDialogBoxEventBus.$on('videoDialogBoxClose', (video) => {
@@ -164,6 +174,28 @@
                     this.previousPageExists = true;
                 }
             },
+
+            onStoryClick(){
+                console.log(this.selected);
+                return;
+                if (selected) {
+                    this.$store.commit('setStory', this.current_story);
+                } else {
+                    this.$store.commit('removeStory', this.current_story);
+                }
+            },
+
+            isStorySelected(){
+                let stories = this.$store.getters.getAllSelectedStories;
+
+                //set initialize state
+                this.selected = false;
+                stories.forEach((story) => {
+                    if (story.id === this.current_story.id) {
+                        this.selected = true;
+                    }
+                });
+            }
 
         }
     }
