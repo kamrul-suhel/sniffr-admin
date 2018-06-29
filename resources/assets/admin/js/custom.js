@@ -175,6 +175,77 @@ var public_vars = public_vars || {};
 			}
 	    });
 
+		function checkJobs() {
+            setTimeout(
+            function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/mailers/checkjobs',
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.jobs == 0) {
+                            swal.close();
+                            swal({
+                                title: 'Stories are now up-to-date.',
+                                icon: 'success',
+                                closeModal: true,
+                                closeOnClickOutside: true,
+                                closeOnEsc: true
+                            }).then(function() {
+                                window.location.reload();
+                            });
+                        } else {
+                            // jobs are still in the queue, so run again
+                            checkJobs();
+                        }
+                    }
+                });
+            }, 500);
+        }
+
+        $('.js-story-refresh').click(function (e) {
+            e.preventDefault();
+            swal({
+                title: 'Please wait while the stories update. This may take a few minutes.',
+                icon: 'info',
+                closeModal: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                buttons: {
+                    confirm: false,
+                    cancel: false,
+                }
+            });
+            var refreshUrl = '/admin/mailers/refresh';
+            if (refreshUrl) {
+                $('.js-story-refresh').css('display', 'none');
+                $.ajax({
+                    type: 'GET',
+                    url: refreshUrl,
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.dispatched == false) {
+                            swal.close();
+                            swal({
+                                title: 'Stories are already up-to-date.',
+                                icon: 'success',
+                                closeModal: true,
+                                closeOnClickOutside: true,
+                                closeOnEsc: true
+                            }).then(function() {
+                                $('.js-story-refresh').css('display', 'block');
+                            });
+                        } else {
+                            // jobs have been sent to queue so need to check the job queue
+                            checkJobs();
+                        }
+                    }
+                });
+            }
+        });
+
 	    $('.js-state').click(function(e){
 			e.preventDefault();
 			var state, alertType;

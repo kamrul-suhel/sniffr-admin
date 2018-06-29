@@ -23,7 +23,11 @@
                     @endif
 					<a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
 						<i class="fa fa-plus-circle"></i>
-						Add New
+						Add New Story
+					</a>
+                    <a href="#" class="btn btn-primary js-story-refresh pull-right" style="margin-right:10px;">
+						<i class="fa fa-refresh"></i>
+						Refresh Stories
 					</a>
 				</h3>
 			</div>
@@ -192,7 +196,6 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
-
 
 	});
 	</script>
