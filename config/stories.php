@@ -28,7 +28,6 @@ return [
         'pickup' => [
 			'approved',
             'unlicensed',
-            'licensed',
 		],
         'licensing' => [
 			'licensing',
@@ -37,16 +36,20 @@ return [
 			'licensed',
             'hacks-unassigned',
 		],
-        'editorial-pickup' => [
+        'editorial-process' => [
 			'writing-inprogress',
             'writing-completed',
             'subs-unassigned',
             'subs-inprogress',
             'subs-approved',
             'subs-rejected',
+            'edits-unassigned',
+            'edits-inprogress',
+            'edits-approved',
+            'edits-rejected',
 		],
         'published' => [
-			'licensed',
+			'published',
 		],
         'archived' => [
 			'rejected',

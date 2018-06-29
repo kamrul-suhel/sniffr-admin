@@ -240,6 +240,8 @@ class AdminStoryController extends Controller
 
         $story->save();
 
+        // need states for when syncing stories to WP
+
         return Redirect::to('admin/stories')->with([
             'note' => 'Successfully Updated Story!',
             'note_type' => 'success'
@@ -275,13 +277,24 @@ class AdminStoryController extends Controller
 
         }
 
+        // need states for when syncing stories to WP
+
+        // create message for frontend
+        switch (true) {
+            case ($state == 'hacks-unassigned'||$state == 'hacks-unassigned'||$state == 'writing-inprogress'||$state == 'writing-completed'||$state == 'subs-unassigned'||$state == 'subs-inprogress'||$state == 'subs-approved'||$state == 'subs-rejected'):
+                $message = 'Updated Editorial Process';
+                break;
+            default:
+                $message = 'Successfully ' . ucfirst($state) . ' Story';
+        }
+
         // Save story data to database
         $story->save();
 
         if ($isJson) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'Successfully ' . ucfirst($state) . ' Story',
+                'message' => $message,
                 'state' => $state,
                 'remove' => 'yes',
                 'story_id' => $story->id,
