@@ -16,17 +16,19 @@
             <v-container grid-list-lg>
 
                 <div v-if="logged_in">
-                    <div v-if="mailer_videos && mailer_videos.length > 0">
+                    <div v-if="mailer_videos || recommended">
                         <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
-                        <transition-group name="slide-fade" tag="div" class="layout row wrap">
+                        <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
+                        <v-card-text class="overflow-hidden" style="overflow:auto; height:352px; width:100% !important; margin: 0px; padding:0px;">
+                        <v-layout align-content-center style="overflow-x:scroll;">
                             <videoloop-component v-if="mailer_videos && mailer_videos.length > 0" v-for="(mailer, index) in mailer_videos" :video="mailer" :key="mailer.alpha_id"></videoloop-component>
-                            <videoloop-component v-if="recommended && recommended.length > 0" v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
-                        </transition-group>
+                                <videoloop-component v-if="recommended && recommended.length > 0" v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
+                            </v-layout>
+                        </v-card-text>
                         <br>
                     </div>
                 </div>
-
 
                 <h3 class="sub-heading">All Videos</h3>
                 <hr>
