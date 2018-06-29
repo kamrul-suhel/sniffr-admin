@@ -9,7 +9,6 @@ const state = {
     user_id:'',
     client_id:'',
     user_role: '',
-
     route_url: ''
 }
 

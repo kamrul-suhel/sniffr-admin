@@ -170,8 +170,8 @@
 
             this.setPrevRoute();
 
-
             LoginEventBus.$on('logoutChangeState', () => {
+
                 this.is_login = false;
             });
 

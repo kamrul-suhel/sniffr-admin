@@ -112,7 +112,7 @@
                         </div>
 
                         <div class="tab-pane" id="sales">
-                            <h1>Sales</h1>
+                            @include('admin.videos.partials.video_class')
                         </div>
 
                         <div class="tab-pane" id="rights">

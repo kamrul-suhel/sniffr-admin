@@ -49,7 +49,7 @@
                         </div>
                     </v-flex>
 
-                    <buy-button-component></buy-button-component>
+                    <buy-button-component v-if="user.client_id"></buy-button-component>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -71,6 +71,7 @@
         data() {
             return {
                 video_detail: '',
+                user: {},
                 tags: [],
                 ready_to_show: true,
                 content_padding: true,
@@ -83,6 +84,8 @@
         },
 
         created() {
+            this.user = this.$store.getters.getUser;
+
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;

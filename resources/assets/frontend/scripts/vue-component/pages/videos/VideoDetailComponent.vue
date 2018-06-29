@@ -61,7 +61,7 @@
                                     </ul>
                                 </div>
 
-                                <buy-button-component></buy-button-component>
+                                <buy-button-component v-if="user.client_id"></buy-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
@@ -87,13 +87,11 @@
         data() {
             return {
                 ini:false,
+                user: {},
                 video_detail: {},
                 tags: [],
-
                 ready_to_show : true,
-
                 previousPageUrl: '',
-
                 content_padding:true
             }
         },
@@ -102,6 +100,7 @@
         },
 
         created() {
+            this.user = this.$store.getters.getUser;
             let breakpoint = this.$vuetify.breakpoint.name;
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;

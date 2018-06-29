@@ -141,6 +141,12 @@ export const routes = [
             },
 
             {
+                path: 'collections/accept_price/:collection_video_id',
+                name: 'accept_quote',
+                component: ClientPurchasedAssetsComponent
+            },
+
+            {
                 path: 'stories/:alpha_id',
                 name: 'client_story_detail',
                 component: ClientStoryDetailComponent
