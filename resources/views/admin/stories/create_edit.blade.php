@@ -46,7 +46,7 @@
 								</div>
 								<?php endif; ?>
 
-								<input type="text" class="form-control" name="title" id="title" placeholder="Story Title" value="@if(!empty($story->title)){{ $story->title }}@endif" />
+								<input type="text" class="form-control" name="title" id="title" placeholder="Story Title" value="@if(!empty($story->title)){{ $story->title }}@endif" @if(isset($story)) @if(in_array($story->state, config('stories.decisions.writing-in-progress'))||in_array($story->state, config('stories.decisions.subbing-in-progress'))) disabled @endif @endif />
 							</div>
 						</div>
 
@@ -62,7 +62,7 @@
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="description" id="description">@if(!empty($story->description)){{ htmlspecialchars($story->description) }}@endif</textarea>
+								<textarea class="form-control" name="description" id="description" @if(isset($story)) @if(in_array($story->state, config('stories.decisions.writing-in-progress'))||in_array($story->state, config('stories.decisions.subbing-in-progress'))) disabled @endif @endif>@if(!empty($story->description)){{ htmlspecialchars($story->description) }}@endif</textarea>
 							</div>
 						</div>
 
@@ -72,13 +72,13 @@
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">Story Excerpt / Notes</div>
+								<div class="panel-title">Notes</div>
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="excerpt" id="excerpt">@if(!empty($story->excerpt)){{ htmlspecialchars($story->excerpt) }}@endif</textarea>
+								<textarea class="form-control" name="excerpt" id="excerpt" @if(isset($story)) @if(in_array($story->state, config('stories.decisions.writing-in-progress'))||in_array($story->state, config('stories.decisions.subbing-in-progress'))) disabled @endif @endif>@if(!empty($story->excerpt)){{ htmlspecialchars($story->excerpt) }}@endif</textarea>
 							</div>
 						</div>
 
@@ -144,7 +144,7 @@
 							</div>
 
 							<div class="panel-body" style="display: block;">
-								<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="http://" value="@if(!empty($story->source)){{ $story->source }}@endif" />
+								<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="http://" value="@if(!empty($story->source)){{ $story->source }}@endif" @if(isset($story)) @if(in_array($story->state, config('stories.decisions.writing-in-progress'))||in_array($story->state, config('stories.decisions.subbing-in-progress'))) disabled @endif @endif />
 							</div>
 						</div>
 					</div>
