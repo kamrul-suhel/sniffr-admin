@@ -14,11 +14,11 @@
 					<i class="fa fa-tasks"></i>
                     @if($decision)
                     <a href="/admin/stories/?$decision={{ lcfirst($decision) }}">
-						{{ ucwords(str_replace('-', ' ', $decision)) }} Stories
+						Stories: {{ ucwords(str_replace('-', ' ', $decision)) }}
 					</a>
                     @else
                     <a href="/admin/stories/{{ lcfirst($state) }}">
-						{{ ucfirst($state) }} Stories
+						Stories: {{ ucfirst($state) }}
 					</a>
                     @endif
 					<a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
@@ -39,7 +39,7 @@
 					<div class="form-group">
 						<select id="decision" name="decision" class="selectpicker form-control" title="Decision Point">
                             @foreach(config('stories.decisions') as $decision_state_key => $decision_state)
-							<option value="{{ $decision_state_key }}" @if($decision==@$decision_state_key) selected @endif>{{ ucwords(str_replace('-', ' ', $decision_state_key)) }} Stories</option>
+							<option value="{{ $decision_state_key }}" @if($decision==@$decision_state_key) selected @endif>{{ ucwords(str_replace('-', ' ', $decision_state_key)) }}</option>
                             @endforeach
 						</select>
 					</div>
@@ -151,26 +151,46 @@
                             </div>
                             <div class="album-options">
                                 @if($story->state == 'unapproved')
+
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state approved btn-mini btn-mini-border" title="Approve"><i class="fa fa-check"></i> Approve</a>
+
                                 @elseif($story->state == 'approved')
+
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state licensing btn-mini btn-mini-border" title="Pick Up"><i class="fa fa-check"></i> Pick Up</a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state licensing btn-mini btn-mini-border" title="License Story"><i class="fa fa-check"></i> License Story</a>
+
                                 @elseif($story->state == 'licensing'||$story->state == 'unlicensed')
+
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state approved btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state licensed btn-mini btn-mini-border" title="License"><i class="fa fa-check"></i> License</a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state licensed btn-mini btn-mini-border" title="Edit License"><i class="fa fa-check"></i> Edit License</a>
+
                                 @elseif($story->state == 'licensed')
+
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border" title="Pick Up"><i class="fa fa-check"></i> Pick Up</a>
-                                @elseif($story->state == 'writing-inprogress'||$story->state == 'writing-completed'||$story->state == 'subs-unassigned'||$story->state == 'subs-inprogress'||$story->state == 'subs-rejected'||$story->state == 'subs-approved')
-                                    <!-- <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a> -->
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Editorial Process"><i class="fa fa-info"></i> Editorial Process</a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border" title="Pick Up"><i class="fa fa-check"></i> Write Story</a>
+
+                                @elseif($story->state == 'writing-inprogress'||$story->state == 'writing-completed')
+
+                                    <!-- <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state licensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a> -->
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state subs-unassigned btn-mini btn-mini-border" title="Submit to Sub"><i class="fa fa-check"></i> Submit to Sub</a>
+
+                                @elseif($story->state == 'subs-unassigned'||$story->state == 'subs-inprogress'||$story->state == 'subs-rejected'||$story->state == 'subs-approved')
+
+                                    <!-- <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Editorial Process"><i class="fa fa-info"></i> Editorial Process</a> -->
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state writing-inprogress btn-mini btn-mini-border left" title="Back to Writing"><i class="fa fa-times"></i></a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state published btn-mini btn-mini-border left" title="Story Ready"><i class="fa fa-check"></i> Story Ready</a>
+
                                 @elseif($story->state == 'published')
+
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state subs-inprogress btn-mini btn-mini-border left" title="Editorial"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Published"><i class="fa fa-info"></i> Published</a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success btn-mini btn-mini-border" title="View Story"><i class="fa fa-info"></i> View Story</a>
+
                                 @else
+
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border left" title="Next State"><i class="fa fa-check"></i> Pick Up</a>
+
                                 @endif
                             </div>
                         </footer>

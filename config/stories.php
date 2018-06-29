@@ -22,13 +22,13 @@ return [
         'published'
     ],
     'decisions' => [
-		'new' => [
+		'content-sourced' => [
 			'unapproved',
 		],
-        'pickup-approved' => [
+        'ready-to-license' => [
 			'approved',
 		],
-        'licensing' => [
+        'licensing-in-progress' => [
             'unlicensed',
 			'licensing',
 		],
@@ -36,9 +36,11 @@ return [
 			'licensed',
             'hacks-unassigned',
 		],
-        'editorial-process' => [
+        'writing-in-progress' => [
 			'writing-inprogress',
             'writing-completed',
+		],
+        'subbing-in-progress' => [
             'subs-unassigned',
             'subs-inprogress',
             'subs-approved',
@@ -48,7 +50,7 @@ return [
             'edits-approved',
             'edits-rejected',
 		],
-        'published' => [
+        'ready-to-publish' => [
 			'published',
 		],
         'archived' => [
