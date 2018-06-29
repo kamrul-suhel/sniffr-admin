@@ -14,7 +14,9 @@ use App\Asset;
 use App\Video;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 
@@ -156,8 +158,14 @@ class AdminStoryController extends Controller
         //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
 
-        if (Input::get('story_image_source_url')) {
-            $story->thumb = Input::get('story_image_source_url');
+        if (Input::hasFile('story_image')) {
+            $imageFile = Input::file('story_image');
+            $imageUrl = $this->saveImageFile($imageFile);
+            $story->thumb = ($imageUrl ? $imageUrl : $story->thumb);
+        } else {
+            if (Input::get('story_image_source_url')) {
+                $story->thumb = Input::get('story_image_source_url');
+            }
         }
 
         $story->save();
@@ -227,8 +235,14 @@ class AdminStoryController extends Controller
             $story->source = Input::get('source');
         }
 
-        if (Input::get('story_image_source_url')) {
-            $story->thumb = Input::get('story_image_source_url');
+        if (Input::hasFile('story_image')) {
+            $imageFile = Input::file('story_image');
+            $imageUrl = $this->saveImageFile($imageFile);
+            $story->thumb = ($imageUrl ? $imageUrl : $story->thumb);
+        } else {
+            if (Input::get('story_image_source_url')!=$story->thumb) {
+                $story->thumb = Input::get('story_image_source_url');
+            }
         }
 
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
@@ -403,6 +417,22 @@ class AdminStoryController extends Controller
                 'message' => 'Error',
             ]);
         }
+    }
+
+    /**
+     * @param UploadedFile $imageFile
+     * @return string
+     */
+    private function saveImageFile(UploadedFile $imageFile)
+    {
+        $imageFileName = time() . '.' . $imageFile->getClientOriginalExtension();
+        $t = \Storage::disk('s3')->put($imageFileName, file_get_contents($imageFile), 'public');
+
+        if (!$t) {
+            abort(500);
+        }
+
+        return \Storage::disk('s3')->url($imageFileName);
     }
 
     /**
