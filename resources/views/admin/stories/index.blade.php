@@ -165,6 +165,9 @@
                                 @elseif($story->state == 'writing-inprogress'||$story->state == 'writing-completed'||$story->state == 'subs-unassigned'||$story->state == 'subs-inprogress'||$story->state == 'subs-rejected'||$story->state == 'subs-approved')
                                     <!-- <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a> -->
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Editorial Process"><i class="fa fa-info"></i> Editorial Process</a>
+                                @elseif($story->state == 'published')
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state subs-inprogress btn-mini btn-mini-border left" title="Editorial"><i class="fa fa-times"></i></a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Published"><i class="fa fa-info"></i> Published</a>
                                 @else
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border left" title="Next State"><i class="fa fa-check"></i> Pick Up</a>

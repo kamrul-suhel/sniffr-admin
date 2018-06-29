@@ -133,6 +133,13 @@ var public_vars = public_vars || {};
                         //console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
 						if(data.status=='success') {
                             $('#story-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+							if(data.field_id=='state') {
+								window.location.reload();
+								// if(data.field_value=='published') {
+								// 	$('#story-'+storyId).fadeOut();
+								// 	$('#story-'+storyId).remove();
+								// }
+							}
 						} else {
                             $('#story-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
 						}

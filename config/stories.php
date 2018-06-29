@@ -25,11 +25,11 @@ return [
 		'new' => [
 			'unapproved',
 		],
-        'pickup' => [
+        'pickup-approved' => [
 			'approved',
-            'unlicensed',
 		],
         'licensing' => [
+            'unlicensed',
 			'licensing',
 		],
         'licensed' => [

@@ -262,30 +262,29 @@ class AdminStoryController extends Controller
         $previous_state = $story->state;
         $story->state = ($story->state!=$state ? $state : $story->state);
 
-        // post story to WP
-        if ($state == 'approved') {
-
-            $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
-            $result = $this->apiPost('posts', $parameters, true);
-
-            // update stories record with WP response from post
-            if($result->id){
-                $story->wp_id = $result->id;
-                $story->status = $result->status;
-                $story->date_ingested = $story->created_at;
-            }
-
-        }
-
-        // need states for when syncing stories to WP
-
         // create message for frontend
+        $message = 'Successfully ' . ucfirst($state) . ' Story';
+
+        // sync to WP
         switch (true) {
+            case ($state == 'approved'):
+                // add new post to WP
+                $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
+                $result = $this->apiPost('posts', $parameters, true);
+                // update stories record with WP response from post
+                if($result->id){
+                    $story->wp_id = $result->id;
+                    $story->status = $result->status;
+                    $story->date_ingested = $story->created_at;
+                }
+                break;
+            case ($state == 'published'):
+                // get latest story updates from WP and update stories record (WIP)
+                break;
             case ($state == 'hacks-unassigned'||$state == 'hacks-unassigned'||$state == 'writing-inprogress'||$state == 'writing-completed'||$state == 'subs-unassigned'||$state == 'subs-inprogress'||$state == 'subs-approved'||$state == 'subs-rejected'):
+                // get latest story updates from WP and update stories record (WIP)
                 $message = 'Updated Editorial Process';
                 break;
-            default:
-                $message = 'Successfully ' . ucfirst($state) . ' Story';
         }
 
         // Save story data to database
@@ -322,6 +321,7 @@ class AdminStoryController extends Controller
         $field_value = $request->input('field_value');
         $story = Story::where('alpha_id', $id)
             ->first();
+
 
         if($field_id&&$field_value) {
             switch (true) {
