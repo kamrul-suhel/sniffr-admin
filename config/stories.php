@@ -25,28 +25,31 @@ return [
 		'new' => [
 			'unapproved',
 		],
-        'pickup' => [
+        'pickup-approved' => [
 			'approved',
-            'unlicensed',
-            'licensed',
 		],
         'licensing' => [
+            'unlicensed',
 			'licensing',
 		],
         'licensed' => [
 			'licensed',
             'hacks-unassigned',
 		],
-        'editorial-pickup' => [
+        'editorial-process' => [
 			'writing-inprogress',
             'writing-completed',
             'subs-unassigned',
             'subs-inprogress',
             'subs-approved',
             'subs-rejected',
+            'edits-unassigned',
+            'edits-inprogress',
+            'edits-approved',
+            'edits-rejected',
 		],
         'published' => [
-			'licensed',
+			'published',
 		],
         'archived' => [
 			'rejected',
