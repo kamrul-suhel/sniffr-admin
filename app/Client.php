@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\QueueEmailCompany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -41,19 +42,43 @@ class Client extends Model
 		return $this->hasMany(User::class);
 	}
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
 	public function owner()
     {
         return $this->belongsTo(User::class, 'account_owner_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function billingUser()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function collections()
     {
         return $this->hasMany(Collection::class);
+    }
+
+    /**
+     * @param $params
+     * @return \Illuminate\Foundation\Bus\PendingDispatch
+     */
+    public function emailNewCompanyUser($params)
+    {
+        return QueueEmailCompany::dispatch(
+            $params['company_id'],
+            $params['user_email'],
+            $params['user_full_name'],
+            $params['user_full_name'],
+            $params['token']
+        );
     }
 
     public function routeNotificationForSlack()
