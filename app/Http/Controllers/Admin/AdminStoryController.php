@@ -63,7 +63,6 @@ class AdminStoryController extends Controller
                 if($decision==$decision_state_key) {
                     $count=1;
                     foreach($decision_state as $state_key => $state_value) {
-                        //echo $state_value. "<br />";
                         if($count==0) {
                             $stories = $stories->where('state', $state_value);
                         } else {
@@ -281,7 +280,7 @@ class AdminStoryController extends Controller
 
         // sync to WP
         switch (true) {
-            case ($state == 'approved'):
+            case (in_array($state, config('stories.decisions.ready-to-license'))):
                 // add new post to WP
                 $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
                 $result = $this->apiPost('posts', $parameters, true);
@@ -291,13 +290,22 @@ class AdminStoryController extends Controller
                     $story->status = $result->status;
                     $story->date_ingested = $story->created_at;
                 }
+                $message = 'Ready to license';
                 break;
-            case ($state == 'published'):
-                // get latest story updates from WP and update stories record (WIP)
+            case (in_array($state, config('stories.decisions.licensing-in-progress'))):
+                $message = 'Licensing in progress';
                 break;
-            case ($state == 'hacks-unassigned'||$state == 'hacks-unassigned'||$state == 'writing-inprogress'||$state == 'writing-completed'||$state == 'subs-unassigned'||$state == 'subs-inprogress'||$state == 'subs-approved'||$state == 'subs-rejected'):
+            case (in_array($state, config('stories.decisions.ready-to-publish'))):
                 // get latest story updates from WP and update stories record (WIP)
-                $message = 'Updated Editorial Process';
+                $message = 'Ready to publish';
+                break;
+            case (in_array($state, config('stories.decisions.writing-in-progress'))):
+                // get latest story updates from WP and update stories record (WIP)
+                $message = 'Writing in progess';
+                break;
+            case (in_array($state, config('stories.decisions.subbing-in-progress'))):
+                // get latest story updates from WP and update stories record (WIP)
+                $message = 'Subbing in progess';
                 break;
         }
 
