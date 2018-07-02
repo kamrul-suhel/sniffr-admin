@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Story;
+use App\CollectionVideo;
 use Auth;
 use App\Client;
 use App\Collection;
-use App\CollectionStory;
-use App\CollectionVideo;
 use App\Jobs\QueueEmailCompany;
 use App\Jobs\QueueEmailPendingQuote;
 use App\Libraries\VideoHelper;
@@ -16,66 +16,66 @@ use App\Video;
 use Redirect;
 use App\Notifications\RequestVideoQuote;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CollectionController extends Controller
 {
 
-    use Slug;
+    use Slug, VideoHelper;
+
+    protected $collection, $collectionVideo, $video, $story, $client, $user;
+
+    /**
+     * CollectionController constructor.
+     * @param Collection $collection
+     * @param CollectionVideo $collectionVideo
+     * @param Video $video
+     * @param Story $story
+     * @param Client $client
+     * @param User $user
+     */
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo, Video $video, Story $story, Client $client, User $user)
+    {
+        $this->collection = $collection;
+        $this->collectionVideo = $collectionVideo;
+        $this->video = $video;
+        $this->story = $story;
+        $this->client = $client;
+        $this->user = $user;
+    }
 
     /**
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     * - Check if video already exists for client (not just user)
-     * - Check if no one has bought video within the time of clicking 'Buy'
-     * - Create CollectionVideo/CollectionStory instance. (assoc to this collection)
+     * TODO - Check if video already exists for client (not just user)
+     * TODO - Create CollectionVideo/CollectionStory instance. (assoc to this collection)
      **/
     public function store(Request $request)
     {
-        $data = $request->except("_token");
         $user = auth()->user();
 
-        $collection = new Collection();
-        $collection->name = "order_".VideoHelper::quickRandom(10);
-        $collection->user_id = $user->id;
-        $collection->client_id = $user->client->id;
-        $collection->status = "open";
-        $collection->save();
+        $data = [
+            'name' => "order_".VideoHelper::quickRandom(10),
+            'user_id' => $user->id,
+            'client_id' => $user->client_id,
+            'status' => 'open',
+        ];
+
+        $collection = $this->collection->create($data);
 
         if($request->has('video_alpha_id')) {
-            $video = Video::where('alpha_id', $request->get('video_alpha_id'))->first();
-            $collectionVideo = new CollectionVideo();
-            $collectionVideo->collection_id = $collection->id;
-            $collectionVideo->video_id = $video->id;
-            $collectionVideo->type = null;
-            $collectionVideo->platform = null;
-            $collectionVideo->length = null;
-            $collectionVideo->class = $video->class;
-            $collectionVideo->final_price = config('pricing.base');
-            $collectionVideo->company_location = $user->client->region;
-            $collectionVideo->company_tier = $user->client->tier;
-            $collectionVideo->status = 'received';
-            $collectionVideo->save();
-        }
-
-        if($request->has('story_id')) {
-            $collectionStory = new CollectionStory();
-            $collectionStory->collection_id = $collection->id;
-            $collectionStory->story_id = $request->get('story_id');
-            $collectionStory->status = 'received';
-            $collectionStory->final_price = 0;
-            $collectionStory->save();
+            $video = $this->video->where('alpha_id', $request->get('video_alpha_id'))->first();
+            $collectionVideo = $collection->addVideoToCollection($video, $user);
         }
 
         return response([
             'collection_id' => $collection->id,
             'collection_video_id' => $collectionVideo->id ?? null,
-            'collection_story_id' => $collectionStory ?? null,
             'message' => "New collection created."
         ], 200);
     }
 
     /**
+     * Interactive method to retrieve the price and update the db on demand
      * @param Request $request
      * @param $collectionVideoId
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
@@ -84,50 +84,151 @@ class CollectionController extends Controller
 	{
 	    $user = auth()->user();
 
-        $video = Video::where('alpha_id', $request->get('video_alpha_id'))->first();
+        $video = $this->video->where('alpha_id', $request->get('video_alpha_id'))->first();
 
 		if ($video && $video->class != 'exceptional'){
 			$client = $user->client;
-			$collectionVideo = CollectionVideo::find($collectionVideoId);
+			$collectionVideo = $this->collectionVideo->find($collectionVideoId);
 
-			$price = config('pricing.base');
+			$pricingMetrics = $this->gatherMetricsForPricing($video, $client, $collectionVideo);
 
-			$price = $price * (config('pricing.class.' . $video->class . '.modifier') ?: 1);
-			$price = $price * (config('pricing.locations.' . $client->location . '.modifier') ?: 1);
-			$price = $price * (config('pricing.tier.' . $client->tier . '.modifier') ?: 1);
-			$price = $price * (config('pricing.type.' . $request->input('license_type') . '.modifier') ?: 1);
-			$price = $price * (config('pricing.platform.' . $request->input('license_platform') . '.modifier') ?: 1);
-			$price = $price * (config('pricing.length.' . $request->input('license_length') . '.modifier') ?: 1);
+			$finalPrice = $collectionVideo->calculatePrice($pricingMetrics);
 
-			$price = round($price, 2);
+			$collectionVideo->update([
+                'type'=> $pricingMetrics['license_type'],
+                'platform'=> $pricingMetrics['license_platform'],
+                'length'=> $pricingMetrics['license_length'],
+                'company_location'=> $client->region,
+                'company_tier'=> $client->tier,
+                'final_price'=> $finalPrice,
+            ]);
 
-			$collectionVideo->type = $request->input('license_type') ??         $collectionVideo->type;
-			$collectionVideo->platform = $request->input('license_platform') ?? $collectionVideo->platform;
-			$collectionVideo->length = $request->input('license_length') ??     $collectionVideo->length;
-
-			$collectionVideo->company_location = $client->region;
-			$collectionVideo->company_tier = $client->tier;
-			$collectionVideo->final_price = $price;
-			$collectionVideo->save();
-
-			return response(['price' => $price], 200);
+			return response(['price' => $collectionVideo->final_price], 200);
 		}
 
 		return response(['price' => ''], 200);
     }
 
     /**
+     * Gather metrics so we can calculate the final price for a CollectionVideo
+     * @param Video $video
+     * @param Client $client
+     * @param CollectionVideo $collectionVideo
+     * @return array
+     */
+    private function gatherMetricsForPricing(Video $video, Client $client, CollectionVideo $collectionVideo)
+    {
+        return $pricingMetrics = [
+            'class' => $video->class,
+            'location' => $client->location,
+            'tier' => $client->tier,
+            'license_type' => request()->input('license_type') ??   $collectionVideo->type,
+            'license_platform' => request()->input('license_platform') ?? $collectionVideo->platform,
+            'license_length' => request()->input('license_length') ?? $collectionVideo->length,
+        ];
+    }
+
+    /**
+     * Register new user, and email then set password email. Also create a new collection and link to that user
+     * @param Request $request
+     * @param $collection_id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function registerUser(Request $request, $collection_id)
+    {
+        $data = $request->except('_token');
+
+        $company_slug = $this->slugify($data['company_name']);
+        $password = $this->quickRandom();
+
+        $client = $this->client->create([
+            'name' => $data['company_name'],
+            'slug' => $company_slug,
+            'account_owner' => null, //set to null as we don't know this person will be the top dog.
+        ]);
+
+        $user = $this->user->create([
+            'username' => $company_slug,
+            'email' => $data['user_email'],
+            'full_name' => $data['user_full_name'],
+            'role' => 'client_owner',
+            'password' => \Hash::make($password),
+            'client_id' => $client->id
+        ]);
+
+        $params = [
+            'company_id' => $client->id,
+            'user_email' => $user->email,
+            'user_full_name' => $user->full_name,
+            'token' => app('App\Http\Controllers\Admin\AdminUsersController')->getToken($user->email, $user)
+        ];
+
+        $client->emailNewCompanyUser($params);
+
+        $collection = $this->collection->find($collection_id);
+        $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
+
+        return response([
+            'user' => $user,
+        ], 200);
+
+    }
+
+    /**
+     * Send a newly registered user an email telling them we are looking into their request.
+     * @param Request $request
+     * @param $collection_video_id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function requestVideoQuote(Request $request, $collection_video_id)
+    {
+        $data = $request->except('_token');
+    	$user = Auth::user();
+    	$client = $user->client;
+
+        $collectionVideo = $this->collectionVideo->find($collection_video_id);
+        $collectionVideo->update([
+            'status' =>  'requested',
+            'type' =>  $data['license_type'] ??         $collectionVideo->type,
+            'platform' =>  $data['license_platform'] ?? $collectionVideo->platform,
+            'length' =>  $data['license_length'] ??     $collectionVideo->length,
+            'company_location' =>  $client->region,
+            'company_tier' =>  $client->tier,
+            'final_price' =>  null,
+        ]);
+
+        $collection = $collectionVideo->collection;
+		$video = $collectionVideo->video;
+		$client = $collection->client;
+
+		$params = [
+			'username' => is_null($user->full_name) ? $user->username : $user->full_name,
+			'user' => $user->email,
+            'collection' => $collection
+        ];
+
+		$collectionVideo->emailPendingQuote($params);
+
+		$user->slackChannel('quotes')->notify(new RequestVideoQuote($user, $video, $client));
+
+        return response([
+            'message' => 'Email has been sent to new user'
+        ], 200);
+    }
+
+    /**
+     * TODO - Check if no one has bought video within the time of clicking 'Buy'
      * @param Request $request
      * @param $collection_video_id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function acceptFinalPrice(Request $request, $collection_video_id)
     {
-		$isJson = $request->ajax();
+        $isJson = $request->ajax();
 
-		$user = auth()->user();
-		$client = $user->client;
-        $collectionVideo = CollectionVideo::find($collection_video_id);
+        $user = auth()->user();
+        $client = $user->client;
+        $collectionVideo = $this->collectionVideo->find($collection_video_id);
         $collection = $collectionVideo->collection;
 
         if($client->id !== $collection->client_id) {
@@ -173,111 +274,17 @@ class CollectionController extends Controller
         $collection->status = "closed";
         $collection->save();
 
-		if($isJson){
-			return response([
-				'collection' => $collection,
-				'message' => 'final price has been accepted'
-			], 200);
-		}
+        if($isJson){
+            return response([
+                'collection' => $collection,
+                'message' => 'final price has been accepted'
+            ], 200);
+        }
 
-		return Redirect::to('client/purchased')
-			->with([
-				'note' => 'Thanks for purchasing the video',
-				'note_type' => 'success',
-			]);
+        return Redirect::to('client/purchased')
+            ->with([
+                'note' => 'Thanks for purchasing the video',
+                'note_type' => 'success',
+            ]);
     }
-
-    /**
-     * Register new user, and email then set password email.
-     * @param Request $request
-     * @param $collection_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function registerUser(Request $request, $collection_id)
-    {
-        $company_slug = $this->slugify($request->get('company_name'));
-
-        $company_id = Client::insertGetId([
-            'name' => $request->get('company_name'),
-            'slug' => $company_slug,
-        ]);
-
-        $password = VideoHelper::quickRandom();
-
-        $user_id = User::insertGetId([
-            'username' => $company_slug,
-            'email' => $request->get('user_email'),
-            'full_name' => $request->get('user_full_name'),
-            'role' => 'client_owner',
-            'password' => \Hash::make($password),
-            'client_id' => $company_id
-        ]);
-
-        $user = User::find($user_id);
-
-        $client = Client::find($company_id);
-        $client->account_owner_id = null; //set to null as we dont know this person will be the top dog.
-        $client->save();
-
-        $token = app('App\Http\Controllers\Admin\AdminUsersController')->getToken($request->get('user_email'), $user);
-
-        QueueEmailCompany::dispatch(
-            $company_id,
-            $request->get('user_email'),
-            $request->get('user_full_name'),
-            $request->get('user_full_name'),
-            $token
-        );
-
-        $collection = Collection::find($collection_id);
-        $collection->user_id = $user->id;
-        $collection->client_id = $client->id;
-        $collection->save();
-
-        return response([
-            'user' => $user,
-        ], 200);
-
-    }
-
-    /**
-     * Send a newly registered user an email telling them we are looking into their request.
-     * @param Request $request
-     * @param $collection_video_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function requestVideoQuote(Request $request, $collection_video_id)
-    {
-    	$user = Auth::user();
-    	$client = $user->client;
-
-        $collectionVideo = CollectionVideo::find($collection_video_id);
-        $collectionVideo->status = 'requested';
-
-        $collectionVideo->type = $request->input('license_type') ??         $collectionVideo->type;
-        $collectionVideo->platform = $request->input('license_platform') ?? $collectionVideo->platform;
-        $collectionVideo->length = $request->input('license_length') ??     $collectionVideo->length;
-        $collectionVideo->company_location = $client->region;
-        $collectionVideo->company_tier = $client->tier;
-        $collectionVideo->final_price = null;
-        $collectionVideo->save();
-
-        $collection = $collectionVideo->collection;
-
-		$video = $collectionVideo->video;
-		$client = $collection->client;
-
-        QueueEmailPendingQuote::dispatch(
-			is_null($user->full_name) ? $user->username : $user->full_name,
-			$user->email,
-            $collection
-        );
-
-		$user->slackChannel('quotes')->notify(new RequestVideoQuote($user, $video, $client));
-
-        return response([
-            'message' => 'Email has been sent to new user'
-        ], 200);
-    }
-
 }

@@ -95,7 +95,7 @@ class VideoController extends Controller
                     ->pluck('id');
 				$recommended = Video::select($this->getVideoFieldsForFrontend())
 					->whereIn('id', $recommendedVids)
-					->paginate(10);
+					->paginate();
 
 				$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
 
@@ -104,7 +104,7 @@ class VideoController extends Controller
 				$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
                     ->whereIn('id', $mailerVideoIds)
                     ->whereNotIn('id', $unsearchableVideos)
-                    ->paginate(100);
+                    ->paginate();
 			}
 
 			$data = [

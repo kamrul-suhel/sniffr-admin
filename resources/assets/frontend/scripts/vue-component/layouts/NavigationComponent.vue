@@ -15,7 +15,7 @@
                         <ul>
                             <li v-if="client_login">
                                 <router-link :to="{name: 'client_purchased_assets'}">
-                                    <v-icon color="white" left>money</v-icon> Purchases
+                                    <v-icon color="white" left>attach_money</v-icon> Purchases
                                 </router-link>
                             </li>
 
