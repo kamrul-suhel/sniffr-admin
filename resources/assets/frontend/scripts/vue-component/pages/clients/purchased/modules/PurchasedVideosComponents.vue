@@ -56,7 +56,6 @@
                 this.page = 1;
                 this.getVideosData(this.getQueryObject());
             }
-
         },
 
         created() {
@@ -73,20 +72,23 @@
                 if(queryObject.searchTerm != ''){
                     url += '&search='+ queryObject.searchTerm;
                 }
-                axios.get(url)
-                    .then((videos) => {
+
+                this.$store.dispatch('fetchPurchasedVideos', url)
+                    .then(() => {
+                        var videos = this.$store.getters.getPurchasedVideos;
+
                         // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
-                        if(typeof videos.data.videos.data == 'object'){
-                            videos.data.videos.data = Object.values(videos.data.videos.data);
+                        if(typeof videos.data == 'object'){
+                            videos.data = Object.values(videos.data);
                         }
-                        videos.data.videos.data.forEach((video) => {
+                        videos.data.forEach((video) => {
                             this.videos.push(video[0].video);
                         });
 
-                        this.videosPerPage = videos.data.videos.per_page;
-                        this.totalVideos = videos.data.videos.total;
-                        this.numberOfPages = videos.data.videos.last_page
-                    });
+                        this.videosPerPage = videos.per_page;
+                        this.totalVideos = videos.total;
+                        this.numberOfPages = videos.last_page;
+                    })
             },
 
             getQueryObject(){

@@ -18,11 +18,11 @@
                 :story="story"></asset-story-downloaded-component>
 
 
-        <div class="text-xs-center" v-if="stories.total > stories.per_page">
+        <div class="text-xs-center" v-if="totalStories > storiesPerPage">
             <v-pagination
-                    :length="totalPage"
+                    :length="numberOfPages"
                     v-model="page"
-                    :total-visible="7"
+                    :total-visible="3"
                     dark color="black">
             </v-pagination>
         </div>
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-    import ClientDownloadedEventBus from '../../../../../event-bus/client-downloaded-event-bus';
     import AssetStoryDownloadedComponent from '../../partials/AssetStoryDownloadComponent'
 
     export default {
@@ -40,8 +39,10 @@
         data() {
             return {
                 page: 1,
-                stories: '',
-                totalPage: 0,
+                stories: [],
+                numberOfPages: 1,
+                totalStories: 0,
+                storiesPerPage: 0,
                 searchTerm: ''
             }
         },
@@ -59,12 +60,6 @@
 
         created() {
             this.getStoriesData(this.getQueryObject());
-
-            ClientDownloadedEventBus.$on('storiesUpdated', () => {
-                setTimeout(() => {
-                    this.getStoriesData();
-                }, 1000)
-            });
         },
 
         methods: {
@@ -78,10 +73,21 @@
                     url += '&search=' + queryObject.searchTerm;
                 }
 
-                this.$store.dispatch('setDownloadedStories', url)
+                this.$store.dispatch('fetchPurchasedStories', url)
                     .then(() => {
-                        this.stories = this.$store.getters.getDownloadedStories;
-                        this.totalPage = this.stories.last_page;
+                        var stories = this.$store.getters.getPurchasedStories;
+
+                        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
+                        if(typeof stories.data == 'object'){
+                            stories.data = Object.values(stories.data);
+                        }
+                        stories.data.forEach((story) => {
+                            this.stories.push(story[0].story);
+                        });
+
+                        this.storiesPerPage = stories.per_page;
+                        this.totalStories = stories.total;
+                        this.numberOfPages = stories.last_page
                     })
             },
 

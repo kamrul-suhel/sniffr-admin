@@ -19,7 +19,7 @@
                                 </router-link>
                             </li>
 
-                            <li>
+                            <li v-if="!client_login">
                                 <router-link to="/upload">
                                     <v-icon color="white" left>file_upload</v-icon> Upload
                                 </router-link>

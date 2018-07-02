@@ -16,18 +16,19 @@
                             slider-color="black"
                     >
                         <v-tab>
-                            Stories
-                        </v-tab>
-
-                        <v-tab-item>
-                            <purchased-stories-component></purchased-stories-component>
-                        </v-tab-item>
-                        <v-tab>
                             Videos
                         </v-tab>
 
                         <v-tab-item>
                             <purchased-videos-component></purchased-videos-component>
+                        </v-tab-item>
+
+                        <v-tab>
+                            Stories
+                        </v-tab>
+
+                        <v-tab-item>
+                            <purchased-stories-component></purchased-stories-component>
                         </v-tab-item>
                     </v-tabs>
                 </v-flex>

@@ -3,6 +3,7 @@ const state = {
     clientCurrentVideo: '',
     mailClientVideos: '',
     clientMailerId:'',
+    purchased_videos:''
 }
 
 const mutations = {
@@ -55,26 +56,21 @@ const actions = {
         })
     },
 
-    getClientDownloadedVideos({commit}, downloaded_obj){
+    fetchPurchasedVideos({commit}, payload){
         return new Promise((resolve, reject) => {
-            let url = '/client/client_videos/downloaded';
-            if (downloaded_obj.page > 0) {
-                url += '?page=' + downloaded_obj.page;
-            }
 
-            axios.get(url)
+            axios.get(payload)
                 .then((response) => {
-                    let data = response.data;
-                    commit('setclient_videos', data);
-                    resolve();
-                })
-                .catch((error) => {
-                    reject();
-                    console.log(error);
-                });
-
+                        state.purchased_videos = response.data.videos;
+                        resolve();
+                    },
+                    (error) => {s
+                        return reject();
+                    });
         })
     }
+
+
 
 }
 
@@ -85,6 +81,10 @@ const getters = {
 
     getClientCurrentVideo(state){
         return state.currentStory;
+    },
+
+    getPurchasedVideos(state){
+        return state.purchased_videos;
     }
 }
 
