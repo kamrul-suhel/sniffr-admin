@@ -63,7 +63,7 @@
 
                 setTimeout(() => {
                     if(this.page === 'video'){
-                        this.$router.push({path: '/videos', query: {page: this.current_page}});
+                        this.$router.push({path: '/videos', query: {page: this.current_page, search: this.$route.query.search}});
                     }
 
                     if(this.page === 'search'){

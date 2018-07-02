@@ -220,8 +220,14 @@ class VideoController extends Controller
     {
     	$recommended = [];
         if ($request->ajax() || $request->isJson()) {
-            $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
-                ->orderBy('id', 'DESC')
+            $videos = Video::select($this->getVideoFieldsForFrontend())
+                ->where('state', 'licensed');
+            if($request->search){
+                $videos = $videos->where('title', 'LIKE', '%'. $request->search);
+                $videos = $videos->orWhere('title', 'LIKE', '%'. $request->search);
+            }
+
+            $videos = $videos->orderBy('id', 'DESC')
                 ->paginate($this->videos_per_page);
 
             if(Auth::user()){

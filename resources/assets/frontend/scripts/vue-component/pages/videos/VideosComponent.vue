@@ -75,9 +75,11 @@
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
+
             this.setAlldata();
 
         },
+
         methods: {
             checkLogin(){
                 // see user status
@@ -89,6 +91,7 @@
                     }
                 });
             },
+
             setAlldata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;

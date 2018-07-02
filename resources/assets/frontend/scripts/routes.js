@@ -60,11 +60,11 @@ export const routes = [
         component: ContractComponent
     },
 
-    {
-        path: '/search',
-        name: 'videos_search',
-        component: VideoSearchComponent
-    },
+    // {
+    //     path: '/search',
+    //     name: 'videos_search',
+    //     component: VideoSearchComponent
+    // },
 
     {
         path: '/videos/tag/:value',
