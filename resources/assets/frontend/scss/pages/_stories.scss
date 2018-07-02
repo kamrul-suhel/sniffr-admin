@@ -1,4 +1,31 @@
 .stories-component{
+  .story-media-thumbnail {
+    height:200px !important;
+  }
+  @include small-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  @include medium-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  @include large-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  @include extra-large-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
   .stories {
     h2{
       height: 36px;
@@ -7,7 +34,9 @@
       text-overflow: ellipsis;
     }
     .description{
-      height:120px;
+      height: 120px;
+      overflow: hidden;
+      white-space: initial;
     }
   }
 }

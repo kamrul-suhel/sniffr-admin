@@ -107,6 +107,10 @@
         <buy-component></buy-component>
         <!-- End buy component -->
 
+        <!-- Request quote Component -->
+        <request-quote-component></request-quote-component>
+        <!-- End request quote component -->
+
         <!-- Logout snackbars -->
         <v-snackbar
                 top="top"
@@ -119,15 +123,17 @@
     </section>
 </template>
 <script>
-    import LoginComponent from '../includes/LoginComponent';
-    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent';
-    import BuyComponent from '../includes/BuyComponent';
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
+    import LoginComponent from '../includes/LoginComponent'
+    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
+    import BuyComponent from '../includes/BuyComponent'
+    import RequestQuoteComponent from '../includes/RequestQuoteComponent'
+    import LoginEventBus from '../../event-bus/login-event-bus'
     export default {
         components: {
             LoginComponent,
             ForgotPasswordComponent,
-            BuyComponent
+            BuyComponent,
+            RequestQuoteComponent
         },
         data() {
             return {

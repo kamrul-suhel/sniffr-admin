@@ -327,7 +327,8 @@ Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('c
 | Frontend Stories route
 |--------------------------------------------------------------------------
 */
-Route::get('stories', 'Frontend\StoryCOntroller@index')->name('frontend.stories');
+Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
+Route::post('/request_quote_process', 'Frontend\StoryController@requestQuote')->name('frontend.request.quote');
 
 
 

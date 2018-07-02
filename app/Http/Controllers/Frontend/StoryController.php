@@ -45,6 +45,11 @@ class StoryController extends Controller
         return view('frontend.master');
     }
 
+    public function requestQuote(Request $request){
+        $formData = $request->input('form');
+        dd(json_decode($formData));
+    }
+
     /**
      * @param Request $request
      * @param string $id
