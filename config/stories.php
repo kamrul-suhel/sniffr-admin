@@ -2,7 +2,7 @@
 
 return [
     'states' => [
-        'unapproved',
+        'unapproved' ,
         'approved',
         'rejected',
         'unlicensed',
@@ -15,40 +15,36 @@ return [
         'subs-inprogress',
         'subs-approved',
         'subs-rejected',
-        'edits-unassigned',
-        'edits-inprogress',
-        'edits-approved',
-        'edits-rejected',
+        // 'edits-unassigned',
+        // 'edits-inprogress',
+        // 'edits-approved',
+        // 'edits-rejected',
         'published'
     ],
-    'decisions' => [
+
+    'decision_states' => [
 		'content-sourced' => [
-			'unapproved',
-		],
-        'ready-to-license' => [
-			'approved',
+			'unapproved' => '',
+            'approved' => '',
 		],
         'licensing-in-progress' => [
+            'approved',
             'unlicensed',
 			'licensing',
-		],
-        'licensed' => [
-			'licensed',
-            'hacks-unassigned',
+            'licensed',
 		],
         'writing-in-progress' => [
+            'licensed',
+            'hacks-unassigned',
 			'writing-inprogress',
             'writing-completed',
 		],
         'subbing-in-progress' => [
+            'writing-completed',
             'subs-unassigned',
             'subs-inprogress',
             'subs-approved',
             'subs-rejected',
-            'edits-unassigned',
-            'edits-inprogress',
-            'edits-approved',
-            'edits-rejected',
 		],
         'ready-to-publish' => [
 			'published',
@@ -57,35 +53,73 @@ return [
 			'rejected',
 		],
     ],
+
+    'decisions' => [
+		'content-sourced' => [
+			'unapproved',
+            'approved',
+            'rejected',
+		],
+        'licensing-in-progress' => [
+            'approved',
+            'unlicensed',
+			'licensing',
+            'licensed',
+		],
+        'writing-in-progress' => [
+            'licensed',
+            'hacks-unassigned',
+			'writing-inprogress',
+            'writing-completed',
+		],
+        'subbing-in-progress' => [
+            'writing-completed',
+            'subs-unassigned',
+            'subs-inprogress',
+            'subs-approved',
+            'subs-rejected',
+            // 'edits-unassigned',
+            // 'edits-inprogress',
+            // 'edits-approved',
+            // 'edits-rejected',
+		],
+        'ready-to-publish' => [
+			'published',
+		],
+    ],
+
     'priorities' => [
         'high',
         'medium',
         'low',
     ],
+
     'destinations' => [
         'for-sale',
         'for-page',
     ],
+
     'colors' => [
         'unapproved' => 'default',
         'approved' => 'default',
-        'rejected' => 'danger',
-        'unlicensed' => 'warning',
-        'licensing' => 'warning',
-        'licensed' => 'success',
+        'rejected' => 'default',
+        'unlicensed' => 'default',
+        'licensing' => 'default',
+        'licensed' => 'default',
         'hacks-unassigned' => 'default',
-        'writing-inprogress' => 'warning',
+        'writing-inprogress' => 'default',
         'writing-completed' => 'success',
         'subs-unassigned' => 'default',
-        'subs-inprogress' => 'warning',
+        'subs-inprogress' => 'default',
         'subs-approved' => 'success',
-        'subs-rejected' => 'danger',
+        'subs-rejected' => 'default',
         'edits-unassigned' => 'default',
-        'edits-inprogress' => 'warning',
-        'edits-approved' => 'success',
-        'edits-rejected' => 'danger',
+        'edits-inprogress' => 'default',
+        'edits-approved' => 'default',
+        'edits-rejected' => 'default',
         'published' => 'success',
     ],
+
     'icons' => [
         'accepted' => 'fa fa-clock-o',
         'rejected' => 'fa fa-times',

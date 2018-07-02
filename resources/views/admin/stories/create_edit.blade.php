@@ -206,6 +206,10 @@
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
+
+		@if(isset($story->id))
+			<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-right:10px;">License</a>
+	    @endif 
 	</form>
 
 	<div class="clear"></div>

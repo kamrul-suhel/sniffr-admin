@@ -40,6 +40,8 @@ class AdminStoryController extends Controller
      */
     public function index(Request $request)
     {
+        //dd(config('stories.decisions'));
+
         $search_value = $request->input('search_value', null);
         $state = ($request->input('state', 'all') ? $request->input('state', 'all') : 'all');
         $decision = $request->input('decision', null);
@@ -56,7 +58,7 @@ class AdminStoryController extends Controller
             });
         }
 
-        // create decision point and only display states within it
+        // only display states within selected decision point
         if($decision) {
             $state = 'all';
             foreach(config('stories.decisions') as $decision_state_key => $decision_state) {
@@ -85,7 +87,7 @@ class AdminStoryController extends Controller
             'stories' => $stories,
             'state' => $state,
             'decision' => $decision,
-            'users' => User::all(),
+            'users' => User::where([['client_id', NULL]])->get(),
             'user' => Auth::user(),
         ];
 
@@ -270,6 +272,8 @@ class AdminStoryController extends Controller
     public function status(Request $request, $state, $id)
     {
         $isJson = $request->ajax();
+        $decision = $request->input('decision');
+        $remove = 'no';
 
         $story = Story::where('alpha_id', $id)->first();
         $previous_state = $story->state;
@@ -278,33 +282,30 @@ class AdminStoryController extends Controller
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
-        // sync to WP
+        // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case (in_array($state, config('stories.decisions.ready-to-license'))):
+            case ($state == 'approved'):
                 // add new post to WP
-                $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
-                $result = $this->apiPost('posts', $parameters, true);
-                // update stories record with WP response from post
-                if($result->id){
-                    $story->wp_id = $result->id;
-                    $story->status = $result->status;
-                    $story->date_ingested = $story->created_at;
-                }
+                // $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
+                // $result = $this->apiPost('posts', $parameters, true);
+                // // update stories record with WP response from post
+                // if($result->id){
+                //     $story->wp_id = $result->id;
+                //     $story->status = $result->status;
+                //     $story->date_ingested = $story->created_at;
+                // }
                 $message = 'Ready to license';
                 break;
             case (in_array($state, config('stories.decisions.licensing-in-progress'))):
                 $message = 'Licensing in progress';
                 break;
             case (in_array($state, config('stories.decisions.ready-to-publish'))):
-                // get latest story updates from WP and update stories record (WIP)
                 $message = 'Ready to publish';
                 break;
             case (in_array($state, config('stories.decisions.writing-in-progress'))):
-                // get latest story updates from WP and update stories record (WIP)
                 $message = 'Writing in progess';
                 break;
             case (in_array($state, config('stories.decisions.subbing-in-progress'))):
-                // get latest story updates from WP and update stories record (WIP)
                 $message = 'Subbing in progess';
                 break;
         }
@@ -317,18 +318,19 @@ class AdminStoryController extends Controller
                 'status' => 'success',
                 'message' => $message,
                 'state' => $state,
-                'remove' => 'yes',
+                'remove' => $remove,
                 'story_id' => $story->id,
                 'story_alpha_id' => $story->alpha_id,
-                'previous_state' => $previous_state,
+                'decision' => $decision,
             ]);
+        } else {
+            return Redirect::to('admin/stories/?decision=' . $decision)
+                ->with([
+                    'note' => 'Story Updated',
+                    'note_type' => 'success',
+                ]);
         }
 
-        // return Redirect::to('admin/stories/edit/' . $id . '/?previous_state=' . $previous_state)
-        //     ->with([
-        //         'note' => 'Successfully Updated Story',
-        //         'note_type' => 'success',
-        //     ]);
     }
 
     /**
