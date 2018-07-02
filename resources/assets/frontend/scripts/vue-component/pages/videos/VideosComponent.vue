@@ -46,12 +46,13 @@
     import VideoLoopComponent from '../../includes/VideoLoopComponent';
     import PaginationComponent from '../../includes/PaginationComponent';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
+    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components: {
             searchComponent: SearchComponent,
             videoloopComponent: VideoLoopComponent,
-            paginationComponent: PaginationComponent
+            paginationComponent: PaginationComponent,
         },
         data(){
             return {
@@ -73,24 +74,27 @@
         },
 
         created(){
-            this.checkLogin();
+            this.logged_in = this.$store.getters.isClientLogin;
+
+            // If client has logged in
+            LoginEventBus.$on('clientLoginSuccess', () => {
+                this.setAlldata();
+                this.logged_in = this.$store.getters.isUserLogin;
+                this.client_login = this.$store.getters.isClientLogin;
+            });
+
+            LoginEventBus.$on('logoutChangeState', () => {
+                this.logged_in = false;
+                this.client_login = false;
+            });
 
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
+
             this.setAlldata();
         },
         methods: {
-            checkLogin(){
-                // see user status
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                        this.logged_in = true;
-                    }
-                });
-            },
             setAlldata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;

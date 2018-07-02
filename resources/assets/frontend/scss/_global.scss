@@ -154,28 +154,6 @@ p {
   font-family: JosefinSansregular;
 }
 
-/* ************************* Countdown section style ******************* */
-
-.countdown {
-  background: $countdown-background-color;
-  color: $countdown-text-color;
-
-  .countdown-container {
-    text-align: center;
-
-    .countdown-number h2 {
-      font-size: $countdown-number-font-size;
-    }
-
-    .countdown-subtitle {
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-  }
-}
-
-
 /* ************************* More detail Section style ******************* */
 
 .more-detail-component {

@@ -61,7 +61,6 @@ const actions = {
             if (downloaded_obj.page > 0) {
                 url += '?page=' + downloaded_obj.page;
             }
-            console.log(url);
 
             axios.get(url)
                 .then((response) => {

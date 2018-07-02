@@ -13,7 +13,7 @@
                 <v-flex xs12 sm6 md8 lg8>
                     <nav class="navigation">
                         <ul>
-                            <li v-if="client_login && is_login">
+                            <li v-if="client_login">
                                 <router-link :to="{name: 'client_purchased_assets'}">
                                     <v-icon color="white" left>money</v-icon> Purchases
                                 </router-link>
@@ -121,6 +121,7 @@
 
                 //user auth
                 is_login: false,
+                client_login: false,
 
                 //logout
                 logout: false,
@@ -130,13 +131,11 @@
                 //if user login all data
                 user: '',
 
-                client_login: false
             }
         },
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
-
                 this.onResetPrevRoute();
 
                 if(to.name != 'home'){
@@ -146,52 +145,36 @@
                         this.nav_background = false;
                     }, 800);
                 }
-                // see user status
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                        if(this.user.role === 'client_admin' || this.user.role=== 'client_owner' || this.user.role === 'client'){
-                            this.client_login = true;
-                        }
-                    }
-                });
             }
         },
         created(){
-
             this.setPrevRoute();
 
-            LoginEventBus.$on('logoutChangeState', () => {
+            this.user = this.$store.getters.getUser;
 
+            LoginEventBus.$on('logoutChangeState', () => {
                 this.is_login = false;
+                this.client_login = false;
             });
 
+            // If client has logged in
             LoginEventBus.$on('clientLoginSuccess', () => {
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                        if(this.user.role === 'client_admin' || this.user.role === 'client_owner' || this.user.role === 'client'){
-                            this.client_login = true;
-                        }
-                    }
-                });
+                this.user = this.$store.getters.getUser;
+                this.is_login = this.$store.getters.isUserLogin;
+                this.client_login = this.$store.getters.isClientLogin;
+            });
+
+            // On every navigation load, check to see if user is logged in
+            this.$store.dispatch('getLoginStatus').then((response) => {
+                this.is_login = this.$store.getters.isUserLogin;
+                this.client_login = this.$store.getters.isClientLogin;
             });
 
             this.$store.dispatch('setSettingObjectFromServer').then(() => {
                 this.settings = this.$store.getters.getSettingsObject;
             });
 
-            this.$store.dispatch('getLoginStatus').then((response) => {
-                this.is_login = this.$store.getters.isUserLogin;
-                if(this.is_login){
-                    this.user = this.$store.getters.getUser;
-                    if(this.user.role === 'client_admin' || this.user.role === 'client_owner' || this.user.role === 'client'){
-                        this.client_login = true;
-                    }
-                }
-            });
+
             if(this.$route.name != 'home'){
                 this.nav_background = true;
             }else{

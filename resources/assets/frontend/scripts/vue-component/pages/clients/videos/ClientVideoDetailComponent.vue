@@ -136,7 +136,6 @@
         methods: {
             onGoback() {
                 let prevRoute = this.$store.getters.getRouteUrl;
-                console.log(prevRoute);
                 if(prevRoute != ''){
                     this.$router.push({name : this.$store.getters.getRouteUrl});
                 }else{

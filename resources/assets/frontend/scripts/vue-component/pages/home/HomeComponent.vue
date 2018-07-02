@@ -11,23 +11,17 @@
         <!-- Feature Component -->
         <feature-component></feature-component>
 
-        <!-- Countdown Component -->
-        <!-- <count-down></count-down> -->
-
         <!-- Upload video component -->
         <!--<upload-video-component></upload-video-component>-->
     </div>
 </template>
 <script>
-    import CountdownComponent from './_partials/CountdownComponent.vue';
-    import FeatureComponent from './_partials/FeatureComponent.vue';
+    import FeatureComponent from '../../includes/FeatureComponent.vue';
     import UploadVideoComponent from '../../forms/UploadVideoComponent.vue';
-
     import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components:{
-            countDown: CountdownComponent,
             featureComponent: FeatureComponent,
             uploadVideoComponent: UploadVideoComponent
         },
@@ -55,28 +49,10 @@
                         this.nav_background = false;
                     }, 800);
                 }
-                // see user status
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                    }
-                });
             }
         },
 
         methods: {
-            onLogout(){
-                this.$store.dispatch('userLogout')
-                    .then((response) => {
-                        this.logout = true;
-                        this.is_login = this.$store.getters.isUserLogin;
-                        setTimeout(() => {
-                            this.logout = false;
-                        }, 3500);
-                    });
-            },
-
             onUploadVideo(){
                 this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
                 setTimeout(() => {
@@ -96,14 +72,6 @@
         created(){
             LoginEventBus.$on('logoutChangeState', () => {
                 this.is_login = false;
-            });
-
-            //Get user data
-            this.$store.dispatch('getLoginStatus').then((response) => {
-                this.is_login = this.$store.getters.isUserLogin;
-                if(this.is_login){
-                    this.user = this.$store.getters.getUser;
-                }
             });
 
             var browserheight = window.innerHeight;

@@ -218,7 +218,7 @@ class AdminClientController extends Controller
 	public function orders(Request $request, $client_id)
 	{
 		$client = Client::find($client_id);
-		$orders = Collection::where([['client_id', '=', $client_id],['status']])
+		$orders = Collection::where([['client_id', '=', $client_id],['status', 'closed']])
 			->get();
 		$downloads = Download::where('client_id', '=', $client_id)
 			->get();
