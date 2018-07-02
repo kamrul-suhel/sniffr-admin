@@ -184,4 +184,76 @@ return [
 			'modifier' => 1.75
 		]
 	],
+    'location' => [
+        'eastern-europe' => [
+            'slug' => 'eastern-europe',
+            'name' => 'Eastern Europe',
+            'modifier' => 1.25
+        ],
+        'africa' => [
+            'slug' => 'africa',
+            'name' => 'Africa',
+            'modifier' => 1.25
+        ],
+        'middle-east-east' => [
+            'slug' => 'middle-east-east',
+            'name' => 'Middle East (East)',
+            'modifier' => 1.25
+        ],
+        'asia' => [
+            'slug' => 'asia',
+            'name' => 'Asia',
+            'modifier' => 1.5
+        ],
+        'south-america' => [
+            'slug' => 'south-america',
+            'name' => 'South America',
+            'modifier' => 1.5
+        ],
+        'south-africa' => [
+            'slug' => 'south-africa',
+            'name' => 'South Africa',
+            'modifier' => 1.75
+        ],
+        'middle-east-west' => [
+            'slug' => 'middle-east-west',
+            'name' => 'Middle East (West)',
+            'modifier' => 1.75
+        ],
+        'oceania' => [
+            'slug' => 'oceania',
+            'name' => 'Oceania',
+            'modifier' => 2
+        ],
+        'western-europe' => [
+            'slug' => 'western-europe',
+            'name' => 'Western Europe',
+            'modifier' => 2
+        ],
+        'russia' => [
+            'slug' => 'russia',
+            'name' => 'Russia',
+            'modifier' => 2
+        ],
+        'japan' => [
+            'slug' => 'japan',
+            'name' => 'Japan',
+            'modifier' => 2
+        ],
+        'china' => [
+            'slug' => 'china',
+            'name' => 'China',
+            'modifier' => 2
+        ],
+        'singapore' => [
+            'slug' => 'singapore',
+            'name' => 'Singapore',
+            'modifier' => 2
+        ],
+        'america' => [
+            'slug' => 'america',
+            'name' => 'America',
+            'modifier' => 2
+        ]
+    ],
 ];

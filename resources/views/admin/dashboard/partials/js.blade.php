@@ -11,37 +11,33 @@
                     echo '"' . $video[0]->created_at->format('jS M') . '",';
                 }?>
                 ],
-                "datasets": [{
-                    "label": 'Ex Submission',
-                    "data": [
-                        <?php foreach ($video_traffic as $video) {
-                        echo count($video->where('rights', 'ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
-                    "borderWidth": 1
-                },
+                "datasets": [
+                    {
+                        "label": 'Ex Chaser',
+                        "data": [<?php foreach ($video_traffic as $video) {echo count($video->where('rights', 'exc')) . ',';}?>],
+                        "fill": false,
+                        "backgroundColor": "rgba(20, 130, 200, 0.5",
+                        "borderWidth": 1
+                    },
+                    {
+                        "label": 'Ex Submissione',
+                        "data": [<?php foreach ($video_traffic as $video) {echo count($video->where('rights', 'ex')) . ',';}?>],
+                        "fill": false,
+                        "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                        "borderWidth": 1
+                    },
                     {
                         "label": 'Ex Chaser Channel',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('rights', 'excc')) . ',';
-                        }?>
-                        ],
+                        "data": [<?php foreach ($video_traffic as $video) {echo count($video->where('rights', 'excc')) . ',';}?>],
                         "fill": false,
-                        "backgroundColor": "rgba(0, 160, 90, 0.2)",
+                        "backgroundColor": "rgba(0, 160, 90, 0.3)",
                         "borderWidth": 1
                     },
                     {
                         "label": 'Non Ex Chaser',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('rights', 'nonexc')) . ',';
-                        }?>
-                        ],
+                        "data": [<?php foreach ($video_traffic as $video) {echo count($video->where('rights', 'nonexc')) . ',';}?>],
                         "fill": false,
-                        "backgroundColor": "rgba(100, 155, 72, 0.2)",
+                        "backgroundColor": "rgba(100, 155, 72, 0.9)",
                         "borderWidth": 1
                     },
 

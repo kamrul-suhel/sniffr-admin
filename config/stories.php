@@ -21,9 +21,54 @@ return [
         'edits-rejected',
         'published'
     ],
+    'decisions' => [
+		'content-sourced' => [
+			'unapproved',
+		],
+        'ready-to-license' => [
+			'approved',
+		],
+        'licensing-in-progress' => [
+            'unlicensed',
+			'licensing',
+		],
+        'licensed' => [
+			'licensed',
+            'hacks-unassigned',
+		],
+        'writing-in-progress' => [
+			'writing-inprogress',
+            'writing-completed',
+		],
+        'subbing-in-progress' => [
+            'subs-unassigned',
+            'subs-inprogress',
+            'subs-approved',
+            'subs-rejected',
+            'edits-unassigned',
+            'edits-inprogress',
+            'edits-approved',
+            'edits-rejected',
+		],
+        'ready-to-publish' => [
+			'published',
+		],
+        'archived' => [
+			'rejected',
+		],
+    ],
+    'priorities' => [
+        'high',
+        'medium',
+        'low',
+    ],
+    'destinations' => [
+        'for-sale',
+        'for-page',
+    ],
     'colors' => [
         'unapproved' => 'default',
-        'accepted' => 'default',
+        'approved' => 'default',
         'rejected' => 'danger',
         'unlicensed' => 'warning',
         'licensing' => 'warning',
