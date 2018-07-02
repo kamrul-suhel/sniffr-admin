@@ -13,12 +13,13 @@ import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeC
 import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
+import StoriesComponent from './vue-component/pages/stories/StoriesComponent';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
-import ClientDownloadedAssetsComponent from './vue-component/pages/clients/downloaded/ClientDownloadedAssetsComponent';
+import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
 
 
 export const routes = [
@@ -42,6 +43,12 @@ export const routes = [
     },
 
     {
+        path: '/stories',
+        name: 'stories',
+        component: StoriesComponent
+    },
+
+    {
         path: '/videos/:id',
         name: 'videos_detail',
         component: VideoDetailComponent
@@ -53,11 +60,11 @@ export const routes = [
         component: ContractComponent
     },
 
-    {
-        path: '/search',
-        name: 'videos_search',
-        component: VideoSearchComponent
-    },
+    // {
+    //     path: '/search',
+    //     name: 'videos_search',
+    //     component: VideoSearchComponent
+    // },
 
     {
         path: '/videos/tag/:value',
@@ -141,6 +148,12 @@ export const routes = [
             },
 
             {
+                path: 'collections/accept_price/:collection_video_id',
+                name: 'accept_quote',
+                component: ClientPurchasedAssetsComponent
+            },
+
+            {
                 path: 'stories/:alpha_id',
                 name: 'client_story_detail',
                 component: ClientStoryDetailComponent
@@ -159,9 +172,9 @@ export const routes = [
             },
 
             {
-                path: 'downloaded',
-                name: 'client_downloaded_assets',
-                component: ClientDownloadedAssetsComponent
+                path: 'purchased',
+                name: 'client_purchased_assets',
+                component: ClientPurchasedAssetsComponent,
             },
 
         ],

@@ -8,6 +8,7 @@ use Auth;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use App\User;
 use App\Page;
 use App\Video;
 use App\Contact;
@@ -128,7 +129,8 @@ class DetailsController extends Controller
 
         // Notification of new video
         if (env('APP_ENV') != 'local') {
-            $video->notify(new DetailsReview($video));
+			$user = new User();
+			$user->slackChannel('submissions')->notify(new DetailsReview($video));
         }
 
         // Send thanks notification email (via queue after 2mins)

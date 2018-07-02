@@ -115,11 +115,14 @@
 
 .menu__content{
   box-shadow:none;
-  top:120px !important;
+  margin-top:10px;
+  //top:120px !important;
 
   .list{
-    background: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.5);
+    padding: 1px 0;
   }
+
   a{
     color:#fff;
     text-decoration:none;
@@ -135,22 +138,36 @@
       width:24px;
     }
   }
+
+  &.menu__content--select{
+    margin-top:0;
+
+    .list{
+      background-color: #fff;
+      color: rgba(255,255,255,0.5);
+      padding: 0;
+    }
+
+    a{
+      color:#888;
+      background-color:rgba(0,0,0,0.1);
+
+      &:hover{
+        color:#fff;
+        background-color:#000 !important;
+      }
+    }
+  }
 }
 
+
 @include small-device{
-  .menu__content{
-    top:62px !important;
-  }
   .navigation{
     text-align:center;
   }
 }
 
 @include medium-device{
-  .menu__content{
-    top:62px !important;
-  }
-
   .navigation{
     text-align:right;
   }
@@ -159,16 +176,8 @@
   .navigation{
     text-align:right;
   }
-
-  .menu__content{
-    top:62px !important;
-  }
 }
 @include extra-large-device{
-  .menu__content{
-    top:62px !important;
-  }
-
   .navigation{
     text-align:right;
   }

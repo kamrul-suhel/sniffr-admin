@@ -141,8 +141,7 @@
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
                                     this.$router.push({name: 'videos'});
-                                    LoginEventBus.clientLoginChange();
-
+                                    LoginEventBus.clientLoginSuccess();
                                 });
                             }else{
                                 this.error = true;

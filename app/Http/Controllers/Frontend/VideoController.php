@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\ClientMailer;
+use App\ClientMailerUser;
+use App\ClientMailerVideo;
+use App\CollectionVideo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\RecommendedAsset;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
-use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use App\Page;
+use Auth;
 use App\User;
+use App\Page;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
@@ -61,7 +66,64 @@ class VideoController extends Controller
         $this->videoService = $videoService;
     }
 
-    /**
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function index(Request $request)
+	{
+		$recommended = [];
+		$mailerVideos = [];
+		if ($request->ajax() || $request->isJson()) {
+
+            //Remove any exclusive based collections that have been purchased and downloaded.
+            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
+                ->whereIn('status', ['purchased', 'downloaded'])
+                ->pluck('video_id');
+
+			$videos = Video::select($this->getVideoFieldsForFrontend())
+				->where('file', '!=', NULL)
+				->where('state', 'licensed')
+				->orderBy('id', 'DESC')
+                ->whereNotIn('id', $unsearchableVideos)
+				->paginate($this->videos_per_page);
+
+			if(Auth::check()){
+				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)
+                    ->whereNotNull('video_id')
+                    ->where('created_at', '>=', Carbon::today()->subDay(config('settings.stale_time'))->startOfDay())
+                    ->pluck('id');
+				$recommended = Video::select($this->getVideoFieldsForFrontend())
+					->whereIn('id', $recommendedVids)
+					->paginate();
+
+				$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+
+				$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)->pluck('video_id');
+
+				$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
+                    ->whereIn('id', $mailerVideoIds)
+                    ->whereNotIn('id', $unsearchableVideos)
+                    ->paginate();
+			}
+
+			$data = [
+				'videos' => $videos,
+				'recommended' => $recommended,
+                'mailer_videos' => $mailerVideos,
+				'video_categories' => VideoCategory::all(),
+				'theme_settings' => config('settings.theme'),
+				'pages' => (new Page)->where('active', '=', 1)->get(),
+			];
+
+			return $this->successResponse($data);
+		}
+
+		return view('frontend.master');
+	}
+
+
+	/**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function upload()
@@ -126,7 +188,8 @@ class VideoController extends Controller
 
         // Slack notification
         if (env('APP_ENV') == 'prod') {
-            $video->notify(new SubmissionNew($video));
+			$user = new User();
+			$user->slackChannel('submissions')->notify(new SubmissionNew($video));
         }
 
         // thanks notification email
@@ -166,8 +229,8 @@ class VideoController extends Controller
         File: ' . Input::get('user_file') . ',
         Url: ' . Input::get('user_url') . ',
         UserAgent: ' . $_SERVER['HTTP_USER_AGENT'] . '';
-        $user = new User();
-        $user->notify(new SubmissionAlert($alert));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert($alert));
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 
@@ -193,8 +256,8 @@ class VideoController extends Controller
                 abort('404');
             }
 
-            $user = new User();
-            $user->notify(new SubmissionAlert(
+			$user = new User();
+			$user->slackChannel('alerts')->notify(new SubmissionAlert(
                 'watermark test ' . $postHeader .
                 ' (jobId: ' . $postFile->jobId .
                 ', input: ' . $postFile->input->key .
@@ -212,38 +275,7 @@ class VideoController extends Controller
         response()->json([]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-    	$recommended = [];
-        if ($request->ajax() || $request->isJson()) {
-            $videos = Video::select($this->getVideoFieldsForFrontend())->where('state', 'licensed')
-                ->orderBy('id', 'DESC')
-                ->paginate($this->videos_per_page);
 
-            if(Auth::user()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('video_id');
-				$recommended = Video::select($this->getVideoFieldsForFrontend())
-					->whereIn('id', $recommendedVids)
-					->paginate(10);
-			}
-
-            $data = [
-                'videos' => $videos,
-				'recommended' => $recommended,
-                'video_categories' => VideoCategory::all(),
-                'theme_settings' => config('settings.theme'),
-                'pages' => (new Page)->where('active', '=', 1)->get(),
-            ];
-
-            return $this->successResponse($data);
-        }
-
-        return view('frontend.master');
-    }
 
     /**
      * @param Request $request

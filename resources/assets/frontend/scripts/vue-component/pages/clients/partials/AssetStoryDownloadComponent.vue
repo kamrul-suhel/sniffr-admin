@@ -79,7 +79,6 @@
         ],
 
         created() {
-            console.log(this.story);
             var user = this.$store.getters.getUser;
 
             var componentServices = new ComponentServices();

@@ -4,6 +4,10 @@
         <v-container grid-list-lg>
             <v-layout row wrap>
                 <v-flex xs12>
+                    <h1>Purchases</h1>
+                </v-flex>
+
+                <v-flex xs12>
 
                     <v-tabs
                             v-model="active"
@@ -12,18 +16,19 @@
                             slider-color="black"
                     >
                         <v-tab>
-                            Stories
-                        </v-tab>
-
-                        <v-tab-item>
-                            <downloaded-stories-component></downloaded-stories-component>
-                        </v-tab-item>
-                        <v-tab>
                             Videos
                         </v-tab>
 
                         <v-tab-item>
-                            <downloaded-videos-component></downloaded-videos-component>
+                            <purchased-videos-component></purchased-videos-component>
+                        </v-tab-item>
+
+                        <v-tab>
+                            Stories
+                        </v-tab>
+
+                        <v-tab-item>
+                            <purchased-stories-component></purchased-stories-component>
                         </v-tab-item>
                     </v-tabs>
                 </v-flex>
@@ -32,14 +37,13 @@
     </div>
 </template>
 <script>
-    import DownloadedStoriesComponent from './modules/DownloadedStoriesComponents';
-    import DownloadedVideosComponent from './modules/DownloadedVideosComponents';
-    // import MailerEventBus from '../../../event-bus/downloaded-event-bus';
+    import PurchasedStoriesComponent from './modules/PurchasedStoriesComponents';
+    import PurchasedVideosComponent from './modules/PurchasedVideosComponents';
 
     export default {
         components: {
-            DownloadedStoriesComponent,
-            DownloadedVideosComponent
+            PurchasedStoriesComponent,
+            PurchasedVideosComponent
         },
 
         data() {

@@ -11,15 +11,13 @@
             </v-layout>
 
             <v-layout row wrap class="videos-section">
-
                 <video-loop-component v-for="video in videos" :video="video" :key="video.id"></video-loop-component>
-
             </v-layout>
         </v-container>
     </section>
 </template>
 <script>
-    import VideoLoopComponent from '../../../includes/VideoLoopComponent.vue';
+    import VideoLoopComponent from './VideoLoopComponent.vue';
 
     export default{
         data(){
@@ -43,4 +41,3 @@
         }
     }
 </script>
-<style></style>

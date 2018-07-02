@@ -173,7 +173,8 @@ class AdminVideosController extends Controller
             } else {
                 // Set to process for youtube and analysis (if video not already on youtube)
                 if (!$video->youtube_id && $video->file) {
-                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
+					$user = new User();
+					$user->slackChannel('submissions')->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
                     QueueVideoYoutubeUpload::dispatch($video->id)
                         ->delay(now()->addSeconds(5));
                 }
@@ -378,8 +379,9 @@ class AdminVideosController extends Controller
         $video->duration = $this->getDuration($video, $duration);
 
         $video->user_id = Auth::id();
-        $video->active = ($request->input('active')) ?: 0;
-        $video->featured = ($request->input('featured')) ?: 0;
+        $video->active = $request->input('active') ?: 0;
+        $video->featured = $request->input('featured') ?: 0;
+		$video->class = $request->input('class') ?: null;
         $video->video_collection_id = $request->input('video_collection_id', null);
         $video->video_shottype_id = $request->input('video_shottype_id', null);
         $video->video_category_id = $request->input('video_category_id', null);

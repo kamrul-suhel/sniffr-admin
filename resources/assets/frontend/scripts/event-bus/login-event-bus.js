@@ -40,7 +40,7 @@ const LoginEventBus = new Vue({
             this.$emit('logoutChangeState');
         },
 
-        clientLoginChange(){
+        clientLoginSuccess(){
             this.closeLoginDialog();
             this.$emit('clientLoginSuccess');
         }

@@ -98,14 +98,14 @@
 
         created() {
             let current_device = this.$vuetify.breakpoint.name;
-            if(current_device == 'sm' || current_device == 'xs'){
+            if(current_device === 'sm' || current_device === 'xs'){
                 this.margin_content = false;
             }
 
             VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
                 this.loadData = false;
                 this.video_dialog = VideoDialogBoxEventBus.openVideoDialogBox;
-            })
+            });
 
             VideoDialogBoxEventBus.$on('setNextPrevButton', () => {
                 this.nextPageAlphaId = this.$store.getters.getNextVideoAlphaId;
@@ -117,7 +117,7 @@
                 //Hide loading dialog
                 this.loadData = true;
 
-            })
+            });
 
             VideoDialogBoxEventBus.$on('videoDialogBoxClose', (video) => {
                 this.video_dialog = false;
@@ -133,6 +133,10 @@
                     this.$router.push({name: 'videos_tag', params: {value: tag.name}});
                 }, 500);
 
+            });
+
+            VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
+                this.video_dialog = false;
             });
 
         },

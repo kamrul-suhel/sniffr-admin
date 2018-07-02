@@ -57,7 +57,8 @@ class QueueEmail implements ShouldQueue
         //check if contact has unsubcribed (contact_id!=0)
         if (isset($video->id)) {
             if ($video->contact_id == 0) {
-                $video->notify(new SubmissionAlert('a job failed to send an ' . $this->email_type . ' email due to unsubscribe or no contact email (Id: ' . $this->video_id . ')'));
+				$user = new User();
+				$user->slackChannel('alerts')->notify(new SubmissionAlert('a job failed to send an ' . $this->email_type . ' email due to unsubscribe or no contact email (Id: ' . $this->video_id . ')'));
             } else {
                 switch ($this->email_type) {
                     case 'submission_accepted':
@@ -100,7 +101,7 @@ class QueueEmail implements ShouldQueue
     public function failed()
     {
         // Send user notification of failure, etc...
-        $user = new User();
-        $user->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: ' . $this->video_id . ')'));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: ' . $this->video_id . ')'));
     }
 }

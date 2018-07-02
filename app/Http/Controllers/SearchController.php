@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CollectionVideo;
 use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Story;
@@ -26,15 +27,21 @@ class SearchController extends Controller
             $search_value = Input::get('value');
             $settings = config('settings.site');
 
+            //Remove any exclusive based collections that have been purchased and downloaded.
+            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
+                ->whereIn('status', ['purchased', 'downloaded'])
+                ->pluck('video_id');
+
             $videos = Video::where(function ($query) use ($search_value) {
-                $query->where('state', '=', 'licensed')
-                    ->where('title', 'LIKE', '%' . $search_value . '%');
-            })
+                $query->where('title', 'LIKE', '%' . $search_value . '%');
+            	})
                 ->orWhereHas('tags', function ($q) use ($search_value) {
-                    $q->where('state', '=', 'licensed')
-                        ->where('name', 'LIKE', '%' . $search_value . '%');
+                    $q->where('name', 'LIKE', '%' . $search_value . '%');
                 })
-                ->orderBy('licensed_at', 'DESC')
+				->where('state', '=', 'licensed')
+				->where('file', '!=', NULL)
+                ->whereNotIn('id', $unsearchableVideos)
+				->orderBy('licensed_at', 'DESC')
                 ->paginate($settings['posts_per_page']);
 
             $data = [
@@ -53,28 +60,22 @@ class SearchController extends Controller
      */
     public function featureVideosInDialog(Request $request)
     {
-
         if ($request->ajax() || $request->isJson()) {
             $current_video = $this->getCurrentVideo($request->alpha_id);
 
-
-            $featured_videos = Video::where(function ($query) {
-                $query->where([['state', 'licensed'], ['active', 1], ['featured', 1]])
-                    ->orWhere('state', 'licensed')->orderBy('licensed_at', 'DESC');
-            })
-                ->orderBy('featured', 'DESC')
+            $featured_videos = Video::select($this->getVideoFieldsForFrontend())
+				->where('state', 'licensed')
+                ->where('featured', 1)
+				->where('file', '!=', NULL)
+				->orderBy('featured', 'DESC')
                 ->orderBy('licensed_at', 'DESC')
                 ->limit(12)
                 ->get();
 
-
             $next_alpha_id = '';
             $previous_alpha_id = '';
 
-            $position = $featured_videos
-                ->pluck('id')
-                ->search($current_video->id);
-
+            $position = $featured_videos->pluck('id')->search($current_video->id);
 
             $check_previous_id = $position - 1;
             if ($check_previous_id >= 0) {
@@ -82,10 +83,9 @@ class SearchController extends Controller
             }
 
             $check_next_id = $position + 1;
-            if ($check_next_id <= 11) {
+            if ($check_next_id < $featured_videos->count()) {
                 $next_alpha_id = $featured_videos[$check_next_id]->alpha_id;
             }
-
 
             $data = [
                 'current_video' => $current_video,
@@ -108,9 +108,10 @@ class SearchController extends Controller
 
         $next_alpha_id = '';
         $next = Video::select('alpha_id')
-            ->where('id', '<', $current_video->id)
-            ->where('state', '=', 'licensed')
-            ->orderBy('id', 'desc')
+            ->where('licensed_at', '<', $current_video->licensed_at)
+            ->where('file' , '!=', NULL)
+            ->where('state', 'licensed')
+            ->orderBy('licensed_at', 'DESC')
             ->first();
 
         // Check if exists or no
@@ -120,9 +121,10 @@ class SearchController extends Controller
 
         $previous_alpha_id = '';
         $previous = Video::select('alpha_id')
-            ->where('id', '>', $current_video->id)
-            ->where('state', '=', 'licensed')
-            ->orderBy('id', 'asc')
+            ->where('licensed_at', '>', $current_video->licensed_at)
+            ->where('file' , '!=', NULL)
+            ->where('state', 'licensed')
+            ->orderBy('licensed_at', 'ASC')
             ->first();
 
         if ($previous) {
@@ -147,11 +149,10 @@ class SearchController extends Controller
     {
         $current_story = $this->getCurrentstory($request->alpha_id);
 
-
         $next_alpha_id = '';
         $next = Story::select('alpha_id')
-            ->where('id', '<', $current_story->id)
-            ->orderBy('id', 'desc')
+            ->where('date_ingested', '<', $current_story->date_ingested)
+            ->orderBy('date_ingested', 'DESC')
             ->first();
 
         // Check if exists or no
@@ -160,9 +161,8 @@ class SearchController extends Controller
         }
 
         $previous_alpha_id = '';
-        $previous = Story::select('alpha_id')
-            ->where('id', '>', $current_story->id)
-            ->orderBy('id', 'asc')
+        $previous = Story::where('date_ingested', '>', $current_story->date_ingested)
+            ->orderBy('date_ingested', 'ASC')
             ->first();
 
         if ($previous) {
@@ -174,7 +174,6 @@ class SearchController extends Controller
             'next_story_alpha_id' => $next_alpha_id,
             'prev_story_alpha_id' => $previous_alpha_id
         ];
-
         return $this->successResponse($data);
     }
 
@@ -242,10 +241,7 @@ class SearchController extends Controller
     }
 
     private function getCurrentStory($alpha_id){
-        $current_story = Story::
-        where('alpha_id', '=', $alpha_id)
-            ->with('assets')
-            ->first();
+        $current_story = Story::where('alpha_id', $alpha_id)->with('assets')->first();
         return $current_story;
     }
 

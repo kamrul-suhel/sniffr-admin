@@ -8,7 +8,7 @@
                             class="dark"
                             :length="pagination.last_page"
                             v-model="current_page"
-                            :total-visible="total_visiable"
+                            :total-visible="total_visible"
                         ></v-pagination>
                 </v-flex>
             </v-layout>
@@ -21,7 +21,7 @@
         data() {
             return {
                 current_page: 1,
-                total_visiable: 10,
+                total_visible: 12,
             }
         },
 
@@ -56,13 +56,14 @@
                         this.$router.push({name: 'client_videos', query:{ page: this.current_page}});
                         break;
 
+
                     default:
-                        this.$vuetify.goTo('.videos-section',{ duration: 500, easing:'easeInCubic' });
+                        this.$vuetify.goTo('.videos-section',{ duration: 1, easing:'easeInCubic' });
                 }
 
                 setTimeout(() => {
                     if(this.page === 'video'){
-                        this.$router.push({path: '/videos', query: {page: this.current_page}});
+                        this.$router.push({path: '/videos', query: {page: this.current_page, search: this.$route.query.search}});
                     }
 
                     if(this.page === 'search'){
@@ -77,9 +78,13 @@
                         this.$router.push({name: 'videos_tag', params:{value: value}, query:{ page: page}});
                     }
 
+                    if(this.page === 'stories'){
+                        let value = this.$route.query.search;
+                        let page =  this.current_page;
+                        this.$router.push({name: 'stories', query:{search: value, page: page}});
+                    }
 
-
-                }, 500);
+                }, 1);
             }
         },
 
@@ -88,7 +93,7 @@
             let device = this.$vuetify.breakpoint.name;
 
             if(device === 'xs'){
-                this.total_visiable = 5;
+                this.total_visible = 5;
             }
         },
 
