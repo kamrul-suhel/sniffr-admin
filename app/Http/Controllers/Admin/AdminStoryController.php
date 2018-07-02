@@ -40,8 +40,6 @@ class AdminStoryController extends Controller
      */
     public function index(Request $request)
     {
-        //dd(config('stories.decisions'));
-
         $search_value = $request->input('search_value', null);
         $state = ($request->input('state', 'all') ? $request->input('state', 'all') : 'all');
         $decision = $request->input('decision', null);
@@ -62,19 +60,22 @@ class AdminStoryController extends Controller
         if($decision) {
             $state = 'all';
             foreach(config('stories.decisions') as $decision_state_key => $decision_state) {
+
                 if($decision==$decision_state_key) {
                     $count=1;
                     foreach($decision_state as $state_key => $state_value) {
                         if($count==0) {
-                            $stories = $stories->where('state', $state_value);
+                            $stories = $stories->where('state', $state_key);
                         } else {
-                            $stories = $stories->orWhere('state', $state_value);
+                            $stories = $stories->orWhere('state', $state_key);
                         }
                         $count++;
                     }
                 }
             }
         }
+
+        //dd($stories->count());
 
         if ($state != 'all') {
             $stories = $stories->where('state', $state);

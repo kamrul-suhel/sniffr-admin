@@ -22,71 +22,112 @@ return [
         'published'
     ],
 
-    'decision_states' => [
+    'decisions' => [
 		'content-sourced' => [
-			'unapproved' => '',
-            'approved' => '',
+			'unapproved' => [
+                'dropdown' => 'Unapproved', // dropdown name
+                'value' => 'unapproved', // dropdown value
+            ],
+            'approved' => [
+                'dropdown' => 'Approved',
+                'value' => 'approved',
+            ],
+            'rejected' => [
+                'dropdown' => 'Rejected',
+                'value' => 'rejected',
+            ],
 		],
         'licensing-in-progress' => [
-            'approved',
-            'unlicensed',
-			'licensing',
-            'licensed',
+            'approved' => [
+                'dropdown' => 'Ready for Pickup',
+                'value' => 'approved',
+            ],
+            'licensing' => [
+                'dropdown' => 'In Progress',
+                'value' => 'licensing',
+            ],
+            'licensed' => [
+                'dropdown' => 'Licensed',
+                'value' => 'licensed',
+            ],
+            'unlicensed' => [
+                'dropdown' => 'Unlicensable',
+                'value' => 'unlicensed',
+            ],
 		],
         'writing-in-progress' => [
-            'licensed',
-            'hacks-unassigned',
-			'writing-inprogress',
-            'writing-completed',
+            'licensed' => [
+                'dropdown' => 'Ready for Pickup',
+                'value' => 'licensed',
+            ],
+            'writing-inprogress' => [
+                'dropdown' => 'In Progress',
+                'value' => 'writing-inprogress',
+            ],
+            'writing-completed' => [
+                'dropdown' => 'Ready For Sub',
+                'value' => 'writing-completed',
+            ],
+            'subs-rejected' => [
+                'dropdown' => 'In Purgatory',
+                'value' => 'subs-rejected',
+            ],
 		],
         'subbing-in-progress' => [
-            'writing-completed',
-            'subs-unassigned',
-            'subs-inprogress',
-            'subs-approved',
-            'subs-rejected',
+            'writing-completed' => [
+                'dropdown' => 'Ready for Pickup',
+                'value' => 'writing-completed',
+            ],
+            'subs-inprogress' => [
+                'dropdown' => 'In Progress',
+                'value' => 'subs-inprogress',
+            ],
+            'subs-approved' => [
+                'dropdown' => 'Ready for Publishing',
+                'value' => 'subs-approved',
+            ],
+            'subs-unassigned' => [
+                'dropdown' => 'In Purgatory',
+                'value' => 'subs-unassigned',
+            ],
 		],
         'ready-to-publish' => [
-			'published',
-		],
-        'archived' => [
-			'rejected',
+            'published' => [
+                'dropdown' => 'Published',
+                'value' => 'published',
+            ],
 		],
     ],
 
-    'decisions' => [
-		'content-sourced' => [
-			'unapproved',
-            'approved',
-            'rejected',
-		],
-        'licensing-in-progress' => [
-            'approved',
-            'unlicensed',
-			'licensing',
-            'licensed',
-		],
-        'writing-in-progress' => [
-            'licensed',
-            'hacks-unassigned',
-			'writing-inprogress',
-            'writing-completed',
-		],
-        'subbing-in-progress' => [
-            'writing-completed',
-            'subs-unassigned',
-            'subs-inprogress',
-            'subs-approved',
-            'subs-rejected',
-            // 'edits-unassigned',
-            // 'edits-inprogress',
-            // 'edits-approved',
-            // 'edits-rejected',
-		],
-        'ready-to-publish' => [
-			'published',
-		],
-    ],
+    // 'decisions' => [
+	// 	'content-sourced' => [
+	// 		'unapproved',
+    //         'approved',
+    //         'rejected',
+	// 	],
+    //     'licensing-in-progress' => [
+    //         'approved',
+    //         'unlicensed',
+	// 		'licensing',
+    //         'licensed',
+	// 	],
+    //     'writing-in-progress' => [
+    //         'licensed',
+    //         'hacks-unassigned',
+	// 		'writing-inprogress',
+    //         'writing-completed',
+	// 	],
+    //     'subbing-in-progress' => [
+    //         'writing-completed',
+    //         'subs-unassigned',
+    //         'subs-inprogress',
+    //         'subs-approved',
+    //         'subs-rejected',
+	// 	],
+    //     'ready-to-publish' => [
+	// 		'published',
+	// 	],
+    // ],
 
     'priorities' => [
         'high',

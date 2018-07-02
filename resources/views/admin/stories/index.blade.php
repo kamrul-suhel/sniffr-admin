@@ -45,7 +45,20 @@
 					</div>
 				</div>
 
-				<div class="col-md-3">
+                <div class="col-md-3">
+					<div class="form-group">
+						<select id="state" name="state" class="selectpicker form-control" title="State">
+                            @if($decision)
+                                @foreach(config('stories.decisions.'.$decision) as $current_state => $state_values)
+							        <option value="{{ $state_values['value'] }}" @if($state==@$current_state) selected @endif>{{ $state_values['dropdown'] }}</option>
+                                @endforeach
+                            @else
+                            @endif
+						</select>
+					</div>
+				</div>
+
+				<!-- <div class="col-md-3">
 					<div class="form-group">
 						<select id="state" name="state" class="selectpicker form-control" title="State">
                             @foreach(config('stories.states') as $current_state)
@@ -53,7 +66,7 @@
                             @endforeach
 						</select>
 					</div>
-				</div>
+				</div> -->
 
 				<div class="col-md-6">
 					<div class="form-group">
@@ -183,11 +196,11 @@
                                         <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border" title="Write Story"><i class="fa fa-check"></i> Write</a>
                                     @endif
 
-                                @elseif($story->state == 'writing-inprogress'||$story->state == 'writing-completed')
+                                @elseif($story->state == 'writing-inprogress'||$story->state == 'subs-rejected')
 
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state subs-unassigned btn-mini btn-mini-border" title="Submit to Sub"><i class="fa fa-check"></i> Submit to Sub</a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-completed btn-mini btn-mini-border" title="Submit to Sub"><i class="fa fa-check"></i> Submit to Sub</a>
 
-                                @elseif($story->state == 'subs-unassigned'||$story->state == 'subs-rejected')
+                                @elseif($story->state == 'subs-unassigned'||$story->state == 'writing-completed')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state writing-inprogress btn-mini btn-mini-border left" title="Back to Writing"><i class="fa fa-times"></i></a>
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state subs-inprogress btn-mini btn-mini-border left" title="Sub Story"><i class="fa fa-check"></i> Sub Story</a>
