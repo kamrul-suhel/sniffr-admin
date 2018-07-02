@@ -27,17 +27,14 @@
 /* ************************* Login Page style ******************* */
 @import "pages/login";
 
-/* ************************* Buy Page style ******************* */
-@import "pages/buy";
+/* ************************* Quote Page style ******************* */
+@import "pages/quote";
 
 /* ************************* Videos Page style ******************* */
 @import "pages/videos";
 
 /* ************************* Video loop style ******************* */
-@import "layout/video-loop";
-
-/* ************************* Video loop section style ******************* */
-@import "video-loop";
+@import "partials/video-loop";
 
 /* ************************* Video dialog box section style ******************* */
 @import "pages/video-dialog-box";

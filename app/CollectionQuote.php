@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\QueueEmailPendingQuote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,8 +31,12 @@ class CollectionQuote extends Model
         return $this->hasOne(CollectionStory::class);
     }
 
-	public function routeNotificationForSlack()
+	public function emailPendingQuote($params)
 	{
-		return 'https://hooks.slack.com/services/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';
+		return QueueEmailPendingQuote::dispatch(
+			$params['username'],
+			$params['user'],
+			$params['collection']
+		);
 	}
 }

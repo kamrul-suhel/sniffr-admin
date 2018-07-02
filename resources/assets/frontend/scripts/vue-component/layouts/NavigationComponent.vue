@@ -31,7 +31,7 @@
                                 </router-link>
                             </li>
 
-                            <li>
+                            <li v-if="client_login">
                                 <router-link to="/stories">
                                     <v-icon color="white" left>art_track</v-icon> Stories
                                 </router-link>
@@ -56,14 +56,6 @@
                                             <v-list-tile-title>
                                                 <a href="/client/profile">
                                                     <v-icon color="white" left size="20px">settings</v-icon> Account Settings
-                                                </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <a @click.prevent.stop="onClientEmail()">
-                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> My Stories
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -97,8 +89,8 @@
         <buy-component></buy-component>
         <!-- End buy component -->
 
-        <!-- Request quote Component -->
-        <request-quote-component></request-quote-component>
+        <!-- Quote Component -->
+        <quote-component></quote-component>
         <!-- End request quote component -->
 
         <!-- Logout snackbars -->
@@ -116,14 +108,14 @@
     import LoginComponent from '../includes/LoginComponent'
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
     import BuyComponent from '../includes/BuyComponent'
-    import RequestQuoteComponent from '../includes/RequestQuoteComponent'
+    import QuoteComponent from '../includes/QuoteComponent'
     import LoginEventBus from '../../event-bus/login-event-bus'
     export default {
         components: {
             LoginComponent,
             ForgotPasswordComponent,
             BuyComponent,
-            RequestQuoteComponent
+            QuoteComponent
         },
         data() {
             return {
@@ -170,7 +162,7 @@
             });
 
             // If client has logged in
-            LoginEventBus.$on('clientLoginSuccess', () => {
+            LoginEventBus.$on('loginSuccess', () => {
                 this.user = this.$store.getters.getUser;
                 this.is_login = this.$store.getters.isUserLogin;
                 this.client_login = this.$store.getters.isClientLogin;
@@ -223,31 +215,19 @@
                     });
             },
 
-
             // Login component trigger this methods when change any value
             onChangeLogin(changeLogin){
                 if(!changeLogin){
                     this.login_dialog = false; 
                 }
             },
+
             onLoginClick(){
                 LoginEventBus.openLoginDialog();
             },
 
             logoutStateChange() {
               this.is_login = false;
-            },
-
-            onClientEmail(){
-                this.$router.push({name: 'client_stories'});
-            },
-
-            onClientStories(){
-                this.$router.push({name: 'client'});
-            },
-
-            onClientVideos(){
-                this.$router.push({name: 'client_videos'});
             }
         }
     }

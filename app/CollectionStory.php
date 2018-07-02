@@ -8,6 +8,8 @@ class CollectionStory extends Model
 {
     protected $table = 'collection_stories';
 
+	protected $fillable = ['collection_id', 'story_id', 'final_price', 'status'];
+
     public function collection()
     {
         return $this->belongsTo(Collection::class);
@@ -15,11 +17,11 @@ class CollectionStory extends Model
 
     public function story()
     {
-        return $this->hasOne(Story::class);
+        return $this->belongsTo(Story::class);
     }
 
     public function quotes()
     {
-        return $this->hasMany(CollectionQuote::class);
+        return $this->hasMany(CollectionQuote::class, 'collection_story_id', 'id');
     }
 }

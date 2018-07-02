@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Jobs\QueueEmailPendingQuote;
 use Illuminate\Database\Eloquent\Model;
 
 class CollectionVideo extends Model
@@ -53,14 +52,5 @@ class CollectionVideo extends Model
         $price = $price * (config('pricing.length.' . $data['license_length'] . '.modifier') ?: 1);
 
         return $price = round($price, 2);
-    }
-
-    public function emailPendingQuote($params)
-    {
-        return QueueEmailPendingQuote::dispatch(
-            $params['username'],
-            $params['user'],
-            $params['collection']
-        );
     }
 }

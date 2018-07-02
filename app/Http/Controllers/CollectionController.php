@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Story;
-use App\CollectionVideo;
 use Auth;
 use App\Client;
 use App\Collection;
-use App\Jobs\QueueEmailCompany;
-use App\Jobs\QueueEmailPendingQuote;
 use App\Libraries\VideoHelper;
 use App\Traits\Slug;
 use App\User;
 use App\Video;
+use App\Story;
+use App\CollectionVideo;
+use App\CollectionStory;
+use App\CollectionQuote;
 use Redirect;
-use App\Notifications\RequestVideoQuote;
+use App\Notifications\RequestQuote;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
@@ -22,7 +22,7 @@ class CollectionController extends Controller
 
     use Slug, VideoHelper;
 
-    protected $collection, $collectionVideo, $video, $story, $client, $user;
+    protected $collection, $collectionVideo, $collectionStory, $video, $story, $client, $user;
 
     /**
      * CollectionController constructor.
@@ -33,10 +33,11 @@ class CollectionController extends Controller
      * @param Client $client
      * @param User $user
      */
-    public function __construct(Collection $collection, CollectionVideo $collectionVideo, Video $video, Story $story, Client $client, User $user)
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory, Video $video, Story $story, Client $client, User $user)
     {
         $this->collection = $collection;
         $this->collectionVideo = $collectionVideo;
+		$this->collectionStory = $collectionStory;
         $this->video = $video;
         $this->story = $story;
         $this->client = $client;
@@ -62,14 +63,18 @@ class CollectionController extends Controller
 
         $collection = $this->collection->create($data);
 
-        if($request->has('video_alpha_id')) {
-            $video = $this->video->where('alpha_id', $request->get('video_alpha_id'))->first();
+        if($request->get('type') == 'video') {
+            $video = $this->video->where('alpha_id', $request->get('asset_alpha_id'))->first();
             $collectionVideo = $collection->addVideoToCollection($video, $user);
-        }
+        }else{
+			$story = $this->story->where('alpha_id', $request->get('asset_alpha_id'))->first();
+			$collectionStory = $collection->addStoryToCollection($story, $user);
+		}
 
         return response([
             'collection_id' => $collection->id,
             'collection_video_id' => $collectionVideo->id ?? null,
+			'collection_story_id' => $collectionStory->id ?? null,
             'message' => "New collection created."
         ], 200);
     }
@@ -180,25 +185,36 @@ class CollectionController extends Controller
      * @param $collection_video_id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function requestVideoQuote(Request $request, $collection_video_id)
-    {
-        $data = $request->except('_token');
-    	$user = Auth::user();
-    	$client = $user->client;
+    public function requestQuote(Request $request, $type, $collection_asset_id)
+	{
+		$data = $request->except('_token');
+		$user = Auth::user();
+		$client = $user->client;
 
-        $collectionVideo = $this->collectionVideo->find($collection_video_id);
-        $collectionVideo->update([
-            'status' =>  'requested',
-            'type' =>  $data['license_type'] ??         $collectionVideo->type,
-            'platform' =>  $data['license_platform'] ?? $collectionVideo->platform,
-            'length' =>  $data['license_length'] ??     $collectionVideo->length,
-            'company_location' =>  $client->region,
-            'company_tier' =>  $client->tier,
-            'final_price' =>  null,
-        ]);
+		if ($type == 'video'){
+			$collectionVideo = $this->collectionVideo->find($collection_asset_id);
+			$collectionVideo->update([
+				'status' => 'requested',
+				'type' => $data['license_type'] ?? $collectionVideo->type,
+				'platform' => $data['license_platform'] ?? $collectionVideo->platform,
+				'length' => $data['license_length'] ?? $collectionVideo->length,
+				'company_location' => $client->region,
+				'company_tier' => $client->tier,
+				'final_price' => null,
+			]);
 
-        $collection = $collectionVideo->collection;
-		$video = $collectionVideo->video;
+			$collection = $collectionVideo->collection;
+			$asset = $collectionVideo->video;
+		}else{
+			$collectionStory = $this->collectionStory->find($collection_asset_id);
+			$collectionStory->update([
+				'status' => 'requested',
+				'final_price' => null,
+			]);
+
+			$collection = $collectionStory->collection;
+			$asset = $collectionStory->story;
+		}
 		$client = $collection->client;
 
 		$params = [
@@ -207,9 +223,10 @@ class CollectionController extends Controller
             'collection' => $collection
         ];
 
-		$collectionVideo->emailPendingQuote($params);
+		$collectionQuote = new CollectionQuote;
+		$collectionQuote->emailPendingQuote($params);
 
-		$user->slackChannel('quotes')->notify(new RequestVideoQuote($user, $video, $client));
+		$user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
 
         return response([
             'message' => 'Email has been sent to new user'

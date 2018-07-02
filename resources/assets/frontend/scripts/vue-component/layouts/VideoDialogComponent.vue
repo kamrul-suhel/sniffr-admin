@@ -26,7 +26,7 @@
                 <v-layout row wrap>
                     <div class="video-dialog-loading"></div>
 
-                    <v-container grid-list-xs fluid
+                    <v-container class="no-padding" grid-list-xs fluid
                                  v-touch="{
                                       left: () => swipe('Left'),
                                       right: () => swipe('Right')

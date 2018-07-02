@@ -31,7 +31,7 @@
                                             label="Enter your password"
                                             v-model="user.password"
                                             :append-icon="showpassword ? 'visibility' : 'visibility_off'"
-                                            :append-icon-cb="() => (showpassword = !showpassword)"
+                                            @click:append="showpassword = !showpassword"
                                             :type="showpassword ? 'password' : 'text'"
                                             :rules="passwordRules"
                                             @keyup.enter="onSubmit()"
@@ -155,7 +155,7 @@
 
                             let data = response.data;
                             if(data.error){
-                                this.login_progress = false;
+                                this.login_prosgress = false;
                                 this.loading = false;
                                 this.validation.error = true;
                                 this.validation.message = data.error_message;
@@ -163,25 +163,11 @@
                             }
 
                             this.$store.commit('setUserState', data.user);
-                            LoginEventBus.clientLoginSuccess();
+                            LoginEventBus.loginSuccess();
 
-                            // if(data.redirect_url){
-                            //     window.location.href = data.redirect_url;
-                            // }
-
-                            // Set the user store
-                            // this.$store.dispatch('getLoginStatus').then((response) => {
-                            //     // Check if is a client
-                            //     if(data.user.client_id){
-                            //         LoginEventBus.clientLoginSuccess();
-                            //         return;
-                            //     }
-                            //
-                            //     if(data.redirect_url){
-                            //         window.location.href = data.redirect_url;
-                            //     }
-                            // });
-
+                            if(data.redirect_url != ''){
+                                window.location.href = data.redirect_url;
+                            }
                         })
                         .catch(error => {
                             console.log(error);

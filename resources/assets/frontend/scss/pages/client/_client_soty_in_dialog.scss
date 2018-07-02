@@ -36,7 +36,7 @@
 //}
 
 .theme--light .story-dialog-container .card{
-  .card__media{
+  .v-card__media{
     height:250px !important;
     background-color:#000;
   }
@@ -44,7 +44,7 @@
 
 @include small-device {
   .theme--light .story-dialog-container .card{
-    .card__media{
+    .v-card__media{
       height:250px !important;
     }
   }
@@ -52,7 +52,7 @@
 
 @include medium-device {
   .theme--light .story-dialog-container .card{
-    .card__media{
+    .v-card__media{
       height:350px !important;
     }
   }
@@ -60,7 +60,7 @@
 
 @include large-device {
   .theme--light .story-dialog-container .card{
-    .card__media{
+    .v-card__media{
       height:550px !important;
     }
   }
@@ -68,7 +68,7 @@
 
 @include extra-large-device {
   .theme--light .story-dialog-container .card{
-    .card__media{
+    .v-card__media{
       height:650px !important;
     }
   }

@@ -15,13 +15,13 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg>
 
-                <div v-if="logged_in && mailer_videos.length > 0 || recommended.length > 0">
+                <div v-if="client_logged_id && (mailer_videos.length || recommended.length)">
                     <h3 class="sub-heading">Your Suggested Videos</h3>
                     <hr>
                     <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
                     <v-card-text class="overflow-hidden" style="overflow:auto; height:352px; width:100% !important; margin: 0px; padding:0px;">
-                    <v-layout align-content-center style="overflow-x:scroll;">
-                        <videoloop-component v-if="mailer_videos && mailer_videos.length > 0" v-for="(mailer, index) in mailer_videos" :video="mailer" :key="mailer.alpha_id"></videoloop-component>
+                        <v-layout align-content-center style="overflow-x:scroll;">
+                            <videoloop-component v-if="mailer_videos && mailer_videos.length > 0" v-for="(mailer, index) in mailer_videos" :video="mailer" :key="mailer.alpha_id"></videoloop-component>
                             <videoloop-component v-if="recommended && recommended.length > 0" v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
                         </v-layout>
                     </v-card-text>
@@ -58,12 +58,12 @@
             return {
                 data: '',
                 videos: '',
-                recommended: '',
-                mailer_videos: '',
+                recommended: [],
+                mailer_videos: [],
                 paginate: '',
                 current_page: 0,
                 logged_in : false,
-
+                client_logged_id : false
             }
         },
         watch: {
@@ -74,18 +74,18 @@
         },
 
         created(){
-            this.logged_in = this.$store.getters.isClientLogin;
+            this.client_logged_id = this.$store.getters.isClientLogin;
 
             // If client has logged in
-            LoginEventBus.$on('clientLoginSuccess', () => {
+            LoginEventBus.$on('loginSuccess', () => {
                 this.setAlldata();
                 this.logged_in = this.$store.getters.isUserLogin;
-                this.client_login = this.$store.getters.isClientLogin;
+                this.client_logged_id = this.$store.getters.isClientLogin;
             });
 
             LoginEventBus.$on('logoutChangeState', () => {
                 this.logged_in = false;
-                this.client_login = false;
+                this.client_logged_id = false;
             });
 
             if (this.$route.query.page) {
@@ -101,13 +101,15 @@
                     this.paginate = this.$store.getters.getPaginateObject;
                 });
 
-                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
-                    this.recommended = this.$store.getters.getRecommendedData;
-                });
+                if(this.client_logged_id){
+                    this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
+                        this.recommended = this.$store.getters.getRecommendedData;
+                    });
 
-                this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
-                    this.mailer_videos = this.$store.getters.getMailerVideoData;
-                });
+                    this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
+                        this.mailer_videos = this.$store.getters.getMailerVideoData;
+                    });
+                }
             },
 
             updateVideodata(){
@@ -115,13 +117,15 @@
                     this.videos = this.$store.getters.getVideoData;
                 });
 
-                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
-                    this.recommended = this.$store.getters.getRecommendedData;
-                });
+                if(this.client_logged_id){
+                    this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
+                        this.recommended = this.$store.getters.getRecommendedData;
+                    });
 
-                this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
-                    this.mailer_videos = this.$store.getters.getMailerVideoData;
-                });
+                    this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
+                        this.mailer_videos = this.$store.getters.getMailerVideoData;
+                    });
+                }
             },
         }
     }
