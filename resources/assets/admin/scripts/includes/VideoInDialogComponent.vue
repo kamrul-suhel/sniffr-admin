@@ -47,13 +47,13 @@
                         </div>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <v-layout column wrap align-end class="video-detail-sidebar">
-                            <div class="video-detail-social-share">
-                                <v-btn dark block class="dark">Get Quote</v-btn>
-                            </div>
-                        </v-layout>
-                    </v-flex>
+                    <!--<v-flex xs12>-->
+                        <!--<v-layout column wrap align-end class="video-detail-sidebar">-->
+                            <!--<div class="video-detail-social-share">-->
+                                <!--<v-btn dark block class="dark">Get Quote</v-btn>-->
+                            <!--</div>-->
+                        <!--</v-layout>-->
+                    <!--</v-flex>-->
 
                 </v-layout>
             </v-flex>

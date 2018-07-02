@@ -108,9 +108,10 @@ class SearchController extends Controller
 
         $next_alpha_id = '';
         $next = Video::select('alpha_id')
-            ->where('id', '<', $current_video->id)
-            ->where('state', '=', 'licensed')
-            ->orderBy('id', 'desc')
+            ->where('licensed_at', '<', $current_video->licensed_at)
+            ->where('file' , '!=', NULL)
+            ->where('state', 'licensed')
+            ->orderBy('licensed_at', 'DESC')
             ->first();
 
         // Check if exists or no
@@ -120,9 +121,10 @@ class SearchController extends Controller
 
         $previous_alpha_id = '';
         $previous = Video::select('alpha_id')
-            ->where('id', '>', $current_video->id)
-            ->where('state', '=', 'licensed')
-            ->orderBy('id', 'asc')
+            ->where('licensed_at', '>', $current_video->licensed_at)
+            ->where('file' , '!=', NULL)
+            ->where('state', 'licensed')
+            ->orderBy('licensed_at', 'ASC')
             ->first();
 
         if ($previous) {
@@ -147,11 +149,10 @@ class SearchController extends Controller
     {
         $current_story = $this->getCurrentstory($request->alpha_id);
 
-
         $next_alpha_id = '';
         $next = Story::select('alpha_id')
-            ->where('id', '<', $current_story->id)
-            ->orderBy('id', 'desc')
+            ->where('date_ingested', '<', $current_story->date_ingested)
+            ->orderBy('date_ingested', 'DESC')
             ->first();
 
         // Check if exists or no
@@ -160,9 +161,8 @@ class SearchController extends Controller
         }
 
         $previous_alpha_id = '';
-        $previous = Story::select('alpha_id')
-            ->where('id', '>', $current_story->id)
-            ->orderBy('id', 'asc')
+        $previous = Story::where('date_ingested', '>', $current_story->date_ingested)
+            ->orderBy('date_ingested', 'ASC')
             ->first();
 
         if ($previous) {
@@ -174,7 +174,6 @@ class SearchController extends Controller
             'next_story_alpha_id' => $next_alpha_id,
             'prev_story_alpha_id' => $previous_alpha_id
         ];
-
         return $this->successResponse($data);
     }
 
@@ -242,10 +241,7 @@ class SearchController extends Controller
     }
 
     private function getCurrentStory($alpha_id){
-        $current_story = Story::
-        where('alpha_id', '=', $alpha_id)
-            ->with('assets')
-            ->first();
+        $current_story = Story::where('alpha_id', $alpha_id)->with('assets')->first();
         return $current_story;
     }
 

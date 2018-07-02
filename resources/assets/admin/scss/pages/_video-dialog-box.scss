@@ -129,6 +129,21 @@
 
   .video-dialog-content {
 
+      .badge{
+        display: inline-block;
+        position: relative;
+        white-space: unset;
+        background: none;
+        color: #000;
+        text-align: left;
+        padding:0
+      }
+    .video-icon{
+      position:absolute;
+      right:10px;
+      top:10px;
+    }
+
     #video_player {
       width: 100%;
       height: 350px;

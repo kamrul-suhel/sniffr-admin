@@ -91,9 +91,9 @@
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
-
             this.setAlldata();
         },
+
         methods: {
             setAlldata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
@@ -101,11 +101,11 @@
                     this.paginate = this.$store.getters.getPaginateObject;
                 });
 
-                this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
+                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
                     this.recommended = this.$store.getters.getRecommendedData;
                 });
 
-                this.$store.dispatch('getMailerVideoData', {page: 1}).then(() => {
+                this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
                     this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
             },
@@ -115,11 +115,11 @@
                     this.videos = this.$store.getters.getVideoData;
                 });
 
-                this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
+                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
                     this.recommended = this.$store.getters.getRecommendedData;
                 });
 
-                this.$store.dispatch('getMailerVideoData', {page: 1}).then(() => {
+                this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
                     this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
             },
