@@ -10,6 +10,7 @@
 	                                name="value"
 									v-model="value"
 	                                color="white"
+									dark
 	                                label="Search"
 	                                append-icon="search"
 	                                aria-describedby="filterhelp"

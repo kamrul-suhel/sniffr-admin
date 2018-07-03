@@ -1,6 +1,7 @@
 const state = {
     videos: null,
-    paginate: ''
+    paginate: '',
+    recommended:''
 };
 
 const getters = {
@@ -19,10 +20,10 @@ const getters = {
 const mutations = {
     setVideoData(state, data){
         state.videos = data.videos.data;
+        state.recommended = data.recommended.data;
     },
 
     setRecommendedData(state, data){
-        console.log(data);
         state.recommended = data.recommended.data;
     },
 
@@ -39,6 +40,11 @@ const actions = {
             if (payload.page && payload.page != 0) {
                 url = url + '?page=' + payload.page;
             }
+
+            if(payload.search && payload.search != ''){
+                url = url + '&search='+payload.search;
+            }
+
             axios.get(url)
                 .then((response) => {
                     let data = response.data;
@@ -48,27 +54,7 @@ const actions = {
                 })
                 .catch((error) => {
                     console.log('Not connect');
-                    reject();
-                });
-        });
-    },
-
-    getRecommendedData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
-            let url = '/videos';
-
-            if (payload.page && payload.page != 0) {
-                url = url + '?page=' + payload.page;
-            }
-            axios.get(url)
-                .then((response) => {
-                    let data = response.data;
-                    commit('setRecommendedData', data);
-                    commit('setPaginationObject', data.recommended);
-                    resovle();
-                })
-                .catch((error) => {
-                    console.log('Not connect');
+                    console.log(error);
                     reject();
                 });
         });

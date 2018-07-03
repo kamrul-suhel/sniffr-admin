@@ -218,28 +218,38 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
-    	$recommended = [];
-        if ($request->ajax() || $request->isJson()) {
-            $videos = Video::select($this->getVideoFieldsForFrontend())
-                ->where('state', 'licensed');
-            if($request->search){
-                $videos = $videos->where('title', 'LIKE', '%'. $request->search);
-                $videos = $videos->orWhere('title', 'LIKE', '%'. $request->search);
-            }
+        $recommended = [];
 
-            $videos = $videos->orderBy('id', 'DESC')
+        if ($request->ajax() || $request->isJson()) {
+
+            $search = $request->search;
+            $videos = Video::where(function ($query) use ($search) {
+                $query->where('state', '=', 'licensed');
+
+                if($search){
+                    $query->where('title', 'LIKE', '%' . $search . '%');
+                }
+            });
+            if($request->tag){
+                $tag = $request->tag;
+                $videos = $videos->whereHas('tags', function ($q) use ($tag) {
+                    $q->where('name', '=', $tag);
+                });
+            }
+            $videos = $videos->orderBy('licensed_at', 'DESC')
                 ->paginate($this->videos_per_page);
 
-            if(Auth::user()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
-				$recommended = Video::select($this->getVideoFieldsForFrontend())
-					->whereIn('id', $recommendedVids)
-					->paginate(10);
-			}
 
+
+            if (Auth::user()) {
+                $recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+                $recommended = Video::select($this->getVideoFieldsForFrontend())
+                    ->whereIn('id', $recommendedVids)
+                    ->paginate(10);
+            }
             $data = [
                 'videos' => $videos,
-				'recommended' => $recommended,
+                'recommended' => $recommended,
                 'video_categories' => VideoCategory::all(),
                 'theme_settings' => config('settings.theme'),
                 'pages' => (new Page)->where('active', '=', 1)->get(),
@@ -263,7 +273,7 @@ class VideoController extends Controller
             $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
-				->with('orders')
+                ->with('orders')
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
                 ->first();

@@ -19,7 +19,7 @@
     @include heading-border;
   }
 
-  .card__media__content {
+  .v-card__media__content {
     a{
       background-size:cover;
       backgorund-position:center center;
@@ -86,16 +86,16 @@
     }
   }
 
-  .card__title{
+  .v-card__title{
     height:50px;
     position:relative;
     overflow:hidden;
   }
 
-  .card__media__background{
+  .v-card__media__background{
     background: url("/assets/img/default.jpg") center center / cover no-repeat;
   }
-  .card__text{
+  .v-card__text{
     height:80px;
   }
 

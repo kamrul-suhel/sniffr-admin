@@ -14,28 +14,51 @@
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <div v-if="logged_in">
+                            <div v-if="recommended.length > 0">
+                                <h3 class="sub-heading">Your Recommended Videos</h3>
 
-                <div v-if="logged_in">
-                    <div v-if="recommended.length > 0">
-                        <h3 class="sub-heading">Your Recommended Videos</h3>
+                                <hr>
+
+                                <transition-group name="slide-fade" tag="div" class="layout row wrap">
+                                    <videoloop-component
+                                            v-for="(recommend, index) in recommended"
+                                            :video="recommend"
+                                            :key="recommend.alpha_id"
+                                    ></videoloop-component>
+                                </transition-group>
+                                <br>
+                            </div>
+                        </div>
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <h3 class="sub-heading">All Videos</h3>
+                    </v-flex>
+
+                    <v-flex xs12>
                         <hr>
-                        <transition-group name="slide-fade" tag="div" class="layout row wrap">
-                            <videoloop-component v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
-                        </transition-group>
-                        <br>
-                    </div>
-                </div>
+                    </v-flex>
+                </v-layout>
 
-                <h3 class="sub-heading">All Videos</h3>
-                <hr>
-                <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
-                    <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
-                </transition-group>
+                    <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
+                        <videoloop-component
+                                v-for="(video, index) in videos"
+                                :video="video"
+                                :key="video.alpha_id"
+                        ></videoloop-component>
+                    </transition-group>
+
             </v-container>
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'video'"></pagination-component>
+        <pagination-component
+                :pagination="paginate"
+                :page="'video'"
+        ></pagination-component>
     </div>
 </template>
 
@@ -57,15 +80,16 @@
                 videos: '',
                 recommended: '',
                 paginate: '',
-                current_page: 0,
+                current_page: 1,
                 logged_in : false,
 
             }
         },
         watch: {
             '$route'(to, from, next){
+                console.log("route change");
                 this.current_page = to.query.page;
-                this.updateVideodata();
+                this.setAllData();
             }
         },
 
@@ -76,8 +100,7 @@
                 this.current_page = this.$route.query.page;
             }
 
-            this.setAlldata();
-
+            this.setAllData();
         },
 
         methods: {
@@ -92,27 +115,28 @@
                 });
             },
 
-            setAlldata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
+            setAllData(){
+                console.log(this.getQueryObject());
+                this.$store.dispatch('getVideoData', this.getQueryObject()).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                     this.paginate = this.$store.getters.getPaginateObject;
-                });
 
-
-                this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
+                    //getting the recommended data
                     this.recommended = this.$store.getters.getRecommendedData;
                 });
             },
 
-            updateVideodata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
-                    this.videos = this.$store.getters.getVideoData;
-                });
+            getQueryObject(){
+                let query = {
+                    page: this.current_page,
+                };
 
-                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
-                    this.recommended = this.$store.getters.getRecommendedData;
-                });
-            },
+                if(this.$route.query.search && this.$route.query.search != ''){
+                    query.search = this.$route.query.search;
+                }
+
+                return query;
+            }
         }
     }
 </script>
