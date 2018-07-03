@@ -18,7 +18,7 @@
 					</a>
                     @else
                     <a href="{{ url('admin/stories/'.lcfirst($state)) }}">
-						Stories: {{ ucfirst($state) }}
+						Stories: {!! ($state ? ucfirst($state) : 'All') !!}
 					</a>
                     @endif
 					<a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
@@ -37,7 +37,10 @@
 			<form id="search-form" method="get" role="form" class="search-form-full">
                 <div class="col-md-3">
 					<div class="form-group">
-						<select id="decision" name="decision" class="selectpicker form-control" title="Steps">
+						<select id="decision" name="decision" class="form-control" title="Steps">
+							@if(!$decision)
+							<option value="">Steps</option>
+							@endif
                             @foreach(config('stories.decisions') as $decision_state_key => $decision_state)
 							<option value="{{ $decision_state_key }}" @if($decision==@$decision_state_key) selected @endif>{{ ucwords(str_replace('-', ' ', $decision_state_key)) }}</option>
                             @endforeach
@@ -47,12 +50,16 @@
 
                 <div class="col-md-3">
 					<div class="form-group">
-						<select id="state" name="state" class="selectpicker form-control" title="State">
+						<select id="state" name="state" class="form-control" title="State">
                             @if($decision)
+								@if(!$state)
+								<option value="">States</option>
+								@endif
                                 @foreach(config('stories.decisions.'.$decision) as $current_state => $state_values)
-							        <option value="{{ $state_values['value'] }}" @if($state==@$current_state) selected @endif>{{ $state_values['dropdown'] }}</option>
+							    <option value="{{ $state_values['value'] }}" @if($state==$state_values['value']) selected @endif>{{ $state_values['dropdown'] }}</option>
                                 @endforeach
                             @else
+								<option value="">Select a Step first</option>
                             @endif
 						</select>
 					</div>
@@ -73,6 +80,7 @@
 						<input type="text" class="form-control" name="search_value" id="search-input" placeholder="Search..." value="{{ Request::get('search_value') }}"> <i class="fa fa-search"></i>
 					</div>
 				</div>
+
 			</form>
 		</div>
 	</div>
@@ -134,7 +142,7 @@
                                         </div>
                                         <div class="options-body">
                                             <select id="state" name="state" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="State">
-                                                @foreach(config('stories.states') as $current_state)
+												@foreach(config('stories.states') as $current_state)
                     							<option value="{{ $current_state }}" @if($story->state==$current_state) selected @endif>{{ ucwords(str_replace('-', ' ', $current_state)) }}</option>
                                                 @endforeach
                     						</select>
@@ -258,6 +266,14 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		// $('#decision').change(function(e) {
+        //     e.preventDefault();
+		// 	var decision = $(this).val();
+		// 	var search = $.url('?search_value')
+		// 	console.log(search);
+        //     window.location.href = 'http://example.com';
+		// });
 
 	});
 	</script>

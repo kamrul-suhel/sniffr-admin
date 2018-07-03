@@ -37,7 +37,7 @@ return [
                 'value' => 'rejected',
             ],
 		],
-        'licensing-in-progress' => [
+        'licensing' => [
             'approved' => [
                 'dropdown' => 'Ready for Pickup',
                 'value' => 'approved',
@@ -55,7 +55,7 @@ return [
                 'value' => 'unlicensed',
             ],
 		],
-        'writing-in-progress' => [
+        'writing' => [
             'licensed' => [
                 'dropdown' => 'Ready for Pickup',
                 'value' => 'licensed',
@@ -64,16 +64,12 @@ return [
                 'dropdown' => 'In Progress',
                 'value' => 'writing-inprogress',
             ],
-            'writing-completed' => [
-                'dropdown' => 'Ready For Sub',
-                'value' => 'writing-completed',
-            ],
             'subs-rejected' => [
                 'dropdown' => 'In Purgatory',
                 'value' => 'subs-rejected',
             ],
 		],
-        'subbing-in-progress' => [
+        'subbing' => [
             'writing-completed' => [
                 'dropdown' => 'Ready for Pickup',
                 'value' => 'writing-completed',

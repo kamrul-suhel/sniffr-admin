@@ -41,7 +41,7 @@ class AdminStoryController extends Controller
     public function index(Request $request)
     {
         $search_value = $request->input('search_value', null);
-        $state = ($request->input('state', 'all') ? $request->input('state', 'all') : 'all');
+        $state = ($request->input('state') ? $request->input('state') : '');
         $decision = $request->input('decision', null);
 
         $stories = new Story;
@@ -58,27 +58,21 @@ class AdminStoryController extends Controller
 
         // only display states within selected decision point
         if($decision) {
-            $state = 'all';
-            foreach(config('stories.decisions') as $decision_state_key => $decision_state) {
-                if($decision==$decision_state_key) {
-                    $count=1;
-                    foreach($decision_state as $state_key => $state_value) {
-                        if($count==0) {
-                            $stories = $stories->where('state', $state_key);
-                        } else {
-                            $stories = $stories->orWhere('state', $state_key);
-                        }
-                        $count++;
-                    }
+            $found=0;
+            foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+                if($state==$state_values['value']) {
+                    $found=1;
                 }
             }
-        }
-
-        //dd($stories->count());
-
-        if ($state != 'all') {
-            $stories = $stories->where('state', $state);
-            //session(['state' => $state]); not sure what this does?
+            // ^ ABOVE: need a way to search state values to see if state exists within a decision array
+            if($found==1) {
+                $stories = $stories->where('state', $state);
+            } else {
+                $state = '';
+                foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+                    $stories = $stories->orWhere('state', $state_values['value']);
+                }
+            }
         }
 
         $stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
@@ -296,16 +290,16 @@ class AdminStoryController extends Controller
                 // }
                 $message = 'Ready to license';
                 break;
-            case (in_array($state, config('stories.decisions.licensing-in-progress'))):
+            case (in_array($state, config('stories.decisions.licensing'))):
                 $message = 'Licensing in progress';
                 break;
             case (in_array($state, config('stories.decisions.ready-to-publish'))):
                 $message = 'Ready to publish';
                 break;
-            case (in_array($state, config('stories.decisions.writing-in-progress'))):
+            case (in_array($state, config('stories.decisions.writing'))):
                 $message = 'Writing in progess';
                 break;
-            case (in_array($state, config('stories.decisions.subbing-in-progress'))):
+            case (in_array($state, config('stories.decisions.subbing'))):
                 $message = 'Subbing in progess';
                 break;
         }
