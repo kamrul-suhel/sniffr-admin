@@ -254,6 +254,8 @@
 
         created() {
             QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) =>{
+
+                console.log(asset);
                 this.client_login = this.$store.getters.isClientLogin;
                 this.$refs.quote_form.reset();
                 this.open_quote_dialog = true;

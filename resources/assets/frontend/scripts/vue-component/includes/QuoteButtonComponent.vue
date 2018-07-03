@@ -3,6 +3,7 @@
 </template>
 
 <script>
+    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus';
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus';
 
     export default {
@@ -26,13 +27,28 @@
         },
 
         created() {
-            this.button_text = (this.type == 'story' || this.asset.class == 'exceptional' || this.asset.class == '') ? 'Request Quote' : 'Buy Now';
+            VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
+                this.setButtonText();
+            });
+
+            VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
+                this.setButtonText();
+            });
+
+            VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
+                this.setButtonText();
+            });
+
+            this.setButtonText();
         },
 
         mounted() {
         },
 
         methods: {
+            setButtonText(){
+                this.button_text = (this.type == 'story' || this.asset.class == 'exceptional' || this.asset.class == '') ? 'Request Quote' : 'Buy Now';
+            },
             createCollection() {
                 axios.post('/client/collections', {
                     'type': this.type,

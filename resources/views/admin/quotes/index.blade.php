@@ -12,7 +12,7 @@
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-heading">Pending Collections</div>
                     <div class="panel-body" style="">
-                        @foreach($pendingCollections as $collection)
+                        @foreach($pendingVideoCollections as $collection)
                             <h4>Collection: <b>{{ $collection->name }}</b></h4>
                             @foreach($collection->collectionVideos as $videoCollection)
                                 @if (count($errors) > 0)
@@ -70,11 +70,11 @@
                                 <br>
                             @endforeach
                         @endforeach
-                        {{ $pendingCollections->links() }}
+                        {{ $pendingVideoCollections->links() }}
                     </div>
                 </div>
             </div>
-        </div>
+        </div>s
 
         <hr>
 
@@ -83,7 +83,7 @@
                 <div class="panel panel-primary" data-collapsed="0">
                     <div class="panel-heading">Offered Collections</div>
                     <div class="panel-body" style="">
-                        @foreach($offeredCollections as $collection)
+                        @foreach($offeredVideoCollections as $collection)
                             <h4>Collection: <b>{{ $collection->name }}</b></h4>
                             @foreach($collection->collectionVideos as $videoCollection)
                                 <h5>Offered Videos ({{ $collection->collectionVideos->count() }})</h5>
@@ -131,7 +131,7 @@
                                 <br>
                             @endforeach
                         @endforeach
-                        {{ $offeredCollections->links() }}
+                        {{ $offeredVideoCollections->links() }}
                     </div>
                 </div>
             </div>

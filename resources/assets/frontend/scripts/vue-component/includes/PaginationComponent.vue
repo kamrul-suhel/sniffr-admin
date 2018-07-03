@@ -89,7 +89,7 @@
         },
 
         created(){
-            this.current_page = Number(this.$route.query.page);
+            this.current_page = this.pagination.current_page;
             let device = this.$vuetify.breakpoint.name;
 
             if(device === 'xs'){

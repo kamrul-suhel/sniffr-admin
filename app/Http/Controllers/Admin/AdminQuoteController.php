@@ -22,17 +22,27 @@ class AdminQuoteController extends Controller {
      */
     public function index()
     {
-        $pendingCollections = Collection::whereHas('collectionVideos', function($query) {
+        $pendingVideoCollections = Collection::whereHas('collectionVideos', function($query) {
            $query->where('status', 'requested');
         })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'pending');
 
-        $offeredCollections = Collection::whereHas('collectionVideos', function($query) {
+        $offeredVideoCollections = Collection::whereHas('collectionVideos', function($query) {
             $query->where('status', 'offered');
         })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'offered');
 
+		$pendingStoryCollections = Collection::whereHas('collectionStories', function($query) {
+			$query->where('status', 'requested');
+		})->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'pending');
+
+		$offeredStoryCollections = Collection::whereHas('collectionStories', function($query) {
+			$query->where('status', 'offered');
+		})->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'offered');
+
         return view('admin.quotes.index')
-            ->with('pendingCollections', $pendingCollections)
-            ->with('offeredCollections', $offeredCollections);
+            ->with('pendingVideoCollections', $pendingVideoCollections)
+            ->with('offeredVideoCollections', $offeredVideoCollections)
+			->with('pendingStoryCollections', $pendingStoryCollections)
+			->with('offeredStoryCollections', $offeredStoryCollections);
     }
 
     /**

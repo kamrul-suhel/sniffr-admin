@@ -10,7 +10,6 @@ use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
 use App\Order;
-use App\RecommendedAsset;
 use App\User;
 use Auth;
 use Redirect;
@@ -94,26 +93,6 @@ class AdminClientController extends Controller
         $client->save();
 
         $token = app('App\Http\Controllers\Admin\AdminUsersController')->getToken($request->get('user_email'), $user);
-
-        if (count($request->get('recommend-videos')) > 0) {
-            foreach($request->get('recommend-videos') as $video) {
-                $recommendation = new RecommendedAsset();
-                $recommendation->user_id = $user->id;
-                $recommendation->client_id = $client->id;
-                $recommendation->video_id = $video;
-                $recommendation->save();
-            }
-        }
-
-        if (count($request->get('recommend-stories')) > 0) {
-            foreach($request->get('recommend-stories') as $story) {
-                $recommendation = new RecommendedAsset();
-                $recommendation->user_id = $user->id;
-                $recommendation->client_id = $client->id;
-                $recommendation->story_id = $story;
-                $recommendation->save();
-            }
-        }
 
         if ($request->get('send_invitation')) {
             QueueEmailCompany::dispatch(

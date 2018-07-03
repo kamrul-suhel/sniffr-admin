@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\ClientMailer;
 use App\ClientMailerUser;
 use App\ClientMailerVideo;
 use App\CollectionVideo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
-use App\RecommendedAsset;
 use App\Services\VideoService;
 use App\Traits\FrontendResponse;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Auth;
@@ -72,7 +69,6 @@ class VideoController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$recommended = [];
 		$mailerVideos = [];
 		if ($request->ajax() || $request->isJson()) {
 
@@ -89,14 +85,6 @@ class VideoController extends Controller
 				->paginate($this->videos_per_page);
 
 			if(Auth::check()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)
-                    ->whereNotNull('video_id')
-                    ->where('created_at', '>=', Carbon::today()->subDay(config('settings.stale_time'))->startOfDay())
-                    ->pluck('id');
-				$recommended = Video::select($this->getVideoFieldsForFrontend())
-					->whereIn('id', $recommendedVids)
-					->paginate();
-
 				$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
 
 				$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)->pluck('video_id');
@@ -109,7 +97,6 @@ class VideoController extends Controller
 
 			$data = [
 				'videos' => $videos,
-				'recommended' => $recommended,
                 'mailer_videos' => $mailerVideos,
 				'video_categories' => VideoCategory::all(),
 				'theme_settings' => config('settings.theme'),

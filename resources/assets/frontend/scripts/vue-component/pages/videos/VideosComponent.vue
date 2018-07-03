@@ -36,7 +36,7 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'video'"></pagination-component>
+        <pagination-component v-if="paginate.last_page > 1" :pagination="paginate" :page="'video'"></pagination-component>
     </div>
 </template>
 
@@ -93,28 +93,19 @@
 
         methods: {
             setAlldata(){
+                console.log('set');
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                     this.paginate = this.$store.getters.getPaginateObject;
+                    this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
-
-                if(this.client_logged_in){
-                    this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
-                        this.mailer_videos = this.$store.getters.getMailerVideoData;
-                    });
-                }
             },
 
             updateVideodata(){
+                console.log('update');
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                 });
-
-                if(this.client_logged_in){
-                    this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
-                        this.mailer_videos = this.$store.getters.getMailerVideoData;
-                    });
-                }
             },
         }
     }

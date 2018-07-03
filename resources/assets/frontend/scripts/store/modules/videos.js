@@ -20,15 +20,11 @@ const getters = {
 };
 const mutations = {
     setVideoData(state, data){
-        state.videos = data.videos.data;
-    },
-
-    setRecommendedData(state, data){
-        state.recommended = data.recommended.data;
+        state.videos = data;
     },
 
     setMailerVideoData(state, data){
-        state.mailer_videos = data.mailer_videos.data;
+        state.mailer_videos = data;
     },
 
     setPaginationObject(state, paginate){
@@ -47,7 +43,8 @@ const actions = {
             axios.get(url)
                 .then((response) => {
                     let data = response.data;
-                    commit('setVideoData', data);
+                    commit('setVideoData', data.videos.data);
+                    commit('setMailerVideoData', data.mailer_videos.data);
                     commit('setPaginationObject', data.videos);
                     resovle();
                 })
@@ -56,29 +53,7 @@ const actions = {
                     reject();
                 });
         });
-    },
-
-    getMailerVideoData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
-            let url = '/videos';
-
-            if (payload.page && payload.page != 0) {
-                url = url + '?page=' + payload.page;
-            }
-            axios.get(url)
-                .then((response) => {
-                    let data = response.data;
-                    commit('setMailerVideoData', data);
-                    commit('setPaginationObject', data.mailer_videos);
-                    resovle();
-                })
-                .catch((error) => {
-                    console.log('Not connect');
-                    reject();
-                });
-        });
-    },
-
+    }
 };
 export default {
     state,
