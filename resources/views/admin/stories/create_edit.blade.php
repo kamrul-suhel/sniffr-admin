@@ -2,21 +2,33 @@
 
 @section('content')
 
+<style>
+.story-title {
+	font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+	font-size: 24px;
+}
+.drop-5050 {
+	width:50% !important;
+}
+</style>
+
 <div id="admin-container">
 <!-- This is where -->
 
-	<ol class="breadcrumb"> <li> <a href="/admin/stories"><i class="fa fa-tasks"></i> Stories</a> </li> <li class="active">@if(!empty($story->id)) <strong>{{ $story->title }}</strong> @else <strong>New Story</strong> @endif</li> </ol>
-
-	<!-- <div class="admin-section-title" style="background:#1976d2;color:#fff;">
-		<p>This feature is currently in development (please be gentle).</p>
-	</div> -->
+	<ol class="breadcrumb">
+		<li> <a href="/admin/stories"><i class="fa fa-tasks"></i> Stories</a> </li>
+		<li class="active">
+			@if(!empty($story->id))
+				<strong>Edit Story</strong>
+			@else
+				<strong>New Story</strong>
+			@endif
+		</li>
+	</ol>
 
 	<div class="admin-section-title">
-	@if(empty($story->id))
-		<h3><i class="fa fa-plus"></i> Add New Story</h3>
-	@endif
-	</div>
-	<div class="admin-section-title" style="color">
 		<p></p>
 	</div>
 	<div class="clear"></div>
@@ -25,7 +37,19 @@
 
 		<div class="row">
 
-			<div class="col-sm-6">
+			<div class="col-sm-12">
+
+				<div class="panel panel-primary" data-collapsed="0">
+					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($story->title)){{ $story->title }}@endif" />
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="row">
+
+			<div class="col-sm-4"> <!-- first column -->
 
 				<div class="row">
 
@@ -33,26 +57,24 @@
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">Story Title</div>
+								<div class="panel-title">Story Assets</div>
+
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
 							</div>
-							<div class="panel-body" style="display: block;">
-								<?php if($errors->first('title')): ?>
-								<div class="alert alert-danger">
-									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <strong>Oh snap!</strong>
-									<?= $errors->first('title'); ?>
-								</div>
-								<?php endif; ?>
 
-								<input type="text" class="form-control" name="title" id="title" placeholder="Story Title" value="@if(!empty($story->title)){{ $story->title }}@endif" @if(isset($story)) @if(in_array($story->state, config('stories.decisions.writing'))||in_array($story->state, config('stories.decisions.subbing'))) disabled @endif @endif />
+							<div class="panel-body" style="display: block;">
+								<img id="story_image_source" src="{{ (!empty($story->thumb) ? $story->thumb : '/assets/frontend/images/placeholder.png') }}" border="0">
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Upload Image
+						            </span>
+									<input type="text" class="form-control" id="story_image_source_url" name="story_image_source_url" placeholder="" value="" />
+						            <input type="file" multiple="true" class="form-control" name="story_image" id="story_image"/>
+						        </span>
 							</div>
 						</div>
-
-					</div>
-
-					<div class="col-sm-12">
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
@@ -66,13 +88,147 @@
 							</div>
 						</div>
 
+						<div class="col-sm-6">
+							<div class="panel panel-primary" data-collapsed="0">
+								<div class="panel-heading">
+									<div class="panel-title">State</div>
+
+									<div class="panel-options">
+										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+									</div>
+								</div>
+
+								<div class="panel-body" style="display: block;">
+									<select name="state" id="state" class="form-control">
+										@foreach(config('stories.states') as $state)
+										<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="panel panel-primary" data-collapsed="0">
+								<div class="panel-heading">
+									<div class="panel-title">Assigned to</div>
+
+									<div class="panel-options">
+										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+									</div>
+								</div>
+
+								<div class="panel-body" style="display: block;">
+									<select id="user_id" name="user_id" class="form-control">
+										<option value="">Not assigned</option>
+										@foreach($users as $user2)
+											<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
+
 					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-sm-4"> <!-- second column -->
+
+				<div class="row">
 
 					<div class="col-sm-12">
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">Notes</div>
+								<div class="panel-title">Licensing Information</div>
+
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+
+							<div class="panel-body" style="display: block;">
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Source URL
+						            </span>
+									<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="" value="@if(!empty($story->source)){{ $story->source }}@endif" />
+						        </span>
+								<br />
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Contact
+						            </span>
+									<input type="text" class="form-control" name="contact" id="contact" placeholder="" value="" />
+						        </span>
+								<br />
+								<span class="input-group has-feedback">
+									<span class="input-group-addon">
+						                Date Sourced
+						            </span>
+				                    <input type="text" class="form-control" id="source_date" />
+				                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+						        </span>
+								<br />
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Removed from Social for
+						            </span>
+									<select name="removed_from_social" id="removed_from_social" class="form-control">
+										@foreach(config('stories.removed_from_social') as $from)
+										<option value="{{ $from }}">{{ ucwords(str_replace('-', ' ', $from)) }}</option>
+										@endforeach
+									</select>
+						        </span>
+								<br />
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Problem Status
+						            </span>
+									<select name="problem_status" id="problem_status" class="form-control">
+										@foreach(config('stories.problem_status') as $problem)
+										<option value="{{ $problem }}">{{ ucwords(str_replace('-', ' ', $problem)) }}</option>
+										@endforeach
+									</select>
+						        </span>
+								<br />
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Categorisation
+						            </span>
+									<select name="vertical" id="vertical" class="form-control drop-5050">
+										<option value="">Select vertical</option>
+										@foreach($video_categories as $category)
+										<option value="{{ $category->id }}">{{ $category->name }}</option>
+										@endforeach
+									</select>
+									<select name="collection" id="collection" class="form-control drop-5050">
+										<option value="">Select collection</option>
+										@foreach($video_collections as $collection)
+										<option value="{{ $collection->id }}">{{ $collection->name }}</option>
+										@endforeach
+									</select>
+						        </span>
+								<br />
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                Submitted to
+						            </span>
+									<select name="submitted_to[]" id="submitted_to" class="selectpicker" data-width="100%" title="Select who you submitted to" multiple>
+										@foreach(config('stories.submitted_to') as $sites)
+										<option value="{{ $sites }}">{{ ucwords(str_replace('-', ' ', $sites)) }}</option>
+										@endforeach
+									</select>
+						        </span>
+							</div>
+						</div>
+
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Comments</div>
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
@@ -82,98 +238,9 @@
 							</div>
 						</div>
 
-					</div>
-
-					<div class="col-sm-6">
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">State</div>
-
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-								</div>
-							</div>
-
-							<div class="panel-body" style="display: block;">
-								<select name="state" id="state" class="form-control">
-									@foreach(config('stories.states') as $state)
-									<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6">
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Assigned to</div>
-
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-								</div>
-							</div>
-
-							<div class="panel-body" style="display: block;">
-								<select id="user_id" name="user_id" class="form-control">
-									<option value="">Not assigned</option>
-									@foreach($users as $user2)
-										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-			</div>
-
-			<div class="col-sm-6">
-
-				<div class="row">
-
-					<div class="col-sm-12">
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Source URL</div>
-
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-								</div>
-							</div>
-
-							<div class="panel-body" style="display: block;">
-								<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="http://" value="@if(!empty($story->source)){{ $story->source }}@endif" />
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-12">
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Story Thumbnail</div>
-
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-								</div>
-							</div>
-
-							<div class="panel-body" style="display: block;">
-								<img id="story_image_source" src="@if(!empty($story->thumb)){{ $story->thumb }}@endif" border="0">
-								<span class="input-group">
-						            <span class="input-group-addon">
-						                Upload Image
-						            </span>
-									<input type="text" class="form-control" name="story_image_source_url" id="story_image_source_url" placeholder="" value="@if(!empty($story->thumb)){{ $story->thumb }}@endif" />
-						            <input type="file" multiple="true" class="form-control" name="story_image" id="story_image"/>
-						        </span>
-							</div>
-						</div>
-
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Video Assets</div>
+								<div class="panel-title">Include Video Assets</div>
 
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
@@ -191,6 +258,21 @@
 
 							</div>
 						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-sm-4"> <!-- third column -->
+
+				<div class="row">
+
+					<div class="col-sm-12">
+
+
+
 					</div>
 
 				</div>
@@ -205,11 +287,13 @@
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
-		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 
 		@if(isset($story->id))
-			<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-right:10px;">License</a>
+			<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License Story</a>
 	    @endif
+
+		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
+
 	</form>
 
 	<div class="clear"></div>
@@ -223,6 +307,8 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		$('#source_date').datetimepicker();
 
 		tinymce.init({
 			relative_urls: false,

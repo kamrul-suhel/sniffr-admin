@@ -136,6 +136,39 @@ return [
         'for-page',
     ],
 
+    'removed_from_social' => [
+        '1-day',
+        '2-days',
+        '3-days',
+        '4-days',
+        '5-days',
+        '6-days',
+        '7-days',
+        'none',
+    ],
+
+    'problem_status' => [
+        'no-problem',
+        'dead-link',
+        'prior-exclusive-license',
+        'contact-is-not-owner',
+        'minor-in-video',
+    ],
+
+    'submitted_to' => [
+        'lad-bible',
+        'storyful',
+        'jukin',
+        'newsflare',
+        'viral-hog',
+        'viral-thread',
+        'viral-flare',
+        'blunt-kommunity',
+        'buzzfeed',
+        'tasty',
+        'other',
+    ],
+
     'colors' => [
         'unapproved' => 'default',
         'approved' => 'default',

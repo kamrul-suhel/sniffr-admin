@@ -12,6 +12,8 @@ use App\User;
 use App\Story;
 use App\Asset;
 use App\Video;
+use App\VideoCategory;
+use App\VideoCollection;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -125,6 +127,8 @@ class AdminStoryController extends Controller
             'button_text' => 'Add New Story',
             'user' => Auth::user(),
             'users' => User::all(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
         ];
 
@@ -184,6 +188,19 @@ class AdminStoryController extends Controller
         $story = Story::where('alpha_id', $id)
             ->first();
 
+        var_dump($story->state);
+
+        foreach(config('stories.decisions') as $current_decision => $decision) {
+            // if($state==$state_values['value']) {
+            //     $found=1;
+            // }
+            var_dump(in_array($story->state, (array)$decision));
+
+            //var_dump($decision);
+        }
+
+        dd('--------------');
+
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
             'story' => $story,
@@ -191,6 +208,8 @@ class AdminStoryController extends Controller
             'button_text' => 'Update Story',
             'user' => Auth::user(),
             'users' => User::all(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
         ];
 
@@ -203,6 +222,7 @@ class AdminStoryController extends Controller
     public function update()
     {
         $data = Input::all();
+        dd($data['source_date']);
         $id = $data['id'];
         $story = Story::findOrFail($id);
 
@@ -289,18 +309,6 @@ class AdminStoryController extends Controller
                 //     $story->date_ingested = $story->created_at;
                 // }
                 $message = 'Ready to license';
-                break;
-            case (in_array($state, config('stories.decisions.licensing'))):
-                $message = 'Licensing in progress';
-                break;
-            case (in_array($state, config('stories.decisions.ready-to-publish'))):
-                $message = 'Ready to publish';
-                break;
-            case (in_array($state, config('stories.decisions.writing'))):
-                $message = 'Writing in progess';
-                break;
-            case (in_array($state, config('stories.decisions.subbing'))):
-                $message = 'Subbing in progess';
                 break;
         }
 

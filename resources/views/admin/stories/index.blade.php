@@ -3,10 +3,6 @@
 
 @section('content')
 
-    <!-- <div class="admin-section-title" style="background:#1976d2;color:#fff;">
-        <p>This feature is currently in development (please be gentle).</p>
-    </div> -->
-
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
