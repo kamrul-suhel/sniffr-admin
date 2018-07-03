@@ -60,7 +60,6 @@ class AdminStoryController extends Controller
         if($decision) {
             $state = 'all';
             foreach(config('stories.decisions') as $decision_state_key => $decision_state) {
-
                 if($decision==$decision_state_key) {
                     $count=1;
                     foreach($decision_state as $state_key => $state_value) {
