@@ -109,9 +109,6 @@
             });
         },
 
-        mounted() {
-        },
-
         methods: {
             getVideoData(alpha_id) {
                 this.$store.commit('setRouteObject', this.$route);

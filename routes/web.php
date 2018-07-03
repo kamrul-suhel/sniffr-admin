@@ -13,7 +13,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
-    Route::get('videos/tag/{tag}', 'Frontend\VideoController@findByTag')->name('videos_tag_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
     Route::post('upload', 'Frontend\VideoController@store')->name('videos_store');
     Route::get('upload', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
@@ -257,7 +256,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('storydialogbox/{alpha_id}', 'SearchController@storyInDialog');
+    Route::get('storydialogbox/{alpha_id}', 'SearchController@stories');
 
 
     Route::resource('quotes', 'Admin\AdminQuoteController');
@@ -342,24 +341,19 @@ Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('c
 
 /*
 |--------------------------------------------------------------------------
+| Frontend video dialog box, getting current video, next & previous link
+|--------------------------------------------------------------------------
+*/
+
+Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
+
+/*
+|--------------------------------------------------------------------------
 | Frontend Stories route
 |--------------------------------------------------------------------------
 */
 Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
 Route::post('/request_quote_process', 'Frontend\StoryController@requestQuote')->name('frontend.request.quote');
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Frontend video dialog box, getting current video, next & previous link
-|--------------------------------------------------------------------------
-*/
-
-Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
-Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
-Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
-Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
 
 
 /*

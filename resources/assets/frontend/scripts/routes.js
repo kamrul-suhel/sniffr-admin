@@ -2,8 +2,6 @@ import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import LoginComponent from './vue-component/pages/login/LoginComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
-import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
-import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
 import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
 import PasswordSetTokenComponent from './vue-component/pages/loging/PasswordSetTokenComponent.vue';
@@ -59,19 +57,7 @@ export const routes = [
         name: 'contract_accept',
         component: ContractComponent
     },
-
-    // {
-    //     path: '/search',
-    //     name: 'videos_search',
-    //     component: VideoSearchComponent
-    // },
-
-    {
-        path: '/videos/tag/:value',
-        name: 'videos_tag',
-        component: VideoTagComponent
-    },
-
+    
     {
         path: '/upload',
         name: 'upload_video',

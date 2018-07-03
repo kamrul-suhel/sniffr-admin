@@ -66,7 +66,7 @@ class AdminQuoteController extends Controller {
     {
         //update collection video status, final_price
         $collectionVideo = CollectionVideo::find($id);
-        $collectionVideo->final_price = $request->get('final_price');
+        $collectionVideo->final_price = $request->input('final_price');
         $collectionVideo->status = 'offered';
         $collectionVideo->save();
 
@@ -74,7 +74,7 @@ class AdminQuoteController extends Controller {
         $collectionQuote = new CollectionQuote();
         $collectionQuote->collection_video_id = $collectionVideo->id;
         $collectionQuote->user_id = auth()->user()->id; //offered by the admin signed in
-        $collectionQuote->price = $request->get('final_price');
+        $collectionQuote->price = $request->input('final_price');
         $collectionQuote->save();
 
         QueueEmailOfferedQuote::dispatch(

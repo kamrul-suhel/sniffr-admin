@@ -69,43 +69,6 @@ class VideoController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$mailerVideos = [];
-		if ($request->ajax() || $request->isJson()) {
-
-            //Remove any exclusive based collections that have been purchased and downloaded.
-            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
-                ->whereIn('status', ['purchased', 'downloaded'])
-                ->pluck('video_id');
-
-			$videos = Video::select($this->getVideoFieldsForFrontend())
-				->where('file', '!=', NULL)
-				->where('state', 'licensed')
-				->orderBy('id', 'DESC')
-                ->whereNotIn('id', $unsearchableVideos)
-				->paginate($this->videos_per_page);
-
-			if(Auth::check()){
-				$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
-
-				$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)->pluck('video_id');
-
-				$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
-                    ->whereIn('id', $mailerVideoIds)
-                    ->whereNotIn('id', $unsearchableVideos)
-                    ->paginate();
-			}
-
-			$data = [
-				'videos' => $videos,
-                'mailer_videos' => $mailerVideos,
-				'video_categories' => VideoCategory::all(),
-				'theme_settings' => config('settings.theme'),
-				'pages' => (new Page)->where('active', '=', 1)->get(),
-			];
-
-			return $this->successResponse($data);
-		}
-
 		return view('frontend.master');
 	}
 
@@ -222,49 +185,6 @@ class VideoController extends Controller
     }
 
     /**
-     * TODO: Method is not being used
-     *
-     * @codeCoverageIgnore
-     * @param Request $request
-     */
-    public function videoCheck(Request $request)
-    {
-        $postHeader = $request->header('x-amz-sns-message-type');
-        if ($postHeader) {
-            $postBody = $request->file();
-            $postBody = array_values($postBody)[0];
-            $postFile = file_get_contents($postBody->getRealPath());
-            $postFile = preg_replace('!\\r?\\n!', '', $postFile);
-            $postFile = str_replace('(', '{', $postFile);
-            $postFile = str_replace(')', '}', $postFile);
-            $postFile = json_decode($postFile);
-
-            if (!$postFile->jobId) {
-                abort('404');
-            }
-
-			$user = new User();
-			$user->slackChannel('alerts')->notify(new SubmissionAlert(
-                'watermark test ' . $postHeader .
-                ' (jobId: ' . $postFile->jobId .
-                ', input: ' . $postFile->input->key .
-                ', output: ' . $postFile->outputs->key . ')'
-            ));
-
-            response()->json([
-                'jobId' => $postFile->jobId,
-                'input' => $postFile->input->key,
-                'output' => $postFile->outputs->key,
-                'duration' => $postFile->outputs->duration
-            ]);
-        }
-        // TODO: error response
-        response()->json([]);
-    }
-
-
-
-    /**
      * @param Request $request
      * @param string $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
@@ -293,85 +213,6 @@ class VideoController extends Controller
         return view('frontend.master');
     }
 
-    /**
-     * @param Request $request
-     * @param string $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     * Letter we will remove this code it is for frontend not client video show method
-     */
-//    public function show(Request $request, string $id)
-//    {
-//        $video = Video::where('state', 'licensed')
-//            ->with('tags')
-//            ->orderBy('licensed_at', 'DESC')
-//            ->where('alpha_id', $id)
-//            ->first();
-//        $isJson = $request->ajax() || $request->isJson();
-//
-//        //Make sure video is active
-//        if ((Auth::check()) && (($video) && ((Auth::user()->role == 'admin' || Auth::user()->role == 'client') || $video->state == 'licensed'))) {
-//            $favorited = false;
-//            $downloaded = false;
-//            $iFrame = $this->getVideoHtml($video, true);
-//            $ordered = Order::where('video_id', $video->id)
-//                ->where('client_id', Auth::user()->client_id)
-//                ->first();
-//
-//            $view_increment = $this->handleViewCount($id);
-//
-//            $data = [
-//                'video' => $video,
-//                'iframe' => $iFrame,
-//                'ordered' => $ordered ? true : false,
-//                'view_increment' => $view_increment,
-//                'favorited' => $favorited,
-//                'downloaded' => $downloaded,
-//                'video_categories' => VideoCategory::all(),
-//                'theme_settings' => config('settings.theme'),
-//                'pages' => Page::where('active', '=', 1)->get(),
-//            ];
-//
-//            if ($isJson) {
-//                return $this->successResponse($data);
-//            }
-//
-//            return view('frontend.master', $data);
-//        }
-//
-//        if ($isJson) {
-//            return $this->errorResponse('Sorry, this video is no longer active');
-//        }
-//
-//        return Redirect::to('videos')->with([
-//            'note' => 'Sorry, this video is no longer active.',
-//            'note_type' => 'error'
-//        ]);
-//    }
-
-    /**
-     * @param Request $request
-     * @param string $tagName
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function findByTag(Request $request, string $tagName)
-    {
-        if ($request->ajax() || $request->isJson()) {
-            if (!isset($tagName)) {
-                return redirect()->to('video_index');
-            }
-
-            $videos = Video::select($this->getVideoFieldsForFrontend())
-                ->where('state', 'licensed')
-                ->whereHas('tags', function ($query) use ($tagName) {
-                    $query->where('name', '=', $tagName);
-                })
-                ->paginate($this->videos_per_page);
-
-            return $this->successResponse(['videos' => $videos]);
-        }
-
-        return view('frontend.master');
-    }
 
     /**
      * TODO: are we using this method?

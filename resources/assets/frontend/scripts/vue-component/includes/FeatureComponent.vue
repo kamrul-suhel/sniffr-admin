@@ -27,6 +27,7 @@
         },
 
         components: {
+
             VideoLoopComponent
         },
 
@@ -34,9 +35,11 @@
         },
 
         created(){
-            axios.get('/')
+            axios.post('/search/videos', {
+                'featured':'true'
+            })
             .then((response) => {
-                this.videos = response.data.videos;
+                this.videos = response.data.videos.data;
             });
         }
     }

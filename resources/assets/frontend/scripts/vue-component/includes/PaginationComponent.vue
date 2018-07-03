@@ -38,10 +38,6 @@
                 return this.pagination;
             },
 
-            '$route'() {
-                this.current_page = Number(this.$route.query.page);
-            },
-
             current_page(){
                 switch(this.page){
                     case 'client_stories':

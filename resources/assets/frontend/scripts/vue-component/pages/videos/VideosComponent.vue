@@ -66,7 +66,7 @@
         watch: {
             '$route'(to, from, next){
                 this.current_page = to.query.page;
-                this.updateVideodata();
+                this.setAlldata(this.getQueryObject());
             }
         },
 
@@ -77,7 +77,7 @@
             LoginEventBus.$on('loginSuccess', () => {
                 this.logged_in = this.$store.getters.isUserLogin;
                 this.client_logged_in = this.$store.getters.isClientLogin;
-                this.setAlldata();
+                this.setAlldata(this.getQueryObject());
             });
 
             LoginEventBus.$on('logoutChangeState', () => {
@@ -88,13 +88,13 @@
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
-            this.setAlldata();
+
+            this.setAlldata(this.getQueryObject());
         },
 
         methods: {
-            setAlldata(){
-                console.log('set');
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
+            setAlldata(query){
+                this.$store.dispatch('getVideoData', query).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                     this.paginate = this.$store.getters.getPaginateObject;
                     this.mailer_videos = this.$store.getters.getMailerVideoData;
@@ -102,11 +102,26 @@
             },
 
             updateVideodata(){
-                console.log('update');
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                 });
             },
+
+            getQueryObject(){
+                let query = {
+                    page: this.current_page? this.current_page : 1,
+                };
+
+                if(this.$route.query.search && this.$route.query.search != ''){
+                    query.search = this.$route.query.search;
+                }
+
+                if(this.$route.query.tag && this.$route.query.tag != ''){
+                    query.tag = this.$route.query.tag;
+                }
+
+                return query;
+            }
         }
     }
 </script>

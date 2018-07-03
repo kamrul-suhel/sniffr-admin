@@ -130,7 +130,7 @@
             VideoDialogBoxEventBus.$on('videoDialogBoxCloseByTag', (tag) => {
                 this.video_dialog = false;
                 setTimeout(() => {
-                    this.$router.push({name: 'videos_tag', params: {value: tag.name}});
+                    this.$router.push({name: 'videos', query: { tag: tag.name} });
                 }, 500);
 
             });
