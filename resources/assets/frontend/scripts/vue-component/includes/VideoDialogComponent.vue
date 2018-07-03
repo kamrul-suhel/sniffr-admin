@@ -32,7 +32,7 @@
                                       right: () => swipe('Right')
                                 }"
                     >
-                        <video-dialog-component></video-dialog-component>
+                        <video-in-dialog-component></video-in-dialog-component>
                     </v-container>
 
 
@@ -56,7 +56,7 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus';
-    import VideoDialogComponent from '../pages/videos/VideoInDialogComponent';
+    import VideoInDialogComponent from '../pages/videos/VideoInDialogComponent';
     import LoginEventBus from '../../event-bus/login-event-bus';
 
     export default {
@@ -93,7 +93,7 @@
         },
 
         components: {
-          VideoDialogComponent
+            VideoInDialogComponent
         },
 
         created() {

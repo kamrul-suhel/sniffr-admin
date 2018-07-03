@@ -60,7 +60,7 @@
     </section>
 </template>
 <script>
-    import VideoDialogComponent from './VideoDialogComponent'
+    import VideoDialogComponent from '../includes/VideoDialogComponent'
 
     export default {
         data() {

@@ -247,7 +247,7 @@
 
             open_quote_dialog(val){
                 if(!val){
-                    this.onQuoteDialogClose();s
+                    this.onQuoteDialogClose();
                 }
             }
         },

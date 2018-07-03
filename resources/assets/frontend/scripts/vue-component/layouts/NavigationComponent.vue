@@ -85,10 +85,6 @@
         <forgot-password-component></forgot-password-component>
         <!-- End password reset -->
 
-        <!-- Buy Component -->
-        <buy-component></buy-component>
-        <!-- End buy component -->
-
         <!-- Quote Component -->
         <quote-component></quote-component>
         <!-- End request quote component -->
@@ -107,14 +103,12 @@
 <script>
     import LoginComponent from '../includes/LoginComponent'
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
-    import BuyComponent from '../includes/BuyComponent'
     import QuoteComponent from '../includes/QuoteComponent'
     import LoginEventBus from '../../event-bus/login-event-bus'
     export default {
         components: {
             LoginComponent,
             ForgotPasswordComponent,
-            BuyComponent,
             QuoteComponent
         },
         data() {

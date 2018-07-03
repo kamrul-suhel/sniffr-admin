@@ -15,7 +15,7 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg>
 
-                <div v-if="client_logged_id && (mailer_videos.length || recommended.length)">
+                <div v-if="client_logged_in && (mailer_videos.length || recommended.length)">
                     <h3 class="sub-heading">Your Suggested Videos</h3>
                     <hr>
                     <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
@@ -45,7 +45,6 @@
     import SearchComponent from '../../includes/SearchComponent';
     import VideoLoopComponent from '../../includes/VideoLoopComponent';
     import PaginationComponent from '../../includes/PaginationComponent';
-    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
@@ -63,7 +62,7 @@
                 paginate: '',
                 current_page: 0,
                 logged_in : false,
-                client_logged_id : false
+                client_logged_in : false
             }
         },
         watch: {
@@ -74,18 +73,18 @@
         },
 
         created(){
-            this.client_logged_id = this.$store.getters.isClientLogin;
+            this.client_logged_in = this.$store.getters.isClientLogin;
 
             // If client has logged in
             LoginEventBus.$on('loginSuccess', () => {
                 this.setAlldata();
                 this.logged_in = this.$store.getters.isUserLogin;
-                this.client_logged_id = this.$store.getters.isClientLogin;
+                this.client_logged_in = this.$store.getters.isClientLogin;
             });
 
             LoginEventBus.$on('logoutChangeState', () => {
                 this.logged_in = false;
-                this.client_logged_id = false;
+                this.client_logged_in = false;
             });
 
             if (this.$route.query.page) {
@@ -101,7 +100,7 @@
                     this.paginate = this.$store.getters.getPaginateObject;
                 });
 
-                if(this.client_logged_id){
+                if(this.client_logged_in){
                     this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
                         this.recommended = this.$store.getters.getRecommendedData;
                     });
@@ -117,7 +116,7 @@
                     this.videos = this.$store.getters.getVideoData;
                 });
 
-                if(this.client_logged_id){
+                if(this.client_logged_in){
                     this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
                         this.recommended = this.$store.getters.getRecommendedData;
                     });
