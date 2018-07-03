@@ -1,6 +1,5 @@
 const state = {
     videos: null,
-    recommended: null,
     mailer_videos: null,
     paginate: ''
 };
@@ -21,6 +20,7 @@ const getters = {
 const mutations = {
     setVideoData(state, data){
         state.videos = data.videos.data;
+        state.recommended = data.recommended.data;
     },
 
     setRecommendedData(state, data){
@@ -44,6 +44,11 @@ const actions = {
             if (payload.page && payload.page != 0) {
                 url = url + '?page=' + payload.page;
             }
+
+            if(payload.search && payload.search != ''){
+                url = url + '&search='+payload.search;
+            }
+
             axios.get(url)
                 .then((response) => {
                     let data = response.data;

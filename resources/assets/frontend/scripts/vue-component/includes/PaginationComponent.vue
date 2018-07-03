@@ -43,23 +43,7 @@
             },
 
             current_page(){
-                switch(this.page){
-                    case 'client_stories':
-                        this.$router.push({name: 'client_stories', query:{ page: this.current_page}});
-                        break;
-
-                    case 'client_stories_download':
-                        this.$router.push({name: 'client_downloaded_stories', query:{ page: this.current_page}});
-                        break;
-
-                    case 'client_videos':
-                        this.$router.push({name: 'client_videos', query:{ page: this.current_page}});
-                        break;
-
-
-                    default:
-                        this.$vuetify.goTo('.videos-section',{ duration: 1, easing:'easeInCubic' });
-                }
+                this.$vuetify.goTo('.videos-section',{ duration: 1, easing:'easeInCubic' });
 
                 setTimeout(() => {
                     if(this.page === 'video'){
@@ -89,7 +73,7 @@
         },
 
         created(){
-            this.current_page = Number(this.$route.query.page);
+            //this.current_page = Number(this.$route.query.page);
             let device = this.$vuetify.breakpoint.name;
 
             if(device === 'xs'){

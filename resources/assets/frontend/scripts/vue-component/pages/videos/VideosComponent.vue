@@ -36,7 +36,10 @@
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'video'"></pagination-component>
+        <pagination-component
+                :pagination="paginate"
+                :page="'video'"
+        ></pagination-component>
     </div>
 </template>
 
@@ -58,7 +61,7 @@
                 videos: '',
                 mailer_videos: [],
                 paginate: '',
-                current_page: 0,
+                current_page: 1,
                 logged_in : false,
                 client_logged_in : false
             }
@@ -66,7 +69,7 @@
         watch: {
             '$route'(to, from, next){
                 this.current_page = to.query.page;
-                this.updateVideodata();
+                this.setAllData();
             }
         },
 
@@ -89,6 +92,8 @@
                 this.current_page = this.$route.query.page;
             }
             this.setAlldata();
+
+            this.setAllData();
         },
 
         methods: {
@@ -115,7 +120,23 @@
                         this.mailer_videos = this.$store.getters.getMailerVideoData;
                     });
                 }
+
+                    //getting the recommended data
+                    this.recommended = this.$store.getters.getRecommendedData;
+                });
             },
+
+            getQueryObject(){
+                let query = {
+                    page: this.current_page,
+                };
+
+                if(this.$route.query.search && this.$route.query.search != ''){
+                    query.search = this.$route.query.search;
+                }
+
+                return query;
+            }
         }
     }
 </script>
