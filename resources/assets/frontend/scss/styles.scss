@@ -18,8 +18,7 @@
 /* ************************* NAV style ******************* */
 //@import "./layout/nav";
 
-/* ************************* BUTTONS style ******************* */
-@import "./partials/buttons";
+
 
 /* ************************* Home Page style ******************* */
 @import "pages/home";
@@ -32,9 +31,6 @@
 
 /* ************************* Videos Page style ******************* */
 @import "pages/videos";
-
-/* ************************* Video loop style ******************* */
-@import "partials/video-loop";
 
 /* ************************* Video dialog box section style ******************* */
 @import "pages/video-dialog-box";
@@ -65,6 +61,9 @@
 /* ************************* More detail form page ******************* */
 @import "form/more-detail";
 
+
+@import "partials/buttons";
+@import "partials/video-card";
 
 @include small-device{
 }

@@ -1,11 +1,5 @@
 <template>
-    <v-flex xs12>
-        <v-layout column wrap align-end class="video-detail-sidebar">
-            <div class="video-detail-social-share">
-                <v-btn dark block class="dark" @click.stop="createCollection()">{{ button_text }}</v-btn>
-            </div>
-        </v-layout>
-    </v-flex>
+    <v-btn dark block class="mb-0" @click.stop="createCollection()">{{ button_text }}</v-btn>
 </template>
 
 <script>

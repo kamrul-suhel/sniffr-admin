@@ -77,9 +77,9 @@
 
             // If client has logged in
             LoginEventBus.$on('loginSuccess', () => {
-                this.setAlldata();
                 this.logged_in = this.$store.getters.isUserLogin;
                 this.client_logged_in = this.$store.getters.isClientLogin;
+                this.setAlldata();
             });
 
             LoginEventBus.$on('logoutChangeState', () => {

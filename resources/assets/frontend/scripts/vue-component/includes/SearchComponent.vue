@@ -6,6 +6,7 @@
 	                <v-flex xs12>
 	                    <div class="form-group">
 	                        <v-text-field
+									dark
 	                                type="text"
 	                                name="value"
 									v-model="value"
