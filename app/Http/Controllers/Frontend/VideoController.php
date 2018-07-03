@@ -66,61 +66,102 @@ class VideoController extends Controller
         $this->videoService = $videoService;
     }
 
-	/**
-	 * @param Request $request
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function index(Request $request)
-	{
-		$recommended = [];
-		$mailerVideos = [];
-		if ($request->ajax() || $request->isJson()) {
+//	/**
+//	 * @param Request $request
+//	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+//	 */
+//	public function index(Request $request)
+//	{
+//		$recommended = [];
+//		$mailerVideos = [];
+//		if ($request->ajax() || $request->isJson()) {
+//
+//            //Remove any exclusive based collections that have been purchased and downloaded.
+//            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
+//                ->whereIn('status', ['purchased', 'downloaded'])
+//                ->pluck('video_id');
+//
+//			$videos = Video::select($this->getVideoFieldsForFrontend())
+//				->where('file', '!=', NULL)
+//				->where('state', 'licensed')
+//				->orderBy('id', 'DESC')
+//                ->whereNotIn('id', $unsearchableVideos)
+//				->paginate($this->videos_per_page);
+//
+//			if(Auth::check()){
+//				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)
+//                    ->whereNotNull('video_id')
+//                    ->where('created_at', '>=', Carbon::today()->subDay(config('settings.stale_time'))->startOfDay())
+//                    ->pluck('id');
+//				$recommended = Video::select($this->getVideoFieldsForFrontend())
+//					->whereIn('id', $recommendedVids)
+//					->paginate();
+//
+//				$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+//
+//				$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)->pluck('video_id');
+//
+//				$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
+//                    ->whereIn('id', $mailerVideoIds)
+//                    ->whereNotIn('id', $unsearchableVideos)
+//                    ->paginate();
+//			}
+//
+//			$data = [
+//				'videos' => $videos,
+//				'recommended' => $recommended,
+//                'mailer_videos' => $mailerVideos,
+//				'video_categories' => VideoCategory::all(),
+//				'theme_settings' => config('settings.theme'),
+//				'pages' => (new Page)->where('active', '=', 1)->get(),
+//			];
+//
+//			return $this->successResponse($data);
+//		}
+//
+//		return view('frontend.master');
+//	}
 
-            //Remove any exclusive based collections that have been purchased and downloaded.
-            $unsearchableVideos = CollectionVideo::where('type', 'exclusive')
-                ->whereIn('status', ['purchased', 'downloaded'])
-                ->pluck('video_id');
 
-			$videos = Video::select($this->getVideoFieldsForFrontend())
-				->where('file', '!=', NULL)
-				->where('state', 'licensed')
-				->orderBy('id', 'DESC')
-                ->whereNotIn('id', $unsearchableVideos)
-				->paginate($this->videos_per_page);
+    // Using for videos / search videos / search by tag videos
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        $recommended = [];
+        if ($request->ajax() || $request->isJson()) {
+            $videos = Video::select($this->getVideoFieldsForFrontend())
+                ->where('state', 'licensed');
+            if($request->search){
+                $videos = $videos->where('title', 'LIKE', '%'. $request->search);
+                $videos = $videos->orWhere('title', 'LIKE', '%'. $request->search);
+            }
 
-			if(Auth::check()){
-				$recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)
-                    ->whereNotNull('video_id')
-                    ->where('created_at', '>=', Carbon::today()->subDay(config('settings.stale_time'))->startOfDay())
-                    ->pluck('id');
-				$recommended = Video::select($this->getVideoFieldsForFrontend())
-					->whereIn('id', $recommendedVids)
-					->paginate();
+            $videos = $videos->orderBy('id', 'DESC')
+                ->paginate($this->videos_per_page);
 
-				$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+            if(Auth::user()){
+                $recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
+                $recommended = Video::select($this->getVideoFieldsForFrontend())
+                    ->whereIn('id', $recommendedVids)
+                    ->paginate(10);
+            }
 
-				$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)->pluck('video_id');
+            $data = [
+                'videos' => $videos,
+                'recommended' => $recommended,
+                'video_categories' => VideoCategory::all(),
+                'theme_settings' => config('settings.theme'),
+                'pages' => (new Page)->where('active', '=', 1)->get(),
+            ];
 
-				$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
-                    ->whereIn('id', $mailerVideoIds)
-                    ->whereNotIn('id', $unsearchableVideos)
-                    ->paginate();
-			}
+            return $this->successResponse($data);
+        }
 
-			$data = [
-				'videos' => $videos,
-				'recommended' => $recommended,
-                'mailer_videos' => $mailerVideos,
-				'video_categories' => VideoCategory::all(),
-				'theme_settings' => config('settings.theme'),
-				'pages' => (new Page)->where('active', '=', 1)->get(),
-			];
-
-			return $this->successResponse($data);
-		}
-
-		return view('frontend.master');
-	}
+        return view('frontend.master');
+    }
 
 
 	/**
@@ -229,8 +270,8 @@ class VideoController extends Controller
         File: ' . Input::get('user_file') . ',
         Url: ' . Input::get('user_url') . ',
         UserAgent: ' . $_SERVER['HTTP_USER_AGENT'] . '';
-		$user = new User();
-		$user->slackChannel('alerts')->notify(new SubmissionAlert($alert));
+        $user = new User();
+        $user->notify(new SubmissionAlert($alert));
         return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
     }
 
@@ -256,8 +297,8 @@ class VideoController extends Controller
                 abort('404');
             }
 
-			$user = new User();
-			$user->slackChannel('alerts')->notify(new SubmissionAlert(
+            $user = new User();
+            $user->notify(new SubmissionAlert(
                 'watermark test ' . $postHeader .
                 ' (jobId: ' . $postFile->jobId .
                 ', input: ' . $postFile->input->key .
@@ -275,49 +316,6 @@ class VideoController extends Controller
         response()->json([]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-        $recommended = [];
-
-        if ($request->ajax() || $request->isJson()) {
-
-            $search = $request->search;
-            $videos = Video::where(function ($query) use ($search) {
-                $query->where('state', '=', 'licensed');
-
-                if($search){
-                    $query->where('title', 'LIKE', '%' . $search . '%');
-                }
-            });
-            if($request->tag){
-                $tag = $request->tag;
-                $videos = $videos->whereHas('tags', function ($q) use ($tag) {
-                    $q->where('name', '=', $tag);
-                });
-            }
-            $videos = $videos->orderBy('licensed_at', 'DESC')
-                ->paginate($this->videos_per_page);
-
-
-
-            if (Auth::user()) {
-                $recommendedVids = RecommendedAsset::where('user_id', auth()->user()->id)->whereNotNull('video_id')->pluck('id');
-                $recommended = Video::select($this->getVideoFieldsForFrontend())
-                    ->whereIn('id', $recommendedVids)
-                    ->paginate(10);
-            }
-            $data = [
-                'videos' => $videos,
-                'recommended' => $recommended,
-                'video_categories' => VideoCategory::all(),
-                'theme_settings' => config('settings.theme'),
-                'pages' => (new Page)->where('active', '=', 1)->get(),
-            ];
-
 
     /**
      * @param Request $request
@@ -331,7 +329,7 @@ class VideoController extends Controller
             $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
-                ->with('orders')
+				->with('orders')
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
                 ->first();

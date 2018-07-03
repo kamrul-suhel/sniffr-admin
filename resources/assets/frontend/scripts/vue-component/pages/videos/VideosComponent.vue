@@ -69,7 +69,7 @@
         watch: {
             '$route'(to, from, next){
                 this.current_page = to.query.page;
-                this.setAllData();
+                this.setAlldata(this.getQueryObject());
             }
         },
 
@@ -80,7 +80,7 @@
             LoginEventBus.$on('loginSuccess', () => {
                 this.logged_in = this.$store.getters.isUserLogin;
                 this.client_logged_in = this.$store.getters.isClientLogin;
-                this.setAlldata();
+                this.setAlldata(this.getQueryObject());
             });
 
             LoginEventBus.$on('logoutChangeState', () => {
@@ -91,9 +91,8 @@
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
-            this.setAlldata();
+            this.setAlldata(this.getQueryObject());
 
-            this.setAllData();
         },
 
         methods: {
@@ -101,34 +100,14 @@
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                     this.paginate = this.$store.getters.getPaginateObject;
-                });
-
-                if(this.client_logged_in){
-                    this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
-                        this.mailer_videos = this.$store.getters.getMailerVideoData;
-                    });
-                }
-            },
-
-            updateVideodata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
-                    this.videos = this.$store.getters.getVideoData;
-                });
-
-                if(this.client_logged_in){
-                    this.$store.dispatch('getMailerVideoData', {page: this.current_page}).then(() => {
-                        this.mailer_videos = this.$store.getters.getMailerVideoData;
-                    });
-                }
-
-                    //getting the recommended data
-                    this.recommended = this.$store.getters.getRecommendedData;
+                    this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
             },
+
 
             getQueryObject(){
                 let query = {
-                    page: this.current_page,
+                    page: this.current_page? this.current_page : 1,
                 };
 
                 if(this.$route.query.search && this.$route.query.search != ''){

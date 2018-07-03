@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-lg fill-height>
+    <v-container grid-list-lg>
         <v-layout justify-center align-center>
             <v-flex shrink>
                 <v-card raised>
@@ -42,30 +42,26 @@
 
                             </v-layout>
 
-                            <v-layout row justify-center>
+                            <v-layout row justify-center v-if="validation.error">
                                 <v-flex>
-                                    <div v-if="validation.error" class="red--text text-xs-center">{{validation.message}}</div>
+                                    <div  class="red--text text-xs-center">{{validation.message}}</div>
                                 </v-flex>
                             </v-layout>
 
-                            <v-layout row justify-center>
-                                <v-flex xs3>
-                                    <div class="login-button">
-                                        <input type="hidden" name="_token"/>
-                                        <v-btn
-                                                raised
-                                                dark
-                                                :loading="loading"
-                                                :disabled="loading"
-                                                @click="onSubmit()">
-                                            LOGIN
-                                        </v-btn>
-                                    </div>
+                            <v-layout row wrap fluid class="text-xs-center">
+                                <v-flex xs12>
+                                    <input type="hidden" name="_token"/>
+                                    <v-btn
+                                            raised
+                                            dark
+                                            :loading="loading"
+                                            :disabled="loading"
+                                            @click="onSubmit()">
+                                        LOGIN
+                                    </v-btn>
                                 </v-flex>
-                            </v-layout>
 
-                            <v-layout row justify-center>
-                                <v-flex xs12 class="text-xs-center">
+                                <v-flex xs12>
                                     <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
                                 </v-flex>
                             </v-layout>

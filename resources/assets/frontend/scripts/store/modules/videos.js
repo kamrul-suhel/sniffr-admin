@@ -23,9 +23,6 @@ const mutations = {
         state.recommended = data.recommended.data;
     },
 
-    setRecommendedData(state, data){
-        state.recommended = data.recommended.data;
-    },
 
     setMailerVideoData(state, data){
         state.mailer_videos = data.mailer_videos.data;
@@ -33,7 +30,7 @@ const mutations = {
 
     setPaginationObject(state, paginate){
         state.paginate = paginate;
-    },
+    }
 };
 
 const actions = {

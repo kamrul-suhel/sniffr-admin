@@ -38,11 +38,8 @@
                 return this.pagination;
             },
 
-            '$route'() {
-                this.current_page = Number(this.$route.query.page);
-            },
-
             current_page(){
+                console.log('Currnt page in pagination');
                 this.$vuetify.goTo('.videos-section',{ duration: 1, easing:'easeInCubic' });
 
                 setTimeout(() => {
