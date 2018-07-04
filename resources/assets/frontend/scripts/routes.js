@@ -19,6 +19,7 @@ import ClientStoryDetailComponent from './vue-component/pages/clients/stories/Cl
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
+import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
 
 export const routes = [
@@ -169,6 +170,12 @@ export const routes = [
                 path: 'purchased',
                 name: 'client_purchased_assets',
                 component: ClientPurchasedAssetsComponent,
+            },
+
+            {
+                path: 'collections',
+                name: 'client_collections',
+                component: ClientCollectionComponent,
             },
 
         ],

@@ -9,7 +9,7 @@
                             :length="pagination.last_page"
                             v-model="current_page"
                             :total-visible="total_visible"
-                        ></v-pagination>
+                    ></v-pagination>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -21,65 +21,50 @@
         data() {
             return {
                 current_page: 1,
-                total_visible: 12,
+                total_visible: 10,
             }
         },
 
-        props:[
+        props: [
             'pagination',
             'page'
         ],
 
 
-
         watch: {
-            pagination(){
+            pagination() {
                 this.current_page = this.pagination.current_page;
                 return this.pagination;
             },
 
-            current_page(){
-                console.log('Currnt page in pagination');
-                this.$vuetify.goTo('.videos-section',{ duration: 1, easing:'easeInCubic' });
+            current_page() {
+                this.$vuetify.goTo('.videos-section', {duration: 1, easing: 'easeInCubic'});
 
-                setTimeout(() => {
-                    if(this.page === 'video'){
-                        this.$router.push({path: '/videos', query: {page: this.current_page, search: this.$route.query.search}});
-                    }
+                if (this.page === 'video') {
+                    this.$router.push({
+                        path: '/videos',
+                        query: {page: this.current_page, search: this.$route.query.search}
+                    });
+                }
 
-                    if(this.page === 'search'){
-                        let value = this.$route.query.value;
-                        let page =  this.current_page;
-                        this.$router.push({name: 'videos_search', query:{value: value, page: page}});
-                    }
+                if (this.page === 'stories') {
+                    let value = this.$route.query.search;
+                    let page = this.current_page;
+                    this.$router.push({name: 'stories', query: {search: value, page: page}});
+                }
 
-                    if(this.page === 'tagsearch'){
-                        let value = this.$route.params.value;
-                        let page =  this.current_page;
-                        this.$router.push({name: 'videos_tag', params:{value: value}, query:{ page: page}});
-                    }
-
-                    if(this.page === 'stories'){
-                        let value = this.$route.query.search;
-                        let page =  this.current_page;
-                        this.$router.push({name: 'stories', query:{search: value, page: page}});
-                    }
-
-                }, 1);
             }
         },
 
-        created(){
+        created() {
             //this.current_page = Number(this.$route.query.page);
             let device = this.$vuetify.breakpoint.name;
 
-            if(device === 'xs'){
+            if (device === 'xs') {
                 this.total_visible = 5;
             }
         },
 
-        methods: {
-
-        }
+        methods: {}
     }
 </script>

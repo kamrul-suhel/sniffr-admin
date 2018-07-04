@@ -307,9 +307,10 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Collections Routes
+    | Collections Routes for video
     |--------------------------------------------------------------------------
     */
+
     Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
     Route::post('collections/request_quote/{type}/{collection_video_id}', 'CollectionController@requestQuote')->name( 'client.request_quote');
 	Route::get('collections/accept_price/{collection_video_id}', 'CollectionController@acceptFinalPrice')->name('client.accept_price');

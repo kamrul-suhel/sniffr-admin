@@ -57,7 +57,6 @@
 </template>
 
 <script>
-    import QuoteDialogBoxEventBus from '../../../event-bus/quote-dialog-box-event-bus';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';

@@ -10,7 +10,11 @@
         <video-player-in-dialog></video-player-in-dialog>
 
 
-        <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
+        <v-dialog
+                v-model="dialog"
+                max-width="400"
+                persistent
+                content-class="mailer-dialog-error">
             <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
 

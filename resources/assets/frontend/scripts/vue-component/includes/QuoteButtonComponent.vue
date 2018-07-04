@@ -29,9 +29,6 @@
             this.button_text = (this.type == 'story' || this.asset.class == 'exceptional' || this.asset.class == '') ? 'Request Quote' : 'Buy Now';
         },
 
-        mounted() {
-        },
-
         methods: {
             createCollection() {
                 axios.post('/client/collections', {
