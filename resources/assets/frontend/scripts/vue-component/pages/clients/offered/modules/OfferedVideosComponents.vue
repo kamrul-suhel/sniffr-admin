@@ -12,10 +12,10 @@
             </v-flex>
         </v-layout>
 
-        <asset-video-download-component
+        <asset-video-offered-component
                 v-for="(video, index) in videos"
                 :key="index"
-                :video="video"></asset-video-download-component>
+                :video="video"></asset-video-offered-component>
 
         <div class="text-xs-center" v-if="totalVideos > videosPerPage">
             <v-pagination
@@ -29,11 +29,11 @@
 </template>
 
 <script>
-    import AssetVideoDownloadComponent from '../../partials/AssetVideoDownloadComponent';
+    import AssetVideoOfferedComponent from '../../partials/AssetVideoOfferedComponent';
 
     export default {
         components: {
-            AssetVideoDownloadComponent
+            AssetVideoOfferedComponent
         },
 
         data() {

@@ -17,6 +17,10 @@
                 :key="index"
                 :story="story"></asset-story-downloaded-component>
 
+        <asset-story-offered-component
+                v-for="(story, index) in stories.data"
+                :key="index"
+                :story="story"></asset-story-offered-component>
 
         <div class="text-xs-center" v-if="totalStories > storiesPerPage">
             <v-pagination
@@ -31,10 +35,12 @@
 
 <script>
     import AssetStoryDownloadedComponent from '../../partials/AssetStoryDownloadComponent'
+    import AssetStoryOfferedComponent from '../../partials/AssetStoryOfferedComponent'
 
     export default {
         components: {
-            AssetStoryDownloadedComponent
+            AssetStoryDownloadedComponent,
+            AssetStoryOfferedComponent
         },
         data() {
             return {
