@@ -45,6 +45,22 @@
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
+								<div class="panel-title">Story Type</div>
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+							<div class="panel-body" style="display: block;">
+								<select name="type" id="type" class="form-control">
+									@foreach(config('stories.story_type') as $type)
+									<option value="{{ $type }}">{{ ucwords(str_replace('-', ' ', $type)) }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
 								<div class="panel-title">Story Assets</div>
 
 								<div class="panel-options">
@@ -76,47 +92,6 @@
 							</div>
 						</div>
 
-						<div class="col-sm-6">
-							<div class="panel panel-primary" data-collapsed="0">
-								<div class="panel-heading">
-									<div class="panel-title">State</div>
-
-									<div class="panel-options">
-										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-									</div>
-								</div>
-
-								<div class="panel-body" style="display: block;">
-									<select name="state" id="state" class="form-control">
-										@foreach(config('stories.states') as $state)
-										<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-6">
-							<div class="panel panel-primary" data-collapsed="0">
-								<div class="panel-heading">
-									<div class="panel-title">Assigned to</div>
-
-									<div class="panel-options">
-										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-									</div>
-								</div>
-
-								<div class="panel-body" style="display: block;">
-									<select id="user_id" name="user_id" class="form-control">
-										<option value="">Not assigned</option>
-										@foreach($users as $user2)
-											<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-						</div>
-
 					</div>
 
 				</div>
@@ -143,7 +118,10 @@
 						            <span class="input-group-addon">
 						                Source URL
 						            </span>
-									<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="" value="@if(!empty($story->source)){{ $story->source }}@endif" />
+									<select name="source_type" id="source_type" class="form-control drop-25">
+										<option value="other">Other</option>
+								    </select>
+									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="@if(!empty($story->source)){{ $story->source }}@endif" />
 						        </span>
 								<br />
 								<span class="input-group has-feedback">
@@ -332,6 +310,47 @@
 						            </span>
 									<textarea class="form-control" name="notes" id="notes" rows="7"></textarea>
 						        </span>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="panel panel-primary" data-collapsed="0">
+								<div class="panel-heading">
+									<div class="panel-title">State</div>
+
+									<div class="panel-options">
+										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+									</div>
+								</div>
+
+								<div class="panel-body" style="display: block;">
+									<select name="state" id="state" class="form-control">
+										@foreach(config('stories.states') as $state)
+										<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="panel panel-primary" data-collapsed="0">
+								<div class="panel-heading">
+									<div class="panel-title">Assigned to</div>
+
+									<div class="panel-options">
+										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+									</div>
+								</div>
+
+								<div class="panel-body" style="display: block;">
+									<select id="user_id" name="user_id" class="form-control">
+										<option value="">Not assigned</option>
+										@foreach($users as $user2)
+											<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+										@endforeach
+									</select>
+								</div>
 							</div>
 						</div>
 

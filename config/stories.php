@@ -125,6 +125,11 @@ return [
 	// 	],
     // ],
 
+    'story_type' => [
+        'new',
+        'skeleton',
+    ],
+
     'priorities' => [
         'high',
         'medium',
