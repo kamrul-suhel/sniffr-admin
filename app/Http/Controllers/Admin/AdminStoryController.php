@@ -451,15 +451,15 @@ class AdminStoryController extends Controller
      */
     public function destroy($id)
     {
-        $story = Story::find($id);
+        $story = Story::where('alpha_id', $id)->first();
 
         if (!$story) {
             abort(404);
         }
 
-        $story->destroy($id);
+        $story->destroy($story->id);
 
-        return Redirect::to('admin/clients')->with([
+        return Redirect::to('admin/stories')->with([
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);

@@ -186,8 +186,15 @@
 									<span class="input-group-addon">
 						                Date Sourced
 						            </span>
-				                    <input type="text" class="form-control" name="source_date" id="source_date" />
+				                    <input type="text" class="form-control" name="sourced_at" id="sourced_at" />
 				                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+						        </span>
+								<br />
+								<span class="input-group">
+									<span class="input-group-addon">
+						                Location
+						            </span>
+				                    <input type="text" class="form-control" name="location" id="location" />
 						        </span>
 								<br />
 								<span class="input-group">
@@ -281,8 +288,6 @@
 
 			</div>
 
-			@if(isset($story)&&isset($decision)&&$decision!='content-sourced')
-
 			<div class="col-sm-4"> <!-- third column -->
 
 				<div class="row">
@@ -301,15 +306,15 @@
 						            <span class="input-group-addon">
 						                License Type
 						            </span>
-									<select name="license_type_status" id="license_type_status" class="form-control">
+									<select name="rights" id="rights" class="form-control">
 										<option value"">Set status</option>
-										@foreach(config('stories.license_type_status') as $status)
+										@foreach(config('stories.rights') as $status)
 										<option value="{{ $status }}">{{ ucwords(str_replace('-', ' ', $status)) }}</option>
 										@endforeach
 									</select>
-									<select name="license_type_rights" id="license_type_rights" class="form-control">
+									<select name="rights_type" id="rights_type" class="form-control">
 										<option value"">Set rights type</option>
-										@foreach(config('stories.license_type_rights') as $rights)
+										@foreach(config('stories.rights_type') as $rights)
 										<option value="{{ $rights }}">{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
 										@endforeach
 									</select>
@@ -336,13 +341,12 @@
 
 			</div>
 
-			@endif
-
 		</div>
 
 		@if(isset($story->id))
 			<input type="hidden" id="id" name="id" value="{{ $story->id }}" />
 			<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $story->alpha_id }}" />
+			<a href="{{ url('admin/stories/delete/'.$story->alpha_id) }}" class="btn btn-danger">Delete Story</a>
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
@@ -387,7 +391,9 @@
 			}
 		});
 
-		$('#source_date').datetimepicker();
+		$('#source_date').datetimepicker({
+			format: 'DD/MM/YYYY HH:MM:SS',
+		});
 
 		tinymce.init({
 			relative_urls: false,

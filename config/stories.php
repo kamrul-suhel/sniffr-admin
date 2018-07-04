@@ -169,12 +169,12 @@ return [
         'other',
     ],
 
-    'license_type_status' => [
+    'rights' => [
         'exclusive',
         'non-exclusive',
     ],
 
-    'license_type_rights' => [
+    'rights_type' => [
         'content',
         'editorial',
     ],
