@@ -2,18 +2,6 @@
 
 @section('content')
 
-<style>
-.story-title {
-	font-family: inherit;
-    font-weight: 500;
-    line-height: 1.1;
-	font-size: 24px;
-}
-.drop-5050 {
-	width:50% !important;
-}
-</style>
-
 <div id="admin-container">
 <!-- This is where -->
 
@@ -158,18 +146,47 @@
 									<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="" value="@if(!empty($story->source)){{ $story->source }}@endif" />
 						        </span>
 								<br />
-								<span class="input-group">
-						            <span class="input-group-addon">
+								<span class="input-group has-feedback">
+									<span class="input-group-addon">
 						                Contact
 						            </span>
-									<input type="text" class="form-control" name="contact" id="contact" placeholder="" value="" />
+									<input type="button" class="form-control btn-clear" name="contact_add" id="contact_add" value="Add Contact" />
 						        </span>
+								<div class="js-contact-add">
+									<input type="text" class="form-control" name="contact_full_name" id="contact_full_name" placeholder="Enter contact full name" value="" />
+									<input type="text" class="form-control" name="contact_email" id="contact_email" placeholder="Enter contact email" value="" />
+									<input type="text" class="form-control" name="contact_tel" id="contact_tel" placeholder="Enter contact telephone" value="" />
+								</div>
+								<div class="js-contact-search">
+									<select name="contact_id" id="contact_id" class="selectpicker" data-live-search="true" data-width="100%" title="Search and attach contact...">
+										@if(!empty($contacts))
+											@foreach($contacts as $contact)
+												<option value="{{ $contact->id }}"{{ (isset($story) && $story->contact_id==$contact->id)  ? " selected" : "" }}>{{ $contact->full_name }}</option>
+											@endforeach
+										@endif
+									</select>
+						        </div>
+								<br />
+								<div class="input-group">
+									<label class="checkbox-inline" for="is_owner">
+										<input type="checkbox" name="is_owner" id="is_owner" value="1">
+										Contact is owner
+									</label>
+									<label class="checkbox-inline" for="happy_to_publish">
+										<input type="checkbox" name="happy_to_publish" id="happy_to_publish" value="1">
+										Happy to publish
+									</label>
+									<label class="checkbox-inline" for="has_permission">
+										<input type="checkbox" name="has_permission" id="has_permission" value="1">
+										Has permission
+									</label>
+								</div>
 								<br />
 								<span class="input-group has-feedback">
 									<span class="input-group-addon">
 						                Date Sourced
 						            </span>
-				                    <input type="text" class="form-control" id="source_date" />
+				                    <input type="text" class="form-control" name="source_date" id="source_date" />
 				                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
 						        </span>
 								<br />
@@ -255,7 +272,6 @@
 										@endforeach
 									@endif
 								</select>
-
 							</div>
 						</div>
 
@@ -265,19 +281,62 @@
 
 			</div>
 
+			@if(isset($story)&&isset($decision)&&$decision!='content-sourced')
+
 			<div class="col-sm-4"> <!-- third column -->
 
 				<div class="row">
 
 					<div class="col-sm-12">
 
-
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Rights Status</div>
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+							<div class="panel-body" style="display: block; background: #fcfcfc;">
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                License Type
+						            </span>
+									<select name="license_type_status" id="license_type_status" class="form-control">
+										<option value"">Set status</option>
+										@foreach(config('stories.license_type_status') as $status)
+										<option value="{{ $status }}">{{ ucwords(str_replace('-', ' ', $status)) }}</option>
+										@endforeach
+									</select>
+									<select name="license_type_rights" id="license_type_rights" class="form-control">
+										<option value"">Set rights type</option>
+										@foreach(config('stories.license_type_rights') as $rights)
+										<option value="{{ $rights }}">{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
+										@endforeach
+									</select>
+						        </span>
+								<div class="story-dividers">
+									<h5 class="text-success"><i class="fa fa-check-square-o"></i> Owner pending</h5>
+									<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending</h5>
+									<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending</h5>
+									<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending</h5>
+									<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending</h5>
+								</div>
+								<span class="input-group">
+						            <span class="input-group-addon">
+						                License Notes
+						            </span>
+									<textarea class="form-control" name="notes" id="notes" rows="7"></textarea>
+						        </span>
+							</div>
+						</div>
 
 					</div>
 
 				</div>
 
 			</div>
+
+			@endif
 
 		</div>
 
@@ -288,11 +347,15 @@
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 
-		@if(isset($story->id))
+		@if(isset($story->id)&&isset($decision)&&$decision=='licensing')
 			<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License Story</a>
 	    @endif
 
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
+
+		@if(isset($story)&&isset($decision)&&$decision!='content-sourced')
+			<a href="{{ $story->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
+		@endif
 
 	</form>
 
@@ -307,6 +370,22 @@
 	$ = jQuery;
 
 	$(document).ready(function(){
+
+		$('#contact_add').click(function(e){
+			e.preventDefault();
+			if($(this).val()=='Add Contact') {
+				$(this).val('clear x');
+				$('.js-contact-search').hide();
+				$('.js-contact-add').show();
+			} else {
+				$(this).val('Add Contact');
+				$('#contact_full_name').val('');
+				$('#contact_email').val('');
+				$('#contact_tel').val('');
+				$('.js-contact-search').show();
+				$('.js-contact-add').hide();
+			}
+		});
 
 		$('#source_date').datetimepicker();
 

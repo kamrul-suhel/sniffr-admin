@@ -12,6 +12,7 @@ use App\User;
 use App\Story;
 use App\Asset;
 use App\Video;
+use App\Contact;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\Libraries\VideoHelper;
@@ -44,7 +45,7 @@ class AdminStoryController extends Controller
     {
         $search_value = $request->input('search_value', null);
         $state = ($request->input('state') ? $request->input('state') : '');
-        $decision = $request->input('decision', null);
+        $decision = $request->input('decision', 'content-sourced');
 
         $stories = new Story;
 
@@ -167,6 +168,10 @@ class AdminStoryController extends Controller
             }
         }
 
+        if (Input::get('contact_id')) {
+            $story->contact_id = Input::get('contact_id');
+        }
+
         $story->save();
 
         if (Input::get('videos')) {
@@ -188,26 +193,18 @@ class AdminStoryController extends Controller
         $story = Story::where('alpha_id', $id)
             ->first();
 
-        var_dump($story->state);
-
-        foreach(config('stories.decisions') as $current_decision => $decision) {
-            // if($state==$state_values['value']) {
-            //     $found=1;
-            // }
-            var_dump(in_array($story->state, (array)$decision));
-
-            //var_dump($decision);
-        }
-
-        dd('--------------');
+        $decision = Input::get('decision');
+        //array_key_exists($story->state,config('stories.decisions.'.$decision)) looks for state within specific decision step
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
             'story' => $story,
             'post_route' => url('admin/stories/update'),
             'button_text' => 'Update Story',
+            'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
+            'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
@@ -222,7 +219,6 @@ class AdminStoryController extends Controller
     public function update()
     {
         $data = Input::all();
-        dd($data['source_date']);
         $id = $data['id'];
         $story = Story::findOrFail($id);
 

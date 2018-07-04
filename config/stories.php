@@ -169,6 +169,16 @@ return [
         'other',
     ],
 
+    'license_type_status' => [
+        'exclusive',
+        'non-exclusive',
+    ],
+
+    'license_type_rights' => [
+        'content',
+        'editorial',
+    ],
+
     'colors' => [
         'unapproved' => 'default',
         'approved' => 'default',
