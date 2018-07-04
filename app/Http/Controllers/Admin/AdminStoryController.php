@@ -128,6 +128,7 @@ class AdminStoryController extends Controller
             'button_text' => 'Add New Story',
             'user' => Auth::user(),
             'users' => User::all(),
+            'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
@@ -155,6 +156,7 @@ class AdminStoryController extends Controller
         $story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : NULL);
         $story->source = (Input::get('source') ? Input::get('source') : NULL);
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : Auth::user()->id);
+        $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
         //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
 
@@ -251,7 +253,7 @@ class AdminStoryController extends Controller
             $imageUrl = $this->saveImageFile($imageFile);
             $story->thumb = ($imageUrl ? $imageUrl : $story->thumb);
         } else {
-            if (Input::get('story_image_source_url')!=$story->thumb) {
+            if (Input::get('story_image_source_url')&&Input::get('story_image_source_url')!=$story->thumb) {
                 $story->thumb = Input::get('story_image_source_url');
             }
         }
