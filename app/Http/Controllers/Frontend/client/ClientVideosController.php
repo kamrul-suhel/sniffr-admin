@@ -76,6 +76,38 @@ class ClientVideosController extends Controller
         return view('frontend.master');
     }
 
+    public function getOfferedVideos(Request $request)
+    {
+        if ($request->ajax()) {
+            $clientId = Auth::user()->client_id;
+
+            $offeredVideos = Collection::with('collectionVideos.video');
+            // If search passed through
+            if ($request->search) {
+                $search = $request->search;
+                $offeredVideos = $offeredVideos->whereHas('collectionVideos.video', function ($query) use ($search) {
+                    $query->where('title', 'LIKE', '%' . $search . '%');
+                });
+            }
+            $offeredVideos = $offeredVideos->where('client_id', $clientId)
+                ->where('status', 'open')
+                ->orderBy('created_at', 'DESC')
+                ->whereHas('collectionVideos', function($query) {
+                    $query->where('status', 'offered');
+                })
+                ->get()
+                ->pluck('collectionVideos')->all();
+
+            //Paginate collection object
+            $videos = $this->paginate($offeredVideos,self::PAGINATE_PER_PAGE, $request->page);
+
+            $data = [
+                'videos' => $videos,
+            ];
+            return $this->successResponse($data);
+        }
+        return view('frontend.master');
+    }
 
 	public function getPurchasedVideos(Request $request)
 	{
