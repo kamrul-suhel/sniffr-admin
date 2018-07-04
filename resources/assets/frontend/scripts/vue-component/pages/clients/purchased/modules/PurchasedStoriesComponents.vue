@@ -75,12 +75,13 @@
 
                 this.$store.dispatch('fetchPurchasedStories', url)
                     .then(() => {
-                        var stories = this.$store.getters.getPurchasedStories;
+                        let stories = this.$store.getters.getPurchasedStories;
 
-                        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
-                        if(typeof stories.data == 'object'){
+                        // IAN: Need to convert it to an array if it returns an object, for some stupid reason the pagination returns an object
+                        if(typeof stories.data === 'object'){
                             stories.data = Object.values(stories.data);
                         }
+                        this.stories = [];
                         stories.data.forEach((story) => {
                             this.stories.push(story[0].story);
                         });

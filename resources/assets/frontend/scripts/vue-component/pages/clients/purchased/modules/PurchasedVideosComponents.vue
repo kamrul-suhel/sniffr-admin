@@ -81,6 +81,7 @@
                         if(typeof videos.data == 'object'){
                             videos.data = Object.values(videos.data);
                         }
+                        this.videos = [];
                         videos.data.forEach((video) => {
                             this.videos.push(video[0].video);
                         });
