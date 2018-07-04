@@ -146,16 +146,16 @@
 						        </div>
 								<br />
 								<div class="input-group">
-									<label class="checkbox-inline" for="is_owner">
-										<input type="checkbox" name="is_owner" id="is_owner" value="1">
+									<label class="checkbox-inline" for="contact_is_owner">
+										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" value="1">
 										Contact is owner
 									</label>
-									<label class="checkbox-inline" for="happy_to_publish">
-										<input type="checkbox" name="happy_to_publish" id="happy_to_publish" value="1">
+									<label class="checkbox-inline" for="allow_publish">
+										<input type="checkbox" name="allow_publish" id="allow_publish" value="1">
 										Happy to publish
 									</label>
 									<label class="checkbox-inline" for="has_permission">
-										<input type="checkbox" name="has_permission" id="has_permission" value="1">
+										<input type="checkbox" name="permission" id="permission" value="1">
 										Has permission
 									</label>
 								</div>
@@ -219,7 +219,7 @@
 						            <span class="input-group-addon">
 						                Submitted to
 						            </span>
-									<select name="submitted_to[]" id="submitted_to" class="selectpicker" data-width="100%" title="Select who you submitted to" multiple>
+									<select name="submitted_to" id="submitted_to" class="selectpicker" data-width="100%" title="Select who you submitted to" multiple>
 										@foreach(config('stories.submitted_to') as $sites)
 										<option value="{{ $sites }}">{{ ucwords(str_replace('-', ' ', $sites)) }}</option>
 										@endforeach
