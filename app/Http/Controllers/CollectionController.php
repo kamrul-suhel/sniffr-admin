@@ -22,7 +22,7 @@ class CollectionController extends Controller
 
     use Slug, VideoHelper;
 
-    protected $collection, $collectionVideo, $collectionStory, $video, $story, $client, $user;
+    protected $collection, $collectionVideo, $collectionStory, $collectionQuote,  $video, $story, $client, $user;
 
     /**
      * CollectionController constructor.
@@ -33,11 +33,12 @@ class CollectionController extends Controller
      * @param Client $client
      * @param User $user
      */
-    public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory, Video $video, Story $story, Client $client, User $user)
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory, CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, User $user)
     {
         $this->collection = $collection;
         $this->collectionVideo = $collectionVideo;
 		$this->collectionStory = $collectionStory;
+		$this->collectionQuote = $collectionQuote;
         $this->video = $video;
         $this->story = $story;
         $this->client = $client;
@@ -194,12 +195,13 @@ class CollectionController extends Controller
 		if ($type == 'video'){
 			$collectionVideo = $this->collectionVideo->find($collection_asset_id);
 			$collectionVideo->update([
-				'status' => 'requested',
 				'type' => $data['license_type'] ?? $collectionVideo->type,
 				'platform' => $data['license_platform'] ?? $collectionVideo->platform,
 				'length' => $data['license_length'] ?? $collectionVideo->length,
 				'company_location' => $client->region,
 				'company_tier' => $client->tier,
+				'notes' => $data['notes'] ?? '',
+				'status' => 'requested',
 				'final_price' => null,
 			]);
 
@@ -208,6 +210,7 @@ class CollectionController extends Controller
 		}else{
 			$collectionStory = $this->collectionStory->find($collection_asset_id);
 			$collectionStory->update([
+				'notes' => $data['notes'] ?? '',
 				'status' => 'requested',
 				'final_price' => null,
 			]);
@@ -233,20 +236,51 @@ class CollectionController extends Controller
         ], 200);
     }
 
+
+	public function acceptAssetQuote(Request $request, $collection_asset_id, $type){
+		// Accept asset price
+		$isJson = $request->ajax();
+
+		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
+		$collection = $collectionAsset->collection;
+
+		$collectionAsset->status = "purchased";
+		$collectionAsset->save();
+
+		$collection->status = "closed";
+		$collection->save();
+
+		if($isJson){
+			return response([
+				'collection' => $collection,
+				'message' => 'final price has been accepted'
+			], 200);
+		}
+
+		return Redirect::to('client/purchased')
+			->with([
+				'note' => 'Thanks for purchasing the video',
+				'note_type' => 'success',
+			]);
+	}
+
     /**
      * TODO - Check if no one has bought video within the time of clicking 'Buy'
      * @param Request $request
      * @param $collection_video_id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function acceptFinalPrice(Request $request, $collection_video_id)
+    public function acceptCollectionQuote(Request $request, $collection_id, $quote_id)
     {
         $isJson = $request->ajax();
 
         $user = auth()->user();
         $client = $user->client;
-        $collectionVideo = $this->collectionVideo->find($collection_video_id);
-        $collection = $collectionVideo->collection;
+        $collection = $this->collection->find($collection_id);
+        $quote = $this->collectionQuote->find($quote_id);
+
+        $type = $quote->collection_video_id ? 'Video' : 'Story';
+		$collectionAsset = $this->${'collection'.ucfirst($type)};
 
         if($client->id !== $collection->client_id) {
             if($isJson) {
@@ -256,7 +290,8 @@ class CollectionController extends Controller
                     'error' => true,
                 ], 200);
             }
-            return redirect('/videos');
+
+            return redirect('/');
         }
 
         if($user->id !== $collection->user_id) {
@@ -268,12 +303,12 @@ class CollectionController extends Controller
                 ], 200);
             }
 
-            return redirect('/videos');
+            return redirect('/');
         }
 
         if($collection->status != 'open'
-            || $collectionVideo->status == 'purchased'
-            || $collectionVideo->status == 'downloaded') {
+            || $collectionAsset->status == 'purchased'
+            || $collectionAsset->status == 'downloaded') {
             if($isJson) {
                 return response([
                     'collection' => null,
@@ -282,11 +317,11 @@ class CollectionController extends Controller
                 ], 200);
             }
 
-            return redirect('/videos');
+            return redirect('/');
         }
 
-        $collectionVideo->status = "purchased";
-        $collectionVideo->save();
+		$collectionAsset->status = "purchased";
+		$collectionAsset->save();
 
         $collection->status = "closed";
         $collection->save();

@@ -28,7 +28,6 @@ class OfferQuote extends Mailable
      */
     public function build()
     {
-
         return $this->view('emails.quotes.offered')
             ->subject('SNIFFR - You have a new quote!')
             ->with('data', $this->data);

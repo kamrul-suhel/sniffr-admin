@@ -21,7 +21,8 @@ class CreateCollectionStoriesTable extends Migration
             //TODO add story metrics
 
             $table->integer('final_price')->nullable();
-            $table->enum('status', ['requested', 'received', 'accepted', 'purchased', 'closed']);
+			$table->text('notes')->nullable();
+            $table->enum('status', ['requested', 'received', 'accepted', 'offered', 'purchased', 'closed']);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -8,7 +8,7 @@ class CollectionVideo extends Model
 {
     protected $table = 'collection_videos';
 
-    protected $fillable = ['collection_id', 'video_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'status'];
+    protected $fillable = ['collection_id', 'video_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -8,7 +8,7 @@ class CollectionStory extends Model
 {
     protected $table = 'collection_stories';
 
-	protected $fillable = ['collection_id', 'story_id', 'final_price', 'status'];
+	protected $fillable = ['collection_id', 'story_id', 'final_price', 'notes', 'status'];
 
     public function collection()
     {

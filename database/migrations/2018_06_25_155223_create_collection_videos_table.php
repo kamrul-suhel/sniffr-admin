@@ -24,6 +24,7 @@ class CreateCollectionVideosTable extends Migration
             $table->string('class')->nullable()->default(1)->comment('class at the time of request or purchase');
             $table->string('company_location')->nullable()->comment('location of company where they will use the video');
             $table->string('company_tier')->nullable()->comment('status and type of company');
+			$table->text('notes')->nullable();
 
             $table->integer('final_price')->nullable();
             $table->enum('status', ['requested', 'received', 'offered', 'accepted', 'purchased', 'closed']);

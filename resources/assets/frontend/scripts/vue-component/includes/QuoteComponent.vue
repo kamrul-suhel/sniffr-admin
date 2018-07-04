@@ -125,9 +125,10 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12>
+                            <v-flex xs12 v-if="!can_buy">
                                 <v-textarea
-                                        name="details"
+                                        v-model="notes"
+                                        name="notes"
                                         label="Additional information"
                                 ></v-textarea>
                             </v-flex>
@@ -185,11 +186,13 @@
                 type: '',
                 collection: {},
                 collection_asset_id: '',
+                can_buy: false,
                 open_quote_dialog: false,
                 valid:false,
                 license_type: null,
                 license_platform: null,
                 license_length: null,
+                notes: null,
                 licenses: [],
                 platforms: [],
                 lengths: [],
@@ -255,7 +258,6 @@
         created() {
             QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) =>{
 
-                console.log(asset);
                 this.client_login = this.$store.getters.isClientLogin;
                 this.$refs.quote_form.reset();
                 this.open_quote_dialog = true;
@@ -280,12 +282,13 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                    this.button_text = this.asset.class == 'exceptional' ? 'Request Quote' : 'Accept Price';
+                    this.can_buy = (this.asset.class == 'exceptional' || this.asset.class =='') ? false : true;
+                    this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
                 }else if(this.type == 'story'){
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.button_text = 'Request Quote';
-                    this.disabled = false;s
+                    this.disabled = false;
                 }
             });
 
@@ -347,7 +350,7 @@
                 if(this.$refs.quote_form.validate()){
                     this.loading = true;
                     // submit data with ajax request
-                    axios.get('/client/collections/accept_price/'+this.collection_asset_id)
+                    axios.get('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
                         .then(response => {
                             this.loading = false;
                             this.open_quote_dialog = false;
@@ -368,6 +371,7 @@
                     form_data.append('license_type', this.license_type);
                     form_data.append('license_platform', this.license_platform);
                     form_data.append('license_length', this.license_length);
+                    form_data.append('notes', this.notes);
 
                     // submit data with ajax request
                     axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
