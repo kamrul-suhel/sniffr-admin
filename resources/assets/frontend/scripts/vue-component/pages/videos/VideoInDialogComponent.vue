@@ -49,7 +49,12 @@
                         </div>
                     </v-flex>
 
-                    <quote-button-component v-if="user.client_id" :type="'video'" :asset="video_detail"></quote-button-component>
+                    <quote-button-component
+                            v-if="user.client_id"
+                            :type="'video'"
+                            :asset="video_detail"
+                    ></quote-button-component>
+
                 </v-layout>
             </v-flex>
         </v-layout>

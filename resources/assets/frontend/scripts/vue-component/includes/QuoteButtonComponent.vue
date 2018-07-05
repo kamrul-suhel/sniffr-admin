@@ -23,7 +23,9 @@
         },
 
         watch: {
-
+            asset(){
+                this.setButtonText();
+            }
         },
 
         created() {
