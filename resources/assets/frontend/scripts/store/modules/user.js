@@ -19,6 +19,7 @@ const mutations = {
         state.avatar = '';
         state.email = '';
         state.user_login = false;
+        state.client_id = '';
         state.user_id = '';
         state.user_role = '';
     },

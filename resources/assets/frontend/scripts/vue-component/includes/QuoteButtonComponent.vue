@@ -5,6 +5,7 @@
 <script>
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus';
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus';
+    import LoginEventBus from '../../event-bus/login-event-bus';
 
     export default {
         props:['type', 'asset', 'user'],
@@ -19,6 +20,7 @@
                 button_text: 'Buy Now',
                 ready_to_show: true,
                 content_padding: true,
+                client_logged_in: false
             }
         },
 
@@ -29,6 +31,15 @@
         },
 
         created() {
+            // If client has logged in
+            LoginEventBus.$on('loginSuccess', () => {
+                this.setButtonText();
+            });
+
+            LoginEventBus.$on('logoutChangeState', () => {
+                this.setButtonText();
+            });
+
             VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
                 this.setButtonText();
             });
@@ -46,14 +57,10 @@
 
         methods: {
             setButtonText(){
-                this.button_text = (
-                    this.type == 'story' ||
-                    this.asset.class == 'exceptional' ||
-                    this.asset.class == '') ? 'Request Quote' : 'Buy Now';
+                this.client_logged_in = this.$store.getters.isClientLogin;
 
-                if(!this.user) {
-                    this.button_text = 'Register & Request Quote';
-                }
+                this.can_buy = (!this.client_logged_in || this.type == 'story' || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class) ? false : true;
+                this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
             },
             createCollection() {
                 let form_data = {

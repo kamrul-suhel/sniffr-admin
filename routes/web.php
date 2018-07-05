@@ -64,14 +64,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Search Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('search', 'SearchController@index')->name('search');
-
-
-    /*
-    |--------------------------------------------------------------------------
     | Auth and Password Reset Routes
     |--------------------------------------------------------------------------
     */
@@ -255,10 +247,6 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     | Admin story in dialog box
     |--------------------------------------------------------------------------
     */
-
-    Route::get('storydialogbox/{alpha_id}', 'SearchController@stories');
-
-
     Route::resource('quotes', 'Admin\AdminQuoteController');
 });
 
@@ -268,10 +256,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 | Client Routes
 |--------------------------------------------------------------------------
 */
-Route::group(/**
- *
- */
-    ['middleware' => ['client'], 'prefix' => 'client'], function () {
+Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
     /*
    |--------------------------------------------------------------------------
