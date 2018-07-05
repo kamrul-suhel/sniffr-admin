@@ -153,15 +153,15 @@
 								<br />
 								<div class="input-group">
 									<label class="checkbox-inline" for="contact_is_owner">
-										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" value="1" {{ (isset($story) && $story->contact_is_owner==1) ? 'checked' : '' }}>
+										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" class="js-contact-is-owner" value="1" {{ (isset($story) && $story->contact_is_owner==1) ? 'checked' : '' }}>
 										Contact is owner
 									</label>
 									<label class="checkbox-inline" for="allow_publish">
-										<input type="checkbox" name="allow_publish" id="allow_publish" value="1" {{ (isset($story) && $story->allow_publish==1) ? 'checked' : '' }}>
+										<input type="checkbox" name="allow_publish" id="allow_publish" class="js-allow-publish" value="1" {{ (isset($story) && $story->allow_publish==1) ? 'checked' : '' }}>
 										Happy to publish
 									</label>
-									<label class="checkbox-inline" for="has_permission">
-										<input type="checkbox" name="permission" id="permission" value="1" {{ (isset($story) && $story->permission==1) ? 'checked' : '' }}>
+									<label class="checkbox-inline" for="permission">
+										<input type="checkbox" name="permission" id="permission" class="js-permission" value="1" {{ (isset($story) && $story->permission==1) ? 'checked' : '' }}>
 										Has permission
 									</label>
 								</div>
@@ -228,7 +228,7 @@
 						            <span class="input-group-addon">
 						                Submitted to
 						            </span>
-									<select name="submitted_to" id="submitted_to" class="selectpicker" data-width="100%" title="Select who you submitted to" multiple>
+									<select name="submitted_to" id="submitted_to" class="selectpicker js-submitted-to" data-width="100%" title="Select who you submitted to" multiple>
 										@foreach(config('stories.submitted_to') as $site)
 										<option value="{{ $site }}" {{ (isset($story) && (in_array($site, explode(',', $story->submitted_to, 0)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
 										@endforeach
@@ -307,11 +307,37 @@
 									</select>
 						        </span>
 								<div class="story-dividers">
-									<h5 class="text-success"><i class="fa fa-check-square-o"></i> Owner pending</h5>
-									<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending</h5>
-									<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending</h5>
-									<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending</h5>
-									<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending</h5>
+									<div id="owner-status">
+										@if($story->contact_is_owner)
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Contact is owner </h5>
+										@else
+										<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>
+										@endif
+									</div>
+									<div id="submitted-status">
+										@if($story->submitted_to)
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>
+										@else
+										<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending</h5>
+										@endif
+									</div>
+									<div id="publish-status">
+										@if($story->allow_publish)
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Happy to publish </h5>
+										@else
+										<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending </h5>
+										@endif
+									</div>
+									<div id="permission-status">
+										@if($story->permission)
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Has permission </h5>
+										@else
+										<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending </h5>
+										@endif
+									</div>
+									<div id="rights-status">
+										<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>
+									</div>
 								</div>
 								<span class="input-group">
 						            <span class="input-group-addon">
@@ -322,44 +348,40 @@
 							</div>
 						</div>
 
-						<div class="col-sm-6">
-							<div class="panel panel-primary" data-collapsed="0">
-								<div class="panel-heading">
-									<div class="panel-title">State</div>
+						<!-- <div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">State</div>
 
-									<div class="panel-options">
-										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-									</div>
-								</div>
-
-								<div class="panel-body" style="display: block;">
-									<select name="state" id="state" class="form-control">
-										@foreach(config('stories.states') as $state)
-										<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
-										@endforeach
-									</select>
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
 							</div>
-						</div>
 
-						<div class="col-sm-6">
-							<div class="panel panel-primary" data-collapsed="0">
-								<div class="panel-heading">
-									<div class="panel-title">Assigned to</div>
+							<div class="panel-body" style="display: block;">
+								<select name="state" id="state" class="form-control">
+									@foreach(config('stories.states') as $state)
+									<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div> -->
 
-									<div class="panel-options">
-										<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-									</div>
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Assigned to</div>
+
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
+							</div>
 
-								<div class="panel-body" style="display: block;">
-									<select id="user_id" name="user_id" class="form-control">
-										<option value="">Not assigned</option>
-										@foreach($users as $user2)
-											<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
-										@endforeach
-									</select>
-								</div>
+							<div class="panel-body" style="display: block;">
+								<select id="user_id" name="user_id" class="form-control">
+									<option value="">Not assigned</option>
+									@foreach($users as $user2)
+										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+									@endforeach
+								</select>
 							</div>
 						</div>
 
@@ -421,6 +443,62 @@
 				$('.js-contact-add').hide();
 			}
 		});
+
+		$('.js-contact-is-owner').click(function(e){
+			if ($(this).is(':checked')) {
+				$('#owner-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Contact is owner </h5>');
+			} else {
+				$('#owner-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>');
+			}
+		});
+
+		$('.js-allow-publish').click(function(e){
+			if ($(this).is(':checked')) {
+				$('#publish-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Happy to publish </h5>');
+			} else {
+				$('#publish-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending </h5>');
+			}
+		});
+
+		$('.js-permission').click(function(e){
+			if ($(this).is(':checked')) {
+				$('#permission-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Has permission </h5>');
+			} else {
+				$('#permission-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending </h5>');
+			}
+		});
+
+		$('.js-submitted-to').change(function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+	        var arr = $(this).val();
+			if(arr.length>0) {
+				if($.inArray('UNILAD', arr) !== -1) {
+					$('#rights').val('exclusive');
+				} else {
+					$('#rights').val('');
+				}
+				if(arr.length>1) {
+					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to multiple </h5>');
+				} else {
+					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to '+arr[0]+' </h5>');
+				}
+			} else {
+				$('#submitted-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending </h5>');
+			}
+	    });
+
+		$('#rights').change(function(e) {
+			if($('#rights').val()=='exclusive') {
+				$('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
+			}
+			if($('#rights').val()=='non-exclusive') {
+				$('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
+			}
+			if(!$('#rights').val()) {
+				$('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
+			}
+		})
 
 		$('#sourced_at').datetimepicker({
 			// format: 'YYYY-MM-DD HH:MM:SS',

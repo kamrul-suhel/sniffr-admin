@@ -3,6 +3,8 @@
 
 @section('content')
 
+@php use App\Http\Controllers\Admin\AdminStoryController @endphp
+
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
@@ -31,7 +33,7 @@
 
 		<div class="row">
 			<form id="search-form" method="get" role="form" class="search-form-full">
-                <div class="col-md-3">
+                <div class="col-md-2">
 					<div class="form-group">
 						<select id="decision" name="decision" class="form-control" title="Steps">
 							@if(!$decision)
@@ -44,7 +46,7 @@
 					</div>
 				</div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
 					<div class="form-group">
 						<select id="state" name="state" class="form-control" title="State">
                             @if($decision)
@@ -61,14 +63,19 @@
 					</div>
 				</div>
 
-				<!-- <div class="col-md-3">
+				<div class="col-md-2">
 					<div class="form-group">
-						<select id="state" name="state" class="selectpicker form-control" title="State">
-                            @foreach(config('stories.states') as $current_state)
-							<option value="{{ $current_state }}" @if($state==@$current_state) selected @endif>{{ ucwords(str_replace('-', ' ', $current_state)) }}</option>
-                            @endforeach
+						<select id="assigned_to" name="assigned_to" class="form-control" title="Assign To">
+							<option value="">Assigned To</option>
+							@foreach($users as $user)
+							<option value="{{ $user->id }}" @if($assigned_to==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+							@endforeach
 						</select>
 					</div>
+				</div>
+
+				<!-- <div class="col-md-2">
+					Reserved space for more filters
 				</div> -->
 
 				<div class="col-md-6">
@@ -120,7 +127,7 @@
                                     <div class="options">
                                         <div class="options-body">
                                             <select id="priority" name="priority" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Priority">
-                                                <option value"">Priority</option>
+                                                <option value="">Priority</option>
                                                 @foreach(config('stories.priorities') as $priority)
                     							<option value="{{ $priority }}" @if($story->priority==$priority) selected @endif>{{ ucwords(str_replace('-', ' ', $priority)) }}</option>
                                                 @endforeach
@@ -129,7 +136,7 @@
                                         </div>
                                         <div class="options-body">
                                             <select id="destination" name="destination" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Destination">
-                                                <option value"">Destination</option>
+                                                <option value="">Destination</option>
                                                 @foreach(config('stories.destinations') as $destination)
                     							<option value="{{ $destination }}" @if($story->destination==$destination) selected @endif>{{ ucwords(str_replace('-', ' ', $destination)) }}</option>
                                                 @endforeach
@@ -137,17 +144,20 @@
                                             <span class="caret"></span>
                                         </div>
                                         <div class="options-body">
-                                            <select id="state" name="state" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="State">
+                                            <!-- <select id="state" name="state" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="State">
 												@foreach(config('stories.states') as $current_state)
                     							<option value="{{ $current_state }}" @if($story->state==$current_state) selected @endif>{{ ucwords(str_replace('-', ' ', $current_state)) }}</option>
                                                 @endforeach
-                    						</select>
+                    						</select> -->
+											<select id="statex" name="statex" class="btn btn-mini">
+												<option>{{ AdminStoryController::checkDropdownValue($story->state) }}</option>
+											</select>
                                             <span class="caret"></span>
                                         </div>
                                         <hr>
                                         <div class="options-body">
                                             <select id="assign_to" name="assign_to" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Assign To">
-                                                <option value"">Assign To</option>
+                                                <option value="">Assign To</option>
                                                 @foreach($users as $user)
                     							<option value="{{ $user->id }}" @if($story->user()->first()->id==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
                                                 @endforeach

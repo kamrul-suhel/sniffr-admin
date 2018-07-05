@@ -46,6 +46,7 @@ class AdminStoryController extends Controller
         $search_value = $request->input('search_value', null);
         $state = ($request->input('state') ? $request->input('state') : '');
         $decision = $request->input('decision', 'content-sourced');
+        $assigned_to = $request->input('assigned_to', null);
 
         $stories = new Story;
 
@@ -59,6 +60,10 @@ class AdminStoryController extends Controller
             });
         }
 
+        if ($assigned_to) {
+            $stories = $stories->where('user_id', $assigned_to);
+        }
+
         // only display states within selected decision point
         if($decision) {
             $found=0;
@@ -67,11 +72,11 @@ class AdminStoryController extends Controller
                     $found=1;
                 }
             }
-            // ^ ABOVE: need a way to search state values to see if state exists within a decision array
+            // ^ ABOVE: need a better way to search state values to see if state exists within a decision array
             if($found==1) {
                 $stories = $stories->where('state', $state);
             } else {
-                $state = '';
+                $state = $current_state[0]; //set current state to first state within decision
                 foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
                     $stories = $stories->orWhere('state', $state_values['value']);
                 }
@@ -84,6 +89,7 @@ class AdminStoryController extends Controller
             'stories' => $stories,
             'state' => $state,
             'decision' => $decision,
+            'assigned_to' => $assigned_to,
             'users' => User::where([['client_id', NULL]])->get(),
             'user' => Auth::user(),
         ];
@@ -229,7 +235,7 @@ class AdminStoryController extends Controller
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
             'story' => $story,
             'post_route' => url('admin/stories/update'),
-            'button_text' => 'Update Story',
+            'button_text' => 'Save Draft',
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
@@ -261,7 +267,9 @@ class AdminStoryController extends Controller
             $story->title = Input::get('title');
         }
 
-        $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
+        if (Input::get('state')) {
+            $story->state = Input::get('state');
+        }
 
         if (Input::get('description')) {
             $story->description = Input::get('description');
@@ -328,7 +336,7 @@ class AdminStoryController extends Controller
         // need states for when syncing stories to WP
 
         return Redirect::to('admin/stories')->with([
-            'note' => 'Successfully Updated Story!',
+            'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
         ]);
     }
@@ -501,6 +509,19 @@ class AdminStoryController extends Controller
         }
 
         return \Storage::disk('s3')->url($imageFileName);
+    }
+
+    public static function checkDropdownValue($state)
+    {
+        $found='';
+        foreach(config('stories.decisions') as $decision1 => $decision1_values) {
+            foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values) {
+                if($state==$current_state) {
+                    $found=$state_values['dropdown'];
+                }
+            }
+        }
+        return $found;
     }
 
     /**
