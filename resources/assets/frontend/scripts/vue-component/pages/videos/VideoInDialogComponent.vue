@@ -51,6 +51,14 @@
 
                     <quote-button-component
                             v-if="user.client_id"
+                            :user="'user'"
+                            :type="'video'"
+                            :asset="video_detail"
+                    ></quote-button-component>
+
+                    <quote-button-component
+                            v-if="!user.client_id"
+                            :user="false"
                             :type="'video'"
                             :asset="video_detail"
                     ></quote-button-component>
