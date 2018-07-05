@@ -21,12 +21,12 @@
         },
 
         created() {
-            this.content_show = this;
-
-            //Logout button click then you can not see any of page
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.$router.push({name: 'home'});
-            });
+            // this.content_show = this;
+            //
+            // //Logout button click then you can not see any of page
+            // LoginEventBus.$on('logoutChangeState', () => {
+            //     this.$router.push({name: 'home'});
+            // });
         },
 
         updated(){

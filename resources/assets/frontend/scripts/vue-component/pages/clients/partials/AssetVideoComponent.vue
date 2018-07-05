@@ -10,7 +10,16 @@
                             <v-btn slot="activator" flat icon raised light color="white">
                                 <v-icon size="25px">money</v-icon>
                             </v-btn>
-                            <span>Download</span>
+                            <span>Purchased</span>
+                        </v-tooltip>
+                    </div>
+
+                    <div class="cdi-label" v-if="decline">
+                        <v-tooltip top>
+                            <v-btn slot="activator" flat icon raised light color="white">
+                                <v-icon size="25px">error_outline</v-icon>
+                            </v-btn>
+                            <span>Declined</span>
                         </v-tooltip>
                     </div>
                 </v-card-media>
@@ -84,12 +93,15 @@
 </template>
 
 <script>
+    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus'
+    import ClientVideoOfferPurchasedEventBus from '../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
         data() {
             return {
                 button_text: 'Download Video',
                 purchased: false,
+                decline: false,
 
                 loader: null,
                 showButton: false,
@@ -110,10 +122,16 @@
             type: {
                 type: String,
                 require: true
+            },
+
+            index: {
+                type: Number,
+                require: true
             }
         },
 
         created() {
+
         },
 
         watch: {
@@ -153,24 +171,34 @@
             },
 
             onAccept() {
+                return;
 
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
                 axios.get(url).then((response) => {
                     if (response.data.success === 1) {
-                        // Do some action when they accept
+
                         this.acceptLoading = false;
+                        this.type = "purchased"
+                        this.purchased = true
+                        SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
+
+                        // After purchased if we need to to change another component this event need to enable
+                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
+
                     }
                 });
             },
 
             onDecline() {
                 let url = 'collections/reject_asset_price/' + this.video.collection_video_id + '/video';
-                this.declineLoading = true;
                 axios.get(url).then((response) => {
                     if (response.data.success === 1) {
                         // Do some action when they accept
                         this.declineLoading = false;
+                        this.declineLoading = true;
+                        this.decline = true;
+                        SnackbarEventBus.displayMessage(5000, 'Video has declined');
                     }
                 });
 

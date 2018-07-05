@@ -16,6 +16,7 @@
                 v-for="(video, index) in videos"
                 :key="index"
                 :type="type"
+                :index="index"
                 :video="video"></asset-video-component>
 
         <div class="text-xs-center" v-if="totalVideos > videosPerPage">
@@ -31,6 +32,7 @@
 
 <script>
     import AssetVideoComponent from '../AssetVideoComponent';
+    import ClientVideoOfferPurchasedEventBus from '../../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
         components: {
@@ -63,6 +65,10 @@
 
         created() {
             this.setData();
+
+            ClientVideoOfferPurchasedEventBus.$on('clientRemoveVideo', (videoIndex) => {
+                this.videos.splice(videoIndex, 1);
+            });
         },
 
         methods: {
@@ -96,7 +102,6 @@
                         }
                         this.videos = [];
                         videos.data.forEach((video) => {
-                            console.log(video);
                             video[0].video.final_price = video[0].final_price;
                             video[0].video.collection_video_id = video[0].id;
                             this.videos.push(video[0].video);
