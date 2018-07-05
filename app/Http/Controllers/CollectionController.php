@@ -14,9 +14,9 @@ use App\Story;
 use App\CollectionVideo;
 use App\CollectionStory;
 use App\CollectionQuote;
+use Illuminate\Http\Request;
 use Redirect;
 use App\Notifications\RequestQuote;
-use Illuminate\Http\Request;
 
 class CollectionController extends Controller
 {
@@ -47,19 +47,19 @@ class CollectionController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      * TODO - Check if video already exists for client (not just user)
      * TODO - Create CollectionVideo/CollectionStory instance. (assoc to this collection)
-     **/
+     * @param Request $request
+     * @return mixed
+     */
     public function store(Request $request)
     {
         $user = auth()->user();
 
         $data = [
             'name' => "order_".VideoHelper::quickRandom(10),
-            'user_id' => $user->id,
-            'client_id' => $user->client_id,
+            'user_id' => $user->id ?? null,
+            'client_id' => $user->client_id ?? null,
             'status' => 'open',
         ];
 
@@ -74,6 +74,7 @@ class CollectionController extends Controller
 		}
 
         return response([
+            'collection' => $collection,
             'collection_id' => $collection->id,
             'collection_video_id' => $collectionVideo->id ?? null,
 			'collection_story_id' => $collectionStory->id ?? null,
@@ -85,7 +86,7 @@ class CollectionController extends Controller
      * Interactive method to retrieve the price and update the db on demand
      * @param Request $request
      * @param $collectionVideoId
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return mixed
      */
     public function getVideoPrice(Request $request, $collectionVideoId)
 	{
@@ -139,11 +140,11 @@ class CollectionController extends Controller
      * Register new user, and email then set password email. Also create a new collection and link to that user
      * @param Request $request
      * @param $collection_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return mixed
      */
     public function registerUser(Request $request, $collection_id)
     {
-        $data = $request->except('_token');
+        $data = $request->all();
 
         $company_slug = $this->slugify($data['company_name']);
         $password = $this->quickRandom();
@@ -151,7 +152,7 @@ class CollectionController extends Controller
         $client = $this->client->create([
             'name' => $data['company_name'],
             'slug' => $company_slug,
-            'account_owner' => null, //set to null as we don't know this person will be the top dog.
+            'account_owner_id' => null, //set to null as we don't know this person will be the top dog.
         ]);
 
         $user = $this->user->create([
@@ -159,6 +160,7 @@ class CollectionController extends Controller
             'email' => $data['user_email'],
             'full_name' => $data['user_full_name'],
             'role' => 'client_owner',
+            'tel' => $data['tel'],
             'password' => \Hash::make($password),
             'client_id' => $client->id
         ]);
@@ -173,7 +175,10 @@ class CollectionController extends Controller
         $client->emailNewCompanyUser($params);
 
         $collection = $this->collection->find($collection_id);
+
         $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
+
+        auth()->attempt(['email' => $user->email, 'password' => $password]);
 
         return response([
             'user' => $user,
@@ -184,8 +189,9 @@ class CollectionController extends Controller
     /**
      * Send a newly registered user an email telling them we are looking into their request.
      * @param Request $request
-     * @param $collection_video_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @param $type
+     * @param $collection_asset_id
+     * @return mixed
      */
     public function requestQuote(Request $request, $type, $collection_asset_id)
 	{
@@ -237,7 +243,14 @@ class CollectionController extends Controller
         ], 200);
     }
 
-
+    /**
+     * Accept the price on an individual asset. but keep the collection open for other options to be available
+     * TODO - check if collection has anything else in there. if it doesn't then close the collection
+     * @param Request $request
+     * @param $collection_asset_id
+     * @param $type
+     * @return mixed
+     */
 	public function acceptAssetQuote(Request $request, $collection_asset_id, $type){
 		// Accept asset price
 		$isJson = $request->ajax();
@@ -247,9 +260,6 @@ class CollectionController extends Controller
 
 		$collectionAsset->status = "purchased";
 		$collectionAsset->save();
-
-		$collection->status = "closed";
-		$collection->save();
 
 		if($isJson){
 			return response([
@@ -293,10 +303,12 @@ class CollectionController extends Controller
     }
 
     /**
-     * TODO - Check if no one has bought video within the time of clicking 'Buy'
+     * Accept an asset and close the collection
+     * TODO - accept everything within a collection and close it.
      * @param Request $request
-     * @param $collection_video_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @param $collection_id
+     * @param $quote_id
+     * @return mixed
      */
     public function acceptCollectionQuote(Request $request, $collection_id, $quote_id)
     {

@@ -13,15 +13,15 @@
                 <v-flex xs12 sm6 md8 lg8>
                     <nav class="navigation">
                         <ul>
-                            <li v-if="client_login">
-                                <router-link :to="{name: 'client_purchased_assets'}">
-                                    <v-icon color="white" left>attach_money</v-icon> Purchases
-                                </router-link>
-                            </li>
-
                             <li v-if="!client_login">
                                 <router-link to="/upload">
                                     <v-icon color="white" left>file_upload</v-icon> Upload
+                                </router-link>
+                            </li>
+
+                            <li v-if="client_login">
+                                <router-link :to="{name: 'client_offered_assets'}">
+                                    <v-icon color="white" left>gavel</v-icon> My Offers ()
                                 </router-link>
                             </li>
 
@@ -60,6 +60,14 @@
                                             </v-list-tile-title>
                                         </v-list-tile>
 
+                                        <v-list-tile v-if="client_login">
+                                            <v-list-tile-title>
+                                                <a href="/client/purchased">
+                                                    <v-icon color="white" left size="20px">attach_money</v-icon> Order History
+                                                </a>
+                                            </v-list-tile-title>
+                                        </v-list-tile>
+
                                         <v-list-tile>
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onLogout()">
@@ -80,7 +88,7 @@
         <!-- Login component -->
         <login-component></login-component>
         <!-- End login component -->
-            
+
         <!-- Password reset dialog box -->
         <forgot-password-component></forgot-password-component>
         <!-- End password reset -->
@@ -212,7 +220,7 @@
             // Login component trigger this methods when change any value
             onChangeLogin(changeLogin){
                 if(!changeLogin){
-                    this.login_dialog = false; 
+                    this.login_dialog = false;
                 }
             },
 

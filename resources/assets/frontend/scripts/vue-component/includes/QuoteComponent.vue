@@ -132,6 +132,7 @@
                                         label="Additional information"
                                 ></v-textarea>
                             </v-flex>
+
                         </v-layout>
 
                         <v-layout row justify-center>
@@ -265,7 +266,8 @@
                 this.asset = asset;
                 this.collection = collection;
 
-                if(this.type == 'video'){
+                if (this.type === 'video') {
+
                     this.settings = this.$store.getters.getSettingsObject;
 
                     Object.values(this.settings.pricing.type).forEach((type) =>{
@@ -282,18 +284,25 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                    this.can_buy = (this.asset.class == 'exceptional' || this.asset.class =='') ? false : true;
+                    this.can_buy = (this.asset.class === 'exceptional' || this.asset.class === '') ? false : true;
                     this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
-                }else if(this.type == 'story'){
+
+                }else if (this.type == 'story') {
+
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.button_text = 'Request Quote';
                     this.disabled = false;
                 }
+
+                if(this.$store.getters.getUser.id === '') {
+                    this.button_text = 'Register & Request Quote';
+                }
             });
 
             VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
                 //this.$router.push('client/purchased');
+                //TODO - Decide where to send user based on type of view
             });
         },
 
@@ -334,9 +343,13 @@
             },
 
             buttonClicked(){
-                if(this.price){
+                if(this.$store.getters.getUser.id === '') {
+                    this.registerUser();
+                    this.requestQuote();
+                }
+                if(this.price) {
                     this.acceptPrice();
-                }else{
+                } else {
                     this.requestQuote();
                 }
             },
@@ -383,7 +396,41 @@
                             console.log(error);
                         });
                 }
-            }
+            },
+
+            registerUser() {
+                if(this.$refs.quote_form.validate()) {
+                    this.loading = true;
+
+                    let form_data = new FormData();
+                    form_data.append('user_full_name', this.request_quote.name);
+                    form_data.append('user_email', this.request_quote.email);
+                    form_data.append('tel', this.request_quote.phone);
+                    form_data.append('company_name', this.request_quote.company);
+                    form_data.append(this.alpha_name, this.asset.alpha_id);
+                    form_data.append('license_type', this.license_type);
+                    form_data.append('license_platform', this.license_platform);
+                    form_data.append('license_length', this.license_length);
+                    form_data.append('notes', this.notes);
+
+                    axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
+                        .then(response => {
+                            this.$store.dispatch('getLoginStatus').then(() => {
+                                axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
+                                    .then(response => {
+                                        this.loading = false;
+                                        this.show_thanks = true;
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
+                            });
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            },
         }
     }
 </script>

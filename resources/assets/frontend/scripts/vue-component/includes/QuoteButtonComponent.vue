@@ -7,7 +7,7 @@
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus';
 
     export default {
-        props:['type', 'asset'],
+        props:['type', 'asset', 'user'],
 
         components: {
         },
@@ -46,13 +46,22 @@
 
         methods: {
             setButtonText(){
-                this.button_text = (this.type == 'story' || this.asset.class == 'exceptional' || this.asset.class == '') ? 'Request Quote' : 'Buy Now';
+                this.button_text = (
+                    this.type == 'story' ||
+                    this.asset.class == 'exceptional' ||
+                    this.asset.class == '') ? 'Request Quote' : 'Buy Now';
+
+                if(!this.user) {
+                    this.button_text = 'Register & Request Quote';
+                }
             },
             createCollection() {
-                axios.post('/client/collections', {
+                let form_data = {
                     'type': this.type,
                     'asset_alpha_id': this.asset.alpha_id
-                })
+                };
+
+                axios.post('/client/collections', form_data)
                     .then(response => {
                         QuoteDialogBoxEventBus.openQuoteDialog(response.data, this.asset, this.type);
                     })

@@ -139,7 +139,7 @@
                                                     <span class="input-group-addon">
                                                         Quote
                                                     </span>
-                                                    <input placeholder="£" value="{{ $storyCollection->final_price }}" name="final_price" type="text" class="form-control">
+                                                    <input placeholder="£" value="{{ $storyCollection->final_price }}" name="final_price" type="text" class="form-control" disabled>
                                                 </span>
 
                                                 <button type="submit" class="btn btn-success btn-sm pull-right">Submit</button>
@@ -222,7 +222,7 @@
                                                     <span class="input-group-addon">
                                                         Quote
                                                     </span>
-                                                    <input placeholder="£" value="{{ $videoCollection->final_price }}" name="final_price" type="text" class="form-control">
+                                                    <input placeholder="£" value="{{ $videoCollection->final_price }}" name="final_price" type="text" class="form-control" disabled>
                                                 </span>
 
                                                 <button type="submit" class="btn btn-danger btn-sm pull-right">Retract</button>

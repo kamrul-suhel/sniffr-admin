@@ -171,8 +171,6 @@
             },
 
             onAccept() {
-                return;
-
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
                 axios.get(url).then((response) => {
@@ -183,7 +181,7 @@
                         this.purchased = true
                         SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
-                        // After purchased if we need to to change another component this event need to enable
+                        // After purchased, if we need to to change another component data this event need to enable
                         // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
 
                     }

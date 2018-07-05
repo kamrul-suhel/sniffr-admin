@@ -61,8 +61,7 @@
             }
         },
 
-        created() {
-        },
+        created() {},
 
         methods: {},
     }

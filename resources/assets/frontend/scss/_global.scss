@@ -8,9 +8,9 @@ body {
 section.section-space {
   padding: $section-spacing-mobile 0px;
 
-  & > div{
-    padding-top:0;
-  }
+  //& > div{
+  //  padding-top:0;
+  //}
 }
 
 @include small-device {

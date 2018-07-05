@@ -222,8 +222,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 
     Route::resource('clients', 'Admin\AdminClientController');
-    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
-    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
+    Route::get('clients/{id}/purchases', 'Admin\AdminClientController@purchases')->name('clients.purchases');
+    Route::get('clients/{id}/purchases/csv', 'Admin\AdminClientController@purchases_csv')->name('clients.purchases_csv');
     Route::get('clients', 'Admin\AdminClientController@index');
     Route::get('clients/create', 'Admin\AdminClientController@create');
     Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
@@ -268,7 +268,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 | Client Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
+Route::group(/**
+ *
+ */
+    ['middleware' => ['client'], 'prefix' => 'client'], function () {
 
     /*
    |--------------------------------------------------------------------------
@@ -277,6 +280,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
    */
     Route::resource('orders', 'OrderController');
 	Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
+	Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
 	Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
 
     /*
@@ -318,8 +322,6 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 	Route::get('collections/accept_collection_quote/{collection_id}/{quote_id}', 'CollectionController@acceptCollectionQuote')->name('client.accept_collection_quote');
     Route::post('collections/request_quote/{type}/{collection_video_id}', 'CollectionController@requestQuote')->name( 'client.request_quote');
 
-
-	Route::resource('collections', 'CollectionController', ['as' => 'clients']);
 });
 
 
@@ -328,7 +330,8 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 | Collection Routes
 |--------------------------------------------------------------------------
 */
-Route::post('client/collections/register_user/{collection_id}', ['as' => 'clients.collections.register_user']);
+Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
+Route::post('client/collections', 'CollectionController@store')->name('client.store');
 
 
 /*
@@ -352,6 +355,7 @@ Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('c
 */
 
 Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
+Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*
 |--------------------------------------------------------------------------

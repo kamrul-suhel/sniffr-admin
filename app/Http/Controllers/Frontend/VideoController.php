@@ -40,19 +40,12 @@ class VideoController extends Controller
     private $data;
 
     /**
-     * @var int
-     */
-    private $videos_per_page;
-
-    /**
      * VideoController constructor.
      * @param \App\Services\VideoService $videoService
      */
     public function __construct(VideoService $videoService)
     {
         //TODO: Remove pages?
-        $settings = config('settings.site');
-        $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
             'user' => Auth::user(),
             'theme_settings' => config('settings.theme'),
