@@ -20,7 +20,9 @@
                         </v-tab>
 
                         <v-tab-item>
-                            <offered-videos-component></offered-videos-component>
+                            <videos-component
+                                    :type="'offered'"
+                                ></videos-component>
                         </v-tab-item>
 
                         <v-tab>
@@ -28,7 +30,9 @@
                         </v-tab>
 
                         <v-tab-item>
-                            <offered-stories-component></offered-stories-component>
+                            <stories-component
+                                :type="'offered'"
+                            ></stories-component>
                         </v-tab-item>
                     </v-tabs>
                 </v-flex>
@@ -37,13 +41,13 @@
     </div>
 </template>
 <script>
-    import OfferedStoriesComponent from './modules/OfferedStoriesComponents';
-    import OfferedVideosComponent from './modules/OfferedVideosComponents';
+    import StoriesComponent from '../partials/modules/StoriesComponents';
+    import VideosComponent from '../partials/modules/VideosComponents';
 
     export default {
         components: {
-            OfferedStoriesComponent,
-            OfferedVideosComponent
+            StoriesComponent,
+            VideosComponent
         },
 
         data() {

@@ -34,14 +34,22 @@
 </template>
 
 <script>
-    import AssetStoryDownloadedComponent from '../../partials/AssetStoryDownloadComponent'
-    import AssetStoryOfferedComponent from '../../partials/AssetStoryOfferedComponent'
+    import AssetStoryDownloadedComponent from '../AssetStoryDownloadComponent'
+    import AssetStoryOfferedComponent from '../AssetStoryOfferedComponent'
 
     export default {
         components: {
             AssetStoryDownloadedComponent,
             AssetStoryOfferedComponent
         },
+
+        props:{
+            type: {
+                type: String,
+                required: true
+            }
+        },
+
         data() {
             return {
                 page: 1,
@@ -55,21 +63,61 @@
 
         watch: {
             page() {
-                this.getStoriesData(this.getQueryObject());
+                this.setData();
             },
 
             searchTerm() {
                 this.page = 1;
-                this.getStoriesData(this.getQueryObject());
+                this.setData();
             }
         },
 
         created() {
-            this.getStoriesData(this.getQueryObject());
+            this.setData();
         },
 
         methods: {
-            getStoriesData(queryObject = null) {
+
+            setData(){
+                if(this.type === 'offered'){
+                    this.getOfferedStoriesData(this.getQueryObject());
+                }
+
+                if(this.type === 'purchased'){
+                    this.getPurchasedStoriesData(this.getQueryObject());
+                }
+            },
+
+            getPurchasedStoriesData(queryObject = null) {
+                let url = '/client/stories/purchased';
+                if (queryObject.page != null) {
+                    url += '?page=' + queryObject.page;
+                }
+
+                if (queryObject.searchTerm != '') {
+                    url += '&search=' + queryObject.searchTerm;
+                }
+
+                this.$store.dispatch('fetchPurchasedStories', url)
+                    .then(() => {
+                        let stories = this.$store.getters.getPurchasedStories;
+
+                        // IAN: Need to convert it to an array if it returns an object, for some stupid reason the pagination returns an object
+                        if(typeof stories.data === 'object'){
+                            stories.data = Object.values(stories.data);
+                        }
+                        this.stories = [];
+                        stories.data.forEach((story) => {
+                            this.stories.push(story[0].story);
+                        });
+
+                        this.storiesPerPage = stories.per_page;
+                        this.totalStories = stories.total;
+                        this.numberOfPages = stories.last_page
+                    })
+            },
+
+            getOfferedStoriesData(queryObject = null) {
                 let url = '/client/stories/purchased';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
