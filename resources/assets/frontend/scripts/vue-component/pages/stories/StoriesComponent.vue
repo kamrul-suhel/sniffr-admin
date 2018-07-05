@@ -20,8 +20,7 @@
                 </v-layout>
             </v-container>
 
-            <pagination-component :pagination="paginateObj" :page="'stories'" v-if="stories.length > paginateObj.last_page"></pagination-component>
-
+            <pagination-component :pagination="paginate" :page="'stories'" v-if="paginate.last_page > 1"></pagination-component>
         </section>
     </div>
 </template>
@@ -41,30 +40,31 @@
         data() {
             return {
                 stories: '',
-                paginateObj: '',
+                paginate: '',
+                mailer_stories: []
             }
         },
 
         watch: {
             '$route'(to, from, next) {
-                this.getStoriesData(this.getQueryParam());
+                this.setAllStoryData(this.getQueryObject());
             }
         },
 
         created() {
-            this.getStoriesData(this.getQueryParam());
+            this.setAllStoryData(this.getQueryObject());
         },
 
         methods: {
-            getStoriesData(query = {page: 1, search:''}) {
-                this.$store.dispatch('getStoriesDataAsync', query)
-                    .then(() => {
-                        this.stories = this.$store.getters.getStoriesData;
-                        this.paginateObj = this.$store.getters.getStoriesPaginateData;
-                    })
+            setAllStoryData(query) {
+                this.$store.dispatch('getStoryData', query).then(() => {
+                    this.stories = this.$store.getters.getStoriesData;
+                    this.paginate = this.$store.getters.getStoriesPaginateObject;
+                    this.mailer_stories = this.$store.getters.getMailerStoriesData;
+                })
             },
 
-            getQueryParam() {
+            getQueryObject() {
                 return {
                     page: this.$route.query.page,
                     search: this.$route.query.search

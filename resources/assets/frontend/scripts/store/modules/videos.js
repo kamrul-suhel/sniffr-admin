@@ -13,21 +13,21 @@ const getters = {
         return state.mailer_videos;
     },
 
-    getPaginateObject(state){
+    getVideoPaginateObject(state){
         return state.paginate;
     },
 };
+
 const mutations = {
     setVideoData(state, data){
         state.videos = data;
     },
 
-
     setMailerVideoData(state, data){
         state.mailer_videos = data;
     },
 
-    setPaginationObject(state, paginate){
+    setVideoPaginationObject(state, paginate){
         state.paginate = paginate;
     }
 };
@@ -54,7 +54,7 @@ const actions = {
                     let data = response.data;
                     commit('setVideoData', data.videos.data);
                     commit('setMailerVideoData', data.mailer_videos.data);
-                    commit('setPaginationObject', data.videos);
+                    commit('setVideoPaginationObject', data.videos);
                     resovle();
                 })
                 .catch((error) => {
@@ -64,6 +64,7 @@ const actions = {
         });
     }
 };
+
 export default {
     state,
     getters,

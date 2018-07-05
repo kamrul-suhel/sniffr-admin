@@ -124,9 +124,15 @@ class SearchController extends Controller
      */
     public function stories(Request $request)
     {
+		$next_alpha_id = '';
+		$mailerStories = [];
+		$current_story_id = Input::get('alpha_id');
+
+		dd(Input::get('alpha_id'));
+
         $current_story = $this->getCurrentstory($request->alpha_id);
 
-        $next_alpha_id = '';
+
         $next = Story::select('alpha_id')
             ->where('date_ingested', '<', $current_story->date_ingested)
             ->orderBy('date_ingested', 'DESC')
@@ -145,6 +151,17 @@ class SearchController extends Controller
         if ($previous) {
             $previous_alpha_id = $previous->alpha_id;
         }
+
+		if(Auth::check()){
+			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+
+			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)->pluck('story_id');
+
+			$mailerStories = Video::select($this->getVideoFieldsForFrontend())
+				->whereIn('id', $mailerStoryIds)
+				->whereNotIn('id', $unsearchableStories)
+				->paginate();
+		}
 
         $data = [
             'current_story' => $current_story,
