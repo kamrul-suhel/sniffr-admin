@@ -38,7 +38,7 @@
             });
 
             VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-                this.setButtonText();
+                this.setButtonText();   
             });
 
             this.setButtonText();
