@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class ClientMailer extends Notification
+class ClientMailerAlert extends Notification
 {
     use Queueable;
 
@@ -21,9 +21,8 @@ class ClientMailer extends Notification
      *
      * @param Video $mailer
      */
-    public function __construct(Video $mailer)
+    public function __construct()
     {
-        $this->mailer = $mailer;
     }
 
     /**
