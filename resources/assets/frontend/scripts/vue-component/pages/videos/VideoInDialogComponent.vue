@@ -49,7 +49,20 @@
                         </div>
                     </v-flex>
 
-                    <buy-button-component v-if="user.client_id"></buy-button-component>
+                    <quote-button-component
+                            v-if="user.client_id"
+                            :user="'user'"
+                            :type="'video'"
+                            :asset="video_detail"
+                    ></quote-button-component>
+
+                    <quote-button-component
+                            v-if="!user.client_id"
+                            :user="false"
+                            :type="'video'"
+                            :asset="video_detail"
+                    ></quote-button-component>
+
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -57,15 +70,14 @@
 </template>
 
 <script>
-    import BuyDialogBoxEventBus from '../../../event-bus/buy-dialog-box-event-bus';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
-    import BuyButtonComponent from "../../includes/BuyButtonComponent";
+    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
 
     export default {
         components: {
-            BuyButtonComponent,
+            QuoteButtonComponent,
             videoPlayer: VideoPlayer
         },
         data() {
@@ -110,12 +122,8 @@
             });
         },
 
-        mounted() {
-        },
-
         methods: {
             getVideoData(alpha_id) {
-
                 this.$store.commit('setRouteObject', this.$route);
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
@@ -138,16 +146,6 @@
 
             goToDetail() {
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
-            },
-
-            createCollection() {
-                axios.post('/client/collections', {'video_alpha_id': this.video_detail.alpha_id})
-                    .then(response => {
-                        BuyDialogBoxEventBus.openBuyDialog(response.data, this.video_detail);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
             }
         },
 

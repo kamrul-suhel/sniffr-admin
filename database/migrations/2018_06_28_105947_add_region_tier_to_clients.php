@@ -15,7 +15,6 @@ class AddRegionTierToClients extends Migration
     {
 		Schema::table('clients', function (Blueprint $table) {
 			$table->string('region')->nullable()->after('country')->default();
-			$table->string('tier')->nullable()->after('usable_domains')->default();
 		});
     }
 

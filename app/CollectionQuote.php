@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\QueueEmailPendingQuote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,16 +23,20 @@ class CollectionQuote extends Model
 
     public function collectionVideo()
     {
-        return $this->hasOne(CollectionVideo::class);
+        return $this->hasOne(CollectionVideo::class, 'id', 'collection_video_id');
     }
 
     public function collectionStory()
     {
-        return $this->hasOne(CollectionStory::class);
+        return $this->hasOne(CollectionStory::class, 'id', 'collection_story_id');
     }
 
-	public function routeNotificationForSlack()
+	public function emailPendingQuote($params)
 	{
-		return 'https://hooks.slack.com/services/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';
+		return QueueEmailPendingQuote::dispatch(
+			$params['username'],
+			$params['user'],
+			$params['collection']
+		);
 	}
 }

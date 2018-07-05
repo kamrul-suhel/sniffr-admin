@@ -12,7 +12,7 @@
                 <div v-html="getFilterText(story.description, 220)" class="description"></div>
                 <v-layout row wrap align-end>
                     <v-flex xs6>
-                        <request-quote-button-component :type="'story'" :asset="story"></request-quote-button-component>
+                        <quote-button-component :type="'story'" :asset="story"></quote-button-component>
                     </v-flex>
                     <v-flex xs6>
                         <v-btn dark color="dark" block class="mb-0" @click="onStoryDetail">View</v-btn>
@@ -24,10 +24,11 @@
 </template>
 
 <script>
-    import RequestQuoteButtonComponent from '../../../includes/RequestQuoteButtonComponent'
+    import QuoteButtonComponent from '../../../includes/QuoteButtonComponent'
+
     export default  {
         components :{
-            RequestQuoteButtonComponent
+            QuoteButtonComponent
         },
 
         data(){
@@ -51,8 +52,6 @@
             onStoryDetail(){
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
-
-
         }
     }
 </script>

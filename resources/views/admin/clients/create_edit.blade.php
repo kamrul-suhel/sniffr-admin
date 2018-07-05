@@ -104,38 +104,6 @@
                 </div>
             </div>
 
-            @if(!$company)
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Add Recommended Videos or Stories</div>
-                            <div class="panel-body">
-                                <div class="col-lg-6">
-                                    <div id="admin-mailer">
-                                        Videos
-                                        <select class="form-control" name="recommend-videos[]" multiple="multiple" style="height:200px;">
-                                            @foreach($videos as $video)
-                                                <option value="{{ $video->id }}">{{ $video->title }} - {{ date('d/m/Y', strtotime($video->licensed_at)) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div id="admin-mailer">
-                                        Stories
-                                        <select class="form-control" name="recommend-stories[]" multiple="multiple" style="height:200px;">
-                                            @foreach($stories as $story)
-                                                <option value="{{ $story->id }}">{{ $story->title }} - {{ date('d/m/Y', strtotime($story->created_at)) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
             @if($company)
                 <div class="row">
                     <div class="col-sm-6">

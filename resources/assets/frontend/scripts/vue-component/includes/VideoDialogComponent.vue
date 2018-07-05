@@ -18,7 +18,17 @@
                 <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <!--<v-toolbar-title>Swipe Direction: {{ swipeDirection }}</v-toolbar-title>-->
+
+                <v-spacer></v-spacer>
+
+
+                <v-btn icon @click="onPreviousVideo">
+                    <v-icon>navigate_before</v-icon>
+                </v-btn>
+
+                <v-btn icon @click="onNextVideo">
+                    <v-icon>navigate_next</v-icon>
+                </v-btn>
 
             </v-toolbar>
 
@@ -26,13 +36,13 @@
                 <v-layout row wrap>
                     <div class="video-dialog-loading"></div>
 
-                    <v-container grid-list-xs fluid
+                    <v-container class="no-padding" grid-list-xs fluid
                                  v-touch="{
                                       left: () => swipe('Left'),
                                       right: () => swipe('Right')
                                 }"
                     >
-                        <video-dialog-component></video-dialog-component>
+                        <video-in-dialog-component></video-in-dialog-component>
                     </v-container>
 
 
@@ -56,7 +66,7 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus';
-    import VideoDialogComponent from '../pages/videos/VideoInDialogComponent';
+    import VideoInDialogComponent from '../pages/videos/VideoInDialogComponent';
     import LoginEventBus from '../../event-bus/login-event-bus';
 
     export default {
@@ -93,7 +103,7 @@
         },
 
         components: {
-          VideoDialogComponent
+            VideoInDialogComponent
         },
 
         created() {
@@ -130,7 +140,7 @@
             VideoDialogBoxEventBus.$on('videoDialogBoxCloseByTag', (tag) => {
                 this.video_dialog = false;
                 setTimeout(() => {
-                    this.$router.push({name: 'videos_tag', params: {value: tag.name}});
+                    this.$router.push({name: 'videos', query: { tag: tag.name} });
                 }, 500);
 
             });

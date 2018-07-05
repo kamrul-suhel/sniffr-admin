@@ -3,13 +3,12 @@
 namespace App\Notifications;
 
 use App\User;
-use App\Video;
 use App\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class RequestVideoQuote extends Notification
+class RequestQuote extends Notification
 {
     use Queueable;
 
@@ -18,11 +17,11 @@ class RequestVideoQuote extends Notification
      *
      * @return void
      */
-    public function __construct(User $user, Video $video, Client $client)
+    public function __construct(User $user, Client $client, $asset)
     {
 		$this->user = $user;
-        $this->video = $video;
         $this->client = $client;
+		$this->asset = $asset;
     }
 
     /**
@@ -45,6 +44,6 @@ class RequestVideoQuote extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('Quote Requested for: '.$this->video->title.' : '. url('admin/quotes').', from: '.$this->user->email.'@'.$this->client->name);
+           ->content('Quote Requested for: '.$this->asset->title.' : '. url('admin/quotes').', from: '.$this->user->email.'@'.$this->client->name);
     }
 }

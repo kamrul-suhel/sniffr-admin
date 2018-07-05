@@ -10,7 +10,6 @@ use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
 use App\Order;
-use App\RecommendedAsset;
 use App\User;
 use Auth;
 use Redirect;
@@ -94,26 +93,6 @@ class AdminClientController extends Controller
         $client->save();
 
         $token = app('App\Http\Controllers\Admin\AdminUsersController')->getToken($request->get('user_email'), $user);
-
-        if (count($request->get('recommend-videos')) > 0) {
-            foreach($request->get('recommend-videos') as $video) {
-                $recommendation = new RecommendedAsset();
-                $recommendation->user_id = $user->id;
-                $recommendation->client_id = $client->id;
-                $recommendation->video_id = $video;
-                $recommendation->save();
-            }
-        }
-
-        if (count($request->get('recommend-stories')) > 0) {
-            foreach($request->get('recommend-stories') as $story) {
-                $recommendation = new RecommendedAsset();
-                $recommendation->user_id = $user->id;
-                $recommendation->client_id = $client->id;
-                $recommendation->story_id = $story;
-                $recommendation->save();
-            }
-        }
 
         if ($request->get('send_invitation')) {
             QueueEmailCompany::dispatch(
@@ -216,22 +195,36 @@ class AdminClientController extends Controller
 	 * @param $client_id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function orders(Request $request, $client_id)
+	public function purchases(Request $request, $client_id)
 	{
 		$client = Client::find($client_id);
-		$orders = Collection::where([['client_id', '=', $client_id],['status', 'closed']])
-			->get();
-		$downloads = Download::where('client_id', '=', $client_id)
-			->get();
 
-		return view('admin.clients.orders', [
-			'orders' => $orders,
-			'client' => $client,
-			'downloads' => $downloads
+		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionVideos')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_videos');
+
+		$collectionPurchasesStories = Collection::whereHas('collectionStories', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionStories')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_stories');
+
+		return view('admin.clients.purchases', [
+			'collectionPurchasesVideos' => $collectionPurchasesVideos,
+			'collectionPurchasesStories' => $collectionPurchasesStories,
+			'client' => $client
 		]);
 	}
 
-	public function orders_csv(Request $request, $client_id)
+	public function purchases_csv(Request $request, $client_id)
 	{
 		$client = Client::find($client_id);
 		$orders = Order::where('client_id', '=', $client_id)

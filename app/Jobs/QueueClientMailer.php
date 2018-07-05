@@ -68,6 +68,6 @@ class QueueClientMailer implements ShouldQueue
     {
         // Send user notification of failure, etc...
 		$user = new User();
-		$user->slackChannel('alerts')->notify(new ClientMailer('Failed to send an email within a client downloaded, please check user (Id: ' . $this->client_id . ')'));
+		$user->slackChannel('alerts')->notify(new ClientMailerAlert('Failed to send an email within a client mailer, please check user (Id: ' . $this->client_id . ')'));
     }
 }

@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Story;
-use App\CollectionVideo;
+use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
 use App\Collection;
-use App\Jobs\QueueEmailCompany;
-use App\Jobs\QueueEmailPendingQuote;
 use App\Libraries\VideoHelper;
 use App\Traits\Slug;
 use App\User;
 use App\Video;
-use Redirect;
-use App\Notifications\RequestVideoQuote;
+use App\Story;
+use App\CollectionVideo;
+use App\CollectionStory;
+use App\CollectionQuote;
 use Illuminate\Http\Request;
+use Redirect;
+use App\Notifications\RequestQuote;
 
 class CollectionController extends Controller
 {
 
-    use Slug, VideoHelper;
+    use Slug, VideoHelper, FrontendResponse;
 
-    protected $collection, $collectionVideo, $video, $story, $client, $user;
+    protected $collection, $collectionVideo, $collectionStory, $collectionQuote,  $video, $story, $client, $user;
 
     /**
      * CollectionController constructor.
@@ -33,10 +34,12 @@ class CollectionController extends Controller
      * @param Client $client
      * @param User $user
      */
-    public function __construct(Collection $collection, CollectionVideo $collectionVideo, Video $video, Story $story, Client $client, User $user)
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory, CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, User $user)
     {
         $this->collection = $collection;
         $this->collectionVideo = $collectionVideo;
+		$this->collectionStory = $collectionStory;
+		$this->collectionQuote = $collectionQuote;
         $this->video = $video;
         $this->story = $story;
         $this->client = $client;
@@ -44,32 +47,37 @@ class CollectionController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      * TODO - Check if video already exists for client (not just user)
      * TODO - Create CollectionVideo/CollectionStory instance. (assoc to this collection)
-     **/
+     * @param Request $request
+     * @return mixed
+     */
     public function store(Request $request)
     {
         $user = auth()->user();
 
         $data = [
             'name' => "order_".VideoHelper::quickRandom(10),
-            'user_id' => $user->id,
-            'client_id' => $user->client_id,
+            'user_id' => $user->id ?? null,
+            'client_id' => $user->client_id ?? null,
             'status' => 'open',
         ];
 
         $collection = $this->collection->create($data);
 
-        if($request->has('video_alpha_id')) {
-            $video = $this->video->where('alpha_id', $request->get('video_alpha_id'))->first();
+        if($request->get('type') == 'video') {
+            $video = $this->video->where('alpha_id', $request->get('asset_alpha_id'))->first();
             $collectionVideo = $collection->addVideoToCollection($video, $user);
-        }
+        }else{
+			$story = $this->story->where('alpha_id', $request->get('asset_alpha_id'))->first();
+			$collectionStory = $collection->addStoryToCollection($story, $user);
+		}
 
         return response([
+            'collection' => $collection,
             'collection_id' => $collection->id,
             'collection_video_id' => $collectionVideo->id ?? null,
+			'collection_story_id' => $collectionStory->id ?? null,
             'message' => "New collection created."
         ], 200);
     }
@@ -78,7 +86,7 @@ class CollectionController extends Controller
      * Interactive method to retrieve the price and update the db on demand
      * @param Request $request
      * @param $collectionVideoId
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return mixed
      */
     public function getVideoPrice(Request $request, $collectionVideoId)
 	{
@@ -132,11 +140,11 @@ class CollectionController extends Controller
      * Register new user, and email then set password email. Also create a new collection and link to that user
      * @param Request $request
      * @param $collection_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return mixed
      */
     public function registerUser(Request $request, $collection_id)
     {
-        $data = $request->except('_token');
+        $data = $request->all();
 
         $company_slug = $this->slugify($data['company_name']);
         $password = $this->quickRandom();
@@ -144,7 +152,7 @@ class CollectionController extends Controller
         $client = $this->client->create([
             'name' => $data['company_name'],
             'slug' => $company_slug,
-            'account_owner' => null, //set to null as we don't know this person will be the top dog.
+            'account_owner_id' => null, //set to null as we don't know this person will be the top dog.
         ]);
 
         $user = $this->user->create([
@@ -152,6 +160,7 @@ class CollectionController extends Controller
             'email' => $data['user_email'],
             'full_name' => $data['user_full_name'],
             'role' => 'client_owner',
+            'tel' => $data['tel'],
             'password' => \Hash::make($password),
             'client_id' => $client->id
         ]);
@@ -166,7 +175,10 @@ class CollectionController extends Controller
         $client->emailNewCompanyUser($params);
 
         $collection = $this->collection->find($collection_id);
+
         $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
+
+        auth()->attempt(['email' => $user->email, 'password' => $password]);
 
         return response([
             'user' => $user,
@@ -177,28 +189,42 @@ class CollectionController extends Controller
     /**
      * Send a newly registered user an email telling them we are looking into their request.
      * @param Request $request
-     * @param $collection_video_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @param $type
+     * @param $collection_asset_id
+     * @return mixed
      */
-    public function requestVideoQuote(Request $request, $collection_video_id)
-    {
-        $data = $request->except('_token');
-    	$user = Auth::user();
-    	$client = $user->client;
+    public function requestQuote(Request $request, $type, $collection_asset_id)
+	{
+		$data = $request->except('_token');
+		$user = Auth::user();
+		$client = $user->client;
 
-        $collectionVideo = $this->collectionVideo->find($collection_video_id);
-        $collectionVideo->update([
-            'status' =>  'requested',
-            'type' =>  $data['license_type'] ??         $collectionVideo->type,
-            'platform' =>  $data['license_platform'] ?? $collectionVideo->platform,
-            'length' =>  $data['license_length'] ??     $collectionVideo->length,
-            'company_location' =>  $client->region,
-            'company_tier' =>  $client->tier,
-            'final_price' =>  null,
-        ]);
+		if ($type == 'video'){
+			$collectionVideo = $this->collectionVideo->find($collection_asset_id);
+			$collectionVideo->update([
+				'type' => $data['license_type'] ?? $collectionVideo->type,
+				'platform' => $data['license_platform'] ?? $collectionVideo->platform,
+				'length' => $data['license_length'] ?? $collectionVideo->length,
+				'company_location' => $client->region,
+				'company_tier' => $client->tier,
+				'notes' => $data['notes'] ?? '',
+				'status' => 'requested',
+				'final_price' => null,
+			]);
 
-        $collection = $collectionVideo->collection;
-		$video = $collectionVideo->video;
+			$collection = $collectionVideo->collection;
+			$asset = $collectionVideo->video;
+		}else{
+			$collectionStory = $this->collectionStory->find($collection_asset_id);
+			$collectionStory->update([
+				'notes' => $data['notes'] ?? '',
+				'status' => 'requested',
+				'final_price' => null,
+			]);
+
+			$collection = $collectionStory->collection;
+			$asset = $collectionStory->story;
+		}
 		$client = $collection->client;
 
 		$params = [
@@ -207,9 +233,10 @@ class CollectionController extends Controller
             'collection' => $collection
         ];
 
-		$collectionVideo->emailPendingQuote($params);
+		$collectionQuote = new CollectionQuote;
+		$collectionQuote->emailPendingQuote($params);
 
-		$user->slackChannel('quotes')->notify(new RequestVideoQuote($user, $video, $client));
+		$user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
 
         return response([
             'message' => 'Email has been sent to new user'
@@ -217,19 +244,83 @@ class CollectionController extends Controller
     }
 
     /**
-     * TODO - Check if no one has bought video within the time of clicking 'Buy'
+     * Accept the price on an individual asset. but keep the collection open for other options to be available
+     * TODO - check if collection has anything else in there. if it doesn't then close the collection
      * @param Request $request
-     * @param $collection_video_id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @param $collection_asset_id
+     * @param $type
+     * @return mixed
      */
-    public function acceptFinalPrice(Request $request, $collection_video_id)
+	public function acceptAssetQuote(Request $request, $collection_asset_id, $type){
+		// Accept asset price
+		$isJson = $request->ajax();
+
+		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
+		$collection = $collectionAsset->collection;
+
+		$collectionAsset->status = "purchased";
+		$collectionAsset->save();
+
+		if($isJson){
+			return response([
+				'collection' => $collection,
+				'message' => 'final price has been accepted'
+			], 200);
+		}
+
+		return Redirect::to('client/purchased')
+			->with([
+				'note' => 'Thanks for purchasing the video',
+				'note_type' => 'success',
+			]);
+	}
+
+    public function rejectAssetQuote(Request $request, $collection_asset_id, $type){
+        // Accept asset price
+        $isJson = $request->ajax();
+
+        $collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
+        $collection = $collectionAsset->collection;
+
+        $collectionAsset->status = "closed";
+        $collectionAsset->save();
+
+        $collection->status = "closed";
+        $collection->save();
+
+        if($isJson){
+            return $this->successResponse([
+                'collection' => $collection,
+                'message' => 'final price has been rejected'
+            ]);
+        }
+
+        return Redirect::to('client/purchased')
+            ->with([
+                'note' => 'Thanks for purchasing the video',
+                'note_type' => 'success',
+            ]);
+    }
+
+    /**
+     * Accept an asset and close the collection
+     * TODO - accept everything within a collection and close it.
+     * @param Request $request
+     * @param $collection_id
+     * @param $quote_id
+     * @return mixed
+     */
+    public function acceptCollectionQuote(Request $request, $collection_id, $quote_id)
     {
         $isJson = $request->ajax();
 
         $user = auth()->user();
         $client = $user->client;
-        $collectionVideo = $this->collectionVideo->find($collection_video_id);
-        $collection = $collectionVideo->collection;
+        $collection = $this->collection->find($collection_id);
+        $quote = $this->collectionQuote->find($quote_id);
+
+        $type = $quote->collection_video_id ? 'Video' : 'Story';
+		$collectionAsset = $this->${'collection'.ucfirst($type)};
 
         if($client->id !== $collection->client_id) {
             if($isJson) {
@@ -239,7 +330,8 @@ class CollectionController extends Controller
                     'error' => true,
                 ], 200);
             }
-            return redirect('/videos');
+
+            return redirect('/');
         }
 
         if($user->id !== $collection->user_id) {
@@ -251,12 +343,12 @@ class CollectionController extends Controller
                 ], 200);
             }
 
-            return redirect('/videos');
+            return redirect('/');
         }
 
         if($collection->status != 'open'
-            || $collectionVideo->status == 'purchased'
-            || $collectionVideo->status == 'downloaded') {
+            || $collectionAsset->status == 'purchased'
+            || $collectionAsset->status == 'downloaded') {
             if($isJson) {
                 return response([
                     'collection' => null,
@@ -265,11 +357,11 @@ class CollectionController extends Controller
                 ], 200);
             }
 
-            return redirect('/videos');
+            return redirect('/');
         }
 
-        $collectionVideo->status = "purchased";
-        $collectionVideo->save();
+		$collectionAsset->status = "purchased";
+		$collectionAsset->save();
 
         $collection->status = "closed";
         $collection->save();
@@ -287,4 +379,5 @@ class CollectionController extends Controller
                 'note_type' => 'success',
             ]);
     }
+
 }

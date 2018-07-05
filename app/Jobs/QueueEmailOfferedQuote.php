@@ -2,8 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Collection;
+use App\CollectionQuote;
 use App\CollectionVideo;
+use App\CollectionStory;
 use App\Mail\Quotes\OfferQuote;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -15,7 +16,7 @@ class QueueEmailOfferedQuote implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $username, $email, $collectionVideo;
+    protected $username, $email, $quote, $collection_id, $quote_id;
 
 	public $tries = 5;
 	public $timeout = 120;
@@ -24,13 +25,18 @@ class QueueEmailOfferedQuote implements ShouldQueue
      * QueueEmailOfferedQuote constructor.
      * @param string $username
      * @param string $email
-     * @param CollectionVideo $collection
+     * @param CollectionQuote $collection
      */
-    public function __construct(string $username, string $email, CollectionVideo $collection)
+    public function __construct(CollectionQuote $collectionQuote, $type)
     {
-    	$this->username = $username;
-    	$this->email = $email;
-        $this->collectionVideo = $collection;
+		$quoteUser = $collectionQuote->{'collection'.$type}->collection->user;
+
+		$this->username = $quoteUser->username;
+    	$this->email = $quoteUser->email;
+    	$this->quote = $collectionQuote->price;
+    	$this->collection_id = $collectionQuote->{'collection'.$type}->collection->id;
+        $this->quote_id = $collectionQuote->id;
+
     }
 
     /**
@@ -42,7 +48,9 @@ class QueueEmailOfferedQuote implements ShouldQueue
     {
 		\Mail::to($this->email)->send(new OfferQuote([
 			'username' => $this->username,
-			'collectionVideo' => $this->collectionVideo
+			'quote' => $this->quote,
+			'collection_id' => $this->collection_id,
+			'quote_id' => $this->quote_id
 		]));
     }
 }

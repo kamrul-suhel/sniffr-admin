@@ -53,10 +53,10 @@
 
 
 
-  .card.video-player-poster{
+  .video-player-poster{
     position:relative;
 
-    .card__media{
+    > div{
       padding-top:56.26%;
     }
 
@@ -73,9 +73,6 @@
 
 .video-dialog-box {
   position: relative;
-
-  .content-description{
-  }
 
   .video-detail-content{
     .read-more{
@@ -116,7 +113,6 @@
 }
 
 .video-dialog-content {
-
   #video_player {
     width: 100%;
     height: 350px;
@@ -158,6 +154,7 @@
 
     }
   }
+
   .horizontal {
     .video-container {
       video {
@@ -179,7 +176,6 @@
   }
 
   .video-container {
-
     display: flex;
     width: 100%;
     position: relative;
@@ -301,10 +297,6 @@
     .video-detail-social-share {
       width: 150px;
       text-align: center;
-
-      .btn__content{
-        margin-bottom:-5px;
-      }
     }
 
     .video-license {

@@ -7,6 +7,10 @@ body {
 
 section.section-space {
   padding: $section-spacing-mobile 0px;
+
+  //& > div{
+  //  padding-top:0;
+  //}
 }
 
 @include small-device {
@@ -31,6 +35,10 @@ section.section-space {
   section.section-space {
     padding: $section-spacing 0px;
   }
+}
+
+.no-padding{
+  padding:0;
 }
 
 .nav-background {

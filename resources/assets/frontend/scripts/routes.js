@@ -2,8 +2,6 @@ import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
 import LoginComponent from './vue-component/pages/login/LoginComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
-import VideoSearchComponent from './vue-component/pages/search/SearchComponent.vue';
-import VideoTagComponent from './vue-component/pages/search/TagsComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
 import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
 import PasswordSetTokenComponent from './vue-component/pages/loging/PasswordSetTokenComponent.vue';
@@ -20,6 +18,8 @@ import ClientStoryDetailComponent from './vue-component/pages/clients/stories/Cl
 import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
+import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
+import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
 
 export const routes = [
@@ -58,18 +58,6 @@ export const routes = [
         path: '/contract/:token/accept',
         name: 'contract_accept',
         component: ContractComponent
-    },
-
-    // {
-    //     path: '/search',
-    //     name: 'videos_search',
-    //     component: VideoSearchComponent
-    // },
-
-    {
-        path: '/videos/tag/:value',
-        name: 'videos_tag',
-        component: VideoTagComponent
     },
 
     {
@@ -171,10 +159,23 @@ export const routes = [
                 component: ClientVideoDetailComponent
             },
 
+
             {
                 path: 'purchased',
                 name: 'client_purchased_assets',
                 component: ClientPurchasedAssetsComponent,
+            },
+
+            {
+                path: 'offered',
+                name: 'client_offered_assets',
+                component: ClientOfferedAssetsComponent,
+            },
+
+            {
+                path: 'collections',
+                name: 'client_collections',
+                component: ClientCollectionComponent,
             },
 
         ],

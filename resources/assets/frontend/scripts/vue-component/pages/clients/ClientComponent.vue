@@ -2,7 +2,7 @@
     <!-- Client section -->
     <div class="client-section">
         <!-- Client content SECTION -->
-        <section class="client-content section-space" align-content-end v-if="content_show">
+        <section class="client-content section-space" v-if="content_show">
             <transition name="slide-fade" mode="out-in">
                 <router-view></router-view>
             </transition>

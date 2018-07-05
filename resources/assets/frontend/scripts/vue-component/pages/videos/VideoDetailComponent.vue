@@ -61,13 +61,10 @@
                                     </ul>
                                 </div>
 
-                                <buy-button-component v-if="user.client_id"></buy-button-component>
+                                <quote-button-component v-if="user.client_id" :type="'video'" :asset="video_detail"></quote-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
-
-
-
                 </v-layout>
             </v-container>
         </div>
@@ -76,11 +73,11 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
-    import BuyButtonComponent from "../../includes/BuyButtonComponent";
+    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
 
     export default {
         components: {
-            BuyButtonComponent,
+            QuoteButtonComponent,
             videoPlayer: VideoPlayer
         },
 

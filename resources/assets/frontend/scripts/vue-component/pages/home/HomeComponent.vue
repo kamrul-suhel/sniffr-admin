@@ -10,20 +10,15 @@
 
         <!-- Feature Component -->
         <feature-component></feature-component>
-
-        <!-- Upload video component -->
-        <!--<upload-video-component></upload-video-component>-->
     </div>
 </template>
 <script>
     import FeatureComponent from '../../includes/FeatureComponent.vue';
-    import UploadVideoComponent from '../../forms/UploadVideoComponent.vue';
     import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components:{
-            featureComponent: FeatureComponent,
-            uploadVideoComponent: UploadVideoComponent
+            featureComponent: FeatureComponent
         },
 
         data() {

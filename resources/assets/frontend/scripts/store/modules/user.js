@@ -45,7 +45,6 @@ const mutations = {
 const actions = {
     getLoginStatus({commit}) {
         return new Promise(function (resolve, reject) {
-            console.log('sniffr in data');
             commit('setUserState', sniffr_app.user);
             resolve();
         });

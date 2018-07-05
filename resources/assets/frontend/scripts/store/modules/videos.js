@@ -1,6 +1,5 @@
 const state = {
     videos: null,
-    recommended: null,
     mailer_videos: null,
     paginate: ''
 };
@@ -10,101 +9,63 @@ const getters = {
         return state.videos;
     },
 
-    getRecommendedData(state){
-        return state.recommended;
-    },
-
     getMailerVideoData(state){
         return state.mailer_videos;
     },
 
-    getPaginateObject(state){
+    getVideoPaginateObject(state){
         return state.paginate;
     },
 };
+
 const mutations = {
     setVideoData(state, data){
-        state.videos = data.videos.data;
-    },
-
-    setRecommendedData(state, data){
-        state.recommended = data.recommended.data;
+        state.videos = data;
     },
 
     setMailerVideoData(state, data){
-        state.mailer_videos = data.mailer_videos.data;
+        console.log(data);
+        state.mailer_videos = data;
     },
 
-    setPaginationObject(state, paginate){
+    setVideoPaginationObject(state, paginate){
         state.paginate = paginate;
-    },
+    }
 };
 
 const actions = {
     getVideoData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
-            let url = '/videos';
+        return new Promise(function (resolve, reject) {
+            let url = '/search/videos';
 
             if (payload.page && payload.page != 0) {
                 url = url + '?page=' + payload.page;
             }
-            axios.get(url)
-                .then((response) => {
-                    let data = response.data;
-                    commit('setVideoData', data);
-                    commit('setPaginationObject', data.videos);
-                    resovle();
-                })
-                .catch((error) => {
-                    console.log('Not connect');
-                    reject();
-                });
-        });
-    },
 
-    getRecommendedData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
-            let url = '/videos';
-
-            if (payload.page && payload.page != 0) {
-                url = url + '?page=' + payload.page;
+            if(payload.search && payload.search != ''){
+                url = url + '&search='+payload.search;
             }
-            axios.get(url)
-                .then((response) => {
-                    let data = response.data;
-                    commit('setRecommendedData', data);
-                    commit('setPaginationObject', data.recommended);
-                    resovle();
-                })
-                .catch((error) => {
-                    console.log('Not connect');
-                    reject();
-                });
-        });
-    },
 
-    getMailerVideoData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
-            let url = '/videos';
-
-            if (payload.page && payload.page != 0) {
-                url = url + '?page=' + payload.page;
+            if(payload.tag && payload.tag != ''){
+                url = url + '&tag='+payload.tag;
             }
-            axios.get(url)
+
+            axios.post(url)
                 .then((response) => {
                     let data = response.data;
-                    commit('setMailerVideoData', data);
-                    commit('setPaginationObject', data.mailer_videos);
-                    resovle();
+                    commit('setVideoData', data.videos.data);
+                    commit('setMailerVideoData', data.mailer_videos.data);
+                    commit('setVideoPaginationObject', data.videos);
+                    resolve();
                 })
                 .catch((error) => {
-                    console.log('Not connect');
+                    console.log('Not connect: '+error);
                     reject();
                 });
         });
-    },
-
+    }
 };
+
 export default {
     state,
     getters,

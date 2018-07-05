@@ -1,6 +1,6 @@
 #nav{
   width:100%;
-  padding:10px 0;
+  padding:0;
   z-index:10;
   transition:all ease-in-out .4s;
 
@@ -99,26 +99,17 @@
       a:focus{
         outline:none;
       }
-
-      .btn__content{
-        padding:0;
-
-        i{
-          display:inline-block;
-          margin-right:5px;
-        }
-      }
     }
   }
 
 }
 
-.menu__content{
+.v-menu__content{
   box-shadow:none;
   margin-top:10px;
   //top:120px !important;
 
-  .list{
+  .v-list{
     background-color: rgba(0,0,0,.5);
     padding: 1px 0;
   }
@@ -139,7 +130,7 @@
     }
   }
 
-  &.menu__content--select{
+  &.v-menu__content--select{
     margin-top:0;
 
     .list{
@@ -225,7 +216,7 @@
   background:#000;
 }
 
-.list, .list__tile {
+.v-list, .v-list__tile {
   background-color: black;
   color: white;
 }
