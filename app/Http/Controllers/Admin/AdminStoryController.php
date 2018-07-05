@@ -167,13 +167,16 @@ class AdminStoryController extends Controller
         $story->type = (Input::get('type') ? Input::get('type') : NULL);
         $story->notes = (Input::get('notes') ? Input::get('notes') : NULL);
         $story->source_type = (Input::get('source_type') ? Input::get('source_type') : NULL);
-        $story->sourced_at = (Input::get('sourced_at') ? Input::get('sourced_at') : NULL);
+        $story->sourced_at = (Input::get('sourced_at') ? Carbon::parse(Input::get('sourced_at')) : NULL);
         $story->location = (Input::get('location') ? Input::get('location') : NULL);
         $story->removed_from_social = (Input::get('removed_from_social') ? Input::get('removed_from_social') : NULL);
         $story->problem_status = (Input::get('problem_status') ? Input::get('problem_status') : NULL);
         $story->submitted_to = (Input::get('submitted_to') ? Input::get('submitted_to') : NULL);
         $story->rights = (Input::get('rights') ? Input::get('rights') : NULL);
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : NULL);
+
+        $story->story_category_id = (Input::get('category') ? Input::get('category') : NULL);
+        $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : NULL);
 
         if (Input::hasFile('story_image')) {
             $imageFile = Input::file('story_image');
@@ -185,11 +188,18 @@ class AdminStoryController extends Controller
             }
         }
 
-        if (Input::get('contact_id')) {
-            $story->contact_id = Input::get('contact_id');
-        }
-
         // Need to add / update contact
+        if(Input::get('contact_email')) {
+            $contact = new Contact();
+            $contact->full_name = Input::get('contact_full_name');
+            $contact->email = Input::get('contact_email');
+            $contact->tel = Input::get('contact_tell');
+            $contact->save();
+            $story->contact_id = $contact->id;
+            // should they get an email or something?
+        } else {
+            $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
+        }
 
         $story->save();
 
@@ -275,14 +285,17 @@ class AdminStoryController extends Controller
             }
         }
 
-        $story->contact_is_owner = (Input::get('contact_is_owner') ? Input::get('contact_is_owner') : $story->contact_is_owner);
-        $story->allow_publish = (Input::get('allow_publish') ? Input::get('allow_publish') : $story->allow_publish);
-        $story->permission = (Input::get('permission') ? Input::get('permission') : $story->permission);
+        $story->contact_is_owner = (Input::get('contact_is_owner') == 1  ? 1 : NULL);
+        $story->allow_publish = (Input::get('allow_publish') == 1  ? 1 : NULL);
+        $story->permission = (Input::get('permission') == 1  ? 1 : NULL);
+
+        $story->story_category_id = (Input::get('category') ? Input::get('category') : $story->story_category_id);
+        $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : $story->story_collection_id);
 
         $story->type = (Input::get('type') ? Input::get('type') : $story->type);
         $story->notes = (Input::get('notes') ? Input::get('notes') : $story->notes);
         $story->source_type = (Input::get('source_type') ? Input::get('source_type') : $story->source_type);
-        $story->sourced_at = (Input::get('sourced_at') ? Input::get('sourced_at') : $story->sourced_at);
+        $story->sourced_at = (Input::get('sourced_at') ? Carbon::parse(Input::get('sourced_at')) : ($story->sourced_at ? $story->sourced_at : NULL));
         $story->location = (Input::get('location') ? Input::get('location') : $story->location);
         $story->removed_from_social = (Input::get('removed_from_social') ? Input::get('removed_from_social') : $story->removed_from_social);
         $story->problem_status = (Input::get('problem_status') ? Input::get('problem_status') : $story->problem_status);
@@ -294,6 +307,17 @@ class AdminStoryController extends Controller
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
 
         // Need to add / update contact
+        if(Input::get('contact_email')) {
+            $contact = new Contact();
+            $contact->full_name = Input::get('contact_full_name');
+            $contact->email = Input::get('contact_email');
+            $contact->tel = Input::get('contact_tel');
+            $contact->save();
+            $story->contact_id = $contact->id;
+            // should they get an email or something?
+        } else {
+            $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
+        }
 
         if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));

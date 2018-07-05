@@ -2,6 +2,12 @@
 
 @section('content')
 
+<style>
+.placepicker-map {
+  min-height: 250px;
+}
+</style>
+
 <div id="admin-container">
 <!-- This is where -->
 
@@ -53,7 +59,7 @@
 							<div class="panel-body" style="display: block;">
 								<select name="type" id="type" class="form-control">
 									@foreach(config('stories.story_type') as $type)
-									<option value="{{ $type }}">{{ ucwords(str_replace('-', ' ', $type)) }}</option>
+									<option value="{{ $type }}" {{ (isset($story) && $story->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -128,7 +134,7 @@
 									<span class="input-group-addon">
 						                Contact
 						            </span>
-									<input type="button" class="form-control btn-clear" name="contact_add" id="contact_add" value="Add Contact" />
+									<input type="button" class="form-control btn-clear" name="contact_add" id="contact_add" value="Add New Contact" />
 						        </span>
 								<div class="js-contact-add">
 									<input type="text" class="form-control" name="contact_full_name" id="contact_full_name" placeholder="Enter contact full name" value="" />
@@ -139,7 +145,7 @@
 									<select name="contact_id" id="contact_id" class="selectpicker" data-live-search="true" data-width="100%" title="Search and attach contact...">
 										@if(!empty($contacts))
 											@foreach($contacts as $contact)
-												<option value="{{ $contact->id }}"{{ (isset($story) && $story->contact_id==$contact->id)  ? " selected" : "" }}>{{ $contact->full_name }}</option>
+												<option value="{{ $contact->id }}"{{ (isset($story) && $story->contact_id==$contact->id) ? ' selected' : '' }}>{{ $contact->full_name }}</option>
 											@endforeach
 										@endif
 									</select>
@@ -147,15 +153,15 @@
 								<br />
 								<div class="input-group">
 									<label class="checkbox-inline" for="contact_is_owner">
-										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" value="1">
+										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" value="1" {{ (isset($story) && $story->contact_is_owner==1) ? 'checked' : '' }}>
 										Contact is owner
 									</label>
 									<label class="checkbox-inline" for="allow_publish">
-										<input type="checkbox" name="allow_publish" id="allow_publish" value="1">
+										<input type="checkbox" name="allow_publish" id="allow_publish" value="1" {{ (isset($story) && $story->allow_publish==1) ? 'checked' : '' }}>
 										Happy to publish
 									</label>
 									<label class="checkbox-inline" for="has_permission">
-										<input type="checkbox" name="permission" id="permission" value="1">
+										<input type="checkbox" name="permission" id="permission" value="1" {{ (isset($story) && $story->permission==1) ? 'checked' : '' }}>
 										Has permission
 									</label>
 								</div>
@@ -164,7 +170,7 @@
 									<span class="input-group-addon">
 						                Date Sourced
 						            </span>
-				                    <input type="text" class="form-control" name="sourced_at" id="sourced_at" />
+				                    <input type="text" class="form-control" name="sourced_at" id="sourced_at" value="@if(!empty($story->sourced_at)){{ $story->sourced_at }}@endif" />
 				                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
 						        </span>
 								<br />
@@ -172,7 +178,10 @@
 									<span class="input-group-addon">
 						                Location
 						            </span>
-				                    <input type="text" class="form-control" name="location" id="location" />
+				                    <input type="text" class="form-control placepicker" data-map-container-id="locationCollapse" name="location" id="location" value="@if(!empty($story->location)){{ $story->location }}@endif" />
+									<div id="locationCollapse" class="collapse">
+										<div class="placepicker-map thumbnail"></div>
+									</div>
 						        </span>
 								<br />
 								<span class="input-group">
@@ -181,7 +190,7 @@
 						            </span>
 									<select name="removed_from_social" id="removed_from_social" class="form-control">
 										@foreach(config('stories.removed_from_social') as $from)
-										<option value="{{ $from }}">{{ ucwords(str_replace('-', ' ', $from)) }}</option>
+										<option value="{{ $from }}" {{ (isset($story) && $story->removed_from_social==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $from)) }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -192,7 +201,7 @@
 						            </span>
 									<select name="problem_status" id="problem_status" class="form-control">
 										@foreach(config('stories.problem_status') as $problem)
-										<option value="{{ $problem }}">{{ ucwords(str_replace('-', ' ', $problem)) }}</option>
+										<option value="{{ $problem }}" {{ (isset($story) && $story->problem_status==$problem) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $problem)) }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -201,16 +210,16 @@
 						            <span class="input-group-addon">
 						                Categorisation
 						            </span>
-									<select name="vertical" id="vertical" class="form-control drop-5050">
+									<select name="category" id="category" class="form-control drop-5050">
 										<option value="">Select vertical</option>
 										@foreach($video_categories as $category)
-										<option value="{{ $category->id }}">{{ $category->name }}</option>
+										<option value="{{ $category->id }}" {{ (isset($story) && $story->vertical==$category) ? 'selected' : '' }}>{{ $category->name }}</option>
 										@endforeach
 									</select>
 									<select name="collection" id="collection" class="form-control drop-5050">
 										<option value="">Select collection</option>
 										@foreach($video_collections as $collection)
-										<option value="{{ $collection->id }}">{{ $collection->name }}</option>
+										<option value="{{ $collection->id }}" {{ (isset($story) && $story->collection==$collection) ? 'selected' : '' }}>{{ $collection->name }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -220,8 +229,8 @@
 						                Submitted to
 						            </span>
 									<select name="submitted_to" id="submitted_to" class="selectpicker" data-width="100%" title="Select who you submitted to" multiple>
-										@foreach(config('stories.submitted_to') as $sites)
-										<option value="{{ $sites }}">{{ ucwords(str_replace('-', ' ', $sites)) }}</option>
+										@foreach(config('stories.submitted_to') as $site)
+										<option value="{{ $site }}" {{ (isset($story) && (in_array($site, explode(',', $story->submitted_to, 0)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -285,13 +294,13 @@
 						                License Type
 						            </span>
 									<select name="rights" id="rights" class="form-control">
-										<option value"">Set status</option>
+										<option value="">Set status</option>
 										@foreach(config('stories.rights') as $status)
 										<option value="{{ $status }}">{{ ucwords(str_replace('-', ' ', $status)) }}</option>
 										@endforeach
 									</select>
 									<select name="rights_type" id="rights_type" class="form-control">
-										<option value"">Set rights type</option>
+										<option value="">Set rights type</option>
 										@foreach(config('stories.rights_type') as $rights)
 										<option value="{{ $rights }}">{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
 										@endforeach
@@ -388,6 +397,9 @@
 
 	@section('javascript')
 
+	<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuut3P8ipXPBhj93RZiymyThtzovaswws&libraries=places"></script>
+	<script type="text/javascript" src="https://benignware.github.io/jquery-placepicker/js/jquery.placepicker.min.js"></script> -->
+
 	<script type="text/javascript">
 
 	$ = jQuery;
@@ -410,9 +422,25 @@
 			}
 		});
 
-		$('#source_date').datetimepicker({
-			format: 'DD/MM/YYYY HH:MM:SS',
+		$('#sourced_at').datetimepicker({
+			// format: 'YYYY-MM-DD HH:MM:SS',
+			defaultDate: $.now()
 		});
+
+		// var mapPlacepicker = $(".placepicker").placepicker({placeChanged: function(place) {
+		// 	var location_value = place.formatted_address +" Latitude" +this.getLocation().latitude + " Longitude" + this.getLocation().longitude;
+		//
+		// }});
+		//
+		// $(".placepicker").each(function() {
+		// 	var target = this;
+		// 	var $collapse = $(this).parents('.form-group').next('.collapse');
+		// 	var $map = $collapse.find('.another-map-class');
+		// 	var placepicker = $(this).placepicker({
+		// 		map: $map.get(0),
+		//
+		// 	}).data('placepicker');
+		// });
 
 		tinymce.init({
 			relative_urls: false,

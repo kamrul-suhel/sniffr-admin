@@ -14,7 +14,8 @@ class UpdateStoriesTable extends Migration
     public function up()
     {
         Schema::table('stories', function (Blueprint $table) {
-            $table->dateTime('sourced_at')->nullable()->after('destination');
+            $table->timestamp('licensed_at')->nullable()->after('destination');
+            $table->timestamp('sourced_at')->nullable()->after('destination');
             $table->string('source_type')->nullable()->after('source');
             $table->integer('story_collection_id')->unsigned()->nullable()->after('destination');
             $table->integer('story_category_id')->unsigned()->nullable()->after('destination');
@@ -39,6 +40,7 @@ class UpdateStoriesTable extends Migration
     public function down()
     {
         Schema::table('stories', function (Blueprint $table) {
+            $table->dropColumn('licensed_at');
             $table->dropColumn('sourced_at');
             $table->dropColumn('source_type');
             $table->dropColumn('story_collection_id');
