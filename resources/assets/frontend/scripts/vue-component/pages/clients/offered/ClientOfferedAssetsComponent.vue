@@ -1,10 +1,10 @@
 <template>
     <div class="admin-mailer-section">
         <!-- End refresh stories dialog box -->
-        <v-container grid-list-lg>
+        <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
                 <v-flex xs12>
-                    <h1>Your Offers</h1>
+                    <h2 class="text-center text-uppercase">Your Offers</h2>
                 </v-flex>
 
                 <v-flex xs12>
@@ -20,7 +20,9 @@
                         </v-tab>
 
                         <v-tab-item>
-                            <offered-videos-component></offered-videos-component>
+                            <videos-component
+                                    :type="'offered'"
+                                ></videos-component>
                         </v-tab-item>
 
                         <v-tab>
@@ -28,7 +30,9 @@
                         </v-tab>
 
                         <v-tab-item>
-                            <offered-stories-component></offered-stories-component>
+                            <stories-component
+                                :type="'offered'"
+                            ></stories-component>
                         </v-tab-item>
                     </v-tabs>
                 </v-flex>
@@ -37,13 +41,13 @@
     </div>
 </template>
 <script>
-    import OfferedStoriesComponent from './modules/OfferedStoriesComponents';
-    import OfferedVideosComponent from './modules/OfferedVideosComponents';
+    import StoriesComponent from '../partials/modules/StoriesComponents';
+    import VideosComponent from '../partials/modules/VideosComponents';
 
     export default {
         components: {
-            OfferedStoriesComponent,
-            OfferedVideosComponent
+            StoriesComponent,
+            VideosComponent
         },
 
         data() {

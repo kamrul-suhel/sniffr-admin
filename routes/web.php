@@ -318,6 +318,7 @@ Route::group(/**
 
     Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
 	Route::get('collections/accept_asset_price/{collection_asset_id}/{type}', 'CollectionController@acceptAssetQuote')->name('client.accept_asset_quote');
+	Route::get('collections/reject_asset_price/{collection_asset_id}/{type}', 'CollectionController@rejectAssetQuote')->name('client.accept_asset_quote');
 	Route::get('collections/accept_collection_quote/{collection_id}/{quote_id}', 'CollectionController@acceptCollectionQuote')->name('client.accept_collection_quote');
     Route::post('collections/request_quote/{type}/{collection_video_id}', 'CollectionController@requestQuote')->name( 'client.request_quote');
 
