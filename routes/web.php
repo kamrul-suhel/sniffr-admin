@@ -280,6 +280,7 @@ Route::group(/**
    */
     Route::resource('orders', 'OrderController');
 	Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
+	Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
 	Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
 
     /*
