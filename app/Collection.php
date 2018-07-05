@@ -31,7 +31,7 @@ class Collection extends Model
     }
 
     //Functions
-    public function addVideoToCollection(Video $video, User $user)
+    public function addVideoToCollection(Video $video, User $user = null)
     {
         $data = [
             'collection_id' => $this->id,
@@ -41,8 +41,8 @@ class Collection extends Model
             'length' => null,
             'class' => $video->class,
             'final_price' => config('pricing.base'),
-            'company_location' => $user->client->region,
-            'company_tier' => $user->client->tier,
+            'company_location' => $user->client->region ?? null,
+            'company_tier' => $user->client->tier ?? null,
             'status' => 'received'
         ];
 
