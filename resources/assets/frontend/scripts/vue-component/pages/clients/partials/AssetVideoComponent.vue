@@ -40,7 +40,7 @@
             </v-layout>
         </v-flex>
 
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-if="type === 'purchased'">
+        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-if="assetType === 'purchased'">
             <v-btn
                     block
                     dark
@@ -70,7 +70,7 @@
                     dark
                     large
                     :loading="acceptLoading"
-                    :disabled="acceptLoading"
+                    :disabled="acceptLoading || assetDeclined"
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
@@ -84,7 +84,7 @@
                     color="dark"
                     @click.native="onDecline()"
                     :loading="declineLoading"
-                    :disabled="declineLoading"
+                    :disabled="declineLoading || assetDeclined"
             >
                 Decline
             </v-btn>
@@ -114,6 +114,9 @@
                 loading: false,
                 acceptLoading: false,
                 declineLoading:false,
+                assetDeclined: false,
+
+                assetType:''
             }
         },
 
@@ -135,7 +138,7 @@
         },
 
         created() {
-
+            this.assetType = this.type;
         },
 
         watch: {
@@ -179,10 +182,11 @@
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
                 axios.get(url).then((response) => {
-                    if (response.data.success === 1) {
+                    console.log(response);
+                    if (response.data.success === '1') {
 
                         this.acceptLoading = false;
-                        this.type = "purchased"
+                        this.assetType = "purchased"
                         this.purchased = true
                         SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
@@ -195,11 +199,13 @@
 
             onDecline() {
                 let url = 'collections/reject_asset_price/' + this.video.collection_video_id + '/video';
+                this.declineLoading = true;
                 axios.get(url).then((response) => {
-                    if (response.data.success === 1) {
+                    if (response.data.success === '1') {
                         // Do some action when they accept
                         this.declineLoading = false;
-                        this.declineLoading = true;
+
+                        this.assetDeclined = true;
                         this.decline = true;
                         SnackbarEventBus.displayMessage(5000, 'Video has declined');
                     }
