@@ -22,7 +22,6 @@
                     <v-card-text class="overflow-hidden" style="overflow:auto; height:352px; width:100% !important; margin: 0px; padding:0px;">
                         <v-layout align-content-center style="overflow-x:scroll;">
                             <video-loop-component
-                                    v-if="mailer_videos && mailer_videos > 0"
                                     v-for="(mailer, index) in mailer_videos"
                                     :video="mailer"
                                     :key="mailer.alpha_id"
