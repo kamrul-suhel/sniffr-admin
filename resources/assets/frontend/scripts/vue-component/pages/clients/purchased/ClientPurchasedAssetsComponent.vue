@@ -1,10 +1,10 @@
 <template>
     <div class="admin-mailer-section">
         <!-- End refresh stories dialog box -->
-        <v-container grid-list-lg>
+        <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
                 <v-flex xs12>
-                    <h1>Purchases</h1>
+                    <h2 class="text-center text-uppercase">Purchases</h2>
                 </v-flex>
 
                 <v-flex xs12>

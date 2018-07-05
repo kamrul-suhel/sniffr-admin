@@ -27,7 +27,7 @@
             </v-layout>
         </v-flex>
 
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-if="type === 'purchased'">
             <v-btn
                     block
                     dark
@@ -51,6 +51,32 @@
             </v-btn>
         </v-flex>
 
+        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-else>
+            <v-btn
+                    block
+                    dark
+                    large
+                    :loading="acceptLoading"
+                    :disabled="acceptLoading"
+                    @click="onAccept()"
+                    color="dark"
+                    class="mb-3">
+                Accept
+            </v-btn>
+
+            <v-btn
+                    block
+                    dark
+                    large
+                    color="dark"
+                    @click.native="onDecline()"
+                    :loading="declineLoading"
+                    :disabled="declineLoading"
+            >
+                Decline
+            </v-btn>
+        </v-flex>
+
         <v-flex xs12 class="my-4">
             <v-divider></v-divider>
         </v-flex>
@@ -58,28 +84,36 @@
 </template>
 
 <script>
-    import ComponentServices from '../../../../services/ComponentServices';
 
     export default {
         data() {
             return {
                 button_text: 'Download Video',
                 purchased: false,
-                loading: false,
+
                 loader: null,
                 showButton: false,
                 hide_download_button: false,
+
+                loading: false,
+                acceptLoading: false,
+                declineLoading:false,
             }
         },
 
-        props: [
-            'video'
-        ],
+        props: {
+            video: {
+                type: Object,
+                require: true
+            },
+
+            type: {
+                type: String,
+                require: true
+            }
+        },
 
         created() {
-            var user = this.$store.getters.getUser;
-
-            var componentServices = new ComponentServices();
         },
 
         watch: {
@@ -116,6 +150,30 @@
                 this.loader = 'loading';
                 var url = '/client/videos/' + this.video.id + '/download';
                 window.location = url;
+            },
+
+            onAccept() {
+
+                let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
+                this.acceptLoading = true;
+                axios.get(url).then((response) => {
+                    if (response.data.success === 1) {
+                        // Do some action when they accept
+                        this.acceptLoading = false;
+                    }
+                });
+            },
+
+            onDecline() {
+                let url = 'collections/reject_asset_price/' + this.video.collection_video_id + '/video';
+                this.declineLoading = true;
+                axios.get(url).then((response) => {
+                    if (response.data.success === 1) {
+                        // Do some action when they accept
+                        this.declineLoading = false;
+                    }
+                });
+
             }
         }
     }

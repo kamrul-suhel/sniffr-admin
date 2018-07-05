@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
 use App\Collection;
@@ -20,7 +21,7 @@ use Illuminate\Http\Request;
 class CollectionController extends Controller
 {
 
-    use Slug, VideoHelper;
+    use Slug, VideoHelper, FrontendResponse;
 
     protected $collection, $collectionVideo, $collectionStory, $collectionQuote,  $video, $story, $client, $user;
 
@@ -263,6 +264,33 @@ class CollectionController extends Controller
 				'note_type' => 'success',
 			]);
 	}
+
+    public function rejectAssetQuote(Request $request, $collection_asset_id, $type){
+        // Accept asset price
+        $isJson = $request->ajax();
+
+        $collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
+        $collection = $collectionAsset->collection;
+
+        $collectionAsset->status = "closed";
+        $collectionAsset->save();
+
+        $collection->status = "closed";
+        $collection->save();
+
+        if($isJson){
+            return $this->successResponse([
+                'collection' => $collection,
+                'message' => 'final price has been rejected'
+            ]);
+        }
+
+        return Redirect::to('client/purchased')
+            ->with([
+                'note' => 'Thanks for purchasing the video',
+                'note_type' => 'success',
+            ]);
+    }
 
     /**
      * TODO - Check if no one has bought video within the time of clicking 'Buy'

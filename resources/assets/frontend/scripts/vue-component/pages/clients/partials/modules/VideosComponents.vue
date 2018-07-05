@@ -12,10 +12,11 @@
             </v-flex>
         </v-layout>
 
-        <asset-video-offered-component
+        <asset-video-component
                 v-for="(video, index) in videos"
                 :key="index"
-                :video="video"></asset-video-offered-component>
+                :type="type"
+                :video="video"></asset-video-component>
 
         <div class="text-xs-center" v-if="totalVideos > videosPerPage">
             <v-pagination
@@ -29,11 +30,11 @@
 </template>
 
 <script>
-    import AssetVideoOfferedComponent from '../AssetVideoOfferedComponent';
+    import AssetVideoComponent from '../AssetVideoComponent';
 
     export default {
         components: {
-            AssetVideoOfferedComponent
+            AssetVideoComponent
         },
 
         props: ['type'],
@@ -95,6 +96,9 @@
                         }
                         this.videos = [];
                         videos.data.forEach((video) => {
+                            console.log(video);
+                            video[0].video.final_price = video[0].final_price;
+                            video[0].video.collection_video_id = video[0].id;
                             this.videos.push(video[0].video);
                         });
 
@@ -124,6 +128,9 @@
                         }
                         this.videos = [];
                         videos.data.forEach((video) => {
+                            video[0].video.final_price = video[0].finfinal_price;
+                            video[0].video.collection_id = video[0].collection_id;
+
                             this.videos.push(video[0].video);
                         });
 
