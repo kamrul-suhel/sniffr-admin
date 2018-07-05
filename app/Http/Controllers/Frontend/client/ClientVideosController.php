@@ -114,22 +114,25 @@ class ClientVideosController extends Controller
 		if ($request->ajax()) {
 			$client_id = Auth::user()->client_id;
 
-				$purchased_videos = Collection::with('collectionVideos.video');
-				// If search passed through
-				if ($request->search) {
-					$search = $request->search;
-					$purchased_videos = $purchased_videos->whereHas('collectionVideos.video', function ($query) use ($search) {
-						$query->where('title', 'LIKE', '%' . $search . '%');
-					});
-				}
-				$purchased_videos = $purchased_videos->where('client_id', $client_id)
-					->where('status', 'closed')
-					->orderBy('created_at', 'DESC')
-					->get()
-					->pluck('collectionVideos')->all();
+			$purchasedVideos = Collection::with('collectionVideos.video');
+			// If search passed through
+			if ($request->search) {
+				$search = $request->search;
+				$purchasedVideos = $purchasedVideos->whereHas('collectionVideos.video', function ($query) use ($search) {
+					$query->where('title', 'LIKE', '%' . $search . '%');
+				});
+			}
+			$purchasedVideos = $purchasedVideos->where('client_id', $client_id)
+				->where('status', 'closed')
+				->orderBy('created_at', 'DESC')
+				->whereHas('collectionVideos', function($query) {
+					$query->where('status', 'purchased');
+				})
+				->get()
+				->pluck('collectionVideos')->all();
 
 			//Paginate collection object
-			$videos = $this->paginate($purchased_videos, self::PAGINATE_PER_PAGE, $request->page);
+			$videos = $this->paginate($purchasedVideos, self::PAGINATE_PER_PAGE, $request->page);
 
 			$data = [
 				'videos' => $videos,
@@ -154,7 +157,6 @@ class ClientVideosController extends Controller
 
 		// save the order
 		$this->orderService->logDownload($videoId, $mailer_id, 'video');
-		$this->orderService->saveDownloadToOrder($videoId, $mailer_id, 'video');
 
 		$newZipFileName = $video->alpha_id. time() . '.zip';
 		$newZipFilePath = '../storage/'.$newZipFileName;

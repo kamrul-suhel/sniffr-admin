@@ -330,7 +330,7 @@
             getVideoPrice(){
                 this.disabledCheck();
 
-                if(this.client_logged_in){
+                if(this.can_buy){
                     let form_data = new FormData();
                     form_data.append(this.alpha_name, this.asset.alpha_id);
                     form_data.append('license_type', this.license_type);

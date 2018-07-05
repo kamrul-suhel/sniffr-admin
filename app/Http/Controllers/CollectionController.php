@@ -258,6 +258,9 @@ class CollectionController extends Controller
 		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
 		$collection = $collectionAsset->collection;
 
+		$collection->status = "closed";
+		$collection->save();
+
 		$collectionAsset->status = "purchased";
 		$collectionAsset->save();
 

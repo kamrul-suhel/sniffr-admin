@@ -40,7 +40,7 @@
             </v-layout>
         </v-flex>
 
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-if="assetType === 'purchased'">
+        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -63,8 +63,7 @@
                 {{ button_text }}
             </v-btn>
         </v-flex>
-
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-else>
+        <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -97,7 +96,7 @@
 </template>
 
 <script>
-    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus'
+    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus';
     import ClientVideoOfferPurchasedEventBus from '../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
@@ -109,7 +108,6 @@
 
                 loader: null,
                 showButton: false,
-                hide_download_button: false,
 
                 loading: false,
                 acceptLoading: false,

@@ -3,7 +3,8 @@ const state = {
     currentStory: '',
     mailStories: '',
     client_goback_route_name:'',
-    purchased_stories:''
+    purchased_stories:'',
+    offered_stories:''
 }
 
 const mutations = {
@@ -59,9 +60,21 @@ const actions = {
         })
     },
 
+    fetchOfferedStories({commit}, payload){
+        return new Promise((resolve, reject) => {
+            axios.get(payload)
+                .then((response) => {
+                        state.offered_stories = response.data.stories;
+                        resolve();
+                    },
+                    (error) => {
+                        return reject();
+                    });
+        })
+    },
+
     fetchPurchasedStories({commit}, payload){
         return new Promise((resolve, reject) => {
-
             axios.get(payload)
                 .then((response) => {
                         state.purchased_stories = response.data.stories;
@@ -86,6 +99,10 @@ const getters = {
 
     getClientGoBackRoute(state){
         return state.client_goback_route_name;
+    },
+
+    getOfferedStories(state){
+        return state.offered_stories;
     },
 
     getPurchasedStories(state){

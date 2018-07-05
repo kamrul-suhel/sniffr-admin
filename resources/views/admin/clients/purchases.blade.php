@@ -34,15 +34,20 @@
         <table class="table table-striped pages-table">
             <tr class="table-header">
                 <th>Order No.</th>
+                <th>Order Date</th>
                 <th>Story / Video</th>
                 <th>Downloaded</th>
                 <th>Price</th>
             </tr>
-            <tr>
-                @foreach($collectionPurchasesVideos as $collection)
-                    @foreach($collection->collectionVideos as $purchasedVideo)
+
+            @foreach($collectionPurchasesVideos as $collection)
+                @foreach($collection->collectionVideos as $purchasedVideo)
+                <tr>
                     <td>
                         {{ $collection->name }}
+                    </td>
+                    <td>
+                        {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
                     </td>
                     <td>
                         <div class="row">
@@ -61,33 +66,39 @@
                     <td>
                         £ {{ $purchasedVideo->final_price }}
                     </td>
-                    @endforeach
+                </tr>
                 @endforeach
-                @foreach($collectionPurchasesStories as $collection)
-                    @foreach($collection->collectionStories as $purchasedStory)
-                        <td>
-                            {{ $collection->name }}
-                        </td>
-                        <td>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <img src="{{ $purchasedStory->story->thumb }}" width="100%">
-                                </div>
+            @endforeach
 
-                                <div class="col-xs-8">
-                                    <h3 class="title"><a target="_blank" href="{{ url('admin/stories/edit/'.$purchasedStory->story->alpha_id) }}">{{ $purchasedStory->story->title }} <i class="fa fa-external-link"></i></a></h3>
-                                </div>
+            @foreach($collectionPurchasesStories as $collection)
+                @foreach($collection->collectionStories as $purchasedStory)
+                <tr>
+                    <td>
+                        {{ $collection->name }}
+                    </td>
+                    <td>
+                        {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <img src="{{ $purchasedStory->story->thumb }}" width="100%">
                             </div>
-                        </td>
-                        <td>
 
-                        </td>
-                        <td>
-                            £ {{ $purchasedStory->final_price }}
-                        </td>
-                    @endforeach
+                            <div class="col-xs-8">
+                                <h3 class="title"><a target="_blank" href="{{ url('admin/stories/edit/'.$purchasedStory->story->alpha_id) }}">{{ $purchasedStory->story->title }} <i class="fa fa-external-link"></i></a></h3>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        £ {{ $purchasedStory->final_price }}
+                    </td>
+                    </tr>
                 @endforeach
-            </tr>
+            @endforeach
         </table>
     </div>
 @endsection

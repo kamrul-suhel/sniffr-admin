@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Frontend\Client;
 
 use App\ClientMailer;
 use App\Http\Controllers\Controller;
-use App\Order;
 use App\Story;
-use App\Video;
+use App\Collection;
 use Chumper\Zipper\Facades\Zipper;
 use App\Traits\FrontendResponse;
 use App\Services\OrderService;
@@ -86,35 +85,71 @@ class ClientStoriesController extends Controller
 
     }
 
+	public function getOfferedStories(Request $request)
+	{
+		if ($request->ajax()) {
+			$clientId = Auth::user()->client_id;
+
+			$offeredStories = Collection::with('collectionStories.story');
+			// If search passed through
+			if ($request->search) {
+				$search = $request->search;
+				$offeredStories = $offeredStories->whereHas('collectionStories.story', function ($query) use ($search) {
+					$query->where('title', 'LIKE', '%' . $search . '%');
+				});
+			}
+			$offeredStories = $offeredStories->where('client_id', $clientId)
+				->where('status', 'open')
+				->orderBy('created_at', 'DESC')
+				->whereHas('collectionStories', function($query) {
+					$query->where('status', 'offered');
+				})
+				->get()
+				->pluck('collectionStories')->all();
+
+			//Paginate collection object
+			$stories = $this->paginate($offeredStories,self::PAGINATE_PER_PAGE, $request->page);
+
+			$data = [
+				'stories' => $stories,
+			];
+			return $this->successResponse($data);
+		}
+		return view('frontend.master');
+	}
+
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function getPurchasedStories(Request $request)
     {
-
         if ($request->ajax()) {
             $client_id = Auth::user()->client_id;
 
+			$purchasedStories = Collection::with('collectionStories.story');
+			// If search passed through
             if ($request->search) {
-                $ordered_stories = Story::with('orders')
-                    ->where('title', 'LIKE', '%' . $request->search . '%')
-                    ->whereHas('orders', function ($query) use ($client_id) {
-                        $query->where('client_id', $client_id);
-                    })
-                    ->orderBy('id', 'DESC')
-                    ->get();
-            } else {
-                $ordered_stories = Story::with('orders')
-                    ->whereHas('orders', function ($query) use ($client_id) {
-                        $query->where('client_id', $client_id);
-                    })->get();
+				$search = $request->search;
+				$purchasedStories = $purchasedStories->whereHas('collectionStories.story', function ($query) use ($search) {
+					$query->where('title', 'LIKE', '%' . $search . '%');
+				});
             }
-            //Paginate collection object
-            $stories = $this->paginate($ordered_stories, self::PAGINATE_PER_PAGE, $request->page);
-            $data = [
-                'stories' => $stories,
-            ];
+			$purchasedStories = $purchasedStories->where('client_id', $client_id)
+				->where('status', 'closed')
+				->orderBy('created_at', 'DESC')
+				->whereHas('collectionStories', function($query) {
+					$query->where('status', 'purchased');
+				})
+				->get()
+				->pluck('collectionStories')->all();
+
+			//Paginate collection object
+			$stories = $this->paginate($purchasedStories, self::PAGINATE_PER_PAGE, $request->page);
+
+			$data = [
+				'stories' => $stories,
+			];
             return $this->successResponse($data);
         }
         return view('frontend.master');
@@ -153,7 +188,6 @@ class ClientStoriesController extends Controller
 
         // save the order
         $this->orderService->logDownload($storyId, $mailer_id, 'story');
-        $this->orderService->saveDownloadToOrder($storyId, $mailer_id, 'story');
 
         Zipper::make($newZipFilePath)->add($files)->close();
         \Storage::disk('s3')->put('downloads/' . $newZipFileName, $newZipFilePath, 'public');
