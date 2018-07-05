@@ -30,7 +30,7 @@
 
                 <v-layout row wrap>
                     <v-flex xs12 class="px-0 mb-3">
-                        <h3 class="sub-heading">All Videos</h3>
+                        <h3 class="sub-heading">All Stories</h3>
                         <hr>
                     </v-flex>
                 </v-layout>
