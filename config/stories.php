@@ -3,7 +3,7 @@
 return [
     'states' => [
         'unapproved' ,
-        'approved',
+        // 'approved',
         'rejected',
         'unlicensed',
         'licensing',
@@ -28,9 +28,9 @@ return [
                 'dropdown' => 'Unapproved', // dropdown name
                 'value' => 'unapproved', // dropdown value
             ],
-            'approved' => [
+            'unlicensed' => [
                 'dropdown' => 'Approved',
-                'value' => 'approved',
+                'value' => 'unlicensed',
             ],
             'rejected' => [
                 'dropdown' => 'Rejected',
@@ -38,9 +38,9 @@ return [
             ],
 		],
         'licensing' => [
-            'approved' => [
+            'unlicensed' => [
                 'dropdown' => 'Ready for Pickup',
-                'value' => 'approved',
+                'value' => 'unlicensed',
             ],
             'licensing' => [
                 'dropdown' => 'In Progress',
@@ -50,10 +50,10 @@ return [
                 'dropdown' => 'Licensed',
                 'value' => 'licensed',
             ],
-            'unlicensed' => [
-                'dropdown' => 'Unlicensable',
-                'value' => 'unlicensed',
-            ],
+            // 'unlicensed' => [
+            //     'dropdown' => 'Unlicensable',
+            //     'value' => 'unlicensed',
+            // ],
 		],
         'writing' => [
             'licensed' => [
@@ -78,16 +78,16 @@ return [
                 'dropdown' => 'In Progress',
                 'value' => 'subs-inprogress',
             ],
-            'subs-approved' => [
-                'dropdown' => 'Ready for Publishing',
-                'value' => 'subs-approved',
-            ],
             'subs-unassigned' => [
                 'dropdown' => 'In Purgatory',
                 'value' => 'subs-unassigned',
             ],
 		],
         'ready-to-publish' => [
+            'subs-approved' => [
+                'dropdown' => 'Ready for Publishing',
+                'value' => 'subs-approved',
+            ],
             'published' => [
                 'dropdown' => 'Published',
                 'value' => 'published',
@@ -142,13 +142,13 @@ return [
     ],
 
     'removed_from_social' => [
-        '1-day',
-        '2-days',
-        '3-days',
-        '4-days',
-        '5-days',
-        '6-days',
         '7-days',
+        '6-days',
+        '5-days',
+        '4-days',
+        '3-days',
+        '2-days',
+        '1-day',
         'none',
     ],
 
@@ -161,6 +161,7 @@ return [
     ],
 
     'submitted_to' => [
+        'UNILAD',
         'lad-bible',
         'storyful',
         'jukin',

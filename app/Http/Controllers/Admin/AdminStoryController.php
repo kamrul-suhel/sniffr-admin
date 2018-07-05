@@ -354,7 +354,7 @@ class AdminStoryController extends Controller
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'approved'):
+            case ($state == 'unlicensed'):
                 // add new post to WP
                 // $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
                 // $result = $this->apiPost('posts', $parameters, true);

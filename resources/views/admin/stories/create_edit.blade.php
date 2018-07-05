@@ -385,7 +385,7 @@
 
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 
-		@if(isset($story)&&isset($decision)&&$decision!='content-sourced')
+		@if(isset($story)&&isset($decision)&&$decision!='content-sourced'&&$story->url)
 			<a href="{{ $story->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
 		@endif
 
