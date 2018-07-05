@@ -18,7 +18,17 @@
                 <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <!--<v-toolbar-title>Swipe Direction: {{ swipeDirection }}</v-toolbar-title>-->
+
+                <v-spacer></v-spacer>
+
+
+                <v-btn icon @click="onPreviousVideo">
+                    <v-icon>navigate_before</v-icon>
+                </v-btn>
+
+                <v-btn icon @click="onNextVideo">
+                    <v-icon>navigate_next</v-icon>
+                </v-btn>
 
             </v-toolbar>
 

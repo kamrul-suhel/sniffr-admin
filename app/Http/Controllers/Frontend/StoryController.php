@@ -34,7 +34,6 @@ class StoryController extends Controller
                 $stories = Story::orderBy('id', 'DESC')
                     ->paginate($this->stories_per_page);
             }
-
             $data = [
                 'stories' => $stories,
             ];

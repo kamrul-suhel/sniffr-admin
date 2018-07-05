@@ -1,6 +1,5 @@
 const state = {
     videos: null,
-    recommended: null,
     mailer_videos: null,
     paginate: ''
 };
@@ -23,13 +22,14 @@ const mutations = {
         state.videos = data;
     },
 
+
     setMailerVideoData(state, data){
         state.mailer_videos = data;
     },
 
     setPaginationObject(state, paginate){
         state.paginate = paginate;
-    },
+    }
 };
 
 const actions = {

@@ -19,6 +19,7 @@ import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVi
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
 import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
+import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
 
 export const routes = [
@@ -58,7 +59,7 @@ export const routes = [
         name: 'contract_accept',
         component: ContractComponent
     },
-    
+
     {
         path: '/upload',
         name: 'upload_video',
@@ -168,6 +169,12 @@ export const routes = [
                 path: 'offered',
                 name: 'client_offered_assets',
                 component: ClientOfferedAssetsComponent,
+            },
+
+            {
+                path: 'collections',
+                name: 'client_collections',
+                component: ClientCollectionComponent,
             },
 
         ],

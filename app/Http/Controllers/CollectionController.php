@@ -339,4 +339,5 @@ class CollectionController extends Controller
                 'note_type' => 'success',
             ]);
     }
+
 }

@@ -24,7 +24,7 @@
 @import "pages/home";
 
 /* ************************* Login Page style ******************* */
-@import "pages/login";
+@import "includes/login";
 
 /* ************************* Quote Page style ******************* */
 @import "pages/quote";
@@ -33,7 +33,7 @@
 @import "pages/videos";
 
 /* ************************* Video dialog box section style ******************* */
-@import "pages/video-dialog-box";
+@import "includes/video-dialog-box";
 
 /* ************************* Video dialog box section style ******************* */
 @import "pages/stories";
@@ -44,7 +44,7 @@
 
 
 /* ************************* Video upload page style ******************* */
-@import "pages/video-upload";
+@import "form/video-upload";
 
 
 /* ************************* Footer style ******************* */
@@ -52,11 +52,11 @@
 
 
 /* ************************* Pagination style ******************* */
-@import "layout/pagination";
+@import "includes/pagination";
 
 
 /* ************************* Submission form page ******************* */
-@import "pages/submission-form";
+@import "form/submission-form";
 
 /* ************************* More detail form page ******************* */
 @import "form/more-detail";

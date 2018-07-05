@@ -42,9 +42,6 @@
             this.setButtonText();
         },
 
-        mounted() {
-        },
-
         methods: {
             setButtonText(){
                 this.button_text = (this.type == 'story' || this.asset.class == 'exceptional' || this.asset.class == '') ? 'Request Quote' : 'Buy Now';
