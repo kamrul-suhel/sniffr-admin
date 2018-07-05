@@ -23,7 +23,9 @@
         },
 
         watch: {
-
+            asset(){
+                this.setButtonText();
+            }
         },
 
         created() {
@@ -36,7 +38,7 @@
             });
 
             VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-                this.setButtonText();
+                this.setButtonText();   
             });
 
             this.setButtonText();

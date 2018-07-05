@@ -64,7 +64,7 @@
 
         methods: {
             getVideosData(queryObject = null) {
-                let url = '/client/videos/purchased';
+                let url = '/client/videos/offered';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
                 }

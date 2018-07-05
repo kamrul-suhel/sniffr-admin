@@ -15,7 +15,7 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg>
 
-                <div v-if="client_logged_in && mailer_videos">
+                <div v-if="client_logged_in && mailer_videos.length > 0">
                     <h3 class="sub-heading">Your Suggested Videos</h3>
                     <hr>
                     <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
