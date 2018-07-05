@@ -262,10 +262,10 @@ class CollectionController extends Controller
 		$collectionAsset->save();
 
 		if($isJson){
-			return response([
+			return $this->successResponse([
 				'collection' => $collection,
 				'message' => 'final price has been accepted'
-			], 200);
+			]);
 		}
 
 		return Redirect::to('client/purchased')

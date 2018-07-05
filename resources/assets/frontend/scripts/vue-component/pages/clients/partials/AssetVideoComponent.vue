@@ -32,6 +32,10 @@
                     <h2 v-html="video.title"></h2>
                     <div class="cd-time">{{ video.updated_at | convertDate }}</div>
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
+
+                    <div class="final-price">
+                        <h4>Final price: <span>£{{ video.final_price }}</span></h4>
+                    </div>
                 </v-flex>
             </v-layout>
         </v-flex>
@@ -171,6 +175,7 @@
             },
 
             onAccept() {
+                console.log('accept video');
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
                 axios.get(url).then((response) => {
