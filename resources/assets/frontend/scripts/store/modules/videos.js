@@ -24,6 +24,7 @@ const mutations = {
     },
 
     setMailerVideoData(state, data){
+        console.log(data);
         state.mailer_videos = data;
     },
 
@@ -34,7 +35,7 @@ const mutations = {
 
 const actions = {
     getVideoData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
+        return new Promise(function (resolve, reject) {
             let url = '/search/videos';
 
             if (payload.page && payload.page != 0) {
@@ -55,10 +56,10 @@ const actions = {
                     commit('setVideoData', data.videos.data);
                     commit('setMailerVideoData', data.mailer_videos.data);
                     commit('setVideoPaginationObject', data.videos);
-                    resovle();
+                    resolve();
                 })
                 .catch((error) => {
-                    console.log('Not connect');
+                    console.log('Not connect: '+error);
                     reject();
                 });
         });

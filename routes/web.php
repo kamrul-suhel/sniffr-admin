@@ -351,6 +351,7 @@ Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('c
 */
 
 Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
+Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*
 |--------------------------------------------------------------------------

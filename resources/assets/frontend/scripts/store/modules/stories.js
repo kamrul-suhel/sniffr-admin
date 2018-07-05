@@ -20,7 +20,7 @@ const getters = {
 
 const mutations = {
     setStoriesData(state, data){
-        state.stories = data.stories.data;
+        state.stories = data;
     },
 
     setMailerStoriesData(state, data){
@@ -34,7 +34,7 @@ const mutations = {
 
 const actions = {
     getStoryData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
+        return new Promise(function (resolve, reject) {
             let url = 'search/stories';
 
             if (payload.page && payload.page != 0) {
@@ -45,15 +45,16 @@ const actions = {
                 url = url + '&search='+payload.search;
             }
 
-            axios.get(url)
+            axios.post(url)
                 .then((response) => {
-                    commit('setStoriesData', response.data);
+                    let data = response.data;
+                    commit('setStoriesData', data.stories.data);
                     commit('setMailerStoriesData', data.mailer_stories.data);
-                    commit('setStoriesPaginateObject', response.data.stories);
-                    resovle();
+                    commit('setStoriesPaginateObject', data.stories);
+                    resolve();
                 })
                 .catch((error) => {
-                    console.log('Not connect');
+                    console.log('Not connect: '+error);
                     reject();
                 });
         });
