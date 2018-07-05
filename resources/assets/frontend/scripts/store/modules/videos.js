@@ -13,28 +13,29 @@ const getters = {
         return state.mailer_videos;
     },
 
-    getPaginateObject(state){
+    getVideoPaginateObject(state){
         return state.paginate;
     },
 };
+
 const mutations = {
     setVideoData(state, data){
         state.videos = data;
     },
 
-
     setMailerVideoData(state, data){
+        console.log(data);
         state.mailer_videos = data;
     },
 
-    setPaginationObject(state, paginate){
+    setVideoPaginationObject(state, paginate){
         state.paginate = paginate;
     }
 };
 
 const actions = {
     getVideoData({commit}, payload = {}){
-        return new Promise(function (resovle, reject) {
+        return new Promise(function (resolve, reject) {
             let url = '/search/videos';
 
             if (payload.page && payload.page != 0) {
@@ -54,16 +55,17 @@ const actions = {
                     let data = response.data;
                     commit('setVideoData', data.videos.data);
                     commit('setMailerVideoData', data.mailer_videos.data);
-                    commit('setPaginationObject', data.videos);
-                    resovle();
+                    commit('setVideoPaginationObject', data.videos);
+                    resolve();
                 })
                 .catch((error) => {
-                    console.log('Not connect');
+                    console.log('Not connect: '+error);
                     reject();
                 });
         });
     }
 };
+
 export default {
     state,
     getters,

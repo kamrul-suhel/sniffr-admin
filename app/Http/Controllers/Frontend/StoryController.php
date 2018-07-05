@@ -13,34 +13,11 @@ class StoryController extends Controller
 	use FrontendResponse;
 
     /**
-     * @var int
-     */
-    private $stories_per_page = 12;
-
-    /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-        if ($request->ajax() || $request->isJson()) {
-            $stories = '';
-            if($request->search){
-                $stories = Story::where('title', 'LIKE', '%'. $request->search. '%')
-                    ->orderBy('id', 'DESC')
-                    ->paginate($this->stories_per_page);
-
-            }else{
-                $stories = Story::orderBy('id', 'DESC')
-                    ->paginate($this->stories_per_page);
-            }
-            $data = [
-                'stories' => $stories,
-            ];
-
-            return $this->successResponse($data);
-        }
-
         return view('frontend.master');
     }
 

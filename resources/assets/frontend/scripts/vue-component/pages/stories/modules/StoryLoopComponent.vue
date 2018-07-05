@@ -52,8 +52,6 @@
             onStoryDetail(){
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
-
-
         }
     }
 </script>
