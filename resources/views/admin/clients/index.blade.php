@@ -26,8 +26,8 @@
 				<td>{{ TextHelper::shorten($client->name, 250) }}</td>
 				<td>
                     <a href="{{ route('clients.purchases', ['id' => $client->id]) }}" class="btn btn-xs btn-warning">
-                        <span class="fa fa-bar-chart"></span>
-                        Orders
+                        <span class="fa fa-money"></span>
+                        Purchases
                     </a>
                     <a href="{{ route('clients.edit', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
                         <span class="fa fa-edit"></span>

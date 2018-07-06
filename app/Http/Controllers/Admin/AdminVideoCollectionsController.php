@@ -56,7 +56,7 @@ class AdminVideoCollectionsController extends Controller
             abort(404);
         }
         return Redirect::to('admin/videos/collections')->with([
-            'note' => 'Successfully Added Your New Video Collectio',
+            'note' => 'Successfully Added Your New Video Collection',
             'note_type' => 'success'
         ]);
     }

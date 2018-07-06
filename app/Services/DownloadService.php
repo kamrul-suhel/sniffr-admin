@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Download;
-use App\Order;
 
-class OrderService
+class DownloadService
 {
 	/**
 	 * @param $story_id

@@ -36,7 +36,7 @@
                 <th>Order No.</th>
                 <th>Order Date</th>
                 <th>Story / Video</th>
-                <th>Downloaded</th>
+                <th>Downloads</th>
                 <th>Price</th>
             </tr>
 
@@ -44,7 +44,7 @@
                 @foreach($collection->collectionVideos as $purchasedVideo)
                 <tr>
                     <td>
-                        {{ $collection->name }}
+                        {{ $collection->name }} {{ $purchasedVideo->id }}
                     </td>
                     <td>
                         {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
@@ -61,7 +61,7 @@
                         </div>
                     </td>
                     <td>
-
+                        {{ $downloads->where('video_id', $purchasedVideo->video->id)->count() }}
                     </td>
                     <td>
                         £ {{ $purchasedVideo->final_price }}
@@ -74,7 +74,7 @@
                 @foreach($collection->collectionStories as $purchasedStory)
                 <tr>
                     <td>
-                        {{ $collection->name }}
+                        {{ $collection->name }}  {{ $purchasedStory->story->id }}
                     </td>
                     <td>
                         {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
@@ -91,7 +91,7 @@
                         </div>
                     </td>
                     <td>
-
+                        {{ $downloads->where('story_id', $purchasedStory->story->id)->count() }}
                     </td>
                     <td>
                         £ {{ $purchasedStory->final_price }}

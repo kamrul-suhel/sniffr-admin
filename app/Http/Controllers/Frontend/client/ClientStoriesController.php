@@ -8,7 +8,7 @@ use App\Story;
 use App\Collection;
 use Chumper\Zipper\Facades\Zipper;
 use App\Traits\FrontendResponse;
-use App\Services\OrderService;
+use App\Services\DownloadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App;
@@ -16,16 +16,16 @@ use App;
 class ClientStoriesController extends Controller
 {
     /**
-     * @var OrderService
+     * @var DownloadService
      */
-    private $orderService;
+    private $downloadService;
 
     use FrontendResponse;
     const PAGINATE_PER_PAGE = 12;
 
-    public function __construct(Request $request, OrderService $orderService)
+    public function __construct(Request $request, DownloadService $downloadService)
     {
-        $this->orderService = $orderService;
+        $this->downloadService = $downloadService;
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
@@ -187,7 +187,7 @@ class ClientStoriesController extends Controller
 		$mailer_id = $story->mailers()->first() ? $story->mailers()->first()->id : 0; //get mailer_id for better logs (which downloads relate to which downloaded) - the story could be sent out in more that one email, but we just grab the first one
 
         // save the order
-        $this->orderService->logDownload($storyId, $mailer_id, 'story');
+        $this->downloadService->logDownload($storyId, $mailer_id, 'story');
 
         Zipper::make($newZipFilePath)->add($files)->close();
         \Storage::disk('s3')->put('downloads/' . $newZipFileName, $newZipFilePath, 'public');

@@ -9,13 +9,12 @@ use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
-use App\Order;
 use App\User;
+use App\Download;
 use Auth;
 use Redirect;
 use App\Video;
 use App\Story;
-use App\Download;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -217,9 +216,12 @@ class AdminClientController extends Controller
 			->with('user')
 			->paginate(20, ['*'], 'purchased_stories');
 
+		$downloads = Download::where('client_id', $client_id)->get();
+
 		return view('admin.clients.purchases', [
 			'collectionPurchasesVideos' => $collectionPurchasesVideos,
 			'collectionPurchasesStories' => $collectionPurchasesStories,
+			'downloads' => $downloads,
 			'client' => $client
 		]);
 	}
@@ -244,6 +246,8 @@ class AdminClientController extends Controller
 			->with('user')
 			->paginate(20, ['*'], 'purchased_stories');
 
+		$downloads = Download::where('client_id', $client_id)->get();
+
 		$csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
 
 		$csv->insertOne(['Order No.', 'Order Date', 'Story / Video', 'Downloaded', 'Price']);
@@ -255,7 +259,7 @@ class AdminClientController extends Controller
 				$insert['order_no'] = $collection->name;
 				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
 				$insert['title'] = $purchasedVideo->video->title;
-				$insert['downloaded'] = 0;
+				$insert['downloaded'] = $downloads->where('video_id', $purchasedVideo->video->id)->count();
 				$insert['price'] = '£' . $purchasedVideo->final_price;
 
 				$csv->insertOne($insert);
@@ -268,7 +272,7 @@ class AdminClientController extends Controller
 				$insert['order_no'] = $collection->name;
 				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
 				$insert['title'] = $purchasedStory->story->title;
-				$insert['downloaded'] = 0;
+				$insert['downloaded'] = $downloads->where('story_id', $purchasedStory->story->id)->count();
 				$insert['price'] = '£' . $purchasedStory->final_price;
 
 				$csv->insertOne($insert);

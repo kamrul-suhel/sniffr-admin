@@ -8,7 +8,7 @@ use App\Traits\FrontendResponse;
 use Auth;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Http\Request;
-use App\Services\OrderService;
+use App\Services\DownloadService;
 use App\Video;
 use App\Collection;
 use App\Http\Controllers\Controller;
@@ -29,9 +29,9 @@ class ClientVideosController extends Controller
     /**
      * ClientVideosController constructor.
      */
-    public function __construct(Request $request, OrderService $orderService)
+    public function __construct(Request $request, DownloadService $downloadService)
     {
-    	$this->orderService = $orderService;
+    	$this->downloadService = $downloadService;
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
@@ -156,7 +156,7 @@ class ClientVideosController extends Controller
 		$files[] = $this->getVideoPdf($videoId, false);
 
 		// save the order
-		$this->orderService->logDownload($videoId, $mailer_id, 'video');
+		$this->downloadService->logDownload($videoId, $mailer_id, 'video');
 
 		$newZipFileName = $video->alpha_id. time() . '.zip';
 		$newZipFilePath = '../storage/'.$newZipFileName;
