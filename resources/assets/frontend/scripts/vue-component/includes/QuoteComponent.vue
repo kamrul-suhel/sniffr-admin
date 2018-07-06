@@ -11,7 +11,6 @@
                     <v-layout row wrap>
                         <v-flex xs12 text-xs-center>
                             <h2 class="buy-title">Thanks</h2>
-
                             <p>Thanks for your request, someone from our licensing team will be in touch shortly</p>
                         </v-flex>
 
@@ -35,11 +34,11 @@
                         <v-layout row wrap id="buy-section">
 
                             <v-flex xs12>
-                                <h1 class="quote-title">Quote</h1>
-                                <p class="text-xs-center" style="margin-top:-15px;">Please provide us with your requirements</p>
+                                <h2 class="text-center text-uppercase">Quote</h2>
+                                <p class="text-xs-center">Please provide us with your requirements</p>
                             </v-flex>
 
-                            <v-flex xs12 v-if="!client_login">
+                            <v-flex xs12 v-if="!client_logged_in">
                                 <v-flex xs12>
                                     <v-text-field
                                             label="Name"
@@ -125,10 +124,11 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 v-if="!can_buy">
+                            <v-flex xs12>
                                 <v-textarea
                                         v-model="notes"
                                         name="notes"
+                                        color="dark"
                                         label="Additional information"
                                 ></v-textarea>
                             </v-flex>
@@ -176,7 +176,7 @@
         data() {
             return {
                 alpha_name: '',
-                client_login: false,
+                client_logged_in: false,
                 disabled: true,
                 settings: {},
                 price: false,
@@ -237,16 +237,22 @@
         },
 
         watch: {
-            license_type(){
-                this.getVideoPrice();
+            license_type(val){
+                if(val){
+                    this.getVideoPrice();
+                }
             },
 
-            license_platform(){
-                this.getVideoPrice();
+            license_platform(val){
+                if(val) {
+                    this.getVideoPrice();
+                }
             },
 
-            license_length(){
-                this.getVideoPrice();
+            license_length(val){
+                if(val) {
+                    this.getVideoPrice();
+                }
             },
 
             open_quote_dialog(val){
@@ -259,15 +265,17 @@
         created() {
             QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) =>{
 
-                this.client_login = this.$store.getters.isClientLogin;
+                this.client_logged_in = this.$store.getters.isClientLogin;
                 this.$refs.quote_form.reset();
                 this.open_quote_dialog = true;
                 this.type = type;
                 this.asset = asset;
                 this.collection = collection;
 
-                if (this.type === 'video') {
+                this.can_buy = (this.type == 'story' || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class) ? false : true;
+                this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
 
+                if (this.type === 'video') {
                     this.settings = this.$store.getters.getSettingsObject;
 
                     Object.values(this.settings.pricing.type).forEach((type) =>{
@@ -284,18 +292,13 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                    this.can_buy = (this.asset.class === 'exceptional' || this.asset.class === '') ? false : true;
-                    this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
-
                 }else if (this.type == 'story') {
-
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
-                    this.button_text = 'Request Quote';
                     this.disabled = false;
                 }
 
-                if(this.$store.getters.getUser.id === '') {
+                if(!this.client_logged_in) {
                     this.button_text = 'Register & Request Quote';
                 }
             });
@@ -327,19 +330,21 @@
             getVideoPrice(){
                 this.disabledCheck();
 
-                let form_data = new FormData();
-                form_data.append(this.alpha_name, this.asset.alpha_id);
-                form_data.append('license_type', this.license_type);
-                form_data.append('license_platform', this.license_platform);
-                form_data.append('license_length', this.license_length);
+                if(this.can_buy){
+                    let form_data = new FormData();
+                    form_data.append(this.alpha_name, this.asset.alpha_id);
+                    form_data.append('license_type', this.license_type);
+                    form_data.append('license_platform', this.license_platform);
+                    form_data.append('license_length', this.license_length);
 
-                axios.post('/client/collections/get_video_price/'+this.collection_asset_id, form_data)
-                    .then(response => {
-                        this.price = response.data.price ? response.data.price : false;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    axios.post('/client/collections/get_video_price/'+this.collection_asset_id, form_data)
+                        .then(response => {
+                            this.price = response.data.price ? response.data.price : false;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
             },
 
             buttonClicked(){

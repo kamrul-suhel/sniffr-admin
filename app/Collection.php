@@ -49,7 +49,6 @@ class Collection extends Model
         return CollectionVideo::create($data);
     }
 
-	//Functions
 	public function addStoryToCollection(Story $story, User $user)
 	{
 		$data = [
@@ -63,4 +62,5 @@ class Collection extends Model
 
 		return CollectionStory::create($data);
 	}
+
 }

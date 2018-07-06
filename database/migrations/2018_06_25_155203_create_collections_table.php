@@ -16,7 +16,7 @@ class CreateCollectionsTable extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('client_id')->unsigned()->nullable();
             $table->float('discount', 100, 2)->nullable();
             $table->enum('status', ['open', 'closed']);

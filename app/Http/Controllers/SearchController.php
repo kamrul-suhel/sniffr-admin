@@ -175,7 +175,7 @@ class SearchController extends Controller
 
 			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)->pluck('story_id');
 
-			$mailerStories = Video::whereIn('id', $mailerStoryIds);
+			$mailerStories = Story::whereIn('id', $mailerStoryIds);
 			//$mailerStories = $mailerStories->whereNotIn('id', $unsearchableStories);
 			$mailerStories = $mailerStories->paginate();
 		}

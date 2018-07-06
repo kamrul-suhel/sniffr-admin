@@ -64,13 +64,14 @@
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
-                <v-flex xs4 class="text-xs-left">
+                <v-flex class="text-xs-left">
                     <v-btn @click="onAddStories()">
                         <v-icon>add</v-icon>
                         Add Stories
                     </v-btn>
                 </v-flex>
-                <v-flex xs8 class="text-xs-right">
+
+                <v-flex class="text-xs-right">
                     <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
                         Refresh Stories

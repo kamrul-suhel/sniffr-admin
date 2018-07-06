@@ -33,61 +33,82 @@
 
         <table class="table table-striped pages-table">
             <tr class="table-header">
+                <th>Thumb</th>
+                <th>Aplha ID</th>
                 <th>Order No.</th>
+                <th>Order Date</th>
                 <th>Story / Video</th>
-                <th>Downloaded</th>
+                <th>Downloads</th>
                 <th>Price</th>
             </tr>
-            <tr>
-                @foreach($collectionPurchasesVideos as $collection)
-                    @foreach($collection->collectionVideos as $purchasedVideo)
-                    <td>
-                        {{ $collection->name }}
-                    </td>
-                    <td>
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <img src="{{ $purchasedVideo->video->thumb }}" width="100%">
-                            </div>
 
-                            <div class="col-xs-8">
-                                <h3 class="title"><a target="_blank" href="{{ url('admin/videos/edit/'.$purchasedVideo->video->alpha_id) }}">{{ $purchasedVideo->video->title }} <i class="fa fa-external-link"></i></a></h3>
-                            </div>
-                        </div>
-                    </td>
+            @foreach($collectionPurchasesVideos as $collection)
+                @foreach($collection->collectionVideos as $purchasedVideo)
+                <tr>
                     <td>
+                        <img src="{{ $purchasedVideo->video->thumb }}" width="100px">
+                    </td>
 
-                    </td>
                     <td>
-                        £ {{ $purchasedVideo->final_price }}
+                        {{ $purchasedVideo->video->alpha_id }}
                     </td>
-                    @endforeach
+
+                    <td>
+                        {{ $collection->name }} {{ $purchasedVideo->id }}
+                    </td>
+
+                    <td>
+                        {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
+                    </td>
+
+                    <td>
+                        <a target="_blank" href="{{ url('admin/videos/edit/'.$purchasedVideo->video->alpha_id) }}">{{ $purchasedVideo->video->title }} <i class="fa fa-external-link"></i></a>
+                    </td>
+
+                    <td>
+                        {{ $downloads->where('video_id', $purchasedVideo->video->id)->count() }}
+                    </td>
+
+                    <td>
+                        £{{ $purchasedVideo->final_price }}
+                    </td>
+                </tr>
                 @endforeach
-                @foreach($collectionPurchasesStories as $collection)
-                    @foreach($collection->collectionStories as $purchasedStory)
-                        <td>
-                            {{ $collection->name }}
-                        </td>
-                        <td>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <img src="{{ $purchasedStory->story->thumb }}" width="100%">
-                                </div>
+            @endforeach
 
-                                <div class="col-xs-8">
-                                    <h3 class="title"><a target="_blank" href="{{ url('admin/stories/edit/'.$purchasedStory->story->alpha_id) }}">{{ $purchasedStory->story->title }} <i class="fa fa-external-link"></i></a></h3>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
+            @foreach($collectionPurchasesStories as $collection)
+                @foreach($collection->collectionStories as $purchasedStory)
+                <tr>
+                    <td>
+                        <img src="{{ $purchasedStory->story->thumb }}" width="100px">
+                    </td>
 
-                        </td>
-                        <td>
-                            £ {{ $purchasedStory->final_price }}
-                        </td>
-                    @endforeach
+                    <td>
+                        {{ $purchasedStory->story->alpha_id }}
+                    </td>
+
+                    <td>
+                        {{ $collection->name }}  {{ $purchasedStory->story->id }}
+                    </td>
+
+                    <td>
+                        {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
+                    </td>
+
+                    <td>
+                        <a target="_blank" href="{{ url('admin/stories/edit/'.$purchasedStory->story->alpha_id) }}">{{ $purchasedStory->story->title }} <i class="fa fa-external-link"></i></a>
+                    </td>
+
+                    <td>
+                        {{ $downloads->where('story_id', $purchasedStory->story->id)->count() }}
+                    </td>
+
+                    <td>
+                        £{{ $purchasedStory->final_price }}
+                    </td>
+                </tr>
                 @endforeach
-            </tr>
+            @endforeach
         </table>
     </div>
 @endsection

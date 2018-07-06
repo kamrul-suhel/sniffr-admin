@@ -3,7 +3,8 @@ const state = {
     clientCurrentVideo: '',
     mailClientVideos: '',
     clientMailerId:'',
-    purchased_videos:''
+    purchased_videos:'',
+    offered_videos:''
 }
 
 const mutations = {
@@ -56,6 +57,20 @@ const actions = {
         })
     },
 
+    fetchOfferedVideos({commit}, payload){
+        return new Promise((resolve, reject) => {
+
+            axios.get(payload)
+                .then((response) => {
+                        state.offered_videos = response.data.videos;
+                        resolve();
+                    },
+                    (error) => {s
+                        return reject();
+                    });
+        })
+    },
+
     fetchPurchasedVideos({commit}, payload){
         return new Promise((resolve, reject) => {
 
@@ -69,9 +84,6 @@ const actions = {
                     });
         })
     }
-
-
-
 }
 
 const getters = {
@@ -81,6 +93,10 @@ const getters = {
 
     getClientCurrentVideo(state){
         return state.currentStory;
+    },
+
+    getOfferedVideos(state){
+        return state.offered_videos;
     },
 
     getPurchasedVideos(state){

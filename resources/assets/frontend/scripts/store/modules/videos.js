@@ -24,7 +24,6 @@ const mutations = {
     },
 
     setMailerVideoData(state, data){
-        console.log(data);
         state.mailer_videos = data;
     },
 

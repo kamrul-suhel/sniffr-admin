@@ -9,13 +9,12 @@ use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
-use App\Order;
 use App\User;
+use App\Download;
 use Auth;
 use Redirect;
 use App\Video;
 use App\Story;
-use App\Download;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -217,54 +216,68 @@ class AdminClientController extends Controller
 			->with('user')
 			->paginate(20, ['*'], 'purchased_stories');
 
+		$downloads = Download::where('client_id', $client_id)->get();
+
 		return view('admin.clients.purchases', [
 			'collectionPurchasesVideos' => $collectionPurchasesVideos,
 			'collectionPurchasesStories' => $collectionPurchasesStories,
+			'downloads' => $downloads,
 			'client' => $client
 		]);
 	}
 
 	public function purchases_csv(Request $request, $client_id)
 	{
-		$client = Client::find($client_id);
-		$orders = Order::where('client_id', '=', $client_id)
-			->get();
-		$downloads = Download::where('client_id', '=', $client_id)
-			->get();
-		$stories = Story::all();
-		$videos = Video::all();
+		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionVideos')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_videos');
+
+		$collectionPurchasesStories = Collection::whereHas('collectionStories', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionStories')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_stories');
+
+		$downloads = Download::where('client_id', $client_id)->get();
 
 		$csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
 
-		$csv->insertOne(['Order No.', 'Order Date', 'Story / Video', 'Author', 'Url', 'Downloaded']);
+		$csv->insertOne(['Order No.', 'Order Date', 'Story / Video', 'Downloaded', 'Price']);
 
 		$count = 1;
 		$insert = [];
-		foreach ($orders as $order) {
-			$insert['order_no'] = str_pad($count, 4, '0', STR_PAD_LEFT);
-			$insert['order_date'] = date('jS M Y H:i:s',strtotime($order->created_at));
-			if($order->story_id!=0) {
-				$insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
-				$insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
-				if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
-					$insert['url'] = 'Not yet published';
-				} else {
-					$insert['url'] = $stories->where('id', $order->story_id)->pluck('url')->first();
-				}
-				$insert['downloaded'] = $downloads->where('story_id', $order->story_id)->where('client_id', $order->client_id)->count();
-			} else {
-				$insert['story'] = $videos->where('id', $order->video_id)->pluck('title')->first();
-				$insert['author'] = $videos->where('id', $order->video_id)->pluck('contact.full_name')->first();
-				if($videos->where('id', $order->video_id)->pluck('state')->first()!='licensed') {
-					$insert['url'] = 'Not yet licensed';
-				} else {
-					$insert['url'] = $videos->where('id', $order->video_id)->pluck('file_watermark')->first();
-				}
-				$insert['downloaded'] = $downloads->where('video_id', $order->video_id)->where('client_id', $order->client_id)->count();
-			}
+		foreach($collectionPurchasesVideos as $collection){
+			foreach($collection->collectionVideos as $purchasedVideo) {
+				$insert['order_no'] = $collection->name;
+				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
+				$insert['title'] = $purchasedVideo->video->title;
+				$insert['downloaded'] = $downloads->where('video_id', $purchasedVideo->video->id)->count();
+				$insert['price'] = '£' . $purchasedVideo->final_price;
 
-			$csv->insertOne($insert);
-			$count++;
+				$csv->insertOne($insert);
+				$count++;
+			}
+		}
+
+		foreach($collectionPurchasesStories as $collection){
+			foreach($collection->collectionStories as $purchasedStory) {
+				$insert['order_no'] = $collection->name;
+				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
+				$insert['title'] = $purchasedStory->story->title;
+				$insert['downloaded'] = $downloads->where('story_id', $purchasedStory->story->id)->count();
+				$insert['price'] = '£' . $purchasedStory->final_price;
+
+				$csv->insertOne($insert);
+				$count++;
+			}
 		}
 
 		$csv->output('orders.csv');

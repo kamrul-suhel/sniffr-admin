@@ -9,6 +9,7 @@ class Client {
 
     public function handle($request, Closure $next)
     {
+
         if ( Auth::check() && Auth::user()->canAccessClient() )
         {
             return $next($request);

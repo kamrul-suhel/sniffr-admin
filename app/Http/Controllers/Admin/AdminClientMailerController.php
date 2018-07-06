@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 use App\Jobs\QueueClientMailer;
-use App\Notifications\ClientMailerAlert;
 
 use App\Jobs\QueueStory;
 

@@ -29,12 +29,16 @@ class CollectionController extends Controller
      * CollectionController constructor.
      * @param Collection $collection
      * @param CollectionVideo $collectionVideo
+     * @param CollectionStory $collectionStory
+     * @param CollectionQuote $collectionQuote
      * @param Video $video
      * @param Story $story
      * @param Client $client
      * @param User $user
      */
-    public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory, CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, User $user)
+    public function __construct(
+        Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory,
+        CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, User $user)
     {
         $this->collection = $collection;
         $this->collectionVideo = $collectionVideo;
@@ -258,14 +262,17 @@ class CollectionController extends Controller
 		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
 		$collection = $collectionAsset->collection;
 
+		$collection->status = "closed";
+		$collection->save();
+
 		$collectionAsset->status = "purchased";
 		$collectionAsset->save();
 
 		if($isJson){
-			return response([
+			return $this->successResponse([
 				'collection' => $collection,
 				'message' => 'final price has been accepted'
-			], 200);
+			]);
 		}
 
 		return Redirect::to('client/purchased')
@@ -275,6 +282,13 @@ class CollectionController extends Controller
 			]);
 	}
 
+    /**
+     * Reject an asset quote and close the collection_asset
+     * @param Request $request
+     * @param $collection_asset_id
+     * @param $type
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function rejectAssetQuote(Request $request, $collection_asset_id, $type){
         // Accept asset price
         $isJson = $request->ajax();

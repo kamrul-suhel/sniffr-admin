@@ -11,7 +11,7 @@
         <search-component @searchOption="searchOption($event)"></search-component>
 
         <section class="stories-section section-space">
-            <v-container grid-list-lg class="stories">
+            <v-container grid-list-lg class="stories pt-0">
                 <div v-if="client_logged_in && mailer_stories.length > 0">
                     <h3 class="sub-heading">Your Suggested Stories</h3>
                     <hr>
@@ -29,7 +29,7 @@
                 </div>
 
                 <v-layout row wrap>
-                    <v-flex xs12 class="px-0 mb-3">
+                    <v-flex xs12 class=" mb-3">
                         <h3 class="sub-heading">All Stories</h3>
                         <hr>
                     </v-flex>
