@@ -170,7 +170,7 @@
 									<span class="input-group-addon">
 						                Date Sourced
 						            </span>
-				                    <input type="text" class="form-control" name="sourced_at" id="sourced_at" value="@if(!empty($story->sourced_at)){{ $story->sourced_at }}@endif" />
+				                    <input type="text" class="form-control" name="sourced_at" id="sourced_at" />
 				                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
 						        </span>
 								<br />
@@ -213,13 +213,13 @@
 									<select name="category" id="category" class="form-control drop-5050">
 										<option value="">Select vertical</option>
 										@foreach($video_categories as $category)
-										<option value="{{ $category->id }}" {{ (isset($story) && $story->vertical==$category) ? 'selected' : '' }}>{{ $category->name }}</option>
+										<option value="{{ $category->id }}" {{ (isset($story) && $story->story_category_id==$category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
 										@endforeach
 									</select>
 									<select name="collection" id="collection" class="form-control drop-5050">
 										<option value="">Select collection</option>
 										@foreach($video_collections as $collection)
-										<option value="{{ $collection->id }}" {{ (isset($story) && $story->collection==$collection) ? 'selected' : '' }}>{{ $collection->name }}</option>
+										<option value="{{ $collection->id }}" {{ (isset($story) && $story->story_collection_id==$collection->id) ? 'selected' : '' }}>{{ $collection->name }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -506,7 +506,7 @@
 
 		$('#sourced_at').datetimepicker({
 			// format: 'YYYY-MM-DD HH:MM:SS',
-			defaultDate: $.now()
+			defaultDate: @if(!empty($story->sourced_at)) '{{ $story->sourced_at }}' @else $.now() @endif
 		});
 
 		// var mapPlacepicker = $(".placepicker").placepicker({placeChanged: function(place) {
