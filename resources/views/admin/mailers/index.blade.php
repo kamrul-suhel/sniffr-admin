@@ -39,7 +39,7 @@
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
 				<td>
 					@foreach($mailer->users()->where('sent_at', '!=', NULL)->get() as $user)
-						{!! $opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() ? '<span class="fa fa-envelope-open-o"></span>&nbsp;'.$opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() : '<span class="fa fa-envelope-o"></span>'  !!}&nbsp;:&nbsp;{{ $user->email }}<br>
+						{!! $opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() ? '<span class="fa fa-envelope-open-o"></span>&nbsp;'.$opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() : '<span class="fa fa-envelope-o"></span>'  !!}&nbsp;:&nbsp;{{ $user->email }} ({{$user->client->name}})<br>
 					@endforeach
 				</td>
 				<td class="single-line">
