@@ -11,7 +11,6 @@
                     <v-layout row wrap>
                         <v-flex xs12 text-xs-center>
                             <h2 class="buy-title">Thanks</h2>
-
                             <p>Thanks for your request, someone from our licensing team will be in touch shortly</p>
                         </v-flex>
 
@@ -35,8 +34,8 @@
                         <v-layout row wrap id="buy-section">
 
                             <v-flex xs12>
-                                <h1 class="quote-title">Quote</h1>
-                                <p class="text-xs-center" style="margin-top:-15px;">Please provide us with your requirements</p>
+                                <h2 class="text-center text-uppercase">Quote</h2>
+                                <p class="text-xs-center">Please provide us with your requirements</p>
                             </v-flex>
 
                             <v-flex xs12 v-if="!client_logged_in">
@@ -129,6 +128,7 @@
                                 <v-textarea
                                         v-model="notes"
                                         name="notes"
+                                        color="dark"
                                         label="Additional information"
                                 ></v-textarea>
                             </v-flex>
