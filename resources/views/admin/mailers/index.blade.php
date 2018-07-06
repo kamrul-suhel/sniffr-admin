@@ -39,17 +39,21 @@
 				<td>@if($mailer['sent_at']){{ date('jS M Y h:i:s',strtotime($mailer['sent_at'])) }}@else Not yet sent. @endif</td>
 				<td>
 					@foreach($mailer->users()->where('sent_at', '!=', NULL)->get() as $user)
-						{!! $opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() ? '<span class="fa fa-envelope-open-o"></span>&nbsp;'.$opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() : '<span class="fa fa-envelope-o"></span>'  !!}&nbsp;:&nbsp;{{ $user->email }}<br>
+						{!! $opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() ? '<span class="fa fa-envelope-open-o"></span>&nbsp;'.$opens->where('client_mailer_id', $mailer->id)->where('user_id', $user->id)->count() : '<span class="fa fa-envelope-o"></span>'  !!}&nbsp;:&nbsp;{{ $user->email }} ({{$user->client->name}})<br>
 					@endforeach
 				</td>
 				<td class="single-line">
 					@foreach($mailer->stories()->get() as $story)
-						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count().'&nbsp;:&nbsp;' : '' !!}<span title="{{ $story->title }}">{{ $story->title }}</span><br>
+						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count().'&nbsp;:&nbsp;' : '' !!}
+						<span title="{{ $story->title }}"><a target="_blank" href="{{ url('stories/'.$stories->alpha_id) }}"> {{ $story->title }} <span class="fa fa-external-link"></span></a>
+						</span><br>
 					@endforeach
 				</td>
 				<td class="single-line">
 					@foreach($mailer->videos()->get() as $video)
-						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $video->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $video->id)->count().'&nbsp;:&nbsp;' : '' !!}<span title="{{ $video->title }}">{{ $video->title }}</span><br>
+						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $video->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('video_id', $video->id)->count().'&nbsp;:&nbsp;' : '' !!}
+						<span title="{{ $video->title }}"><a target="_blank" href="{{ url('videos/'.$video->alpha_id) }}"> {{ $video->title }} <span class="fa fa-external-link"></span></a>
+						</span><br>
 					@endforeach
 				</td>
 				<td>
