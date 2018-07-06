@@ -34,6 +34,8 @@ require('nestable2');
 require('bootstrap-select');
 require('select2');
 require('chart.js');
+require('eonasdan-bootstrap-datetimepicker');
+
 
 window.Bloodhound = require('corejs-typeahead');
 window.toastr = require('toastr');

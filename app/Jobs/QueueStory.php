@@ -53,7 +53,7 @@ class QueueStory implements ShouldQueue
 			$story->alpha_id = VideoHelper::quickRandom();
 			$story->wp_id = $this->post->id;
 			$story->active = 1;
-            $story->state = 'licensed';
+            $story->state = 'unlicensed';
 		} else {
 			$story = Story::where([['wp_id', $this->post->id]])->first();
 		}

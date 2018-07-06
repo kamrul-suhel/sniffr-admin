@@ -55,6 +55,13 @@ select.btn-mini + .caret {
     margin-left: -20px;
     margin-top: 9px;
 }
+.btn-grey {
+    background: #f5f5f7;
+}
+.btn-clear {
+    text-align: right;
+    padding-right: 10px !important;
+}
 .btn-mini-info {
     padding:2px 6px;
     background-color: #fff;
@@ -96,8 +103,35 @@ select.btn-mini + .caret {
 .padded-bottom {
     margin-bottom:10px;
 }
+.story-title {
+	font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+	font-size: 24px;
+}
+.story-hr {
+	background: #999;
+}
+.story-dividers {
+    width: 100%;
+    margin: 15px 0;
+    border-top: #c9c9c9 solid 1px;
+    border-bottom: #c9c9c9 solid 1px;
+}
+.drop-5050 {
+	width:50% !important;
+}
+.drop-25 {
+	width:25% !important;
+}
+.drop-75 {
+	width:75% !important;
+}
 #story_image_source {
     width: 100%;
     height: auto;
     margin-bottom: 15px;
+}
+.js-contact-add {
+    display:none;
 }
