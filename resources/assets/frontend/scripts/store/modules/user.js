@@ -11,7 +11,7 @@ const state = {
     client_id: sniffr_app ? sniffr_app.user.client_id : '',
     user_role: '',
     route_url: '',
-    offers: '',
+    offers: sniffr_app.user_offers,
 };
 
 const mutations = {
@@ -43,7 +43,12 @@ const mutations = {
 
     setRouteUrl(state, currUrl){
         state.route_url = currUrl;
-    }
+    },
+
+    setUserOffers(state, data){
+        let user = data.user;
+        state.offers = data;
+    },
 };
 
 const actions = {

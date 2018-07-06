@@ -19,9 +19,9 @@
                                 </router-link>
                             </li>
 
-                            <li v-if="client_login">
+                            <li v-if="client_login && this.$store.getters.getUser.offers >= 1">
                                 <router-link :to="{name: 'client_offered_assets'}">
-                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ user.offers }})
+                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ this.$store.getters.getUser.offers }})
                                 </router-link>
                             </li>
 
