@@ -4,32 +4,12 @@ namespace App\Jobs;
 
 use App\Video;
 use App\User;
-use App\Jobs\QueueVideoCheck;
-
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\Mail\DetailsReminder;
-use App\Mail\DetailsThanks;
-use App\Mail\SubmissionAccepted;
-use App\Mail\SubmissionLicensed;
-use App\Mail\SubmissionRejected;
-use App\Mail\SubmissionThanks;
-use App\Mail\SubmissionThanksNonEx;
-
-use Dumpk\Elastcoder\ElastcoderAWS;
-
 use App\Notifications\SubmissionAlert;
 
 class QueueVideo implements ShouldQueue
@@ -133,10 +113,8 @@ class QueueVideo implements ShouldQueue
             }
 
         } else {
-
-            $video = new Video();
-            $video->notify(new SubmissionAlert('a job in the queue has failed to create a watermark because there is no video file (Id: '.$this->video_id.')'));
-
+			$user = new User();
+			$user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to create a watermark because there is no video file (Id: '.$this->video_id.')'));
         }
     }
 
@@ -149,7 +127,7 @@ class QueueVideo implements ShouldQueue
     public function failed($exception)
     {
         // Send user notification of failure, etc...
-        $user = new User();
-        $user->notify(new SubmissionAlert('a job in the queue has failed to create a watermark (Id: '.$this->video_id.')'));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to create a watermark (Id: '.$this->video_id.')'));
     }
 }

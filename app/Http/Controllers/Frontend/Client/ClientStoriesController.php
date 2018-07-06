@@ -90,7 +90,7 @@ class ClientStoriesController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function getDownloadedStories(Request $request)
+    public function getPurchasedStories(Request $request)
     {
 
         if ($request->ajax()) {
@@ -149,7 +149,7 @@ class ClientStoriesController extends Controller
             $files[] = $tempImage;
         }
 
-        $mailer_id = $story->mailers()->first()->id; //get mailer_id for better logs (which downloads relate to which downloaded) - the story could be sent out in more that one email, but we just grab the first one
+		$mailer_id = $story->mailers()->first() ? $story->mailers()->first()->id : 0; //get mailer_id for better logs (which downloads relate to which downloaded) - the story could be sent out in more that one email, but we just grab the first one
 
         // save the order
         $this->orderService->logDownload($storyId, $mailer_id, 'story');

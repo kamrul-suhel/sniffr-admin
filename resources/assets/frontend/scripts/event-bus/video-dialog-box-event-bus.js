@@ -9,13 +9,17 @@ const VideoDialogBoxEventBus = new Vue({
     methods: {
         openVideoDialog(alpha_id){
             this.openVideoDialogBox = true;
-            console.log(alpha_id);
             this.$emit('videoDialogStateChange', alpha_id);
         },
 
         closeVideoDialog(video){
             this.openVideoDialogBox = false;
             this.$emit('videoDialogBoxClose', video);
+        },
+
+        closeVideoDialogFromBuy(){
+            this.openVideoDialogBox = false;
+            this.$emit('videoDialogBoxCloseFromBuy');
         },
 
         closeDialogByTagSearch(tag){

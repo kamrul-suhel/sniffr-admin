@@ -34,6 +34,7 @@
         "schooch/youtube": "^5.0.5",
         "talvbansal/media-manager": "^2.5",
         "thujohn/twitter": "^2.2",
+        "true/punycode": "~2.0",
         "weidner/goutte": "^1.0"
     },
     "require-dev": {

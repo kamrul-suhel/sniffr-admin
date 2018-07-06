@@ -61,19 +61,10 @@
                                     </ul>
                                 </div>
 
-                                <!--<v-flex xs12 class="mt-1">-->
-                                    <!--<v-layout column wrap align-end class="video-detail-sidebar">-->
-                                        <!--<div class="video-detail-social-share">-->
-                                            <!--<v-btn dark block class="dark">License</v-btn>-->
-                                        <!--</div>-->
-                                    <!--</v-layout>-->
-                                <!--</v-flex>-->
+                                <quote-button-component v-if="user.client_id" :type="'video'" :asset="video_detail"></quote-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
-
-
-
                 </v-layout>
             </v-container>
         </div>
@@ -82,22 +73,22 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
+    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
 
     export default {
         components: {
-            VideoPlayer
+            QuoteButtonComponent,
+            videoPlayer: VideoPlayer
         },
 
         data() {
             return {
                 ini:false,
+                user: {},
                 video_detail: {},
                 tags: [],
-
                 ready_to_show : true,
-
                 previousPageUrl: '',
-
                 content_padding:true
             }
         },
@@ -106,6 +97,7 @@
         },
 
         created() {
+            this.user = this.$store.getters.getUser;
             let breakpoint = this.$vuetify.breakpoint.name;
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;

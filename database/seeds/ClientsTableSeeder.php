@@ -14,6 +14,8 @@ class ClientsTableSeeder extends Seeder
             Client::create([
                 'name' => $index == 1 ? 'The DailyMail' : ( $index == 2 ? 'The Sun' : $faker->sentence(2) ),
                 'slug' => $faker->slug(2),
+				'tier' => $faker->randomElement(['social-media-agency', 'online', 'production', 'publisher', 'well-known', NULL]),
+				'region' => $faker->randomElement(['western-europe', 'north-america', 'asia', 'singapore', 'china', NULL]),
             ]);
         }
     }

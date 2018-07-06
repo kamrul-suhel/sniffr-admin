@@ -316,15 +316,12 @@
                 axios.post('/submission', form, {
                         onUploadProgress: function( progressEvent ) {
                             this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-                            console.log(this.progressbar);
                         }.bind(this)
                     }
                 )
                     .then(response => {
                         //data uploaded succes
                         let data = response.data;
-                        console.log(data);
-
                         if(data.status == 'success'){
                             // set all default
                             this.progressbar = 0;

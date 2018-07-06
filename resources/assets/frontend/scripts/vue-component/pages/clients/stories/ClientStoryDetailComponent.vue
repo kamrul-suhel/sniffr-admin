@@ -42,17 +42,7 @@
 
                         <div v-html="story.description"></div>
 
-                        <v-flex xs12 class="text-xs-right">
-                            <v-btn
-                                    dark
-                                    :loading="loading"
-                                    :disabled="loading"
-                                    medium
-                                    @click.native="onDownloadAllAssets()"
-                                    color="dark">Download story
-
-                            </v-btn>
-                        </v-flex>
+                        <quote-button-component v-if="user.client_id" :type="'story'" :asset="story"></quote-button-component>
                     </div>
                 </v-flex>
 
@@ -64,14 +54,18 @@
 <script>
     import AssetComponent from '../partials/AssetStoryComponent';
     import VideoReloadServices from '../../../../services/VideoReloadServices';
+    import QuoteButtonComponent from "../../../includes/QuoteButtonComponent";
+
     export default {
         components: {
+            QuoteButtonComponent,
             assetComponent: AssetComponent
         },
 
         data() {
             return {
                 story: '',
+                user: {},
                 loading: false,
                 loader: null,
                 order: false,
@@ -79,11 +73,12 @@
         },
 
         created() {
+            this.user = this.$store.getters.getUser;
+
             this.getStoryDetail();
 
             var video_reload = new VideoReloadServices();
             video_reload.reloadAll();
-
         },
 
         watch: {

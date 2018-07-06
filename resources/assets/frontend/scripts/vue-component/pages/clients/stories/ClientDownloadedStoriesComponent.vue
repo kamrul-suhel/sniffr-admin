@@ -1,5 +1,5 @@
 <template>
-    <section class="cliend-downloaded-stories">
+    <section class="client-purchased-stories">
         <v-container grid-list-xl v-if="stories == ''">
             <v-layout row wrap>
                 <h2 class="text-xs-center no-stories">Sorry, you have not downloaded anything yet.</h2>
@@ -10,7 +10,7 @@
             <v-layout row wrap>
                 <v-flex xs12 pt-0 mb-4>
                     <div>
-                        <h2 class="text-center text-uppercase">Downloaded Stories</h2>
+                        <h2 class="text-center text-uppercase">Purchased Stories</h2>
                     </div>
                 </v-flex>
             </v-layout>
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-    import AssetDownloadComponent from '../partials/AssetStoryDownloadComponent'
+    import AssetDownloadComponent from '../partials/AssetStoryDownloadComponentComponent'
     import PaginationComponent from '../../../includes/PaginationComponent'
     export default {
         components: {
-            assetDownloadComponent: AssetDownloadComponent,
+            assetPurchasedComponent: AssetDownloadComponent,
             paginationComponent: PaginationComponent
         },
 
@@ -71,7 +71,6 @@
                     .then(() => {
                         this.stories = this.$store.getters.getMailStories;
                         this.ini_state = true;
-                        console.log(this.stories);
                     });
             }
         }

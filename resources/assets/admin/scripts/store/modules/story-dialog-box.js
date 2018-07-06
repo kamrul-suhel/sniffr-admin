@@ -11,8 +11,8 @@ const mutations = {
     setStoryDialogBox(state, data) {
         state.story_dialog_box = true;
         state.story_dialog_current_story = data.current_story;
-        state.story_dialog_next_alpha_id = data.prev_story_alpha_id;
-        state.story_dialog_prev_alpha_id = data.next_story_alpha_id;
+        state.story_dialog_next_alpha_id = data.next_story_alpha_id ;
+        state.story_dialog_prev_alpha_id = data.prev_story_alpha_id;
     },
 
     setRouteObject(state, route) {
@@ -40,7 +40,6 @@ const actions = {
             axios.get(url)
                 .then((response) => {
                     commit('setStoryDialogBox', response.data);
-                    console.log(response.data);
                     resolve();
                 })
                 .catch((error) => {

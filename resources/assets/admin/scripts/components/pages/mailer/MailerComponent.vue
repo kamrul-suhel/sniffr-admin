@@ -6,8 +6,15 @@
         <!-- Story dialog -->
         <story-in-dialog></story-in-dialog>
 
+        <!-- VideoPlayer dialogbox dialog -->
+        <video-player-in-dialog></video-player-in-dialog>
 
-        <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
+
+        <v-dialog
+                v-model="dialog"
+                max-width="400"
+                persistent
+                content-class="mailer-dialog-error">
             <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
 
@@ -116,6 +123,7 @@
     import MailerEventBus from '../../../event-bus/mailer-event-bus';
     import VideoInDialog from './modules/VideoInDialog';
     import StoryInDialog from './modules/StoryDialog';
+    import VideoPlayerInDialog from './modules/VideoPlayerInDialog'
 
     export default {
         components: {
@@ -123,6 +131,7 @@
             mailerStoriesComponent: MailerStoriesComponent,
             videoInDialog: VideoInDialog,
             storyInDialog: StoryInDialog,
+            VideoPlayerInDialog
         },
 
         data() {

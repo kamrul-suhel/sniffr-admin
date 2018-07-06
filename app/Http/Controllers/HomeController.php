@@ -29,20 +29,6 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-
-        if ($request->ajax() || $request->isJson()) {
-            $data = [
-                'videos' => Video::select($this->getVideoFieldsForFrontend())->where(function ($query) {
-                    $query->where([['state', 'licensed'], ['active', 1], ['featured', 1]])
-                        ->orWhere('state', 'licensed')->orderBy('licensed_at', 'DESC');
-                })
-                    ->orderBy('featured', 'DESC')
-                    ->orderBy('licensed_at', 'DESC')
-                    ->limit(12)
-                    ->get()
-            ];
-            return $this->successResponse($data);
-        }
 		return view('frontend.master');
 	}
 }

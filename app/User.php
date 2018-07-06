@@ -29,13 +29,15 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public $webhook;
+
     protected $table = 'users';
 
     /**
      * @var array
      */
     protected $fillable = [
-        'client_id', 'username', 'email', 'password', 'avatar', 'role', 'active',
+        'client_id', 'username', 'email', 'full_name', 'password', 'avatar', 'role', 'active',
     ];
 
     /**
@@ -75,7 +77,14 @@ class User extends Authenticatable
 
     public function routeNotificationForSlack()
     {
-        return 'https://hooks.slack.com/services/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';
+    	if($this->webhook){
+			return config('services.slack.channels.'.$this->webhook);
+		}
     }
+
+    public function slackChannel($channel){
+    	$this->webhook = $channel;
+    	return $this;
+	}
 
 }

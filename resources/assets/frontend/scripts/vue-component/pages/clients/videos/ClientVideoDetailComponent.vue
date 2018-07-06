@@ -62,7 +62,7 @@
 </template>
 
 <script>
-    import VideoPlayer from '../../videos/VideoPlayerComponent'
+    import VideoPlayer from '../../videos/VideoPlayerComponent';
 
     export default {
         components: {
@@ -136,7 +136,6 @@
         methods: {
             onGoback() {
                 let prevRoute = this.$store.getters.getRouteUrl;
-                console.log(prevRoute);
                 if(prevRoute != ''){
                     this.$router.push({name : this.$store.getters.getRouteUrl});
                 }else{

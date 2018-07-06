@@ -173,7 +173,8 @@ class AdminVideosController extends Controller
             } else {
                 // Set to process for youtube and analysis (if video not already on youtube)
                 if (!$video->youtube_id && $video->file) {
-                    $video->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
+					$user = new User();
+					$user->slackChannel('submissions')->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
                     QueueVideoYoutubeUpload::dispatch($video->id)
                         ->delay(now()->addSeconds(5));
                 }
@@ -378,8 +379,9 @@ class AdminVideosController extends Controller
         $video->duration = $this->getDuration($video, $duration);
 
         $video->user_id = Auth::id();
-        $video->active = ($request->input('active')) ?: 0;
-        $video->featured = ($request->input('featured')) ?: 0;
+        $video->active = $request->input('active') ?: 0;
+        $video->featured = $request->input('featured') ?: 0;
+		$video->class = $request->input('class') ?: null;
         $video->video_collection_id = $request->input('video_collection_id', null);
         $video->video_shottype_id = $request->input('video_shottype_id', null);
         $video->video_category_id = $request->input('video_category_id', null);
@@ -612,26 +614,20 @@ class AdminVideosController extends Controller
         $video = Video::where('alpha_id', $id)->first();
 
         // Detach and delete any unused tags
-        foreach ($video->tags as $tag) {
-            $this->detachTagFromVideo($video, $tag->id);
-            if (!$this->isTagContainedInAnyVideos($tag->name)) {
-                $tag->delete();
-            }
+        // foreach ($video->tags as $tag) {
+        //     $this->detachTagFromVideo($video, $tag->id);
+        //     if (!$this->isTagContainedInAnyVideos($tag->name)) {
+        //         $tag->delete();
+        //     }
+        // }
+
+        //$this->deleteVideoImages($video);
+
+        if (!$video) {
+            abort(404);
         }
 
-        $this->deleteVideoImages($video);
-
-        // Hide on youtube
-        if ($video->youtube_id && $video->file) {
-            //$response = Youtube::setStatus($video->youtube_id, 'private'); NOT WORKING (youtube.video: forbidden) -> might need to check 'url' field if youtube which would mean it might not be our own youtube video to make private
-
-            if (!$response) { // There is no youtube video, remove the id
-                $video->youtube_id = '';
-            }
-        }
-
-        $video->delete();
-        $video->save();
+        $video->destroy($video->id);
 
         if ($isJson) {
             return response()->json([

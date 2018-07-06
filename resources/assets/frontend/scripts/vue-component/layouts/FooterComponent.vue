@@ -57,10 +57,15 @@
 
         <!-- Video dialog box -->
         <video-dialog-component></video-dialog-component>
+
+        <!-- Snack bar component -->
+        <snackbar-component></snackbar-component>
+
     </section>
 </template>
 <script>
-    import VideoDialogComponent from './VideoDialogComponent'
+    import VideoDialogComponent from '../includes/VideoDialogComponent'
+    import SnackbarComponent from '../includes/SnackbarComponent'
 
     export default {
         data() {
@@ -77,7 +82,8 @@
         },
 
         components: {
-            VideoDialogComponent
+            VideoDialogComponent,
+            SnackbarComponent
         }
     }
 </script>

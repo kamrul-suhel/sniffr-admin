@@ -4,7 +4,7 @@ Thank you for signing the contract.
 
 If you need it you can download it from this link.
 
-{{ route('contract.download', ['id' => $video->contracts->first()->reference_id]) }}
+{{ route('contract.download.public', ['id' => $video->contracts->first()->reference_id]) }}
 
 If you have any questions you&rsquo;re more than welcome to contact the team here: licensing@unilad.co.uk
 

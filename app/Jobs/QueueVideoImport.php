@@ -2,25 +2,14 @@
 
 namespace App\Jobs;
 
+use App\User;
 use App\Video;
-use App\Jobs\QueueVideo;
-
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\Notifications\SubmissionImport;
 use App\Notifications\SubmissionAlert;
 
 class QueueVideoImport implements ShouldQueue
@@ -195,8 +184,8 @@ class QueueVideoImport implements ShouldQueue
 
                 $invalidType = (!empty($fileMimeType) ? ', MimeType: .'.$fileMimeType : '' );
 
-                $user = new User();
-                $user->notify(new SubmissionAlert('a job in the queue was either invalid or not a video (Id: '.$this->video_id.', File: '.$this->file.' '.$invalidType.')'));
+				$user = new User();
+				$user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue was either invalid or not a video (Id: '.$this->video_id.', File: '.$this->file.' '.$invalidType.')'));
             } else {
 
                 //maybe sent out a notification on slack
@@ -213,8 +202,8 @@ class QueueVideoImport implements ShouldQueue
      public function failed($exception)
      {
          // Send user notification of failure, etc...
-         $user = new User();
-         $user->notify(new SubmissionAlert('a job in the queue has failed (Id: '.$this->video_id.', File: '.$this->file.')'));
+		 $user = new User();
+		 $user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed (Id: '.$this->video_id.', File: '.$this->file.')'));
 
          //Log::info('Job failed: '.$exception);
 

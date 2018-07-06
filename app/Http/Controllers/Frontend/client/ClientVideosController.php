@@ -10,6 +10,7 @@ use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 use App\Video;
+use App\Collection;
 use App\Http\Controllers\Controller;
 use App;
 
@@ -18,7 +19,7 @@ class ClientVideosController extends Controller
     use FrontendResponse;
     use VideoHelper;
 
-    const PAGINATE_PER_PAGE = 6;
+    const PAGINATE_PER_PAGE = 12;
 
     /**
      * @var int
@@ -75,26 +76,61 @@ class ClientVideosController extends Controller
         return view('frontend.master');
     }
 
+    public function getOfferedVideos(Request $request)
+    {
+        if ($request->ajax()) {
+            $clientId = Auth::user()->client_id;
 
-	public function getDownloadedVideos(Request $request)
+            $offeredVideos = Collection::with('collectionVideos.video');
+            // If search passed through
+            if ($request->search) {
+                $search = $request->search;
+                $offeredVideos = $offeredVideos->whereHas('collectionVideos.video', function ($query) use ($search) {
+                    $query->where('title', 'LIKE', '%' . $search . '%');
+                });
+            }
+            $offeredVideos = $offeredVideos->where('client_id', $clientId)
+                ->where('status', 'open')
+                ->orderBy('created_at', 'DESC')
+                ->whereHas('collectionVideos', function($query) {
+                    $query->where('status', 'offered');
+                })
+                ->get()
+                ->pluck('collectionVideos')->all();
+
+            //Paginate collection object
+            $videos = $this->paginate($offeredVideos,self::PAGINATE_PER_PAGE, $request->page);
+
+            $data = [
+                'videos' => $videos,
+            ];
+            return $this->successResponse($data);
+        }
+        return view('frontend.master');
+    }
+
+	public function getPurchasedVideos(Request $request)
 	{
 		if ($request->ajax()) {
 			$client_id = Auth::user()->client_id;
 
-			if ($request->search) {
-				$ordered_videos = Video::with('orders')
-					->where('title', 'LIKE', '%' . $request->search . '%')
-					->whereHas('orders', function ($query) use ($client_id) {
-						$query->where('client_id', $client_id);
-					})->get();
-			} else {
-				$ordered_videos = Video::with('orders')
-					->whereHas('orders', function ($query) use ($client_id) {
-						$query->where('client_id', $client_id);
-					})->get();
-			}
+				$purchased_videos = Collection::with('collectionVideos.video');
+				// If search passed through
+				if ($request->search) {
+					$search = $request->search;
+					$purchased_videos = $purchased_videos->whereHas('collectionVideos.video', function ($query) use ($search) {
+						$query->where('title', 'LIKE', '%' . $search . '%');
+					});
+				}
+				$purchased_videos = $purchased_videos->where('client_id', $client_id)
+					->where('status', 'closed')
+					->orderBy('created_at', 'DESC')
+					->get()
+					->pluck('collectionVideos')->all();
+
 			//Paginate collection object
-			$videos = $this->paginate($ordered_videos, self::PAGINATE_PER_PAGE, $request->page);
+			$videos = $this->paginate($purchased_videos, self::PAGINATE_PER_PAGE, $request->page);
+
 			$data = [
 				'videos' => $videos,
 			];
@@ -112,7 +148,7 @@ class ClientVideosController extends Controller
 			abort(404, 'Asset Not Found');
 		}
 
-		$mailer_id = $video->mailers()->first()->id;
+		$mailer_id = $video->mailers()->first() ? $video->mailers()->first()->id : 0;
 
 		$files[] = $this->getVideoPdf($videoId, false);
 

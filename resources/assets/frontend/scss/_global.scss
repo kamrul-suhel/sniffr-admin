@@ -7,6 +7,10 @@ body {
 
 section.section-space {
   padding: $section-spacing-mobile 0px;
+
+  //& > div{
+  //  padding-top:0;
+  //}
 }
 
 @include small-device {
@@ -33,6 +37,10 @@ section.section-space {
   }
 }
 
+.no-padding{
+  padding:0;
+}
+
 .nav-background {
   background: #000;
 }
@@ -45,6 +53,23 @@ p.gray-text {
 
 h1, h2, h3, h4, h5 {
   font-family: JosefinSansbold;
+}
+
+.text-title-with-underline{
+  color: #000;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom:$heading_bottom_space;
+  text-transform:uppercase;
+
+  &::after{
+    content: '';
+    width: 50px;
+    background: #000;
+    margin: 0px auto 0px auto;
+    height: 2px;
+    display: block;
+  }
 }
 
 p, form, form input, a, span {
@@ -153,28 +178,6 @@ p {
 .input, label {
   font-family: JosefinSansregular;
 }
-
-/* ************************* Countdown section style ******************* */
-
-.countdown {
-  background: $countdown-background-color;
-  color: $countdown-text-color;
-
-  .countdown-container {
-    text-align: center;
-
-    .countdown-number h2 {
-      font-size: $countdown-number-font-size;
-    }
-
-    .countdown-subtitle {
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-  }
-}
-
 
 /* ************************* More detail Section style ******************* */
 

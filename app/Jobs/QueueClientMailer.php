@@ -3,12 +3,7 @@
 namespace App\Jobs;
 
 use App\ClientMailer;
-use App\Contact;
-use App\Story;
 use App\User;
-use App\Asset;
-use App\Video;
-use App\Client;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -72,7 +67,7 @@ class QueueClientMailer implements ShouldQueue
     public function failed()
     {
         // Send user notification of failure, etc...
-        $user = new User();
-        $user->notify(new ClientMailer('Failed to send an email within a client downloaded, please check user (Id: ' . $this->client_id . ')'));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new ClientMailerAlert('Failed to send an email within a client mailer, please check user (Id: ' . $this->client_id . ')'));
     }
 }

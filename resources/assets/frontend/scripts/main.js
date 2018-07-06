@@ -91,7 +91,9 @@ new Vue({
     },
     router,
     data() {
-        return {}
+        return {
+
+        }
     },
     methods: {}
 });

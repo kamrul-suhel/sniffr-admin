@@ -13,30 +13,17 @@ class StoryController extends Controller
 	use FrontendResponse;
 
     /**
-     * @var int
-     */
-    private $stories_per_page;
-
-    /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-        if ($request->ajax() || $request->isJson()) {
-            $stories = Story::All()
-                ->orderBy('id', 'DESC')
-                ->paginate($this->stories_per_page);
-
-            $data = [
-                'stories' => $stories,
-                'pages' => (new Page)->where('active', '=', 1)->get(),
-            ];
-
-            return $this->successResponse($data);
-        }
-
         return view('frontend.master');
+    }
+
+    public function requestQuote(Request $request){
+        $formData = $request->input('form');
+        dd(json_decode($formData));
     }
 
     /**

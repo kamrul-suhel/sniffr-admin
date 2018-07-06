@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div v-if="video_detail.description != 'null'" class="content-description">
+                        <div v-if="video_detail.description !== 'null'" class="content-description">
                             <p>{{ video_detail.description | readmore(300, '...')}}</p>
                         </div>
 
@@ -49,13 +49,19 @@
                         </div>
                     </v-flex>
 
-                    <!--<v-flex xs12>
-                        <v-layout column wrap align-end class="video-detail-sidebar">
-                            <div class="video-detail-social-share">
-                                <v-btn href="/" dark block class="dark">Buy Now</v-btn>
-                            </div>
-                        </v-layout>
-                    </v-flex>-->
+                    <quote-button-component
+                            v-if="user.client_id"
+                            :user="'user'"
+                            :type="'video'"
+                            :asset="video_detail"
+                    ></quote-button-component>
+
+                    <quote-button-component
+                            v-if="!user.client_id"
+                            :user="false"
+                            :type="'video'"
+                            :asset="video_detail"
+                    ></quote-button-component>
 
                 </v-layout>
             </v-flex>
@@ -67,18 +73,19 @@
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
+    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
 
     export default {
         components: {
+            QuoteButtonComponent,
             videoPlayer: VideoPlayer
         },
         data() {
             return {
                 video_detail: '',
+                user: {},
                 tags: [],
-
                 ready_to_show: true,
-
                 content_padding: true,
             }
         },
@@ -89,6 +96,8 @@
         },
 
         created() {
+            this.user = this.$store.getters.getUser;
+
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;
@@ -96,7 +105,7 @@
 
             VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
                 this.getVideoData(alpha_id);
-            })
+            });
 
             VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
                 let alpha_id = this.$store.getters.getNextVideoAlphaId;
@@ -110,19 +119,16 @@
 
             LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
                 this.video_detail = '';
-            })
-        },
-
-        mounted() {
+            });
         },
 
         methods: {
             getVideoData(alpha_id) {
-
                 this.$store.commit('setRouteObject', this.$route);
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
+
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
                     } else {
