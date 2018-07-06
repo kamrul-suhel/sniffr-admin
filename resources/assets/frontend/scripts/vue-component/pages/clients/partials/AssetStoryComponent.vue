@@ -29,7 +29,7 @@
 
                 <v-card-media
                         :src="current_item.mime_type === 'video/mp4'? current_item.thumbnail : current_item.url"
-                 v-if="!showVideo">
+                        v-if="!showVideo">
                     <div class="video-button" v-if="current_item.mime_type === 'video/mp4'" @click="onPlayVideo()">
                         <v-btn dark fab class="dark" medium>
                             <v-icon dark large>play_arrow</v-icon>
@@ -51,13 +51,13 @@
 
 <script>
     export default {
-        data () {
+        data() {
             return {
                 loading: false,
                 loader: null,
                 showButton: false,
                 current_item: '',
-                current_item_thumbnail:'',
+                current_item_thumbnail: '',
                 thumbnailImg: '',
 
                 story_dialog: false,
@@ -68,14 +68,14 @@
                 previousImgExists: true,
                 previousImgObj: '',
 
-                showVideo:false,
+                showVideo: false,
             }
         },
 
         props: ['asset', 'story_id', 'assets'],
 
         watch: {
-            loader () {
+            loader() {
                 const l = this.loader
                 this[l] = !this[l]
 
@@ -84,9 +84,10 @@
                 this.loader = null
             },
 
-            story_dialog(val){
-                if(!val){
+            story_dialog(val) {
+                if (!val) {
                     this.showVideo = false;
+                    this.resetNextPrevious();
                 }
             }
         },
@@ -96,29 +97,29 @@
         },
 
         methods: {
-            showDownloadButton(){
+            showDownloadButton() {
                 this.showButton = !this.showButton;
             },
 
-            setImageUrl(asset){
-                if(asset.mime_type === "video/mp4"){
+            setImageUrl(asset) {
+                if (asset.mime_type === "video/mp4") {
                     this.thumbnailImg = asset.thumbnail;
-                }else{
+                } else {
                     this.thumbnailImg = asset.url;
                 }
             },
 
-            downloadAsset(){
+            downloadAsset() {
                 this.loader = 'loading';
                 this.loader = 'loading';
                 var url = '/client/stories/' + this.story_id + '/download';
                 window.location = url;
             },
 
-            onClickAsset(){
+            onClickAsset() {
             },
 
-            onOpenDialog(id){
+            onOpenDialog(id) {
                 this.story_dialog = true;
 
                 this.assets.forEach((item, index) => {
@@ -139,7 +140,7 @@
             },
 
 
-            onPreviousVideo(){
+            onPreviousVideo() {
                 this.current_item = this.previousImgObj;
                 this.showVideo = false;
 
@@ -159,7 +160,7 @@
                             this.nextImgExists = true;
                         }
 
-                        else{
+                        else {
                             this.previousImgExists = true;
                             this.nextImgExists = true;
                         }
@@ -167,7 +168,7 @@
                 })
             },
 
-            onNextVideo(){
+            onNextVideo() {
                 this.current_item = this.nextImgObj;
                 this.showVideo = false;
 
@@ -187,7 +188,7 @@
                             this.nextImgExists = true;
                         }
 
-                        else{
+                        else {
                             this.previousImgExists = true;
                             this.nextImgExists = true;
                         }
@@ -199,19 +200,26 @@
                 this.story_dialog = false;
             },
 
-            onPlayVideo(){
-                var promise = new Promise((resolve, reject)=>{
+            onPlayVideo() {
+                var promise = new Promise((resolve, reject) => {
                     this.showVideo = true;
                     resolve();
                 });
 
-                promise.then(() =>{
-                    setTimeout(()=> {
+                promise.then(() => {
+                    setTimeout(() => {
                         this.$refs.playerVideo.play();
                     }, 100);
 
                 });
 
+            },
+
+            resetNextPrevious() {
+                this.nextImgExists = true;
+                this.nextImgObj = '';
+                this.previousImgExists = true;
+                this.previousImgObj = ''
             }
         }
     }
