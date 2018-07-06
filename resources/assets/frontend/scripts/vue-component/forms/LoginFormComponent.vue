@@ -1,67 +1,69 @@
 <template>
     <v-card raised>
-        <v-card-text class="login-section">
+        <v-card-text class="login-section pa-0">
             <v-form method="post" v-model="valid" ref="login_form">
-                <v-layout row wrap id="login-section">
+                <v-container grid-list-lg>
+                    <v-layout row wrap id="login-section">
 
-                    <v-flex xs12>
-                        <h2 class="login-title">LOGIN</h2>
-                    </v-flex>
+                        <v-flex xs12>
+                            <h2 class="login-title">LOGIN</h2>
+                        </v-flex>
 
-                    <v-flex xs12>
-                        <v-text-field
-                                color="dark"
-                                label="Email:"
-                                v-model="user.email"
-                                :rules="emailRules"
-                                required
-                                validate-on-blur
-                                :error="validation.error"
-                        >
-                        </v-text-field>
-                    </v-flex>
+                        <v-flex xs12>
+                            <v-text-field
+                                    color="dark"
+                                    label="Email:"
+                                    v-model="user.email"
+                                    :rules="emailRules"
+                                    required
+                                    validate-on-blur
+                                    :error="validation.error"
+                            >
+                            </v-text-field>
+                        </v-flex>
 
-                    <v-flex xs12>
-                        <v-text-field
-                                class="email"
-                                color="dark"
-                                label="Enter your password"
-                                v-model="user.password"
-                                :append-icon="showpassword ? 'visibility' : 'visibility_off'"
-                                @click:append="showpassword = !showpassword"
-                                :type="showpassword ? 'password' : 'text'"
-                                :rules="passwordRules"
-                                @keyup.enter="onSubmit()"
-                                :error="validation.error"
-                                required
-                        ></v-text-field>
-                    </v-flex>
+                        <v-flex xs12>
+                            <v-text-field
+                                    class="email"
+                                    color="dark"
+                                    label="Enter your password"
+                                    v-model="user.password"
+                                    :append-icon="showpassword ? 'visibility' : 'visibility_off'"
+                                    @click:append="showpassword = !showpassword"
+                                    :type="showpassword ? 'password' : 'text'"
+                                    :rules="passwordRules"
+                                    @keyup.enter="onSubmit()"
+                                    :error="validation.error"
+                                    required
+                            ></v-text-field>
+                        </v-flex>
 
-                </v-layout>
+                    </v-layout>
 
-                <v-layout row justify-center v-if="validation.error">
-                    <v-flex>
-                        <div class="red--text text-xs-center">{{validation.message}}</div>
-                    </v-flex>
-                </v-layout>
+                    <v-layout row justify-center v-if="validation.error">
+                        <v-flex>
+                            <div class="red--text text-xs-center">{{validation.message}}</div>
+                        </v-flex>
+                    </v-layout>
 
-                <v-layout row wrap fluid class="text-xs-center">
-                    <v-flex xs12>
-                        <input type="hidden" name="_token"/>
-                        <v-btn
-                                raised
-                                dark
-                                :loading="loading"
-                                :disabled="loading"
-                                @click="onSubmit()">
-                            LOGIN
-                        </v-btn>
-                    </v-flex>
+                    <v-layout row wrap fluid class="text-xs-center">
+                        <v-flex xs12>
+                            <input type="hidden" name="_token"/>
+                            <v-btn
+                                    raised
+                                    dark
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    @click="onSubmit()">
+                                LOGIN
+                            </v-btn>
+                        </v-flex>
 
-                    <v-flex xs12>
-                        <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
-                    </v-flex>
-                </v-layout>
+                        <v-flex xs12>
+                            <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
 
             </v-form>
         </v-card-text>
@@ -112,6 +114,7 @@
             LoginEventBus.$on('closeLoginDialog', () => {
                 this.open_login_dialog = false;
             });
+
         },
 
         methods: {
@@ -154,6 +157,13 @@
 
                             this.$store.commit('setUserState', data);
                             LoginEventBus.loginSuccess();
+
+                            // if has previous page then do this
+                            let request_url = this.$route.query.request_url;
+                            if(request_url && request_url != ''){
+                                request_url = '/'+ request_url;
+                                this.$router.push({path: request_url});
+                            }
 
                             if (data.redirect_url != '') {
                                 window.location.href = data.redirect_url;

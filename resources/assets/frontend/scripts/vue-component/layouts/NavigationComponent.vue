@@ -31,6 +31,7 @@
                                 </router-link>
                             </li>
 
+
                             <li v-if="client_login">
                                 <router-link to="/stories">
                                     <v-icon color="white" left>art_track</v-icon> Stories

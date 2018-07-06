@@ -109,6 +109,7 @@ class AuthController extends Controller
         if (key_exists(Auth::user()->role, config('roles.admins'))) {
             $redirect_route = '/admin';
         } elseif (key_exists(Auth::user()->role, config('roles.clients'))) {
+
             $user = Auth::user();
             $client = Auth::user()->client();
             $offers = $user->userOffers();
