@@ -62,9 +62,9 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <a href="/client/purchased">
+                                                <router-link :to="{name: 'client_purchased_assets'}">
                                                     <v-icon color="white" left size="20px">attach_money</v-icon> Order History
-                                                </a>
+                                                </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 
