@@ -58,10 +58,10 @@
         methods: {
             setButtonText(){
                 this.client_logged_in = this.$store.getters.isClientLogin;
-
                 this.can_buy = (!this.client_logged_in || this.type == 'story' || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class) ? false : true;
                 this.button_text = this.can_buy ? 'Buy Now' : 'Request Quote';
             },
+
             createCollection() {
                 let form_data = {
                     'type': this.type,
@@ -76,9 +76,6 @@
                         console.log(error);
                     });
             }
-        },
-
-        destroyed() {
         }
     }
 </script>

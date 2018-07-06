@@ -189,7 +189,6 @@ class VideoController extends Controller
             $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
-				->with('orders')
                 ->orderBy('licensed_at', 'DESC')
                 ->where('alpha_id', $id)
                 ->first();
