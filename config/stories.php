@@ -139,6 +139,7 @@ return [
     'destinations' => [
         'for-sale',
         'for-page',
+        'for-both',
     ],
 
     'removed_from_social' => [
@@ -182,7 +183,7 @@ return [
 
     'rights_type' => [
         'content',
-        'editorial',
+        'distribution-rights',
     ],
 
     'colors' => [

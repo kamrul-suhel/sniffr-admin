@@ -2,12 +2,6 @@
 
 @section('content')
 
-<style>
-.placepicker-map {
-  min-height: 250px;
-}
-</style>
-
 <div id="admin-container">
 <!-- This is where -->
 
@@ -150,6 +144,9 @@
 										@endif
 									</select>
 						        </div>
+
+								@if(!empty($story))
+
 								<br />
 								<div class="input-group">
 									<label class="checkbox-inline" for="contact_is_owner">
@@ -230,10 +227,12 @@
 						            </span>
 									<select name="submitted_to[]" id="submitted_to" class="selectpicker js-submitted-to" data-width="100%" title="Select who you submitted to" multiple>
 										@foreach(config('stories.submitted_to') as $site)
-										<option value="{{ $site }}" {{ (isset($story) && (in_array($site, explode(',', $story->submitted_to, 0)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
+										<option value="{{ $site }}" {{ (isset($story)&&(in_array($site, explode(',', $story->submitted_to)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
 										@endforeach
 									</select>
 						        </span>
+
+								@endif
 							</div>
 						</div>
 
@@ -283,12 +282,43 @@
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
+								<div class="panel-title">Assigned to</div>
+
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+
+							<div class="panel-body" style="display: block;">
+								<select id="user_id" name="user_id" class="form-control">
+									<option value="">Not assigned</option>
+									@foreach($users as $user2)
+										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+
+						@if(!empty($story))
+
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
 								<div class="panel-title">Rights Status</div>
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
 							</div>
 							<div class="panel-body" style="display: block; background: #fcfcfc;">
+								<div class="status-box">
+									@if(isset($story)&&$story->rights=='exclusive')
+									<div class="status-box-inner success" id="rights-box-status">Exclusive</div>
+									@elseif(isset($story)&&$story->rights=='non-exclusive')
+									<div class="status-box-inner danger" id="rights-box-status">Non-Exclusive</div>
+									@else
+									<div class="status-box-inner" id="rights-box-status">Pending</div>
+									@endif
+									<!-- <div class="status-box-inner">Restricted</div> -->
+								</div>
 								<span class="input-group">
 						            <span class="input-group-addon">
 						                License Type
@@ -370,24 +400,7 @@
 							</div>
 						</div> -->
 
-						<div class="panel panel-primary" data-collapsed="0">
-							<div class="panel-heading">
-								<div class="panel-title">Assigned to</div>
-
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-								</div>
-							</div>
-
-							<div class="panel-body" style="display: block;">
-								<select id="user_id" name="user_id" class="form-control">
-									<option value="">Not assigned</option>
-									@foreach($users as $user2)
-										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
+						@endif
 
 					</div>
 
@@ -404,6 +417,7 @@
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
+		<input type="hidden" name="decision" value="{{ ($decision ? $decision : '') }}" />
 
 		@if(isset($story->id)&&isset($decision)&&$decision=='licensing')
 			<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License Story</a>
@@ -494,15 +508,21 @@
 
 		$('#rights').change(function(e) {
 			if($('#rights').val()=='exclusive') {
+				$('#rights-box-status').removeClass('danger').addClass('success');
+				$('#rights-box-status').text('Exclusive');
 				$('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
 			}
 			if($('#rights').val()=='non-exclusive') {
-				$('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
+				$('#rights-box-status').removeClass('success').addClass('danger');
+				$('#rights-box-status').text('Non-Exclusive');
+				$('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
 			}
 			if(!$('#rights').val()) {
+				$('#rights-box-status').removeClass('success').removeClass('danger');
+				$('#rights-box-status').text('Pending');
 				$('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
 			}
-		})
+		});
 
 		$('#sourced_at').datetimepicker({
 			// format: 'YYYY-MM-DD HH:MM:SS',

@@ -252,6 +252,7 @@ class AdminStoryController extends Controller
     {
         $data = Input::all();
         $id = $data['id'];
+        $decision = $data['decision'];
         $story = Story::findOrFail($id);
 
         $validator = Validator::make($data, $this->rules);
@@ -314,7 +315,7 @@ class AdminStoryController extends Controller
 
         // need states for when syncing stories to WP
 
-        return Redirect::to('admin/stories')->with([
+        return Redirect::to('admin/stories/?decision='.$decision)->with([
             'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
         ]);
