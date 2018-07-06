@@ -52,6 +52,7 @@
                                 </v-flex>
 
                                 <v-flex xs12>
+                                    <small style="color:red" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
                                     <v-text-field
                                             label="Email"
                                             type="email"
@@ -72,6 +73,7 @@
                                 </v-flex>
 
                                 <v-flex xs12>
+                                    <small style="color:red" v-if="errors.company_name">{{ errors.company_name[0] }}</small>
                                     <v-text-field
                                             label="Company"
                                             v-model="request_quote.company"
@@ -197,6 +199,7 @@
                 licenses: [],
                 platforms: [],
                 lengths: [],
+                errors: [],
 
                 //Form data
                 request_quote: {
@@ -299,7 +302,7 @@
                 }
 
                 if(!this.client_logged_in) {
-                    this.button_text = 'Register & Request Quote';
+                    this.button_text = 'Request Quote';
                 }
             });
 
@@ -349,13 +352,12 @@
 
             buttonClicked(){
                 if(this.$store.getters.getUser.id === '') {
-                    this.registerUser();
-                    this.requestQuote();
+                    return this.registerUser();
                 }
                 if(this.price) {
-                    this.acceptPrice();
+                    return this.acceptPrice();
                 } else {
-                    this.requestQuote();
+                    return this.requestQuote();
                 }
             },
 
@@ -432,7 +434,8 @@
                             });
                         })
                         .catch(error => {
-                            console.log(error);
+                            this.errors = error.response.data.errors;
+                            this.loading = false;
                         });
                 }
             },

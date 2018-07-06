@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\CreateUserQuoteRequest;
 use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
@@ -146,7 +147,7 @@ class CollectionController extends Controller
      * @param $collection_id
      * @return mixed
      */
-    public function registerUser(Request $request, $collection_id)
+    public function registerUser(CreateUserQuoteRequest $request, $collection_id)
     {
         $data = $request->all();
 

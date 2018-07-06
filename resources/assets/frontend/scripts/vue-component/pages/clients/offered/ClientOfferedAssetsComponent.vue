@@ -21,8 +21,8 @@
 
                         <v-tab-item>
                             <videos-component
-                                    :type="'offered'"
-                                ></videos-component>
+                                :type="'offered'"
+                            ></videos-component>
                         </v-tab-item>
 
                         <v-tab>

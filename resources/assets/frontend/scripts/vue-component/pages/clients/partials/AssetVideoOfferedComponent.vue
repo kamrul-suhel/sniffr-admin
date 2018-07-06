@@ -141,13 +141,13 @@
 
         watch: {
             loader() {
-                const l = this.loader
-                this[l] = !this[l]
+                const l = this.loader;
+                this[l] = !this[l];
 
                 setTimeout(() => {
                     this[l] = false;
                     this.newOrder = true;
-                }, 3000)
+                }, 3000);
 
                 this.loader = null
             }
@@ -179,13 +179,14 @@
                 console.log('accept video');
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
-                axios.get(url).then((response) => {
-                    console.log(response);
-                    if (response.data.success === '1') {
 
+
+                axios.get(url).then((response) => {
+                    if (response.data.success === '1') {
+                        this.$store.commit('setUserOffers', this.$store.getters.getUser.offers - 1);
                         this.acceptLoading = false;
-                        this.assetType = "purchased"
-                        this.purchased = true
+                        this.assetType = "purchased";
+                        this.purchased = true;
                         SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
                         // After purchased, if we need to to change another component data this event need to enable
