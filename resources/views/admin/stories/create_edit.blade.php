@@ -228,7 +228,7 @@
 						            <span class="input-group-addon">
 						                Submitted to
 						            </span>
-									<select name="submitted_to" id="submitted_to" class="selectpicker js-submitted-to" data-width="100%" title="Select who you submitted to" multiple>
+									<select name="submitted_to[]" id="submitted_to" class="selectpicker js-submitted-to" data-width="100%" title="Select who you submitted to" multiple>
 										@foreach(config('stories.submitted_to') as $site)
 										<option value="{{ $site }}" {{ (isset($story) && (in_array($site, explode(',', $story->submitted_to, 0)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
 										@endforeach
@@ -296,54 +296,58 @@
 									<select name="rights" id="rights" class="form-control">
 										<option value="">Set status</option>
 										@foreach(config('stories.rights') as $status)
-										<option value="{{ $status }}">{{ ucwords(str_replace('-', ' ', $status)) }}</option>
+										<option value="{{ $status }}" {{ (isset($story) && $story->rights==$status) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $status)) }}</option>
 										@endforeach
 									</select>
 									<select name="rights_type" id="rights_type" class="form-control">
 										<option value="">Set rights type</option>
 										@foreach(config('stories.rights_type') as $rights)
-										<option value="{{ $rights }}">{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
+										<option value="{{ $rights }}" {{ (isset($story) && $story->rights_type==$rights) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
 										@endforeach
 									</select>
 						        </span>
 								<div class="story-dividers">
 									<div id="owner-status">
-										@if($story->contact_is_owner)
+										@if(isset($story)&&$story->contact_is_owner)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Contact is owner </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>
 										@endif
 									</div>
 									<div id="submitted-status">
-										@if($story->submitted_to)
+										@if(isset($story)&&$story->submitted_to)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending</h5>
 										@endif
 									</div>
 									<div id="publish-status">
-										@if($story->allow_publish)
+										@if(isset($story)&&$story->allow_publish)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Happy to publish </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending </h5>
 										@endif
 									</div>
 									<div id="permission-status">
-										@if($story->permission)
+										@if(isset($story)&&$story->permission)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Has permission </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending </h5>
 										@endif
 									</div>
 									<div id="rights-status">
+										@if(isset($story)&&$story->rights)
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> {{ ucwords(str_replace('-', ' ', $story->rights)) }} rights </h5>
+										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>
+										@endif
 									</div>
 								</div>
 								<span class="input-group">
 						            <span class="input-group-addon">
 						                License Notes
 						            </span>
-									<textarea class="form-control" name="notes" id="notes" rows="7"></textarea>
+									<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($story)&&$story->notes) {{ $story->notes }} @endif</textarea>
 						        </span>
 							</div>
 						</div>
@@ -481,7 +485,7 @@
 				if(arr.length>1) {
 					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to multiple </h5>');
 				} else {
-					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to '+arr[0]+' </h5>');
+					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to '+arr[0].replace('-', ' ')+' </h5>');
 				}
 			} else {
 				$('#submitted-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending </h5>');

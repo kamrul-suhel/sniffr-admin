@@ -165,11 +165,9 @@ class AdminStoryController extends Controller
         $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
         //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
-
         $story->contact_is_owner = (Input::get('contact_is_owner') ? Input::get('contact_is_owner') : NULL);
         $story->allow_publish = (Input::get('allow_publish') ? Input::get('allow_publish') : NULL);
         $story->permission = (Input::get('permission') ? Input::get('permission') : NULL);
-
         $story->type = (Input::get('type') ? Input::get('type') : NULL);
         $story->notes = (Input::get('notes') ? Input::get('notes') : NULL);
         $story->source_type = (Input::get('source_type') ? Input::get('source_type') : NULL);
@@ -177,10 +175,9 @@ class AdminStoryController extends Controller
         $story->location = (Input::get('location') ? Input::get('location') : NULL);
         $story->removed_from_social = (Input::get('removed_from_social') ? Input::get('removed_from_social') : NULL);
         $story->problem_status = (Input::get('problem_status') ? Input::get('problem_status') : NULL);
-        $story->submitted_to = (Input::get('submitted_to') ? Input::get('submitted_to') : NULL);
+        $story->submitted_to = (Input::get('submitted_to') ? implode(',', Input::get('submitted_to')) : NULL);
         $story->rights = (Input::get('rights') ? Input::get('rights') : NULL);
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : NULL);
-
         $story->story_category_id = (Input::get('category') ? Input::get('category') : NULL);
         $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : NULL);
 
@@ -263,26 +260,6 @@ class AdminStoryController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        if (Input::get('title')) {
-            $story->title = Input::get('title');
-        }
-
-        if (Input::get('state')) {
-            $story->state = Input::get('state');
-        }
-
-        if (Input::get('description')) {
-            $story->description = Input::get('description');
-        }
-
-        if (Input::get('excerpt')) {
-            $story->excerpt = Input::get('excerpt');
-        }
-
-        if (Input::get('source')) {
-            $story->source = Input::get('source');
-        }
-
         if (Input::hasFile('story_image')) {
             $imageFile = Input::file('story_image');
             $imageUrl = $this->saveImageFile($imageFile);
@@ -293,13 +270,16 @@ class AdminStoryController extends Controller
             }
         }
 
+        $story->title = (Input::get('title') ? Input::get('title') : $story->title);
+        $story->state = (Input::get('state') ? Input::get('state') : $story->state);
+        $story->description = (Input::get('description') ? Input::get('description') : $story->description);
+        $story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : $story->excerpt);
+        $story->source = (Input::get('source') ? Input::get('source') : $story->source);
         $story->contact_is_owner = (Input::get('contact_is_owner') == 1  ? 1 : NULL);
         $story->allow_publish = (Input::get('allow_publish') == 1  ? 1 : NULL);
         $story->permission = (Input::get('permission') == 1  ? 1 : NULL);
-
         $story->story_category_id = (Input::get('category') ? Input::get('category') : $story->story_category_id);
         $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : $story->story_collection_id);
-
         $story->type = (Input::get('type') ? Input::get('type') : $story->type);
         $story->notes = (Input::get('notes') ? Input::get('notes') : $story->notes);
         $story->source_type = (Input::get('source_type') ? Input::get('source_type') : $story->source_type);
@@ -307,10 +287,9 @@ class AdminStoryController extends Controller
         $story->location = (Input::get('location') ? Input::get('location') : $story->location);
         $story->removed_from_social = (Input::get('removed_from_social') ? Input::get('removed_from_social') : $story->removed_from_social);
         $story->problem_status = (Input::get('problem_status') ? Input::get('problem_status') : $story->problem_status);
-        $story->submitted_to = (Input::get('submitted_to') ? Input::get('submitted_to') : $story->submitted_to);
+        $story->submitted_to = (Input::get('submitted_to') ? implode(',', Input::get('submitted_to')) : $story->submitted_to);
         $story->rights = (Input::get('rights') ? Input::get('rights') : $story->rights);
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : $story->rights_type);
-
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
 
@@ -372,7 +351,7 @@ class AdminStoryController extends Controller
                 //     $story->status = $result->status;
                 //     $story->date_ingested = $story->created_at;
                 // }
-                $message = 'Ready to license';
+                $message = 'Pushed to WP + Ready to license';
                 break;
         }
 
@@ -511,6 +490,10 @@ class AdminStoryController extends Controller
         return \Storage::disk('s3')->url($imageFileName);
     }
 
+    /**
+     * @param $state
+     * @return string
+     */
     public static function checkDropdownValue($state)
     {
         $found='';
