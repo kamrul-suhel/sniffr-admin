@@ -28,7 +28,8 @@
                     <br>
                 </div>
 
-                <v-layout row wrap>
+
+                <v-layout row wrap class="s-pagination-goto">
                     <v-flex xs12 class=" mb-3">
                         <h3 class="sub-heading">All Stories</h3>
                         <hr>

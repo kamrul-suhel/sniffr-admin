@@ -1,6 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <div class="videos-section">
+    <div class="videos-section s-pagination-goto">
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">

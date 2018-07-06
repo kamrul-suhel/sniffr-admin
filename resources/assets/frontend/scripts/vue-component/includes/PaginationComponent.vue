@@ -38,7 +38,7 @@
             },
 
             current_page() {
-                this.$vuetify.goTo('.videos-section', {duration: 1, easing: 'easeInCubic'});
+                this.$vuetify.goTo('.s-pagination-goto', {duration: 1, easing: 'easeInCubic'});
 
                 if (this.page === 'video') {
                     this.$router.push({
