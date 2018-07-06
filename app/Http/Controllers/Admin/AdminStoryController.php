@@ -76,7 +76,7 @@ class AdminStoryController extends Controller
             if($found==1) {
                 $stories = $stories->where('state', $state);
             } else {
-                $state = $current_state[0]; //set current state to first state within decision
+                $state = ''; //$current_state[0]; //set current state to first state within decision
                 foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
                     $stories = $stories->orWhere('state', $state_values['value']);
                 }
