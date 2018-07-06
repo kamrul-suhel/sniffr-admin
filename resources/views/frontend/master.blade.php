@@ -17,7 +17,8 @@
 
     <script>
         var sniffr_app = {
-            'user' : <?php echo (Auth::user() ? Auth::user() : '""'); ?>
+            'user' : <?php echo (Auth::user() ? Auth::user() : '""'); ?>,
+            'user_offers' : <?php echo (Auth::user() ? Auth::user()->userOffers() : '""'); ?>
         }
     </script>
 </head>

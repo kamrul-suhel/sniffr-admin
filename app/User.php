@@ -75,6 +75,20 @@ class User extends Authenticatable
         return $this->role == 'admin';
     }
 
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
+    }
+
+    public function userOffers()
+    {
+        return Collection::whereHas('collectionVideos', function($query) {
+            $query->where('status', 'offered');
+        })->orWhereHas('collectionStories', function($query) {
+            $query->where('status', 'offered');
+        })->where('user_id', $this->id)->with('collectionVideos')->with('collectionStories')->count();
+    }
+
     public function routeNotificationForSlack()
     {
     	if($this->webhook){

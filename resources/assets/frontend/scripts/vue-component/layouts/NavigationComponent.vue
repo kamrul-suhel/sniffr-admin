@@ -21,7 +21,7 @@
 
                             <li v-if="client_login">
                                 <router-link :to="{name: 'client_offered_assets'}">
-                                    <v-icon color="white" left>gavel</v-icon> My Offers ()
+                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ user.offers }})
                                 </router-link>
                             </li>
 
@@ -136,7 +136,6 @@
 
                 //if user login all data
                 user: '',
-
             }
         },
         watch: {
@@ -181,7 +180,7 @@
             });
 
 
-            if(this.$route.name != 'home'){
+            if(this.$route.name !== 'home'){
                 this.nav_background = true;
             }else{
                 this.nav_background = false;
