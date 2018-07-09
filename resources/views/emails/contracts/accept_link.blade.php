@@ -3,13 +3,13 @@
 @section('content')
     <div>
     <span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;">
-        <b>Hey {{ $video->contact->full_name }}!</b>
+        <b>Hey {{ $asset->contact->full_name }}!</b>
     </span>
     </div>
 
     <div>&nbsp;</div>
 
-    <div>Video Ref: {{ $video->alpha_id }}</div>
+    <div>Video Ref: {{ $asset->alpha_id }}</div>
 
     <div>&nbsp;</div>
 

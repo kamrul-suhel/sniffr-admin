@@ -5,6 +5,7 @@ namespace App\Mail;
 use App\Contact;
 use App\Contract;
 use App\Video;
+use App\Story;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -13,10 +14,9 @@ class ContractMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * @var Video
-     */
-    public $video;
+    public $asset;
+    public $asset_id;
+    public $type;
 
     /**
      * @var Contact
@@ -30,13 +30,17 @@ class ContractMailable extends Mailable
 
     /**
      * ContractMailable constructor.
-     * @param Video $video
      * @param Contract $contract
      */
-    public function __construct(Video $video, Contract $contract)
+    public function __construct($asset_id, Contract $contract, $type = 'video')
     {
+        $this->asset_id = $asset_id;
+        if($type=='video') {
+            $asset = Video::find($asset_id);
+        } else {
+            $asset = Story::find($asset_id);
+        }
         $this->contract = $contract;
-        $this->video = $video;
     }
 
     /**
@@ -48,6 +52,6 @@ class ContractMailable extends Mailable
     {
         return $this->view('emails.contracts.accept_link')
             ->text('emails.contracts.accept_link_text')
-            ->subject('SNIFFR - Here is the contract for your video');
+            ->subject('SNIFFR - Here is the contract for your asset');
     }
 }

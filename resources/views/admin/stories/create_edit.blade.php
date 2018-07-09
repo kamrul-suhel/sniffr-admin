@@ -348,7 +348,6 @@
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>
 										@endif
 									</div>
-									<p>{{ count(explode(',', $story->submitted_to)) }}</p>
 									<div id="submitted-status">
 										@if(isset($story)&&$story->submitted_to)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ((isset($story->submitted_to)&&count(explode(',', $story->submitted_to)))>1) ? 'multiple' : ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>

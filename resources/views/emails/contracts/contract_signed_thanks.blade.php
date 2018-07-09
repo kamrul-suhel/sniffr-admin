@@ -3,7 +3,7 @@
 @section('content')
     <div>
     <span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;">
-        <b>Hey {{ $video->contact->full_name }}!</b>
+        <b>Hey {{ $this->asset->contact->full_name }}!</b>
     </span>
     </div>
 
@@ -14,10 +14,10 @@
 
     <div>&nbsp;</div>
 
-    <div><a href="{{ route('contract.download.public', ['id' => $video->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$video->contracts->first()->reference_id) }}</a></div>
+    <div><a href="{{ route('contract.download.public', ['id' => $this->asset->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$this->asset->contracts->first()->reference_id) }}</a></div>
 
     <div>&nbsp;</div>
-    
+
     <div>If you have any questions you&rsquo;re more than welcome to contact the team here: <a
                 href="mailto:licensing@unilad.co.uk">licensing@unilad.co.uk</a></div>
 
@@ -31,5 +31,5 @@
 
     <div>&nbsp;</div>
 
-    <div>Video Ref: {{ $video->alpha_id }}</div>
+    <div>Video Ref: {{ $this->asset->alpha_id }}</div>
 @endsection

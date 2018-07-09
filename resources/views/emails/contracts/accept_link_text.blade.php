@@ -1,6 +1,6 @@
-Hey {{ $video->contact->full_name }}!
+Hey {{ $asset->contact->full_name }}!
 
-Video Ref: {{ $video->alpha_id }}
+Video Ref: {{ $asset->alpha_id }}
 
 You are receiving this email in reference to licensing your video. Before we can use your video we need to you to agree to an agreement which includes specific terms.
 
@@ -13,4 +13,4 @@ The UNILAD Team
 
 (powered by Sniffr)
 
-Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($asset->contact->email)) }}
