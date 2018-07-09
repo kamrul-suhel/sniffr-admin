@@ -53,7 +53,7 @@ const actions = {
                 .then((response) => {
                     let data = response.data;
                     commit('setVideoData', data.videos.data);
-                    commit('setMailerVideoData', data.mailer_videos.data);
+                    commit('setMailerVideoData', data.mailer_videos);
                     commit('setVideoPaginationObject', data.videos);
                     resolve();
                 })

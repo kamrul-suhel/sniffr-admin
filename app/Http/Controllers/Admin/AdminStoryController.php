@@ -12,6 +12,9 @@ use App\User;
 use App\Story;
 use App\Asset;
 use App\Video;
+use App\Contact;
+use App\VideoCategory;
+use App\VideoCollection;
 use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -41,8 +44,9 @@ class AdminStoryController extends Controller
     public function index(Request $request)
     {
         $search_value = $request->input('search_value', null);
-        $state = ($request->input('state', 'all') ? $request->input('state', 'all') : 'all');
-        $decision = $request->input('decision', null);
+        $state = ($request->input('state') ? $request->input('state') : '');
+        $decision = $request->input('decision', 'content-sourced');
+        $assigned_to = $request->input('assigned_to', null);
 
         $stories = new Story;
 
@@ -56,28 +60,27 @@ class AdminStoryController extends Controller
             });
         }
 
-        // create decision point and only display states within it
-        if($decision) {
-            $state = 'all';
-            foreach(config('stories.decisions') as $decision_state_key => $decision_state) {
-                if($decision==$decision_state_key) {
-                    $count=1;
-                    foreach($decision_state as $state_key => $state_value) {
-                        //echo $state_value. "<br />";
-                        if($count==0) {
-                            $stories = $stories->where('state', $state_value);
-                        } else {
-                            $stories = $stories->orWhere('state', $state_value);
-                        }
-                        $count++;
-                    }
-                }
-            }
+        if ($assigned_to) {
+            $stories = $stories->where('user_id', $assigned_to);
         }
 
-        if ($state != 'all') {
-            $stories = $stories->where('state', $state);
-            //session(['state' => $state]); not sure what this does?
+        // only display states within selected decision point
+        if($decision) {
+            $found=0;
+            foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+                if($state==$state_values['value']) {
+                    $found=1;
+                }
+            }
+            // ^ ABOVE: need a better way to search state values to see if state exists within a decision array
+            if($found==1) {
+                $stories = $stories->where('state', $state);
+            } else {
+                $state = ''; //$current_state[0]; //set current state to first state within decision
+                foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+                    $stories = $stories->orWhere('state', $state_values['value']);
+                }
+            }
         }
 
         $stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
@@ -86,7 +89,8 @@ class AdminStoryController extends Controller
             'stories' => $stories,
             'state' => $state,
             'decision' => $decision,
-            'users' => User::all(),
+            'assigned_to' => $assigned_to,
+            'users' => User::where([['client_id', NULL]])->get(),
             'user' => Auth::user(),
         ];
 
@@ -130,6 +134,9 @@ class AdminStoryController extends Controller
             'button_text' => 'Add New Story',
             'user' => Auth::user(),
             'users' => User::all(),
+            'contacts' => Contact::all(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
         ];
 
@@ -155,8 +162,24 @@ class AdminStoryController extends Controller
         $story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : NULL);
         $story->source = (Input::get('source') ? Input::get('source') : NULL);
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : Auth::user()->id);
+        $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
         //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : User::where('id', Auth::user()->id)->pluck('username')->first());
         $story->active = 1;
+        $story->contact_is_owner = (Input::get('contact_is_owner') ? Input::get('contact_is_owner') : NULL);
+        $story->allow_publish = (Input::get('allow_publish') ? Input::get('allow_publish') : NULL);
+        $story->permission = (Input::get('permission') ? Input::get('permission') : NULL);
+        $story->type = (Input::get('type') ? Input::get('type') : NULL);
+        $story->notes = (Input::get('notes') ? Input::get('notes') : NULL);
+        $story->source_type = (Input::get('source_type') ? Input::get('source_type') : NULL);
+        $story->sourced_at = (Input::get('sourced_at') ? Carbon::parse(Input::get('sourced_at')) : NULL);
+        $story->location = (Input::get('location') ? Input::get('location') : NULL);
+        $story->removed_from_social = (Input::get('removed_from_social') ? Input::get('removed_from_social') : NULL);
+        $story->problem_status = (Input::get('problem_status') ? Input::get('problem_status') : NULL);
+        $story->submitted_to = (Input::get('submitted_to') ? implode(',', Input::get('submitted_to')) : NULL);
+        $story->rights = (Input::get('rights') ? Input::get('rights') : NULL);
+        $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : NULL);
+        $story->story_category_id = (Input::get('category') ? Input::get('category') : NULL);
+        $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : NULL);
 
         if (Input::hasFile('story_image')) {
             $imageFile = Input::file('story_image');
@@ -166,6 +189,19 @@ class AdminStoryController extends Controller
             if (Input::get('story_image_source_url')) {
                 $story->thumb = Input::get('story_image_source_url');
             }
+        }
+
+        // Need to add / update contact
+        if(Input::get('contact_email')) {
+            $contact = new Contact();
+            $contact->full_name = Input::get('contact_full_name');
+            $contact->email = Input::get('contact_email');
+            $contact->tel = Input::get('contact_tell');
+            $contact->save();
+            $story->contact_id = $contact->id;
+            // should they get an email or something?
+        } else {
+            $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
         }
 
         $story->save();
@@ -189,13 +225,20 @@ class AdminStoryController extends Controller
         $story = Story::where('alpha_id', $id)
             ->first();
 
+        $decision = Input::get('decision');
+        //array_key_exists($story->state,config('stories.decisions.'.$decision)) looks for state within specific decision step
+
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
             'story' => $story,
             'post_route' => url('admin/stories/update'),
-            'button_text' => 'Update Story',
+            'button_text' => 'Save Draft',
+            'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
+            'contacts' => Contact::all(),
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
         ];
 
@@ -209,6 +252,7 @@ class AdminStoryController extends Controller
     {
         $data = Input::all();
         $id = $data['id'];
+        $decision = $data['decision'];
         $story = Story::findOrFail($id);
 
         $validator = Validator::make($data, $this->rules);
@@ -217,36 +261,51 @@ class AdminStoryController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        if (Input::get('title')) {
-            $story->title = Input::get('title');
-        }
-
-        $story->state = (Input::get('state') ? Input::get('state') : 'sourced');
-
-        if (Input::get('description')) {
-            $story->description = Input::get('description');
-        }
-
-        if (Input::get('excerpt')) {
-            $story->excerpt = Input::get('excerpt');
-        }
-
-        if (Input::get('source')) {
-            $story->source = Input::get('source');
-        }
-
         if (Input::hasFile('story_image')) {
             $imageFile = Input::file('story_image');
             $imageUrl = $this->saveImageFile($imageFile);
             $story->thumb = ($imageUrl ? $imageUrl : $story->thumb);
         } else {
-            if (Input::get('story_image_source_url')!=$story->thumb) {
+            if (Input::get('story_image_source_url')&&Input::get('story_image_source_url')!=$story->thumb) {
                 $story->thumb = Input::get('story_image_source_url');
             }
         }
 
+        $story->title = (Input::get('title') ? Input::get('title') : $story->title);
+        $story->state = (Input::get('state') ? Input::get('state') : $story->state);
+        $story->description = (Input::get('description') ? Input::get('description') : $story->description);
+        $story->excerpt = (Input::get('excerpt') ? Input::get('excerpt') : $story->excerpt);
+        $story->source = (Input::get('source') ? Input::get('source') : $story->source);
+        $story->contact_is_owner = (Input::get('contact_is_owner') == 1  ? 1 : NULL);
+        $story->allow_publish = (Input::get('allow_publish') == 1  ? 1 : NULL);
+        $story->permission = (Input::get('permission') == 1  ? 1 : NULL);
+        $story->story_category_id = (Input::get('category') ? Input::get('category') : NULL);
+        $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : NULL);
+        $story->type = (Input::get('type') ? Input::get('type') : $story->type);
+        $story->notes = (Input::get('notes') ? Input::get('notes') : $story->notes);
+        $story->source_type = (Input::get('source_type') ? Input::get('source_type') : $story->source_type);
+        $story->sourced_at = (Input::get('sourced_at') ? Carbon::parse(Input::get('sourced_at')) : ($story->sourced_at ? $story->sourced_at : NULL));
+        $story->location = (Input::get('location') ? Input::get('location') : $story->location);
+        $story->removed_from_social = (Input::get('removed_from_social') ? Input::get('removed_from_social') : $story->removed_from_social);
+        $story->problem_status = (Input::get('problem_status') ? Input::get('problem_status') : '');
+        $story->submitted_to = (Input::get('submitted_to') ? implode(',', Input::get('submitted_to')) : '');
+        $story->rights = (Input::get('rights') ? Input::get('rights') : '');
+        $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : '');
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
+
+        // Need to add / update contact
+        if(Input::get('contact_email')) {
+            $contact = new Contact();
+            $contact->full_name = Input::get('contact_full_name');
+            $contact->email = Input::get('contact_email');
+            $contact->tel = Input::get('contact_tel');
+            $contact->save();
+            $story->contact_id = $contact->id;
+            // should they get an email or something?
+        } else {
+            $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
+        }
 
         if (Input::get('videos')) {
             $story->videos()->sync(Input::get('videos'));
@@ -256,8 +315,8 @@ class AdminStoryController extends Controller
 
         // need states for when syncing stories to WP
 
-        return Redirect::to('admin/stories')->with([
-            'note' => 'Successfully Updated Story!',
+        return Redirect::to('admin/stories/?decision='.$decision)->with([
+            'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
         ]);
     }
@@ -271,6 +330,8 @@ class AdminStoryController extends Controller
     public function status(Request $request, $state, $id)
     {
         $isJson = $request->ajax();
+        $decision = $request->input('decision');
+        $remove = 'no';
 
         $story = Story::where('alpha_id', $id)->first();
         $previous_state = $story->state;
@@ -279,25 +340,19 @@ class AdminStoryController extends Controller
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
-        // sync to WP
+        // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'approved'):
+            case ($state == 'unlicensed'):
                 // add new post to WP
-                $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
-                $result = $this->apiPost('posts', $parameters, true);
-                // update stories record with WP response from post
-                if($result->id){
-                    $story->wp_id = $result->id;
-                    $story->status = $result->status;
-                    $story->date_ingested = $story->created_at;
-                }
-                break;
-            case ($state == 'published'):
-                // get latest story updates from WP and update stories record (WIP)
-                break;
-            case ($state == 'hacks-unassigned'||$state == 'hacks-unassigned'||$state == 'writing-inprogress'||$state == 'writing-completed'||$state == 'subs-unassigned'||$state == 'subs-inprogress'||$state == 'subs-approved'||$state == 'subs-rejected'):
-                // get latest story updates from WP and update stories record (WIP)
-                $message = 'Updated Editorial Process';
+                // $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
+                // $result = $this->apiPost('posts', $parameters, true);
+                // // update stories record with WP response from post
+                // if($result->id){
+                //     $story->wp_id = $result->id;
+                //     $story->status = $result->status;
+                //     $story->date_ingested = $story->created_at;
+                // }
+                $message = 'Pushed to WP + Ready to license';
                 break;
         }
 
@@ -309,18 +364,19 @@ class AdminStoryController extends Controller
                 'status' => 'success',
                 'message' => $message,
                 'state' => $state,
-                'remove' => 'yes',
+                'remove' => $remove,
                 'story_id' => $story->id,
                 'story_alpha_id' => $story->alpha_id,
-                'previous_state' => $previous_state,
+                'decision' => $decision,
             ]);
+        } else {
+            return Redirect::to('admin/stories/?decision=' . $decision)
+                ->with([
+                    'note' => 'Story Updated',
+                    'note_type' => 'success',
+                ]);
         }
 
-        // return Redirect::to('admin/stories/edit/' . $id . '/?previous_state=' . $previous_state)
-        //     ->with([
-        //         'note' => 'Successfully Updated Story',
-        //         'note_type' => 'success',
-        //     ]);
     }
 
     /**
@@ -436,20 +492,37 @@ class AdminStoryController extends Controller
     }
 
     /**
+     * @param $state
+     * @return string
+     */
+    public static function checkDropdownValue($state)
+    {
+        $found='';
+        foreach(config('stories.decisions') as $decision1 => $decision1_values) {
+            foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values) {
+                if($state==$current_state) {
+                    $found=$state_values['dropdown'];
+                }
+            }
+        }
+        return $found;
+    }
+
+    /**
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $story = Story::find($id);
+        $story = Story::where('alpha_id', $id)->first();
 
         if (!$story) {
             abort(404);
         }
 
-        $story->destroy($id);
+        $story->destroy($story->id);
 
-        return Redirect::to('admin/clients')->with([
+        return Redirect::to('admin/stories')->with([
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);

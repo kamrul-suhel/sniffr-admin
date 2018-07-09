@@ -100,15 +100,19 @@ class SearchController extends Controller
 			$data['prev_video_alpha_id'] = $previousAlphaId;
 		}
 
+        // Recommended Videos via the Mailer
 		if(Auth::check()){
-			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)
+                ->pluck('client_mailer_id');
 
-			$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)->pluck('video_id');
+			$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)
+                ->pluck('video_id');
 
 			$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
 				->whereIn('id', $mailerVideoIds)
 				->whereNotIn('id', $unsearchableVideos)
-				->paginate();
+                ->orderBy('licensed_at', 'DESC')
+                ->get();
 		}
 
 		$data['mailer_videos'] = $mailerVideos;

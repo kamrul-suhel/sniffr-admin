@@ -2,8 +2,8 @@
 
 return [
     'states' => [
-        'unapproved',
-        'approved',
+        'unapproved' ,
+        // 'approved',
         'rejected',
         'unlicensed',
         'licensing',
@@ -15,77 +15,198 @@ return [
         'subs-inprogress',
         'subs-approved',
         'subs-rejected',
-        'edits-unassigned',
-        'edits-inprogress',
-        'edits-approved',
-        'edits-rejected',
+        // 'edits-unassigned',
+        // 'edits-inprogress',
+        // 'edits-approved',
+        // 'edits-rejected',
         'published'
     ],
+
     'decisions' => [
 		'content-sourced' => [
-			'unapproved',
+			'unapproved' => [
+                'dropdown' => 'Unapproved', // dropdown name
+                'value' => 'unapproved', // dropdown value
+            ],
+            'unlicensed' => [
+                'dropdown' => 'Approved',
+                'value' => 'unlicensed',
+            ],
+            'rejected' => [
+                'dropdown' => 'Rejected',
+                'value' => 'rejected',
+            ],
 		],
-        'ready-to-license' => [
-			'approved',
+        'licensing' => [
+            'unlicensed' => [
+                'dropdown' => 'Ready for Pickup',
+                'value' => 'unlicensed',
+            ],
+            'licensing' => [
+                'dropdown' => 'In Progress',
+                'value' => 'licensing',
+            ],
+            'licensed' => [
+                'dropdown' => 'Licensed',
+                'value' => 'licensed',
+            ],
+            // 'unlicensed' => [
+            //     'dropdown' => 'Unlicensable',
+            //     'value' => 'unlicensed',
+            // ],
 		],
-        'licensing-in-progress' => [
-            'unlicensed',
-			'licensing',
+        'writing' => [
+            'licensed' => [
+                'dropdown' => 'Ready for Pickup',
+                'value' => 'licensed',
+            ],
+            'writing-inprogress' => [
+                'dropdown' => 'In Progress',
+                'value' => 'writing-inprogress',
+            ],
+            'subs-rejected' => [
+                'dropdown' => 'In Purgatory',
+                'value' => 'subs-rejected',
+            ],
 		],
-        'licensed' => [
-			'licensed',
-            'hacks-unassigned',
-		],
-        'writing-in-progress' => [
-			'writing-inprogress',
-            'writing-completed',
-		],
-        'subbing-in-progress' => [
-            'subs-unassigned',
-            'subs-inprogress',
-            'subs-approved',
-            'subs-rejected',
-            'edits-unassigned',
-            'edits-inprogress',
-            'edits-approved',
-            'edits-rejected',
+        'subbing' => [
+            'writing-completed' => [
+                'dropdown' => 'Ready for Pickup',
+                'value' => 'writing-completed',
+            ],
+            'subs-inprogress' => [
+                'dropdown' => 'In Progress',
+                'value' => 'subs-inprogress',
+            ],
+            'subs-unassigned' => [
+                'dropdown' => 'In Purgatory',
+                'value' => 'subs-unassigned',
+            ],
 		],
         'ready-to-publish' => [
-			'published',
-		],
-        'archived' => [
-			'rejected',
+            'subs-approved' => [
+                'dropdown' => 'Ready for Publishing',
+                'value' => 'subs-approved',
+            ],
+            'published' => [
+                'dropdown' => 'Published',
+                'value' => 'published',
+            ],
 		],
     ],
+
+    // 'decisions' => [
+	// 	'content-sourced' => [
+	// 		'unapproved',
+    //         'approved',
+    //         'rejected',
+	// 	],
+    //     'licensing-in-progress' => [
+    //         'approved',
+    //         'unlicensed',
+	// 		'licensing',
+    //         'licensed',
+	// 	],
+    //     'writing-in-progress' => [
+    //         'licensed',
+    //         'hacks-unassigned',
+	// 		'writing-inprogress',
+    //         'writing-completed',
+	// 	],
+    //     'subbing-in-progress' => [
+    //         'writing-completed',
+    //         'subs-unassigned',
+    //         'subs-inprogress',
+    //         'subs-approved',
+    //         'subs-rejected',
+	// 	],
+    //     'ready-to-publish' => [
+	// 		'published',
+	// 	],
+    // ],
+
+    'story_type' => [
+        'new',
+        'skeleton',
+    ],
+
     'priorities' => [
         'high',
         'medium',
         'low',
     ],
+
     'destinations' => [
         'for-sale',
         'for-page',
+        'for-both',
     ],
+
+    'removed_from_social' => [
+        '7-days',
+        '6-days',
+        '5-days',
+        '4-days',
+        '3-days',
+        '2-days',
+        '1-day',
+        'none',
+    ],
+
+    'problem_status' => [
+        'dead-link',
+        'prior-exclusive-license',
+        'contact-is-not-owner',
+        'minor-in-video',
+    ],
+
+    'submitted_to' => [
+        'UNILAD',
+        'lad-bible',
+        'storyful',
+        'jukin',
+        'newsflare',
+        'viral-hog',
+        'viral-thread',
+        'viral-flare',
+        'blunt-kommunity',
+        'buzzfeed',
+        'tasty',
+        'other',
+    ],
+
+    'rights' => [
+        'exclusive',
+        'non-exclusive',
+    ],
+
+    'rights_type' => [
+        'content',
+        'editorial',
+        'distribution-rights',
+    ],
+
     'colors' => [
         'unapproved' => 'default',
         'approved' => 'default',
-        'rejected' => 'danger',
-        'unlicensed' => 'warning',
-        'licensing' => 'warning',
-        'licensed' => 'success',
+        'rejected' => 'default',
+        'unlicensed' => 'default',
+        'licensing' => 'default',
+        'licensed' => 'default',
         'hacks-unassigned' => 'default',
-        'writing-inprogress' => 'warning',
+        'writing-inprogress' => 'default',
         'writing-completed' => 'success',
         'subs-unassigned' => 'default',
-        'subs-inprogress' => 'warning',
+        'subs-inprogress' => 'default',
         'subs-approved' => 'success',
-        'subs-rejected' => 'danger',
+        'subs-rejected' => 'default',
         'edits-unassigned' => 'default',
-        'edits-inprogress' => 'warning',
-        'edits-approved' => 'success',
-        'edits-rejected' => 'danger',
+        'edits-inprogress' => 'default',
+        'edits-approved' => 'default',
+        'edits-rejected' => 'default',
         'published' => 'success',
     ],
+
     'icons' => [
         'accepted' => 'fa fa-clock-o',
         'rejected' => 'fa fa-times',

@@ -30,6 +30,7 @@ class PendingQuote extends Mailable
     public function build()
     {
         return $this->view('emails.quotes.pending')
-            ->subject('SNIFFR - Your Request is being reviewed');
+            ->subject('SNIFFR - Your Request is being reviewed')
+            ->with('data', $this->data);
     }
 }

@@ -20,6 +20,7 @@
         .container.grid-list-lg .layout .flex {
             padding: 8px;
         }
+
         .navigation ul li a i {
             font-size: 15px;
             margin-top: -5px;
@@ -49,38 +50,37 @@
 </head>
 <body {{ (Request::is('/')) ? 'class="home"' : '' }}>
 
+
 <section id="sniffr">
-    <section id="nav" class="section-space nav-background">
+
+    <section id="nav" class="section-space" style="background-color: black;">
         <div class="container grid-list-lg">
             <div class="layout row wrap">
-                <div class="flex xs12 sm6 md4 lg4" style="margin: -10px;">
-                    <div class="logo"><a href="/" class="router-link-active">
-                            <img src="/assets/frontend/images/logo-sniffr-white.png"></a><p style="color:white;">Client Portal</p></div>
+                <div class="flex xs12 sm6 md4 lg4">
+                    <div class="logo"><a href="/" class="router-link-exact-active router-link-active"><img
+                                    src="/assets/frontend/images/logo-sniffr-white.png"></a></div>
                 </div>
                 <div class="flex xs12 sm6 md8 lg8">
                     <nav class="navigation">
                         <ul>
-                            <li><a href="/client/videos" class=""><i aria-hidden="true" class="icon icon--right white--text material-icons"></i><i class="fa fa-video-camera"></i> Videos</a></li>
-
-                            @if(in_array(auth()->user()->role, ['client', 'client_admin', 'client_owner']))
-                                <li>
-                                    <a href="/client/profile" class="">
-                                        <i aria-hidden="true" class="icon icon--right white--text material-icons"></i>
-                                        <i class="fa fa-user"></i> {{ auth()->user()->client->name ?? 'Company Settings' }}
-                                    </a>
-                                </li>
-                            @else
-                                <li>
-                                    <a href="/client/profile/{{auth()->user()->client->slug}}/users/{{auth()->user()->id}}/edit" class="">
-                                        <i aria-hidden="true" class="icon icon--right white--text material-icons"></i>
-                                        <i class="fa fa-user"></i> {{ auth()->user()->username ?? 'Profile' }}
-                                    </a>
-                                </li>
-                            @endif
+                            <li><a href="/videos" class=""><i aria-hidden="true" class="v-icon white--text v-icon--left material-icons">videocam</i>Videos</a></li>
+                            <li><a href="/stories" class=""><i aria-hidden="true" class="v-icon white--text v-icon--left material-icons">art_track</i>Stories</a></li>
+                            <li>
+                                <div class="v-menu" style="display: inline-block;">
+                                    <div class="v-menu__activator"><a><i aria-hidden="true" class="v-icon white--text material-icons">face</i> {{ auth()->user()->username }}</a></div>
+                                </div>
+                            </li>
                         </ul>
                     </nav>
                 </div>
             </div>
+        </div>
+        <div class="login-dialog">
+            <div class="v-dialog__container login-section" style="display: block;"></div>
+        </div>
+        <div class="v-dialog__container" style="display: block;"></div>
+        <div class="flex quote-dialog">
+            <div class="v-dialog__container login-section" style="display: block;"></div>
         </div>
     </section>
 
