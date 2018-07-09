@@ -86,7 +86,8 @@
                                 <v-flex xs12>
                                     <v-select
                                             label="License Type"
-                                            color="dark"
+
+                                            color="light"
                                             :items="licenses"
                                             v-model="license_type"
                                             item-value="slug"
