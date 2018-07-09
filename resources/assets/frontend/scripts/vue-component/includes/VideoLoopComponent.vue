@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3>
+    <v-flex xs12 sm6 md4 lg4 xl3 style="min-width:380px;">
         <v-card class="video-card block">
             <v-card-media class="video-card-thumb-wrapper"
                 :src="onGetThumbnailImage()">

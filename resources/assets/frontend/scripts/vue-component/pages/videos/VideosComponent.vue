@@ -14,7 +14,7 @@
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg class="py-0">
-                <v-layout row wrap v-if="client_logged_in && mailer_videos.length > 0">
+                <v-layout row wrap v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
                     <v-flex xs12>
                         <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
@@ -22,7 +22,6 @@
                     </v-flex>
 
                     <v-flex xs12>
-
                             <v-layout align-content-center style="overflow-x:scroll;">
                                 <video-loop-component
                                         v-for="(mailer, index) in mailer_videos"
@@ -35,6 +34,7 @@
 
                 <v-layout row wrap>
                     <v-flex xs12 class="mb-3">
+                        <br>
                         <h3 class="sub-heading">All Videos</h3>
                         <hr>
                     </v-flex>
@@ -110,6 +110,7 @@
             }
 
             this.setAllVideoData(this.getQueryObject());
+
         },
 
         methods: {
@@ -119,6 +120,7 @@
                     this.paginate = this.$store.getters.getVideoPaginateObject;
                     this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
+
             },
 
             updateVideodata(){
@@ -132,11 +134,11 @@
                     page: this.current_page? this.current_page : 1,
                 };
 
-                if(this.$route.query.search && this.$route.query.search != ''){
+                if(this.$route.query.search && this.$route.query.search !== ''){
                     query.search = this.$route.query.search;
                 }
 
-                if(this.$route.query.tag && this.$route.query.tag != ''){
+                if(this.$route.query.tag && this.$route.query.tag !== ''){
                     query.tag = this.$route.query.tag;
                 }
 
