@@ -44,18 +44,19 @@ class QueueClientMailer implements ShouldQueue
     {
         $mailer = ClientMailer::find($this->mailer_id);
 		$user = User::find($this->client_id);
+        $subject = ($mailer->subject ? $mailer->subject : 'Sniffr: Daily Newsletter');
 
         if($mailer->user_id!=0) {
             $from = User::find($mailer->user_id);
             $from_name = ($from->full_name ? $from->full_name : $from->username);
             $from_email = $from->email;
         } else {
-            $from_name = 'SNIFFR';
+            $from_name = 'Sniffr';
             $from_email = 'noreply@sniffrmedia.co.uk';
         }
 
         //check if user has unsubcribed (user_id!=0)
-		Mail::to($user->email)->send(new ClientStoryList($mailer, $user, $from_name, $from_email));
+		Mail::to($user->email)->send(new ClientStoryList($mailer, $user, $from_name, $from_email, $subject));
     }
 
     /**

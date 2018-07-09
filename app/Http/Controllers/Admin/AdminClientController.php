@@ -168,6 +168,7 @@ class AdminClientController extends Controller
         $company->billing_name = $request->input('billing_name');
         $company->tier = $request->input('tier');
         $company->location = $request->input('location');
+        $company->active = $request->input('active') == 'on' ? 1 : 0;
 
         $redirect_path = '';
         if ($company->account_owner_id != $request->input('account_owner_id')) {
