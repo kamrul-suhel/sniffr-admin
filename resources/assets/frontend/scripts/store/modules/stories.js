@@ -1,6 +1,6 @@
 const state = {
     stories: null,
-    mailer_stories: null,
+    mailer_stories: [],
     paginate: ''
 };
 

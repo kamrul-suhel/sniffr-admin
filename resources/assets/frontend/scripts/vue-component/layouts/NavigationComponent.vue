@@ -32,7 +32,7 @@
                             </li>
 
 
-                            <li v-if="client_login">
+                            <li>
                                 <router-link to="/stories">
                                     <v-icon color="white" left>art_track</v-icon> Stories
                                 </router-link>
