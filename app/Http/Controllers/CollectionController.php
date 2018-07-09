@@ -157,6 +157,7 @@ class CollectionController extends Controller
         $client = $this->client->create([
             'name' => $data['company_name'],
             'slug' => $company_slug,
+            'active' => 0,
             'account_owner_id' => null, //set to null as we don't know this person will be the top dog.
         ]);
 
@@ -166,6 +167,7 @@ class CollectionController extends Controller
             'full_name' => $data['user_full_name'],
             'role' => 'client_owner',
             'tel' => $data['tel'],
+            'active' => 0,
             'password' => \Hash::make($password),
             'client_id' => $client->id
         ]);
