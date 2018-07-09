@@ -493,8 +493,14 @@
 			if(arr.length>0) {
 				if($.inArray('UNILAD', arr) !== -1) {
 					$('#rights').val('exclusive');
+					$('#rights-box-status').removeClass('danger').addClass('success');
+					$('#rights-box-status').text('Exclusive');
+					$('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
 				} else {
 					$('#rights').val('');
+					$('#rights-box-status').removeClass('success').removeClass('danger');
+					$('#rights-box-status').text('Pending');
+					$('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
 				}
 				if(arr.length>1) {
 					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to multiple </h5>');
