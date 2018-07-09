@@ -126,7 +126,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12>
+                            <v-flex xs12 v-if="!can_buy">
                                 <v-textarea
                                         v-model="notes"
                                         name="notes"
@@ -195,7 +195,7 @@
                 license_type: null,
                 license_platform: null,
                 license_length: null,
-                notes: null,
+                notes: '',
                 licenses: [],
                 platforms: [],
                 lengths: [],
