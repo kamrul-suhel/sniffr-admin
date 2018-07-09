@@ -152,7 +152,7 @@
                                 return;
                             }
 
-                            this.$store.commit('setUserState', data.user);
+                            this.$store.commit('setUserState', data);
                             LoginEventBus.loginSuccess();
 
                             if (data.redirect_url != '') {

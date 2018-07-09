@@ -2,33 +2,45 @@
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
             <div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }">
-                <div class="cdi-label" v-if="ordered || newOrder">
+                <div class="cdi-label" v-if="purchased">
                     <v-tooltip top>
                         <v-btn slot="activator" flat icon raised light color="white">
-                            <v-icon size="25px">cloud_done</v-icon>
+                            <v-icon size="25px">money</v-icon>
                         </v-btn>
-                        <span>Downloaded</span>
+                        <span>Purchased</span>
+                    </v-tooltip>
+                </div>
+
+                <div class="cdi-label" v-if="decline">
+                    <v-tooltip top>
+                        <v-btn slot="activator" flat icon raised light color="white">
+                            <v-icon size="25px">error_outline</v-icon>
+                        </v-btn>
+                        <span>Declined</span>
                     </v-tooltip>
                 </div>
 
                 <div class="hot-story" v-if="story.flagged === 1">
                     <div class="hot-story-content">HOT</div>
                 </div>
-
-
             </div>
         </v-flex>
+
         <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
                     <h2 v-html="story.title"></h2>
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
                     <div v-html="story.excerpt"></div>
+
+                    <div class="final-price">
+                        <h4>Final price: <span>£{{ story.final_price }}</span></h4>
+                    </div>
                 </v-flex>
             </v-layout>
         </v-flex>
 
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -44,11 +56,36 @@
                     dark
                     large
                     color="dark"
-                    @click.native="onDownloadAllAssets()"
+                    @click.native="onDownloadStory()"
                     :loading="loading"
                     :disabled="loading"
             >
-                Download Story
+                {{ button_text }}
+            </v-btn>
+        </v-flex>
+        <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
+            <v-btn
+                    block
+                    dark
+                    large
+                    :loading="acceptLoading"
+                    :disabled="acceptLoading || assetDeclined"
+                    @click="onAccept()"
+                    color="dark"
+                    class="mb-3">
+                Accept
+            </v-btn>
+
+            <v-btn
+                    block
+                    dark
+                    large
+                    color="dark"
+                    @click.native="onDecline()"
+                    :loading="declineLoading"
+                    :disabled="declineLoading || assetDeclined"
+            >
+                Decline
             </v-btn>
         </v-flex>
 
@@ -59,31 +96,47 @@
 </template>
 
 <script>
+    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus'
     import ComponentServices from '../../../../services/ComponentServices';
 
     export default {
         data () {
             return {
-                newOrder: false,
-                loading: false,
+                button_text: 'Download Video',
+                purchased: false,
+                decline: false,
+
                 loader: null,
                 showButton: false,
-                order: false,
-                ordered: false,
-                hide_download_button: false,
+
+                loading: false,
+                acceptLoading: false,
+                declineLoading:false,
+                assetDeclined: false,
+
+                assetType:''
             }
         },
 
-        props: [
-            'story'
-        ],
+        props: {
+            story: {
+                type: Object,
+                require: true
+            },
+
+            type: {
+                type: String,
+                require: true
+            },
+
+            index: {
+                type: Number,
+                require: true
+            }
+        },
 
         created() {
-            var user = this.$store.getters.getUser;
-
-            var componentServices = new ComponentServices();
-
-            this.ordered = componentServices.checkOrderExists(this.story.orders, user);
+            this.assetType = this.type;
         },
 
         watch: {
@@ -105,12 +158,6 @@
                 this.showButton = !this.showButton;
             },
 
-            onDownloadAllAssets(){
-                this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download';
-                window.location = url;
-            },
-
             goToDetail(){
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
@@ -122,16 +169,44 @@
                 return image;
             },
 
-            onBuyStory(){
-                var url = '/client/orders';
-                var formData = new FormData();
-                formData.append('story_id', this.story.id);
-                formData.append('user_agent', navigator.userAgent);
-                formData.append('user_id', this.$store.getters.getUser.id);
+            onDownloadStory(){
+                this.loader = 'loading';
+                var url = '/client/stories/' + this.story.id + '/download';
+                window.location = url;
+            },
 
-                axios.post(url, formData).then((response) => {
+            onAccept() {
+                console.log('accept story');
+                let url = 'collections/accept_asset_price/' + this.story.collection_story_id + '/story';
+                this.acceptLoading = true;
+                axios.get(url).then((response) => {
                     console.log(response);
+                    if (response.data.success === '1') {
+                        this.acceptLoading = false;
+                        this.assetType = "purchased"
+                        this.purchased = true
+                        SnackbarEventBus.displayMessage(5000, 'Story has successfully purchased');
+
+                        // After purchased, if we need to to change another component data this event need to enable
+                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
+                    }
                 });
+            },
+
+            onDecline() {
+                let url = 'collections/reject_asset_price/' + this.story.collection_story_id + '/story';
+                this.declineLoading = true;
+                axios.get(url).then((response) => {
+                    if (response.data.success === '1') {
+                        // Do some action when they accept
+                        this.declineLoading = false;
+
+                        this.assetDeclined = true;
+                        this.decline = true;
+                        SnackbarEventBus.displayMessage(5000, 'Story has declined');
+                    }
+                });
+
             }
         }
     }

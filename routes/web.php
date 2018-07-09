@@ -40,35 +40,11 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Favorite Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('favorite', 'ThemeFavoriteController@favorite');
-    Route::get('favorites', 'ThemeFavoriteController@show_favorites');
-
-    /*
-    |--------------------------------------------------------------------------
     | Download Routes
     |--------------------------------------------------------------------------
     */
     Route::get('/contract/download/{reference_id}', 'Contract\ContractController@generatePdf')->name('contract.download.public');
     Route::get('download/{id}/{type}', 'ThemeDownloadController@index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Page Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('pages', 'ThemePageController@pages');
-    Route::get('page/{slug}', 'ThemePageController@index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Search Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('search', 'SearchController@index')->name('search');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -90,31 +66,10 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
     Route::post('password/set/{token}/{email}', ['uses' => 'AuthController@setPasswordPost', 'as' => 'password.set_password_post']);
 
     Route::get('verify/{activation_code}', 'AuthController@verify');
-
-    /*
-    |--------------------------------------------------------------------------
-    | User and User Edit Routes
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('user/{username}', 'ThemeUserController@index');
-    Route::get('user/{username}/edit', 'ThemeUserController@edit');
-    Route::post('user/{username}/update', ['uses' => 'ThemeUserController@update']);
-    Route::get('user/{username}/billing', ['uses' => 'ThemeUserController@billing']);
-    Route::get('user/{username}/cancel', ['uses' => 'ThemeUserController@cancel_account']);
-    Route::get('user/{username}/resume', ['uses' => 'ThemeUserController@resume_account']);
-    Route::get('user/{username}/update_cc', 'ThemeUserController@update_cc');
-
 }); // End if_logged_in_must_be_subscribed route
 
 Route::get('unsubscribe/{email}', 'ThemeContactController@index');
 Route::post('unsubscribe', 'ThemeContactController@edit');
-
-Route::get('user/{username}/renew_subscription', 'ThemeUserController@renew');
-Route::post('user/{username}/update_cc', ['uses' => 'ThemeUserController@update_cc_store']);
-
-Route::get('user/{username}/upgrade_subscription', 'ThemeUserController@upgrade');
-Route::post('user/{username}/upgrade_cc', ['uses' => 'ThemeUserController@upgrade_cc_store']);
 
 Route::get('logout', 'AuthController@logout')->name('auth.logout');
 
@@ -255,10 +210,6 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     | Admin story in dialog box
     |--------------------------------------------------------------------------
     */
-
-    Route::get('storydialogbox/{alpha_id}', 'SearchController@stories');
-
-
     Route::resource('quotes', 'Admin\AdminQuoteController');
 });
 
@@ -268,17 +219,13 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 | Client Routes
 |--------------------------------------------------------------------------
 */
-Route::group(/**
- *
- */
-    ['middleware' => ['client'], 'prefix' => 'client'], function () {
+Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
     /*
    |--------------------------------------------------------------------------
-   | Orders Controller
+   | Purchased Controller
    |--------------------------------------------------------------------------
    */
-    Route::resource('orders', 'OrderController');
 	Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
 	Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
 	Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');

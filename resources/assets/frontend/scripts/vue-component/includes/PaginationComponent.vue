@@ -1,6 +1,6 @@
 <template>
     <div class="text-xs-center pagination-section">
-        <v-container grid-list-lg>
+        <v-container grid-list-lg class="py-0">
             <v-layout justify-center>
                 <v-flex xs12>
                     <v-pagination

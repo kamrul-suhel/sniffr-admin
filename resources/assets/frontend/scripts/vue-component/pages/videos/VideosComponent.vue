@@ -13,31 +13,33 @@
 
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
-            <v-container grid-list-lg>
-                <div v-if="client_logged_in && mailer_videos.length > 0">
-                    <h3 class="sub-heading">Your Suggested Videos</h3>
-                    <hr>
-                    <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
-                    <v-card-text class="overflow-hidden" style="overflow:auto; height:352px; width:100% !important; margin: 0px; padding:0px;">
-                        <v-layout align-content-center style="overflow-x:scroll;">
-                            <video-loop-component
-                                    v-for="(mailer, index) in mailer_videos"
-                                    :video="mailer"
-                                    :key="mailer.alpha_id"
-                            ></video-loop-component>
-                        </v-layout>
-                    </v-card-text>
-                    <br>
-                </div>
+            <v-container grid-list-lg class="py-0">
+                <v-layout row wrap v-if="client_logged_in && mailer_videos.length > 0">
+                    <v-flex xs12>
+                        <h3 class="sub-heading">Your Suggested Videos</h3>
+                        <hr>
+                        <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
+                    </v-flex>
+
+                    <v-flex xs12>
+
+                            <v-layout align-content-center style="overflow-x:scroll;">
+                                <video-loop-component
+                                        v-for="(mailer, index) in mailer_videos"
+                                        :video="mailer"
+                                        :key="mailer.alpha_id"
+                                ></video-loop-component>
+                            </v-layout>
+                    </v-flex>
+                </v-layout>
 
                 <v-layout row wrap>
-                    <v-flex xs12 class="px-0 mb-3">
+                    <v-flex xs12 class="mb-3">
                         <h3 class="sub-heading">All Videos</h3>
                         <hr>
                     </v-flex>
                 </v-layout>
 
-                <v-layout row wrap>
                     <transition-group
                             name="slide-fade"
                             tag="div"
@@ -49,7 +51,6 @@
                                 :key="video.alpha_id"
                         ></video-loop-component>
                     </transition-group>
-                </v-layout>
             </v-container>
         </section>
 

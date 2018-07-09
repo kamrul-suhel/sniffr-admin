@@ -104,12 +104,14 @@ class AuthController extends Controller
         $redirect_route = '';
         $client = '';
         $user = '';
+        $offers = '';
 
         if (key_exists(Auth::user()->role, config('roles.admins'))) {
             $redirect_route = '/admin';
         } elseif (key_exists(Auth::user()->role, config('roles.clients'))) {
             $user = Auth::user();
             $client = Auth::user()->client();
+            $offers = $user->userOffers();
         }
 
         $redirect = ($request->input('redirect')) ?: $redirect_route;
@@ -119,6 +121,7 @@ class AuthController extends Controller
             $response_data['error'] = false;
             $response_data['client'] = $client;
             $response_data['user'] = $user;
+            $response_data['user_offers'] = $offers;
             return $this->successResponse($response_data);
         }
 

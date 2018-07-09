@@ -7,17 +7,16 @@
                         append-icon="search"
                         v-model="searchTerm"
                         label="Search">
-
                 </v-text-field>
             </v-flex>
         </v-layout>
 
-        <asset-video-component
+        <asset-video-offered-component
                 v-for="(video, index) in videos"
                 :key="index"
                 :type="type"
                 :index="index"
-                :video="video"></asset-video-component>
+                :video="video"></asset-video-offered-component>
 
         <div class="text-xs-center" v-if="totalVideos > videosPerPage">
             <v-pagination
@@ -31,24 +30,24 @@
 </template>
 
 <script>
-    import AssetVideoComponent from '../AssetVideoComponent';
+    import AssetVideoOfferedComponent from '../AssetVideoOfferedComponent';
     import ClientVideoOfferPurchasedEventBus from '../../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
         components: {
-            AssetVideoComponent
+            AssetVideoOfferedComponent
         },
 
         props: ['type'],
 
         data() {
             return {
+                page: 1,
                 videos: [],
+                searchTerm: '',
                 numberOfPages: 1,
                 totalVideos: 0,
                 videosPerPage: 0,
-                page: 1,
-                searchTerm:''
             }
         },
 
@@ -73,13 +72,13 @@
 
         methods: {
             setData(){
-              if(this.type === 'offered'){
-                  this.getOfferedVideosData(this.getQueryObject());
-              }
+                if(this.type === 'offered'){
+                    this.getOfferedVideosData(this.getQueryObject());
+                }
 
-              if(this.type === 'purchased'){
-                  this.getPurchasedVideosData(this.getQueryObject());
-              }
+                if(this.type === 'purchased'){
+                    this.getPurchasedVideosData(this.getQueryObject());
+                }
             },
 
             getOfferedVideosData(queryObject = null) {
@@ -92,9 +91,9 @@
                     url += '&search='+ queryObject.searchTerm;
                 }
 
-                this.$store.dispatch('fetchPurchasedVideos', url)
+                this.$store.dispatch('fetchOfferedVideos', url)
                     .then(() => {
-                        var videos = this.$store.getters.getPurchasedVideos;
+                        var videos = this.$store.getters.getOfferedVideos;
 
                         // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
                         if(typeof videos.data == 'object'){
@@ -133,9 +132,8 @@
                         }
                         this.videos = [];
                         videos.data.forEach((video) => {
-                            video[0].video.final_price = video[0].finfinal_price;
+                            video[0].video.final_price = video[0].final_price;
                             video[0].video.collection_id = video[0].collection_id;
-
                             this.videos.push(video[0].video);
                         });
 

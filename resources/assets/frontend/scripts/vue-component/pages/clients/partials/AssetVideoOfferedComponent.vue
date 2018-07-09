@@ -32,11 +32,15 @@
                     <h2 v-html="video.title"></h2>
                     <div class="cd-time">{{ video.updated_at | convertDate }}</div>
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
+
+                    <div class="final-price">
+                        <h4>Final price: <span>£{{ video.final_price }}</span></h4>
+                    </div>
                 </v-flex>
             </v-layout>
         </v-flex>
 
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-if="type === 'purchased'">
+        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -59,14 +63,13 @@
                 {{ button_text }}
             </v-btn>
         </v-flex>
-
-        <v-flex xs12 sm12 md3 lg3 xl3 pl-3 v-else>
+        <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
                     large
                     :loading="acceptLoading"
-                    :disabled="acceptLoading"
+                    :disabled="acceptLoading || assetDeclined"
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
@@ -80,7 +83,7 @@
                     color="dark"
                     @click.native="onDecline()"
                     :loading="declineLoading"
-                    :disabled="declineLoading"
+                    :disabled="declineLoading || assetDeclined"
             >
                 Decline
             </v-btn>
@@ -93,7 +96,7 @@
 </template>
 
 <script>
-    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus'
+    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus';
     import ClientVideoOfferPurchasedEventBus from '../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
@@ -105,11 +108,13 @@
 
                 loader: null,
                 showButton: false,
-                hide_download_button: false,
 
                 loading: false,
                 acceptLoading: false,
                 declineLoading:false,
+                assetDeclined: false,
+
+                assetType:''
             }
         },
 
@@ -131,7 +136,7 @@
         },
 
         created() {
-
+            this.assetType = this.type;
         },
 
         watch: {
@@ -171,13 +176,15 @@
             },
 
             onAccept() {
+                console.log('accept video');
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
                 axios.get(url).then((response) => {
-                    if (response.data.success === 1) {
+                    console.log(response);
+                    if (response.data.success === '1') {
 
                         this.acceptLoading = false;
-                        this.type = "purchased"
+                        this.assetType = "purchased"
                         this.purchased = true
                         SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
@@ -190,11 +197,13 @@
 
             onDecline() {
                 let url = 'collections/reject_asset_price/' + this.video.collection_video_id + '/video';
+                this.declineLoading = true;
                 axios.get(url).then((response) => {
-                    if (response.data.success === 1) {
+                    if (response.data.success === '1') {
                         // Do some action when they accept
                         this.declineLoading = false;
-                        this.declineLoading = true;
+
+                        this.assetDeclined = true;
                         this.decline = true;
                         SnackbarEventBus.displayMessage(5000, 'Video has declined');
                     }

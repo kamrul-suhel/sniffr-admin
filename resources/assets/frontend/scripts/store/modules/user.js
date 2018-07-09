@@ -10,8 +10,9 @@ const state = {
     user_id:'',
     client_id: sniffr_app ? sniffr_app.user.client_id : '',
     user_role: '',
-    route_url: ''
-}
+    route_url: '',
+    offers: '',
+};
 
 const mutations = {
     clearUserState(state){
@@ -19,12 +20,14 @@ const mutations = {
         state.avatar = '';
         state.email = '';
         state.user_login = false;
+        state.client_id = '';
         state.user_id = '';
         state.user_role = '';
+        state.offers = '';
     },
 
     setUserState(state, data){
-        let user = data;
+        let user = data.user;
         if(user){
             state.username = user.username;
             state.name = user.username;
@@ -34,18 +37,19 @@ const mutations = {
             state.user_id = user.id;
             state.client_id = user.client_id;
             state.user_role = user.role;
+            state.offers = data.user_offers;
         }
     },
 
     setRouteUrl(state, currUrl){
         state.route_url = currUrl;
     }
-}
+};
 
 const actions = {
     getLoginStatus({commit}) {
         return new Promise(function (resolve, reject) {
-            commit('setUserState', sniffr_app.user);
+            commit('setUserState', sniffr_app);
             resolve();
         });
     },
@@ -67,7 +71,7 @@ const actions = {
                 });
         })
     }
-}
+};
 
 const getters = {
     isUserLogin(state) {
@@ -85,18 +89,19 @@ const getters = {
             avatar: state.avatar,
             id: state.user_id,
             client_id: state.client_id,
-            role: state.user_role
+            role: state.user_role,
+            offers: state.offers,
         }
     },
 
     getRouteUrl(state){
         return state.route_url;
     }
-}
+};
 
 export default {
     state,
     getters,
     mutations,
     actions,
-}
+};
