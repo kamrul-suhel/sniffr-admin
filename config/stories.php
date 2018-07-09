@@ -139,6 +139,7 @@ return [
     'destinations' => [
         'for-sale',
         'for-page',
+        'for-both',
     ],
 
     'removed_from_social' => [
@@ -153,7 +154,6 @@ return [
     ],
 
     'problem_status' => [
-        'no-problem',
         'dead-link',
         'prior-exclusive-license',
         'contact-is-not-owner',
@@ -183,6 +183,7 @@ return [
     'rights_type' => [
         'content',
         'editorial',
+        'distribution-rights',
     ],
 
     'colors' => [
