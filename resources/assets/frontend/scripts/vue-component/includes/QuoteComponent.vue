@@ -128,14 +128,14 @@
                                 </v-flex>
                             </v-flex>
 
-                            <!--<v-flex xs12>-->
-                                <!--<v-textarea-->
-                                        <!--v-model="notes"-->
-                                        <!--name="notes"-->
-                                        <!--color="dark"-->
-                                        <!--label="Additional information"-->
-                                <!--&gt;</v-textarea>-->
-                            <!--</v-flex>-->
+                            <v-flex xs12>
+                                <v-textarea
+                                        v-model="notes"
+                                        name="notes"
+                                        color="dark"
+                                        label="Additional information"
+                                ></v-textarea>
+                            </v-flex>
 
                         </v-layout>
 
@@ -158,6 +158,7 @@
                                     <v-btn
                                             raised
                                             dark
+                                            size="medium"
                                             :loading="loading"
                                             :disabled="disabled"
                                             @click="buttonClicked()">
@@ -280,7 +281,7 @@
                 this.collection = collection;
 
                 this.can_buy = (this.type == 'story' || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class) ? false : true;
-                this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
+                this.button_text = this.can_buy ? 'Buy Now' : 'Request Quote';
 
                 if (this.type === 'video') {
                     this.settings = this.$store.getters.getSettingsObject;

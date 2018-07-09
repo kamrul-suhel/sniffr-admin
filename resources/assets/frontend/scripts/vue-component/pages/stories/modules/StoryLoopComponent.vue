@@ -11,15 +11,17 @@
                 <h2 v-html="getFilterText(story.title, 50)"></h2>
                 <div v-html="getFilterText(story.description, 220)" class="description"></div>
                 <v-layout row wrap align-end>
-                    <v-flex xs6 v-if="client_login">
+                    <v-flex>
                         <quote-button-component
                                 :type="'story'"
                                 :asset="story"
                         ></quote-button-component>
                     </v-flex>
-                    <v-flex xs6>
+                    <v-flex>
                         <v-btn
-                                dark color="dark"
+                                dark
+                                color="dark"
+                                raised
                                 block
                                 class="mb-0"
                                 @click="onStoryDetail">View</v-btn>
