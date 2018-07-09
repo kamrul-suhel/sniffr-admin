@@ -49,14 +49,14 @@ class Collection extends Model
         return CollectionVideo::create($data);
     }
 
-	public function addStoryToCollection(Story $story, User $user)
+	public function addStoryToCollection(Story $story, User $user = null)
 	{
 		$data = [
 			'collection_id' => $this->id,
 			'story_id' => $story->id,
 			'final_price' => config('pricing.base'),
-			'company_location' => $user->client->region,
-			'company_tier' => $user->client->tier,
+			'company_location' => $user->client->region ?? null,
+			'company_tier' => $user->client->tier ?? null,
 			'status' => 'received'
 		];
 
