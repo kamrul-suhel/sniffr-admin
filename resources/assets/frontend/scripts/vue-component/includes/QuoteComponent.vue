@@ -7,30 +7,8 @@
                 class="login-section"
                 @keydown.esc="onQuoteDialogClose()">
             <v-card raised>
-                <v-card-text v-if="show_thanks">
-                    <v-layout row wrap>
-                        <v-flex xs12 text-xs-center>
-                            <h2 class="buy-title">Thanks</h2>
-                            <p>{{ showThanksMessage }}</p>
-                        </v-flex>
 
-                        <v-flex xs12 text-xs-center>
-                            <div class="buy-button">
-                                <input type="hidden" name="_token"/>
-                                <v-btn
-                                        raised
-                                        dark
-                                        :loading="loading"
-                                        :disabled="disabled"
-                                        @click="closeDialogBoxes()">
-                                    OK
-                                </v-btn>
-                            </div>
-                        </v-flex>
-                    </v-layout>
-                </v-card-text>
-
-                <v-card-text v-else class="buy-section">
+                <v-card-text class="buy-section">
                     <v-form method="post" v-model="valid" lazy-validation ref="quote_form">
                         <v-layout row wrap id="buy-section">
 
@@ -60,9 +38,10 @@
                                             color="dark"
                                             validate-on-blur
                                             :rules="emailRules"
+                                            :error-messages="emailError"
                                             required>
                                     </v-text-field>
-                                    <small class="text--red" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
+                                    <small class="red--text" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -128,7 +107,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 v-if="!can_buy">
+                            <v-flex xs12>
                                 <v-textarea
                                         v-model="notes"
                                         name="notes"
@@ -146,13 +125,7 @@
                         </v-layout>
 
                         <v-layout row align-center>
-                            <v-flex xs6 >
-                                <div v-if="price && (license_type || license_platform || license_length)">
-                                    <span>Current Quote: <strong>£{{ price }}</strong></span>
-                                </div>
-                            </v-flex>
-
-                            <v-flex xs6>
+                            <v-flex xs12>
                                 <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
                                     <v-btn
@@ -162,7 +135,7 @@
                                             :loading="loading"
                                             :disabled="disabled"
                                             @click="buttonClicked()">
-                                        {{ button_text }}
+                                        Request Quote
                                     </v-btn>
                                 </div>
                             </v-flex>
@@ -184,17 +157,13 @@
                 client_logged_in: false,
                 disabled: true,
                 settings: {},
-                price: false,
-                show_price: false,
                 show_thanks: false,
                 showThanksMessage:'',
 
-                button_text: '',
                 asset: {},
                 type: '',
                 collection: {},
                 collection_asset_id: '',
-                can_buy: false,
                 open_quote_dialog: false,
                 valid:false,
                 license_type: null,
@@ -241,47 +210,46 @@
                 loading: false,
                 loader: null,
                 buy_progress:false,
+
+                //Form validation error
+                emailError:''
             }
         },
 
         watch: {
+            open_quote_dialog(val){
+                if(!val){
+                    this.onQuoteDialogClose();
+                }
+            },
+
             license_type(val){
                 if(val){
-                    this.getVideoPrice();
+                    this.disabledCheck()
                 }
             },
 
             license_platform(val){
                 if(val) {
-                    this.getVideoPrice();
+                    this.disabledCheck()
                 }
             },
 
             license_length(val){
                 if(val) {
-                    this.getVideoPrice();
+                    this.disabledCheck()
                 }
             },
-
-            open_quote_dialog(val){
-                if(!val){
-                    this.onQuoteDialogClose();
-                }
-            }
         },
 
         created() {
-            QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) =>{
-
+            QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) => {
                 this.client_logged_in = this.$store.getters.isClientLogin;
-                this.$refs.quote_form.reset();
+                // this.$refs.quote_form.reset();
                 this.open_quote_dialog = true;
                 this.type = type;
                 this.asset = asset;
                 this.collection = collection;
-
-                this.can_buy = (this.type == 'story' || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class) ? false : true;
-                this.button_text = this.can_buy ? 'Buy Now' : 'Request Quote';
 
                 if (this.type === 'video') {
                     this.settings = this.$store.getters.getSettingsObject;
@@ -304,10 +272,6 @@
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.disabled = false;
-                }
-
-                if(!this.client_logged_in) {
-                    this.button_text = 'Request Quote';
                 }
             });
 
@@ -337,63 +301,17 @@
                 }
             },
 
-            getVideoPrice(){
-                this.disabledCheck();
-
-                if(this.can_buy){
-                    let form_data = new FormData();
-                    form_data.append(this.alpha_name, this.asset.alpha_id);
-                    form_data.append('license_type', this.license_type);
-                    form_data.append('license_platform', this.license_platform);
-                    form_data.append('license_length', this.license_length);
-
-                    axios.post('/client/collections/get_video_price/'+this.collection_asset_id, form_data)
-                        .then(response => {
-                            this.price = response.data.price ? response.data.price : false;
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                }
-            },
-
             buttonClicked(){
                 if(this.$store.getters.getUser.id === '') {
                     return this.registerUser();
                 }
-                if(this.price) {
-                    return this.acceptPrice();
-                } else {
-                    return this.requestQuote();
-                }
+
+                return this.requestQuote();
             },
 
             closeDialogBoxes(){
                 this.open_quote_dialog = false;
                 VideoDialogBoxEventBus.closeVideoDialogFromBuy();
-            },
-
-            acceptPrice() {
-                if(this.$refs.quote_form.validate()){
-                    this.loading = true;
-                    // submit data with ajax request
-                    axios.get('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
-                        .then(response => {
-                            this.loading = false;
-                            this.open_quote_dialog = false;
-                            setTimeout(()=> {
-                                this.open_quote_dialog = true;
-                                this.disabled = false;
-                                this.showThanksMessage = "Thank you for purchasing "+ this.asset.title;
-                                this.show_thanks = true;
-                            }, 500)
-
-                            // VideoDialogBoxEventBus.closeVideoDialogFromBuy();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                }
             },
 
             requestQuote() {
@@ -412,7 +330,6 @@
                         .then(response => {
                             this.loading = false;
                             this.show_thanks = true;
-                            console.log(this.showThanksMessage);
                             this.showThanksMessage = 'Thanks for your request, someone from our licensing team will be in touch shortly'
                         })
                         .catch(error => {
@@ -436,8 +353,10 @@
                     form_data.append('license_length', this.license_length);
                     form_data.append('notes', this.notes);
 
+
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
+
                             this.$store.dispatch('getLoginStatus').then(() => {
                                 axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
                                     .then(response => {
