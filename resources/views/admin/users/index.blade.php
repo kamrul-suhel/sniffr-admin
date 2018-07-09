@@ -50,6 +50,10 @@
 							<div class="label label-success"><i class="fa fa-users"></i>
 								Client
 							</div>
+						@elseif($user->role == 'client_owner')
+							<div class="label label-success"><i class="fa fa-users"></i>
+								Owner
+							</div>
 						@elseif($user->role == 'manager')
 							<div class="label label-info"><i class="fa fa-envelope"></i>
 								Manager
@@ -65,14 +69,24 @@
 						@endif
 					</td>
 					<td>
-						{{ $user->active }}
+						@if($user->active)
+							Yes
+						@else
+							<div class="label label-danger"><i class="fa fa-exclamation"></i>
+								Moderation
+							</div>
+						@endif
 					</td>
 
 					@if(Auth::user()->isAdmin())
 						<td>
 							<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-xs btn-info">
 								<span class="fa fa-edit"></span>
-								Edit
+								@if($user->active)
+									Edit
+								@else
+									Moderate
+								@endif
 							</a>
 							@if($user->client_id)
 								<a href="{{ route('users.stories.sent', ['id' => $user->id]) }}" class="btn btn-xs btn-warning">
