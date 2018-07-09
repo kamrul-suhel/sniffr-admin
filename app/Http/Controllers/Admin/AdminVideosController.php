@@ -392,6 +392,7 @@ class AdminVideosController extends Controller
 		$video->notes = $request->input('notes');
 		$video->credit = $request->input('credit');
         $video->description = $request->input('description');
+        $video->youtube_id = $request->input('youtube_id');
 
         $video->save();
 

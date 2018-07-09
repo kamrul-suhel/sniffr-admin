@@ -56,9 +56,17 @@
                 Embed Code
             </span>
 
-            <textarea class="form-control" name="embed_code" id="embed_code" title="Embed Code" rows="4">{{
-                !empty($video->embed_code) ? $video->embed_code : null
-            }}</textarea>
+            <textarea class="form-control" name="embed_code" id="embed_code" title="Embed Code" rows="4">{{ !empty($video->embed_code) ? $video->embed_code : null }}</textarea>
+        </span>
+    </div>
+
+    <div class="col-md-12">
+        <span class="form-group input-group">
+            <span class="input-group-addon">
+                Youtube Id
+            </span>
+
+            <input type="text" class="form-control" name="youtube_id" id="youtube_id" value="{{ !empty($video->youtube_id) ? $video->youtube_id : '' }}" />
         </span>
     </div>
 </div>
