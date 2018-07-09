@@ -34,14 +34,6 @@ var public_vars = public_vars || {};
 					state = 'unapproved';
 					alertType = 'info';
 					break;
-				case /approved/.test(myClass):
-					state = 'approved';
-					alertType = 'success';
-					break;
-				case /rejected/.test(myClass):
-					state = 'rejected';
-					alertType = 'error';
-					break;
 				case /unlicensed/.test(myClass):
 					state = 'unlicensed';
 					alertType = 'error';
@@ -86,12 +78,20 @@ var public_vars = public_vars || {};
 					state = 'published';
 					alertType = 'success';
 					break;
+				case /approved/.test(myClass):
+					state = 'approved';
+					alertType = 'success';
+					break;
+				case /rejected/.test(myClass):
+					state = 'rejected';
+					alertType = 'error';
+					break;
 			}
 
 			$(this).removeClass('js-story-state');
 
-			swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
-			$('.swal-button-container').css('display','none');
+			// swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+			// $('.swal-button-container').css('display','none');
 
 			if(state&&storyId) {
 				console.log(state);
@@ -105,11 +105,13 @@ var public_vars = public_vars || {};
 							if(data.remove=='yes'){
 								$('#story-'+storyId).fadeOut();
 								$('#story-'+storyId).remove();
+							} else {
+								window.location.reload();
 							}
-							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
-							$('.swal-button-container').css('display','inline-block');
+							// swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
+							// $('.swal-button-container').css('display','inline-block');
 						} else {
-							$('.swal-button-container').css('display','inline-block');
+							// $('.swal-button-container').css('display','inline-block');
 						}
 				    }
 				});

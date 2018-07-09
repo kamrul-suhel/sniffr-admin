@@ -4,7 +4,8 @@
             <v-card>
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
-                        height="200px" class="client-video-thumbnail cdi-content">
+                        height="250px"
+                        class="client-video-thumbnail cdi-content">
                     <div class="cdi-label" v-if="purchased">
                         <v-tooltip top>
                             <v-btn slot="activator" flat icon raised light color="white">
@@ -26,12 +27,28 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
+        <v-flex xs12 sm12 md6 lg6 xl6>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
                     <h2 v-html="video.title"></h2>
                     <div class="cd-time">{{ video.updated_at | convertDate }}</div>
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
+
+                    <div class="quote" v-if="type === 'offered' || type === 'purchased'">
+                        <v-layout row wrap>
+                            <v-flex xs6 class="pb-0">
+                                <span>Platform: {{ video.platform | convertHyphenToSpace}}</span>
+                            </v-flex>
+
+                            <v-flex xs6 class="pb-0">
+                                <span>Length: {{ video.length | convertHyphenToSpace}}</span>
+                            </v-flex>
+
+                            <v-flex xs6 class="py-0">
+                                <span>Type: {{ video.type | convertHyphenToSpace }}</span>
+                            </v-flex>
+                        </v-layout>
+                    </div>
 
                     <div class="final-price">
                         <h4>Final price: <span>£{{ video.final_price }}</span></h4>
@@ -73,7 +90,7 @@
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
-                Accept
+                Buy Now
             </v-btn>
 
             <v-btn
@@ -137,6 +154,7 @@
 
         created() {
             this.assetType = this.type;
+            console.log(this.video);
         },
 
         watch: {
