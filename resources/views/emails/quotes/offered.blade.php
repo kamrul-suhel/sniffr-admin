@@ -16,9 +16,7 @@
                 <p>With the following terms:</p>
                 <ul>
                     <li>
-                        <p>Video Name:
-                            <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b>
-                        </p>
+                        <p>Video Name:<b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b></p>
                     </li>
                     <li>
                         <p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->type)) }}</b></p>
