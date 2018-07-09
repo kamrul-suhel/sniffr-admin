@@ -8,6 +8,8 @@
 
         <div class="clear"></div>
 
+
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-primary" data-collapsed="0">
@@ -28,13 +30,14 @@
                                         </ul>
                                     </div>
                                 @endif
+                                @if($videoCollection->collection->user)
                                 <form class="form_quote" action="{{ route('quotes.update', ['id' => $videoCollection->id]) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('PUT') }}
                                     <input type="hidden" value="video" name="asset_type">
                                     <div class="panel panel-primary" data-collapsed="0">
                                         <div class="panel-heading">
-                                            {{ $collection->name }} : ({{ $collection->collectionVideos->count() }} video)<b title="{{ $videoCollection->collection->user->email }}">{{ $videoCollection->collection->user->full_name ?? $videoCollection->collection->user->username }} @ {{ $videoCollection->collection->user->client->name }} - @if($videoCollection->collection->user->tel)<b>{{ $videoCollection->collection->user->tel }}</b>@endif</b>
+                                            {{ $collection->name }} : ({{ $collection->collectionVideos->count() }} video)<b title="{{ $videoCollection->collection->user->email }}">{{ $videoCollection->collection->user->full_name ?? $videoCollection->collection->user->username }} @ {{ $videoCollection->collection->user->client->name }}@if($videoCollection->collection->user->tel) - <b>{{ $videoCollection->collection->user->tel }}</b>@endif</b>
                                         </div>
 
                                         <div class="panel-body">
@@ -79,6 +82,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                @endif
                             @endforeach
                         @endforeach
                         <div class="text-center">
@@ -99,13 +103,14 @@
                                         </ul>
                                     </div>
                                 @endif
+                                @if($storyCollection->collection->user)
                                 <form class="form_quote" action="{{ route('quotes.update', ['id' => $storyCollection->id]) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('PUT') }}
                                     <input type="hidden" value="story" name="asset_type">
                                     <div class="panel panel-primary" data-collapsed="0">
                                         <div class="panel-heading">
-                                            {{ $collection->name }} : ({{ $collection->collectionStories->count() }} story)<b title="{{ $storyCollection->collection->user->email }}">{{ $storyCollection->collection->user->full_name ?? $storyCollection->collection->user->username }} @ {{ $storyCollection->collection->user->client->name }} - @if($storyCollection->collection->user->tel)<b>{{ $storyCollection->collection->user->tel }}</b>@endif</b>
+                                            {{ $collection->name }} : ({{ $collection->collectionStories->count() }} story)<b title="{{ $storyCollection->collection->user->email }}">{{ $storyCollection->collection->user->full_name ?? $storyCollection->collection->user->username }} @ {{ $storyCollection->collection->user->client->name }}@if($storyCollection->collection->user->tel) - <b>{{ $storyCollection->collection->user->tel }}</b>@endif</b>
                                         </div>
 
                                         <div class="panel-body">
@@ -147,6 +152,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                @endif
                             @endforeach
                         @endforeach
                         <div class="text-center">
@@ -179,13 +185,14 @@
                                         </ul>
                                     </div>
                                 @endif
+                                @if($videoCollection->collection->user)
                                 <form class="form_quote" action="{{ route('quotes.update', ['id' => $videoCollection->id]) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" value="video" name="asset_type">
                                     <div class="panel panel-primary" data-collapsed="0">
                                         <div class="panel-heading">
-                                            {{ $collection->name }} : ({{ $collection->collectionVideos->count() }} video)<b title="{{ $videoCollection->collection->user->email }}">{{ $videoCollection->collection->user->full_name ?? $videoCollection->collection->user->username }} @ {{ $videoCollection->collection->user->client->name }} - @if($videoCollection->collection->user->tel)<b>{{ $videoCollection->collection->user->tel }}</b>@endif</b>
+                                            {{ $collection->name }} : ({{ $collection->collectionVideos->count() }} video)<b title="{{ $videoCollection->collection->user->email }}">{{ $videoCollection->collection->user->full_name ?? $videoCollection->collection->user->username }} @ {{ $videoCollection->collection->user->client->name }}@if($videoCollection->collection->user->tel) - <b>{{ $videoCollection->collection->user->tel }}</b>@endif</b>
                                         </div>
 
                                         <div class="panel-body">
@@ -230,6 +237,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                @endif
                             @endforeach
                         @endforeach
                         <div class="text-center">
@@ -248,13 +256,14 @@
                                         </ul>
                                     </div>
                                 @endif
+                                @if($storyCollection->collection->user)
                                 <form class="form_quote" action="{{ route('quotes.update', ['id' => $storyCollection->id]) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" value="story" name="asset_type">
                                     <div class="panel panel-primary" data-collapsed="0">
                                         <div class="panel-heading">
-                                            {{ $collection->name }} : ({{ $collection->collectionStories->count() }} story)<b title="{{ $storyCollection->collection->user->email }}">{{ $storyCollection->collection->user->full_name ?? $storyCollection->collection->user->username }} @ {{ $storyCollection->collection->user->client->name }} - @if($storyCollection->collection->user->tel)<b>{{ $storyCollection->collection->user->tel }}</b>@endif</b>
+                                            {{ $collection->name }} : ({{ $collection->collectionStories->count() }} story)<b title="{{ $storyCollection->collection->user->email }}">{{ $storyCollection->collection->user->full_name ?? $storyCollection->collection->user->username }} @ {{ $storyCollection->collection->user->client->name }}@if($storyCollection->collection->user->tel) - <b>{{ $storyCollection->collection->user->tel }}</b>@endif</b>
                                         </div>
 
                                         <div class="panel-body">
@@ -296,6 +305,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                @endif
                             @endforeach
                         @endforeach
                         <div class="text-center">
