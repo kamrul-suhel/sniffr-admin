@@ -242,6 +242,8 @@ class AdminClientMailerController extends Controller
             $mailer->users()->sync(Input::get('clients'));
         }
 
+        $mailer->subject = Input::get('subject');
+
         $mailer->user_id = (Input::get('user_id') ? Input::get('user_id') : 0);
 
         $mailer->save();
