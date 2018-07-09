@@ -32,7 +32,7 @@
             @endif
             <br><hr>
             <p>
-                We will get back to you as soon as possible. In the meantime you can check you all of our
+                We will get back to you as soon as possible. In the meantime you can check all of our
                 <a href="{{ url('videos') }}">Videos</a> and <a href="{{ url('stories') }}">Stories</a>
             </p>
             <hr>
