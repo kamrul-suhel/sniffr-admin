@@ -48,6 +48,10 @@
         props:['story'],
 
         created(){
+            LoginEventBus.$on('loginSuccess', () => {
+                this.checkLoginStatus();
+            });
+
             LoginEventBus.$on('logoutChangeState', () => {
                 this.checkLoginStatus();
             })

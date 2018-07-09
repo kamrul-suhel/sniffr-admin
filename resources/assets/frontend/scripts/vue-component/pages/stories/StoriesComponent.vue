@@ -79,7 +79,6 @@
         },
 
         created() {
-            console.log(this.mailer_stories);
             this.client_logged_in = this.$store.getters.isClientLogin;
 
             // If client has logged in

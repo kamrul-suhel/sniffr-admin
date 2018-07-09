@@ -24,7 +24,9 @@ const mutations = {
     },
 
     setMailerStoriesData(state, data){
-        state.mailer_stories = data;
+        if(typeof data !== "undefined"){
+            state.mailer_stories = data;
+        }
     },
 
     setStoriesPaginateObject(state, paginate){
