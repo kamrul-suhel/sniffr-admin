@@ -8,7 +8,11 @@
     import LoginEventBus from '../../event-bus/login-event-bus';
 
     export default {
-        props:['type', 'asset', 'user'],
+        props:[
+            'type',
+            'asset',
+            'user'
+        ],
 
         components: {
         },

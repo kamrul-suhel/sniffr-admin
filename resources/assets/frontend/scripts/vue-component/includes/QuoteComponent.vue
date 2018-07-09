@@ -1,6 +1,6 @@
 <template>
     <!-- Login form -->
-    <v-flex class="quote-dialog">
+    <section class="quote-dialog">
         <v-dialog
                 v-model="open_quote_dialog"
                 max-width="500px"
@@ -53,7 +53,6 @@
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <small style="color:red" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
                                     <v-text-field
                                             label="Email"
                                             type="email"
@@ -63,6 +62,7 @@
                                             :rules="emailRules"
                                             required>
                                     </v-text-field>
+                                    <small class="text--red" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -171,7 +171,7 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
-    </v-flex>
+    </section>
 </template>
 <script>
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus.js';
