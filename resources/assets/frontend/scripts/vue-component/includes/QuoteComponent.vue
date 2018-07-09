@@ -127,14 +127,14 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12>
-                                <v-textarea
-                                        v-model="notes"
-                                        name="notes"
-                                        color="dark"
-                                        label="Additional information"
-                                ></v-textarea>
-                            </v-flex>
+                            <!--<v-flex xs12>-->
+                                <!--<v-textarea-->
+                                        <!--v-model="notes"-->
+                                        <!--name="notes"-->
+                                        <!--color="dark"-->
+                                        <!--label="Additional information"-->
+                                <!--&gt;</v-textarea>-->
+                            <!--</v-flex>-->
 
                         </v-layout>
 
