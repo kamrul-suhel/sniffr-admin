@@ -16,7 +16,7 @@ class QueueEmailOfferedQuote implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $username, $email, $quote, $collection_id, $quote_id;
+    protected $username, $email, $quote, $collectionAsset, $type, $quote_id;
 
 	public $tries = 5;
 	public $timeout = 120;
@@ -34,7 +34,8 @@ class QueueEmailOfferedQuote implements ShouldQueue
 		$this->username = $quoteUser->username;
     	$this->email = $quoteUser->email;
     	$this->quote = $collectionQuote->price;
-    	$this->collection_id = $collectionQuote->{'collection'.$type}->collection->id;
+    	$this->collectionAsset = $collectionQuote->{'collection'.$type};
+    	$this->type = $type;
         $this->quote_id = $collectionQuote->id;
 
     }
@@ -49,7 +50,8 @@ class QueueEmailOfferedQuote implements ShouldQueue
 		\Mail::to($this->email)->send(new OfferQuote([
 			'username' => $this->username,
 			'quote' => $this->quote,
-			'collection_id' => $this->collection_id,
+			'collectionAsset' => $this->collectionAsset,
+			'type' => $this->type,
 			'quote_id' => $this->quote_id
 		]));
     }
