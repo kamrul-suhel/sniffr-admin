@@ -45,7 +45,7 @@
 				<td class="single-line">
 					@foreach($mailer->stories()->get() as $story)
 						{!! $downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count() ? '<span class="fa fa-cloud-download"></span>&nbsp;'.$downloads->where('mailer_id', $mailer->id)->whereIn('story_id', $story->id)->count().'&nbsp;:&nbsp;' : '' !!}
-						<span title="{{ $story->title }}"><a target="_blank" href="{{ url('stories/'.$stories->alpha_id) }}"> {{ $story->title }} <span class="fa fa-external-link"></span></a>
+						<span title="{{ $story->title }}"><a target="_blank" href="{{ url('stories/'.$story->alpha_id) }}"> {{ $story->title }} <span class="fa fa-external-link"></span></a>
 						</span><br>
 					@endforeach
 				</td>
