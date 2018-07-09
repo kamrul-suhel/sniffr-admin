@@ -614,26 +614,20 @@ class AdminVideosController extends Controller
         $video = Video::where('alpha_id', $id)->first();
 
         // Detach and delete any unused tags
-        foreach ($video->tags as $tag) {
-            $this->detachTagFromVideo($video, $tag->id);
-            if (!$this->isTagContainedInAnyVideos($tag->name)) {
-                $tag->delete();
-            }
+        // foreach ($video->tags as $tag) {
+        //     $this->detachTagFromVideo($video, $tag->id);
+        //     if (!$this->isTagContainedInAnyVideos($tag->name)) {
+        //         $tag->delete();
+        //     }
+        // }
+
+        //$this->deleteVideoImages($video);
+
+        if (!$video) {
+            abort(404);
         }
 
-        $this->deleteVideoImages($video);
-
-        // Hide on youtube
-        if ($video->youtube_id && $video->file) {
-            //$response = Youtube::setStatus($video->youtube_id, 'private'); NOT WORKING (youtube.video: forbidden) -> might need to check 'url' field if youtube which would mean it might not be our own youtube video to make private
-
-            if (!$response) { // There is no youtube video, remove the id
-                $video->youtube_id = '';
-            }
-        }
-
-        $video->delete();
-        $video->save();
+        $video->destroy($video->id);
 
         if ($isJson) {
             return response()->json([

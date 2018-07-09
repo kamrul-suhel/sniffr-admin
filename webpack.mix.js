@@ -165,3 +165,7 @@ mix.copy(
     'resources/assets/talvbansal/media-manager/fonts/',
     'public/fonts/'
 );
+mix.copy(
+    'node_modules/bootstrap/fonts',
+    'public/assets/fonts/'
+);

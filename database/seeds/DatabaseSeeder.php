@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             VideosTableSeeder::class,
             CommentsTableSeeder::class,
             DownloadsTableSeeder::class,
-            FavoritesTableSeeder::class,
             MenuTableSeeder::class,
             PagesTableSeeder::class,
             TagsTableSeeder::class,
