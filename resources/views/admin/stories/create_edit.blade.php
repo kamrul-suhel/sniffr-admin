@@ -128,7 +128,7 @@
 									<span class="input-group-addon">
 						                Contact
 						            </span>
-									<input type="button" class="form-control btn-clear" name="contact_add" id="contact_add" value="Add New Contact" />
+									<input type="button" class="form-control btn-clear js-contact" name="contact_add" id="contact_add" value="Add New Contact" />
 						        </span>
 								<div class="js-contact-add">
 									<input type="text" class="form-control" name="contact_full_name" id="contact_full_name" placeholder="Enter contact full name" value="" />
@@ -196,7 +196,8 @@
 						            <span class="input-group-addon">
 						                Problem Status
 						            </span>
-									<select name="problem_status" id="problem_status" class="form-control">
+									<select name="problem_status" id="problem_status" class="form-control js-problem-status">
+										<option value="">No Problem</option>
 										@foreach(config('stories.problem_status') as $problem)
 										<option value="{{ $problem }}" {{ (isset($story) && $story->problem_status==$problem) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $problem)) }}</option>
 										@endforeach
@@ -317,13 +318,16 @@
 									@else
 									<div class="status-box-inner" id="rights-box-status">Pending</div>
 									@endif
-									<!-- <div class="status-box-inner">Restricted</div> -->
+
+									@if(isset($story))
+									<div class="status-box-inner @if(!$story->problem_status) hidden @else warning @endif" id="problem-box-status">{{ ucwords(str_replace('-', ' ', $story->problem_status)) }}</div>
+									@endif
 								</div>
 								<span class="input-group">
 						            <span class="input-group-addon">
 						                License Type
 						            </span>
-									<select name="rights" id="rights" class="form-control">
+									<select name="rights" id="rights" class="form-control js-rights-status">
 										<option value="">Set status</option>
 										@foreach(config('stories.rights') as $status)
 										<option value="{{ $status }}" {{ (isset($story) && $story->rights==$status) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $status)) }}</option>
@@ -344,9 +348,10 @@
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>
 										@endif
 									</div>
+									<p>{{ count(explode(',', $story->submitted_to)) }}</p>
 									<div id="submitted-status">
 										@if(isset($story)&&$story->submitted_to)
-										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ((isset($story->submitted_to)&&count(explode(',', $story->submitted_to)))>1) ? 'multiple' : ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending</h5>
 										@endif
@@ -367,7 +372,7 @@
 									</div>
 									<div id="rights-status">
 										@if(isset($story)&&$story->rights)
-										<h5 class="text-success"><i class="fa fa-check-square-o"></i> {{ ucwords(str_replace('-', ' ', $story->rights)) }} rights </h5>
+										<h5 class="@if($story->rights=='exclusive') text-success @else text-warning @endif"><i class="fa fa-check-square-o"></i> {{ ucwords(str_replace('-', ' ', $story->rights)) }} rights </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>
 										@endif
@@ -446,14 +451,14 @@
 
 	$(document).ready(function(){
 
-		$('#contact_add').click(function(e){
+		$('.js-contact').click(function(e){
 			e.preventDefault();
-			if($(this).val()=='Add Contact') {
+			if($(this).val()=='Add New Contact') {
 				$(this).val('clear x');
 				$('.js-contact-search').hide();
 				$('.js-contact-add').show();
 			} else {
-				$(this).val('Add Contact');
+				$(this).val('Add New Contact');
 				$('#contact_full_name').val('');
 				$('#contact_email').val('');
 				$('#contact_tel').val('');
@@ -504,6 +509,10 @@
 				}
 				if(arr.length>1) {
 					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to multiple </h5>');
+					$('#rights').val('non-exclusive');
+					$('#rights-box-status').removeClass('success').addClass('danger');
+					$('#rights-box-status').text('Non-Exclusive');
+					$('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
 				} else {
 					$('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to '+arr[0].replace('-', ' ')+' </h5>');
 				}
@@ -512,18 +521,29 @@
 			}
 	    });
 
-		$('#rights').change(function(e) {
-			if($('#rights').val()=='exclusive') {
+		$('.js-problem-status').change(function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			if($(this).val()) {
+				$('#problem-box-status').removeClass('hidden').addClass('warning');
+				$('#problem-box-status').text('Problem');
+			} else {
+				$('#problem-box-status').removeClass('warning').addClass('hidden');
+			}
+		});
+
+		$('.js-rights-status').change(function(e) {
+			if($(this).val()=='exclusive') {
 				$('#rights-box-status').removeClass('danger').addClass('success');
 				$('#rights-box-status').text('Exclusive');
 				$('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
 			}
-			if($('#rights').val()=='non-exclusive') {
+			if($(this).val()=='non-exclusive') {
 				$('#rights-box-status').removeClass('success').addClass('danger');
 				$('#rights-box-status').text('Non-Exclusive');
 				$('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
 			}
-			if(!$('#rights').val()) {
+			if(!$(this).val()) {
 				$('#rights-box-status').removeClass('success').removeClass('danger');
 				$('#rights-box-status').text('Pending');
 				$('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');

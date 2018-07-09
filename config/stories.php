@@ -154,7 +154,6 @@ return [
     ],
 
     'problem_status' => [
-        'no-problem',
         'dead-link',
         'prior-exclusive-license',
         'contact-is-not-owner',
@@ -183,6 +182,7 @@ return [
 
     'rights_type' => [
         'content',
+        'editorial',
         'distribution-rights',
     ],
 
