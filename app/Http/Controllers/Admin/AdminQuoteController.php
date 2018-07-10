@@ -109,9 +109,9 @@ class AdminQuoteController extends Controller {
         );
 
         return redirect('admin/quotes')->with([
-            'note' => 'Successfully Offered Quote',
-            'note_type' => 'success'
-        ]);
+				'note' => 'Quote successfully sent',
+				'note_type' => 'success'
+			]);;
     }
 
     public function destroy(Request $request, $id)

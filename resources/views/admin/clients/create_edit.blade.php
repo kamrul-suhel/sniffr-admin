@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-    <!-- Mailer stories & video style -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
-@endsection
-
 @section('content')
     <div id="admin-container">
         <ol class="breadcrumb">

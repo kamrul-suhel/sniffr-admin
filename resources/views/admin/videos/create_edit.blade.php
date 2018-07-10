@@ -12,7 +12,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     @if(!$video)
                         <li class="active">
-                            <a href="#creator_search" role="tab" data-toggle="tab">Create a Video</a>
+                            <a href="#contact_search" role="tab" data-toggle="tab">Create a Video</a>
                         </li>
                     @endif
 
@@ -48,7 +48,7 @@
                         </li>
 
                         <li>
-                            <a href="#creator" role="tab" data-toggle="tab">Creator</a>
+                            <a href="#contact" role="tab" data-toggle="tab">Contact</a>
                         </li>
 
                         @if($video->rights != 'ex' || $video->rights != 'nonex')
@@ -123,8 +123,8 @@
                             </div>
                         </div>
 
-                        <div class="tab-pane" id="creator">
-                            @include('admin.videos.partials.choose_creator')
+                        <div class="tab-pane" id="contact">
+                            @include('admin.videos.partials.choose_contact')
                         </div>
 
                         <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
@@ -158,7 +158,7 @@
                 </form>
                 @else
                 <div class="panel-body tab-content">
-                    <div class="tab-pane active" id="creator_search">
+                    <div class="tab-pane active" id="contact_search">
                         @include('admin.videos.partials.basic_information')
                     </div>
                 </div>
@@ -182,7 +182,7 @@
         @include('admin.videos.partials.contract_modal')
     @endif
 
-    @include('admin.videos.partials.add_creator_modal')
+    @include('admin.modals.add_contact_modal')
 @endsection
 
 @section('javascript')

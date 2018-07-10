@@ -130,15 +130,15 @@ class AdminStoryController extends Controller
     public function create()
     {
         $data = [
+			'user' => Auth::user(),
+			'users' => User::all(),
+			'videos' => Video::all(),
+			'contact' => null,
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
-            'user' => Auth::user(),
-            'users' => User::all(),
-            'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
-            'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
-        ];
+            'video_collections' => VideoCollection::all()
+		];
 
         return view('admin.stories.create_edit', $data);
     }
@@ -207,7 +207,8 @@ class AdminStoryController extends Controller
         $story->save();
 
         if (Input::get('videos')) {
-            $story->videos()->sync(Input::get('videos'));
+            $story->videos()->sync(array_filter(Input::get('videos')));
+            $story->videos()->sync(array_filter(Input::get('videos')));
         }
 
         return Redirect::to('admin/stories')->with([
@@ -236,10 +237,8 @@ class AdminStoryController extends Controller
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
-            'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
-            'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
+            'video_collections' => VideoCollection::all()
         ];
 
         return view('admin.stories.create_edit', $data);
@@ -334,7 +333,6 @@ class AdminStoryController extends Controller
         $remove = 'no';
 
         $story = Story::where('alpha_id', $id)->first();
-        $previous_state = $story->state;
         $story->state = ($story->state!=$state ? $state : $story->state);
 
         // create message for frontend
@@ -344,14 +342,14 @@ class AdminStoryController extends Controller
         switch (true) {
             case ($state == 'unlicensed'):
                 // add new post to WP
-                // $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
-                // $result = $this->apiPost('posts', $parameters, true);
-                // // update stories record with WP response from post
-                // if($result->id){
-                //     $story->wp_id = $result->id;
-                //     $story->status = $result->status;
-                //     $story->date_ingested = $story->created_at;
-                // }
+                 $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
+                 $result = $this->apiPost('posts', $parameters, true);
+                 // update stories record with WP response from post
+                 if($result->id){
+                     $story->wp_id = $result->id;
+                     $story->status = $result->status;
+                     $story->date_ingested = $story->created_at;
+                 }
                 $message = 'Pushed to WP + Ready to license';
                 break;
         }
