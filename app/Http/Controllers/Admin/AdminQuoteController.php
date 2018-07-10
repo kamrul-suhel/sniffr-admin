@@ -9,13 +9,18 @@ use App\CollectionStory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Quote\CreateQuote;
 use App\Jobs\QueueEmailOfferedQuote;
+use App\Jobs\QueueEmailRetractQuote;
 use Illuminate\Http\Request;
 
 class AdminQuoteController extends Controller {
 
-    public function __construct()
-    {
+    protected $collection, $collectionStory, $collectionVideo;
 
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory)
+    {
+        $this->collection = $collection;
+        $this->collectionVideo = $collectionVideo;
+        $this->collectionStory = $collectionStory;
     }
 
     /**
@@ -23,19 +28,19 @@ class AdminQuoteController extends Controller {
      */
     public function index()
     {
-        $pendingVideoCollections = Collection::whereHas('collectionVideos', function($query) {
+        $pendingVideoCollections = $this->collection->whereHas('collectionVideos', function($query) {
            $query->where('status', 'requested');
         })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'pending_video');
 
-        $offeredVideoCollections = Collection::whereHas('collectionVideos', function($query) {
+        $offeredVideoCollections = $this->collection->whereHas('collectionVideos', function($query) {
             $query->where('status', 'offered');
         })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'offered_video');
 
-		$pendingStoryCollections = Collection::whereHas('collectionStories', function($query) {
+		$pendingStoryCollections = $this->collection->whereHas('collectionStories', function($query) {
 			$query->where('status', 'requested');
 		})->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'pending_story');
 
-		$offeredStoryCollections = Collection::whereHas('collectionStories', function($query) {
+		$offeredStoryCollections = $this->collection->whereHas('collectionStories', function($query) {
 			$query->where('status', 'offered');
 		})->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'offered_story');
 
@@ -52,7 +57,7 @@ class AdminQuoteController extends Controller {
      */
     public function show($id)
     {
-        $collection = Collection::find($id);
+        $collection = $this->collection->find($id);
 
         return view('admin.quotes.show')
             ->with('collection', $collection);
@@ -72,7 +77,7 @@ class AdminQuoteController extends Controller {
 		$type = '';
     	if($asset_type == 'video'){
 			//update collection video status, final_price
-			$collectionVideo = CollectionVideo::find($id);
+			$collectionVideo = $this->collectionVideo->find($id);
 			$collectionVideo->final_price = $request->input('final_price');
 			$collectionVideo->status = 'offered';
 			$collectionVideo->save();
@@ -81,7 +86,7 @@ class AdminQuoteController extends Controller {
 			$type = 'Video';
 		}else if($asset_type == 'story'){
 			//update collection video status, final_price
-			$collectionStory = CollectionStory::find($id);
+			$collectionStory = $this->collectionStory->find($id);
 			$collectionStory->final_price = $request->input('final_price');
 			$collectionStory->status = 'offered';
 			$collectionStory->save();
@@ -112,28 +117,21 @@ class AdminQuoteController extends Controller {
     public function destroy(Request $request, $id)
     {
 		$asset_type = $request->get('asset_type');
+		$collectionAsset = $this->{'collection'.ucwords($asset_type)}->find($id);
+		$retractedPrice = $collectionAsset->final_price;
+        $collectionAsset->final_price = null;
+        $collectionAsset->status = 'requested';
+        $collectionAsset->reason = auth()->user()->username . ' rectracted offer of £'. $retractedPrice;
+        $collectionAsset->save();
 
-		if($asset_type == 'video') {
-
-			$collectionVideo = CollectionVideo::find($id);
-			$collectionVideo->final_price = null;
-			$collectionVideo->status = 'requested';
-			$collectionVideo->save();
-			$quotes = $collectionVideo->quotes->last();
-		}else if($asset_type == 'story'){
-
-			$collectionStory = CollectionStory::find($id);
-			$collectionStory->final_price = null;
-			$collectionStory->status = 'requested';
-			$collectionStory->save();
-
-			$quotes = $collectionStory->quotes->last();
-		}
+        QueueEmailRetractQuote::dispatch(
+            $collectionAsset,
+            $asset_type
+        );
 
         //Soft delete quote made
+        $quotes = $collectionAsset->quotes->last();
         $quotes->delete();
-
-        //TODO email client that we've retracted our offer
 
         return redirect('admin/quotes')->with([
             'note' => 'Retracted Quote',
