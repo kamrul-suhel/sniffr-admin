@@ -31,7 +31,7 @@ class DashboardController extends Controller
         $videos = Video::get(['id']);
         $videos_by_state = Video::get(['state'])->groupBy('state');
 
-		$video_traffic = Video::get()->where('created_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function($date) {
+		$all_videos = Video::get()->where('created_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function($date) {
 	        return Carbon::parse($date->created_at)->format('m-d'); // grouping by days
 	    });
 
@@ -45,7 +45,7 @@ class DashboardController extends Controller
 			'user' => Auth::user(),
 			'video_state_count' => $video_state_count,
 			'total_videos' => $videos->count(),
-			'video_traffic' => $video_traffic,
+			'videos' => $all_videos,
 			'new_videos' => (!$videos_by_state['new']) ? 0 : $videos_by_state['new']->count(),
 			'licensed_videos' => (!$videos_by_state['licensed']) ? 0 : $videos_by_state['licensed']->count(),
 			'pending_videos' => (!$videos_by_state['pending']) ? 0 : $videos_by_state['pending']->count(),

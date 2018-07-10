@@ -51,7 +51,7 @@
       <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Video Submissions</div>
+                <div class="panel-title">Ex Chaser</div>
             </div>
 
             <div class="panel-body">
@@ -66,7 +66,7 @@
     <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Submissions Breakdown</div>
+                <div class="panel-title">Ex Submissions</div>
             </div>
 
             <div class="panel-body">

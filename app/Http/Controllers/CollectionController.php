@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserQuoteRequest;
+use App\Jobs\QueueEmailRetractQuote;
 use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
@@ -62,7 +63,7 @@ class CollectionController extends Controller
         $user = auth()->user();
 
         $data = [
-            'name' => "order_".VideoHelper::quickRandom(10),
+            'name' => "order_".strtolower(str_random(10)),
             'user_id' => $user->id ?? null,
             'client_id' => $user->client_id ?? null,
             'status' => 'open',
@@ -157,6 +158,7 @@ class CollectionController extends Controller
         $client = $this->client->create([
             'name' => $data['company_name'],
             'slug' => $company_slug,
+            'active' => 0,
             'account_owner_id' => null, //set to null as we don't know this person will be the top dog.
         ]);
 
@@ -166,6 +168,7 @@ class CollectionController extends Controller
             'full_name' => $data['user_full_name'],
             'role' => 'client_owner',
             'tel' => $data['tel'],
+            'active' => 0,
             'password' => \Hash::make($password),
             'client_id' => $client->id
         ]);
@@ -263,11 +266,54 @@ class CollectionController extends Controller
 		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
 		$collection = $collectionAsset->collection;
 
+        if($collectionAsset->status == 'expired') {
+            if($isJson){
+                return $this->errorResponse([
+                    'collection' => $collection,
+                    'message' => 'This offer has expired',
+                    'reason' => $collectionAsset->reason
+                ]);
+            }
+        }
+
+		if($collection->status == "closed") {
+            if($isJson){
+                return $this->errorResponse([
+                    'collection' => $collection,
+                    'message' => 'This item is no longer available'
+                ]);
+            }
+        }
+
 		$collection->status = "closed";
 		$collection->save();
 
 		$collectionAsset->status = "purchased";
 		$collectionAsset->save();
+
+		//If exclusive type of asset is purchased, Expire all other collections with same asset. Close collection too
+		if($collectionAsset->type === 'exclusive') {
+		    $itemInCollectionAsset = $this->{'collection'.ucfirst($type)}
+                ->where('video_id', $collectionAsset->video_id)
+                ->where('id', '!=', $collectionAsset->id);
+
+            $itemInCollectionAsset
+                ->update([
+                    'status' => 'expired',
+                    'reason' => 'Asset bought Exclusively by '. $collectionAsset->collection->user->client->name
+                ]);
+
+		    $itemsInCollectionAssetCollectionIds = $itemInCollectionAsset->pluck('collection_id');
+		    $this->collection->whereIn('id', $itemsInCollectionAssetCollectionIds)->update(['status' => 'closed']);
+
+		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
+		        QueueEmailRetractQuote::dispatch(
+		            $collectionAsset,
+                    $type
+                );
+            }
+
+        }
 
 		if($isJson){
 			return $this->successResponse([

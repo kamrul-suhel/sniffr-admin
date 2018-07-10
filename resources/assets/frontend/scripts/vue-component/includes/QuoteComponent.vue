@@ -11,7 +11,7 @@
                     <v-layout row wrap>
                         <v-flex xs12 text-xs-center>
                             <h2 class="buy-title">Thanks</h2>
-                            <p>Thanks for your request, someone from our licensing team will be in touch shortly</p>
+                            <p>{{ showThanksMessage }}</p>
                         </v-flex>
 
                         <v-flex xs12 text-xs-center>
@@ -29,6 +29,7 @@
                         </v-flex>
                     </v-layout>
                 </v-card-text>
+
                 <v-card-text v-else class="buy-section">
                     <v-form method="post" v-model="valid" lazy-validation ref="quote_form">
                         <v-layout row wrap id="buy-section">
@@ -86,7 +87,8 @@
                                 <v-flex xs12>
                                     <v-select
                                             label="License Type"
-                                            color="dark"
+
+                                            color="light"
                                             :items="licenses"
                                             v-model="license_type"
                                             item-value="slug"
@@ -156,6 +158,7 @@
                                     <v-btn
                                             raised
                                             dark
+                                            size="medium"
                                             :loading="loading"
                                             :disabled="disabled"
                                             @click="buttonClicked()">
@@ -184,6 +187,8 @@
                 price: false,
                 show_price: false,
                 show_thanks: false,
+                showThanksMessage:'',
+
                 button_text: '',
                 asset: {},
                 type: '',
@@ -276,7 +281,7 @@
                 this.collection = collection;
 
                 this.can_buy = (this.type == 'story' || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class) ? false : true;
-                this.button_text = this.can_buy ? 'Accept Price' : 'Request Quote';
+                this.button_text = this.can_buy ? 'Buy Now' : 'Request Quote';
 
                 if (this.type === 'video') {
                     this.settings = this.$store.getters.getSettingsObject;
@@ -318,10 +323,12 @@
             },
 
             onQuoteDialogClose() {
-                this.show_thanks = false;
-                this.disabled = true;
-                this.buy_dialog = false;
-                this.loading = false;
+                setTimeout(()=> {
+                    this.show_thanks = false;
+                    this.disabled = true;
+                    this.buy_dialog = false;
+                    this.loading = false;
+                }, 500);
             },
 
             disabledCheck(){
@@ -374,7 +381,14 @@
                         .then(response => {
                             this.loading = false;
                             this.open_quote_dialog = false;
-                            VideoDialogBoxEventBus.closeVideoDialogFromBuy();
+                            setTimeout(()=> {
+                                this.open_quote_dialog = true;
+                                this.disabled = false;
+                                this.showThanksMessage = "Thank you for purchasing "+ this.asset.title;
+                                this.show_thanks = true;
+                            }, 500)
+
+                            // VideoDialogBoxEventBus.closeVideoDialogFromBuy();
                         })
                         .catch(error => {
                             console.log(error);
@@ -398,6 +412,8 @@
                         .then(response => {
                             this.loading = false;
                             this.show_thanks = true;
+                            console.log(this.showThanksMessage);
+                            this.showThanksMessage = 'Thanks for your request, someone from our licensing team will be in touch shortly'
                         })
                         .catch(error => {
                             console.log(error);
