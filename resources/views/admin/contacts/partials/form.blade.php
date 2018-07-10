@@ -1,5 +1,5 @@
 <div class="@if($contact) col-lg-9 @else col-lg-12 @endif">
-    <form method="POST" action="{{ ($contact) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
+    <form method="POST" action="{{ (isset($contact)) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
         <div class="row">
             <div class="col-md-12">
                 <h2>Contact Information</h2>
