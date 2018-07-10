@@ -451,8 +451,7 @@
     @endif
 </div>
 
-@include('admin.modals.add_contact_modal')
-
+	@include('admin.modals.add_contact_modal')
 
 	@section('javascript')
 
