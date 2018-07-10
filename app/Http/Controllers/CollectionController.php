@@ -265,11 +265,46 @@ class CollectionController extends Controller
 		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
 		$collection = $collectionAsset->collection;
 
+        if($collectionAsset->status == 'expired') {
+            if($isJson){
+                return $this->errorResponse([
+                    'collection' => $collection,
+                    'message' => 'This offer has expired',
+                    'reason' => $collectionAsset->reason
+                ]);
+            }
+        }
+
+		if($collection->status == "closed") {
+            if($isJson){
+                return $this->errorResponse([
+                    'collection' => $collection,
+                    'message' => 'This item is no longer available'
+                ]);
+            }
+        }
+
 		$collection->status = "closed";
 		$collection->save();
 
 		$collectionAsset->status = "purchased";
 		$collectionAsset->save();
+
+		//If exclusive type of asset is purchased, Expire all other collections with same asset. Close collection too
+		if($collectionAsset->type === 'exclusive') {
+		    $videosInCollectionVideos = $this->collectionVideo
+                ->where('video_id', $collectionAsset->video_id)
+                ->where('id', '!=', $collectionAsset->id);
+
+		    $videosInCollectionVideos
+                ->update([
+                    'status' => 'expired',
+                    'reason' => 'Asset bought Exclusively by '. $collectionAsset->collection->user->client->name
+                ]);
+
+		    $videosInCollectionVideosCollectionIds = $videosInCollectionVideos->pluck('collection_id');
+		    $this->collection->whereIn('id', $videosInCollectionVideosCollectionIds)->update(['status' => 'closed']);
+        }
 
 		if($isJson){
 			return $this->successResponse([
