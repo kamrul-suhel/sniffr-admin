@@ -192,7 +192,7 @@ class ContactController extends Controller
 
 		$queries = Contact::where('full_name', 'LIKE', '%'.$term.'%')
 			->orWhere('email', 'LIKE', '%'.$term.'%')
-			->take(5)->get();
+			->take(10)->get();
 
 		if(!count($queries)) {
 			$results[] = [ 'id' => '', 'value' => 'No results found' ];
