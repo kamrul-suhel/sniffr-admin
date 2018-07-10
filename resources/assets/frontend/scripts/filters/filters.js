@@ -24,7 +24,6 @@ Vue.filter('readmore', function (text, length, suffix) {
 
 Vue.filter('convertHyphenToSpace', function (text) {
     if(text != null){
-        console.log('founded');
         let value = text.replace('-', ' ');
         value = value.replace('_', ' ');
         return value;

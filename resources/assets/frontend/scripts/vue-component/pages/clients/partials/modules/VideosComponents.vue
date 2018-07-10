@@ -66,7 +66,15 @@
             this.setData();
 
             ClientVideoOfferPurchasedEventBus.$on('clientRemoveVideo', (videoIndex) => {
-                this.videos.splice(videoIndex, 1);
+                let currentVideo = this.videos[videoIndex];
+                if(currentVideo.type === 'exclusive') {
+                    this.videos.forEach((video) => {
+                        if(video.alpha_id === currentVideo.alpha_id
+                            && video.collection_video_id !== currentVideo.collection_video_id) {
+                            video.expired = true;
+                        }
+                    });
+                }
             });
         },
 
