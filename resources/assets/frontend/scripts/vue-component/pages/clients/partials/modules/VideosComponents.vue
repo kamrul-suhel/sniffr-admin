@@ -59,23 +59,44 @@
             searchTerm(){
                 this.page = 1;
                 this.setData();
+            },
+
+            videos() {
+
             }
         },
 
         created() {
             this.setData();
 
-            ClientVideoOfferPurchasedEventBus.$on('clientRemoveVideo', (videoIndex) => {
+            ClientVideoOfferPurchasedEventBus.$on("clientRemoveVideo", (videoIndex) => {
                 let currentVideo = this.videos[videoIndex];
-                if(currentVideo.type === 'exclusive') {
+                let temp_video = [];
+                currentVideo.purchased = true;
+                temp_video.push(currentVideo);
+
+                this.videos.splice(videoIndex, 1);
+
+
+
+                // if(currentVideo.type === "exclusive") {
                     this.videos.forEach((video) => {
-                        if(video.alpha_id === currentVideo.alpha_id
-                            && video.collection_video_id !== currentVideo.collection_video_id) {
-                            video.expired = true;
+
+                        if(video.alpha_id === currentVideo.alpha_id) {
+                            if(currentVideo.type === "exclusive" && video.type === "exclusive"){
+                                video.expired = true;
+                            }
                         }
-                    });
-                }
-            });
+
+                        temp_video.push(video);
+                    })
+                // }
+
+                this.videos = [];
+                setTimeout(() => {
+                    this.videos = temp_video;
+                }, 100);
+            })
         },
 
         methods: {

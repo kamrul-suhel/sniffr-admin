@@ -16,6 +16,10 @@ const mutations = {
         state.clientCurrentVideo = story.video;
     },
 
+    setOfferedVideos(){
+
+    }
+
 }
 
 const actions = {
@@ -63,6 +67,8 @@ const actions = {
             axios.get(payload)
                 .then((response) => {
                         state.offered_videos = response.data.videos;
+
+
                         resolve();
                     },
                     (error) => {s
