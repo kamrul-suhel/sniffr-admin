@@ -118,7 +118,6 @@ class AdminQuoteController extends Controller {
 			$collectionVideo->final_price = null;
 			$collectionVideo->status = 'requested';
 			$collectionVideo->save();
-
 			$quotes = $collectionVideo->quotes->last();
 		}else if($asset_type == 'story'){
 			$collectionStory = CollectionStory::find($id);
@@ -134,7 +133,10 @@ class AdminQuoteController extends Controller {
 
         //TODO email client that we've retracted our offer
 
-        return redirect('admin/quotes');
+        return redirect('admin/quotes')->with([
+            'note' => 'Retracted Quote',
+            'note_type' => 'success'
+        ]);
     }
 
 }

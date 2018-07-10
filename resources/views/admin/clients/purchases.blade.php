@@ -34,7 +34,7 @@
         <table class="table table-striped pages-table">
             <tr class="table-header">
                 <th>Thumb</th>
-                <th>Aplha ID</th>
+                <th>Alpha ID</th>
                 <th>Order No.</th>
                 <th>Order Date</th>
                 <th>Story / Video</th>

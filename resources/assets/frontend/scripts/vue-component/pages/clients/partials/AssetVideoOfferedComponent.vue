@@ -57,7 +57,18 @@
             </v-layout>
         </v-flex>
 
-        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-if="expired" xs12 sm12 md3 lg3 xl3 pl-3>
+            <v-btn
+                    block
+                    dark
+                    large
+                    disabled
+                    color="dark"
+                    class="mb-3">
+                No Longer Available
+            </v-btn>
+        </v-flex>
+        <v-flex v-else-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -131,6 +142,8 @@
                 declineLoading:false,
                 assetDeclined: false,
 
+                expired:  false,
+
                 assetType:''
             }
         },
@@ -152,9 +165,16 @@
             }
         },
 
+        updated() {
+            console.log(this.video);
+            if(this.video.expired){
+                this.expired = true;
+            }
+        },
+
         created() {
             this.assetType = this.type;
-            console.log(this.video);
+
         },
 
         watch: {
@@ -168,7 +188,14 @@
                 }, 3000);
 
                 this.loader = null
+            },
+            video(val) {
+                if(val.expired){
+
+                    this.expired = true;
+                }
             }
+
         },
 
         methods: {
@@ -194,10 +221,8 @@
             },
 
             onAccept() {
-                console.log('accept video');
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
-
 
                 axios.get(url).then((response) => {
                     if (response.data.success === '1') {
@@ -208,8 +233,7 @@
                         SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
                         // After purchased, if we need to to change another component data this event need to enable
-                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
-
+                        ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
                     }
                 });
             },
