@@ -121,7 +121,7 @@
 									<select name="source_type" id="source_type" class="form-control drop-25">
 										<option value="other">Other</option>
 								    </select>
-									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($story) ?? $story->source }}" />
+									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($story) ? $story->source : '' }}" />
 						        </span>
 
 								<br />
@@ -136,7 +136,7 @@
 										<button id="contact-add" class="btn btn-default js-contact" type="button" data-toggle="modal" data-target="#add_contact_modal">New</button>
 									</span>
 
-									<input type="hidden" id="contact-id" name="contact_id" value="{{ isset($story) ?? $story->contact_id  }}" />
+									<input type="hidden" id="contact-id" name="contact_id" value="{{ isset($story) ? $story->contact_id : ''  }}" />
 						        </span>
 
 								@if(!empty($story))

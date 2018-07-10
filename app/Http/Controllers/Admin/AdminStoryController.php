@@ -237,6 +237,7 @@ class AdminStoryController extends Controller
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
+			'contact' => null,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all()
         ];
