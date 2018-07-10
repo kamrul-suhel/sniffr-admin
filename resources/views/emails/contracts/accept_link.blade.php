@@ -9,11 +9,11 @@
 
     <div>&nbsp;</div>
 
-    <div>Video Ref: {{ $asset->alpha_id }}</div>
+    <div>{{ ucwords($type) }} Ref: {{ $asset->alpha_id }}</div>
 
     <div>&nbsp;</div>
 
-    <div>You are receiving this email in reference to licensing your video. Before we can use your video <strong>we need to you to agree to an agreement</strong> which includes specific terms.</div>
+    <div>You are receiving this email in reference to licensing your {{ $type }}. Before we can use your {{ $type }} <strong>we need to you to agree to an agreement</strong> which includes specific terms.</div>
 
     <div>&nbsp;</div>
 

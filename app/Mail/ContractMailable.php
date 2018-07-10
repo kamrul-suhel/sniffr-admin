@@ -14,8 +14,8 @@ class ContractMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $asset;
     public $asset_id;
+
     public $type;
 
     /**
@@ -34,13 +34,9 @@ class ContractMailable extends Mailable
      */
     public function __construct($asset_id, Contract $contract, $type = 'video')
     {
-        $this->asset_id = $asset_id;
-        if($type=='video') {
-            $asset = Video::find($asset_id);
-        } else {
-            $asset = Story::find($asset_id);
-        }
         $this->contract = $contract;
+        $this->type = $type;
+        $this->asset_id = $asset_id;
     }
 
     /**
@@ -50,8 +46,10 @@ class ContractMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.contracts.accept_link')
+        $asset = ($this->type=='video' ? Video::find($this->asset_id) : Story::find($this->asset_id));
+
+        return $this->view('emails.contracts.accept_link')->with('asset', $asset)
             ->text('emails.contracts.accept_link_text')
-            ->subject('SNIFFR - Here is the contract for your asset');
+            ->subject('SNIFFR - Here is the contract for your '.$this->type);
     }
 }

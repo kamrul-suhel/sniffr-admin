@@ -6,9 +6,11 @@ use App\Contract;
 use App\Http\Requests\Contract\DeleteContractRequest;
 use App\Notifications\ContractSigned;
 use App\Traits\FrontendResponse;
+use Auth;
 use App\User;
 use App\Video;
 use App\Story;
+use App\Contact;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\Libraries\VideoHelper;
@@ -37,19 +39,40 @@ class ContractController extends Controller
         if(!$contract->signed_at) {
             $note = 'Contract Deleted!';
             $note_type = 'success';
+            $asset = ($contract->video_id ? Video::find($contract->video_id) : Story::find($contract->story_id));
+            $type = ($contract->video_id ? 'video' : 'story');
             $contract->delete();
             $contract->save();
         }
 
-        $video = Video::find($contract->video_id);
+        if($type=='video') {
+            return redirect()->route('admin_video_edit', [
+                'id' => $asset->alpha_id
+            ])->with([
+                'active_tab' => 'contract',
+                'note' => $note,
+                'note_type' => $note_type
+            ]);
+        } else {
+            $data = [
+                'note' => 'Contract Deleted!',
+                'note_type' => 'success',
+                'headline' => '<i class="fa fa-edit"></i> Edit Story',
+                'story' => $asset,
+                'post_route' => url('admin/stories/update'),
+                'button_text' => 'Save Draft',
+                'decision' => '',
+                'user' => Auth::user(),
+                'users' => User::all(),
+                'contacts' => Contact::all(),
+                'video_categories' => VideoCategory::all(),
+                'video_collections' => VideoCollection::all(),
+                'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
+            ];
 
-        return redirect()->route('admin_video_edit', [
-            'id' => $video->alpha_id
-        ])->with([
-            'active_tab' => 'contract',
-            'note' => $note,
-            'note_type' => $note_type
-        ]);
+            return redirect()->back()->with($data);
+        }
+
     }
 
 	/**
@@ -101,13 +124,15 @@ class ContractController extends Controller
                 'note_type' => 'success'
             ]);
         } else {
-
-            $story = Story::where('id', $id)
+            $story_id = $request->input('story_id');
+            $story = Story::where('id', $story_id)
                 ->first();
 
             $decision = ''; //Input::get('decision');
 
             $data = [
+                'note' => 'Contract Saved!',
+                'note_type' => 'success',
                 'headline' => '<i class="fa fa-edit"></i> Edit Story',
                 'story' => $story,
                 'post_route' => url('admin/stories/update'),
@@ -121,11 +146,7 @@ class ContractController extends Controller
                 'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
             ];
 
-            return view('admin.stories.create_edit', $data)->with([
-                'active_tab' => 'contract',
-                'note' => 'Contract Saved!',
-                'note_type' => 'success'
-            ]);
+            return redirect()->back()->with($data);
         }
 
     }
@@ -134,10 +155,10 @@ class ContractController extends Controller
      * @param int $video_id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function send(int $asset_id, $type = 'video')
+    public function send($type = 'video', int $id)
     {
         if($type=='video') {
-            $video = Video::with('currentContract')->with('contact')->find($asset_id);
+            $video = Video::with('currentContract')->with('contact')->find($id);
 
             if (!$video) {
                 abort(404);
@@ -166,7 +187,7 @@ class ContractController extends Controller
                 'note_type' => 'success'
             ]);
         } else {
-            $story = Story::with('currentContract')->with('contact')->find($asset_id);
+            $story = Story::with('currentContract')->with('contact')->find($id);
 
             if (!$story) {
                 abort(404);
@@ -190,6 +211,8 @@ class ContractController extends Controller
             $decision = ''; //Input::get('decision');
 
             $data = [
+                'note' => 'Contract Sent!',
+                'note_type' => 'success',
                 'headline' => '<i class="fa fa-edit"></i> Edit Story',
                 'story' => $story,
                 'post_route' => url('admin/stories/update'),
@@ -203,11 +226,7 @@ class ContractController extends Controller
                 'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
             ];
 
-            return view('admin.stories.create_edit', $data)->with([
-                'active_tab' => 'contract',
-                'note' => 'Contract Sent!',
-                'note_type' => 'success'
-            ]);
+            return redirect()->back()->with($data);
         }
 
     }
@@ -344,24 +363,20 @@ class ContractController extends Controller
      */
     private function getContractText(Contract $contract, $asset_id, $type = 'video')
     {
-        if($type=='video') {
-            $video = Video::find($asset_id);
+        $asset = ($type=='video' ? Video::find($asset_id) : Story::find($asset_id));
 
-            $contract_text = config('contracts')[$contract->contract_model_id]['text'];
-            $contract_text = $contract->signed_at ? str_replace(':contract_date', '<strong>'.$contract->signed_at.'</strong>', $contract_text) : str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
-            $contract_text = str_replace(':licensor_name', '<strong>'.$video->contact->full_name.'</strong>', $contract_text);
-            $contract_text = str_replace(':licensor_email', '<strong>'.$video->contact->email.'</strong>', $contract_text);
-            $contract_text = $video->title ? str_replace(':story_title', 'Video Title: <strong>'.$video->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
-            $contract_text = $video->url ? str_replace(':story_link', 'URL: <strong>'.$video->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
-            $contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
-            $contract_text = $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the video on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
-            $contract_text = str_replace(':video_ref', '<strong>'.$video->alpha_id.'</strong>', $contract_text);
-            $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
-            $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
-            $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
-        } else {
-            $story = Story::find($asset_id);
-        }
+        $contract_text = config('contracts')[$contract->contract_model_id]['text'];
+        $contract_text = $contract->signed_at ? str_replace(':contract_date', '<strong>'.$contract->signed_at.'</strong>', $contract_text) : str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
+        $contract_text = str_replace(':licensor_name', '<strong>'.$asset->contact->full_name.'</strong>', $contract_text);
+        $contract_text = str_replace(':licensor_email', '<strong>'.$asset->contact->email.'</strong>', $contract_text);
+        $contract_text = $asset->title ? str_replace(':story_title', ucwords($type).' Title: <strong>'.$asset->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
+        $contract_text = $asset->url ? str_replace(':story_link', 'URL: <strong>'.$asset->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
+        $contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
+        $contract_text = $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the '.$type.' on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
+        $contract_text = str_replace(':video_ref', '<strong>'.$asset->alpha_id.'</strong>', $contract_text);
+        $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
+        $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
+        $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
 
         $currencies = config('currencies');
         if (($contract->upfront_payment_currency_id != 1) && (key_exists($contract->upfront_payment_currency_id, $currencies))) {

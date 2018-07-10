@@ -85,10 +85,11 @@ class QueueEmail implements ShouldQueue
                         Mail::to($asset->contact->email)->send(new DetailsThanks($asset));
                         break;
 					case 'contract_signed':
-						Mail::to($asset->contact->email)->send(new ContractSignedThanks($asset->id, $asset->currentContract, $this->type));
+                        Mail::to($asset->contact->email)->send(new ContractSignedThanks($asset->id, $asset->currentContract, $this->type));
 						break;
 					case 'sign_contract':
-						Mail::to($asset->contact->email)->send(new ContractMailable($asset->id, $asset->currentContract, $this->type));
+                        Mail::to($asset->contact->email)->send(new ContractMailable($asset->id, $asset->currentContract, $this->type));
+                        break;
                 }
             }
         }

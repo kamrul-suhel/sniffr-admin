@@ -3,7 +3,7 @@
 @section('content')
     <div>
     <span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;">
-        <b>Hey {{ $this->asset->contact->full_name }}!</b>
+        <b>Hey {{ $asset->contact->full_name }}!</b>
     </span>
     </div>
 
@@ -14,7 +14,7 @@
 
     <div>&nbsp;</div>
 
-    <div><a href="{{ route('contract.download.public', ['id' => $this->asset->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$this->asset->contracts->first()->reference_id) }}</a></div>
+    <div><a href="{{ route('contract.download.public', ['id' => $asset->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$asset->contracts->first()->reference_id) }}</a></div>
 
     <div>&nbsp;</div>
 
@@ -31,5 +31,5 @@
 
     <div>&nbsp;</div>
 
-    <div>Video Ref: {{ $this->asset->alpha_id }}</div>
+    <div>{{ ucwords($type) }} Ref: {{ $asset->alpha_id }}</div>
 @endsection

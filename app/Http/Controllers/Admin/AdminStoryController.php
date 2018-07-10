@@ -222,7 +222,7 @@ class AdminStoryController extends Controller
      */
     public function edit($id)
     {
-        $story = Story::where('alpha_id', $id)
+        $story = Story::with('currentContract')->where('alpha_id', $id)
             ->first();
 
         $decision = Input::get('decision');
