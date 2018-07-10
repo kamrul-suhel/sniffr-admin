@@ -89,6 +89,7 @@ var public_vars = public_vars || {};
 			}
 
 			$(this).removeClass('js-story-state');
+			$(this).attr("disabled", true);
 
 			// swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
 			// $('.swal-button-container').css('display','none');
