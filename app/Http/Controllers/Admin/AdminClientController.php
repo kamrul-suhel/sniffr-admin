@@ -251,13 +251,14 @@ class AdminClientController extends Controller
 
 		$csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
 
-		$csv->insertOne(['Order No.', 'Order Date', 'Story / Video', 'Downloaded', 'Price']);
+		$csv->insertOne(['Order No.', 'Alpha ID', 'Order Date', 'Story / Video', 'Downloaded', 'Price']);
 
 		$count = 1;
 		$insert = [];
 		foreach($collectionPurchasesVideos as $collection){
 			foreach($collection->collectionVideos as $purchasedVideo) {
 				$insert['order_no'] = $collection->name;
+				$insert['alpha_id'] = $purchasedVideo->video->alpha_id;
 				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
 				$insert['title'] = $purchasedVideo->video->title;
 				$insert['downloaded'] = $downloads->where('video_id', $purchasedVideo->video->id)->count();
@@ -271,6 +272,7 @@ class AdminClientController extends Controller
 		foreach($collectionPurchasesStories as $collection){
 			foreach($collection->collectionStories as $purchasedStory) {
 				$insert['order_no'] = $collection->name;
+				$insert['alpha_id'] = $purchasedStory->story->alpha_id;
 				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
 				$insert['title'] = $purchasedStory->story->title;
 				$insert['downloaded'] = $downloads->where('story_id', $purchasedStory->story->id)->count();

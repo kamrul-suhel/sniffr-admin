@@ -103,7 +103,10 @@ class AdminQuoteController extends Controller {
 			$type
         );
 
-        return redirect('admin/quotes');
+        return redirect('admin/quotes')->with([
+            'note' => 'Successfully Offered Quote',
+            'note_type' => 'success'
+        ]);
     }
 
     public function destroy(Request $request, $id)
@@ -111,13 +114,14 @@ class AdminQuoteController extends Controller {
 		$asset_type = $request->get('asset_type');
 
 		if($asset_type == 'video') {
+
 			$collectionVideo = CollectionVideo::find($id);
 			$collectionVideo->final_price = null;
 			$collectionVideo->status = 'requested';
 			$collectionVideo->save();
-
 			$quotes = $collectionVideo->quotes->last();
 		}else if($asset_type == 'story'){
+
 			$collectionStory = CollectionStory::find($id);
 			$collectionStory->final_price = null;
 			$collectionStory->status = 'requested';
@@ -131,7 +135,10 @@ class AdminQuoteController extends Controller {
 
         //TODO email client that we've retracted our offer
 
-        return redirect('admin/quotes');
+        return redirect('admin/quotes')->with([
+            'note' => 'Retracted Quote',
+            'note_type' => 'success'
+        ]);
     }
 
 }
