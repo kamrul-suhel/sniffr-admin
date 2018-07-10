@@ -66,7 +66,15 @@
             this.setData();
 
             ClientVideoOfferPurchasedEventBus.$on('clientRemoveVideo', (videoIndex) => {
-                this.videos.splice(videoIndex, 1);
+                let currentVideo = this.videos[videoIndex];
+                if(currentVideo.type === 'exclusive') {
+                    this.videos.forEach((video) => {
+                        if(video.alpha_id === currentVideo.alpha_id
+                            && video.collection_video_id !== currentVideo.collection_video_id) {
+                            video.expired = true;
+                        }
+                    });
+                }
             });
         },
 
@@ -102,6 +110,9 @@
                         this.videos = [];
                         videos.data.forEach((video) => {
                             video[0].video.final_price = video[0].final_price;
+                            video[0].video.platform = video[0].platform;
+                            video[0].video.type = video[0].type;
+                            video[0].video.length = video[0].length;
                             video[0].video.collection_video_id = video[0].id;
                             this.videos.push(video[0].video);
                         });
@@ -133,7 +144,10 @@
                         this.videos = [];
                         videos.data.forEach((video) => {
                             video[0].video.final_price = video[0].final_price;
-                            video[0].video.collection_id = video[0].collection_id;
+                            video[0].video.platform = video[0].platform;
+                            video[0].video.type = video[0].type;
+                            video[0].video.length = video[0].length;
+                            video[0].video.collection_video_id = video[0].id;
                             this.videos.push(video[0].video);
                         });
 

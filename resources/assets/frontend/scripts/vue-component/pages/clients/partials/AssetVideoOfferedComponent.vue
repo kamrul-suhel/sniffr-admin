@@ -4,7 +4,8 @@
             <v-card>
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
-                        height="200px" class="client-video-thumbnail cdi-content">
+                        height="250px"
+                        class="client-video-thumbnail cdi-content">
                     <div class="cdi-label" v-if="purchased">
                         <v-tooltip top>
                             <v-btn slot="activator" flat icon raised light color="white">
@@ -26,12 +27,28 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
+        <v-flex xs12 sm12 md6 lg6 xl6>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
                     <h2 v-html="video.title"></h2>
                     <div class="cd-time">{{ video.updated_at | convertDate }}</div>
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
+
+                    <div class="quote" v-if="type === 'offered' || type === 'purchased'">
+                        <v-layout row wrap>
+                            <v-flex xs6 class="pb-0">
+                                <span>Platform: {{ video.platform | convertHyphenToSpace}}</span>
+                            </v-flex>
+
+                            <v-flex xs6 class="pb-0">
+                                <span>Length: {{ video.length | convertHyphenToSpace}}</span>
+                            </v-flex>
+
+                            <v-flex xs6 class="py-0">
+                                <span>Type: {{ video.type | convertHyphenToSpace }}</span>
+                            </v-flex>
+                        </v-layout>
+                    </div>
 
                     <div class="final-price">
                         <h4>Final price: <span>£{{ video.final_price }}</span></h4>
@@ -40,7 +57,18 @@
             </v-layout>
         </v-flex>
 
-        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-if="expired" xs12 sm12 md3 lg3 xl3 pl-3>
+            <v-btn
+                    block
+                    dark
+                    large
+                    disabled
+                    color="dark"
+                    class="mb-3">
+                No Longer Available
+            </v-btn>
+        </v-flex>
+        <v-flex v-else-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -73,7 +101,7 @@
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
-                Accept
+                Buy Now
             </v-btn>
 
             <v-btn
@@ -114,6 +142,8 @@
                 declineLoading:false,
                 assetDeclined: false,
 
+                expired:  false,
+
                 assetType:''
             }
         },
@@ -135,8 +165,16 @@
             }
         },
 
+        updated() {
+            console.log(this.video);
+            if(this.video.expired){
+                this.expired = true;
+            }
+        },
+
         created() {
             this.assetType = this.type;
+
         },
 
         watch: {
@@ -150,7 +188,14 @@
                 }, 3000);
 
                 this.loader = null
+            },
+            video(val) {
+                if(val.expired){
+
+                    this.expired = true;
+                }
             }
+
         },
 
         methods: {
@@ -176,10 +221,8 @@
             },
 
             onAccept() {
-                console.log('accept video');
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
-
 
                 axios.get(url).then((response) => {
                     if (response.data.success === '1') {
@@ -190,8 +233,7 @@
                         SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
                         // After purchased, if we need to to change another component data this event need to enable
-                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
-
+                        ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
                     }
                 });
             },

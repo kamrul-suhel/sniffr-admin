@@ -127,10 +127,12 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
 
     Route::post('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
+	Route::get('videos/autocomplete', 'Admin\AdminVideosController@autocomplete')->name('video.autocomplete');
     Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
+
 
     Route::resource('comment', 'CommentController');
 

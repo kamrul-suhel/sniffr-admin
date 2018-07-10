@@ -26,9 +26,7 @@
             <table class="table table-striped pages-table">
                 @foreach($companies as $company)
                     @if($company->collections->count())
-                        <thead class="panel-title">
-                            <th>{{ $company->name }}</th>
-                        </thead>
+                        <h3>{{ $company->name }}</h3>
                         <tbody>
                             <table class="table table-condensed table-striped">
                                 <thead>
@@ -39,32 +37,39 @@
                                     <th class="text-center">Video Quotes</th>
                                     <th class="text-center">Stories</th>
                                     <th class="text-center">Story Quotes</th>
-                                    <th class="text-center">Status</th>
                                 </thead>
                                 <tbody>
                                 @foreach($company->collections as $collection)
                                     <tr class="text-center">
-                                        <td><a href="{{ route('admin.collections.show', ['id' => $collection->id]) }}">{{ $collection->name }}</a></td>
-                                        <td>{{ $collection->created_at }}</td>
+                                        <td>
+                                            <a href="{{ route('admin.collections.show', ['id' => $collection->id]) }}">{{ $collection->name }}</a> <br>
+                                            <small> {{ ucwords($collection->status) }} </small>
+                                        </td>
+                                        <td>{{ date('d F Y - H:i:s', strtotime($collection->created_at)) }}</td>
                                         <td>{{ $collection->user->full_name ?? $collection->user->username }} <br> {{ $collection->user->email }}</td>
 
                                         <td>{{ $collection->collectionVideos->count() }}</td>
                                         <td>
                                             @foreach($collection->collectionVideos as $collectionVideo)
-                                                - <a target="_blank" href="{{ route('videos_show', ['id' => $collectionVideo->alpha_id]) }}">
-                                                    {{ $collectionVideo->video->alpha_id }}</a>
-                                                (£{{$collectionVideo->final_price}})<br>
+                                                - <a target="_blank" href="{{ url('videos', $collectionVideo->video->alpha_id) }}">{{ $collectionVideo->video->alpha_id }}
+                                                    <i class="fa fa-external-link"></i></a> (£{{$collectionVideo->final_price}}) - {{ $collectionVideo->status }}
+                                                    @if(isset($collectionVideo->reason))
+                                                        ({{ $collectionVideo->reason }})
+                                                    @endif
+                                                <br>
                                             @endforeach
                                         </td>
                                         <td>{{ $collection->collectionStories->count() }}</td>
                                         <td>
                                             @foreach($collection->collectionStories as $collectionStory)
-                                                - <a target="_blank" href="{{ route('videos_shows', ['id' => $collectionStory->alpha_id]) }}">
-                                                    {{ $collectionStory->story->alpha_id }}</a>
-                                                (£{{$collectionStory->final_price}})<br>
+                                                - <a target="_blank" href="{{ url('videos', $collectionStory->story->alpha_id) }}">{{ $collectionStory->story->alpha_id }}
+                                                    <i class="fa fa-external-link"></i></a>(£{{$collectionStory->final_price}}) - {{ $collectionStory->status }}
+                                                    @if(isset($collectionStory->reason))
+                                                        ({{ $collectionStory->reason }})
+                                                    @endif
+                                                <br>
                                             @endforeach
                                         </td>
-                                        <td>{{ ucwords($collection->status) }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

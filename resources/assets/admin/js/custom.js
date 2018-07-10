@@ -23,6 +23,39 @@ var public_vars = public_vars || {};
 		// 	}
 		// });
 
+        $('.add-video-button').click(function(e){ //on add input button click
+            e.preventDefault();
+
+			$('.video-inputs-wrapper').append('<div class="col-xs-12 input-group"><input type="text" class="form-control" placeholder="Search videos" /><input type="hidden" name="videos[]" /><span class="input-group-btn"><button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button></span></div>');
+
+			$('.video-inputs-wrapper').find('input[type=text]:last').autocomplete({
+				source: '/admin/videos/autocomplete',
+                minLength: 3,
+                select: function(event, ui) {
+                    $(this).next().val(ui.item.id);
+                }
+			});
+        });
+
+        $('.video-inputs-wrapper').on("click",".js-remove-input",  function(e){ //user click on remove text
+            e.preventDefault();
+            $(this).parent().parent().remove();
+        });
+
+        $("input[name^='videos']").autocomplete({
+            source: '/admin/videos/autocomplete',
+            minLength: 3,
+        });
+
+        $( "#js-autocomplete-contact" ).autocomplete({
+            source: "/admin/contacts/autocomplete",
+            minLength: 3,
+            select: function(event, ui) {
+                $('#js-autocomplete-contact').val(ui.item.value);
+                $('#contact-id').val(ui.item.id);
+            }
+        });
+
 		$('.js-story-state').click(function(e){
 			e.preventDefault();
 			var state, alertType;

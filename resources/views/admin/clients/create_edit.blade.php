@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-    <!-- Mailer stories & video style -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
-@endsection
-
 @section('content')
     <div id="admin-container">
         <ol class="breadcrumb">
@@ -366,6 +361,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+                                <div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+                            <div class="panel-body" style="display: block;">
+                                <label>Active</label>
+                                <input type="checkbox" id="active" name="active" {{ ((($company) && ($company->active)) || (!$company)) ? 'checked="checked" value=1' : '' }} />
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             @endif

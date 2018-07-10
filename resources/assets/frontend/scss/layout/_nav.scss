@@ -219,4 +219,8 @@
 .v-list, .v-list__tile {
   background-color: black;
   color: white;
+
+  &:hover{
+    color:black;
+  }
 }
