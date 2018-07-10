@@ -62,7 +62,7 @@ class CollectionController extends Controller
         $user = auth()->user();
 
         $data = [
-            'name' => "order_".VideoHelper::quickRandom(10),
+            'name' => "order_".strtolower(str_random(10)),
             'user_id' => $user->id ?? null,
             'client_id' => $user->client_id ?? null,
             'status' => 'open',
