@@ -50,17 +50,10 @@
                     </v-flex>
 
                     <v-flex xs12>
-                        <buy-button-component
-                                v-if="canBuy"
-                                :type="'video'"
-                                :asset="video_detail">
-                        </buy-button-component>
-
-                        <quote-button-component
-                                v-else
+                        <buy-quote-button-component
                                 :type="'video'"
                                 :asset="video_detail"
-                        ></quote-button-component>
+                        ></buy-quote-button-component>
                     </v-flex>
 
                 </v-layout>
@@ -73,14 +66,12 @@
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
-    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
-    import BuyButtonComponent from '../../includes/BuyButtonComponent'
+    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            QuoteButtonComponent,
+            BuyQuoteButtonComponent,
             videoPlayer: VideoPlayer,
-            BuyButtonComponent
         },
         data() {
             return {

@@ -62,7 +62,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex v-if="type == 'video'">
+                            <v-flex v-if="type === 'video'">
                                 <v-flex xs12>
                                     <v-select
                                             label="License Type"
@@ -149,6 +149,8 @@
 <script>
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus.js';
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
+    import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
+
 
     export default {
         data() {
@@ -157,8 +159,6 @@
                 client_logged_in: false,
                 disabled: true,
                 settings: {},
-                show_thanks: false,
-                showThanksMessage:'',
 
                 asset: {},
                 type: '',
@@ -239,46 +239,31 @@
                 if(val) {
                     this.disabledCheck()
                 }
-            },
+            }
         },
 
         created() {
+            this.initializeData();
+
             QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) => {
-                this.client_logged_in = this.$store.getters.isClientLogin;
-                // this.$refs.quote_form.reset();
+                this.initializeData();
                 this.open_quote_dialog = true;
                 this.type = type;
                 this.asset = asset;
                 this.collection = collection;
 
-                if (this.type === 'video') {
-                    this.settings = this.$store.getters.getSettingsObject;
-
-                    Object.values(this.settings.pricing.type).forEach((type) =>{
-                        this.licenses.push(type);
-                    });
-
-                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
-                        this.platforms.push(platform);
-                    });
-
-                    Object.values(this.settings.pricing.length).forEach((length) =>{
-                        this.lengths.push(length);
-                    });
-
-                    this.collection_asset_id = this.collection.collection_video_id;
-                    this.alpha_name = 'video_alpha_id';
-                }else if (this.type == 'story') {
-                    this.collection_asset_id = this.collection.collection_story_id;
-                    this.alpha_name = 'story_alpha_id';
-                    this.disabled = false;
-                }
             });
 
             VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
                 //this.$router.push('client/purchased');
                 //TODO - Decide where to send user based on type of view
             });
+
+            ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
+                setTimeout(()=> {
+                    this.open_quote_dialog = false;
+                }, 500);
+            })
         },
 
         methods: {
@@ -288,7 +273,6 @@
 
             onQuoteDialogClose() {
                 setTimeout(()=> {
-                    this.show_thanks = false;
                     this.disabled = true;
                     this.buy_dialog = false;
                     this.loading = false;
@@ -329,10 +313,16 @@
                     axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
                         .then(response => {
                             this.loading = false;
-                            this.show_thanks = true;
-                            this.showThanksMessage = 'Thanks for your request, someone from our licensing team will be in touch shortly'
+                            this.open_buy_dialog = false;
+                            
+                            setTimeout(()=> {
+                                this.$refs.quote_form.reset();
+                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly';
+                                ThankYouDialogBoxEventBus.openThankYouDialog(message);
+                            }, 500)
                         })
                         .catch(error => {
+                            this.errors = error.response.data.errors;
                             console.log(error);
                         });
                 }
@@ -357,16 +347,7 @@
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
 
-                            this.$store.dispatch('getLoginStatus').then(() => {
-                                axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
-                                    .then(response => {
-                                        this.loading = false;
-                                        this.show_thanks = true;
-                                    })
-                                    .catch(error => {
-                                        console.log(error);
-                                    });
-                            });
+                            this.requestQuote();
                         })
                         .catch(error => {
                             this.errors = error.response.data.errors;
@@ -374,6 +355,34 @@
                         });
                 }
             },
+
+            initializeData(){
+                this.client_logged_in = this.$store.getters.isClientLogin;
+                // this.$refs.quote_form.reset();
+
+                if (this.type === 'video') {
+                    this.settings = this.$store.getters.getSettingsObject;
+
+                    Object.values(this.settings.pricing.type).forEach((type) =>{
+                        this.licenses.push(type);
+                    });
+
+                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
+                        this.platforms.push(platform);
+                    });
+
+                    Object.values(this.settings.pricing.length).forEach((length) =>{
+                        this.lengths.push(length);
+                    });
+
+                    this.collection_asset_id = this.collection.collection_video_id;
+                    this.alpha_name = 'video_alpha_id';
+                }else if (this.type == 'story') {
+                    this.collection_asset_id = this.collection.collection_story_id;
+                    this.alpha_name = 'story_alpha_id';
+                    this.disabled = false;
+                }
+            }
         }
     }
 </script>

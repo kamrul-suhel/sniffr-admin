@@ -12,53 +12,8 @@
                         <v-layout row wrap id="buy-section">
 
                             <v-flex xs12>
-                                <h2 class="text-center text-uppercase">Quote</h2>
+                                <h2 class="text-center text-uppercase">Buy </h2>
                                 <p class="text-xs-center">Please provide us with your requirements</p>
-                            </v-flex>
-
-                            <v-flex xs12 v-if="!client_logged_in">
-                                <v-flex xs12>
-                                    <v-text-field
-                                            label="Name"
-                                            v-model="request_quote.name"
-                                            color="dark"
-                                            validate-on-blur
-                                            :rules="nameRules"
-                                            required
-                                    >
-                                    </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs12>
-                                    <v-text-field
-                                            label="Email"
-                                            type="email"
-                                            v-model="request_quote.email"
-                                            color="dark"
-                                            validate-on-blur
-                                            :rules="emailRules"
-                                            :error-messages="emailError"
-                                            required>
-                                    </v-text-field>
-                                    <small class="red--text" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
-                                </v-flex>
-
-                                <v-flex xs12>
-                                    <v-text-field
-                                            label="Phone"
-                                            v-model="request_quote.phone"
-                                            color="dark">
-                                    </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs12>
-                                    <small style="color:red" v-if="errors.company_name">{{ errors.company_name[0] }}</small>
-                                    <v-text-field
-                                            label="Company"
-                                            v-model="request_quote.company"
-                                            color="dark">
-                                    </v-text-field>
-                                </v-flex>
                             </v-flex>
 
                             <v-flex v-if="type == 'video'">
@@ -144,13 +99,12 @@
 <script>
     import BuyDialogBoxEventBus from '../../event-bus/buy-dialog-box-event-bus.js';
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
-    import ThankYouDialogEventBus from '../../event-bus/thank-you-dialog-event-bus'
+    import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
 
     export default {
         data() {
             return {
                 alpha_name: '',
-                client_logged_in: false,
                 disabled: true,
                 settings: {},
                 price: false,
@@ -246,7 +200,6 @@
         created() {
             BuyDialogBoxEventBus.$on('buyDialogStateChange', (collection, asset, type) => {
 
-                this.client_logged_in = this.$store.getters.isClientLogin;
                 this.$refs.quote_form.reset();
                 this.open_buy_dialog = true;
                 this.type = type;
@@ -283,6 +236,13 @@
                 //this.$router.push('client/purchased');
                 //TODO - Decide where to send user based on type of view
             });
+
+            ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
+                setTimeout(()=> {
+                    this.open_quote_dialog = false;
+                }, 500);
+            })
+
         },
 
         methods: {
@@ -315,7 +275,6 @@
 
                 axios.post('/client/collections/get_video_price/'+this.collection_asset_id, form_data)
                     .then(response => {
-                        console.log(response);
                         this.price = response.data.price ? response.data.price : false;
                     })
                     .catch(error => {
@@ -331,6 +290,7 @@
             acceptPrice() {
                 if(this.$refs.quote_form.validate()){
                     this.loading = true;
+
                     // submit data with ajax request
                     axios.get('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
                         .then(response => {
@@ -338,7 +298,8 @@
                             this.open_buy_dialog = false;
                             setTimeout(()=> {
                                 let message = "Thank you for purchasing "+ this.asset.title
-                                ThankYouDialogEventBus.openThankYouDialog(message);
+                                ThankYouDialogBoxEventBus.openThankYouDialog(message);
+                                this.$refs.quote_form.reset();
                             }, 500)
 
                         })

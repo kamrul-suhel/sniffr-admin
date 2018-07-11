@@ -62,16 +62,8 @@
                                 </div>
 
                                 <quote-button-component
-                                        v-if="user.client_id"
-                                        :user="'user'"
                                         :type="'video'"
                                         :asset="video_detail.video"
-                                ></quote-button-component>
-
-                                <quote-button-component v-else
-                                        :user="false"
-                                        :type="'video'"
-                                        :asset="video_detail"
                                 ></quote-button-component>
                             </v-flex>
                         </v-layout>
@@ -84,12 +76,12 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
-    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
+    import QuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
             QuoteButtonComponent,
-            videoPlayer: VideoPlayer
+            videoPlayer: VideoPlayer,
         },
 
         data() {
@@ -100,7 +92,9 @@
                 tags: [],
                 ready_to_show : true,
                 previousPageUrl: '',
-                content_padding:true
+                content_padding:true,
+                client_logged_in:'',
+                canBuy:false
             }
         },
 
@@ -118,18 +112,13 @@
             this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
                 this.video_detail.video.iframe = this.video_detail.iframe;
+
+
                 this.ini = true;
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
                 }
-            });
-
-        },
-
-        mounted() {
-            this.$vuetify.goTo('#scroll_to');
-            window.addEventListener('fb-sdk-ready', this.onFBReady)
-
+            })
 
         },
 

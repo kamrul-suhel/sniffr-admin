@@ -54,6 +54,7 @@
         methods: {
             closeDialogBoxes(){
                 this.thankYouDialog = false;
+                ThankYouDialogBoxEventBus.$emit('closeThankYouDialog');
             }
 
         }

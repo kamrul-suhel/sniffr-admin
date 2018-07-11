@@ -77,20 +77,17 @@
 
                 this.videos.splice(videoIndex, 1);
 
+                this.videos.forEach((video) => {
+                    video.change_value = !video.change_value;
 
-
-                // if(currentVideo.type === "exclusive") {
-                    this.videos.forEach((video) => {
-
-                        if(video.alpha_id === currentVideo.alpha_id) {
-                            if(currentVideo.type === "exclusive" && video.type === "exclusive"){
-                                video.expired = true;
-                            }
+                    if(video.alpha_id === currentVideo.alpha_id) {
+                        if(currentVideo.type === "exclusive" && video.type === "exclusive"){
+                            video.expired = true;
                         }
+                    }
 
-                        temp_video.push(video);
-                    })
-                // }
+                    temp_video.push(video);
+                })
 
                 this.videos = [];
                 setTimeout(() => {
@@ -168,6 +165,7 @@
                             video[0].video.platform = video[0].platform;
                             video[0].video.type = video[0].type;
                             video[0].video.length = video[0].length;
+                            video[0].video.change_value = true;
                             video[0].video.collection_video_id = video[0].id;
                             this.videos.push(video[0].video);
                         });
