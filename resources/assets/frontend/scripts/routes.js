@@ -12,6 +12,7 @@ import TermsConditionsComponent from './vue-component/pages/termscondition/Terms
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 import StoriesComponent from './vue-component/pages/stories/StoriesComponent';
+import StoryDetailComponent from './vue-component/pages/stories/StoryDetailComponent.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
@@ -52,6 +53,12 @@ export const routes = [
         path: '/videos/:id',
         name: 'videos_detail',
         component: VideoDetailComponent
+    },
+
+    {
+        path: '/stories/:id',
+        name: 'stories_detail',
+        component: StoryDetailComponent
     },
 
     {

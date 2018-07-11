@@ -246,9 +246,12 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     | Download Stories
     |--------------------------------------------------------------------------
     */
+	Route::get('stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+	Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
     Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
     Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.purchased.stories');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -285,35 +288,32 @@ Route::post('client/collections', 'CollectionController@store')->name('client.st
 
 /*
 |--------------------------------------------------------------------------
-| Client Frontend Routes
+| Frontend Videos Routes
 |--------------------------------------------------------------------------
 */
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
-Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
-Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
-Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('client.videos.show');;
+Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
 
 
 /*
 |--------------------------------------------------------------------------
-| Frontend video dialog box, getting current video, next & previous link
+| Frontend Stories Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
+Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| Frontend Search video/story dialog box, getting current video, next & previous link
 |--------------------------------------------------------------------------
 */
 
 Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
 Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Stories route
-|--------------------------------------------------------------------------
-*/
-Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
-Route::post('/request_quote_process', 'Frontend\StoryController@requestQuote')->name('frontend.request.quote');
-
 
 /*
 |--------------------------------------------------------------------------

@@ -61,10 +61,10 @@
                                     </ul>
                                 </div>
 
-                                <quote-button-component
+                                <buy-quote-button-component
                                         :type="'video'"
                                         :asset="video_detail.video"
-                                ></quote-button-component>
+                                ></buy-quote-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
@@ -76,11 +76,11 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
-    import QuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
+    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            QuoteButtonComponent,
+            BuyQuoteButtonComponent,
             videoPlayer: VideoPlayer,
         },
 

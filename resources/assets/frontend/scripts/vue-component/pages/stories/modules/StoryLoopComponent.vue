@@ -71,7 +71,7 @@
             },
 
             onStoryDetail(){
-                this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
+                this.$router.push({name: 'stories_detail', params: {'id': this.story.alpha_id}})
             },
 
             checkLoginStatus(){
