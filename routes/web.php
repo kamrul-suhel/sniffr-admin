@@ -250,7 +250,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 	Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
     Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
-    Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.purchased.stories');
+    Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.stories.offered');
 
 
     /*

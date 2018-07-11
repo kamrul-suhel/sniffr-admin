@@ -19,7 +19,7 @@ class ClientVideosController extends Controller
     use FrontendResponse;
     use VideoHelper;
 
-    const PAGINATE_PER_PAGE = 12;
+    const PAGINATE_PER_PAGE = 100;
 
     /**
      * @var int

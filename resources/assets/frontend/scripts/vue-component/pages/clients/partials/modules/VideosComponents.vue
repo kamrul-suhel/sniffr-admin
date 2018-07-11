@@ -18,14 +18,14 @@
                 :index="index"
                 :video="video"></asset-video-offered-component>
 
-        <div class="text-xs-center" v-if="totalVideos > videosPerPage">
-            <v-pagination
-                    :length="numberOfPages"
-                    v-model="page"
-                    :total-visible="3"
-                    dark color="black">
-            </v-pagination>
-        </div>
+        <!--<div class="text-xs-center" v-if="totalVideos > videosPerPage">-->
+            <!--<v-pagination-->
+                    <!--:length="numberOfPages"-->
+                    <!--v-model="page"-->
+                    <!--:total-visible="3"-->
+                    <!--dark color="black">-->
+            <!--</v-pagination>-->
+        <!--</div>-->
     </div>
 </template>
 
@@ -77,7 +77,12 @@
 
                 this.videos.splice(videoIndex, 1);
 
-                this.videos.forEach((video) => {
+                this.videos.forEach((video, index) => {
+                    console.log(index);
+                    if(videoIndex === index){
+                        temp_video.push(currentVideo);
+                    }
+
                     video.change_value = !video.change_value;
 
                     if (currentVideo.type === "exclusive") {

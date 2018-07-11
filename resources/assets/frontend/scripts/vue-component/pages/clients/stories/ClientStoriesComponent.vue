@@ -26,9 +26,9 @@
             </v-layout>
         </v-container>
 
-        <v-container grid-list-lg v-if="stories && stories.total > stories.per_page">
-            <pagination-component :pagination="stories" :page="'client_stories'"></pagination-component>
-        </v-container>
+        <!--<v-container grid-list-lg v-if="stories && stories.total > stories.per_page">-->
+            <!--<pagination-component :pagination="stories" :page="'client_stories'"></pagination-component>-->
+        <!--</v-container>-->
     </div>
 </template>
 
