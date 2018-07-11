@@ -373,7 +373,7 @@
 
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
-
+                            
                             this.requestQuote();
                         })
                         .catch(error => {
@@ -381,10 +381,6 @@
                             this.loading = false;
                         });
                 }
-            },
-
-            initializeData(collection, ){
-
             }
         }
     }
