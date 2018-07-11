@@ -124,10 +124,10 @@ class AdminQuoteController extends Controller {
         $collectionAsset->reason = auth()->user()->username . ' rectracted offer of £'. $retractedPrice;
         $collectionAsset->save();
 
-//        QueueEmailRetractQuote::dispatch(
-//            $collectionAsset,
-//            $asset_type
-//        );
+        QueueEmailRetractQuote::dispatch(
+            $collectionAsset,
+            $asset_type
+        );
 
         //Soft delete quote made
         $quotes = $collectionAsset->quotes->last();

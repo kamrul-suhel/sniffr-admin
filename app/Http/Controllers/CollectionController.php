@@ -305,12 +305,12 @@ class CollectionController extends Controller
 		    $itemsInCollectionAssetCollectionIds = $itemInCollectionAsset->pluck('collection_id');
 		    $this->collection->whereIn('id', $itemsInCollectionAssetCollectionIds)->update(['status' => 'closed']);
 
-//		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
-//		        QueueEmailRetractQuote::dispatch(
-//		            $collectionAsset,
-//                    $type
-//                );
-//            }
+		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
+		        QueueEmailRetractQuote::dispatch(
+		            $collectionAsset,
+                    $type
+                );
+            }
 
         }
 
