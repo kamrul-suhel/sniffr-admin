@@ -150,6 +150,7 @@
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus.js';
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
     import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
+    import LoginEventBus from '../../event-bus/login-event-bus';
 
 
     export default {
@@ -373,6 +374,8 @@
 
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
+                            this.$store.commit('setUserState', response.data);
+                            LoginEventBus.loginSuccess();
 
                             this.requestQuote();
                         })
@@ -381,10 +384,6 @@
                             this.loading = false;
                         });
                 }
-            },
-
-            initializeData(collection, ){
-
             }
         }
     }

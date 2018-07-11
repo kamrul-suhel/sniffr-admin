@@ -95,5 +95,10 @@ new Vue({
 
         }
     },
+
+    created(){
+        // initialize code go here before load any of component. like user
+    },
+    
     methods: {}
 });

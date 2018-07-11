@@ -52,7 +52,7 @@
 </template>
 
 <script>
-    import AssetComponent from '../partials/AssetStoryComponent';
+    import AssetComponent from '../../../includes/StoryAssetsComponent';
     import VideoReloadServices from '../../../../services/VideoReloadServices';
     import QuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
@@ -103,14 +103,11 @@
             },
 
             getStoryDetail(){
-                let alpha_id = this.$route.params.alpha_id;
+                let alpha_id = this.$route.params.id;
 
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
-                        if (this.story.orders && this.story.orders.id) {
-                            this.order = true;
-                        }
                     });
             },
 
