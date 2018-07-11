@@ -88,7 +88,7 @@
                 // Set button component
                 this.client_logged_in = this.$store.getters.isClientLogin;
                 this.user = this.$store.getters.getUser;
-                this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 1 ) ? false : true;
+                this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 0 ) ? false : true;
             }
         }
     }
