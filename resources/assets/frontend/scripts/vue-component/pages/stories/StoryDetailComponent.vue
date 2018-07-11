@@ -104,18 +104,12 @@
             },
 
             getStoryDetail(){
-                let alpha_id = this.$route.params.id;
+                let alpha_id = this.$route.params.alpha_id;
 
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
                     });
-            },
-
-            onDownloadAllAssets(){
-                this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download';
-                window.location = url;
             },
 
 

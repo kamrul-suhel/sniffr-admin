@@ -73,7 +73,7 @@
                 if(this.$route.name === 'client_videos'){
                     this.$router.push({name: 'client_video_download', params: {alpha_id: this.video.alpha_id}});
                 }else{
-                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
+                    this.$router.push({name: 'videos_detail', params: {alpha_id: this.video.alpha_id}});
                 }
             },
 

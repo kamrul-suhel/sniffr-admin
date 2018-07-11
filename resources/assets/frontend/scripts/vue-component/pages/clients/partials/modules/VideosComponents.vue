@@ -18,14 +18,14 @@
                 :index="index"
                 :video="video"></asset-video-offered-component>
 
-        <!--<div class="text-xs-center" v-if="totalVideos > videosPerPage">-->
-            <!--<v-pagination-->
-                    <!--:length="numberOfPages"-->
-                    <!--v-model="page"-->
-                    <!--:total-visible="3"-->
-                    <!--dark color="black">-->
-            <!--</v-pagination>-->
-        <!--</div>-->
+        <div class="text-xs-center" v-if="totalVideos > videosPerPage">
+            <v-pagination
+                    :length="numberOfPages"
+                    v-model="page"
+                    :total-visible="3"
+                    dark color="black">
+            </v-pagination>
+        </div>
     </div>
 </template>
 

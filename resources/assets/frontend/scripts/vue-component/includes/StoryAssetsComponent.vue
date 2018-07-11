@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs6 sm6 md12 lg12 xl12 @click="showDownloadButton">
+    <v-flex xs6 sm6 md12 lg12 xl12>
         <div class="thumbnail" :style="{backgroundImage:'url('+thumbnailImg+')'}" @click="onOpenDialog(asset.id)">
             <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
                 <v-icon dark medium>play_circle_outline</v-icon>
@@ -55,7 +55,6 @@
             return {
                 loading: false,
                 loader: null,
-                showButton: false,
                 current_item: '',
                 current_item_thumbnail: '',
                 thumbnailImg: '',
@@ -97,10 +96,6 @@
         },
 
         methods: {
-            showDownloadButton() {
-                this.showButton = !this.showButton;
-            },
-
             setImageUrl(asset) {
                 if (asset.mime_type === "video/mp4") {
                     this.thumbnailImg = asset.thumbnail;

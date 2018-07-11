@@ -1,5 +1,5 @@
 <template>
-    <div class="client-video-download-section">
+    <div class="client-video-detail-section">
         <v-container grid-list-lg class="client-story-detail-section" pt-0>
             <v-layout row wrap v-if="story">
                 <v-flex xs12 pt-0>
@@ -42,7 +42,7 @@
 
                         <div v-html="story.description"></div>
 
-                        <quote-button-component v-if="user.client_id" :type="'story'" :asset="story"></quote-button-component>
+                        <quote-button-component :type="'story'" :asset="story"></quote-button-component>
                     </div>
                 </v-flex>
 
@@ -103,20 +103,13 @@
             },
 
             getStoryDetail(){
-                let alpha_id = this.$route.params.id;
+                let alpha_id = this.$route.params.alpha_id;
 
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {
                         this.story = this.$store.getters.getCurrentStory;
                     });
             },
-
-            onDownloadAllAssets(){
-                this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download';
-                window.location = url;
-            },
-
 
             dateFormater(date){
                 var current_date = new Date(Date.parse(date.replace('-', '/', 'g')));

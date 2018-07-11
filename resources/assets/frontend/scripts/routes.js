@@ -14,9 +14,7 @@ import Notfound from './vue-component/pages/404Component.vue';
 import StoriesComponent from './vue-component/pages/stories/StoriesComponent';
 import StoryDetailComponent from './vue-component/pages/stories/StoryDetailComponent.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
-import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
-import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
 import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
@@ -50,13 +48,13 @@ export const routes = [
     },
 
     {
-        path: '/videos/:id',
+        path: '/videos/:alpha_id',
         name: 'videos_detail',
         component: VideoDetailComponent
     },
 
     {
-        path: '/stories/:id',
+        path: '/stories/:alpha_id',
         name: 'stories_detail',
         component: StoryDetailComponent
     },
@@ -131,23 +129,10 @@ export const routes = [
         component: ClientComponent,
         children: [
             {
-                path: '',
-                name: 'client',
-                component: ClientVideosComponent
-            },
-
-            {
-                path: 'stories',
-                name: 'client_stories',
-                component: ClientStoriesComponent
-            },
-
-            {
                 path: 'collections/accept_price/:collection_video_id',
                 name: 'accept_quote',
                 component: ClientPurchasedAssetsComponent
             },
-
             {
                 path: 'stories/:alpha_id',
                 name: 'client_story_detail',
@@ -155,30 +140,20 @@ export const routes = [
             },
 
             {
-                path: 'videos',
-                name: 'client_videos',
-                component: ClientVideosComponent,
-            },
-
-            {
                 path: 'videos/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
             },
-
-
             {
                 path: 'purchased',
                 name: 'client_purchased_assets',
                 component: ClientPurchasedAssetsComponent,
             },
-
             {
                 path: 'offered',
                 name: 'client_offered_assets',
                 component: ClientOfferedAssetsComponent,
             },
-
             {
                 path: 'collections',
                 name: 'client_collections',

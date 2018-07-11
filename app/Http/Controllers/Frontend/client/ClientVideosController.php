@@ -19,7 +19,7 @@ class ClientVideosController extends Controller
     use FrontendResponse;
     use VideoHelper;
 
-    const PAGINATE_PER_PAGE = 100;
+    const PAGINATE_PER_PAGE = 12;
 
     /**
      * @var int
@@ -75,6 +75,26 @@ class ClientVideosController extends Controller
 
         return view('frontend.master');
     }
+
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+	 */
+	public function show(Request $request)
+	{
+		if ($request->ajax() || $request->isJson()) {
+			$video_id = Video::select('id')->where('alpha_id', '=', $request->alpha_id)->first()['id'];
+			$video = Video::with('orders')->find($video_id);
+
+			$data = [
+				'video' => $video,
+			];
+			return $this->successResponse($data);
+		}
+
+		return view('frontend.master');
+
+	}
 
     public function getOfferedVideos(Request $request)
     {

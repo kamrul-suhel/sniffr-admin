@@ -168,30 +168,40 @@ return [
 		]
 	],
 	'length' => [
-		'twenty_four' => [
-			'slug' => 'twenty_four',
+		'day' => [
+			'slug' => 'day',
 			'name' => '24 hours',
-			'modifier' => 0.5
+			'modifier' => 1
 		],
 		'week' => [
 			'slug' => 'week',
 			'name' => '1 week',
-			'modifier' => 0.6
+			'modifier' => 1.1
 		],
-		'one' => [
-			'slug' => 'one',
+		'month' => [
+			'slug' => 'month',
+			'name' => '1 month',
+			'modifier' => 1.2
+		],
+		'six_months' => [
+			'slug' => '6 months',
+			'name' => '1 - 4 years',
+			'modifier' => 1.3
+		],
+		'year' => [
+			'slug' => 'year',
 			'name' => '1 year',
-			'modifier' => 0.75
+			'modifier' => 1.4
 		],
-		'under_five' => [
-			'slug' => 'under_five',
+		'five_years' => [
+			'slug' => 'five_years',
 			'name' => '1 - 5 years',
-			'modifier' => 1
+			'modifier' => 1.6
 		],
-		'under_ten' => [
-			'slug' => 'under_ten',
+		'ten_years' => [
+			'slug' => 'ten_years',
 			'name' => '5 - 10 years',
-			'modifier' => 1.25
+			'modifier' => 1.7
 		],
 		'perpetuity' => [
 			'slug' => 'perpetuity',
