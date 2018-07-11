@@ -48,13 +48,13 @@ export const routes = [
     },
 
     {
-        path: '/videos/:id',
+        path: '/videos/:alpha_id',
         name: 'videos_detail',
         component: VideoDetailComponent
     },
 
     {
-        path: '/stories/:id',
+        path: '/stories/:alpha_id',
         name: 'stories_detail',
         component: StoryDetailComponent
     },

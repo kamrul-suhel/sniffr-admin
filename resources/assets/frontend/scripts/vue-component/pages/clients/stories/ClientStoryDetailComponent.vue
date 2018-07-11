@@ -103,7 +103,7 @@
             },
 
             getStoryDetail(){
-                let alpha_id = this.$route.params.id;
+                let alpha_id = this.$route.params.alpha_id;
 
                 this.$store.dispatch('getCurrentStory', alpha_id)
                     .then(() => {

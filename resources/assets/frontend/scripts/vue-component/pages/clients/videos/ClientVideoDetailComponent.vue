@@ -100,9 +100,9 @@
         mounted() {
             this.$vuetify.goTo('#scroll_to');
             window.addEventListener('fb-sdk-ready', this.onFBReady)
-            let id = this.$route.params.alpha_id;
+            let alpha_id = this.$route.params.alpha_id;
 
-            this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
+            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
                 this.video_detail.video.iframe = this.video_detail.iframe;
 
