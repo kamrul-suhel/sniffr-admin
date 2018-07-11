@@ -309,10 +309,14 @@ class CollectionController extends Controller
                 ->update(['status' => 'closed']);
 
 		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
-		        QueueEmailRetractQuote::dispatch(
-		            $collectionAsset,
-                    $type
-                );
+		        if(isset($collectionAsset->collection->user)){
+                    QueueEmailRetractQuote::dispatch(
+                        $collectionAsset,
+                        $type
+                    );
+                }
+
+
             }
 
         }
