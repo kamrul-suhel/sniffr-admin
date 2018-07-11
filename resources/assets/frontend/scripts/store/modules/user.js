@@ -12,6 +12,7 @@ const state = {
     user_role: '',
     route_url: '',
     offers: sniffr_app.user_offers,
+    active: '',
 };
 
 const mutations = {
@@ -24,6 +25,7 @@ const mutations = {
         state.user_id = '';
         state.user_role = '';
         state.offers = '';
+        state.active = '';
     },
 
     setUserState(state, data){
@@ -38,6 +40,7 @@ const mutations = {
             state.client_id = user.client_id;
             state.user_role = user.role;
             state.offers = data.user_offers;
+            state.active = user.active;
         }
     },
 
@@ -96,6 +99,7 @@ const getters = {
             client_id: state.client_id,
             role: state.user_role,
             offers: state.offers,
+            active: state.active,
         }
     },
 
