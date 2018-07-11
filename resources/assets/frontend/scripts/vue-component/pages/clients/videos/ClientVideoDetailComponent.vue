@@ -40,19 +40,8 @@
 
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
-
-                                <v-btn
-                                        dark
-                                        block
-                                        large
-                                        class="dark"
-                                        :loading="loading"
-                                        :disabled="loading"
-                                        @click="onDownloadVideo()"
-                                >{{ button_text }}</v-btn>
-
+                                <quote-button-component :type="'video'" :asset="video_detail"></quote-button-component>
                             </v-flex>
-
                         </v-layout>
                     </v-flex>
                 </v-layout>
@@ -63,10 +52,12 @@
 
 <script>
     import VideoPlayer from '../../videos/VideoPlayerComponent';
+    import QuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            VideoPlayer
+            VideoPlayer,
+            QuoteButtonComponent
         },
 
         data() {
@@ -133,13 +124,6 @@
                     this.$router.go(-1);
                 }
             },
-
-            onDownloadVideo() {
-                this.loader = 'loading';
-                var url = '/client/videos/'+this.video_detail.video.id+'/download';
-
-                window.location = url;
-            }
         },
     }
 </script>
