@@ -253,7 +253,6 @@ class CollectionController extends Controller
 
     /**
      * Accept the price on an individual asset. but keep the collection open for other options to be available
-     * TODO - check if collection has anything else in there. if it doesn't then close the collection
      * @param Request $request
      * @param $collection_asset_id
      * @param $type
@@ -365,7 +364,6 @@ class CollectionController extends Controller
 
     /**
      * Accept an asset and close the collection
-     * TODO - accept everything within a collection and close it.
      * @param Request $request
      * @param $collection_id
      * @param $quote_id

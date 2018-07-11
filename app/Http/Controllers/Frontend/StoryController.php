@@ -12,6 +12,8 @@ class StoryController extends Controller
 {
 	use FrontendResponse;
 
+	const PAGINATE_PERPAGE = 12;
+
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -23,7 +25,6 @@ class StoryController extends Controller
 
     public function requestQuote(Request $request){
         $formData = $request->input('form');
-        dd(json_decode($formData));
     }
 
     /**

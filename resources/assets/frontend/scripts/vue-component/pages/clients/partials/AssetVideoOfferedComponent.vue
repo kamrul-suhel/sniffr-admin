@@ -68,7 +68,8 @@
                 No Longer Available
             </v-btn>
         </v-flex>
-        <v-flex v-else-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
+
+        <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
                     dark
@@ -91,6 +92,7 @@
                 {{ button_text }}
             </v-btn>
         </v-flex>
+
         <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
@@ -165,16 +167,12 @@
             }
         },
 
-        updated() {
-            console.log(this.video);
+        created() {
+            this.assetType = this.type;
+            console.log(this.assetType);
             if(this.video.expired){
                 this.expired = true;
             }
-        },
-
-        created() {
-            this.assetType = this.type;
-
         },
 
         watch: {
@@ -188,12 +186,6 @@
                 }, 3000);
 
                 this.loader = null
-            },
-            video(val) {
-                if(val.expired){
-
-                    this.expired = true;
-                }
             }
 
         },
