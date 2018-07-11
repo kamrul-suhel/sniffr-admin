@@ -177,12 +177,14 @@ class SearchController extends Controller
 		}
 
 		if(Auth::check()){
-			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)
+                ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
+                ->pluck('client_mailer_id');
 
-			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)->pluck('story_id');
+			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)
+                ->pluck('story_id');
 
 			$mailerStories = Story::whereIn('id', $mailerStoryIds);
-			//$mailerStories = $mailerStories->whereNotIn('id', $unsearchableStories);
 			$mailerStories = $mailerStories->paginate();
 		}
 
