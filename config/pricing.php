@@ -168,14 +168,29 @@ return [
 		]
 	],
 	'length' => [
-		'under_four' => [
-			'slug' => 'under_four',
-			'name' => '1 - 4 years',
+		'twenty_four' => [
+			'slug' => 'twenty_four',
+			'name' => '24 hours',
+			'modifier' => 0.5
+		],
+		'week' => [
+			'slug' => 'week',
+			'name' => '1 week',
+			'modifier' => 0.6
+		],
+		'one' => [
+			'slug' => 'one',
+			'name' => '1 year',
+			'modifier' => 0.75
+		],
+		'under_five' => [
+			'slug' => 'under_five',
+			'name' => '1 - 5 years',
 			'modifier' => 1
 		],
-		'five_plus' => [
-			'slug' => 'five_plus',
-			'name' => '5+ years',
+		'under_ten' => [
+			'slug' => 'under_ten',
+			'name' => '5 - 10 years',
 			'modifier' => 1.25
 		],
 		'perpetuity' => [

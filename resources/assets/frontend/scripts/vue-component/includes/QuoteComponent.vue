@@ -219,6 +219,7 @@
         watch: {
             open_quote_dialog(val){
                 if(!val){
+                    this.$refs.quote_form.reset();
                     this.onQuoteDialogClose();
                 }
             },
@@ -243,14 +244,40 @@
         },
 
         created() {
-            this.initializeData();
 
             QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) => {
-                this.initializeData();
-                this.open_quote_dialog = true;
+                this.client_logged_in = this.$store.getters.isClientLogin;
+
                 this.type = type;
                 this.asset = asset;
                 this.collection = collection;
+                // this.$refs.quote_form.reset();
+
+                if (this.type === 'video') {
+                    this.settings = this.$store.getters.getSettingsObject;
+
+                    Object.values(this.settings.pricing.type).forEach((type) =>{
+                        this.licenses.push(type);
+                    });
+
+                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
+                        this.platforms.push(platform);
+                    });
+
+                    Object.values(this.settings.pricing.length).forEach((length) =>{
+                        this.lengths.push(length);
+                    });
+
+                    this.collection_asset_id = this.collection.collection_video_id;
+                    this.alpha_name = 'video_alpha_id';
+                }else if (this.type == 'story') {
+                    this.collection_asset_id = this.collection.collection_story_id;
+                    this.alpha_name = 'story_alpha_id';
+                    this.disabled = false;
+                }
+
+                this.open_quote_dialog = true;
+
 
             });
 
@@ -356,32 +383,8 @@
                 }
             },
 
-            initializeData(){
-                this.client_logged_in = this.$store.getters.isClientLogin;
-                // this.$refs.quote_form.reset();
+            initializeData(collection, ){
 
-                if (this.type === 'video') {
-                    this.settings = this.$store.getters.getSettingsObject;
-
-                    Object.values(this.settings.pricing.type).forEach((type) =>{
-                        this.licenses.push(type);
-                    });
-
-                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
-                        this.platforms.push(platform);
-                    });
-
-                    Object.values(this.settings.pricing.length).forEach((length) =>{
-                        this.lengths.push(length);
-                    });
-
-                    this.collection_asset_id = this.collection.collection_video_id;
-                    this.alpha_name = 'video_alpha_id';
-                }else if (this.type == 'story') {
-                    this.collection_asset_id = this.collection.collection_story_id;
-                    this.alpha_name = 'story_alpha_id';
-                    this.disabled = false;
-                }
             }
         }
     }

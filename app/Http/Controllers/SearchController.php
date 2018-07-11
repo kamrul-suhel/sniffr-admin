@@ -12,6 +12,7 @@ use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Story;
 use App\Traits\FrontendResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;
 use Illuminate\Support\Facades\Input;
@@ -103,6 +104,7 @@ class SearchController extends Controller
         // Recommended Videos via the Mailer
 		if(Auth::check()){
 			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)
+                ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
                 ->pluck('client_mailer_id');
 
 			$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)
@@ -175,12 +177,14 @@ class SearchController extends Controller
 		}
 
 		if(Auth::check()){
-			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)->pluck('client_mailer_id');
+			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)
+                ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
+                ->pluck('client_mailer_id');
 
-			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)->pluck('story_id');
+			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)
+                ->pluck('story_id');
 
 			$mailerStories = Story::whereIn('id', $mailerStoryIds);
-			//$mailerStories = $mailerStories->whereNotIn('id', $unsearchableStories);
 			$mailerStories = $mailerStories->paginate();
 		}
 
