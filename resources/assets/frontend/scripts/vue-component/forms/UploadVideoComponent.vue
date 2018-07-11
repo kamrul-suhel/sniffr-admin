@@ -178,7 +178,8 @@
                 v-model="uplod_progress"
                 max-width="500px"
                 persistent>
-            <v-card class="upload-dialog">
+            <v-card class="upload-loading-modal" dark
+                    color="dark">
                 <v-card-title>
                     <v-container>
                         <v-layout row justify-center>
