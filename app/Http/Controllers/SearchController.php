@@ -57,10 +57,10 @@ class SearchController extends Controller
 
 		if($searchValue){
 			$videos = $videos->where(function ($query) use ($searchValue) {
-				$query->where('title', 'LIKE', '%' . $searchValue . '%');
-			});
-			$videos = $videos->orWhereHas('tags', function ($q) use ($searchValue) {
-				$q->where('name', 'LIKE', '%' . $searchValue . '%');
+				$query->where('title', 'LIKE', '%' . $searchValue . '%')
+					->orWhereHas('tags', function ($q) use ($searchValue) {
+						$q->where('name', 'LIKE', '%' . $searchValue . '%');
+					});
 			});
 		}
 
@@ -69,7 +69,6 @@ class SearchController extends Controller
 				$query->where('name', '=', $tagValue);
 			});
 		}
-
 
 		if($featured){
 			$videos = $videos->where('featured', 1);

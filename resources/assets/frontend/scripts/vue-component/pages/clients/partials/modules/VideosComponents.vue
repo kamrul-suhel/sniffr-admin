@@ -77,7 +77,12 @@
 
                 this.videos.splice(videoIndex, 1);
 
-                this.videos.forEach((video) => {
+                this.videos.forEach((video, index) => {
+                    console.log(index);
+                    if(videoIndex === index){
+                        temp_video.push(currentVideo);
+                    }
+
                     video.change_value = !video.change_value;
 
                     if (currentVideo.type === "exclusive") {

@@ -40,17 +40,14 @@
                     </v-flex>
                 </v-layout>
 
-                    <transition-group
-                            name="slide-fade"
-                            tag="div"
-                            class="layout row wrap"
-                            v-if="videos.length > 0">
+                    <v-layout row wrap>
                         <video-loop-component
                                 v-for="(video, index) in videos"
                                 :video="video"
                                 :key="video.alpha_id"
                         ></video-loop-component>
-                    </transition-group>
+                    </v-layout>
+                
             </v-container>
         </section>
 
