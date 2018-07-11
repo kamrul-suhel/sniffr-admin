@@ -54,7 +54,7 @@
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
                                         <li v-for="tag in tags">
-                                            <router-link :to="'/videos/tag/'+tag.name">
+                                            <router-link :to="'/videos?tag='+tag.name">
                                                 #{{ tag.name }}
                                             </router-link>
                                         </li>
