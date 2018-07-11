@@ -16,10 +16,10 @@
 
                     <v-layout row wrap>
                         <asset-component v-for="asset in story.assets"
-                                         :key="asset.id"
+                                         :key="asset.alpha_id"
                                          :asset="asset"
                                          :assets="story.assets"
-                                         :story_id="story.id"></asset-component>
+                                         :story_id="story.alpha_id"></asset-component>
                     </v-layout>
                 </v-flex>
 

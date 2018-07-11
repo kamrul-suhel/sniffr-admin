@@ -40,7 +40,7 @@
                     <story-loop-component
                             v-for="story in stories"
                             :story="story"
-                            :key="story.id"></story-loop-component>
+                    ></story-loop-component>
                 </v-layout>
             </v-container>
 
