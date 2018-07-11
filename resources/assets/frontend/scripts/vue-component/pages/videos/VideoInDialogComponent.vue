@@ -49,19 +49,12 @@
                         </div>
                     </v-flex>
 
-                    <quote-button-component
-                            v-if="user.client_id"
-                            :user="'user'"
-                            :type="'video'"
-                            :asset="video_detail"
-                    ></quote-button-component>
-
-                    <quote-button-component
-                            v-if="!user.client_id"
-                            :user="false"
-                            :type="'video'"
-                            :asset="video_detail"
-                    ></quote-button-component>
+                    <v-flex xs12>
+                        <buy-quote-button-component
+                                :type="'video'"
+                                :asset="video_detail"
+                        ></buy-quote-button-component>
+                    </v-flex>
 
                 </v-layout>
             </v-flex>
@@ -73,12 +66,12 @@
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
-    import QuoteButtonComponent from "../../includes/QuoteButtonComponent";
+    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            QuoteButtonComponent,
-            videoPlayer: VideoPlayer
+            BuyQuoteButtonComponent,
+            videoPlayer: VideoPlayer,
         },
         data() {
             return {
@@ -87,15 +80,13 @@
                 tags: [],
                 ready_to_show: true,
                 content_padding: true,
-            }
-        },
-
-        watch: {
-            '$route'(to, from, next) {
+                client_logged_in:'',
+                canBuy:false
             }
         },
 
         created() {
+
             this.user = this.$store.getters.getUser;
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
@@ -128,6 +119,10 @@
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentVideoForDialog;
 
+                    // Set button component
+                    this.client_logged_in = this.$store.getters.isClientLogin;
+                    this.canBuy = (!this.client_logged_in || this.video_detail.class === 'exceptional' || this.video_detail.class === '' || !this.video_detail.class) ? false : true;
+
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
                     } else {
@@ -146,9 +141,6 @@
             goToDetail() {
                 VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
             }
-        },
-
-        destroyed() {
         }
     }
 </script>

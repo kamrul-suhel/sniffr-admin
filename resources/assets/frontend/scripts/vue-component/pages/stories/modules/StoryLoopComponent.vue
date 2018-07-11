@@ -12,11 +12,12 @@
                 <div v-html="getFilterText(story.description, 220)" class="description"></div>
                 <v-layout row wrap align-end>
                     <v-flex>
-                        <quote-button-component
+                        <buy-quote-button-component
                                 :type="'story'"
                                 :asset="story"
-                        ></quote-button-component>
+                        ></buy-quote-button-component>
                     </v-flex>
+
                     <v-flex>
                         <v-btn
                                 dark
@@ -33,12 +34,12 @@
 </template>
 
 <script>
-    import QuoteButtonComponent from '../../../includes/QuoteButtonComponent'
+    import BuyQuoteButtonComponent from '../../../includes/BuyQuoteButtonComponent'
     import LoginEventBus from '../../../../event-bus/login-event-bus'
 
     export default  {
         components :{
-            QuoteButtonComponent
+            BuyQuoteButtonComponent,
         },
 
         data(){
