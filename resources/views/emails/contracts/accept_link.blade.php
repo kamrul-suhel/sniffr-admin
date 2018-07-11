@@ -3,17 +3,17 @@
 @section('content')
     <div>
     <span style="font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal;">
-        <b>Hey {{ $video->contact->full_name }}!</b>
+        <b>Hey {{ $asset->contact->full_name }}!</b>
     </span>
     </div>
 
     <div>&nbsp;</div>
 
-    <div>Video Ref: {{ $video->alpha_id }}</div>
+    <div>{{ ucwords($type) }} Ref: {{ $asset->alpha_id }}</div>
 
     <div>&nbsp;</div>
 
-    <div>You are receiving this email in reference to licensing your video. Before we can use your video <strong>we need to you to agree to an agreement</strong> which includes specific terms.</div>
+    <div>You are receiving this email in reference to licensing your {{ $type }}. Before we can use your {{ $type }} <strong>we need to you to agree to an agreement</strong> which includes specific terms.</div>
 
     <div>&nbsp;</div>
 

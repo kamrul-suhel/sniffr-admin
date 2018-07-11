@@ -108,13 +108,13 @@
                 @if(!$video->currentContract->signed_at)
                     @if($video->currentContract->sent_at)
                     <p>{{ 'Sent:' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $video->currentContract->sent_at)->diffForHumans().' ' }}
-                        <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">
+                        <a href="{{ route('contract.send', ['type' => 'video', 'id' => $video->id]) }}" class="btn btn-info" id="sendContract">
                             Resend Contract
                         </a>
                     </p>
                     @else
                     <p>
-                        <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">
+                        <a href="{{ route('contract.send', ['type' => 'video', 'id' => $video->id]) }}" class="btn btn-info" id="sendContract">
                             Send Contract
                         </a>
                     </p>

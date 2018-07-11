@@ -223,7 +223,7 @@ class AdminStoryController extends Controller
      */
     public function edit($id)
     {
-        $story = Story::where('alpha_id', $id)
+        $story = Story::with('currentContract')->where('alpha_id', $id)
             ->first();
 
         $decision = Input::get('decision');
@@ -237,6 +237,7 @@ class AdminStoryController extends Controller
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
+			'contact' => null,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all()
         ];
@@ -334,28 +335,28 @@ class AdminStoryController extends Controller
 
         $story = Story::where('alpha_id', $id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
+        $story->save();
 
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
+            case ($state == 'unapproved' || $state == 'rejected' || $state == 'approved'):
+                break;
             case ($state == 'unlicensed'):
                 // add new post to WP
-                 $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description);
-                 $result = $this->apiPost('posts', $parameters, true);
-                 // update stories record with WP response from post
-                 if($result->id){
-                     $story->wp_id = $result->id;
-                     $story->status = $result->status;
-                     $story->date_ingested = $story->created_at;
-                 }
+                QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
                 break;
+            case ($state == 'writing-completed' || $state == 'subs-approved'):
+                // update story content from WP (including assets)
+                if($story->wp_id) {
+                    QueueStory::dispatch($id, 'sync', (!empty(Auth::id()) ? Auth::id() : 0));
+                }
+                $message = 'Just updated content from WP';
+                break;
         }
-
-        // Save story data to database
-        $story->save();
 
         if ($isJson) {
             return response()->json([
@@ -364,7 +365,7 @@ class AdminStoryController extends Controller
                 'state' => $state,
                 'remove' => $remove,
                 'story_id' => $story->id,
-                'story_alpha_id' => $story->alpha_id,
+                'story_alpha_id' => $id,
                 'decision' => $decision,
             ]);
         } else {
