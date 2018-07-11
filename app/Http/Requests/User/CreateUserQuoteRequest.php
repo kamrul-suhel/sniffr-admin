@@ -27,11 +27,19 @@ class CreateUserQuoteRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
             'user_email' => 'required|email|unique:users,email',
             'company_name' => 'required|unique:clients,name',
         ];
+    }
+
+    public function response(array $errors)
+    {
+        return response()->json([
+            'error' => 'true',
+            'errors' => [$errors],
+            'error_message' => 'There are validation errors',
+        ], 200);
     }
 
 }

@@ -54,7 +54,7 @@
 <script>
     import AssetComponent from '../partials/AssetStoryComponent';
     import VideoReloadServices from '../../../../services/VideoReloadServices';
-    import QuoteButtonComponent from "../../../includes/QuoteButtonComponent";
+    import QuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {

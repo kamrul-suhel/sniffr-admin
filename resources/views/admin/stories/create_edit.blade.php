@@ -121,7 +121,7 @@
 									<select name="source_type" id="source_type" class="form-control drop-25">
 										<option value="other">Other</option>
 								    </select>
-									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($story) ?? $story->source }}" />
+									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($story) ? $story->source : '' }}" />
 						        </span>
 
 								<br />
@@ -136,7 +136,7 @@
 										<button id="contact-add" class="btn btn-default js-contact" type="button" data-toggle="modal" data-target="#add_contact_modal">New</button>
 									</span>
 
-									<input type="hidden" id="contact-id" name="contact_id" value="{{ isset($story) ?? $story->contact_id  }}" />
+									<input type="hidden" id="contact-id" name="contact_id" value="{{ isset($story) ? $story->contact_id : ''  }}" />
 						        </span>
 
 								@if(!empty($story))
@@ -345,7 +345,6 @@
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>
 										@endif
 									</div>
-									<p>{{ count(explode(',', $story->submitted_to)) }}</p>
 									<div id="submitted-status">
 										@if(isset($story) && $story->submitted_to)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ((isset($story->submitted_to) && count(explode(',', $story->submitted_to)))>1) ? 'multiple' : ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>
@@ -375,12 +374,21 @@
 										@endif
 									</div>
 								</div>
-								<span class="input-group">
-						            <span class="input-group-addon">
-						                License Notes
-						            </span>
-									<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($story) && $story->notes) {{ $story->notes }} @endif</textarea>
-						        </span>
+							</div>
+						</div>
+
+						@include('admin.stories.partials.contract')
+
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">License Notes</div>
+
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
+							<div class="panel-body" style="display: block;">
+								<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($story)&&$story->notes) {{ $story->notes }} @endif</textarea>
 							</div>
 						</div>
 
@@ -420,10 +428,13 @@
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
+		<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
 
-		@if(isset($story->id) && isset($decision) && $decision=='licensing')
-			<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License Story</a>
-	    @endif
+		@if(isset($story->id)&&isset($decision)&&$decision=='licensing')
+			@if($story->state=='licensing'||$story->state=='unlicensed'||$story->state=='unapproved'||$story->state=='rejected')
+				<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
+			@endif
+		@endif
 
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 
@@ -434,10 +445,13 @@
 	</form>
 
 	<div class="clear"></div>
+
+	@if(isset($story))
+        @include('admin.stories.partials.contract_modal')
+    @endif
 </div>
 
-@include('admin.modals.add_contact_modal')
-
+	@include('admin.modals.add_contact_modal')
 
 	@section('javascript')
 
@@ -536,6 +550,10 @@
 			// format: 'YYYY-MM-DD HH:MM:SS',
 			defaultDate: @if(!empty($story->sourced_at)) '{{ $story->sourced_at }}' @else $.now() @endif
 		});
+
+		$("#sendContract").click(function () {
+            $("#sendContract").attr("disabled", true);
+        });
 
 		// var mapPlacepicker = $(".placepicker").placepicker({placeChanged: function(place) {
 		// 	var location_value = place.formatted_address +" Latitude" +this.getLocation().latitude + " Longitude" + this.getLocation().longitude;
