@@ -2,9 +2,6 @@
 
 @section('css')
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-
-    <!-- Mailer stories & video style -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
 @endsection
 
 @section('content')

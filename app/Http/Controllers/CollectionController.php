@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserQuoteRequest;
+use App\Jobs\QueueEmailRetractQuote;
 use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
@@ -252,7 +253,6 @@ class CollectionController extends Controller
 
     /**
      * Accept the price on an individual asset. but keep the collection open for other options to be available
-     * TODO - check if collection has anything else in there. if it doesn't then close the collection
      * @param Request $request
      * @param $collection_asset_id
      * @param $type
@@ -292,18 +292,26 @@ class CollectionController extends Controller
 
 		//If exclusive type of asset is purchased, Expire all other collections with same asset. Close collection too
 		if($collectionAsset->type === 'exclusive') {
-		    $videosInCollectionVideos = $this->collectionVideo
+		    $itemInCollectionAsset = $this->{'collection'.ucfirst($type)}
                 ->where('video_id', $collectionAsset->video_id)
                 ->where('id', '!=', $collectionAsset->id);
 
-		    $videosInCollectionVideos
+            $itemInCollectionAsset
                 ->update([
                     'status' => 'expired',
                     'reason' => 'Asset bought Exclusively by '. $collectionAsset->collection->user->client->name
                 ]);
 
-		    $videosInCollectionVideosCollectionIds = $videosInCollectionVideos->pluck('collection_id');
-		    $this->collection->whereIn('id', $videosInCollectionVideosCollectionIds)->update(['status' => 'closed']);
+		    $itemsInCollectionAssetCollectionIds = $itemInCollectionAsset->pluck('collection_id');
+		    $this->collection->whereIn('id', $itemsInCollectionAssetCollectionIds)->update(['status' => 'closed']);
+
+//		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
+//		        QueueEmailRetractQuote::dispatch(
+//		            $collectionAsset,
+//                    $type
+//                );
+//            }
+
         }
 
 		if($isJson){
@@ -356,7 +364,6 @@ class CollectionController extends Controller
 
     /**
      * Accept an asset and close the collection
-     * TODO - accept everything within a collection and close it.
      * @param Request $request
      * @param $collection_id
      * @param $quote_id

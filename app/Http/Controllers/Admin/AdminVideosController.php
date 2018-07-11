@@ -235,13 +235,10 @@ class AdminVideosController extends Controller
 	{
         $data = [
             'user' => Auth::user(),
-            'contact' => null,
-            'contacts' => Contact::all(),
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'video_shottypes' => VideoShotType::all(),
-            'users' => User::all(),
-            'creators' => Contact::orderBy('created_at', 'desc')->get(),
+			'contact' => null,
             'video' => null,
             'tags' => null,
         ];
@@ -259,7 +256,7 @@ class AdminVideosController extends Controller
         $video->alpha_id = VideoHelper::quickRandom();
         $video->title = $request->input('title');
         $video->description = $request->input('description');
-        $video->contact_id = $request->input('creator_id');
+        $video->contact_id = $request->input('contact_id');
         $video->user_id = Auth::user()->id;
         $video->state = 'new';
         $video->save();
@@ -269,6 +266,31 @@ class AdminVideosController extends Controller
             'note_type' => 'success',
         ]);
     }
+
+	/**
+	 * Video autocomplete
+	 */
+	public function autocomplete(){
+		$term = Input::get('term');
+
+		$results = array();
+
+		$queries = Video::where('title', 'LIKE', '%'.$term.'%')
+			->orWhere('alpha_id', 'LIKE', '%'.$term.'%')
+			->where('state', 'licensed')
+			->take(10)->get();
+
+		if(!count($queries)) {
+			$results[] = [ 'id' => '', 'value' => 'No results found' ];
+		}else{
+			foreach ($queries as $query)
+			{
+				$results[] = [ 'id' => $query->id, 'alpha_id' => $query->alpha_id, 'value' => $query->title ];
+			}
+		}
+
+		return response()->json($results);
+	}
 
     /**
      * @param Request $request
@@ -385,7 +407,7 @@ class AdminVideosController extends Controller
         $video->video_collection_id = $request->input('video_collection_id', null);
         $video->video_shottype_id = $request->input('video_shottype_id', null);
         $video->video_category_id = $request->input('video_category_id', null);
-        $video->contact_id = $request->input('creator_id', null);
+        $video->contact_id = $request->input('contact_id', null);
         $video->title = $title;
         $video->location = $request->input('location');
         $video->details = $request->input('details');

@@ -22,10 +22,6 @@ mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/
         'public/assets/css/admin.css'
     );
 
-if (mix.inProduction()) {
-    mix.version();
-}
-
 /*
 * *********************************************
 * Navigation styles
@@ -65,10 +61,6 @@ mix.sass(
     })
     .sourceMaps();
 
-if (mix.inProduction()) {
-    mix.version();
-}
-
 mix.js([
     'resources/assets/frontend/scripts/main.js',
 ], 'public/assets/frontend/scripts/scripts.js')
@@ -105,18 +97,6 @@ mix.copy(
 * Admin script and scss
 * *********************************************
 */
-mix.sass(
-    'resources/assets/admin/scss/styles.scss',
-    'public/assets/admin/css/styles.css')
-    .options({
-        processCssUrls: false,
-    })
-    .sourceMaps();
-
-if (mix.inProduction()) {
-    mix.version();
-}
-
 mix.js([
     'resources/assets/admin/scripts/main.js',
 ], 'public/assets/admin/scripts/scripts.js')
