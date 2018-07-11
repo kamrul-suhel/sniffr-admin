@@ -16,9 +16,8 @@ class AddActiveToClientsTable extends Migration
         Schema::table('clients', function (Blueprint $table) {
             $table->tinyInteger('active')->nullable()->default(0)->after('location');
         });
-
         // Update existing rows to active (1)
-        $clients = \App\Client::whereIn('active', [0, null])->get();
+        $clients = \App\Client::where('active', 0)->get();
         foreach($clients as $client) {
             $client->active = 1;
             $client->save();

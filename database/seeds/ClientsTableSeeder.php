@@ -16,6 +16,7 @@ class ClientsTableSeeder extends Seeder
                 'slug' => $faker->slug(2),
 				'tier' => $faker->randomElement(['social-media-agency', 'online', 'production', 'publisher', 'well-known', NULL]),
 				'region' => $faker->randomElement(['western-europe', 'north-america', 'asia', 'singapore', 'china', NULL]),
+                'active' => 1,
             ]);
         }
     }
