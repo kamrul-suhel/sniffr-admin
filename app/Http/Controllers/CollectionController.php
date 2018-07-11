@@ -303,7 +303,10 @@ class CollectionController extends Controller
                 ]);
 
 		    $itemsInCollectionAssetCollectionIds = $itemInCollectionAsset->pluck('collection_id');
-		    $this->collection->whereIn('id', $itemsInCollectionAssetCollectionIds)->update(['status' => 'closed']);
+		    $this->collection
+                ->whereIn('id', $itemsInCollectionAssetCollectionIds)
+                ->whereNot('user_id', null)
+                ->update(['status' => 'closed']);
 
 		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
 		        QueueEmailRetractQuote::dispatch(
