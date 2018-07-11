@@ -305,7 +305,7 @@ class CollectionController extends Controller
 		    $itemsInCollectionAssetCollectionIds = $itemInCollectionAsset->pluck('collection_id');
 		    $this->collection
                 ->whereIn('id', $itemsInCollectionAssetCollectionIds)
-                ->whereNot('user_id', null)
+                ->whereNotNull('user_id')
                 ->update(['status' => 'closed']);
 
 		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
