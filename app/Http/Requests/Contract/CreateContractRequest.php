@@ -31,7 +31,6 @@ class CreateContractRequest extends FormRequest
             'upfront_payment' => 'integer|nullable',
             'success_system' => 'integer|nullable',
             'credit' => 'string|nullable',
-            'video_id' => 'required|integer',
         ];
     }
 }

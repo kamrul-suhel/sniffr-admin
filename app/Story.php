@@ -30,6 +30,38 @@ class Story extends Model
         return $this->belongsToMany(Video::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    /**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
+	 */
+    public function currentContract()
+    {
+        return $this->hasOne('\App\Contract')->latest();
+    }
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
+	 */
+	public function hasContract()
+	{
+		return $this->hasOne('\App\Contract')->latest()->count() ? true : false;
+	}
+
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
 	 */

@@ -138,7 +138,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     Route::get('contract/{contract}/delete', 'Contract\ContractController@delete')->name('contract.delete');
     Route::resource('contract', 'Contract\ContractController');
-    Route::get('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
+    Route::get('contract/{type}/{id}/send', 'Contract\ContractController@send')->name('contract.send');
     Route::get('/contract/download/{reference_id}', 'Contract\ContractController@generatePdf')->name('contract.download');
 
     Route::get('media', 'Admin\AdminMediaController@index');
