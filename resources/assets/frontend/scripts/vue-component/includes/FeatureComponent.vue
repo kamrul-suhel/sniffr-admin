@@ -11,7 +11,7 @@
             </v-layout>
 
             <v-layout row wrap class="videos-section">
-                <video-loop-component v-for="video in videos" :video="video"></video-loop-component>
+                <video-loop-component v-for="video in videos" :video="video" :key="video.id"></video-loop-component>
             </v-layout>
         </v-container>
     </section>
