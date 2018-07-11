@@ -177,8 +177,14 @@ class AdminClientController extends Controller
         }
 
         $company->usable_domains = $request->input('usable_domains');
-
         $company->update();
+
+        //Update all new users linked with this company so they become active
+        $users = $company->users()->get();
+        foreach($users as $user) {
+            $user->active = $company->active;
+            $user->save();
+        }
 
         if (!$redirect_path) {
             $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
