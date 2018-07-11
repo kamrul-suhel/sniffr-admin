@@ -157,7 +157,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
     Route::get('stories', 'Admin\AdminStoryController@index');
-    Route::get('stories/create', 'Admin\AdminStoryController@create');
+    Route::get('stories/create', 'Admin\AdminStoryController@create')->name('admin.stories.create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
