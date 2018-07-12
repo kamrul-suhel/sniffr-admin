@@ -40,7 +40,7 @@
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
     import {PlyrVideo} from './player/videoPlayer'
-    import '../../../../scss/plugins/video-plyr.css';
+    import '../../../../../admin/css/plugins/video-plyr.css';
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     export default {
@@ -78,7 +78,7 @@
         props: ['video'],
 
         watch: {
-            video(val){
+            video(){
                 this.showVideo = false;
             }
         },
@@ -90,10 +90,9 @@
 
             VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
                 this.showVideo = false;
-            })
-
-            console.log(this.video);
+            });
         },
+
 
         methods: {
             change() {
@@ -104,11 +103,11 @@
                     this.s3_video = true;
                     let video = { src: this.video.file_watermark_dirty};
 
-                    this.videos.push(video);
-
                     setTimeout(()=>{
+                        document.getElementById('video_player').play();
                         $('.plyr__control.plyr__control--overlaid').click()
-                    }, 1500);
+
+                    }, 100);
                     return;
                 }
 
@@ -117,7 +116,7 @@
                     this.youtubeVideo = true;
                     setTimeout(()=>{
                         $('.plyr__control.plyr__control--overlaid').click()
-                    }, 1500);
+                    }, 100);
                 }
 
 
@@ -129,7 +128,7 @@
                     });
                     setTimeout(() => {
                         this.reloadInstagrm()
-                    }, 1500)
+                    }, 100)
 
                 }
 
@@ -141,7 +140,7 @@
 
                     setTimeout(() => {
                         this.reloadTwitter()
-                    }, 1500)
+                    }, 100)
                 }
 
                 if(new RegExp('facebook', 'i').test(this.video.url)){
@@ -153,7 +152,7 @@
 
                     setTimeout(() => {
                         this.reloadFacebook();
-                    }, 1500)
+                    }, 100)
 
                 }
             },

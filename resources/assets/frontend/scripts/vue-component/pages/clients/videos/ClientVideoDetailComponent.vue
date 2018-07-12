@@ -40,19 +40,8 @@
 
                                 <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
 
-
-                                <v-btn
-                                        dark
-                                        block
-                                        large
-                                        class="dark"
-                                        :loading="loading"
-                                        :disabled="loading"
-                                        @click="onDownloadVideo()"
-                                >{{ button_text }}</v-btn>
-
+                                <quote-button-component :type="'video'" :asset="video_detail"></quote-button-component>
                             </v-flex>
-
                         </v-layout>
                     </v-flex>
                 </v-layout>
@@ -62,11 +51,13 @@
 </template>
 
 <script>
-    import VideoPlayer from '../../videos/VideoPlayerComponent'
+    import VideoPlayer from '../../videos/VideoPlayerComponent';
+    import QuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            VideoPlayer
+            VideoPlayer,
+            QuoteButtonComponent
         },
 
         data() {
@@ -109,9 +100,9 @@
         mounted() {
             this.$vuetify.goTo('#scroll_to');
             window.addEventListener('fb-sdk-ready', this.onFBReady)
-            let id = this.$route.params.alpha_id;
+            let alpha_id = this.$route.params.alpha_id;
 
-            this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
+            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
                 this.video_detail.video.iframe = this.video_detail.iframe;
 
@@ -120,15 +111,6 @@
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
                 }
-                this.reloadInstagrm('//platform.instagram.com/en_US/embeds.js');
-
-                if (this.video_detail.iframe.includes('vimeo')) {
-                    this.reloadVideoJs();
-                }
-
-                this.reloadFacebook();
-
-                this.realoadTwitter();
             });
 
         },
@@ -136,85 +118,12 @@
         methods: {
             onGoback() {
                 let prevRoute = this.$store.getters.getRouteUrl;
-                console.log(prevRoute);
                 if(prevRoute != ''){
                     this.$router.push({name : this.$store.getters.getRouteUrl});
                 }else{
                     this.$router.go(-1);
                 }
             },
-
-
-
-            reloadInstagrm(src) {
-                var s = document.createElement("script");
-                s.type = "text/javascript";
-                s.src = src;
-                s.async = true;
-
-                $('body').append(s);
-                setTimeout(function () {
-                    if (typeof window.instgrm !== 'undefined') {
-                        window.instgrm.Embeds.process();
-                    }
-                }, 30);
-            },
-
-            reloadFacebook() {
-                if (!document.getElementById('facebook-jssdk')) {
-                    (function (d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11&appId=151068855526504";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
-
-                } else {
-                    setTimeout(() => {
-                        window.FB.XFBML.parse();
-                    }, 30);
-
-                }
-            },
-
-            realoadTwitter(){
-                TwitterWidgetsLoader.load(function(twttr) {
-                    var tweets = jQuery(".tweet");
-
-                    $(tweets).each( function( t, tweet ) {
-                        var id = jQuery(this).attr('id');
-                        twttr.widgets.createVideo(id,tweet).then( function( el ) {
-                            widget_type=video
-                        });
-                    });
-                });
-            },
-
-            reloadVideoJs() {
-
-                let videojs1 = document.createElement('script');
-                videojs1.type = "text/javascript";
-                videojs1.src = "/assets/admin/js/video.js";
-
-                let vimeo = document.createElement('script');
-                vimeo.type = "text/javascript";
-                vimeo.src = "/assets/admin/js/videojs-vimeo.js";
-                $('body').append(videojs1);
-                $('body').append(vimeo);
-
-            },
-
-            onDownloadVideo() {
-                this.loader = 'loading';
-                var url = '/client/videos/'+this.video_detail.video.id+'/download';
-
-                window.location = url;
-            }
         },
-
-        destroyed() {
-        }
     }
 </script>

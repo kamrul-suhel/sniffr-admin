@@ -6,8 +6,15 @@
         <!-- Story dialog -->
         <story-in-dialog></story-in-dialog>
 
+        <!-- VideoPlayer dialogbox dialog -->
+        <video-player-in-dialog></video-player-in-dialog>
 
-        <v-dialog v-model="dialog" max-width="400" content-class="mailer-dialog-error" persistent>
+
+        <v-dialog
+                v-model="dialog"
+                max-width="400"
+                persistent
+                content-class="mailer-dialog-error">
             <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
 
@@ -57,13 +64,14 @@
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
-                <v-flex xs4 class="text-xs-left">
+                <v-flex class="text-xs-left">
                     <v-btn @click="onAddStories()">
                         <v-icon>add</v-icon>
                         Add Stories
                     </v-btn>
                 </v-flex>
-                <v-flex xs8 class="text-xs-right">
+
+                <v-flex class="text-xs-right">
                     <v-btn dark raised @click="onRefreshStories()">
                         <v-icon>refresh</v-icon>
                         Refresh Stories
@@ -116,6 +124,7 @@
     import MailerEventBus from '../../../event-bus/mailer-event-bus';
     import VideoInDialog from './modules/VideoInDialog';
     import StoryInDialog from './modules/StoryDialog';
+    import VideoPlayerInDialog from './modules/VideoPlayerInDialog'
 
     export default {
         components: {
@@ -123,6 +132,7 @@
             mailerStoriesComponent: MailerStoriesComponent,
             videoInDialog: VideoInDialog,
             storyInDialog: StoryInDialog,
+            VideoPlayerInDialog
         },
 
         data() {

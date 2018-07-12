@@ -5,13 +5,14 @@
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', function () {
-        return response(config('settings.public'));
+    	$settings['public'] = config('settings.public');
+    	$settings['pricing'] = config('pricing');
+        return response($settings);
     });
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
-    Route::get('videos/tag/{tag}', 'Frontend\VideoController@findByTag')->name('videos_tag_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
     Route::post('upload', 'Frontend\VideoController@store')->name('videos_store');
     Route::get('upload', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
@@ -39,35 +40,11 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Favorite Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('favorite', 'ThemeFavoriteController@favorite');
-    Route::get('favorites', 'ThemeFavoriteController@show_favorites');
-
-    /*
-    |--------------------------------------------------------------------------
     | Download Routes
     |--------------------------------------------------------------------------
     */
     Route::get('/contract/download/{reference_id}', 'Contract\ContractController@generatePdf')->name('contract.download.public');
     Route::get('download/{id}/{type}', 'ThemeDownloadController@index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Page Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('pages', 'ThemePageController@pages');
-    Route::get('page/{slug}', 'ThemePageController@index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Search Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::get('search', 'SearchController@index')->name('search');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -89,31 +66,10 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
     Route::post('password/set/{token}/{email}', ['uses' => 'AuthController@setPasswordPost', 'as' => 'password.set_password_post']);
 
     Route::get('verify/{activation_code}', 'AuthController@verify');
-
-    /*
-    |--------------------------------------------------------------------------
-    | User and User Edit Routes
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('user/{username}', 'ThemeUserController@index');
-    Route::get('user/{username}/edit', 'ThemeUserController@edit');
-    Route::post('user/{username}/update', ['uses' => 'ThemeUserController@update']);
-    Route::get('user/{username}/billing', ['uses' => 'ThemeUserController@billing']);
-    Route::get('user/{username}/cancel', ['uses' => 'ThemeUserController@cancel_account']);
-    Route::get('user/{username}/resume', ['uses' => 'ThemeUserController@resume_account']);
-    Route::get('user/{username}/update_cc', 'ThemeUserController@update_cc');
-
 }); // End if_logged_in_must_be_subscribed route
 
 Route::get('unsubscribe/{email}', 'ThemeContactController@index');
 Route::post('unsubscribe', 'ThemeContactController@edit');
-
-Route::get('user/{username}/renew_subscription', 'ThemeUserController@renew');
-Route::post('user/{username}/update_cc', ['uses' => 'ThemeUserController@update_cc_store']);
-
-Route::get('user/{username}/upgrade_subscription', 'ThemeUserController@upgrade');
-Route::post('user/{username}/upgrade_cc', ['uses' => 'ThemeUserController@upgrade_cc_store']);
 
 Route::get('logout', 'AuthController@logout')->name('auth.logout');
 
@@ -171,16 +127,18 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
 
     Route::post('videos/ingest', array('uses' => 'Admin\AdminVideosController@ingest'));
+	Route::get('videos/autocomplete', 'Admin\AdminVideosController@autocomplete')->name('video.autocomplete');
     Route::get('videos/{id}', array('uses' => 'Admin\AdminVideosController@index'));
     Route::get('videos/status/{state}/{id}', array('uses' => 'Admin\AdminVideosController@status'));
     Route::get('videos/statusapi/{state}/{id}', array('uses' => 'Admin\AdminVideosController@statusapi')); //test for ajax call
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
 
+
     Route::resource('comment', 'CommentController');
 
     Route::get('contract/{contract}/delete', 'Contract\ContractController@delete')->name('contract.delete');
     Route::resource('contract', 'Contract\ContractController');
-    Route::get('contract/{id}/send', 'Contract\ContractController@send')->name('contract.send');
+    Route::get('contract/{type}/{id}/send', 'Contract\ContractController@send')->name('contract.send');
     Route::get('/contract/download/{reference_id}', 'Contract\ContractController@generatePdf')->name('contract.download');
 
     Route::get('media', 'Admin\AdminMediaController@index');
@@ -199,11 +157,14 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
     Route::get('stories', 'Admin\AdminStoryController@index');
-    Route::get('stories/create', 'Admin\AdminStoryController@create');
+    Route::get('stories/create', 'Admin\AdminStoryController@create')->name('admin.stories.create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
     Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
     Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
+    Route::get('stories/status/{state}/{id}', array('uses' => 'Admin\AdminStoryController@status'));
+    Route::get('stories/update_field', array('uses' => 'Admin\AdminStoryController@updateField'));
+    Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');
     Route::get('mailers/create_mailer', 'Admin\AdminClientMailerController@create_mailer');
@@ -218,8 +179,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('mailers/delete/{id}', array('uses' => 'Admin\AdminClientMailerController@destroy'));
 
     Route::resource('clients', 'Admin\AdminClientController');
-    Route::get('clients/{id}/orders', 'Admin\AdminClientController@orders')->name('clients.orders');
-    Route::get('clients/{id}/orders/csv', 'Admin\AdminClientController@orders_csv')->name('clients.orders_csv');
+    Route::get('clients/{id}/purchases', 'Admin\AdminClientController@purchases')->name('clients.purchases');
+    Route::get('clients/{id}/purchases/csv', 'Admin\AdminClientController@purchases_csv')->name('clients.purchases_csv');
     Route::get('clients', 'Admin\AdminClientController@index');
     Route::get('clients/create', 'Admin\AdminClientController@create');
     Route::post('clients/store', array('uses' => 'Admin\AdminClientController@store'));
@@ -227,9 +188,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('clients/update/{client}', 'Admin\AdminClientController@update')->name('admin.clients.update');
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
+    Route::resource('collections', 'Admin\AdminCollectionController', ['as' => 'admin']);
+
     Route::get('contacts/autocomplete', 'Contact\ContactController@autocomplete')->name('contact.autocomplete');
     Route::resource('contacts', 'Contact\ContactController');
-
 
     Route::resource('users', 'Admin\AdminUsersController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
 
@@ -250,9 +212,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     | Admin story in dialog box
     |--------------------------------------------------------------------------
     */
-
-    Route::get('storydialogbox/{alpha_id}', 'SearchController@storyInDialog');
-
+    Route::resource('quotes', 'Admin\AdminQuoteController');
 });
 
 
@@ -262,54 +222,101 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
-    /* Frontend */
-    Route::resource('orders', 'OrderController');
 
-    /* Videos */
+    /*
+   |--------------------------------------------------------------------------
+   | Purchased Controller
+   |--------------------------------------------------------------------------
+   */
+	Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
+	Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
+	Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Download Videos
+    |--------------------------------------------------------------------------
+    */
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-    Route::get('videos/downloaded', 'Frontend\Client\ClientVideosController@getDownloadedVideos')->name('client.downloaded.videos');
+    Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
+    Route::get('videos/offered', 'Frontend\Client\ClientVideosController@getOfferedVideos')->name('client.purchased.videos');
+	Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
+	Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
 
-    /* Stories */
+    /*
+    |--------------------------------------------------------------------------
+    | Download Stories
+    |--------------------------------------------------------------------------
+    */
+
+
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
-    Route::get('stories/downloaded', 'Frontend\Client\ClientStoriesController@getDownloadedStories')->name('client.downloaded.stories');
+    Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
+    Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.purchased.stories');
+	Route::get('stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+	Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
 
-	/* Admin */
+    /*
+    |--------------------------------------------------------------------------
+    | Account and Profile Management
+    |--------------------------------------------------------------------------
+    */
 	Route::get('profile', 'Client\ClientAccountController@myAccount')->name('client.profile.edit');
 	Route::put('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
 	Route::resource('profile/{slug}/users', 'Client\ClientUserController', ['as' => 'clients']);
 
-//    Route::get('profile', 'Admin\AdminClientController@myAccount')->name('client.profile.edit');
-//    Route::put('/profile/{client}', 'Admin\AdminClientController@update')->name('client.update');
-//    Route::get('/users', 'Admin\AdminUsersController@index')->name('client.users.index');
-//    Route::get('/users/create', 'Admin\AdminUsersController@create')->name('client.users.create');
-//    Route::post('/users/store', 'Admin\AdminUsersController@store')->name('client.users.store');
+    /*
+    |--------------------------------------------------------------------------
+    | Collections Routes for video
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
+	Route::get('collections/accept_asset_price/{collection_asset_id}/{type}', 'CollectionController@acceptAssetQuote')->name('client.accept_asset_quote');
+	Route::get('collections/reject_asset_price/{collection_asset_id}/{type}', 'CollectionController@rejectAssetQuote')->name('client.accept_asset_quote');
+	Route::get('collections/accept_collection_quote/{collection_id}/{quote_id}', 'CollectionController@acceptCollectionQuote')->name('client.accept_collection_quote');
+    Route::post('collections/request_quote/{type}/{collection_video_id}', 'CollectionController@requestQuote')->name( 'client.request_quote');
+
 });
 
+
 /*
 |--------------------------------------------------------------------------
-| Client Frontend Routes
+| Collection Routes
 |--------------------------------------------------------------------------
 */
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
-Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
-Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
-
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
-Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('client.videos.show');;
+Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
+Route::post('client/collections', 'CollectionController@store')->name('client.store');
 
 
 /*
 |--------------------------------------------------------------------------
-| Frontend video dialog box, getting current video, next & previous link
+| Frontend Videos Routes
 |--------------------------------------------------------------------------
 */
 
-Route::get('videosdialogbox/{alpha_id}', 'SearchController@videosInDialog');
-Route::get('videosdialog/featured/{alpha_id}', 'SearchController@featureVideosInDialog');
-Route::get('videosdialog/search/{alpha_id}/{value}', 'SearchController@searchVideosInDialog')->name('searchvideodialog');
-Route::get('videosdialog/tags/{alpha_id}/{tag}', 'SearchController@tagsSearchVideosInDialog')->name('tagsearchvideodialog');
+Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
 
+
+/*
+|--------------------------------------------------------------------------
+| Frontend Stories Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
+Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| Frontend Search video/story dialog box, getting current video, next & previous link
+|--------------------------------------------------------------------------
+*/
+
+Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
+Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*
 |--------------------------------------------------------------------------

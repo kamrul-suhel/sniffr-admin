@@ -14,7 +14,6 @@ const LoginEventBus = new Vue({
         }
     },
     methods: {
-
         openLoginDialog(){
             this.login_dialog = true;
             this.$emit('openLoginDialog', this.login_dialog);
@@ -40,9 +39,9 @@ const LoginEventBus = new Vue({
             this.$emit('logoutChangeState');
         },
 
-        clientLoginChange(){
+        loginSuccess(){
             this.closeLoginDialog();
-            this.$emit('clientLoginSuccess');
+            this.$emit('loginSuccess');
         }
     }
 });

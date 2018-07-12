@@ -54,26 +54,20 @@
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
                                         <li v-for="tag in tags">
-                                            <router-link :to="'/videos/tag/'+tag.name">
+                                            <router-link :to="'/videos?tag='+tag.name">
                                                 #{{ tag.name }}
                                             </router-link>
                                         </li>
                                     </ul>
                                 </div>
 
-                                <!--<v-flex xs12 class="mt-1">-->
-                                    <!--<v-layout column wrap align-end class="video-detail-sidebar">-->
-                                        <!--<div class="video-detail-social-share">-->
-                                            <!--<v-btn dark block class="dark">License</v-btn>-->
-                                        <!--</div>-->
-                                    <!--</v-layout>-->
-                                <!--</v-flex>-->
+                                <buy-quote-button-component
+                                        :type="'video'"
+                                        :asset="video_detail.video"
+                                ></buy-quote-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
-
-
-
                 </v-layout>
             </v-container>
         </div>
@@ -82,23 +76,25 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
+    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            VideoPlayer
+            BuyQuoteButtonComponent,
+            videoPlayer: VideoPlayer,
         },
 
         data() {
             return {
                 ini:false,
+                user: {},
                 video_detail: {},
                 tags: [],
-
                 ready_to_show : true,
-
                 previousPageUrl: '',
-
-                content_padding:true
+                content_padding:true,
+                client_logged_in:'',
+                canBuy:false
             }
         },
 
@@ -106,27 +102,23 @@
         },
 
         created() {
+            this.user = this.$store.getters.getUser;
             let breakpoint = this.$vuetify.breakpoint.name;
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;
             }
 
-            let id = this.$route.params.id;
-            this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
+            let alpha_id = this.$route.params.alpha_id;
+            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
                 this.video_detail.video.iframe = this.video_detail.iframe;
+
+
                 this.ini = true;
                 if (this.video_detail.video.tags.length > 0) {
                     this.tags.push(...this.video_detail.video.tags);
                 }
-            });
-
-        },
-
-        mounted() {
-            this.$vuetify.goTo('#scroll_to');
-            window.addEventListener('fb-sdk-ready', this.onFBReady)
-
+            })
 
         },
 
@@ -136,8 +128,6 @@
             }
         },
 
-        destroyed() {
-        },
 
     }
 </script>

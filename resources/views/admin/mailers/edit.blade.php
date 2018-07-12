@@ -134,10 +134,28 @@
 					</div>
 
 					<div class="panel-body" style="display: block;">
-						<select id="user_id" name="user_id">
+						<select id="user_id" name="user_id" class="form-control">
 							<option value="0">Default (noreply@sniffrmedia.co.uk)</option>
 							@foreach(\App\User::whereIn('role', ['admin', 'manager'])->get() as $user_from)
-								<option value="{{ $user_from->id }}" @if(isset($user_from)) @if(!empty($user_from->id == $mailer->user_id))selected="selected"@endif @endif>{{ ($user_from->full_name ? $user_from->full_name : $user_from->username) }} ({{ $user_from->email }})</option>
+								<option value="{{ $user_from->id }}" @if(isset($user_from)) @if(!empty($user_from->id == $mailer->user_id)) selected @endif @endif>{{ ($user_from->full_name ? $user_from->full_name : $user_from->username) }} ({{ $user_from->email }})</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Subject</div>
+
+						<div class="panel-options">
+							<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+
+					<div class="panel-body" style="display: block;">
+						<select id="subject" name="subject" class="form-control">
+							@foreach(config('clientmailer.subjects') as $subject)
+								<option value="{{ $subject }}" @if(isset($mailer)) @if($subject==$mailer->subject)) selected @endif @endif>{{ $subject }}</option>
 							@endforeach
 						</select>
 					</div>

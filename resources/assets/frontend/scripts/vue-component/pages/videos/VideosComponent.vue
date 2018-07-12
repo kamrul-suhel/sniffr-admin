@@ -1,6 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <div class="videos-section">
+    <div class="videos-section s-pagination-goto">
         <section id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
@@ -13,29 +13,46 @@
 
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
-            <v-container grid-list-lg>
-
-                <div v-if="logged_in">
-                    <div v-if="recommended.length > 0">
-                        <h3 class="sub-heading">Your Recommended Videos</h3>
+            <v-container grid-list-lg class="py-0">
+                <v-layout row wrap v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
+                    <v-flex xs12>
+                        <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
-                        <transition-group name="slide-fade" tag="div" class="layout row wrap">
-                            <videoloop-component v-for="(recommend, index) in recommended" :video="recommend" :key="recommend.alpha_id"></videoloop-component>
-                        </transition-group>
-                        <br>
-                    </div>
-                </div>
+                        <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
+                    </v-flex>
 
-                <h3 class="sub-heading">All Videos</h3>
-                <hr>
-                <transition-group name="slide-fade" tag="div" class="layout row wrap" v-if="videos.length > 0">
-                    <videoloop-component v-for="(video, index) in videos" :video="video" :key="video.alpha_id"></videoloop-component>
-                </transition-group>
+                    <v-flex xs12>
+                            <v-layout align-content-center style="overflow-x:scroll;">
+                                <video-loop-component
+                                        v-for="(mailer, index) in mailer_videos"
+                                        :video="mailer"
+                                        :key="mailer.alpha_id"
+                                ></video-loop-component>
+                            </v-layout>
+                    </v-flex>
+                </v-layout>
+
+                <v-layout row wrap>
+                    <v-flex xs12 class="mb-3">
+                        <br>
+                        <h3 class="sub-heading">All Videos</h3>
+                        <hr>
+                    </v-flex>
+                </v-layout>
+
+                    <v-layout row wrap>
+                        <video-loop-component
+                                v-for="(video, index) in videos"
+                                :video="video"
+                                :key="video.alpha_id"
+                        ></video-loop-component>
+                    </v-layout>
+                
             </v-container>
         </section>
 
         <!-- Pagination -->
-        <pagination-component :pagination="paginate" :page="'video'"></pagination-component>
+        <pagination-component v-if="paginate.last_page > 1" :pagination="paginate" :page="'video'"></pagination-component>
     </div>
 </template>
 
@@ -43,73 +60,87 @@
     import SearchComponent from '../../includes/SearchComponent';
     import VideoLoopComponent from '../../includes/VideoLoopComponent';
     import PaginationComponent from '../../includes/PaginationComponent';
-    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
+    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components: {
-            searchComponent: SearchComponent,
-            videoloopComponent: VideoLoopComponent,
-            paginationComponent: PaginationComponent
+            SearchComponent,
+            VideoLoopComponent,
+            PaginationComponent,
         },
         data(){
             return {
                 data: '',
-                videos: '',
-                recommended: '',
+                videos: [],
+                mailer_videos: [],
                 paginate: '',
-                current_page: 0,
+                current_page: 1,
                 logged_in : false,
-
+                client_logged_in : false
             }
         },
         watch: {
             '$route'(to, from, next){
                 this.current_page = to.query.page;
-                this.updateVideodata();
+                this.setAllVideoData(this.getQueryObject());
             }
         },
 
         created(){
-            this.checkLogin();
+            this.client_logged_in = this.$store.getters.isClientLogin;
+
+            // If client has logged in
+            LoginEventBus.$on('loginSuccess', () => {
+                this.logged_in = this.$store.getters.isUserLogin;
+                this.client_logged_in = this.$store.getters.isClientLogin;
+
+                this.setAllVideoData(this.getQueryObject());
+            });
+
+            LoginEventBus.$on('logoutChangeState', () => {
+                this.logged_in = false;
+                this.client_logged_in = false;
+            });
 
             if (this.$route.query.page) {
                 this.current_page = this.$route.query.page;
             }
-            this.setAlldata();
+
+            this.setAllVideoData(this.getQueryObject());
 
         },
+
         methods: {
-            checkLogin(){
-                // see user status
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                        this.logged_in = true;
-                    }
-                });
-            },
-            setAlldata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
+            setAllVideoData(query){
+                this.$store.dispatch('getVideoData', query).then(() => {
                     this.videos = this.$store.getters.getVideoData;
-                    this.paginate = this.$store.getters.getPaginateObject;
+                    this.paginate = this.$store.getters.getVideoPaginateObject;
+                    this.mailer_videos = this.$store.getters.getMailerVideoData;
                 });
 
-
-                this.$store.dispatch('getRecommendedData', {page: 1}).then(() => {
-                    this.recommended = this.$store.getters.getRecommendedData;
-                });
             },
 
             updateVideodata(){
                 this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
                     this.videos = this.$store.getters.getVideoData;
                 });
-
-                this.$store.dispatch('getRecommendedData', {page: this.current_page}).then(() => {
-                    this.recommended = this.$store.getters.getRecommendedData;
-                });
             },
+
+            getQueryObject(){
+                let query = {
+                    page: this.current_page? this.current_page : 1,
+                };
+
+                if(this.$route.query.search && this.$route.query.search !== ''){
+                    query.search = this.$route.query.search;
+                }
+
+                if(this.$route.query.tag && this.$route.query.tag !== ''){
+                    query.tag = this.$route.query.tag;
+                }
+
+                return query;
+            }
         }
     }
 </script>

@@ -2,9 +2,6 @@
 
 @section('css')
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-
-    <!-- Mailer stories & video style -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
 @endsection
 
 @section('content')
@@ -35,82 +32,6 @@
                     window.location = $(this).attr('href');
                 }
                 return false;
-            });
-
-            function checkJobs() {
-                setTimeout(
-                function() {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/admin/mailers/checkjobs',
-                        data: {},
-                        dataType: 'json',
-                        success: function (data) {
-                            if (data.jobs == 0) {
-                                swal.close();
-                                swal({
-                                    title: 'Stories are now up-to-date.',
-                                    icon: 'success',
-                                    closeModal: true,
-                                    closeOnClickOutside: true,
-                                    closeOnEsc: true
-                                }).then(function() {
-                                    window.location.reload();
-                                });
-                            } else {
-                                // jobs are still in the queue, so run again
-                                checkJobs();
-                            }
-                        }
-                    });
-                }, 500);
-            }
-
-            $('.js-refresh-stories').click(function (e) {
-                e.preventDefault();
-                swal({
-                    title: 'Please wait while the stories update. This may take a few minutes.',
-                    icon: 'info',
-                    closeModal: false,
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: {
-                        confirm: false,
-                        cancel: {
-                            text: "Cancel",
-                            value: null,
-                            visible: true,
-                            closeModal: true,
-                          }
-                    }
-                });
-                var refreshUrl = '/admin/mailers/refresh';
-                if (refreshUrl) {
-                    $('.js-refresh-stories').css('display', 'none');
-                    $.ajax({
-                        type: 'GET',
-                        url: refreshUrl,
-                        data: {},
-                        dataType: 'json',
-                        success: function (data) {
-                            if (data.dispatched == false) {
-                                swal.close();
-                                swal({
-                                    title: 'Stories are already up-to-date.',
-                                    icon: 'success',
-                                    closeModal: true,
-                                    closeOnClickOutside: true,
-                                    closeOnEsc: true
-                                }).then(function() {
-                                    $('.js-refresh-stories').css('display', 'block');
-                                });
-                            } else {
-                                // jobs have been sent to queue so need to check the job queue
-                                checkJobs();
-                            }
-                        }
-                    });
-                }
             });
         });
     </script>

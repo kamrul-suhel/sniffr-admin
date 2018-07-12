@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Page;
+use App\User;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
@@ -159,7 +160,8 @@ class ThemeSubmissionController extends Controller
 
         // Notification of new video
         if (env('APP_ENV') != 'local') {
-            $video->notify(new SubmissionNewNonEx($video));
+			$user = new User();
+			$user->slackChannel('submissions')->notify(new SubmissionNewNonEx($video));
         }
 
         // Send thanks notification email (via queue after 2 mins)

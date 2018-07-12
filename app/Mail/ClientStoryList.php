@@ -12,19 +12,20 @@ class ClientStoryList extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $mailer, $user, $from_name, $from_email;
+    public $mailer, $user, $from_name, $from_email, $subject;
 
     /**
      * ClientStoryList constructor.
      * @param ClientMailer $mailer
      * @param User $user
      */
-    public function __construct(ClientMailer $mailer, User $user, $from_name, $from_email)
+    public function __construct(ClientMailer $mailer, User $user, $from_name, $from_email, $subject)
     {
         $this->mailer = $mailer;
 		$this->user = $user;
         $this->from_name = $from_name;
         $this->from_email = $from_email;
+        $this->subject = $subject;
     }
 
     /**
@@ -38,6 +39,6 @@ class ClientStoryList extends Mailable
             ->from($this->from_email, $this->from_name)
             ->view('emails.clientmailers.mailer')
             ->text('emails.clientmailers.mailer_plain')
-            ->subject('SNIFFR: Today\'s Recommendations');
+            ->subject($this->subject);
     }
 }

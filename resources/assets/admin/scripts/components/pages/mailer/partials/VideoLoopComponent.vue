@@ -11,7 +11,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md6 lg4 xl4 class="mailer-title">
-            <strong @click="onOpenVideoDialog()">{{ video.title }}</strong>
+            <h4 @click="onOpenVideoDialog()">{{ video.title }}</h4>
             <p>{{ video.excerpt | readmore(300, '...') }}</p>
         </v-flex>
 

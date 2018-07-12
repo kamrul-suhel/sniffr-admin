@@ -35,7 +35,7 @@ const actions = {
                 url = url +'&page='+payload.page;
             }
 
-            axios.get(url)
+            axios.post(url)
                 .then((response) => {
                     let data = response.data;
                     commit('setSearchVideoData', data);

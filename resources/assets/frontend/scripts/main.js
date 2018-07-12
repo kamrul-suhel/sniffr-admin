@@ -91,7 +91,14 @@ new Vue({
     },
     router,
     data() {
-        return {}
+        return {
+
+        }
     },
+
+    created(){
+        // initialize code go here before load any of component. like user
+    },
+    
     methods: {}
 });

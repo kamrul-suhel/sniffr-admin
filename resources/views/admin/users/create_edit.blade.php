@@ -288,7 +288,7 @@
 
 		$(document).ready(function(){
 			$('#role').change(function(){
-				if($(this).val() == 'client'){
+				if($(this).val() == 'client'||$(this).val() == 'client_admin'||$(this).val() == 'client_owner'){
 					$('#client-box').show();
 				} else {
 					$('#client-box').hide();

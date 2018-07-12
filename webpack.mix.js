@@ -22,10 +22,6 @@ mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/
         'public/assets/css/admin.css'
     );
 
-if (mix.inProduction()) {
-    mix.version();
-}
-
 /*
 * *********************************************
 * Navigation styles
@@ -65,10 +61,6 @@ mix.sass(
     })
     .sourceMaps();
 
-if (mix.inProduction()) {
-    mix.version();
-}
-
 mix.js([
     'resources/assets/frontend/scripts/main.js',
 ], 'public/assets/frontend/scripts/scripts.js')
@@ -81,16 +73,17 @@ if (mix.inProduction()) {
 if (!mix.inProduction()) {
     mix.webpackConfig({devtool: 'inline-source-map'})
 }
+
 //Copying file from resource folder to public
 
-// mix.copy(
-//     'resources/assets/frontend/images',
-//     'public/assets/frontend/images/'
-// );
-// mix.copy(
-//     'resources/assets/admin/images',
-//     'public/assets/admin/images/'
-// );
+mix.copy(
+    'resources/assets/frontend/images',
+    'public/assets/frontend/images/'
+);
+mix.copy(
+    'resources/assets/admin/images',
+    'public/assets/admin/images/'
+);
 
 /*
 * ******************************************
@@ -104,18 +97,6 @@ if (!mix.inProduction()) {
 * Admin script and scss
 * *********************************************
 */
-mix.sass(
-    'resources/assets/admin/scss/styles.scss',
-    'public/assets/admin/css/styles.css')
-    .options({
-        processCssUrls: false,
-    })
-    .sourceMaps();
-
-if (mix.inProduction()) {
-    mix.version();
-}
-
 mix.js([
     'resources/assets/admin/scripts/main.js',
 ], 'public/assets/admin/scripts/scripts.js')
@@ -163,4 +144,8 @@ mix.copy(
 mix.copy(
     'resources/assets/talvbansal/media-manager/fonts/',
     'public/fonts/'
+);
+mix.copy(
+    'node_modules/bootstrap/fonts',
+    'public/assets/fonts/'
 );

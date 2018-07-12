@@ -10,7 +10,7 @@ const state = {
 const mutations = {
     setVideoDialogBox(state, data) {
         state.video_dialog_box = true;
-        state.video_dialog_current_video = data.current_video.alpha_id;
+        state.video_dialog_current_alpha_id = data.current_video.alpha_id;
         state.video_dialog_current_video = data.current_video;
         state.video_dialog_next_alpha_id = data.next_video_alpha_id;
         state.video_dialog_prev_alpha_id = data.prev_video_alpha_id;
@@ -33,29 +33,28 @@ const mutations = {
 const actions = {
     getVideoNextAndPrevLink({commit, state}, payload) {
         return new Promise(function (resolve, reject) {
-            let url = '';
+            let data = {};
             let request_url = state.current_route_obj.name;
 
             if(request_url === 'videos'){
-                url = '/videosdialogbox/'+payload.alpha_id;
+                data = {'alpha_id': payload.alpha_id};
             }
 
             //Featured videos
             if (request_url === 'home') {
-                url = '/videosdialog/featured/' + payload.alpha_id;
+                data = {'featured':'true', 'alpha_id': payload.alpha_id};
             }
 
             //Search video url
             if (request_url === 'videos_search') {
-                url = '/videosdialog/search/'+payload.alpha_id+'/'+state.current_route_obj.query.value;
+                data = {'value':state.current_route_obj.query.value}
             }
 
             //Search by tag video url
             if (request_url === 'videos_tag') {
-                url = '/videosdialog/tags/'+payload.alpha_id+'/'+state.current_route_obj.params.value;
             }
 
-            axios.get(url)
+            axios.post('/search/videos', data)
                 .then((response) => {
                     commit('setVideoDialogBox', response.data);
                     resolve();
@@ -82,6 +81,10 @@ const getters = {
     },
 
     getCurrentRecommendedForDialog(state) {
+        return state.video_dialog_current_video;
+    },
+
+    getCurrentMailerVideoForDialog(state) {
         return state.video_dialog_current_video;
     },
 

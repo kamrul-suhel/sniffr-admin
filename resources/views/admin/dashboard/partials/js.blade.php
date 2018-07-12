@@ -7,44 +7,44 @@
             "type": "bar",
             "data": {
                 "labels": [
-                    <?php foreach ($video_traffic as $video) {
-                    echo '"' . $video[0]->created_at->format('jS M') . '",';
+					<?php foreach ($videos as $video) {
+					echo '"' . $video[0]->created_at->format('jS M') . '",';
                 }?>
                 ],
-                "datasets": [{
-                    "label": 'Ex Submission',
-                    "data": [
-                        <?php foreach ($video_traffic as $video) {
-                        echo count($video->where('rights', 'ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
-                    "borderWidth": 1
-                },
+                "datasets": [
                     {
-                        "label": 'Ex Chaser Channel',
+                        "label": 'New',
                         "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('rights', 'excc')) . ',';
-                        }?>
+							<?php foreach ($videos as $video) {
+							echo count($video->where('state', 'new')->where('rights','exc')) . ',';
+						    }?>
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                        "borderWidth": 1
+                    },
+                    {
+                        "label": 'Pending',
+                        "data": [
+							<?php foreach ($videos as $video) {
+							echo count($video->where('state', 'pending')->where('rights','exc')) . ',';
+						    }?>
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(255, 205, 86, 0.2)",
+                        "borderWidth": 1
+                    },
+                    {
+                        "label": 'Licensed',
+                        "data": [
+							<?php foreach ($videos as $video) {
+							echo count($video->where('state','licensed')->where('rights','exc')) . ',';
+						    }?>
                         ],
                         "fill": false,
                         "backgroundColor": "rgba(0, 160, 90, 0.2)",
                         "borderWidth": 1
-                    },
-                    {
-                        "label": 'Non Ex Chaser',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('rights', 'nonexc')) . ',';
-                        }?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(100, 155, 72, 0.2)",
-                        "borderWidth": 1
-                    },
-
+                    }
                 ]
             },
             "options": {
@@ -66,6 +66,91 @@
             }
         });
 
+
+        var ctx = $('#sub-breakdown-graph');
+        ctx.height(285);
+        new Chart($("#sub-breakdown-graph"), {
+            "type": "bar",
+            "data": {
+                "labels": [
+                    <?php foreach ($videos as $video) {
+                    echo '"' . $video[0]->created_at->format('jS M') . '",';
+                }?>
+                ],
+                "datasets": [{
+                    "label": 'New',
+                    "data": [
+                        <?php foreach ($videos as $video) {
+                        echo count($video->where('state', 'new')->where('rights','ex')) . ',';
+                    }?>
+                    ],
+                    "fill": false,
+                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": 'Accepted',
+                    "data": [
+                        <?php foreach ($videos as $video) {
+                        echo count($video->where('state', 'accepted')->where('rights','ex')) . ',';
+                    }?>
+                    ],
+                    "fill": false,
+                    "backgroundColor": "rgba(166, 255, 172, 0.2)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": 'Licensed',
+                    "data": [
+                        <?php foreach ($videos as $video) {
+                        echo count($video->where('state', 'licensed')->where('rights','ex')) . ',';
+                    }?>
+                    ],
+                    "fill": false,
+                    "backgroundColor": "rgba(0, 160, 90, 0.2)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": 'Restricted',
+                    "data": [
+                        <?php foreach ($videos as $video) {
+                        echo count($video->where('state', 'restricted')->where('rights','ex')) . ',';
+                    }?>
+                    ],
+                    "fill": false,
+                    "backgroundColor": "rgba(255, 205, 86, 0.2)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": 'Rejected',
+                    "data": [
+                        <?php foreach ($videos as $video) {
+                        echo count($video->where('state', 'rejected')->where('rights','ex')) . ',';
+                    }?>
+                    ],
+                    "fill": false,
+                    "backgroundColor": "rgba(255, 20, 20, 0.2)",
+                    "borderWidth": 1
+                }]
+            },
+            "options": {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true
+                },
+                "scales": {
+                    "xAxes": [{
+                        stacked: true
+                    }],
+                    "yAxes": [{
+                        stacked: true,
+                        "ticks": {
+                            "beginAtZero": true
+                        }
+                    }]
+                }
+            }
+        });
 
         var ctx = $('#sub-state-overview');
         ctx.height(285);
@@ -108,92 +193,6 @@
                             return currentValue + ' (' + precentage + "%)";
                         }
                     }
-                }
-            }
-        });
-
-
-        var ctx = $('#sub-breakdown-graph');
-        ctx.height(285);
-        new Chart($("#sub-breakdown-graph"), {
-            "type": "bar",
-            "data": {
-                "labels": [
-                    <?php foreach ($video_traffic as $video) {
-                    echo '"' . $video[0]->created_at->format('jS M') . '",';
-                }?>
-                ],
-                "datasets": [{
-                    "label": 'New',
-                    "data": [
-                        <?php foreach ($video_traffic as $video) {
-                        echo count($video->where('state', 'new')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
-                    "borderWidth": 1
-                },
-                    {
-                        "label": 'Accepted',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('state', 'accepted')) . ',';
-                        }?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(166, 255, 172, 0.2)",
-                        "borderWidth": 1
-                    },
-                    {
-                        "label": 'Licensed',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('state', 'licensed')) . ',';
-                        }?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(0, 160, 90, 0.2)",
-                        "borderWidth": 1
-                    },
-                    {
-                        "label": 'Restricted',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('state', 'restricted')) . ',';
-                        }?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(255, 205, 86, 0.2)",
-                        "borderWidth": 1
-                    },
-                    {
-                        "label": 'Rejected',
-                        "data": [
-                            <?php foreach ($video_traffic as $video) {
-                            echo count($video->where('state', 'rejected')) . ',';
-                        }?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(255, 20, 20, 0.2)",
-                        "borderWidth": 1
-                    }]
-            },
-            "options": {
-                maintainAspectRatio: false,
-                legend: {
-                    display: true
-                },
-                "scales": {
-                    "xAxes": [{
-                        stacked: true
-                    }],
-                    "yAxes": [{
-                        stacked: true,
-                        "ticks": {
-                            "beginAtZero": true
-                        }
-                    }]
                 }
             }
         });

@@ -1,10 +1,5 @@
 @extends('admin.master')
 
-@section('css')
-    <!-- Mailer stories & video style -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.css') }}"/>
-@endsection
-
 @section('content')
     <div id="admin-container">
         <ol class="breadcrumb">
@@ -92,6 +87,7 @@
                                 }}"/>
                                 </div>
                             </div>
+
                             <div class="panel-body">
                                 <label class="checkbox-inline">
                                     <input type="checkbox" name="send_invitation" id="send_invitation" value="1" checked>
@@ -102,38 +98,6 @@
                     </div>
                 </div>
             </div>
-
-            @if(!$company)
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Add Recommended Videos or Stories</div>
-                            <div class="panel-body">
-                                <div class="col-lg-6">
-                                    <div id="admin-mailer">
-                                        Videos
-                                        <select class="form-control" name="recommend-videos[]" multiple="multiple" style="height:200px;">
-                                            @foreach($videos as $video)
-                                                <option value="{{ $video->id }}">{{ $video->title }} - {{ date('d/m/Y', strtotime($video->created_at)) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div id="admin-mailer">
-                                        Stories
-                                        <select class="form-control" name="recommend-stories[]" multiple="multiple" style="height:200px;">
-                                            @foreach($stories as $story)
-                                                <option value="{{ $story->id }}">{{ $story->title }} - {{ date('d/m/Y', strtotime($story->created_at)) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
 
             @if($company)
                 <div class="row">
@@ -146,7 +110,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Building Name in the textbox below:</p>
                                 <input type="text" class="form-control" name="address_line1" id="address_line1"
                                        placeholder="Building Name"
                                        value="{{ ($company) ? $company->address_line1 : '' }}"/>
@@ -163,7 +126,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Street Address in the textbox below:</p>
                                 <input type="text" class="form-control" name="address_line2" id="address_line2"
                                        placeholder="Street Address"
                                        value="{{ ($company->address_line2) ? $company->address_line2 : '' }}"/>
@@ -180,12 +142,10 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add City in the textbox below:</p>
                                 <input type="text" class="form-control" name="city" id="city" placeholder="City"
                                        value="{{ ($company->city) ? $company->city : '' }}"/>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="col-sm-6">
@@ -197,7 +157,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Postcode / Zip Code in the textbox below:</p>
                                 <input type="text" class="form-control" name="postcode" id="postcode" value="{{
                                 ($company->postcode) ? $company->postcode : '' }}"/>
                             </div>
@@ -213,9 +172,44 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Country in the textbox below:</p>
                                 <input type="text" class="form-control" name="country" id="country" value="{{
                                        ($company->country) ? $company->country : ''}}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Region</div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="display: block;">
+                                <select name="tier" class="form-control" id="region">
+                                    @foreach(config('pricing.region') as $key => $value)
+                                        <option {{ $key === $company->region ? 'selected': '' }} value="{{ $key}}">{{ $value['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Tier</div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="display: block;">
+                                <select name="tier" class="form-control" id="tier">
+                                    @foreach(config('pricing.tier') as $key => $value)
+                                        <option {{ $key === $company->tier ? 'selected': '' }} value="{{ $key }}">{{ $value['name'] }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -229,7 +223,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add VAT Number in the textbox below:</p>
                                 <input type="text" class="form-control" name="vat_number" id="vat_number" value="{{
                                        ($company->vat_number) ? $company->vat_number : '' }}"/>
                             </div>
@@ -245,7 +238,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Billing Phone Number in the textbox below:</p>
                                 <input type="text" class="form-control" name="billing_tel" id="billing_tel" value="{{
                                 ($company->billing_tel) ? $company->billing_tel : '' }}"/>
                             </div>
@@ -263,7 +255,6 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <p>Add Email Address in the textbox below:</p>
                                 <input type="text" class="form-control" name="billing_email" id="billing_email" value="{{
                                        ($company->billing_email) ? $company->billing_email : '' }}"/>
                             </div>
@@ -318,6 +309,69 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Company Tier</div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="display: block;">
+                                <label for="tier">
+                                    Select the Company Tier
+                                </label>
+                                <select id="tier" name="tier">
+                                    @if(config('pricing.tier'))
+                                        <option value="">N/A</option>
+                                        @foreach(config('pricing.tier') as $key => $value)
+                                            <option value="{{ $value['slug'] }}" @if($value['slug']==$company->tier) selected @endif>
+                                               {{ $value['name'] }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Company Location</div>
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="display: block;">
+                                <label for="location">
+                                    Select the Company Location
+                                </label>
+                                <select id="location" name="location">
+                                    @if(config('pricing.location'))
+                                        <option value="">N/A</option>
+                                        @foreach(config('pricing.location') as $key => $value)
+                                            <option value="{{ $value['slug'] }}" @if($value['slug']==$company->location) selected @endif>
+                                               {{ $value['name'] }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+                                <div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+                            <div class="panel-body" style="display: block;">
+                                <label>Active</label>
+                                <input type="checkbox" id="active" name="active" {{ ((($company) && ($company->active)) || (!$company)) ? 'checked="checked" value=1' : '' }} />
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             @endif

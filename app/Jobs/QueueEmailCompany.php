@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\User;
 use App\Client;
 use App\Mail\NewCompany;
-use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -70,7 +70,7 @@ class QueueEmailCompany implements ShouldQueue
     public function failed()
     {
         // Send user notification of failure, etc...
-        $user = new User();
-        $user->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Company Id: ' . $this->company_id . ')'));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Company Id: ' . $this->company_id . ')'));
     }
 }
