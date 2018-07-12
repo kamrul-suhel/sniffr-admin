@@ -36,7 +36,7 @@ class DashboardController extends Controller
 	        return Carbon::parse($date->created_at)->format('m-d'); // grouping by days
 	    });
 
-		$exc_contracts = Contract::get()->where('video_id', '!=', null)->where('contract_model_id','1')->where('signed_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function($date) {
+		$exc_contracts = Contract::orderBy('signed_at')->get()->where('video_id', '!=', null)->where('contract_model_id','1')->where('signed_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function($date) {
 			return Carbon::parse($date->signed_at)->format('m-d'); // grouping by days
 		});
 
