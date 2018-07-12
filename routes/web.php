@@ -7,6 +7,14 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
     Route::get('/settings_object', function () {
     	$settings['public'] = config('settings.public');
     	$settings['pricing'] = config('pricing');
+
+
+        $settings['sniffr_app']  = [
+                "user" => (Auth::user() ? Auth::user() : "''"),
+               "user_offers" => (Auth::user() ? Auth::user()->userOffers() : "")
+            ];
+
+
         return response($settings);
     });
     Route::get('/', 'HomeController@index')->name('home');
