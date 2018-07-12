@@ -257,7 +257,15 @@
 
 							<div class="panel-body">
 								<div class="video-inputs-wrapper">
-
+									@foreach($story->videos as $video)
+										<div class="form-group input-group">
+											<input type="text" class="form-control" value="{{ $video->title }}" disabled />
+											<input type="hidden" name="videos[]" value="{{ $video->id }}" />
+											<span class="input-group-btn">
+												<button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button>
+											</span>
+										</div>
+									@endforeach
 								</div>
 
                                 <br>
