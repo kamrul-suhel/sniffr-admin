@@ -37,7 +37,6 @@ class Contract extends Model
         'video_id',
         'contract_model_id',
         'token',
-        'signed_at',
         'ip',
         'user_agent',
     ];
