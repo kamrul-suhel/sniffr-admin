@@ -153,7 +153,8 @@
         {{ csrf_field() }}
 
         @if(\Request::route()->getName() != "contact.create")
-            <input type="hidden" value="{{ \Request::route()->getName() }}" name="referral" id="referral" title="referral">
+            <input type="hidden" value="{{ \Request::route()->getName() }}" name="referral">
+            <input type="hidden" value="{{ isset(\Request::route()->parameters['id']) ? \Request::route()->parameters['id'] : ''  }}" name="referral_id">
         @endif
 
         {{ ($contact) ? method_field('PUT') : method_field('POST') }}

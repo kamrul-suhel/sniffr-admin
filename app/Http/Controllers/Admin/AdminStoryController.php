@@ -180,6 +180,7 @@ class AdminStoryController extends Controller
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : NULL);
         $story->story_category_id = (Input::get('category') ? Input::get('category') : NULL);
         $story->story_collection_id = (Input::get('collection') ? Input::get('collection') : NULL);
+		$story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
 
         if (Input::hasFile('story_image')) {
             $imageFile = Input::file('story_image');
@@ -191,25 +192,11 @@ class AdminStoryController extends Controller
             }
         }
 
-        // Need to add / update contact
-        if(Input::get('contact_email')) {
-            $contact = new Contact();
-            $contact->full_name = Input::get('contact_full_name');
-            $contact->email = Input::get('contact_email');
-            $contact->tel = Input::get('contact_tell');
-            $contact->save();
-            $story->contact_id = $contact->id;
-            // should they get an email or something?
-        } else {
-            $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : NULL);
-        }
-
         $story->save();
 
-        if (Input::get('videos')) {
-            $story->videos()->sync(array_filter(Input::get('videos')));
-            $story->videos()->sync(array_filter(Input::get('videos')));
-        }
+        // Sync attached videos
+		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
+		$story->videos()->sync($attachedVideos);
 
         return Redirect::to('admin/stories')->with([
             'note' => 'New Story Successfully Added!',
@@ -293,28 +280,15 @@ class AdminStoryController extends Controller
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : '');
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
+		$story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
 
-        // Need to add / update contact
-        if(Input::get('contact_email')) {
-            $contact = new Contact();
-            $contact->full_name = Input::get('contact_full_name');
-            $contact->email = Input::get('contact_email');
-            $contact->tel = Input::get('contact_tel');
-            $contact->save();
-            $story->contact_id = $contact->id;
-            // should they get an email or something?
-        } else {
-            $story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
-        }
+		$story->save();
 
-        if (Input::get('videos')) {
-            $story->videos()->sync(Input::get('videos'));
-        }
-
-        $story->save();
+		// Sync attached videos
+		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
+		$story->videos()->sync($attachedVideos);
 
         // need states for when syncing stories to WP
-
         return Redirect::to('admin/stories/?decision='.$decision)->with([
             'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
