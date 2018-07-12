@@ -1,11 +1,19 @@
 {
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/js/app.js": "/assets/js/app.js",
-    "/assets/css/admin.css": "/assets/css/admin.css",
-    "/assets/frontend/css/client/nav-styles.css": "/assets/frontend/css/client/nav-styles.css",
-    "/assets/frontend/css/client/footer-styles.css": "/assets/frontend/css/client/footer-styles.css",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/js/utils.js": "/assets/js/utils.js"
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=d08e007cce49130a57b9",
+    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=252af85216c1e4d92e88",
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=dffc6acae0121c497c9b",
+    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=2558e5c7ba80b09039d9",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=760a88c93c1b30b4d777",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=a08651d59badab9d12ce",
+    "/assets/js/app.js": "/assets/js/app.js?id=9eadb0eed905201b4e19",
+    "/assets/css/admin.css": "/assets/css/admin.css?id=0a0b5b539ff818215cd7",
+    "/assets/frontend/css/client/nav-styles.css": "/assets/frontend/css/client/nav-styles.css?id=3b6b11d0edba37b32ea6",
+    "/assets/frontend/css/client/footer-styles.css": "/assets/frontend/css/client/footer-styles.css?id=c0146f1edd283e3e2eb3",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=db8e871170ed5b144115",
+    "/assets/js/app.js.map": "/assets/js/app.js.map?id=d5a60b029eac950269e1",
+    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=f76a976d08ecce5bc825",
+    "/assets/frontend/css/client/nav-styles.css.map": "/assets/frontend/css/client/nav-styles.css.map?id=f8867d18ebec5fd53d0b",
+    "/assets/frontend/css/client/footer-styles.css.map": "/assets/frontend/css/client/footer-styles.css.map?id=b280c9b91a65cd33f891",
+    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=b0de1a01164416d64658",
+    "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
 }
