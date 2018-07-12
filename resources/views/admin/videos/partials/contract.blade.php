@@ -88,6 +88,15 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">User</span>
+                        <input type="text" class="form-control" disabled="disabled" value="{{ \App\User::find($video->currentContract->user_id)->first()->full_name }}">
+                    </div>
+                </div>
+            </div>
             @else
             <div class="row">
                 <div class="col-md-12">
