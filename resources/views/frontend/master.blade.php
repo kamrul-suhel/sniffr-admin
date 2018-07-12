@@ -15,16 +15,10 @@
     <!-- If we need to add page specific style -->
     @yield('page_styles')
 
-    <script>
-        var sniffr_app = {
-            'user' : <?php echo (Auth::user() ? Auth::user() : '""'); ?>,
-            'user_offers' : <?php echo (Auth::user() ? Auth::user()->userOffers() : '""'); ?>
-        }
-    </script>
 </head>
 <body {{ (Request::is('/')) ? 'class="home"' : '' }}>
     <section id="sniffr">
-        <v-app>
+        <v-app v-if="sniffrStareReady">
             <navigation-component></navigation-component>
 
             <v-content>

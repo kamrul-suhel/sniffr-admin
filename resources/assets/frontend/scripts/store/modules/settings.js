@@ -24,7 +24,7 @@ const actions = {
                     .then((response) => {
                         let data = response.data;
                         commit('setSettingsObject', data);
-                        resolve();
+                        resolve(data);
                     })
                     .catch((error) => {
                         reject();
