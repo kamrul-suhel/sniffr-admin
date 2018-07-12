@@ -29,7 +29,8 @@
 
                 <v-card-media
                         :src="current_item.mime_type === 'video/mp4'? current_item.thumbnail : current_item.url"
-                        v-if="!showVideo">
+                        v-if="!showVideo"
+                        contain="true">
                     <div class="video-button" v-if="current_item.mime_type === 'video/mp4'" @click="onPlayVideo()">
                         <v-btn dark fab class="dark" medium>
                             <v-icon dark large>play_arrow</v-icon>
