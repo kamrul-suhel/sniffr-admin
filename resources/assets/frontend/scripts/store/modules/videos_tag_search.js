@@ -25,17 +25,17 @@ const mutations = {
 const actions = {
     getTagSearchVideoData({ commit }, payload= {}){
         return new Promise(function(resovle, reject){
-            let url = '/videos/tag/';
-
-            if(payload.value && payload.value != 0){
-                url = url + payload.value;
-            }
+            let url = '/search/videos';
 
             if(payload.page && payload.page != ''){
                 url = url +'?page='+payload.page;
             }
 
-            axios.get(url)
+            if(payload.value && payload.value != 0){
+                data = {'tag':payload.value};
+            }
+
+            axios.post(url, data)
                 .then((response) => {
                 let data = response.data;
                 commit('setTagSearchVideoData', data);

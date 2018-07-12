@@ -85,6 +85,7 @@ return [
         MichaelJWright\Rekognition\RekognitionServiceProvider::class,
         \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
         ComoCode\LaravelAb\LaravelAbServiceProvider::class,
+        Weidner\Goutte\GoutteServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -155,6 +156,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Rekognition' => 'MichaelJWright\Rekognition\RekognitionFacade',
         'Zipper' => Chumper\Zipper\Zipper::class,
+        'Goutte' => Weidner\Goutte\GoutteFacade::class,
     ],
 
 ];

@@ -30,7 +30,7 @@
 
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
-    import '../../scss/plugins/video-plyr.css';
+    import '../../css/plugins/video-plyr.css';
     import VideoDialogBoxEventBus from '../event-bus/video-dialog-box-event-bus';
 
     export default {

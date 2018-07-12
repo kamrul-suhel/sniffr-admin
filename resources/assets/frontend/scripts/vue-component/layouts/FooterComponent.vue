@@ -57,10 +57,23 @@
 
         <!-- Video dialog box -->
         <video-dialog-component></video-dialog-component>
+
+        <!-- Buy dialog box -->
+        <buy-dialog-component></buy-dialog-component>
+
+        <!-- Thank you dialog box -->
+        <thank-you-dialog-box></thank-you-dialog-box>
+
+        <!-- Snack bar component -->
+        <snackbar-component></snackbar-component>
+
     </section>
 </template>
 <script>
-    import VideoDialogComponent from './VideoDialogComponent'
+    import VideoDialogComponent from '../includes/VideoDialogComponent'
+    import SnackbarComponent from '../includes/SnackbarComponent'
+    import BuyDialogComponent from '../includes/BuyComponent'
+    import ThankYouDialogBox from '../includes/ThankyouComponent'
 
     export default {
         data() {
@@ -77,7 +90,10 @@
         },
 
         components: {
-            VideoDialogComponent
+            VideoDialogComponent,
+            SnackbarComponent,
+            BuyDialogComponent,
+            ThankYouDialogBox
         }
     }
 </script>

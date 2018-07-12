@@ -1,10 +1,10 @@
-Hey {{ $video->contact->full_name }}!
+Hey {{ $asset->contact->full_name }}!
 
 Thank you for signing the contract.
 
 If you need it you can download it from this link.
 
-{{ route('contract.download', ['id' => $video->contracts->first()->reference_id]) }}
+{{ route('contract.download.public', ['id' => $asset->contracts->first()->reference_id]) }}
 
 If you have any questions you&rsquo;re more than welcome to contact the team here: licensing@unilad.co.uk
 
@@ -14,6 +14,6 @@ The UNILAD Team
 
 (powered by Sniffr)
 
-Video Ref: {{ $video->alpha_id }}
+{{ ucwords($type) }} Ref: {{ $asset->alpha_id }}
 
-Unsubscribe > {{ url('/unsubscribe/' . base64_encode($video->contact->email)) }}
+Unsubscribe > {{ url('/unsubscribe/' . base64_encode($asset->contact->email)) }}

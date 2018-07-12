@@ -79,7 +79,6 @@
         ],
 
         created() {
-            console.log(this.story);
             var user = this.$store.getters.getUser;
 
             var componentServices = new ComponentServices();
@@ -121,18 +120,6 @@
                     return '/assets/frontend/images/placeholder.png';
                 }
                 return image;
-            },
-
-            onBuyStory(){
-                var url = '/client/orders';
-                var formData = new FormData();
-                formData.append('story_id', this.story.id);
-                formData.append('user_agent', navigator.userAgent);
-                formData.append('user_id', this.$store.getters.getUser.id);
-
-                axios.post(url, formData).then((response) => {
-                    console.log(response);
-                });
             }
         }
     }

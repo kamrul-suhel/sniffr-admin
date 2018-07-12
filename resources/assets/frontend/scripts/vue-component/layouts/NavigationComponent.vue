@@ -13,15 +13,28 @@
                 <v-flex xs12 sm6 md8 lg8>
                     <nav class="navigation">
                         <ul>
-                            <li>
+                            <li v-if="!client_login">
                                 <router-link to="/upload">
                                     <v-icon color="white" left>file_upload</v-icon> Upload
+                                </router-link>
+                            </li>
+
+                            <li v-if="client_login && this.$store.getters.getUser.offers >= 1">
+                                <router-link :to="{name: 'client_offered_assets'}">
+                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ this.$store.getters.getUser.offers }})
                                 </router-link>
                             </li>
 
                             <li>
                                 <router-link to="/videos">
                                     <v-icon color="white" left>videocam</v-icon> Videos
+                                </router-link>
+                            </li>
+
+
+                            <li>
+                                <router-link to="/stories">
+                                    <v-icon color="white" left>art_track</v-icon> Stories
                                 </router-link>
                             </li>
 
@@ -50,24 +63,8 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <a @click.prevent.stop="onClientEmail()">
-                                                    <v-icon color="white" left size="20px">alternate_email</v-icon> My Stories
-                                                </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <a @click.prevent.stop="onClientVideos()">
-                                                    <v-icon color="white" left size="20px">video_library</v-icon> My Videos
-                                                </a>
-                                            </v-list-tile-title>
-                                        </v-list-tile>
-
-                                        <v-list-tile v-if="client_login">
-                                            <v-list-tile-title>
-                                                <router-link :to="{name: 'client_downloaded_assets'}">
-                                                    <v-icon color="white" size="20px">cloud_done</v-icon> My Downloads
+                                                <router-link :to="{name: 'client_purchased_assets'}">
+                                                    <v-icon color="white" left size="20px">attach_money</v-icon> Order History
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -92,10 +89,14 @@
         <!-- Login component -->
         <login-component></login-component>
         <!-- End login component -->
-            
+
         <!-- Password reset dialog box -->
         <forgot-password-component></forgot-password-component>
         <!-- End password reset -->
+
+        <!-- Quote Component -->
+        <quote-component></quote-component>
+        <!-- End request quote component -->
 
         <!-- Logout snackbars -->
         <v-snackbar
@@ -109,13 +110,15 @@
     </section>
 </template>
 <script>
-    import LoginComponent from '../includes/LoginComponent';
-    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent';
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
+    import LoginComponent from '../includes/LoginComponent'
+    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
+    import QuoteComponent from '../includes/QuoteComponent'
+    import LoginEventBus from '../../event-bus/login-event-bus'
     export default {
         components: {
             LoginComponent,
-            ForgotPasswordComponent
+            ForgotPasswordComponent,
+            QuoteComponent
         },
         data() {
             return {
@@ -125,6 +128,7 @@
 
                 //user auth
                 is_login: false,
+                client_login: false,
 
                 //logout
                 logout: false,
@@ -133,14 +137,11 @@
 
                 //if user login all data
                 user: '',
-
-                client_login: false
             }
         },
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
-
                 this.onResetPrevRoute();
 
                 if(to.name != 'home'){
@@ -150,49 +151,37 @@
                         this.nav_background = false;
                     }, 800);
                 }
-                // see user status
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                        if(this.user.role === 'client_admin' || this.user.role=== 'client_owner' || this.user.role === 'client'){
-                            this.client_login = true;
-                        }
-                    }
-                });
             }
         },
         created(){
-
             this.setPrevRoute();
 
+            this.user = this.$store.getters.getUser;
 
             LoginEventBus.$on('logoutChangeState', () => {
                 this.is_login = false;
+                this.client_login = false;
             });
 
-            LoginEventBus.$on('clientLoginSuccess', () => {
-                this.$store.dispatch('getLoginStatus').then((response) => {
-                    this.is_login = this.$store.getters.isUserLogin;
-                    if(this.is_login){
-                        this.user = this.$store.getters.getUser;
-                        if(this.user.role === 'client_admin' || this.user.role === 'client_owner' || this.user.role === 'client'){
-                            this.client_login = true;
-                        }
-                    }
-                });
+            // If client has logged in
+            LoginEventBus.$on('loginSuccess', () => {
+                this.user = this.$store.getters.getUser;
+                this.is_login = this.$store.getters.isUserLogin;
+                this.client_login = this.$store.getters.isClientLogin;
             });
 
+            // On every navigation load, check to see if user is logged in
             this.$store.dispatch('getLoginStatus').then((response) => {
                 this.is_login = this.$store.getters.isUserLogin;
-                if(this.is_login){
-                    this.user = this.$store.getters.getUser;
-                    if(this.user.role === 'client_admin' || this.user.role === 'client_owner' || this.user.role === 'client'){
-                        this.client_login = true;
-                    }
-                }
+                this.client_login = this.$store.getters.isClientLogin;
             });
-            if(this.$route.name != 'home'){
+
+            this.$store.dispatch('setSettingObjectFromServer').then(() => {
+                this.settings = this.$store.getters.getSettingsObject;
+            });
+
+
+            if(this.$route.name !== 'home'){
                 this.nav_background = true;
             }else{
                 this.nav_background = false;
@@ -228,31 +217,19 @@
                     });
             },
 
-
             // Login component trigger this methods when change any value
             onChangeLogin(changeLogin){
                 if(!changeLogin){
-                    this.login_dialog = false; 
+                    this.login_dialog = false;
                 }
             },
+
             onLoginClick(){
                 LoginEventBus.openLoginDialog();
             },
 
             logoutStateChange() {
               this.is_login = false;
-            },
-
-            onClientEmail(){
-                this.$router.push({name: 'client_stories'});
-            },
-
-            onClientStories(){
-                this.$router.push({name: 'client'});
-            },
-
-            onClientVideos(){
-                this.$router.push({name: 'client_videos'});
             }
         }
     }

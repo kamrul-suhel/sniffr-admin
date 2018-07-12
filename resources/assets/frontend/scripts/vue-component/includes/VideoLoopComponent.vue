@@ -1,16 +1,17 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3>
-        <v-card class="block">
-            <v-card-media class="sniffr-media-thumbnail"
+    <v-flex xs12 sm6 md4 lg4 xl3 style="min-width:380px;">
+        <v-card class="video-card block">
+            <v-card-media class="video-card-thumb-wrapper"
                 :src="onGetThumbnailImage()">
                 <a
                 @click.stop="openVideoDialog(video)"
-                class="block-thumbnail"
+                class="video-card-thumb"
                 >
                     <div class="thumbnail-overlay"></div>
                     <span class="play-button">
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
+
                     <span class="label" :class="video.state == 'licensed' ? 'label-licensed': 'label-danger'">
                         {{video.state}}
                     </span>
@@ -26,15 +27,15 @@
             </v-card-media>
 
             <v-card-title class="pb-0">
-                <h3 class="headline mb-0" @click.stop="goToDetail(video)">
+                <h3 class="video-card-title mb-0" @click.stop="goToDetail(video)">
                     {{ video.title }}
                 </h3>
             </v-card-title>
 
             <v-card-text class="pt-0">
-                <div class="video-content" v-if="video.description != 'null'">
+                <p class="video-card-text" v-if="video.description != 'null'">
                     {{ video.description | readmore(100, '...') }}
-                </div>
+                </p>
             </v-card-text>
         </v-card>
     </v-flex>
@@ -72,7 +73,7 @@
                 if(this.$route.name === 'client_videos'){
                     this.$router.push({name: 'client_video_download', params: {alpha_id: this.video.alpha_id}});
                 }else{
-                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
+                    this.$router.push({name: 'videos_detail', params: {alpha_id: this.video.alpha_id}});
                 }
             },
 

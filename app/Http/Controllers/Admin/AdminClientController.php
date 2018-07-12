@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Client;
+use App\Collection;
 use App\Http\Requests\Company\CreateCompanyRequest;
 use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
 use App\Libraries\VideoHelper;
-use App\Order;
 use App\User;
+use App\Download;
 use Auth;
 use Redirect;
 use App\Video;
 use App\Story;
-use App\Download;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -160,11 +160,15 @@ class AdminClientController extends Controller
         $company->city = $request->input('city');
         $company->postcode = $request->input('postcode');
         $company->country = $request->input('country');
+        $company->region = $request->input('region');
+        $company->tier = $request->input('tier');
         $company->vat_number = $request->input('vat_number');
         $company->billing_tel = $request->input('billing_tel');
         $company->billing_email = $request->input('billing_email');
         $company->billing_name = $request->input('billing_name');
-
+        $company->tier = $request->input('tier');
+        $company->location = $request->input('location');
+        $company->active = $request->input('active') == 'on' ? 1 : 0;
 
         $redirect_path = '';
         if ($company->account_owner_id != $request->input('account_owner_id')) {
@@ -173,8 +177,14 @@ class AdminClientController extends Controller
         }
 
         $company->usable_domains = $request->input('usable_domains');
-
         $company->update();
+
+        //Update all new users linked with this company so they become active
+        $users = $company->users()->get();
+        foreach($users as $user) {
+            $user->active = $company->active;
+            $user->save();
+        }
 
         if (!$redirect_path) {
             $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
@@ -185,6 +195,102 @@ class AdminClientController extends Controller
             'note_type' => 'success'
         ]);
     }
+
+	/**
+	 * @param Request $request
+	 * @param $client_id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function purchases(Request $request, $client_id)
+	{
+		$client = Client::find($client_id);
+
+		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionVideos')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_videos');
+
+		$collectionPurchasesStories = Collection::whereHas('collectionStories', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionStories')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_stories');
+
+		$downloads = Download::where('client_id', $client_id)->get();
+
+		return view('admin.clients.purchases', [
+			'collectionPurchasesVideos' => $collectionPurchasesVideos,
+			'collectionPurchasesStories' => $collectionPurchasesStories,
+			'downloads' => $downloads,
+			'client' => $client
+		]);
+	}
+
+	public function purchases_csv(Request $request, $client_id)
+	{
+		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionVideos')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_videos');
+
+		$collectionPurchasesStories = Collection::whereHas('collectionStories', function($query) {
+			$query->where('status', 'purchased');
+		})
+			->where('client_id', $client_id)
+			->with('collectionStories')
+			->with('client')
+			->with('user')
+			->paginate(20, ['*'], 'purchased_stories');
+
+		$downloads = Download::where('client_id', $client_id)->get();
+
+		$csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
+
+		$csv->insertOne(['Order No.', 'Alpha ID', 'Order Date', 'Story / Video', 'Downloaded', 'Price']);
+
+		$count = 1;
+		$insert = [];
+		foreach($collectionPurchasesVideos as $collection){
+			foreach($collection->collectionVideos as $purchasedVideo) {
+				$insert['order_no'] = $collection->name;
+				$insert['alpha_id'] = $purchasedVideo->video->alpha_id;
+				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
+				$insert['title'] = $purchasedVideo->video->title;
+				$insert['downloaded'] = $downloads->where('video_id', $purchasedVideo->video->id)->count();
+				$insert['price'] = '£' . $purchasedVideo->final_price;
+
+				$csv->insertOne($insert);
+				$count++;
+			}
+		}
+
+		foreach($collectionPurchasesStories as $collection){
+			foreach($collection->collectionStories as $purchasedStory) {
+				$insert['order_no'] = $collection->name;
+				$insert['alpha_id'] = $purchasedStory->story->alpha_id;
+				$insert['order_date'] = date('jS M Y H:i:s', strtotime($collection->updated_at));
+				$insert['title'] = $purchasedStory->story->title;
+				$insert['downloaded'] = $downloads->where('story_id', $purchasedStory->story->id)->count();
+				$insert['price'] = '£' . $purchasedStory->final_price;
+
+				$csv->insertOne($insert);
+				$count++;
+			}
+		}
+
+		$csv->output('orders.csv');
+	}
 
     /**
      * @param $id
@@ -204,71 +310,5 @@ class AdminClientController extends Controller
             'note' => 'Successfully Deleted Client',
             'note_type' => 'success'
         ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param $client_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function orders(Request $request, $client_id)
-    {
-        $client = Client::find($client_id);
-        $orders = Order::where('client_id', '=', $client_id)
-            ->get();
-        $downloads = Download::where('client_id', '=', $client_id)
-            ->get();
-
-        return view('admin.clients.orders', [
-            'orders' => $orders,
-            'client' => $client,
-            'downloads' => $downloads
-        ]);
-    }
-
-    public function orders_csv(Request $request, $client_id)
-    {
-        $client = Client::find($client_id);
-        $orders = Order::where('client_id', '=', $client_id)
-            ->get();
-        $downloads = Download::where('client_id', '=', $client_id)
-            ->get();
-        $stories = Story::all();
-        $videos = Video::all();
-
-        $csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
-
-        $csv->insertOne(['Order No.', 'Order Date', 'Story / Video', 'Author', 'Url', 'Downloaded']);
-
-        $count = 1;
-        $insert = [];
-        foreach ($orders as $order) {
-            $insert['order_no'] = str_pad($count, 4, '0', STR_PAD_LEFT);
-            $insert['order_date'] = date('jS M Y H:i:s',strtotime($order->created_at));
-            if($order->story_id!=0) {
-                $insert['story'] = $stories->where('id', $order->story_id)->pluck('title')->first();
-                $insert['author'] = $stories->where('id', $order->story_id)->pluck('author')->first();
-                if($stories->where('id', $order->story_id)->pluck('status')->first()=='draft') {
-                    $insert['url'] = 'Not yet published';
-                } else {
-                    $insert['url'] = $stories->where('id', $order->story_id)->pluck('url')->first();
-                }
-                $insert['downloaded'] = $downloads->where('story_id', $order->story_id)->where('client_id', $order->client_id)->count();
-            } else {
-                $insert['story'] = $videos->where('id', $order->video_id)->pluck('title')->first();
-                $insert['author'] = $videos->where('id', $order->video_id)->pluck('contact.full_name')->first();
-                if($videos->where('id', $order->video_id)->pluck('state')->first()!='licensed') {
-                    $insert['url'] = 'Not yet licensed';
-                } else {
-                    $insert['url'] = $videos->where('id', $order->video_id)->pluck('file_watermark')->first();
-                }
-                $insert['downloaded'] = $downloads->where('video_id', $order->video_id)->where('client_id', $order->client_id)->count();
-            }
-
-            $csv->insertOne($insert);
-            $count++;
-        }
-
-        $csv->output('orders.csv');
     }
 }

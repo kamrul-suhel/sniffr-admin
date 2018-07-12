@@ -15,10 +15,6 @@
     }
   }
 
-  .btn .btn__content .icon {
-    margin-left: -8px;
-  }
-
   .nsfw {
     position: absolute;
     right: 0;
@@ -175,10 +171,10 @@
     display: flex;
   }
 
-  .card.video-player-poster {
+  .video-player-poster {
     position: relative;
 
-    .card__media {
+    > div {
       padding-top: 56.26%;
     }
 

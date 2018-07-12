@@ -19,25 +19,24 @@
 //@import "./layout/nav";
 
 
+
 /* ************************* Home Page style ******************* */
 @import "pages/home";
 
-
 /* ************************* Login Page style ******************* */
-@import "pages/login";
+@import "includes/login";
 
+/* ************************* Quote Page style ******************* */
+@import "pages/quote";
 
 /* ************************* Videos Page style ******************* */
 @import "pages/videos";
 
-/* ************************* Video loop style ******************* */
-@import "layout/video-loop";
-
-/* ************************* Video loop section style ******************* */
-@import "video-loop";
+/* ************************* Video dialog box section style ******************* */
+@import "includes/video-dialog-box";
 
 /* ************************* Video dialog box section style ******************* */
-@import "pages/video-dialog-box";
+@import "pages/stories";
 
 
 /* ************************* Video detail style ******************* */
@@ -45,7 +44,7 @@
 
 
 /* ************************* Video upload page style ******************* */
-@import "pages/video-upload";
+@import "form/video-upload";
 
 
 /* ************************* Footer style ******************* */
@@ -53,15 +52,19 @@
 
 
 /* ************************* Pagination style ******************* */
-@import "layout/pagination";
+@import "includes/pagination";
 
 
 /* ************************* Submission form page ******************* */
-@import "pages/submission-form";
+@import "form/submission-form";
 
 /* ************************* More detail form page ******************* */
 @import "form/more-detail";
 
+
+@import "partials/buttons";
+@import "partials/modals";
+@import "partials/video-card";
 
 @include small-device{
 }

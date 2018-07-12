@@ -47,52 +47,76 @@ class QueueStory implements ShouldQueue
 	 */
 	public function handle() // THIS JOB ADDS OR UPDATES A STORY IN OUR DB FROM EACH WP POST
 	{
-		// determine if adding new story & updating
-		if($this->update_type == 'new') {
-			$story = new Story();
-			$story->alpha_id = VideoHelper::quickRandom();
-			$story->wp_id = $this->post->id;
-			$story->active = 1;
-		} else {
-			$story = Story::where([['wp_id', $this->post->id]])->first();
-		}
+        // IF 'push' to WP, 'sync' with WP, 'new' from WP or 'update' from WP
+        if($this->update_type=='push') {
+            $story = Story::where([['alpha_id', $this->post]])->first();
+            if(isset($story)&&!$story->wp_id) {
+                $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description).'&tags='.env('UNILAD_WP_TAG_ID');
+                $result = $this->apiPost('posts', $parameters, true);
+                // update stories record with WP response from post
+                if($result->id){
+                    $story->wp_id = $result->id;
+                    $story->status = $result->status;
+                    $story->date_ingested = $story->created_at;
+                    $story->save();
+                }
+            }
+        } else {
+            // determine if adding new story & updating
+    		if($this->update_type == 'new') {
+    			$story = new Story();
+    			$story->alpha_id = VideoHelper::quickRandom();
+    			$story->wp_id = $this->post->id;
+    			$story->active = 1;
+                $story->state = 'unlicensed';
+            } elseif($this->update_type == 'sync') {
+                $version = VideoHelper::quickRandom();
+                $story = Story::where([['alpha_id', $this->post]])->first();
+                $this->post = $this->apiRequest('posts/'.$story->wp_id.'/?version=' . $version , true);
+    		} else {
+    			$story = Story::where([['wp_id', $this->post->id]])->first();
+    		}
 
-		// get assets from curl request (as a function)
-		$asset_ids = $this->createAssets($this->post->featured_media, $this->post->content->rendered);
-		if(count($asset_ids)) {
-			$story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
-		}
+    		// get assets from curl request (as a function)
+            if($this->post->featured_media) {
+                $asset_ids = $this->createAssets($this->post->featured_media, $this->post->content->rendered);
+        		if(count($asset_ids)) {
+        			$story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
+        		}
+            }
 
-		// get author from curl request
-		if($this->post->author) {
-			$author = $this->apiRequest('users/' . $this->post->author);
-			$story->author = isset($author->name) ? $author->name : NULL;
-		}
+    		// get author from curl request
+    		if($this->post->author) {
+    			$author = $this->apiRequest('users/' . $this->post->author);
+    			$story->author = isset($author->name) ? $author->name : NULL;
+    		}
 
-		if($this->post->content->rendered){
-			$description = preg_replace('/copyrightHolder\">([^<]+)</is','copyrightHolder"><',$this->post->content->rendered); // Remove UNILAD
-			$description = preg_replace('/<script(.*?)>(.*?)<\/script>/is', '', $description); // Remove scripts
-			$description = strip_tags($description, '<p><blockquote>'); // Strip tags (except p and blockquote)
-			$description = str_replace('If you have a story you want to tell send it to UNILAD via stories@unilad.co.uk. To license this article contact licensing@unilad.co.uk','',$description); // Need to remove last line
-			$description = str_replace('If you have a story you want to tell send it to stories@unilad.co.uk. To license this article contact licensing@unilad.co.uk','',$description); // Need to remove last line
-		}else{
-			$description = NULL;
-		}
+    		if($this->post->content->rendered){
+    			$description = preg_replace('/copyrightHolder\">([^<]+)</is','copyrightHolder"><',$this->post->content->rendered); // Remove UNILAD
+    			$description = preg_replace('/<script(.*?)>(.*?)<\/script>/is', '', $description); // Remove scripts
+    			$description = strip_tags($description, '<p><blockquote>'); // Strip tags (except p and blockquote)
+    			$description = str_replace('If you have a story you want to tell send it to UNILAD via stories@unilad.co.uk. To license this article contact licensing@unilad.co.uk','',$description); // Need to remove last line
+    			$description = str_replace('If you have a story you want to tell send it to stories@unilad.co.uk. To license this article contact licensing@unilad.co.uk','',$description); // Need to remove last line
+    		}else{
+    			$description = NULL;
+    		}
 
-        $story->flagged = (is_int(array_search(env('UNILAD_WP_FLAGGED_ID'), $this->post->tags)) ? 1 : 0); // if tag in WP is also 'flagged' then display as hot story in stories view 
+            $story->flagged = (is_int(array_search(env('UNILAD_WP_FLAGGED_ID'), $this->post->tags)) ? 1 : 0); // if tag in WP is also 'flagged' then display as hot story in stories view
+    		$story->excerpt = ($this->post->excerpt ? substr(trim(strip_tags($this->post->excerpt->rendered)),0,700) : NULL);
+    		$story->date_ingested = Carbon::parse($this->post->date)->format('Y-m-d H:i:s');
+    		$story->categories = implode(",",$this->post->categories);
+    		$story->status = $this->post->status;
+    		$story->title = $this->post->title->rendered;
+    		$story->url = $this->post->link;
+    		$story->description = $description;
+    		$story->user_id = ($story->user_id ? $story->user_id : $this->user_id);
 
-		$story->excerpt = ($this->post->excerpt ? substr(trim(strip_tags($this->post->excerpt->rendered)),0,700) : NULL);
-		$story->date_ingested = Carbon::parse($this->post->date)->format('Y-m-d H:i:s');
-		$story->categories = implode(",",$this->post->categories);
-		$story->status = $this->post->status;
-		$story->state = 'licensed';
-		$story->title = $this->post->title->rendered;
-		$story->url = $this->post->link;
-		$story->description = $description;
-		$story->user_id = $this->user_id;
+    		$story->save();
 
-		$story->save();
-		$story->assets()->sync($asset_ids);
+            if(isset($asset_ids)) {
+                $story->assets()->sync($asset_ids);
+            }
+        }
 	}
 
 	/**

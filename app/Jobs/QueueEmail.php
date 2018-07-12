@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Video;
+use App\Story;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Bus\Queueable;
@@ -26,7 +27,7 @@ class QueueEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $video_id, $email_type;
+    protected $asset_id, $email_type, $type;
 
     public $tries = 5;
     public $timeout = 120;
@@ -37,10 +38,11 @@ class QueueEmail implements ShouldQueue
      * @return void
      */
 
-    public function __construct($video_id, $email_type)
+    public function __construct($asset_id, $email_type, $type = 'video')
     {
-        $this->video_id = $video_id;
+        $this->asset_id = $asset_id;
         $this->email_type = $email_type;
+        $this->type = $type;
     }
 
     /**
@@ -50,42 +52,44 @@ class QueueEmail implements ShouldQueue
      */
     public function handle()
     {
-        $video = Video::find($this->video_id);
+        $asset = ($this->type=='video' ? Video::find($this->asset_id) : Story::find($this->asset_id));
 
         //check if email is valid (might not be needed if frontend upload form is doing it)
 
         //check if contact has unsubcribed (contact_id!=0)
-        if (isset($video->id)) {
-            if ($video->contact_id == 0) {
-                $video->notify(new SubmissionAlert('a job failed to send an ' . $this->email_type . ' email due to unsubscribe or no contact email (Id: ' . $this->video_id . ')'));
+        if (isset($asset->id)) {
+            if ($asset->contact_id == 0) {
+				$user = new User();
+				$user->slackChannel('alerts')->notify(new SubmissionAlert('a job failed to send an ' . $this->email_type . ' email due to unsubscribe or no contact email (Id: ' . $this->asset_id . ')'));
             } else {
                 switch ($this->email_type) {
                     case 'submission_accepted':
-                        Mail::to($video->contact->email)->send(new SubmissionAccepted($video));
+                        Mail::to($asset->contact->email)->send(new SubmissionAccepted($asset));
                         break;
                     case 'submission_licensed':
-                        Mail::to($video->contact->email)->send(new SubmissionLicensed($video));
+                        Mail::to($asset->contact->email)->send(new SubmissionLicensed($asset));
                         break;
                     case 'submission_rejected':
-                        Mail::to($video->contact->email)->send(new SubmissionRejected($video));
+                        Mail::to($asset->contact->email)->send(new SubmissionRejected($asset));
                         break;
                     case 'submission_thanks':
-                        Mail::to($video->contact->email)->send(new SubmissionThanks($video));
+                        Mail::to($asset->contact->email)->send(new SubmissionThanks($asset));
                         break;
                     case 'submission_thanks_nonex':
-                        Mail::to($video->contact->email)->send(new SubmissionThanksNonEx($video));
+                        Mail::to($asset->contact->email)->send(new SubmissionThanksNonEx($asset));
                         break;
                     case 'details_reminder':
-                        Mail::to($video->contact->email)->send(new DetailsReminder($video));
+                        Mail::to($asset->contact->email)->send(new DetailsReminder($asset));
                         break;
                     case 'details_thanks':
-                        Mail::to($video->contact->email)->send(new DetailsThanks($video));
+                        Mail::to($asset->contact->email)->send(new DetailsThanks($asset));
                         break;
 					case 'contract_signed':
-						Mail::to($video->contact->email)->send(new ContractSignedThanks($video, $video->currentContract));
+                        Mail::to($asset->contact->email)->send(new ContractSignedThanks($asset->id, $asset->currentContract, $this->type));
 						break;
 					case 'sign_contract':
-						Mail::to($video->contact->email)->send(new ContractMailable($video, $video->currentContract));
+                        Mail::to($asset->contact->email)->send(new ContractMailable($asset->id, $asset->currentContract, $this->type));
+                        break;
                 }
             }
         }
@@ -100,7 +104,7 @@ class QueueEmail implements ShouldQueue
     public function failed()
     {
         // Send user notification of failure, etc...
-        $user = new User();
-        $user->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: ' . $this->video_id . ')'));
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert('a job failed to send an email, please check job queue (Id: ' . $this->asset_id . ')'));
     }
 }

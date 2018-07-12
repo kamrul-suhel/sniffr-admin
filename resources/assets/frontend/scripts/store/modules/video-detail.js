@@ -4,7 +4,7 @@ const state = {
 
 const getters = {
 	getVideoDetailData(state){
-			return state.video_detail;
+		return state.video_detail;
 	}
 }
 const mutations = {

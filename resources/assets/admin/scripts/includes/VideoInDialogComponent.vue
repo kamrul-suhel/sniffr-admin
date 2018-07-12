@@ -47,13 +47,13 @@
                         </div>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <v-layout column wrap align-end class="video-detail-sidebar">
-                            <div class="video-detail-social-share">
-                                <v-btn dark block class="dark">Get Quote</v-btn>
-                            </div>
-                        </v-layout>
-                    </v-flex>
+                    <!--<v-flex xs12>-->
+                        <!--<v-layout column wrap align-end class="video-detail-sidebar">-->
+                            <!--<div class="video-detail-social-share">-->
+                                <!--<v-btn dark block class="dark">Get Quote</v-btn>-->
+                            <!--</div>-->
+                        <!--</v-layout>-->
+                    <!--</v-flex>-->
 
                 </v-layout>
             </v-flex>
@@ -136,6 +136,22 @@
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.video_detail = this.$store.getters.getCurrentRecommendedForDialog;
+                    if (this.video_detail.tags.length > 0) {
+                        this.tags.push(...this.video_detail.tags);
+                    } else {
+                        this.tags = [];
+                    }
+
+                    VideoDialogBoxEventBus.$emit('setNextPrevButton');
+
+                });
+            },
+
+            getMailerVideoData(alpha_id) {
+                this.$store.commit('setRouteObject', this.$route);
+
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
+                    this.video_detail = this.$store.getters.getCurrentMailerVideoForDialog;
                     if (this.video_detail.tags.length > 0) {
                         this.tags.push(...this.video_detail.tags);
                     } else {

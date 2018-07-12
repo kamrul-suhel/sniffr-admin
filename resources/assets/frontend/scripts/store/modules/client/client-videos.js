@@ -3,6 +3,8 @@ const state = {
     clientCurrentVideo: '',
     mailClientVideos: '',
     clientMailerId:'',
+    purchased_videos:'',
+    offered_videos:''
 }
 
 const mutations = {
@@ -13,6 +15,10 @@ const mutations = {
     setClientCurrentVideo(state, video){
         state.clientCurrentVideo = story.video;
     },
+
+    setOfferedVideos(){
+
+    }
 
 }
 
@@ -55,28 +61,35 @@ const actions = {
         })
     },
 
-    getClientDownloadedVideos({commit}, downloaded_obj){
+    fetchOfferedVideos({commit}, payload){
         return new Promise((resolve, reject) => {
-            let url = '/client/client_videos/downloaded';
-            if (downloaded_obj.page > 0) {
-                url += '?page=' + downloaded_obj.page;
-            }
-            console.log(url);
 
-            axios.get(url)
+            axios.get(payload)
                 .then((response) => {
-                    let data = response.data;
-                    commit('setclient_videos', data);
-                    resolve();
-                })
-                .catch((error) => {
-                    reject();
-                    console.log(error);
-                });
+                        state.offered_videos = response.data.videos;
 
+
+                        resolve();
+                    },
+                    (error) => {s
+                        return reject();
+                    });
+        })
+    },
+
+    fetchPurchasedVideos({commit}, payload){
+        return new Promise((resolve, reject) => {
+
+            axios.get(payload)
+                .then((response) => {
+                        state.purchased_videos = response.data.videos;
+                        resolve();
+                    },
+                    (error) => {s
+                        return reject();
+                    });
         })
     }
-
 }
 
 const getters = {
@@ -86,6 +99,14 @@ const getters = {
 
     getClientCurrentVideo(state){
         return state.currentStory;
+    },
+
+    getOfferedVideos(state){
+        return state.offered_videos;
+    },
+
+    getPurchasedVideos(state){
+        return state.purchased_videos;
     }
 }
 

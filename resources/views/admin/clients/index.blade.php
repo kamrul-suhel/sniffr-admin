@@ -20,18 +20,32 @@
 	<table class="table table-striped pages-table">
 		<tr class="table-header">
 			<th>Name</th>
+			<th>Active</th>
 			<th>Actions</th>
 			@foreach($clients as $client)
 			<tr>
 				<td>{{ TextHelper::shorten($client->name, 250) }}</td>
 				<td>
-                    <a href="{{ route('clients.orders', ['id' => $client->id]) }}" class="btn btn-xs btn-warning">
-                        <span class="fa fa-bar-chart"></span>
-                        Orders
-                    </a>
-                    <a href="{{ route('clients.edit', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
-                        <span class="fa fa-edit"></span>
-                        Edit
+					@if($client->active)
+						Yes
+					@else
+						<div class="label label-danger"><i class="fa fa-exclamation"></i>
+							Moderation
+						</div>
+					@endif
+				</td>
+				<td>
+					<a href="{{ route('clients.edit', ['id' => $client->id]) }}" class="btn btn-xs btn-info">
+						<span class="fa fa-edit"></span>
+						@if($client->active)
+							Edit
+						@else
+							Moderate
+						@endif
+					</a>
+                    <a href="{{ route('clients.purchases', ['id' => $client->id]) }}" class="btn btn-xs btn-warning">
+                        <span class="fa fa-money"></span>
+                        Purchases
                     </a>
 				</td>
 			</tr>

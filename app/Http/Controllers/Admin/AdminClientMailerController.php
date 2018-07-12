@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 use App\Jobs\QueueClientMailer;
-use App\Notifications\ClientMailerAlert;
 
 use App\Jobs\QueueStory;
 
@@ -81,7 +80,7 @@ class AdminClientMailerController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\JsonResponse
      */
     public function refresh()
     {
@@ -242,6 +241,8 @@ class AdminClientMailerController extends Controller
         if (Input::get('clients')) {
             $mailer->users()->sync(Input::get('clients'));
         }
+
+        $mailer->subject = Input::get('subject');
 
         $mailer->user_id = (Input::get('user_id') ? Input::get('user_id') : 0);
 

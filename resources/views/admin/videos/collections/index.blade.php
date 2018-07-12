@@ -23,6 +23,7 @@
 				<div class="modal-body">
 					<form id="new-cat-form" accept-charset="UTF-8" action="{{ url('admin/videos/collections/store') }}" method="post">
 				        <label for="name">Enter the new collection name below</label>
+
 				        <input name="name" id="name" placeholder="Collection Name" class="form-control" value="" /><br />
 				        <input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 				    </form>

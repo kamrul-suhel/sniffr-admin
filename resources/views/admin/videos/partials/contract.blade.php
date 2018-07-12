@@ -88,6 +88,15 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">User</span>
+                        <input type="text" class="form-control" disabled="disabled" value="{{ \App\User::find($video->currentContract->user_id)->first()->full_name }}">
+                    </div>
+                </div>
+            </div>
             @else
             <div class="row">
                 <div class="col-md-12">
@@ -108,13 +117,13 @@
                 @if(!$video->currentContract->signed_at)
                     @if($video->currentContract->sent_at)
                     <p>{{ 'Sent:' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $video->currentContract->sent_at)->diffForHumans().' ' }}
-                        <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">
+                        <a href="{{ route('contract.send', ['type' => 'video', 'id' => $video->id]) }}" class="btn btn-info" id="sendContract">
                             Resend Contract
                         </a>
                     </p>
                     @else
                     <p>
-                        <a href="{{ route('contract.send', ['id' => $video->id]) }}" class="btn btn-info" id="sendContract">
+                        <a href="{{ route('contract.send', ['type' => 'video', 'id' => $video->id]) }}" class="btn btn-info" id="sendContract">
                             Send Contract
                         </a>
                     </p>

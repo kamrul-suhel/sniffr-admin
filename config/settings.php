@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'stale_time' => 3, //in days
     'cache' => [
         'cache_enabled' => env('CACHE_ENABLED', false),
     ],

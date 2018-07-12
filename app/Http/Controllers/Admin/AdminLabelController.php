@@ -114,7 +114,6 @@ class AdminLabelController extends Controller {
                     ],
                 ];
              $job = \Rekognition::startLabelDetection($config);
-             dd($job['JobId']);
          } elseif($type=='get') {
              $config = [
                     'JobId' => '1c5e8249508ea97368d5e0dc5381d1e839470880d34db42466c30cd349c19cf5',

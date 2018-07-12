@@ -2,31 +2,14 @@
 
 namespace App\Jobs;
 
+use App\User;
 use App\Video;
-
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Mail\Mailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\Mail\DetailsReminder;
-use App\Mail\DetailsThanks;
-use App\Mail\SubmissionAccepted;
-use App\Mail\SubmissionLicensed;
-use App\Mail\SubmissionRejected;
-use App\Mail\SubmissionThanks;
-use App\Mail\SubmissionThanksNonEx;
-
 use App\Notifications\SubmissionAlert;
 
 class QueueVideoAnalysis implements ShouldQueue
@@ -70,7 +53,8 @@ class QueueVideoAnalysis implements ShouldQueue
                 if($disk->exists(basename($video->file))) {
                     $disk->move(''.basename($video->file), 'videos/a83d0c57-605a-4957-bebc-36f598556b59/'.basename($video->file));
                 } else {
-                    $video->notify(new SubmissionAlert('a job in the queue has failed to Analyse video as no file exists (Id: '.$video->file.')'));
+					$user = new User();
+					$user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to Analyse video as no file exists (Id: '.$video->file.')'));
                 }
 
             }
@@ -87,7 +71,7 @@ class QueueVideoAnalysis implements ShouldQueue
      public function failed($exception)
      {
          // Send user notification of failure, etc...
-         $video = new Video();
-         $video->notify(new SubmissionAlert('a job in the queue has failed to Analyse video (Id: '.$this->video_id.')'));
+		 $user = new User();
+		 $user->slackChannel('alerts')->notify(new SubmissionAlert('a job in the queue has failed to Analyse video (Id: '.$this->video_id.')'));
      }
 }

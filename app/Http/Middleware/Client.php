@@ -14,7 +14,7 @@ class Client {
             return $next($request);
         }
 
-        return redirect()->home()->with([
+        return redirect('/login?request_url='.urlencode($request->path()))->with([
             'note' => 'Sorry but you do not have permission to access this page',
             'note_type' => 'error'
         ]);

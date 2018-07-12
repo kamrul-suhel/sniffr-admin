@@ -28,7 +28,7 @@
                                     hint="At least 8 characters"
                                     v-model="password"
                                     :append-icon="passwordType ? 'visibility' : 'visibility_off'"
-                                    :append-icon-cb="() => (passwordType = !passwordType)"
+                                    @click:append="passwordType = !passwordType"
                                     :type="passwordType ? 'password' : 'text'"
                                     :counter="counter"
                                     :rules="passwordRules"
@@ -43,7 +43,7 @@
                                     label="Confirm your password"
                                     v-model="confirm_password"
                                     :append-icon="passwordTypeConfirm ? 'visibility' : 'visibility_off'"
-                                    :append-icon-cb="() => (passwordTypeConfirm = !passwordTypeConfirm)"
+                                    @click:append="passwordTypeConfirm = !passwordTypeConfirm"
                                     :type="passwordTypeConfirm ? 'password' : 'text'"
                                     :counter="counter"
                                     :rules="passwordConfirmationRules"
@@ -138,7 +138,7 @@
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
                                     this.$router.push({name: 'videos'});
-                                    LoginEventBus.clientLoginChange();
+                                    LoginEventBus.loginSuccess();
 
                                 });
                             }else{

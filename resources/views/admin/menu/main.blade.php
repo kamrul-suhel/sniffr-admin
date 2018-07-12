@@ -125,7 +125,7 @@
     @endif
 
     @if(Auth::user()->isAdmin())
-    <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
+        <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
         <a href="{{ url('admin/users') }}" class="tlink">
             <i class="fa fa-user-circle"></i>
             <span class="title">Users</span>
@@ -137,10 +137,30 @@
         <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
             <a href="{{ url('client/users') }}" class="tlink">
                 <i class="fa fa-user-circle"></i>
-                <span class="title">
-                    Users
-                </span>
+                <span class="title">Users</span>
             </a>
         </li>
     @endif
+
+    <li class="{{ Request::segment(2) == 'quotes' ? 'active' : '' }}">
+        <a href="{{ url('admin/quotes') }}" class="tlink">
+            <i class="fa fa-exclamation"></i>
+            <small class="badge">
+                {{
+                    \App\Collection::whereHas('collectionVideos', function($query) {
+                        $query->where('status', 'requested');
+                    })->orWhereHas('collectionStories', function($query) {
+                        $query->where('status', 'requested');
+                    })->with('collectionVideos')->with('collectionStories')->count()
+                }}
+            </small>
+            <span class="title">Quotes</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ url('admin/collections') }}">Collections</a>
+            </li>
+        </ul>
+    </li>
+
 </ul>
