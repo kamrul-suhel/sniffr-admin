@@ -5,6 +5,16 @@
                 Contract
                 {{ ($video->currentContract->signed_at) ? 'Agreed' : (($video->currentContract->sent_at) ? 'Sent' : 'Draft') }}
             </h2>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Sent By</span>
+                        <input type="text" class="form-control" disabled="disabled" value="{{ \App\User::find($video->currentContract->user_id)->full_name }}">
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group input-group">
@@ -85,15 +95,6 @@
                         <textarea class="form-control" disabled="disabled" rows="4">{{
                     $video->currentContract->user_agent
                     }}</textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group input-group">
-                        <span class="input-group-addon">User</span>
-                        <input type="text" class="form-control" disabled="disabled" value="{{ \App\User::find($video->currentContract->user_id)->first()->full_name }}">
                     </div>
                 </div>
             </div>
