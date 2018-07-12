@@ -47,9 +47,11 @@
                             <a href="#rights" role="tab" data-toggle="tab">Rights</a>
                         </li>
 
+                        @if(!isset($video->currentContract->signed_at) || !isset($video->contact))
                         <li>
                             <a href="#contact" role="tab" data-toggle="tab">Contact</a>
                         </li>
+                        @endif
 
                         @if($video->rights != 'ex' || $video->rights != 'nonex')
                         <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
@@ -123,9 +125,11 @@
                             </div>
                         </div>
 
+                        @if(!isset($video->currentContract->signed_at) || !isset($video->contact))
                         <div class="tab-pane" id="contact">
                             @include('admin.videos.partials.choose_contact')
                         </div>
+                        @endif
 
                         <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
                             @include('admin.videos.partials.contract')

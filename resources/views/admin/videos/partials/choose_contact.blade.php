@@ -1,7 +1,7 @@
 <span class="input-group">
     <div class="input-group" id="selectpicker-contact">
         <span class="input-group-addon">Contact</span>
-        {{ Form::text('js-autocomplete-contact', '', ['id' =>  'js-autocomplete-contact', 'placeholder' =>  'Search contacts', 'class' => 'form-control'])}}
+        <input type="text" id="js-autocomplete-contact" class="form-control" name="contact" id="contact" placeholder="Search contacts" value="{{  isset($video) && $video->contact_id ? \App\Contact::find($video->contact_id)->email : '' }}" />
     </div>
 
     @if(!$video)
