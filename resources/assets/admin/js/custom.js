@@ -196,6 +196,114 @@ var public_vars = public_vars || {};
             }
 		});
 
+		$('.js-contact-is-owner').click(function(e){
+	        if ($(this).is(':checked')) {
+	            $('#owner-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Contact is owner </h5>');
+	        } else {
+	            $('#owner-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>');
+	        }
+	    });
+
+	    $('.js-allow-publish').click(function(e){
+	        if ($(this).is(':checked')) {
+	            $('#publish-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Happy to publish </h5>');
+	        } else {
+	            $('#publish-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending </h5>');
+	        }
+	    });
+
+	    $('.js-permission').click(function(e){
+	        if ($(this).is(':checked')) {
+	            $('#permission-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Has permission </h5>');
+	        } else {
+	            $('#permission-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending </h5>');
+	        }
+	    });
+
+	    $('.js-submitted-to').change(function(e) {
+	        e.stopPropagation();
+	        e.preventDefault();
+	        var arr = $(this).val();
+	        if(arr.length>0) {
+	            if($.inArray('UNILAD', arr) !== -1) {
+	                $('#rights').val('exclusive');
+	                $('#rights-box-status').removeClass('danger').addClass('success');
+	                $('#rights-box-status').text('Exclusive');
+	                $('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
+	            } else {
+	                $('#rights').val('');
+	                $('#rights-box-status').removeClass('success').removeClass('danger');
+	                $('#rights-box-status').text('Pending');
+	                $('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
+	            }
+	            if(arr.length>1) {
+	                $('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to multiple </h5>');
+	                $('#rights').val('non-exclusive');
+	                $('#rights-box-status').removeClass('success').addClass('danger');
+	                $('#rights-box-status').text('Non-Exclusive');
+	                $('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
+	            } else {
+	                $('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to '+arr[0].replace('-', ' ')+' </h5>');
+	            }
+	        } else {
+	            $('#submitted-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending </h5>');
+	        }
+	    });
+
+	    $('.js-problem-status').change(function(e) {
+	        e.stopPropagation();
+	        e.preventDefault();
+	        if($(this).val()) {
+	            $('#problem-box-status').removeClass('hidden').addClass('warning');
+	            $('#problem-box-status').text('Problem');
+	        } else {
+	            $('#problem-box-status').removeClass('warning').addClass('hidden');
+	        }
+	    });
+
+	    $('.js-rights-status').change(function(e) {
+	        if($(this).val()=='exclusive') {
+	            $('#rights-box-status').removeClass('danger').addClass('success');
+	            $('#rights-box-status').text('Exclusive');
+	            $('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
+	        }
+	        if($(this).val()=='non-exclusive') {
+	            $('#rights-box-status').removeClass('success').addClass('danger');
+	            $('#rights-box-status').text('Non-Exclusive');
+	            $('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
+	        }
+	        if(!$(this).val()) {
+	            $('#rights-box-status').removeClass('success').removeClass('danger');
+	            $('#rights-box-status').text('Pending');
+	            $('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
+	        }
+	    });
+
+	    $('.js-story-show-asset').click(function (e) {
+	        e.preventDefault();
+	        var url = $.trim($(this).attr('href'));
+	        if(url!='#') {
+	            $('#story_asset_modal').modal('show');
+	            $('.modal .modal-content').css('overflow-y', 'auto');
+	            $('.modal .modal-content').css('background-color', '#000');
+	            $('.modal .modal-content').css('background-repeat', 'no-repeat');
+	            $('.modal .modal-content').css('background-position', '50% 50%');
+	            $('.modal .modal-content').css('background-image', 'url('+url+')');
+	            $('.modal .modal-dialog').css('margin-top', '5%');
+	            $('.modal .modal-dialog').css('width', '50%');
+	            $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
+	            $('#story_asset_modal_set_featured').val(url);
+	        }
+	    });
+
+	    $('.js-story-set-asset').click(function (e) {
+	        e.preventDefault();
+	        var url = $('#story_asset_modal_set_featured').val();
+	        $('#story_image_source').css('background-image', 'url('+url+')');
+	        $('#story_image_source_url').val(url);
+	        $('#story_asset_modal').modal('hide');
+	    });
+
 		$('.js-story-get-source').change(function(e) {
             e.preventDefault();
 
@@ -210,7 +318,7 @@ var public_vars = public_vars || {};
 				    dataType: 'json',
 				    success: function (data) {
 						if(data.url) {
-							$('#story_image_source').attr('src', data.url);
+							$('#story_image_source').css('background-image', 'url('+data.url+')');
 							$('#story_image_source_url').val(data.url);
 						}
 				    }

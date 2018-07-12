@@ -18,7 +18,7 @@
         <div class="row">
             @foreach($story->assets()->get() as $asset)
                 <div class="col-md-4">
-                    <a id="story_image_asset_{{ $asset->alpha_id }}" href="#">
+                    <a id="story_image_asset_{{ $asset->alpha_id }}" title="{{ $asset->alpha_id }}" class="js-story-show-asset" href="{{ (!empty($asset->thumbnail) ? $asset->thumbnail : ($asset->url ? $asset->url : '/assets/frontend/images/placeholder.png')) }}">
                         <div class="story_image_asset" style="background:url('{{ (!empty($asset->thumbnail) ? $asset->thumbnail : ($asset->url ? $asset->url : '/assets/frontend/images/placeholder.png')) }}');">
                             <div class="story_image_asset_icon">
                                 @if(!$asset->jw_player_code)
@@ -41,5 +41,18 @@
             <input type="text" class="form-control" id="story_image_source_url" name="story_image_source_url" placeholder="" value="" />
             <input type="file" multiple="true" class="form-control" name="story_image" id="story_image"/>
         </span>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="story_asset_modal" tabindex="-1" role="dialog" aria-labelledby="story_asset_modal_label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-inner-content">
+                <button class="btn" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                <button class="btn btn-primary pull-right js-story-set-asset"><i class="fa fa-check"></i> Set Featured Image</button>
+                <input type="hidden" id="story_asset_modal_set_featured" name="story_asset_modal_set_featured" value="" />
+            </div>
+        </div>
     </div>
 </div>
