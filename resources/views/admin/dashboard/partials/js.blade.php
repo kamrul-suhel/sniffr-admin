@@ -152,50 +152,31 @@
             }
         });
 
+        <?php if(\Auth::user()->isAdmin()): ?>
         var ctx = $('#exc-licensed-breakdown');
         ctx.height(285);
         new Chart($("#exc-licensed-breakdown"), {
             "type": "bar",
             "data": {
                 "labels": [
-					<?php foreach ($licensed_chaser_videos as $video) {
-					echo '"' . $video[0]->created_at->format('jS M') . '",';
-				}?>
+                    <?php foreach ($exc_contracts as $contract) {
+                    echo '"' . Carbon\Carbon::parse($contract[0]->signed_at)->format('jS M') . '",';
+                }?>
                 ],
                 "datasets": [
+                        <?php foreach ($exc_contracts_users as $user): $userId = $user[0]->user_id; ?>
                     {
-                        "label": 'New',
+                        "label": '<?php echo \App\User::find($userId)->full_name; ?>',
                         "data": [
-							<?php foreach ($licensed_chaser_videos as $video) {
-							echo count($video->currentContract->where('user_id', 1)) . ',';
-						}?>
+                            <?php foreach ($exc_contracts as $contract) {
+                            echo count($contract->where('user_id', $userId)) . ',';
+                        }?>
                         ],
                         "fill": false,
-                        "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                        "backgroundColor": "rgba(<?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, 0.2)",
                         "borderWidth": 1
                     },
-                    {
-                        "label": 'Pending',
-                        "data": [
-							<?php foreach ($licensed_chaser_videos as $video) {
-							echo count($video->where('state', 'pending')) . ',';
-						}?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(255, 205, 86, 0.2)",
-                        "borderWidth": 1
-                    },
-                    {
-                        "label": 'Licensed',
-                        "data": [
-							<?php foreach ($licensed_chaser_videos as $video) {
-							echo count($video->currentContract()->where('user_id', 1)) . ',';
-						}?>
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(0, 160, 90, 0.2)",
-                        "borderWidth": 1
-                    }
+                    <?php endforeach; ?>
                 ]
             },
             "options": {
@@ -216,5 +197,6 @@
                 }
             }
         });
+        <?php endif; ?>
     })(jQuery);
 </script>

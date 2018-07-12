@@ -76,6 +76,7 @@
         </div>
     </div>
 
+    <?php if(\Auth::user()->isAdmin()): ?>
     <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -89,4 +90,5 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
 </div>
