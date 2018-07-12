@@ -365,10 +365,7 @@
                     this.http_error = true;
                 });
 
-
-            this.$store.dispatch('setSettingObjectFromServer').then(() => {
-                this.settings = this.$store.getters.getSettingsObject;
-            });
+            this.settings = this.$store.getters.getSettingsObject;
         },
 
         created() {

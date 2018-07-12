@@ -176,9 +176,7 @@
                 this.client_login = this.$store.getters.isClientLogin;
             });
 
-            this.$store.dispatch('setSettingObjectFromServer').then(() => {
-                this.settings = this.$store.getters.getSettingsObject;
-            });
+            this.settings = this.$store.getters.getSettingsObject;
 
 
             if(this.$route.name !== 'home'){

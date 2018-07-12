@@ -18,7 +18,7 @@
 </head>
 <body {{ (Request::is('/')) ? 'class="home"' : '' }}>
     <section id="sniffr">
-        <v-app v-if="sniffrStareReady">
+        <v-app v-if="sniffrStateReady">
             <navigation-component></navigation-component>
 
             <v-content>

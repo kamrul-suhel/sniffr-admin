@@ -41,8 +41,6 @@ const mutations = {
     },
 
     setUserState(state, data){
-        console.log('here')
-        console.log(data);
         let user = data.user;
         if(user.username){
             state.username = user.username;
