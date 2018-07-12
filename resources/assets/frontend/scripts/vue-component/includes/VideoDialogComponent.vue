@@ -173,6 +173,16 @@
                 this.loadData = false;
                 let alpha_id = this.$store.getters.getPrevVideoAlphaId;
                 let url = '/videos/'+alpha_id;
+
+                if(this.$route.query.tag){
+                    url += '?tag='+this.$route.query.tag;
+                }
+
+                if(this.$route.query.search){
+                    url += '?search='+this.$route.query.search;
+                }
+
+
                 window.history.pushState(null, "page 2",url);
                 VideoDialogBoxEventBus.videoDialogPrevButtonClick()
             },
@@ -181,6 +191,16 @@
                 this.loadData = false;
                 let alpha_id = this.$store.getters.getNextVideoAlphaId;
                 let url = '/videos/'+alpha_id;
+
+                if(this.$route.query.tag){
+                    url += '?tag='+this.$route.query.tag;
+                }
+
+                if(this.$route.query.search){
+                    url += '?search='+this.$route.query.search;
+                }
+
+
                 window.history.pushState(null, "page 2",url);
                 VideoDialogBoxEventBus.videoDialogNextButtonClick()
 

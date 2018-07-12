@@ -77,28 +77,35 @@ class SearchController extends Controller
 		$videos = $videos->where('file', '!=', NULL);
 		$videos = $videos->whereNotIn('id', $unsearchableVideos);
 		$videos = $videos->orderBy('licensed_at', 'DESC');
-		$videos = $videos->paginate($settings['posts_per_page']);
 
 		if($currentVideoId){
+		    $allVideo = $videos->get();
 			$nextAlphaId = '';
 			$previousAlphaId = '';
 
-			$position = $videos->pluck('id')->search($currentVideo->id);
+			$position = $allVideo->pluck('id')->search($currentVideo->id);
 
 			$checkPreviousId = $position - 1;
 			if ($checkPreviousId >= 0) {
-				$previousAlphaId = $videos[$checkPreviousId]->alpha_id;
+				$previousAlphaId = $allVideo[$checkPreviousId]->alpha_id;
 			}
 
 			$checkNextId = $position + 1;
-			if ($checkNextId < $videos->count()) {
-				$nextAlphaId = $videos[$checkNextId]->alpha_id;
+			if ($checkNextId < $allVideo->count()) {
+				$nextAlphaId = $allVideo[$checkNextId]->alpha_id;
 			}
 
 			$data['current_video'] = $currentVideo;
 			$data['next_video_alpha_id'] = $nextAlphaId;
 			$data['prev_video_alpha_id'] = $previousAlphaId;
 		}
+
+		// If we are not searching then return all video with paginate
+        if(!$currentVideoId){
+            $videos = $videos->paginate($settings['posts_per_page']);
+            $data['videos'] = $videos;
+        }
+
 
         // Recommended Videos via the Mailer
 		if(Auth::check()){
@@ -117,7 +124,7 @@ class SearchController extends Controller
 		}
 
 		$data['mailer_videos'] = $mailerVideos;
-		$data['videos'] = $videos;
+
 
 		return $this->successResponse($data);
 	}

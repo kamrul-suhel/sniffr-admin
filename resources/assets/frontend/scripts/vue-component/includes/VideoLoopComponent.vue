@@ -79,6 +79,15 @@
 
             openVideoDialog(video){
                 let url = '/videos/'+video.alpha_id;
+
+                if(this.$route.query.tag){
+                    url += '?tag='+this.$route.query.tag;
+                }
+
+                if(this.$route.query.search){
+                    url += '?search='+this.$route.query.search;
+                }
+
                 window.history.pushState(null, "page 2",url);
                 VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
             }
