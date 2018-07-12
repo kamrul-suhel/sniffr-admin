@@ -94,8 +94,9 @@ class ContactController extends Controller
         $new_contact = Contact::where('email', $request->input('email'))->first();
 
         $redirect_url = $request->input('referral', 'contacts.index');
+        $redirect_url_id = $request->input('referral_id', '');
 
-        return redirect()->route($redirect_url)->with([
+        return redirect()->route($redirect_url, $redirect_url_id)->with([
             'note' => 'New Creator Successfully Added!',
             'note_type' => 'success',
             'contact_id' => $new_contact->id

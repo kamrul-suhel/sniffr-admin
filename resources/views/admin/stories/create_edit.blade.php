@@ -129,7 +129,7 @@
 								<span class="input-group">
 									<div class="input-group" id="selectpicker-creator">
 										<span class="input-group-addon">Contact</span>
-										{{ Form::text('js-autocomplete-contact', '', ['id' =>  'js-autocomplete-contact', 'placeholder' =>  'Search contacts', 'class' => 'form-control'])}}
+										<input type="text" id="js-autocomplete-contact" class="form-control" name="contact" id="contact" placeholder="Search contacts" value="{{  isset($story) && $story->contact_id ? \App\Contact::find($story->contact_id)->email : '' }}" />
 									</div>
 
 									<span class="input-group-btn">
@@ -257,7 +257,17 @@
 
 							<div class="panel-body">
 								<div class="video-inputs-wrapper">
-
+									@if(isset($story))
+										@foreach($story->videos as $video)
+											<div class="form-group input-group">
+												<input type="text" class="form-control" value="{{ $video->title }}" disabled />
+												<input type="hidden" name="videos[]" value="{{ $video->id }}" />
+												<span class="input-group-btn">
+													<button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button>
+												</span>
+											</div>
+										@endforeach
+									@endif
 								</div>
 
                                 <br>

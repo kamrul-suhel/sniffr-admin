@@ -159,8 +159,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('stories', 'Admin\AdminStoryController@index');
     Route::get('stories/create', 'Admin\AdminStoryController@create')->name('admin.stories.create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
-    Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
-    Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+    Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit')->name('admin.stories.edit');
+    Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'))->name('admin.stories.update');
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
     Route::get('stories/status/{state}/{id}', array('uses' => 'Admin\AdminStoryController@status'));
     Route::get('stories/update_field', array('uses' => 'Admin\AdminStoryController@updateField'));
