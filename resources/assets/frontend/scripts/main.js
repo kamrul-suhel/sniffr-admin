@@ -92,12 +92,17 @@ new Vue({
     router,
     data() {
         return {
-
+            sniffrStareReady : false
         }
     },
 
     created(){
         // initialize code go here before load any of component. like user
+        this.$store.dispatch('setSettingObjectFromServer')
+            .then((data) => {
+                this.$store.commit('setUserState', data.sniffr_app);
+                this.sniffrStareReady = true
+            })
     },
     
     methods: {}
