@@ -100,6 +100,7 @@ new Vue({
         // initialize code go here before load any of component. like user
         this.$store.dispatch('setSettingObjectFromServer')
             .then((data) => {
+                console.log(data);
                 this.$store.commit('setUserState', data.sniffr_app);
                 this.sniffrStateReady = true
             })
