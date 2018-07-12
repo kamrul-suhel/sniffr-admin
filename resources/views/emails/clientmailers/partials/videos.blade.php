@@ -4,7 +4,7 @@
         <tr style="background-color:{!! $count % 2 == 0 ? '#f9f9f9;' : '#fff;'  !!}">
             <td valign="top" style="padding: 20px;" width="60%">
                 <h4>{{ TextHelper::shorten($video['title'], 250) }}</h4>
-                <img src="@if($video['image']) {{ $video['image'] }} @elseif($video['thumb']) {{ $video['thumb'] }}@else {{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
+                <a href="{{ url('client/videos/'.$video['alpha_id']) }}"><img src="@if($video['image']) {{ $video['image'] }} @elseif($video['thumb']) {{ $video['thumb'] }}@else {{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" /></a>
                 <br />
                 <div style="display:inline-block;">
                     <div style="display:inline-block;">
