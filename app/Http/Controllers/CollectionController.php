@@ -188,9 +188,11 @@ class CollectionController extends Controller
 
         auth()->attempt(['email' => $user->email, 'password' => $password]);
 
-        return response([
+        return $this->successResponse([
             'user' => $user,
-        ], 200);
+            'message' => "You have also successfully registered.
+             Check your emails to set your password or you will not be able to login again."
+        ]);
 
     }
 

@@ -13,6 +13,10 @@
                         <v-flex xs12 text-xs-center>
                             <h2 class="buy-title">Thanks</h2>
                             <p>{{ message }}</p>
+
+                            <div v-if="passwordMessage">
+                                <p>{{ passwordMessage }}</p>
+                            </div>
                         </v-flex>
 
                         <v-flex xs12 text-xs-center>
@@ -40,13 +44,15 @@
         data() {
             return {
                 thankYouDialog:false,
-                message: ''
+                message: '',
+                passwordMessage: null,
             }
         },
 
         created() {
-            ThankYouDialogBoxEventBus.$on('openThankYouDialog', (message) => {
+            ThankYouDialogBoxEventBus.$on('openThankYouDialog', (message, passwordMessage) => {
                 this.message = message;
+                this.passwordMessage = passwordMessage;
                 this.thankYouDialog = true;
             });
         },
