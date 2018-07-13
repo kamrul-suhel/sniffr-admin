@@ -1,7 +1,3 @@
-@extends('client.master')
-
-@section('content')
-
 <div class="admin-section-title bottom-padding">
     <div class="row">
         <div class="col-md-4">
@@ -51,5 +47,3 @@
         </div>
     </div>
 </div>
-
-@stop

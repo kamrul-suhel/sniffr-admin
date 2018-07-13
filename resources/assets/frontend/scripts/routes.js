@@ -17,6 +17,11 @@ import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
+
+import ClientProfileComponent from './vue-component/pages/clients/ProfileComponent';
+import ClientUserComponent from './vue-component/pages/clients/CreateUserComponent';
+import ClientEditUserComponent from './vue-component/pages/clients/EditUserComponent';
+
 import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
 import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
@@ -118,6 +123,7 @@ export const routes = [
         name: 'unsubscribe_user',
         component: UnsubscribeComponent
     },
+
     {
         path: '/terms',
         name: 'termsconditions',
@@ -129,10 +135,31 @@ export const routes = [
         component: ClientComponent,
         children: [
             {
+                path: 'profile',
+                name: 'client_profile',
+                component: ClientProfileComponent,
+            },
+
+            {
+                path: 'profile/:slug/users/create',
+                name: 'client_create_user',
+                component: ClientUserComponent
+
+            },
+
+            {
+                path: '/client/profile/:slug/users/:userid/edit',
+                name: 'client_edit_create_user',
+                component: ClientEditUserComponent
+
+            },
+
+            {
                 path: 'collections/accept_price/:collection_video_id',
                 name: 'accept_quote',
                 component: ClientPurchasedAssetsComponent
             },
+
             {
                 path: 'stories/:alpha_id',
                 name: 'client_story_detail',
@@ -149,11 +176,13 @@ export const routes = [
                 name: 'client_purchased_assets',
                 component: ClientPurchasedAssetsComponent,
             },
+
             {
                 path: 'offered',
                 name: 'client_offered_assets',
                 component: ClientOfferedAssetsComponent,
             },
+
             {
                 path: 'collections',
                 name: 'client_collections',

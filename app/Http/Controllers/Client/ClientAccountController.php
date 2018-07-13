@@ -32,7 +32,7 @@ class ClientAccountController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
 
@@ -41,7 +41,7 @@ class ClientAccountController extends Controller
             'user' => Auth::user()
         ];
 
-         return view('admin.clients.index', $data);
+        return view('admin.clients.index', $data);
     }
 
     /**
@@ -53,6 +53,7 @@ class ClientAccountController extends Controller
             'company' => null,
             'user' => null,
         ]);
+
     }
 
     /**
@@ -111,14 +112,21 @@ class ClientAccountController extends Controller
      */
     public function myAccount(EditCompanyRequest $request)
     {
+
         $company = Client::find(Auth::user()->client_id);
 
-        return view('client.account.create_edit', [
-            'company' => $company,
-            'user' => Auth::user(),
-            'update_path' => 'client.update',
-            'company_users' => User::where('client_id', $company->id)->get()
-        ]);
+
+
+        if($request->ajax()){
+            return view('client.account.create_edit', [
+                'company' => $company,
+                'user' => Auth::user(),
+                'update_path' => 'client.update',
+                'company_users' => User::where('client_id', $company->id)->get()
+            ]);
+        }
+
+        return view('frontend.master');
     }
 
     /**

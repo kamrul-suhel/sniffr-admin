@@ -14,7 +14,7 @@
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
-                                <router-link to="/upload">
+                                <router-link :to="{name: 'upload_video'}">
                                     <v-icon color="white" left>file_upload</v-icon> Upload
                                 </router-link>
                             </li>
@@ -26,14 +26,14 @@
                             </li>
 
                             <li>
-                                <router-link to="/videos">
+                                <router-link :to="{name: 'videos'}">
                                     <v-icon color="white" left>videocam</v-icon> Videos
                                 </router-link>
                             </li>
 
 
                             <li>
-                                <router-link to="/stories">
+                                <router-link :to="{name: 'stories'}">
                                     <v-icon color="white" left>art_track</v-icon> Stories
                                 </router-link>
                             </li>
@@ -55,9 +55,9 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <a href="/client/profile">
+                                                <router-link :to="{name: 'client_profile'}">
                                                     <v-icon color="white" left size="20px">settings</v-icon> Account Settings
-                                                </a>
+                                                </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 
