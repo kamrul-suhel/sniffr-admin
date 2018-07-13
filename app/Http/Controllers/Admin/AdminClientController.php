@@ -8,6 +8,7 @@ use App\Http\Requests\Company\CreateCompanyRequest;
 use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\QueueEmailCompany;
+use App\Jobs\QueueEmailModerateCompany;
 use App\Libraries\VideoHelper;
 use App\User;
 use App\Download;
@@ -169,15 +170,21 @@ class AdminClientController extends Controller
         $company->tier = $request->input('tier');
         $company->location = $request->input('location');
         $company->active = $request->input('active') == 'on' ? 1 : 0;
+        $company->usable_domains = $request->input('usable_domains');
+        $company->update();
 
         $redirect_path = '';
         if ($company->account_owner_id != $request->input('account_owner_id')) {
-            $redirect_path = 'client/stories';
+            $currentOwner = $company->account_owner_id;
             $company->account_owner_id = $request->input('account_owner_id');
+            //TODO - send email to new owner that they are the account owner
+            //TODO - send email to old owner saying they've been kicked off.
         }
 
-        $company->usable_domains = $request->input('usable_domains');
-        $company->update();
+        if($company->active == 1) {
+            QueueEmailModerateCompany::dispatch($company);
+        }
+
 
         //Update all new users linked with this company so they become active
         $users = $company->users()->get();
@@ -233,6 +240,11 @@ class AdminClientController extends Controller
 		]);
 	}
 
+    /**
+     * @param Request $request
+     * @param $client_id
+     * @throws \League\Csv\CannotInsertRecord
+     */
 	public function purchases_csv(Request $request, $client_id)
 	{
 		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {

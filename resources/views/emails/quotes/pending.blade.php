@@ -1,6 +1,10 @@
 @extends('emails.template_sniffr')
 
 @section('content')
+
+    <p>Hi {{ $data['username'] }}</p>
+    <br>
+
     <div class="col-lg-12">
         <div class="container">
             <h2>Your request is being reviewed</h2>
@@ -8,8 +12,11 @@
                 <p>Your Reference number: <b>{{ ucwords($data['collection']->name) }}</b></p>
 
                 @foreach($data['collection']['collectionVideos'] as $video)
+                    <div class="col-lg-6">
+                        <h2>{{ $video->video->title }}</h2>
+                        <img style="width:50%;" src="{{ $video->video->image }}"/>
+                    </div>
                     <ul>
-                        <li><p>Video Name: <b>{{ ucwords(str_replace('-', ' ', $video->video->title)) }}</b></p></li><br>
                         <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $video->type)) }}</b></p></li><br>
                         <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $video->platform)) }}</b></p></li><br>
                         <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $video->length)) }}</b></p></li><br>
@@ -21,6 +28,10 @@
                 @endforeach
 
                 @foreach($data['collection']['collectionStories'] as $story)
+                    <div class="col-lg-6">
+                        <h2>{{ $story->story->title }}</h2>
+                        <img style="width:50%;" src="{{ $story->story->thumb }}"/>
+                    </div>
                     <ul>
                         <li><p>Video Name: {{ ucwords(str_replace('-', ' ', $story->story->title)) }}</p></li><br>
                         @if(isset($story->notes))

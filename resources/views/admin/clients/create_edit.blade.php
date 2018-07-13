@@ -372,6 +372,23 @@
                         </div>
                     </div>
 
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
+                                <div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+                            <div class="panel-body" style="display: block;">
+                                <label>Client Owner</label>
+                                <select id="account_owner_id" name="account_owner_id">
+                                    <option value="">N/A</option>
+                                    @foreach($company->users as $key => $value)
+                                        <option value="{{ $value['id'] }}" @if($value['id']== $company->account_owner_id) selected @endif>
+                                            {{ $value['name'] }} - {{ $value['email'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             @endif
@@ -380,6 +397,7 @@
             <input type="submit" value="{{ ($company) ? 'Update Company' : 'Create Company' }}"
                    class="btn btn-success pull-right"/>
         </form>
+
 
         @if($company)
             {!! Form::open(['method' => 'DELETE', 'route' => ['clients.destroy', $company->id], 'id' => 'form-delete-clients-' . $company->id]) !!}

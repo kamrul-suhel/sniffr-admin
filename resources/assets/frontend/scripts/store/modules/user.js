@@ -110,7 +110,7 @@ const getters = {
     },
 
     isClientLogin(state) {
-        return state.client_id ? true : false;
+        return !!state.client_id;
     },
 
     getUser(state) {

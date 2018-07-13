@@ -1,6 +1,23 @@
 <div class="panel panel-primary" data-collapsed="0">
     <div class="panel-heading">
-        {{ $collection->name }} : ({{ $collection->collectionVideos->count() }} video)<b title="{{ $asset->collection->user->email }}">{{ $asset->collection->user->full_name ?? $asset->collection->user->username }} @ {{ $asset->collection->user->client->name }}@if($asset->collection->user->tel) - <b>{{ $asset->collection->user->tel }}</b>@endif</b>
+        <h4>
+            <b>
+                @if(\Carbon\Carbon::parse($asset->created_at) < \Carbon\Carbon::now()->subDay())
+                    <span class="label label-danger">{{ \Carbon\Carbon::parse($asset->created_at)->diffForHumans() }}</span>
+                @else
+                    <span class="label label-success">{{ \Carbon\Carbon::parse($asset->created_at)->diffForHumans() }}</span>
+                @endif
+                <b>{{ $collection->name }} : ({{ $collection->{'collection'.str_plural($type)}->count() }} video)</b>
+            </b>
+       </h4>
+
+        <b title="{{ $asset->collection->user->email }}">
+            {{ $asset->collection->user->full_name
+            ?? $asset->collection->user->username }} @ {{ $asset->collection->user->client->name }}
+            @if($asset->collection->user->tel) -
+                <b>{{ $asset->collection->user->tel }}</b>
+            @endif
+        </b>
     </div>
 
     <div class="panel-body">
