@@ -86,17 +86,6 @@
             </v-layout>
         </v-container>
 
-        <!-- Login component -->
-        <login-component></login-component>
-        <!-- End login component -->
-
-        <!-- Password reset dialog box -->
-        <forgot-password-component></forgot-password-component>
-        <!-- End password reset -->
-
-        <!-- Quote Component -->
-        <quote-component></quote-component>
-        <!-- End request quote component -->
 
         <!-- Logout snackbars -->
         <v-snackbar
@@ -107,18 +96,15 @@
             <v-btn flat color="light" @click.native="logout = false">Close</v-btn>
         </v-snackbar>
         <!-- End logout -->
+
     </section>
 </template>
 <script>
-    import LoginComponent from '../includes/LoginComponent'
-    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
-    import QuoteComponent from '../includes/QuoteComponent'
+
     import LoginEventBus from '../../event-bus/login-event-bus'
     export default {
         components: {
-            LoginComponent,
-            ForgotPasswordComponent,
-            QuoteComponent
+
         },
         data() {
             return {

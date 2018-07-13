@@ -17,7 +17,8 @@
                 <v-layout
                         row
                         wrap
-                        v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
+                        v-if="client_logged_in && Object.keys(mailer_videos).length > 0"
+                class="pb-5">
                     <v-flex xs12>
                         <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
