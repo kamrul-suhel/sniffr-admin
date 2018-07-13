@@ -152,8 +152,9 @@ class AdminClientController extends Controller
      */
     public function update(UpdateCompanyRequest $request, int $id)
     {
-        $company = Client::findOrFail($id);
+        $redirect_path = '';
 
+        $company = Client::findOrFail($id);
         $company->slug = $this->slugify($request->input('company_name'));
         $company->name = $request->input('company_name');
         $company->address_line1 = $request->input('address_line1');
@@ -171,15 +172,15 @@ class AdminClientController extends Controller
         $company->location = $request->input('location');
         $company->active = $request->input('active') == 'on' ? 1 : 0;
         $company->usable_domains = $request->input('usable_domains');
-        $company->update();
 
-        $redirect_path = '';
         if ($company->account_owner_id != $request->input('account_owner_id')) {
             $currentOwner = $company->account_owner_id;
             $company->account_owner_id = $request->input('account_owner_id');
             //TODO - send email to new owner that they are the account owner
             //TODO - send email to old owner saying they've been kicked off.
         }
+
+        $company->update();
 
         if($company->active == 1) {
             QueueEmailModerateCompany::dispatch($company);
