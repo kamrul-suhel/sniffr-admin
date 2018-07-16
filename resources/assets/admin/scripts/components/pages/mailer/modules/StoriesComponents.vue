@@ -95,7 +95,7 @@
 
         methods: {
             getStoriesData(queryObject = {page: 1, searchTerm: ''}) {
-                let url = '/admin/mailers/create_mailer/';
+                let url = '/search/stories';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
                 }
@@ -108,7 +108,7 @@
                     .then(() => {
                         this.stories = this.$store.getters.getStories;
                         this.totalPage = this.stories.last_page;
-                    })
+                    });
             },
 
             getQueryObject(){

@@ -1,11 +1,10 @@
 const state = {
     selectedStories: [],
-    stories: {},
-    queryObject: {}
+    stories: {}
 }
 
 const mutations = {
-    setStory(state, curStory) {
+    addStory(state, curStory) {
         if (state.selectedStories.length <= 0) {
             state.selectedStories.push(curStory);
             return;
@@ -29,18 +28,15 @@ const mutations = {
                 state.selectedStories.splice(index, 1);
             }
         })
-    },
-
-    setQueryObject(state, queryObject) {
-        state.queryObject = queryObject;
     }
 }
 
 const actions = {
     getMailerStories({commit, state}, payload) {
         return new Promise((resolve, reject) => {
-            axios.get(payload)
+            axios.post(payload)
                 .then((stories) => {
+                        console.log(stories);
                         state.stories = stories.data.stories;
                         resolve();
                     },
@@ -59,10 +55,6 @@ const getters = {
     getStories(state) {
         return state.stories;
     },
-
-    getQueryObject(state) {
-        return state.queryObject;
-    }
 }
 
 export default {

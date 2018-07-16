@@ -98,33 +98,6 @@ class AdminStoryController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getMailerVideos(Request $request)
-    {
-        if ($request->ajax()) {
-
-            if ($request->search) {
-                $search_value = $request->search;
-                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%' . $search_value . '%']])
-                    ->orWhere('alpha_id', $search_value)
-                    ->orderBy('licensed_at', 'DESC')
-                    ->paginate(12);
-            } else {
-                $videos = Video::with('createdUser')
-                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
-                    ->orderBy('licensed_at', 'DESC')
-                    ->paginate(12);
-            }
-            $data = [
-                'videos' => $videos
-            ];
-            return $this->successResponse($data);
-        }
-    }
-
-    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
