@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Collection;
 use Auth;
 use App\ClientMailerUser;
 use App\ClientMailerVideo;
@@ -15,12 +16,28 @@ use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
-    use FrontendResponse;
-    use VideoHelper;
+    use FrontendResponse, VideoHelper;
+
+    protected $collection, $collectionStory, $collectionVideo, $video, $story, $clientMailerStory, $clientMailerUser, $clientMailerVideo;
+
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo,
+                                CollectionStory $collectionStory, Video $video, Story $story,
+                                ClientMailerUser $clientMailerUser, ClientMailerStory $clientMailerStory,
+                                ClientMailerVideo $clientMailerVideo)
+    {
+        $this->collection = $collection;
+        $this->collectionVideo = $collectionVideo;
+        $this->collectionStory = $collectionStory;
+        $this->video = $video;
+        $this->story = $story;
+        $this->clientMailerStory = $clientMailerStory;
+        $this->clientMailerVideo = $clientMailerVideo;
+        $this->clientMailerUser = $clientMailerUser;
+    }
 
     /**
      * @param Request $request
@@ -31,18 +48,18 @@ class SearchController extends Controller
         return view('frontend.master');
     }
 
-	/**
-	 * @param Request $request
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-	 */
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
 	public function videos(Request $request)
 	{
 		$data = [];
 		$mailerVideos = [];
 		$tagValue = $request->tag;
 		$searchValue = $request->search;
-		$currentVideoId = Input::get('alpha_id');
-		$featured = Input::get('featured');
+		$currentVideoId = request()->get('alpha_id');
+		$featured = request()->get('featured');
 		$settings = config('settings.site');
 
 		if($currentVideoId){
@@ -50,9 +67,9 @@ class SearchController extends Controller
 		}
 
 		//Remove any exclusive based collections that have been purchased and downloaded.
-		$unsearchableVideos = CollectionVideo::where([['type', 'exclusive'], ['status', 'purchased']])->pluck('video_id');
+		$unsearchableVideos = $this->collectionVideo->getAssetByTypeStatus('exclusive', 'purchased')->pluck('video_id');
 
-		$videos = Video::select($this->getVideoFieldsForFrontend());
+		$videos = $this->video->select($this->getVideoFieldsForFrontend());
 		$videos = $videos->where('state', 'licensed');
 
 		if($searchValue){
@@ -108,15 +125,15 @@ class SearchController extends Controller
 
 
         // Recommended Videos via the Mailer
-		if(Auth::check()){
-			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)
+		if(auth()->check()){
+			$mailers = $this->clientMailerUser->where('user_id', auth()->user()->id)
                 ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
                 ->pluck('client_mailer_id');
 
-			$mailerVideoIds = ClientMailerVideo::whereIn('client_mailer_id', $mailers)
+			$mailerVideoIds = $this->clientMailerVideo->whereIn('client_mailer_id', $mailers)
                 ->pluck('video_id');
 
-			$mailerVideos = Video::select($this->getVideoFieldsForFrontend())
+			$mailerVideos = $this->video->select($this->getVideoFieldsForFrontend())
 				->whereIn('id', $mailerVideoIds)
 				->whereNotIn('id', $unsearchableVideos)
                 ->orderBy('licensed_at', 'DESC')
@@ -139,7 +156,7 @@ class SearchController extends Controller
 		$data = [];
 		$mailerStories = [];
 		$searchValue = $request->search;
-		$currentStoryId = Input::get('alpha_id');
+		$currentStoryId = request()->get('alpha_id');
 		$settings = config('settings.site');
 
 		if($currentStoryId) {
@@ -149,7 +166,7 @@ class SearchController extends Controller
 		//Remove any exclusive based collections that have been purchased and downloaded.
 		//$unsearchableStories = CollectionStory::where(['type'=>'exclusive','status'=>'purchased'])->pluck('story_id');
 
-		$stories = Story::where('state', 'licensed');
+		$stories = $this->story::where('state', 'licensed');
 
 		if($searchValue){
 			$stories = $stories->where(function ($query) use ($searchValue) {
@@ -182,15 +199,15 @@ class SearchController extends Controller
 			$data['prev_story_alpha_id'] = $previousAlphaId;
 		}
 
-		if(Auth::check()){
-			$mailers = ClientMailerUser::where('user_id', auth()->user()->id)
+		if(auth()->check()){
+			$mailers =$this->clientMailerUser->where('user_id', auth()->user()->id)
                 ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
                 ->pluck('client_mailer_id');
 
-			$mailerStoryIds = ClientMailerStory::whereIn('client_mailer_id', $mailers)
+			$mailerStoryIds = $this->clientMailerStory->whereIn('client_mailer_id', $mailers)
                 ->pluck('story_id');
 
-			$mailerStories = Story::whereIn('id', $mailerStoryIds);
+			$mailerStories = $this->story->whereIn('id', $mailerStoryIds);
 			$mailerStories = $mailerStories->paginate();
 		}
 
@@ -202,8 +219,8 @@ class SearchController extends Controller
 
 
     private function getCurrentVideo($alpha_id){
-        $currentVideo = Video::
-            where('alpha_id', '=', $alpha_id)
+        $currentVideo = $this->video
+            ->where('alpha_id', '=', $alpha_id)
             ->with('tags')
             ->first();
         $currentVideo->iframe = $this->getVideoHtml($currentVideo, true);
@@ -212,7 +229,10 @@ class SearchController extends Controller
     }
 
     private function getCurrentStory($alpha_id){
-        $currentStory = Story::where('alpha_id', $alpha_id)->with('assets')->first();
+        $currentStory = $this->story
+            ->where('alpha_id', $alpha_id)
+            ->with('assets')
+            ->first();
         return $currentStory;
     }
 }
