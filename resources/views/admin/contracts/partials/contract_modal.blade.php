@@ -1,9 +1,14 @@
+<?php
+$asset = isset($video) ? $video : $story;
+$assetType = isset($video) ? 'video' : 'story';
+?>
+
 <div id="contract_modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Create Contract for this Video</h4>
+                <h4 class="modal-title">Create Contract</h4>
             </div>
 
             <div class="modal-body">
@@ -16,7 +21,7 @@
                                         title="revenue_share">
                                     <option value="">--</option>
                                     @for($i=0; $i <= 100; $i = $i+5)
-                                        <option value="{{ $i }}" {{ ((($video) && ($video->contract['revenue_share'] == $i)) || (old('revenue_share') == $i)) ? 'selected="selected"' : '' }}>
+                                        <option value="{{ $i }}" {{ ((($asset) && ($asset->contract['revenue_share'] == $i)) || (old('revenue_share') == $i)) ? 'selected="selected"' : '' }}>
                                             Creator {{ $i }} %
                                         </option>
                                     @endfor
@@ -31,7 +36,7 @@
                                 <span class="input-group-addon">Upfront Payment</span>
                                 <input type="number" min="1" class="form-control" id="upfront_payment"
                                        name="upfront_payment" title="upfront_payment"
-                                       value="{{ $video->contract->upfront_payment or old('upfront_payment') }}">
+                                       value="{{ $asset->contract->upfront_payment or old('upfront_payment') }}">
                             </div>
                         </div>
 
@@ -84,12 +89,13 @@
                         <div class="col-md-12">
                             {{ csrf_field() }}
                             {{ method_field('POST') }}
-                            <input type="hidden" id="video_id" name="video_id" value="{{ $video->id }}"/>
-                            <input type="hidden" id="video_alpha_id" name="video_alpha_id"
-                                   value="{{ $video->alpha_id }}"/>
+                            <input type="hidden" id="asset_id" name="asset_id" value="{{ $asset->id }}"/>
+                            <input type="hidden" id="asset_type" name="asset_type" value="{{ $assetType }}"/>
+                            <input type="hidden" id="asset_alpha_id" name="asset_alpha_id" value="{{ $asset->alpha_id }}"/>
                         </div>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>

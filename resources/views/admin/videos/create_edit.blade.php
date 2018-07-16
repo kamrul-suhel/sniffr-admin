@@ -2,7 +2,15 @@
 
 @section('content')
     <div id="admin-container">
-        @include('admin.videos.partials.breadcrumb')
+        <ol class="breadcrumb">
+            <li><a href="/admin/videos">All Videos</a></li>
+            @if($video)
+            <li><a href="/admin/videos/{{ ($video->state) ?: 'new' }}">{{ ($video->state) ? ucfirst($video->state) : 'New' }}</a></li>
+            <li class="active"><strong><a href="/admin/videos/edit/{{ $video->alpha_id }}">{{ $video->title  }}</a></strong></li>
+            @else
+            <li class="active"><strong>Add New Video</strong></li>
+            @endif
+        </ol>
 
         <div class="row">
             <div class="col-sm-9">
@@ -76,33 +84,11 @@
                         </div>
 
                         <div class="tab-pane" id="metadata">
-                            @include('admin.videos.partials.vertical')
-                            @include('admin.videos.partials.collection')
-                            @include('admin.videos.partials.shotType')
-                            @include('admin.videos.partials.tags')
-                            @include('admin.videos.partials.location')
-                            @include('admin.videos.partials.video_information')
-                            @include('admin.videos.partials.duration')
-                            @include('admin.videos.partials.credit')
-                            @include('admin.videos.partials.notes')
-                            @include('admin.videos.partials.details')
-                            @include('admin.videos.partials.featured')
+                            @include('admin.videos.partials.metadata')
                         </div>
 
                         <div class="tab-pane" id="moredetails">
-                            <div class="row">
-                                @if($video->more_details)
-                                    <div class="col-md-3">
-                                        @include('admin.videos.partials.rights_status')
-                                    </div>
-                                @endif
-
-                                @if($video->rights == 'nonexc')
-                                    <div class="col-md-6">
-                                        @include('admin.videos.partials.non_exclusive_fields')
-                                    </div>
-                                @endif
-                            </div>
+                            @include('admin.videos.partials.moredetails')
                         </div>
 
                         <div class="tab-pane" id="image_files">
@@ -114,15 +100,11 @@
                         </div>
 
                         <div class="tab-pane" id="sales">
-                            @include('admin.videos.partials.video_class')
+                            @include('admin.videos.partials.sales')
                         </div>
 
                         <div class="tab-pane" id="rights">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    @include('admin.videos.partials.license_selector')
-                                </div>
-                            </div>
+                            @include('admin.videos.partials.rights')
                         </div>
 
                         @if(!isset($video->currentContract->signed_at) || !isset($video->contact))
@@ -132,17 +114,15 @@
                         @endif
 
                         <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
-                            @include('admin.videos.partials.contract')
+                            @include('admin.contracts.partials.form')
                         </div>
 
                         <div class="tab-pane" id="admin">
-                            @include('admin.videos.partials.assign_form')
-
-                            @include('admin.videos.partials.delete_restore')
+                            @include('admin.videos.partials.admin')
                         </div>
 
                         <div class="tab-pane" id="analytics">
-                            @include('admin.videos.partials.social_links')
+                            @include('admin.videos.partials.analytics')
                         </div>
                     </div>
 
@@ -170,10 +150,27 @@
             </div>
             <div class="col-sm-3">
                 @if($video)
-                    @include('admin.videos.partials.prev_next_nav')
+                    <div class="col-sm-12 ">
+                        <div class="row">
+                            <div class="form-group clearfix">
+                                @if($previous)
+                                    <a href="{{ url('admin/videos/edit/' . $previous->alpha_id) }}" class="btn btn-primary">
+                                        < Previous
+                                    </a>
+                                @endif
+                                @if($next)
+                                    <a href="{{ url('admin/videos/edit/' . $next->alpha_id) }}" class="btn btn-primary pull-right">
+                                        Next >
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="clear"></div>
-                    @include('admin.videos.partials.creator')
+
+                    @include('admin.videos.partials.contact')
+
                     @include('admin.videos.partials.comments')
                 @endif
             </div>
@@ -183,7 +180,7 @@
     </div>
 
     @if($video)
-        @include('admin.videos.partials.contract_modal')
+        @include('admin.contracts.partials.contract_modal')
     @endif
 
     @include('admin.modals.add_contact_modal')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Contact;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Contact\CreateContactRequest;
 use App\Http\Requests\Contact\UpdateContactRequest;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
-class ContactController extends Controller
+class AdminContactController extends Controller
 {
     use VideoHelper;
 
@@ -91,15 +91,13 @@ class ContactController extends Controller
         $contact->other = $request->input('other');
         $contact->save();
 
-        $new_contact = Contact::where('email', $request->input('email'))->first();
-
         $redirect_url = $request->input('referral', 'contacts.index');
         $redirect_url_id = $request->input('referral_id', '');
 
         return redirect()->route($redirect_url, $redirect_url_id)->with([
             'note' => 'New Creator Successfully Added!',
             'note_type' => 'success',
-            'contact_id' => $new_contact->id
+            'contact_id' => $contact->id
         ]);
     }
 

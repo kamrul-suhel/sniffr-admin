@@ -98,37 +98,37 @@ class ContractController extends Controller
     public function store(CreateContractRequest $request)
     {
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
+        $assetType = $request->input('asset_type');
         $contract = new \App\Contract();
         $contract->upfront_payment = $request->input('upfront_payment');
         $contract->upfront_payment_currency_id = $request->input('upfront_payment_currency_id');
         $contract->revenue_share = $request->input('revenue_share');
         $contract->success_system = $request->input('success_system');
         $contract->user_id = \Auth::id();
-        $contract->video_id = ($request->input('video_id') ? $request->input('video_id') : NULL);
-        $contract->story_id = ($request->input('story_id') ? $request->input('story_id') : NULL);
+        $contract->video_id = $assetType == 'video' ? $request->input('asset_id') : NULL;
+        $contract->story_id = $assetType == 'story' ? $request->input('asset_id') : NULL;
         $contract->contract_model_id = $request->input('contract_model_id');
-        $contract->token = ($request->input('video_id') ? md5(uniqid($request->input('video_id'), true)) : md5(uniqid($request->input('story_id'), true)));
+        $contract->token = md5(uniqid($request->input('asset_id'), true));
         $contract->reference_id = $uuid->toString();
         $contract->save();
 
-        if($request->input('video_id')) {
-            $video = Video::find($request->input('video_id'));
+        if($assetType == 'video') {
+            $video = Video::find($request->input('asset_id'));
     		$video->rights = config('contracts')[$contract->contract_model_id]['rights'];
     		$video->save();
 
             return redirect()->route('admin_video_edit', [
-                'id' => $request->input('video_alpha_id')
+                'id' => $request->input('asset_alpha_id')
             ])->with([
                 'active_tab' => 'contract',
                 'note' => 'Contract Saved!',
                 'note_type' => 'success'
             ]);
         } else {
-            $story_id = $request->input('story_id');
-            $story = Story::where('id', $story_id)
+            $story = Story::where('id', $request->input('asset_id'))
                 ->first();
 
-            $decision = ''; //Input::get('decision');
+            $decision = '';
 
             $data = [
                 'note' => 'Contract Saved!',
@@ -187,6 +187,7 @@ class ContractController extends Controller
                 'note_type' => 'success'
             ]);
         } else {
+
             $story = Story::with('currentContract')->with('contact')->find($id);
 
             if (!$story) {

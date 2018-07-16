@@ -198,8 +198,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     Route::resource('collections', 'Admin\AdminCollectionController', ['as' => 'admin']);
 
-    Route::get('contacts/autocomplete', 'Contact\ContactController@autocomplete')->name('contact.autocomplete');
-    Route::resource('contacts', 'Contact\ContactController');
+    Route::get('contacts/autocomplete', 'Admin\AdminContactController@autocomplete')->name('contact.autocomplete');
+    Route::resource('contacts', 'Admin\AdminContactController');
 
     Route::resource('users', 'Admin\AdminUsersController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
 
