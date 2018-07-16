@@ -1,13 +1,13 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
-    <section class="videos-section" v-if="ini">
+    <section class="videos-section">
         <div id="header" class="page-videos">
             <div class="header-content">
                 <div class="position-center">
                     <v-container grid-list-lg>
                         <v-layout row wrap>
                             <v-flex xs12>
-                                <h1 class="heading">{{video_detail.video.title ? video_detail.video.title : ''}}</h1>
+                                <h1 class="heading">{{video.title ? video.title : ''}}</h1>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -28,28 +28,28 @@
                     <v-flex
                             align-content-center
                             xs12 sm12 md7 lg7 xl7>
-                        <video-player :video="video_detail.video"></video-player>
+                        <video-player :video="video"></video-player>
                     </v-flex>
 
                     <v-flex xs12 sm12 md5 lg5 xl5>
                         <v-layout row wrap class="video-detail-content" :class="{'pl-4' : content_padding}">
                             <v-flex xs12>
-                                <h2>{{ video_detail.video.title }}</h2>
+                                <h2>{{ video.title }}</h2>
 
                                 <div class="video-title-caption">
                                     <v-layout row wrap justify-center>
-                                        <v-flex xs6 v-if="this.video_detail.video.duration != null">
-                                            <v-icon small>alarm</v-icon>{{video_detail.video.duration | convertTime}}
+                                        <v-flex xs6 v-if="video.duration != null">
+                                            <v-icon small>alarm</v-icon>{{video.duration | convertTime}}
                                         </v-flex>
                                         <v-spacer></v-spacer>
 
-                                        <v-flex xs6 class="text-xs-right" v-if="video_detail.video.views">
-                                            <v-icon small >remove_red_eye</v-icon> {{ video_detail.video.views+1}} views
+                                        <v-flex xs6 class="text-xs-right" v-if="video.views">
+                                            <v-icon small >remove_red_eye</v-icon> {{ video.views+1}} views
                                         </v-flex>
                                     </v-layout>
                                 </div>
 
-                                <p v-if="video_detail.video.description != 'null'">{{ video_detail.video.description }}</p>
+                                <p v-if="video.description != 'null'">{{ video.description }}</p>
                                 <div class="video-detail-tags" v-if="tags.length > 0">
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
@@ -63,7 +63,7 @@
 
                                 <buy-quote-button-component
                                         :type="'video'"
-                                        :asset="video_detail.video"
+                                        :asset="video"
                                 ></buy-quote-button-component>
                             </v-flex>
                         </v-layout>
@@ -78,6 +78,8 @@
     import VideoPlayer from './VideoPlayerComponent'
     import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
+    import {mapGetters } from 'vuex';
+
     export default {
         components: {
             BuyQuoteButtonComponent,
@@ -86,16 +88,18 @@
 
         data() {
             return {
-                ini:false,
                 user: {},
-                video_detail: {},
-                tags: [],
-                ready_to_show : true,
-                previousPageUrl: '',
                 content_padding:true,
                 client_logged_in:'',
                 canBuy:false
             }
+        },
+
+        computed: {
+            ...mapGetters({
+                video: 'getVideoDetailData',
+                tags : 'getVideoDetailTags'
+            })
         },
 
         watch: {
@@ -109,16 +113,7 @@
             }
 
             let alpha_id = this.$route.params.alpha_id;
-            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id}).then(() => {
-                this.video_detail = this.$store.getters.getVideoDetailData;
-                this.video_detail.video.iframe = this.video_detail.iframe;
-
-
-                this.ini = true;
-                if (this.video_detail.video.tags.length > 0) {
-                    this.tags.push(...this.video_detail.video.tags);
-                }
-            })
+            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id});
 
         },
 

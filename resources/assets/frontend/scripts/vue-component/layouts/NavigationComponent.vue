@@ -114,6 +114,8 @@
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
     import QuoteComponent from '../includes/QuoteComponent'
     import LoginEventBus from '../../event-bus/login-event-bus'
+
+    import { mapGetters } from 'vuex';
     export default {
         components: {
             LoginComponent,
@@ -126,9 +128,8 @@
                 //Password reset section
                 password_reset_dialog: false,
 
-                //user auth
-                is_login: false,
-                client_login: false,
+                is_login : false,
+
 
                 //logout
                 logout: false,
@@ -139,6 +140,13 @@
                 user: '',
             }
         },
+
+        computed: {
+            ...mapGetters({
+                client_login: 'getUserLogin'
+            })
+        },
+
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
@@ -172,8 +180,7 @@
 
             // On every navigation load, check to see if user is logged in
             this.$store.dispatch('getLoginStatus').then((response) => {
-                this.is_login = this.$store.getters.isUserLogin;
-                this.client_login = this.$store.getters.isClientLogin;
+
             });
 
             this.settings = this.$store.getters.getSettingsObject;

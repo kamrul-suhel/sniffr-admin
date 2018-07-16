@@ -2,18 +2,6 @@
  * Created by kamrulahmed on 13/04/2018.
  */
 const state = {
-    // username: sniffr_app ? sniffr_app.user.username : '',
-    // name: sniffr_app ? sniffr_app.user.username : '',
-    // avatar: '',
-    // email: '',
-    // user_login: false,
-    // user_id:'',
-    // client_id: sniffr_app ? sniffr_app.user.client_id : '',
-    // user_role: '',
-    // route_url: '',
-    // offers: sniffr_app.user_offers,
-    // active: '',
-
     username: '',
     name:  '',
     avatar: '',
@@ -40,6 +28,10 @@ const mutations = {
         state.active = '';
     },
 
+    setUserLogin(state, value) {
+        return state.user_login = value;
+    },
+
     setUserState(state, data){
         let user = data.user;
         if(user.username){
@@ -64,6 +56,10 @@ const mutations = {
         let user = data.user;
         state.offers = data;
     },
+
+    setClientLogin(state, data){
+        state.client_id = data;
+    }
 };
 
 const actions = {
@@ -105,11 +101,11 @@ const actions = {
 };
 
 const getters = {
-    isUserLogin(state) {
+    getUserLogin(state) {
         return state.user_login;
     },
 
-    isClientLogin(state) {
+    getClientLogin(state) {
         return state.client_id ? true : false;
     },
 

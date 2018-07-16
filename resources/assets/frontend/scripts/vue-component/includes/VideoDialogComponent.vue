@@ -182,12 +182,18 @@
                     url += '?search='+this.$route.query.search;
                 }
 
+                if(this.$route.query.suggest){
+                    url += '?suggest=true';
+                }
+
 
                 window.history.pushState(null, "page 2",url);
                 VideoDialogBoxEventBus.videoDialogPrevButtonClick()
             },
 
             onNextVideo(){
+                console.log(this.$route);
+                return;
                 this.loadData = false;
                 let alpha_id = this.$store.getters.getNextVideoAlphaId;
                 let url = '/videos/'+alpha_id;
@@ -198,6 +204,10 @@
 
                 if(this.$route.query.search){
                     url += '?search='+this.$route.query.search;
+                }
+
+                if(this.$route.query.suggest){
+                    url += '?suggest=true';
                 }
 
 

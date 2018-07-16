@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3 style="min-width:380px;">
+    <v-flex xs12 sm6 md4 lg4 xl3>
         <v-card class="video-card block">
             <v-card-media class="video-card-thumb-wrapper"
                 :src="onGetThumbnailImage()">
@@ -49,7 +49,17 @@
                 video_image: '/assets/frontend/images/placeholder.png',
             }
         },
-        props:['video'],
+        props:{
+            video: {
+                type: Object,
+                required: true
+            },
+
+            type: {
+                type: String,
+                required: false
+            }
+        },
 
         created(){
         },
@@ -86,6 +96,11 @@
 
                 if(this.$route.query.search){
                     url += '?search='+this.$route.query.search;
+                }
+
+                if(this.type === 'suggest'){
+                    url = '/videos/'+video.alpha_id;
+                    url += '?suggest=true';
                 }
 
                 window.history.pushState(null, "page 2",url);

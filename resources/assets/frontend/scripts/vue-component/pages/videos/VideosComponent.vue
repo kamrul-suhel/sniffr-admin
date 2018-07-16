@@ -25,13 +25,14 @@
                     </v-flex>
 
                     <v-flex xs12>
-                            <v-layout align-content-center style="overflow-x:scroll;">
+                            <div style="overflow-x:scroll; display:flex">
                                 <video-loop-component
                                         v-for="(mailer, index) in mailer_videos"
                                         :video="mailer"
-                                        :key="mailer.alpha_id"
+                                        :key="mailer.id"
+                                        :type="'suggest'"
                                 ></video-loop-component>
-                            </v-layout>
+                            </div>
                     </v-flex>
                 </v-layout>
 
@@ -46,7 +47,7 @@
                         <video-loop-component
                                 v-for="(video, index) in videos"
                                 :video="video"
-                                :key="video.alpha_id"
+                                :key="video.id"
                         ></video-loop-component>
                     </v-layout>
                 
@@ -64,6 +65,8 @@
     import PaginationComponent from '../../includes/PaginationComponent';
     import LoginEventBus from '../../../event-bus/login-event-bus';
 
+    import { mapGetters } from 'vuex';
+
     export default{
         components: {
             SearchComponent,
@@ -73,14 +76,20 @@
         data(){
             return {
                 data: '',
-                videos: [],
-                mailer_videos: [],
-                paginate: '',
                 current_page: 1,
                 logged_in : false,
                 client_logged_in : false
             }
         },
+
+        computed: {
+            ...mapGetters({
+                videos : 'getVideoData',
+                paginate: 'getVideoPaginateObject',
+                mailer_videos: 'getMailerVideoData'
+            })
+        },
+
         watch: {
             '$route'(to, from, next){
                 this.current_page = to.query.page;
@@ -114,18 +123,7 @@
 
         methods: {
             setAllVideoData(query){
-                this.$store.dispatch('getVideoData', query).then(() => {
-                    this.videos = this.$store.getters.getVideoData;
-                    this.paginate = this.$store.getters.getVideoPaginateObject;
-                    this.mailer_videos = this.$store.getters.getMailerVideoData;
-                });
-
-            },
-
-            updateVideodata(){
-                this.$store.dispatch('getVideoData', {page: this.current_page}).then(() => {
-                    this.videos = this.$store.getters.getVideoData;
-                });
+                this.$store.dispatch('getVideoData', query);
             },
 
             getQueryObject(){
