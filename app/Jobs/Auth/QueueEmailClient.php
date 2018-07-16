@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Auth;
 
 use App\User;
 use App\Client;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Quotes;
 
 use App\Mail\Quotes\RetractOffer;
 use Illuminate\Bus\Queueable;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserQuoteRequest;
-use App\Jobs\QueueEmailRetractQuote;
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
@@ -446,6 +446,26 @@ class CollectionController extends Controller
                 'note' => 'Thanks for purchasing the video',
                 'note_type' => 'success',
             ]);
+    }
+
+    /**
+     * Get alpha id of all assets that have ongoing exclusive license agreements
+     * @param $type
+     * @return \Illuminate\Support\Collection
+     */
+    public function getExclusivePurchasedAsset($type)
+    {
+        $exclusiveAsset = $this->{'collection'.str_plural(ucwords($this))}->getAssetByTypeAndStatus('exclusive', 'purchased');
+
+        if($type = 'video') {
+            return $this->video
+                ->whereIn('id', $exclusiveAsset->pluck('video_id'))
+                ->pluck('alpha_id');
+        } else {
+            return $this->story
+                ->whereIn('id', $exclusiveAsset->pluck('video_id'))
+                ->pluck('alpha_id');
+        }
     }
 
 }

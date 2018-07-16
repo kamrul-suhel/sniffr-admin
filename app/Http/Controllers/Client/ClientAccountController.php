@@ -6,7 +6,7 @@ use App\Client;
 use App\Http\Requests\Company\CreateCompanyRequest;
 use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
-use App\Jobs\QueueEmailCompany;
+use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\VideoHelper;
 use App\User;
 use Auth;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Jobs\QueueEmailClient;
+use App\Jobs\Auth\QueueEmailClient;
 use App\Libraries\VideoHelper;
 use Auth;
 use Password;

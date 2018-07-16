@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Client;
 
 use App\Client;
 use App\Http\Requests\Company\UpdateUserRequest;
-use App\Jobs\QueueEmailClient;
-use App\Jobs\QueueEmailCompany;
+use App\Jobs\Auth\QueueEmailClient;
+use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\ImageHandler;
 use App\Libraries\VideoHelper;
 use App\User;

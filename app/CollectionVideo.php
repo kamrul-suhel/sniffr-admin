@@ -53,4 +53,15 @@ class CollectionVideo extends Model
 
         return $price = round($price, 2);
     }
+
+    /**
+     * Get a video of a specific type and status. (common occurrence throughout site)
+     * @param $type
+     * @param $status
+     * @return mixed
+     */
+    public function getAssetByTypeStatus($type, $status)
+    {
+        return $this->where([['type', $type], ['status', $status]])->get();
+    }
 }

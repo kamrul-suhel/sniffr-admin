@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Jobs\QueueEmailPendingQuote;
+use App\Jobs\Quotes\QueueEmailPendingQuote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

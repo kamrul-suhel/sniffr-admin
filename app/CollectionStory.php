@@ -24,4 +24,15 @@ class CollectionStory extends Model
     {
         return $this->hasMany(CollectionQuote::class, 'collection_story_id', 'id');
     }
+
+    /**
+     * Get a video of a specific type and status. (common occurrence throughout site)
+     * @param $type
+     * @param $status
+     * @return mixed
+     */
+    public function getAssetByTypeStatus($type, $status)
+    {
+        return $this->where([['type', $type], ['status', $status]])->get();
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Quotes;
 
 use App\Collection;
 use App\Mail\Quotes\PendingQuote;
