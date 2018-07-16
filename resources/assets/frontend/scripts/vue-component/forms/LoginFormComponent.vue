@@ -75,7 +75,6 @@
     export default {
         data() {
             return {
-                open_login_dialog: false,
 
                 showpassword: true,
                 valid: false,
@@ -104,29 +103,22 @@
         },
 
         watch: {
-            open_login_dialog() {
-                this.$emit('changeLogin_dialog', this.open_login_dialog);
-            },
+            openLoginDialog(){
+                this.$refs.login_form.reset();
+            }
+        },
+
+        computed: {
+            openLoginDialog(){
+                return this.$store.getters.getLoginDialog;
+            }
         },
 
         created() {
-            LoginEventBus.$on('openLoginDialog', this.openLoginDialog);
-            LoginEventBus.$on('closeLoginDialog', () => {
-                this.open_login_dialog = false;
-            });
 
         },
 
         methods: {
-            openLoginDialog(event) {
-                this.open_login_dialog = event;
-            },
-
-            onLoginDialogClose() {
-                this.login_dialog = false;
-                this.loading = false;
-                this.$refs.login_form.reset();
-            },
 
             onSubmit() {
                 if (this.$refs.login_form.validate()) {
@@ -155,8 +147,8 @@
                                 return;
                             }
 
-                            this.$store.commit('setUserState', data);
-                            LoginEventBus.loginSuccess();
+                            this.$store.commit('setUserStatus', data);
+                            this.$store.commit('setLoginDialog', false);
 
                             // if has previous page then do this
                             let request_url = this.$route.query.request_url;

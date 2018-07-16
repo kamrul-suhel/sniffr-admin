@@ -87,7 +87,7 @@
 
         created() {
 
-            this.user = this.$store.getters.getUser;
+            this.user = this.$store.getters.getUserStatus;
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;
@@ -121,7 +121,7 @@
 
                     // Set button component
                     this.client_logged_in = this.$store.getters.isClientLogin;
-                    this.user = this.$store.getters.getUser;
+                    this.user = this.$store.getters.getUserStatus;
                     this.canBuy = (!this.client_logged_in || this.video_detail.class === 'exceptional' || this.video_detail.class === '' || !this.video_detail.class || this.user.active === 0) ? false : true;
 
                     if (this.video_detail.tags.length > 0) {

@@ -374,7 +374,7 @@
 
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
-                            this.$store.commit('setUserState', response.data);
+                            this.$store.commit('setUserStatus', response.data);
                             LoginEventBus.loginSuccess();
 
                             this.requestQuote();

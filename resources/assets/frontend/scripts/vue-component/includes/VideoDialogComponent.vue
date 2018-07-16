@@ -192,8 +192,6 @@
             },
 
             onNextVideo(){
-                console.log(this.$route);
-                return;
                 this.loadData = false;
                 let alpha_id = this.$store.getters.getNextVideoAlphaId;
                 let url = '/videos/'+alpha_id;

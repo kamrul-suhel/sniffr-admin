@@ -217,7 +217,7 @@
 
                 axios.get(url).then((response) => {
                     if (response.data.success === '1') {
-                        this.$store.commit('setUserOffers', this.$store.getters.getUser.offers - 1);
+                        this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
                         this.assetType = "purchased";
                         this.purchased = true;

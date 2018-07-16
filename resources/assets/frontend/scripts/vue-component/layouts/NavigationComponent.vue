@@ -19,7 +19,7 @@
                                 </router-link>
                             </li>
 
-                            <li v-if="client_login && this.$store.getters.getUser.offers >= 1">
+                            <li v-if="client_login && this.$store.getters.getUserStatus.offers >= 1">
                                 <router-link :to="{name: 'client_offered_assets'}">
                                     <v-icon color="white" left>gavel</v-icon> My Offers ({{ this.$store.getters.getUser.offers }})
                                 </router-link>
@@ -39,7 +39,7 @@
                             </li>
 
                             <li>
-                                <a  @click.stop.prevent="onLoginClick()" v-if="!is_login">
+                                <a  @click.stop.prevent="onLoginClick()" v-if="!user.user_login">
                                     <v-icon color="white" left>lock_open</v-icon> Login
                                 </a>
                                 <v-menu bottom open-on-hover offset-y v-else min-width="140px">
@@ -125,26 +125,27 @@
         data() {
             return {
                 nav_background: false,
-                //Password reset section
-                password_reset_dialog: false,
-
-                is_login : false,
-
-
                 //logout
                 logout: false,
                 logoutTime: 3000,
                 logout_text: 'You have successfully logged out',
-
-                //if user login all data
-                user: '',
             }
         },
 
         computed: {
             ...mapGetters({
-                client_login: 'getUserLogin'
-            })
+                client_login: 'getClientLogin'
+            }),
+
+            user: {
+                set(value){
+                    this.$store.commit('setUserStatus', value)
+                },
+
+                get(){
+                    return this.$store.getters.getUserStatus;
+                }
+            },
         },
 
         watch: {
@@ -163,8 +164,6 @@
         },
         created(){
             this.setPrevRoute();
-
-            this.user = this.$store.getters.getUser;
 
             LoginEventBus.$on('logoutChangeState', () => {
                 this.is_login = false;
@@ -211,15 +210,7 @@
             },
 
             onLogout(){
-                this.$store.dispatch('userLogout')
-                    .then((response) => {
-                        this.logout = true;
-                        this.is_login = this.$store.getters.isUserLogin;
-                        LoginEventBus.logoutStateChange();
-                        setTimeout(() => {
-                            this.logout = false;
-                        }, 3500);
-                    });
+                this.$store.dispatch('userLogout');
             },
 
             // Login component trigger this methods when change any value
@@ -230,7 +221,7 @@
             },
 
             onLoginClick(){
-                LoginEventBus.openLoginDialog();
+                this.$store.commit('setLoginDialog', true);
             },
 
             logoutStateChange() {

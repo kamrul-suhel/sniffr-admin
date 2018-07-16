@@ -106,7 +106,7 @@
         },
 
         created() {
-            this.user = this.$store.getters.getUser;
+            this.user = this.$store.getters.getUserStatus;
             let breakpoint = this.$vuetify.breakpoint.name;
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;

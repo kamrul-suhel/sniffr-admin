@@ -60,11 +60,6 @@ const actions = {
                 data = {'featured':'true', 'alpha_id': payload.alpha_id};
             }
 
-            //Suggest videos
-            if (request_url === 'home') {
-                data = {'suggest':'true', 'alpha_id': payload.alpha_id};
-            }
-
             //Search video url
             if (request_url === 'videos_search') {
                 data = {'value':state.current_route_obj.query.value}

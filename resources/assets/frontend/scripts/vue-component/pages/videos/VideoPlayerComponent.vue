@@ -79,7 +79,7 @@
 
         computed: {
             ...mapGetters({
-                video: 'getVideoDetailData'
+                video: 'getCurrentVideoForDialog'
             })
         },
 
