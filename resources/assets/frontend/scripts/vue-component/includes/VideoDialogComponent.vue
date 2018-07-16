@@ -21,7 +21,6 @@
 
                 <v-spacer></v-spacer>
 
-
                 <v-btn
                         icon
                         @click="onPreviousVideo"
@@ -75,11 +74,11 @@
     import VideoInDialogComponent from '../pages/videos/VideoInDialogComponent';
     import LoginEventBus from '../../event-bus/login-event-bus';
 
+    import {mapGetters } from 'vuex';
+
     export default {
         data() {
             return {
-                current_video: '',
-                video_dialog: false,
                 margin_content: true,
                 current_page: 0,
 
@@ -92,6 +91,23 @@
 
                 loadData : false,
 
+            }
+        },
+
+        computed: {
+            video_dialog:{
+                get(){
+                    console.log(this.$route);
+                    return this.$store.getters.getVideoDialogBox
+                },
+
+                set(value){
+                    this.$store.commit('setVideoDialogBox',value);
+                }
+            },
+
+            current_video(){
+                return this.$store.getters.getCurrentVideo;
             }
         },
 
@@ -113,6 +129,7 @@
         },
 
         created() {
+
             let current_device = this.$vuetify.breakpoint.name;
             if(current_device === 'sm' || current_device === 'xs'){
                 this.margin_content = false;

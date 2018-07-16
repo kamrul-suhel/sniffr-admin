@@ -84,7 +84,7 @@
 
         computed: {
             ...mapGetters({
-                videos : 'getVideoData',
+                videos : 'getVideos',
                 paginate: 'getVideoPaginateObject',
                 mailer_videos: 'getMailerVideoData'
             })

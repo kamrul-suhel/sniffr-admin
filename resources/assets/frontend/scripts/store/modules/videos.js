@@ -1,4 +1,8 @@
 const state = {
+    //Dialog box
+    videoDialogBox: false,
+
+
     videos: null,
     mailer_videos: null,
     paginate: '',
@@ -8,12 +12,11 @@ const state = {
      * Video Dialog box property
      */
 
-    video_dialog_current_alpha_id: '',
-    video_dialog_current_video: '',
-    video_dialog_next_alpha_id: '',
-    video_dialog_prev_alpha_id: '',
-
+    currentVideoAlphaId:'',
+    currentVideo:'',
     currentVideoTags: [],
+    videoNextAlphaId : '',
+    videoPreviousAlphaId: '',
 
     current_route_obj: '',
 
@@ -21,14 +24,21 @@ const state = {
     /**
      * Video detail page property
      */
-
     video_detail: {},
     tags: [],
 };
 
 const getters = {
-    getVideoData(state) {
+    getVideoDialogBox(state){
+        return state.videoDialogBox;
+    },
+
+    getVideos(state) {
         return state.videos;
+    },
+
+    getCurrentVideo(state){
+        return state.currentVideo;
     },
 
     getMailerVideoData(state) {
@@ -52,32 +62,29 @@ const getters = {
         return state.currentVideoTags;
     },
 
-    getVideoDialogBox(state) {
-        return state.video_dialog_box;
-    },
 
     getCurrentVideoForDialog(state) {
-        return state.video_dialog_current_video;
+        return state.currentVideo;
     },
 
     getCurrentRecommendedForDialog(state) {
-        return state.video_dialog_current_video;
+        return state.currentVideo;
     },
 
     getCurrentMailerVideoForDialog(state) {
-        return state.video_dialog_current_video;
+        return state.currentVideo;
     },
 
     getCurrentVideoAlphaId() {
-        return state.video_dialog_current_alpha_id;
+        return state.currentVideoAlphaId;
     },
 
     getNextVideoAlphaId() {
-        return state.video_dialog_next_alpha_id;
+        return state.videoNextAlphaId;
     },
 
     getPrevVideoAlphaId() {
-        return state.video_dialog_prev_alpha_id;
+        return state.videoPreviousAlphaId;
     },
 
 
@@ -95,6 +102,10 @@ const getters = {
 };
 
 const mutations = {
+    setVideoDialogBox(state, value){
+        state.videoDialogBox = value;
+    },
+
     setVideoData(state, data) {
         state.videos = data;
     },
@@ -112,12 +123,16 @@ const mutations = {
      * Video dialog box setter
      */
 
-    setVideoDialogBox(state, data) {
-        state.video_dialog_box = true;
-        state.video_dialog_current_alpha_id = data.current_video.alpha_id;
-        state.video_dialog_current_video = data.current_video;
-        state.video_dialog_next_alpha_id = data.next_video_alpha_id;
-        state.video_dialog_prev_alpha_id = data.prev_video_alpha_id;
+    // setVideoDialogBox(state, data) {
+    //     state.video_dialog_box = true;
+    //     state.currentVideoAlphaId = data.current_video.alpha_id;
+    //     state.currentVideo = data.current_video;
+    //     state.videoNextAlphaId = data.next_video_alpha_id;
+    //     state.videoPreviousAlphaId = data.prev_video_alpha_id;
+    // },
+
+    setCurrentVideoAlphaId(state, alphaId){
+        state.currentVideoAlphaId = alphaId;
     },
 
     setCurrentVideoTags(state, data){
@@ -133,10 +148,10 @@ const mutations = {
     },
 
     setResetVideoDialogObject(state) {
-        state.video_dialog_current_alpha_id = '';
-        state.video_dialog_current_video = '';
-        state.video_dialog_next_alpha_id = '';
-        state.video_dialog_prev_alpha_id = '';
+        state.currentVideoAlphaId = '';
+        state.currentVideo = '';
+        state.videoNextAlphaId = '';
+        state.videoPreviousAlphaId = '';
 
         state.current_route_obj = ''
     },
@@ -196,6 +211,8 @@ const actions = {
     getVideoNextAndPrevLink({commit, state}, payload) {
         let data = {};
         let request_url = state.current_route_obj.name;
+        
+        console.log(request_url);
 
 
         if(request_url === 'videos'){
