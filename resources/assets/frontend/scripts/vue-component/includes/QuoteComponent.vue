@@ -247,7 +247,7 @@
         created() {
 
             QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) => {
-                this.client_logged_in = this.$store.getters.isClientLogin;
+                this.client_logged_in = this.$store.getters.getClientLogin;
 
                 this.type = type;
                 this.asset = asset;
