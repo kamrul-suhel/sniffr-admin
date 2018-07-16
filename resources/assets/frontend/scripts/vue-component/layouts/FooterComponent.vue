@@ -55,21 +55,38 @@
             </v-layout>
         </v-container>
 
-        <!-- Video dialog box -->
-        <video-dialog-component></video-dialog-component>
+        <div class="all-dialog-box">
+            <!-- Login component -->
+            <login-component></login-component>
+            <!-- End login component -->
 
-        <!-- Buy dialog box -->
-        <buy-dialog-component></buy-dialog-component>
+            <!-- Password reset dialog box -->
+            <forgot-password-component></forgot-password-component>
+            <!-- End password reset -->
 
-        <!-- Thank you dialog box -->
-        <thank-you-dialog-box></thank-you-dialog-box>
+            <!-- Quote Component -->
+            <quote-component></quote-component>
+            <!-- End request quote component -->
 
-        <!-- Snack bar component -->
-        <snackbar-component></snackbar-component>
+            <!-- Video dialog box -->
+            <video-dialog-component></video-dialog-component>
+
+            <!-- Buy dialog box -->
+            <buy-dialog-component></buy-dialog-component>
+
+            <!-- Thank you dialog box -->
+            <thank-you-dialog-box></thank-you-dialog-box>
+
+            <!-- Snack bar component -->
+            <snackbar-component></snackbar-component>
+        </div>
 
     </section>
 </template>
 <script>
+    import LoginComponent from '../includes/LoginComponent'
+    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
+    import QuoteComponent from '../includes/QuoteComponent'
     import VideoDialogComponent from '../includes/VideoDialogComponent'
     import SnackbarComponent from '../includes/SnackbarComponent'
     import BuyDialogComponent from '../includes/BuyComponent'
@@ -90,6 +107,9 @@
         },
 
         components: {
+            LoginComponent,
+            ForgotPasswordComponent,
+            QuoteComponent,
             VideoDialogComponent,
             SnackbarComponent,
             BuyDialogComponent,

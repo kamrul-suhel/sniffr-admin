@@ -6,8 +6,8 @@ const ThankYouDialogBoxEventBus = new Vue({
       }
     },
     methods: {
-        openThankYouDialog(message){
-            this.$emit('openThankYouDialog', message);
+        openThankYouDialog(message, passwordMessage){
+            this.$emit('openThankYouDialog', message, passwordMessage);
         },
 
         closeThankYouDialog(){

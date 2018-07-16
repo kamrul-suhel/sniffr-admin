@@ -92,7 +92,7 @@ new Vue({
     router,
     data() {
         return {
-            sniffrStareReady : false
+            sniffrStateReady : false
         }
     },
 
@@ -101,7 +101,7 @@ new Vue({
         this.$store.dispatch('setSettingObjectFromServer')
             .then((data) => {
                 this.$store.commit('setUserState', data.sniffr_app);
-                this.sniffrStareReady = true
+                this.sniffrStateReady = true
             })
     },
     
