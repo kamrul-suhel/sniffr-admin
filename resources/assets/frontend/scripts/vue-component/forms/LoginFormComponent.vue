@@ -114,10 +114,6 @@
             }
         },
 
-        created() {
-
-        },
-
         methods: {
 
             onSubmit() {
@@ -168,7 +164,7 @@
             },
 
             onForgotforgotDialog() {
-                this.open_login_dialog = false;
+                this.$store.commit('setLoginDialog', false);
                 setTimeout(() => {
                     LoginEventBus.openPasswordResetDialog();
                 }, 500);

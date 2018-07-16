@@ -105,21 +105,16 @@ const getters = {
 
 const actions = {
     getLoginStatus({commit}) {
-        return new Promise(function (resolve, reject) {
-            axios.get('/settings_object')
-                .then((response) => {
-                    let data = response.data;
-                    if (!data.error) {
-                        commit('setUserStatus', data.sniffr_app);
-                        resolve();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    reject();
-                });
-            resolve();
-        });
+        axios.get('/settings_object')
+            .then((response) => {
+                let data = response.data;
+                if (!data.error) {
+                    commit('setUserStatus', data.sniffr_app);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     },
 
     userLogout({commit}) {
@@ -128,12 +123,10 @@ const actions = {
                 let data = response.data;
                 if (!data.error) {
                     commit('clearUserState');
-                    resolve();
                 }
             })
             .catch((error) => {
                 console.log(error);
-                reject();
             });
     }
 };
