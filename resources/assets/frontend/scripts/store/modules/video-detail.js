@@ -5,7 +5,6 @@ const state = {
 
 const getters = {
     getVideoDetailData(state) {
-        console.log(state.video_detail);
         return state.video_detail;
     },
 

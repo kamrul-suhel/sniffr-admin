@@ -3,36 +3,37 @@
  */
 const state = {
     username: '',
-    name:  '',
+    name: '',
     avatar: '',
     email: '',
     user_login: false,
-    user_id:'',
-    client_id:  '',
+    user_id: '',
+    client_id: '',
     user_role: '',
     route_url: '',
     offers: '',
     active: '',
 
-    loginDialog:false
+    // Login dialog box variable: boolean
+    loginDialog: false
 };
 
 const mutations = {
-    clearUserState(state){
-        state.username= '';
-        state.name=  '';
-        state.avatar= '';
-        state.email= '';
-        state.user_login= false;
-        state.user_id='';
-        state.client_id=  '';
-        state.user_role= '';
-        state.route_url= '';
-        state.offers= '';
-        state.active= '';
+    clearUserState(state) {
+        state.username = '';
+        state.name = '';
+        state.avatar = '';
+        state.email = '';
+        state.user_login = false;
+        state.user_id = '';
+        state.client_id = '';
+        state.user_role = '';
+        state.route_url = '';
+        state.offers = '';
+        state.active = '';
     },
 
-    setLoginDialog(state, value){
+    setLoginDialog(state, value) {
         state.loginDialog = value;
     },
 
@@ -40,9 +41,9 @@ const mutations = {
         return state.user_login = value;
     },
 
-    setUserStatus(state, data){
+    setUserStatus(state, data) {
         let user = data.user;
-        if(user.username){
+        if (user.username) {
             state.username = user.username;
             state.name = user.username;
             state.email = user.email;
@@ -54,22 +55,22 @@ const mutations = {
             state.offers = '';
             state.active = user.active;
         }
-        
+
     },
 
-    setRouteUrl(state, currUrl){
+    setRouteUrl(state, currUrl) {
         state.route_url = currUrl;
     },
 
-    setUserOffers(state, data){
+    setUserOffers(state, data) {
         let user = data.user;
         state.offers = data;
     }
 };
 
 const getters = {
-    getLoginDialog(state){
-      return state.loginDialog;
+    getLoginDialog(state) {
+        return state.loginDialog;
     },
 
     getUserLogin(state) {
@@ -90,14 +91,14 @@ const getters = {
             role: state.user_role,
             offers: state.offers,
             active: state.active,
-            user_login : state.user_login,
+            user_login: state.user_login,
             user_id: state.user_id,
             user_role: state.user_role,
             route_url: '',
         }
     },
 
-    getRouteUrl(state){
+    getRouteUrl(state) {
         return state.route_url;
     }
 };
@@ -121,21 +122,19 @@ const actions = {
         });
     },
 
-    userLogout({commit}){
-        return new Promise((resolve, reject) => {
-            axios.get('/logout')
-                .then((response) => {
-                    let data = response.data;
-                    if (!data.error) {
-                        commit('clearUserState');
-                        resolve();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    reject();
-                });
-        })
+    userLogout({commit}) {
+        axios.get('/logout')
+            .then((response) => {
+                let data = response.data;
+                if (!data.error) {
+                    commit('clearUserState');
+                    resolve();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                reject();
+            });
     }
 };
 
