@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\CollectionStory;
 use App\CollectionVideo;
+use App\Jobs\Quotes\QueueEmailExpiredQuote;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -55,6 +56,9 @@ class MonitorLicenseEndTimes extends Command
                 $video->status = 'expired';
                 $video->reason = 'license term of '.$video->length.' has ended.';
                 $video->save();
+
+                QueueEmailExpiredQuote::dispatch($video, 'video');
+
             }
         }
 
@@ -63,6 +67,9 @@ class MonitorLicenseEndTimes extends Command
                 $story->status = 'expired';
                 $story->reason = 'license term of '.$story->length.' has ended.';
                 $story->save();
+
+                QueueEmailExpiredQuote::dispatch($story, 'story');
+
             }
         }
 
