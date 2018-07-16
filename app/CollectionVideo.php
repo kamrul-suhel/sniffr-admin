@@ -2,13 +2,14 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class CollectionVideo extends Model
 {
     protected $table = 'collection_videos';
 
-    protected $fillable = ['collection_id', 'video_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status'];
+    protected $fillable = ['collection_id', 'video_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status', 'licensed_at', 'license_ends_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -63,5 +64,10 @@ class CollectionVideo extends Model
     public function getAssetByTypeStatus($type, $status)
     {
         return $this->where([['type', $type], ['status', $status]])->get();
+    }
+
+    public function calculateLicenseEndTime()
+    {
+        return config('pricing.length.'. $this->length .'.end_date');
     }
 }
