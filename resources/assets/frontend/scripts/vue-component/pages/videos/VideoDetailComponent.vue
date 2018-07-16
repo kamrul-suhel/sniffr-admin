@@ -88,7 +88,6 @@
 
         data() {
             return {
-                user: {},
                 content_padding:true,
                 client_logged_in:'',
                 canBuy:false
@@ -106,14 +105,14 @@
         },
 
         created() {
-            this.user = this.$store.getters.getUserStatus;
             let breakpoint = this.$vuetify.breakpoint.name;
             if(breakpoint === 'sm' || breakpoint === 'xs' ){
                 this.content_padding = false;
             }
 
             let alpha_id = this.$route.params.alpha_id;
-            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id});
+            this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id});
+
 
         },
 

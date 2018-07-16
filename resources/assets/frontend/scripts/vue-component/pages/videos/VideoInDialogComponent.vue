@@ -75,13 +75,20 @@
         },
         data() {
             return {
-                video_detail: '',
                 user: {},
-                tags: [],
                 ready_to_show: true,
                 content_padding: true,
-                client_logged_in:'',
                 canBuy:false
+            }
+        },
+
+        computed: {
+            video_detail(){
+                return this.$store.getters.getCurrentVideoForDialog;
+            },
+
+            tags(){
+                return this.$store.getters.getCurrentVideoTags;
             }
         },
 
@@ -116,23 +123,7 @@
             getVideoData(alpha_id) {
                 this.$store.commit('setRouteObject', this.$route);
 
-                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
-                    this.video_detail = this.$store.getters.getCurrentVideoForDialog;
-
-                    // Set button component
-                    this.client_logged_in = this.$store.getters.isClientLogin;
-                    this.user = this.$store.getters.getUserStatus;
-                    this.canBuy = (!this.client_logged_in || this.video_detail.class === 'exceptional' || this.video_detail.class === '' || !this.video_detail.class || this.user.active === 0) ? false : true;
-
-                    if (this.video_detail.tags.length > 0) {
-                        this.tags.push(...this.video_detail.tags);
-                    } else {
-                        this.tags = [];
-                    }
-
-                    VideoDialogBoxEventBus.$emit('setNextPrevButton');
-
-                });
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id});
             },
 
             goToTagSearch(tag) {
