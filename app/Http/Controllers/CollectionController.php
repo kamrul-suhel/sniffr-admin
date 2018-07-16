@@ -455,17 +455,11 @@ class CollectionController extends Controller
      */
     public function getExclusivePurchasedAsset($type)
     {
-        $exclusiveAsset = $this->{'collection'.str_plural(ucwords($this))}->getAssetByTypeAndStatus('exclusive', 'purchased');
+        $collectionAsset = $this->{'collection'.ucfirst($type)};
+        $exclusiveAsset = $collectionAsset->getAssetByTypeStatus('exclusive', 'purchased');
 
-        if($type = 'video') {
-            return $this->video
-                ->whereIn('id', $exclusiveAsset->pluck('video_id'))
-                ->pluck('alpha_id');
-        } else {
-            return $this->story
-                ->whereIn('id', $exclusiveAsset->pluck('video_id'))
-                ->pluck('alpha_id');
-        }
+        return $this->successResponse([
+            'data' => $this->{$type}->whereIn('id', $exclusiveAsset->pluck('video_id'))->pluck('alpha_id')
+        ]);
     }
-
 }
