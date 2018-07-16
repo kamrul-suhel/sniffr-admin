@@ -315,10 +315,27 @@ class AdminStoryController extends Controller
 
         // need states for when syncing stories to WP
 
-        return Redirect::to('admin/stories/?decision='.$decision)->with([
+        $data = [
+            'headline' => '<i class="fa fa-edit"></i> Edit Story',
+            'story' => $story,
+            'post_route' => url('admin/stories/update'),
+            'button_text' => 'Save Draft',
+            'decision' => $decision,
+            'user' => Auth::user(),
+            'users' => User::all(),
+			'contact' => null,
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
-        ]);
+        ];
+
+        return view('admin.stories.create_edit', $data);
+
+        // return Redirect::to('admin/stories/?decision='.$decision)->with([
+        //     'note' => 'Successfully Saved Story!',
+        //     'note_type' => 'success'
+        // ]);
     }
 
     /**

@@ -6,7 +6,7 @@
 <!-- This is where -->
 
 	<ol class="breadcrumb">
-		<li> <a href="/admin/stories"><i class="fa fa-tasks"></i> Stories</a> </li>
+		<li> <a href="/admin/stories/?decision={{ $decision }}"><i class="fa fa-tasks"></i> Stories</a> </li>
 		<li class="active">
 			@if(!empty($story->id))
 				<strong>Edit Story</strong>
