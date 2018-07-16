@@ -371,9 +371,10 @@ class ContractController extends Controller
         $contract_text = str_replace(':licensor_email', '<strong>'.$asset->contact->email.'</strong>', $contract_text);
         $contract_text = $asset->title ? str_replace(':story_title', ucwords($type).' Title: <strong>'.$asset->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
         $contract_text = $asset->url ? str_replace(':story_link', 'URL: <strong>'.$asset->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
-        $contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
+		$contract_text = $asset->author ? str_replace(':story_author','Author: <strong>'.$asset->author.'</strong>', $contract_text) : str_replace(':story_author', '', $contract_text);
+		$contract_text = $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
         $contract_text = $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the '.$type.' on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
-        $contract_text = str_replace(':video_ref', '<strong>'.$asset->alpha_id.'</strong>', $contract_text);
+		$contract_text = str_replace(':video_ref', '<strong>'.$asset->alpha_id.'</strong>', $contract_text);
         $contract_text = str_replace(':contract_ref_number', '<strong>'.$contract->reference_id.'</strong>', $contract_text);
         $contract_text = str_replace(':unilad_share', '<strong>'.(100 - $contract->revenue_share).'%</strong>', $contract_text);
         $contract_text = str_replace(':creator_share', '<strong>'.$contract->revenue_share.'%</strong>', $contract_text);
