@@ -292,7 +292,7 @@ class AdminStoryController extends Controller
         $story->rights = (Input::get('rights') ? Input::get('rights') : '');
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : '');
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
-        $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
+        //$story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
 
         // Need to add / update contact
         if(Input::get('contact_email')) {

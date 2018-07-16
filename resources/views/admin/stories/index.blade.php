@@ -114,8 +114,24 @@
 						<section class="album-info album-grey">
                             <div class="row padded-bottom">
                                 <div class="col-sm-12">
-                                    <h3><a href="{{ url('admin/stories/edit/'.$story->alpha_id.'/?decision='.$decision) }}">{{ $story->title }}</a></h3>
-                                    <p><a href="@if($story->source) {{ $story->source }} @else # @endif" class="js-story-show-source btn btn-mini-info" title="Preview Source"><i class="fa fa-info"></i></a> <strong>Source:</strong> @if($story->source) {{ $story->source }} @else N/A @endif</p>
+                                    <h3><a href="{{ url('admin/stories/edit/'.$story->alpha_id.'/?decision='.$decision) }}" title="Edit Story on Sniffr">{{ $story->title }}</a></h3>
+                                    <p>
+										<a href="@if($story->source) {{ $story->source }} @else # @endif" class="js-story-show-source btn btn-mini-info" title="Preview Source">
+											<i class="fa fa-info"></i>
+										</a>
+
+										@if($story->url)
+										<a href="{{ $story->url }}" class="btn btn-mini-info" title="View on Wordpress" target="_blank">
+											<i class="fa fa-wordpress"></i>
+										</a>
+										@endif
+
+										@if($story->author)
+										<a href="#" class="btn btn-mini-info pull-right" title="Author on Wordpress">
+											<i class="fa fa-id-badge"></i> <strong>{{ $story->author }}</strong>
+										</a>
+										@endif
+									</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -126,43 +142,47 @@
                                 <div class="col-sm-4 no-padding">
                                     <div class="options">
                                         <div class="options-body">
-                                            <select id="priority" name="priority" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Priority">
-                                                <option value="">Priority</option>
-                                                @foreach(config('stories.priorities') as $priority)
-                    							<option value="{{ $priority }}" @if($story->priority==$priority) selected @endif>{{ ucwords(str_replace('-', ' ', $priority)) }}</option>
-                                                @endforeach
-                    						</select>
-                                            <span class="caret"></span>
+											<p>
+	                                            <select id="priority" name="priority" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Priority">
+	                                                <option value="">Priority</option>
+	                                                @foreach(config('stories.priorities') as $priority)
+	                    							<option value="{{ $priority }}" @if($story->priority==$priority) selected @endif>{{ ucwords(str_replace('-', ' ', $priority)) }}</option>
+	                                                @endforeach
+	                    						</select>
+	                                            <span class="caret"></span>
+											</p>
                                         </div>
                                         <div class="options-body">
-                                            <select id="destination" name="destination" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Destination">
-                                                <option value="">Destination</option>
-                                                @foreach(config('stories.destinations') as $destination)
-                    							<option value="{{ $destination }}" @if($story->destination==$destination) selected @endif>{{ ucwords(str_replace('-', ' ', $destination)) }}</option>
-                                                @endforeach
-                    						</select>
-                                            <span class="caret"></span>
+											<p>
+	                                            <select id="destination" name="destination" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Destination">
+	                                                <option value="">Destination</option>
+	                                                @foreach(config('stories.destinations') as $destination)
+	                    							<option value="{{ $destination }}" @if($story->destination==$destination) selected @endif>{{ ucwords(str_replace('-', ' ', $destination)) }}</option>
+	                                                @endforeach
+	                    						</select>
+	                                            <span class="caret"></span>
+											</p>
                                         </div>
                                         <div class="options-body">
-                                            <!-- <select id="state" name="state" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="State">
-												@foreach(config('stories.states') as $current_state)
-                    							<option value="{{ $current_state }}" @if($story->state==$current_state) selected @endif>{{ ucwords(str_replace('-', ' ', $current_state)) }}</option>
-                                                @endforeach
-                    						</select> -->
-											<select id="statex" name="statex" class="btn btn-mini">
-												<option>{{ AdminStoryController::checkDropdownValue($story->state) }}</option>
-											</select>
-                                            <span class="caret"></span>
+											<p>
+												<select id="statex" name="statex" class="btn btn-mini">
+													<option>{{ AdminStoryController::checkDropdownValue($story->state) }}</option>
+												</select>
+	                                            <span class="caret"></span>
+											</p>
                                         </div>
                                         <hr>
                                         <div class="options-body">
-                                            <select id="assign_to" name="assign_to" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Assign To">
-                                                <option value="">Assign To</option>
-                                                @foreach($users as $user)
-                    							<option value="{{ $user->id }}" @if($story->user()->first()->id==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
-                                                @endforeach
-                    						</select>
-                                            <span class="caret"></span>
+											<p>
+												<strong>Assign to:</strong>
+	                                            <select id="assign_to" name="assign_to" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Assign To">
+	                                                <option value="">Select User</option>
+	                                                @foreach($users as $user)
+	                    							<option value="{{ $user->id }}" @if($story->user()->first()->id==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+	                                                @endforeach
+	                    						</select>
+	                                            <span class="caret"></span>
+											</p>
                                         </div>
                                     </div>
                                 </div>
