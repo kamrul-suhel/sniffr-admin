@@ -2,7 +2,7 @@
     <section id="nav" class="section-space" :class="{ 'nav-background' : nav_background}">
         <v-container grid-list-lg>
             <v-layout row wrap>
-                <v-flex xs12 sm6 md4 lg4>
+                <v-flex xs12 sm4 md4 lg4>
                     <div class="logo">
                         <router-link to="/">
                             <img src="/assets/frontend/images/logo-sniffr-white.png"/>
@@ -10,7 +10,7 @@
                     </div>
                 </v-flex>
 
-                <v-flex xs12 sm6 md8 lg8>
+                <v-flex xs12 sm8 md8 lg8>
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
