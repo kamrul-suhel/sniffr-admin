@@ -1,8 +1,3 @@
-<?php
-$asset = isset($video) ? $video : $story;
-$assetType = isset($video) ? 'video' : 'story';
-?>
-
 @if(($asset->currentContract) && ($asset->contact))
 <div class="panel panel-primary" data-collapsed="0">
     <div class="panel-heading">
@@ -124,13 +119,13 @@ $assetType = isset($video) ? 'video' : 'story';
                     @if(!$asset->currentContract->signed_at)
                         @if($asset->currentContract->sent_at)
                             <p>{{ 'Sent:' . \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->currentContract->sent_at)->diffForHumans().' ' }}
-                                <a href="{{ route('contract.send', ['type' => $assetType, 'id' => $asset->id]) }}" class="btn btn-info" id="sendContract">
+                                <a href="{{ route('contract.send', ['type' => $asset_type, 'id' => $asset->id]) }}" class="btn btn-info" id="sendContract">
                                     Resend Contract
                                 </a>
                             </p>
                         @else
                             <p>
-                                <a href="{{ route('contract.send', ['type' => $assetType, 'id' => $asset->id]) }}" class="btn btn-info" id="sendContract">
+                                <a href="{{ route('contract.send', ['type' => $asset_type, 'id' => $asset->id]) }}" class="btn btn-info" id="sendContract">
                                     Send Contract
                                 </a>
                             </p>

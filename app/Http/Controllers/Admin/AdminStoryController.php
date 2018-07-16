@@ -105,8 +105,9 @@ class AdminStoryController extends Controller
         $data = [
 			'user' => Auth::user(),
 			'users' => User::all(),
-			'videos' => Video::all(),
 			'contact' => null,
+			'asset' => null,
+			'asset_type' => 'story',
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
             'video_categories' => VideoCategory::all(),
@@ -183,7 +184,7 @@ class AdminStoryController extends Controller
      */
     public function edit($id)
     {
-        $story = Story::with('currentContract')->where('alpha_id', $id)
+        $asset = Story::with('currentContract')->where('alpha_id', $id)
             ->first();
 
         $decision = Input::get('decision');
@@ -191,7 +192,8 @@ class AdminStoryController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
-            'story' => $story,
+            'asset' => $asset,
+			'asset_type' => 'story',
             'post_route' => url('admin/stories/update'),
             'button_text' => 'Save Draft',
             'decision' => $decision,

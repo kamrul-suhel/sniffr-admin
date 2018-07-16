@@ -15,7 +15,7 @@
                     <option value="">Not assigned</option>
                     @foreach($users as $user2)
                         <option value="{{ $user2->id }}"
-                                @if(($video) && ($user2->id == $video->user_id)) selected="selected" @endif>
+                                @if(($asset) && ($user2->id == $asset->user_id)) selected="selected" @endif>
                             {{ $user2->username }}
                         </option>
                     @endforeach
@@ -38,14 +38,14 @@
             </div>
 
             <div class="panel-body" style="display: block;">
-                @if($video->trashed())
-                    <a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Restore Video"
+                @if($asset->trashed())
+                    <a href="{{ url('admin/videos/restore/'.$asset->alpha_id) }}" title="Restore Video"
                        class="btn btn-warning">
                         <i class="fa fa-fa-upload"></i>
                         Restore
                     </a>
                 @else
-                    <a href="{{ url('admin/videos/delete/' . $video->alpha_id) }}" title="Delete Video"
+                    <a href="{{ url('admin/videos/delete/' . $asset->alpha_id) }}" title="Delete Video"
                        class="btn btn-danger">
                         <i class="fa fa-trash-o"></i>
                         Delete

@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            @include('admin.videos.partials.choose_contact')
+            @include('admin.contacts.partials.select')
         </div>
     </div>
 

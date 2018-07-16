@@ -10,15 +10,15 @@
         </div>
 
         <div class="panel-body" style="display: block;">
-            @if(($video->contact) && $video->contact_id!=0)
+            @if(($asset->contact) && $asset->contact_id!=0)
                 <h3>
-                    <a href="{{ route('contacts.edit', ['id' => $video->contact->id]) }}">
-                        {{ $video->contact->full_name or 'Not submitted' }}
+                    <a href="{{ route('contacts.edit', ['id' => $asset->contact->id]) }}">
+                        {{ $asset->contact->full_name or 'Not submitted' }}
                     </a>
                 </h3>
                 <p>
-                    <a href="mailto:{{ $video->contact->email }}">
-                        {{ $video->contact->email }}
+                    <a href="mailto:{{ $asset->contact->email }}">
+                        {{ $asset->contact->email }}
                     </a>
                 </p>
             @else

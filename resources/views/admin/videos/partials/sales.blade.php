@@ -10,7 +10,7 @@
             <div class="panel-body" style="display: block;">
                 <select name="class" class="form-control" id="class">
                     @foreach(config('pricing.class') as $key => $value)
-                        <option {{ $key === $video->class ? 'selected': '' }} value="{{ $key }}">{{ $value['modifier'] }}:{{ $value['name'] }}</option>
+                        <option {{ $key === $asset->class ? 'selected': '' }} value="{{ $key }}">{{ $value['modifier'] }}:{{ $value['name'] }}</option>
                     @endforeach
                 </select>
             </div>
