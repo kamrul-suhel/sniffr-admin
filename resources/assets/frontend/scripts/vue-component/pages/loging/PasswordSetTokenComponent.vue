@@ -138,11 +138,8 @@
                             if(!response.data.error){
                                 this.message = response.data.success_message;
 
-                                // Set the user store
-                                this.$store.dispatch('getLoginStatus').then((response) => {
-                                    this.$router.push({name: 'videos'});
-                                    LoginEventBus.loginSuccess();
-                                });
+                                this.$store.commit('setUserState', response.data);
+                                LoginEventBus.loginSuccess();
                             }else{
                                 this.error = true;
                                 this.message = response.data.error_message;

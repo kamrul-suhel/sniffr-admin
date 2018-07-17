@@ -181,7 +181,7 @@ class AuthController extends Controller
 
             case PasswordBroker::INVALID_USER:
                 if($request->ajax()){
-                    return $this->errorResponse('User is not found in our database');
+                    return $this->errorResponse('That email does not exist.');
                 }
                 return redirect()->back()->with([
                     'note' => trans($response),
@@ -242,6 +242,7 @@ class AuthController extends Controller
 
                     if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
                         return $this->successResponse([
+                            'user' => auth()->user(),
                             'success_message' => 'Your account is now active.'
                         ]);
                     } else {
@@ -319,6 +320,7 @@ class AuthController extends Controller
 
                     if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
                         return $this->successResponse([
+                            'user' => auth()->user(),
                             'success_message' => 'You password has been reset.'
                         ]);
                     } else {
