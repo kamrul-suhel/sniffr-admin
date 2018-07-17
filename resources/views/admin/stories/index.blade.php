@@ -190,18 +190,20 @@
 
                         <footer>
 							<div class="album-images-count">
-                                <p style="margin-top:10px;">
-                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created At:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}<br />
-									@if($story->state == 'approved'||$story->state == 'unapproved'||$story->contacted_at!=NULL)
-										<i class="fa fa-clock-o" title="Contacted"></i> <strong>Contacted:</strong> {{ (isset($story->contacted_at) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet') }}
-									@elseif(isset($story->contacted_at)!=NULL)
-										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> {{ date('jS M Y h:i:s',strtotime($story->contacted_at)) }}
+                                <div class="album-info-extra top">
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created At:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}
+								</div>
+								<div class="album-info-extra bottom">
+									@if($story->contacted_at&&!$story->contact_made)
+										<i class="fa fa-clock-o" title="Contacted"></i> <strong> @if($story->reminders) Reminder Sent: @else Contacted: @endif</strong> {{ (isset($story->contacted_at) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet') }} <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">Send Reminder</a>
+									@elseif($story->contacted_at&&$story->contact_made)
+										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> <a href="#">{{ date('jS M Y h:i:s',strtotime($story->contacted_at)) }}</a>
 									@else
-										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted:</strong> <a href="#" data-id="{{ $story->alpha_id }}" class="js-make-contact text-primary">Make contact</a>
+										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted</strong> <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ($story->state!='unapproved' ? 'Contact Source' : '') }}</a>
 									@endif
-                                </p>
+                                </div>
                             </div>
-                            <div class="album-options">
+                            <div class="album-options no-border">
                                 @if($story->state == 'unapproved')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>

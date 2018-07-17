@@ -43,6 +43,18 @@
     text-align: right;
     color: #cc2424;
 }
+.album-options.no-border {
+    border-left: 0px !important;
+}
+.album-info-extra {
+    font-size: 12px;
+}
+.album-info-extra.top {
+    margin-top: 10px;
+}
+.album-info-extra.bottom {
+    margin-bottom: 5px;
+}
 select.btn-mini {
     width: 120px;
     height: auto;

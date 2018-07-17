@@ -312,6 +312,10 @@ class AdminStoryController extends Controller
                 }
                 break;
             case ($state == 'unlicensed'):
+                // contact has been made (set in db)
+                if($story->id) {
+                    $story->contact_made = 1;
+                }
                 // add new post to WP
                 QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
@@ -441,6 +445,34 @@ class AdminStoryController extends Controller
                 'message' => 'Error',
             ]);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendReminder(Request $request, $id)
+    {
+        $decision = $request->input('decision');
+
+        $story = Story::where('alpha_id', $id)->first();
+
+        if(isset($story->contact)) {
+            $story->contacted_at = now();
+            $story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
+            QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+            $story->save();
+            $status = 'success';
+            $message = 'Reminder Sent';
+        } else {
+            $status = 'error';
+            $message = 'A contact needs to be added to the story first';
+        }
+
+        return Redirect::to('admin/stories/?decision='.$decision)->with([
+            'note' => $message,
+            'note_type' => $status
+        ]);
     }
 
     /**

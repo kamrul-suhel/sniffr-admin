@@ -14,6 +14,7 @@ class AddRemindersStoriesTable extends Migration
     public function up()
     {
         Schema::table('stories', function (Blueprint $table) {
+            $table->integer('contact_made')->unsigned()->nullable()->after('contacted_at');
             $table->integer('reminders')->unsigned()->nullable()->after('contacted_at');
         });
     }
@@ -26,6 +27,7 @@ class AddRemindersStoriesTable extends Migration
     public function down()
     {
         Schema::table('stories', function (Blueprint $table) {
+            $table->dropColumn('contact_made');
             $table->dropColumn('reminders');
         });
     }
