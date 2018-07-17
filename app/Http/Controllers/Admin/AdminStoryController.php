@@ -98,33 +98,6 @@ class AdminStoryController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getMailerVideos(Request $request)
-    {
-        if ($request->ajax()) {
-
-            if ($request->search) {
-                $search_value = $request->search;
-                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%' . $search_value . '%']])
-                    ->orWhere('alpha_id', $search_value)
-                    ->orderBy('licensed_at', 'DESC')
-                    ->paginate(12);
-            } else {
-                $videos = Video::with('createdUser')
-                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
-                    ->orderBy('licensed_at', 'DESC')
-                    ->paginate(12);
-            }
-            $data = [
-                'videos' => $videos
-            ];
-            return $this->successResponse($data);
-        }
-    }
-
-    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
@@ -132,8 +105,9 @@ class AdminStoryController extends Controller
         $data = [
 			'user' => Auth::user(),
 			'users' => User::all(),
-			'videos' => Video::all(),
 			'contact' => null,
+			'asset' => null,
+			'asset_type' => 'story',
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
             'video_categories' => VideoCategory::all(),
@@ -210,7 +184,7 @@ class AdminStoryController extends Controller
      */
     public function edit($id)
     {
-        $story = Story::with('currentContract')->where('alpha_id', $id)
+        $asset = Story::with('currentContract')->where('alpha_id', $id)
             ->first();
 
         $decision = Input::get('decision');
@@ -218,7 +192,8 @@ class AdminStoryController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
-            'story' => $story,
+            'asset' => $asset,
+			'asset_type' => 'story',
             'post_route' => url('admin/stories/update'),
             'button_text' => 'Save Draft',
             'decision' => $decision,
@@ -279,7 +254,7 @@ class AdminStoryController extends Controller
         $story->rights = (Input::get('rights') ? Input::get('rights') : '');
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : '');
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
-        $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
+        $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('full_name')->first() : NULL);
 		$story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
 
 		$story->save();

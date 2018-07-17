@@ -54,32 +54,6 @@ class AdminClientMailerController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create_mailer(Request $request)
-    {
-        if ($request->ajax()) {
-            if($request->search){
-                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
-                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
-                    ->orderBy('date_ingested', 'DESC')
-                    ->paginate(12);
-            }else{
-                $stories = Story::orderBy('date_ingested', 'DESC')
-                    ->paginate(12);
-            }
-
-            $data = [
-                'stories' => $stories
-            ];
-            return $this->successResponse($data);
-        }
-
-        return view('admin.mailers.create');
-    }
-
-    /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function refresh()

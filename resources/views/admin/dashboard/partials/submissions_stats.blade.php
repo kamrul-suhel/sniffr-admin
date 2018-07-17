@@ -48,21 +48,6 @@
 <br/>
 
 <div class="row">
-      <div class="col-sm-12">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="panel-title">Ex Chaser</div>
-            </div>
-
-            <div class="panel-body">
-                <div class="tab-content">
-                    <canvas id="video-sub-stacked-graph"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -80,14 +65,30 @@
     <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Submissions State Overview</div>
+                <div class="panel-title">Ex Chaser</div>
             </div>
 
             <div class="panel-body">
                 <div class="tab-content">
-                    <canvas id="sub-state-overview"></canvas>
+                    <canvas id="video-sub-stacked-graph"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
+    <?php if(\Auth::user()->isAdmin()): ?>
+    <div class="col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Ex Chaser - Licensed</div>
+            </div>
+
+            <div class="panel-body">
+                <div class="tab-content">
+                    <canvas id="exc-licensed-breakdown"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 </div>

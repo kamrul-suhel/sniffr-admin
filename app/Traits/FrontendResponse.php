@@ -55,7 +55,8 @@ trait FrontendResponse
             'is_exclusive',
             'terms',
             'views',
-            'licensed_at'
+            'licensed_at',
+			'created_at'
         ];
 
         return $fields;
