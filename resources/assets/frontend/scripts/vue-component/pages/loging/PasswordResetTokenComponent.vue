@@ -21,6 +21,7 @@
                         </v-flex>
 
                         <v-flex xs12>
+                            <small style="color:red" v-if="errors.password">{{ errors.password[0] }}</small>
                             <v-text-field
                                     name="password"
                                     color="dark"
@@ -107,7 +108,8 @@
 
                 showMessage: false,
                 message: '',
-                error: false
+                error: false,
+                errors: [],
             }
         },
 
@@ -139,13 +141,11 @@
                                 LoginEventBus.loginSuccess();
                             }else{
                                 this.error = true;
-                                this.message = response.data.error_message;
                             }
                         })
                         .catch(error => {
-                            console.log(error);
+                            this.errors = error.response.data.errors;
                         });
-
                 }
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\QueueEmail;
 use App\User;
 use App\Traits\FrontendResponse;
@@ -221,7 +222,7 @@ class AuthController extends Controller
      * @param $email
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function setPasswordPost(Request $request, $token, $email)
+    public function setPasswordPost(UpdateUserRequest $request, $token, $email)
     {
 
         $credentials = $credentials = [
@@ -299,7 +300,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password_reset_post(Request $request)
+    public function password_reset_post(UpdateUserRequest $request)
     {
         $credentials = $credentials = [
             'email' => $request->input('email'),
