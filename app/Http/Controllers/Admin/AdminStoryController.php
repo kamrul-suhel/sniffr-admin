@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
-
+use App\Jobs\QueueEmail;
 use App\Jobs\QueueStory;
 
 class AdminStoryController extends Controller
@@ -352,14 +352,20 @@ class AdminStoryController extends Controller
 
         $story = Story::where('alpha_id', $id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
-        $story->save();
 
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'unapproved' || $state == 'rejected' || $state == 'approved'):
+            case ($state == 'unapproved' || $state == 'rejected'):
+                break;
+            case ($state == 'approved'):
+                // make initial contact (will need to add twitter/fb/reddit in future)
+                if($story->id) {
+                    $story->contacted_at = now();
+                    QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+                }
                 break;
             case ($state == 'unlicensed'):
                 // add new post to WP
@@ -374,6 +380,8 @@ class AdminStoryController extends Controller
                 $message = 'Just updated content from WP';
                 break;
         }
+
+        $story->save();
 
         if ($isJson) {
             return response()->json([

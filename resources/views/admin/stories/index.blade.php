@@ -165,16 +165,15 @@
                                         </div>
                                         <div class="options-body">
 											<p>
-												<select id="statex" name="statex" class="btn btn-mini">
+												<select id="statex" name="statex" class="btn btn-mini no-caret">
 													<option>{{ AdminStoryController::checkDropdownValue($story->state) }}</option>
 												</select>
-	                                            <span class="caret"></span>
 											</p>
                                         </div>
                                         <hr>
                                         <div class="options-body">
 											<p>
-												<strong>Assign to:</strong>
+												<strong>Assigned in Sniffr:</strong>
 	                                            <select id="assign_to" name="assign_to" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Assign To">
 	                                                <option value="">Select User</option>
 	                                                @foreach($users as $user)
@@ -192,21 +191,32 @@
                         <footer>
 							<div class="album-images-count">
                                 <p style="margin-top:10px;">
-                                    <strong>Created:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}<br />
-                                    <strong>Assign to:</strong> @if($story->user()->first()->full_name) {{ $story->user()->first()->full_name }} @else {{ $story->user()->first()->username }} @endif
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created At:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}<br />
+									@if($story->state == 'approved'||$story->state == 'unapproved')
+										<i class="fa fa-clock-o" title="Contacted"></i> <strong>Contacted:</strong> {{ (isset($story->contacted_at) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet') }}
+									@elseif(isset($story->contacted_at)!=NULL)
+										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> {{ date('jS M Y h:i:s',strtotime($story->contacted_at)) }}
+									@else
+										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted:</strong> <a href="#" data-id="{{ $story->alpha_id }}" class="js-make-contact text-primary">Make contact</a>
+									@endif
                                 </p>
                             </div>
                             <div class="album-options">
                                 @if($story->state == 'unapproved')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state unlicensed btn-mini btn-mini-border" title="Approve"><i class="fa fa-check"></i> Approve</a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state approved btn-mini btn-mini-border" title="Approve"><i class="fa fa-check"></i> Approve</a>
+
+								@elseif($story->state == 'approved')
+
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state unlicensed btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-check"></i> Made Contact</a>
 
                                 @elseif($story->state == 'unlicensed')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
                                     @if($decision=='content-sourced')
-                                        <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Approved"><i class="fa fa-thumbs-up"></i> Approved</a>
+                                        <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-thumbs-up"></i> Made Contact</a>
                                     @else
                                         <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state licensing btn-mini btn-mini-border" title="License Story"><i class="fa fa-check"></i> License</a>
                                     @endif
