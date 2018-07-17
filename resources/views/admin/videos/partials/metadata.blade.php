@@ -7,7 +7,7 @@
 
             <select id="video_category_id" name="video_category_id" class="selectpicker form-control" title="choose a vertical">
                 @foreach($video_categories as $category)
-                    <option value="{{ $category->id }}" {{ (($video) && ($video->video_category_id == $category->id)) ? 'selected="selected"' : '' }}>
+                    <option value="{{ $category->id }}" {{ (($asset) && ($asset->video_category_id == $category->id)) ? 'selected="selected"' : '' }}>
                         {{ $category->name }}
                     </option>
                 @endforeach
@@ -26,7 +26,7 @@
             <select id="video_collection_id" name="video_collection_id" class="selectpicker form-control" title="choose a collection">
                 @foreach($video_collections as $collection)
                     <option value="{{ $collection->id }}"
-                            @if(!empty($video->video_collection_id) && $video->video_collection_id == $collection->id)selected="selected"@endif>{{ $collection->name }}</option>
+                            @if(!empty($asset->video_collection_id) && $asset->video_collection_id == $collection->id)selected="selected"@endif>{{ $collection->name }}</option>
                 @endforeach
             </select>
         </span>
@@ -44,7 +44,7 @@
                 <option value="">Please Select</option>
                 @foreach($video_shottypes as $shottype)
                     <option value="{{ $shottype->id }}"
-                            {{ (($video) && ($video->video_shottype_id == $shottype->id)) ? 'selected="selected"' : '' }}>
+                            {{ (($asset) && ($asset->video_shottype_id == $shottype->id)) ? 'selected="selected"' : '' }}>
                         {{ $shottype->name }}
                     </option>
                 @endforeach
@@ -77,7 +77,7 @@
                 Location
             </span>
 
-            <input type="text" class="form-control" name="location" id="location" value="{{ ($video && $video->location != 'null') ? $video->location : '' }}"/>
+            <input type="text" class="form-control" name="location" id="location" value="{{ ($asset && $asset->location != 'null') ? $asset->location : '' }}"/>
         </span>
     </span>
 </div>
@@ -89,7 +89,7 @@
                 Filmed Date
             </span>
             <input type="date" class="form-control" name="date_filmed" id="date_filmed" disabled="disabled" value="{{
-            ($video) ? $video->date_filmed : ''
+            ($asset) ? $asset->date_filmed : ''
             }}" title="date filmed"/>
         </span>
 
@@ -98,7 +98,7 @@
                 Uploaded Date
             </span>
             <input type="text" class="form-control" name="created_at" id="created_at" disabled="disabled" value="{{
-            ($video) ? ($video->created_at)->format('d/m/Y') : ''
+            ($asset) ? ($asset->created_at)->format('d/m/Y') : ''
             }}"/>
         </span>
     </div>
@@ -112,7 +112,7 @@
             </span>
 
             <input class="form-control" name="duration" id="duration" value="{{
-            ($video) ? gmdate('H:i:s', $video->duration) : ''
+            ($asset) ? gmdate('H:i:s', $asset->duration) : ''
             }}" placeholder="Enter the video duration in the following format (Hours : Minutes : Seconds)">
         </span>
     </span>
@@ -123,7 +123,7 @@
         <div class="form-group input-group">
             <span class="input-group-addon">Credit</span>
             <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
-                $video->credit or old('credit')
+                $asset->credit or old('credit')
                 }}</textarea>
         </div>
     </div>
@@ -134,7 +134,7 @@
         <div class="form-group input-group">
             <span class="input-group-addon">Notes</span>
             <textarea class="form-control" name="notes" id="notes" rows="4" title="notes">{{
-				$video->notes or old('notes')
+				$asset->notes or old('notes')
 				}}</textarea>
         </div>
     </div>
@@ -147,16 +147,16 @@
                 Video Details, Links, and Info
             </span>
 
-            <textarea class="form-control" name="details" id="details" rows="10">{!! ($video) ? $video->details : '' !!}</textarea>
+            <textarea class="form-control" name="details" id="details" rows="10">{!! ($asset) ? $asset->details : '' !!}</textarea>
         </span>
     </span>
 </div>
 
-@if($video->state == 'licensed' && (Auth::user()->role == 'admin' || Auth::user()->role == 'manager'))
+@if($asset->state == 'licensed' && (Auth::user()->role == 'admin' || Auth::user()->role == 'manager'))
     <div class="form-group">
         <div class="input-group">
             <span class="input-group">Make Featured</span>
-            <input type="checkbox" @if(isset($video->featured) && $video->featured==1)checked="checked"@endif value="1" name="featured" id="featured" />
+            <input type="checkbox" @if(isset($asset->featured) && $asset->featured==1)checked="checked"@endif value="1" name="featured" id="featured" />
         </div>
     </div>
 @endif

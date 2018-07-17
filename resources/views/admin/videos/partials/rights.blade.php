@@ -10,11 +10,11 @@
 
         <select name="rights" class="selectpicker form-control">
             <option value="">License</option>
-            <option value="ex"{{ $video->rights == 'ex' ? ' selected="selected"' : '' }}>Ex Submission</option>
-            <option value="exc"{{ $video->rights == 'exc' ? ' selected="selected"' : '' }}>Ex Chaser</option>
-            <option value="excc"{{ $video->rights == 'excc' ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>
-            <option value="nonex"{{ $video->rights == 'nonex' ? ' selected="selected"' : '' }}>Non Ex Submission</option>
-            <option value="nonexc"{{ $video->rights == 'nonexc' ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
+            <option value="ex"{{ $asset->rights == 'ex' ? ' selected="selected"' : '' }}>Ex Submission</option>
+            <option value="exc"{{ $asset->rights == 'exc' ? ' selected="selected"' : '' }}>Ex Chaser</option>
+            <option value="excc"{{ $asset->rights == 'excc' ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>
+            <option value="nonex"{{ $asset->rights == 'nonex' ? ' selected="selected"' : '' }}>Non Ex Submission</option>
+            <option value="nonexc"{{ $asset->rights == 'nonexc' ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
         </select>
     </div>
 </div>

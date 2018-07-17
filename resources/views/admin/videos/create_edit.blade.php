@@ -4,9 +4,9 @@
     <div id="admin-container">
         <ol class="breadcrumb">
             <li><a href="/admin/videos">All Videos</a></li>
-            @if($video)
-            <li><a href="/admin/videos/{{ ($video->state) ?: 'new' }}">{{ ($video->state) ? ucfirst($video->state) : 'New' }}</a></li>
-            <li class="active"><strong><a href="/admin/videos/edit/{{ $video->alpha_id }}">{{ $video->title  }}</a></strong></li>
+            @if($asset)
+            <li><a href="/admin/videos/{{ ($asset->state) ?: 'new' }}">{{ ($asset->state) ? ucfirst($asset->state) : 'New' }}</a></li>
+            <li class="active"><strong><a href="/admin/videos/edit/{{ $asset->alpha_id }}">{{ $asset->title  }}</a></strong></li>
             @else
             <li class="active"><strong>Add New Video</strong></li>
             @endif
@@ -14,17 +14,17 @@
 
         <div class="row">
             <div class="col-sm-9">
-                @if(($video) && (($video->file) || ($video->url)))
+                @if(($asset) && (($asset->file) || ($asset->url)))
                     @include('admin.videos.partials.license')
                 @endif
                 <ul class="nav nav-tabs" role="tablist">
-                    @if(!$video)
+                    @if(!$asset)
                         <li class="active">
                             <a href="#contact_search" role="tab" data-toggle="tab">Create a Video</a>
                         </li>
                     @endif
 
-                    @if($video)
+                    @if($asset)
                         <li class="{{ (!session('active_tab')) ? 'active' : '' }}">
                             <a href="#copy" role="tab" data-toggle="tab">Copy</a>
                         </li>
@@ -33,7 +33,7 @@
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
                         </li>
 
-                        @if($video->more_details)
+                        @if($asset->more_details)
                             <li>
                                 <a href="#moredetails" role="tab" data-toggle="tab">More Details</a>
                             </li>
@@ -55,13 +55,13 @@
                             <a href="#rights" role="tab" data-toggle="tab">Rights</a>
                         </li>
 
-                        @if(!isset($video->currentContract->signed_at) || !isset($video->contact))
+                        @if(!isset($asset->currentContract->signed_at) || !isset($asset->contact))
                         <li>
                             <a href="#contact" role="tab" data-toggle="tab">Contact</a>
                         </li>
                         @endif
 
-                        @if($video->rights != 'ex' || $video->rights != 'nonex')
+                        @if($asset->rights != 'ex' || $asset->rights != 'nonex')
                         <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
                             <a href="#contract" role="tab" data-toggle="tab">Contract</a>
                         </li>
@@ -76,8 +76,8 @@
                         </li>
                     @endif
                 </ul>
-                @if($video)
-                <form method="POST" action="{{ ($video) ? route('videos.update', ['id' => $video->id]) : route('videos.store') }}" id="video-form" name="video-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+                @if($asset)
+                <form method="POST" action="{{ ($asset) ? route('videos.update', ['id' => $asset->id]) : route('videos.store') }}" id="video-form" name="video-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
                     <div class="panel-body tab-content">
                         <div class="tab-pane {{ (!session('active_tab')) ? 'active' : '' }}" id="copy">
                             @include('admin.videos.partials.copy')
@@ -107,9 +107,9 @@
                             @include('admin.videos.partials.rights')
                         </div>
 
-                        @if(!isset($video->currentContract->signed_at) || !isset($video->contact))
+                        @if(!isset($asset->currentContract->signed_at) || !isset($asset->contact))
                         <div class="tab-pane" id="contact">
-                            @include('admin.videos.partials.choose_contact')
+                            @include('admin.videos.partials.contact')
                         </div>
                         @endif
 
@@ -126,9 +126,9 @@
                         </div>
                     </div>
 
-                    <input type="hidden" id="id" name="id" value="{{ $video->alpha_id }}"/>
-                    <input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($video->file) }}"/>
-                    <input type="hidden" id="temp_state" name="temp_state" value="{{ basename($video->state) }}"/>
+                    <input type="hidden" id="id" name="id" value="{{ $asset->alpha_id }}"/>
+                    <input type="hidden" id="temp_filename" name="temp_filename" value="{{ basename($asset->file) }}"/>
+                    <input type="hidden" id="temp_state" name="temp_state" value="{{ basename($asset->state) }}"/>
 
                     {{ csrf_field() }}
 
@@ -136,20 +136,20 @@
 
                     <div class="form-group save_button">
                         <div class="clearfix">
-                            <input type="submit" value="{{ ($video) ? 'Update Video' : 'Create Video' }}" class="btn btn-success pull-right"/>
+                            <input type="submit" value="{{ ($asset) ? 'Update Video' : 'Create Video' }}" class="btn btn-success pull-right"/>
                         </div>
                     </div>
                 </form>
                 @else
                 <div class="panel-body tab-content">
                     <div class="tab-pane active" id="contact_search">
-                        @include('admin.videos.partials.basic_information')
+                        @include('admin.videos.partials.initial_information')
                     </div>
                 </div>
                 @endif
             </div>
             <div class="col-sm-3">
-                @if($video)
+                @if($asset)
                     <div class="col-sm-12 ">
                         <div class="row">
                             <div class="form-group clearfix">
@@ -179,7 +179,7 @@
         <div class="clear"></div>
     </div>
 
-    @if($video)
+    @if($asset)
         @include('admin.contracts.partials.contract_modal')
     @endif
 

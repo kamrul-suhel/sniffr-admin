@@ -8,7 +8,7 @@
 	<ol class="breadcrumb">
 		<li> <a href="/admin/stories"><i class="fa fa-tasks"></i> Stories</a> </li>
 		<li class="active">
-			@if(!empty($story->id))
+			@if(!empty($asset->id))
 				<strong>Edit Story</strong>
 			@else
 				<strong>New Story</strong>
@@ -28,7 +28,7 @@
 			<div class="col-sm-12">
 
 				<div class="panel panel-primary" data-collapsed="0">
-					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($story->title)){{ $story->title }}@endif" />
+					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($asset->title)){{ $asset->title }}@endif" />
 				</div>
 
 			</div>
@@ -53,7 +53,7 @@
 							<div class="panel-body" style="display: block;">
 								<select name="type" id="type" class="form-control">
 									@foreach(config('stories.story_type') as $type)
-									<option value="{{ $type }}" {{ (isset($story)  &&  $story->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
+									<option value="{{ $type }}" {{ (isset($asset)  &&  $asset->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -69,7 +69,7 @@
 							</div>
 
 							<div class="panel-body" style="display: block;">
-								<img id="story_image_source" src="{{ (!empty($story->thumb) ? $story->thumb : '/assets/frontend/images/placeholder.png') }}" border="0">
+								<img id="story_image_source" src="{{ (!empty($asset->thumb) ? $asset->thumb : '/assets/frontend/images/placeholder.png') }}" border="0">
 								<span class="input-group">
 						            <span class="input-group-addon">
 						                Upload Image
@@ -88,7 +88,7 @@
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="description" id="description">@if(!empty($story->description)){{ htmlspecialchars($story->description) }}@endif</textarea>
+								<textarea class="form-control" name="description" id="description">@if(!empty($asset->description)){{ htmlspecialchars($asset->description) }}@endif</textarea>
 							</div>
 						</div>
 
@@ -121,40 +121,28 @@
 									<select name="source_type" id="source_type" class="form-control drop-25">
 										<option value="other">Other</option>
 								    </select>
-									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($story) ? $story->source : '' }}" />
+									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($asset) ? $asset->source : '' }}" />
 						        </span>
 
 								<br />
 
-								<span class="input-group">
-                                    <?php if(Session::get('contact_id')){ $contact_id = Session::get('contact_id'); }else if(isset($story) && $story->contact_id){ $contact_id = $story->contact_id; } ?>
-									<div class="input-group" id="selectpicker-creator">
-										<span class="input-group-addon">Contact</span>
-										<input type="text" id="js-autocomplete-contact" class="form-control" name="contact" id="contact" placeholder="Search contacts" value="{{ isset($contact_id) ? \App\Contact::find($contact_id)->email : '' }}" />
-									</div>
+								@include('admin.contacts.partials.select')
 
-									<span class="input-group-btn">
-										<button id="contact-add" class="btn btn-default js-contact" type="button" data-toggle="modal" data-target="#add_contact_modal">New</button>
-									</span>
-
-									<input type="hidden" id="contact-id" name="contact_id" value="{{ isset($contact_id) ? $contact_id : ''  }}" />
-						        </span>
-
-								@if(!empty($story))
+								@if(!empty($asset))
 
 								<br />
 
 								<div class="input-group">
 									<label class="checkbox-inline" for="contact_is_owner">
-										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" class="js-contact-is-owner" value="1" {{ (isset($story)  &&  $story->contact_is_owner==1) ? 'checked' : '' }}>
+										<input type="checkbox" name="contact_is_owner" id="contact_is_owner" class="js-contact-is-owner" value="1" {{ (isset($asset)  &&  $asset->contact_is_owner==1) ? 'checked' : '' }}>
 										Contact is owner
 									</label>
 									<label class="checkbox-inline" for="allow_publish">
-										<input type="checkbox" name="allow_publish" id="allow_publish" class="js-allow-publish" value="1" {{ (isset($story)  &&  $story->allow_publish==1) ? 'checked' : '' }}>
+										<input type="checkbox" name="allow_publish" id="allow_publish" class="js-allow-publish" value="1" {{ (isset($asset)  &&  $asset->allow_publish==1) ? 'checked' : '' }}>
 										Happy to publish
 									</label>
 									<label class="checkbox-inline" for="permission">
-										<input type="checkbox" name="permission" id="permission" class="js-permission" value="1" {{ (isset($story)  &&  $story->permission==1) ? 'checked' : '' }}>
+										<input type="checkbox" name="permission" id="permission" class="js-permission" value="1" {{ (isset($asset)  &&  $asset->permission==1) ? 'checked' : '' }}>
 										Has permission
 									</label>
 								</div>
@@ -173,7 +161,7 @@
 									<span class="input-group-addon">
 						                Location
 						            </span>
-				                    <input type="text" class="form-control placepicker" data-map-container-id="locationCollapse" name="location" id="location" value="@if(!empty($story->location)){{ $story->location }}@endif" />
+				                    <input type="text" class="form-control placepicker" data-map-container-id="locationCollapse" name="location" id="location" value="@if(!empty($asset->location)){{ $asset->location }}@endif" />
 									<div id="locationCollapse" class="collapse">
 										<div class="placepicker-map thumbnail"></div>
 									</div>
@@ -185,7 +173,7 @@
 						            </span>
 									<select name="removed_from_social" id="removed_from_social" class="form-control">
 										@foreach(config('stories.removed_from_social') as $from)
-										<option value="{{ $from }}" {{ (isset($story)  &&  $story->removed_from_social==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $from)) }}</option>
+										<option value="{{ $from }}" {{ (isset($asset)  &&  $asset->removed_from_social==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $from)) }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -197,7 +185,7 @@
 									<select name="problem_status" id="problem_status" class="form-control js-problem-status">
 										<option value="">No Problem</option>
 										@foreach(config('stories.problem_status') as $problem)
-										<option value="{{ $problem }}" {{ (isset($story)  &&  $story->problem_status==$problem) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $problem)) }}</option>
+										<option value="{{ $problem }}" {{ (isset($asset)  &&  $asset->problem_status==$problem) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $problem)) }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -209,13 +197,13 @@
 									<select name="category" id="category" class="form-control drop-5050">
 										<option value="">Select vertical</option>
 										@foreach($video_categories as $category)
-										<option value="{{ $category->id }}" {{ (isset($story)  &&  $story->story_category_id==$category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
+										<option value="{{ $category->id }}" {{ (isset($asset)  &&  $asset->story_category_id==$category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
 										@endforeach
 									</select>
 									<select name="collection" id="collection" class="form-control drop-5050">
 										<option value="">Select collection</option>
 										@foreach($video_collections as $collection)
-										<option value="{{ $collection->id }}" {{ (isset($story)  &&  $story->story_collection_id==$collection->id) ? 'selected' : '' }}>{{ $collection->name }}</option>
+										<option value="{{ $collection->id }}" {{ (isset($asset)  &&  $asset->story_collection_id==$collection->id) ? 'selected' : '' }}>{{ $collection->name }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -226,7 +214,7 @@
 						            </span>
 									<select name="submitted_to[]" id="submitted_to" class="selectpicker js-submitted-to" data-width="100%" title="Select who you submitted to" multiple>
 										@foreach(config('stories.submitted_to') as $site)
-										<option value="{{ $site }}" {{ (isset($story) && (in_array($site, explode(',', $story->submitted_to)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
+										<option value="{{ $site }}" {{ (isset($asset) && (in_array($site, explode(',', $asset->submitted_to)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
 										@endforeach
 									</select>
 						        </span>
@@ -243,7 +231,7 @@
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="excerpt" id="excerpt">@if(!empty($story->excerpt)){{ htmlspecialchars($story->excerpt) }}@endif</textarea>
+								<textarea class="form-control" name="excerpt" id="excerpt">@if(!empty($asset->excerpt)){{ htmlspecialchars($asset->excerpt) }}@endif</textarea>
 							</div>
 						</div>
 
@@ -258,8 +246,8 @@
 
 							<div class="panel-body">
 								<div class="video-inputs-wrapper">
-									@if(isset($story))
-										@foreach($story->videos as $video)
+									@if(isset($asset))
+										@foreach($asset->videos as $video)
 											<div class="form-group input-group">
 												<input type="text" class="form-control" value="{{ $video->title }}" disabled />
 												<input type="hidden" name="videos[]" value="{{ $video->id }}" />
@@ -302,13 +290,13 @@
 								<select id="user_id" name="user_id" class="form-control">
 									<option value="">Not assigned</option>
 									@foreach($users as $user2)
-										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+										<option value="{{ $user2->id }}" @if(isset($asset)) @if(!empty($user2->id == $asset->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
 									@endforeach
 								</select>
 							</div>
 						</div>
 
-						@if(!empty($story))
+						@if(!empty($asset))
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
@@ -319,16 +307,16 @@
 							</div>
 							<div class="panel-body" style="display: block; background: #fcfcfc;">
 								<div class="status-box">
-									@if(isset($story) && $story->rights=='exclusive')
+									@if(isset($asset) && $asset->rights=='exclusive')
 									<div class="status-box-inner success" id="rights-box-status">Exclusive</div>
-									@elseif(isset($story) && $story->rights=='non-exclusive')
+									@elseif(isset($asset) && $asset->rights=='non-exclusive')
 									<div class="status-box-inner danger" id="rights-box-status">Non-Exclusive</div>
 									@else
 									<div class="status-box-inner" id="rights-box-status">Pending</div>
 									@endif
 
-									@if(isset($story))
-									<div class="status-box-inner @if(!$story->problem_status) hidden @else warning @endif" id="problem-box-status">{{ ucwords(str_replace('-', ' ', $story->problem_status)) }}</div>
+									@if(isset($asset))
+									<div class="status-box-inner @if(!$asset->problem_status) hidden @else warning @endif" id="problem-box-status">{{ ucwords(str_replace('-', ' ', $asset->problem_status)) }}</div>
 									@endif
 								</div>
 								<span class="input-group">
@@ -338,48 +326,48 @@
 									<select name="rights" id="rights" class="form-control js-rights-status">
 										<option value="">Set status</option>
 										@foreach(config('stories.rights') as $status)
-										<option value="{{ $status }}" {{ (isset($story)  &&  $story->rights==$status) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $status)) }}</option>
+										<option value="{{ $status }}" {{ (isset($asset)  &&  $asset->rights==$status) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $status)) }}</option>
 										@endforeach
 									</select>
 									<select name="rights_type" id="rights_type" class="form-control">
 										<option value="">Set rights type</option>
 										@foreach(config('stories.rights_type') as $rights)
-										<option value="{{ $rights }}" {{ (isset($story)  &&  $story->rights_type==$rights) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
+										<option value="{{ $rights }}" {{ (isset($asset)  &&  $asset->rights_type==$rights) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $rights)) }}</option>
 										@endforeach
 									</select>
 						        </span>
 								<div class="story-dividers">
 									<div id="owner-status">
-										@if(isset($story) && $story->contact_is_owner)
+										@if(isset($asset) && $asset->contact_is_owner)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Contact is owner </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>
 										@endif
 									</div>
 									<div id="submitted-status">
-										@if(isset($story) && $story->submitted_to)
-										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ((isset($story->submitted_to) && count(explode(',', $story->submitted_to)))>1) ? 'multiple' : ucwords(str_replace('-', ' ', $story->submitted_to)) }}</h5>
+										@if(isset($asset) && $asset->submitted_to)
+										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to {{ ((isset($asset->submitted_to) && count(explode(',', $asset->submitted_to)))>1) ? 'multiple' : ucwords(str_replace('-', ' ', $asset->submitted_to)) }}</h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending</h5>
 										@endif
 									</div>
 									<div id="publish-status">
-										@if(isset($story) && $story->allow_publish)
+										@if(isset($asset) && $asset->allow_publish)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Happy to publish </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending </h5>
 										@endif
 									</div>
 									<div id="permission-status">
-										@if(isset($story) && $story->permission)
+										@if(isset($asset) && $asset->permission)
 										<h5 class="text-success"><i class="fa fa-check-square-o"></i> Has permission </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending </h5>
 										@endif
 									</div>
 									<div id="rights-status">
-										@if(isset($story) && $story->rights)
-										<h5 class="@if($story->rights=='exclusive') text-success @else text-warning @endif"><i class="fa fa-check-square-o"></i> {{ ucwords(str_replace('-', ' ', $story->rights)) }} rights </h5>
+										@if(isset($asset) && $asset->rights)
+										<h5 class="@if($asset->rights=='exclusive') text-success @else text-warning @endif"><i class="fa fa-check-square-o"></i> {{ ucwords(str_replace('-', ' ', $asset->rights)) }} rights </h5>
 										@else
 										<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>
 										@endif
@@ -399,7 +387,7 @@
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($story)&&$story->notes) {{ $story->notes }} @endif</textarea>
+								<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($asset)&&$asset->notes) {{ $asset->notes }} @endif</textarea>
 							</div>
 						</div>
 
@@ -415,7 +403,7 @@
 							<div class="panel-body" style="display: block;">
 								<select name="state" id="state" class="form-control">
 									@foreach(config('stories.states') as $state)
-									<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+									<option value="{{ $state }}" @if (isset($asset) && $asset->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -431,33 +419,33 @@
 
 		</div>
 
-		@if(isset($story->id))
-			<input type="hidden" id="id" name="id" value="{{ $story->id }}" />
-			<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $story->alpha_id }}" />
+		@if(isset($asset->id))
+			<input type="hidden" id="id" name="id" value="{{ $asset->id }}" />
+			<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}" />
 			<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
-			<a href="{{ url('admin/stories/delete/'.$story->alpha_id) }}" class="btn btn-danger">Delete Story</a>
+			<a href="{{ url('admin/stories/delete/'.$asset->alpha_id) }}" class="btn btn-danger">Delete Story</a>
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
 
-		@if(isset($story->id)&&isset($decision)&&$decision=='licensing')
-			@if($story->state=='licensing'||$story->state=='unlicensed'||$story->state=='unapproved'||$story->state=='rejected')
-				<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
+		@if(isset($asset->id)&&isset($decision)&&$decision=='licensing')
+			@if($asset->state=='licensing'||$asset->state=='unlicensed'||$asset->state=='unapproved'||$asset->state=='rejected')
+				<a href="{{ url('admin/stories/status/licensed/'.$asset->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
 			@endif
 		@endif
 
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 
-		@if(isset($story) && isset($decision) && $decision!='content-sourced' && $story->url)
-			<a href="{{ $story->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
+		@if(isset($asset) && isset($decision) && $decision!='content-sourced' && $asset->url)
+			<a href="{{ $asset->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
 		@endif
 
 	</form>
 
 	<div class="clear"></div>
 
-	@if(isset($story))
+	@if(isset($asset))
         @include('admin.contracts.partials.contract_modal')
     @endif
 </div>
@@ -559,7 +547,7 @@
 
 		$('#sourced_at').datetimepicker({
 			// format: 'YYYY-MM-DD HH:MM:SS',
-			defaultDate: @if(!empty($story->sourced_at)) '{{ $story->sourced_at }}' @else $.now() @endif
+			defaultDate: @if(!empty($asset->sourced_at)) '{{ $asset->sourced_at }}' @else $.now() @endif
 		});
 
 		$("#sendContract").click(function () {

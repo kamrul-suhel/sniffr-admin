@@ -37,11 +37,10 @@ return [
 
 	'slack' => [
 		'channels' => [
-			'contracts' => 'https://hooks.slack.com/services/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',
-			'requests' => 'https://hooks.slack.com/services/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',
-			'quotes' => 'https://hooks.slack.com/services/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',
-			'submissions' => 'https://hooks.slack.com/services/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',
-			'alerts' => 'https://hooks.slack.com/services/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'
+			'contracts' => 'https://hooks.slack.com/services/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', // sniffr-contracts
+			'quotes' => 'https://hooks.slack.com/services/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', // sniffr-quotes
+			'submissions' => 'https://hooks.slack.com/services/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', // sniffr-submissions
+			'alerts' => 'https://hooks.slack.com/services/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' // sniffr-bot
 		]
 	]
 

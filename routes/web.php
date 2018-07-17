@@ -163,10 +163,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');
-    Route::get('mailers/create_mailer', 'Admin\AdminClientMailerController@create_mailer');
     Route::get('mailers/refresh', array('uses' => 'Admin\AdminClientMailerController@refresh'));
     Route::get('mailers/checkjobs', 'Admin\AdminClientMailerController@checkJobs');
-    Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');
     Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
     Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
     Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');
