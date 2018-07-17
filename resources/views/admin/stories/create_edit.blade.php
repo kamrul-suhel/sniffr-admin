@@ -16,12 +16,9 @@
 		</li>
 	</ol>
 
-	<div class="admin-section-title">
-		<p></p>
-	</div>
 	<div class="clear"></div>
 
-	<form method="POST" action="{{ $post_route }}" {{ (isset($asset) ? '' : 'id=js-story-update') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<form method="POST" action="{{ $post_route }}" {{ (isset($story) ? '' : 'id=js-story-new') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 		<div class="row">
 

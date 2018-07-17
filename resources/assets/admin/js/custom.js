@@ -296,14 +296,14 @@ var public_vars = public_vars || {};
 	        }
 	    });
 
-		$('#js-story-update').on('submit', function(e){
+		$('#js-story-new').on('submit', function(e){
 	        e.preventDefault();
 	        var contact_id = $('#contact-id').val();
 	        if(contact_id) {
-				$(this).submit();
+				$('#js-story-new')[0].submit();
 			} else {
 				// no contact added to story?
-				swal({  title: 'Please add a contact before saving your story', icon: 'error', buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
+				swal({  title: 'Please add a contact before saving your story', icon: 'error', closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
 			}
 	    });
 

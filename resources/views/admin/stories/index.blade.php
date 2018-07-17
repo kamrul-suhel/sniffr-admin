@@ -192,7 +192,7 @@
 							<div class="album-images-count">
                                 <p style="margin-top:10px;">
                                     <i class="fa fa-file-o" title="Created"></i> <strong>Created At:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}<br />
-									@if($story->state == 'approved'||$story->state == 'unapproved')
+									@if($story->state == 'approved'||$story->state == 'unapproved'||$story->contacted_at!=NULL)
 										<i class="fa fa-clock-o" title="Contacted"></i> <strong>Contacted:</strong> {{ (isset($story->contacted_at) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet') }}
 									@elseif(isset($story->contacted_at)!=NULL)
 										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> {{ date('jS M Y h:i:s',strtotime($story->contacted_at)) }}
