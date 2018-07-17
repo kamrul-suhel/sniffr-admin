@@ -60,6 +60,7 @@
     import StoryLoopComponent from './modules/StoryLoopComponent';
     import PaginationComponent from '../../includes/PaginationComponent';
     import LoginEventBus from '../../../event-bus/login-event-bus';
+    import {mapGetters} from 'vuex';
 
     export default {
         components: {
@@ -68,13 +69,20 @@
             PaginationComponent
         },
 
+        computed: {
+            ...mapGetters({
+                client_logged_in: 'getClientLogin',
+                // mailer_videos: 'getMailerVideoData',
+            }),
+
+        },
+
         data() {
             return {
                 stories: '',
                 paginate: '',
                 mailer_stories: [],
                 logged_in : false,
-                client_logged_in : false
             }
         },
 
@@ -85,21 +93,6 @@
         },
 
         created() {
-            this.client_logged_in = this.$store.getters.isClientLogin;
-
-            // If client has logged in
-            LoginEventBus.$on('loginSuccess', () => {
-                this.logged_in = this.$store.getters.isUserLogin;
-                this.client_logged_in = this.$store.getters.isClientLogin;
-
-                this.setAllStoryData(this.getQueryObject());
-            });
-
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.logged_in = false;
-                this.client_logged_in = false;
-            });
-
             this.setAllStoryData(this.getQueryObject());
         },
 
