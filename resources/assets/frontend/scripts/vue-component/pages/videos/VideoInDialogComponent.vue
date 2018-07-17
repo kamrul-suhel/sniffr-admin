@@ -64,7 +64,6 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
-    import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
     import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
     export default {
@@ -100,24 +99,6 @@
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;
             }
-
-            VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
-                this.getVideoData(alpha_id);
-            });
-
-            VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
-                let alpha_id = this.$store.getters.getNextVideoAlphaId;
-                this.getVideoData(alpha_id);
-            });
-
-            VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-                let alpha_id = this.$store.getters.getPrevVideoAlphaId;
-                this.getVideoData(alpha_id);
-            });
-
-            LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
-                this.video_detail = '';
-            });
         },
 
         methods: {

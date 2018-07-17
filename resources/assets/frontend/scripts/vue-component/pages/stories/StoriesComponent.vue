@@ -1,16 +1,25 @@
 <template>
     <div class="stories-component">
-        <section id="header" class="page-videos">
-            <div class="header-content">
-                <div class="position-center">
-                    <h1 class="heading">Stories</h1>
-                </div>
-            </div>
-        </section>
-
-        <search-component @searchOption="searchOption($event)"></search-component>
+        <!--<section id="header" class="page-videos">-->
+            <!--<div class="header-content">-->
+                <!--<div class="position-center">-->
+                    <!--<h1 class="heading">Stories</h1>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</section>-->
 
         <section class="stories-section section-space">
+
+            <v-container grid-lig-lg class="py-0">
+                <v-layout row wrap class="s-pagination-goto">
+                    <v-flex xs12 class="pt-0 mb-3">
+                        <h2 class="text-center text-uppercase">All Stories</h2>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <search-component @searchOption="searchOption($event)"></search-component>
+
             <v-container grid-list-lg class="stories pt-0">
                 <div v-if="client_logged_in && mailer_stories.length > 0">
                     <h3 class="sub-heading">Your Suggested Stories</h3>
@@ -28,14 +37,6 @@
                     <br>
                 </div>
 
-
-                <v-layout row wrap class="s-pagination-goto">
-                    <v-flex xs12 class="pt-0 mb-3">
-                        <h3 class="sub-heading">All Stories</h3>
-                        <hr>
-                    </v-flex>
-                </v-layout>
-
                 <v-layout row wrap>
                     <story-loop-component
                             v-for="story in stories"
@@ -45,7 +46,11 @@
                 </v-layout>
             </v-container>
 
-            <pagination-component :pagination="paginate" :page="'stories'" v-if="paginate.last_page > 1"></pagination-component>
+            <pagination-component
+                    :pagination="paginate"
+                    :page="'stories'"
+                    v-if="paginate.last_page > 1"
+            ></pagination-component>
         </section>
     </div>
 </template>

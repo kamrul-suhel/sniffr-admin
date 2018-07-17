@@ -20,7 +20,7 @@
     export default {
         data() {
             return {
-                current_page: 1,
+                current_page: this.$route.query.page ? Number(this.$route.query.page): 1,
                 total_visible: 10,
             }
         },

@@ -164,24 +164,6 @@
         },
         created(){
             this.setPrevRoute();
-
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.is_login = false;
-                this.client_login = false;
-            });
-
-            // If client has logged in
-            LoginEventBus.$on('loginSuccess', () => {
-                this.user = this.$store.getters.getUser;
-                this.is_login = this.$store.getters.isUserLogin;
-                this.client_login = this.$store.getters.isClientLogin;
-            });
-
-            // On every navigation load, check to see if user is logged in
-            this.$store.dispatch('getLoginStatus').then((response) => {
-
-            });
-
             this.settings = this.$store.getters.getSettingsObject;
 
 

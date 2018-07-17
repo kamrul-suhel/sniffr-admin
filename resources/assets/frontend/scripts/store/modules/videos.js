@@ -4,8 +4,8 @@ const state = {
     videoLoading:false,
 
 
-    videos: null,
-    mailer_videos: null,
+    videos: [],
+    mailer_videos: [],
     paginate: '',
 
 
@@ -113,6 +113,7 @@ const mutations = {
 
     setMailerVideoData(state, data) {
         state.mailer_videos = data;
+        console.log(typeof state.mailer_videos);
     },
 
     setVideoPaginationObject(state, paginate) {
@@ -245,7 +246,7 @@ const actions = {
 
         //Search video url
         if (request_url === 'videos_search') {
-            data.value = current_route_obj.query.value
+            data.value = state.current_route_obj.query.value
         }
 
         axios.post('/search/videos', data)
@@ -272,7 +273,6 @@ const actions = {
         }
         axios.get(url)
             .then((response) => {
-                commit('');
                 commit('setVideoDetailData', response.data);
             })
             .catch((error) => {
