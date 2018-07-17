@@ -1,8 +1,7 @@
 @extends('admin.master')
 
 @section('content')
-    <td id="admin-container">
-
+    <div id="admin-container">
         <ol class="breadcrumb">
             <li>
                 <a href="/admin/clients"><i class="fa fa-newspaper-o"></i>All Clients</a>
@@ -25,6 +24,7 @@
     			</div>
     		</div>
     	</div>
+
     	<div class="clear"></div>
 
         <div class="admin-section-title">
@@ -36,17 +36,23 @@
                 <th>Thumb</th>
                 <th>Alpha ID</th>
                 <th>Order No.</th>
-                <th>Order Date</th>
+                <th>Licensed at</th>
+                <th>License Expires</th>
+                <th>License Length</th>
+                <th>License Type</th>
+                <th>Platform</th>
                 <th>Story / Video</th>
                 <th>Downloads</th>
                 <th>Price</th>
             </tr>
 
+            <?php $total = 0; ?>
+
             @foreach($collectionPurchasesVideos as $collection)
                 @foreach($collection->collectionVideos as $purchasedVideo)
                 <tr>
                     <td>
-                        <img src="{{ $purchasedVideo->video->thumb }}" width="100px">
+                        <img src="{{ $purchasedVideo->video->thumb ? $purchasedVideo->video->thumb : $purchasedVideo->video->image }}" width="100px">
                     </td>
 
                     <td>
@@ -54,11 +60,31 @@
                     </td>
 
                     <td>
-                        {{ $collection->name }} {{ $purchasedVideo->id }}
+                        {{ $collection->name }}_{{ $purchasedVideo->id }}
                     </td>
 
                     <td>
-                        {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
+                        {{ date('jS M Y H:i:s',strtotime($purchasedVideo->licensed_at)) }}
+                    </td>
+
+                    <td>
+                        @if($purchasedVideo->length != 'perpetuity')
+                        {!! now() < $purchasedVideo->license_ends_at ? Carbon\Carbon::parse($purchasedVideo->license_ends_at)->diffForHumans() : '<span class="text-danger">Expired</span>' !!}
+                        @else
+                        <span class="text-danger">Never</span>
+                        @endif
+                    </td>
+
+                    <td>
+                        {{ Config::get('pricing.length.'.$purchasedVideo->length.'.name') }}
+                    </td>
+
+                    <td>
+                        {{ Config::get('pricing.type.'.$purchasedVideo->type.'.name') }}
+                    </td>
+
+                    <td>
+                        {{ Config::get('pricing.platform.'.$purchasedVideo->platform.'.name') }}
                     </td>
 
                     <td>
@@ -70,9 +96,10 @@
                     </td>
 
                     <td>
-                        £{{ $purchasedVideo->final_price }}
+                        £{{ number_format($purchasedVideo->final_price) }}
                     </td>
                 </tr>
+                <?php $total = $total + $purchasedVideo->final_price; ?>
                 @endforeach
             @endforeach
 
@@ -88,11 +115,27 @@
                     </td>
 
                     <td>
-                        {{ $collection->name }}  {{ $purchasedStory->story->id }}
+                        {{ $collection->name }}_{{ $purchasedStory->story->id }}
                     </td>
 
                     <td>
                         {{ date('jS M Y H:i:s',strtotime($collection->updated_at)) }}
+                    </td>
+
+                    <td>
+                        N/A
+                    </td>
+
+                    <td>
+                        N/A
+                    </td>
+
+                    <td>
+                        N/A
+                    </td>
+
+                    <td>
+                        N/A
                     </td>
 
                     <td>
@@ -104,11 +147,17 @@
                     </td>
 
                     <td>
-                        £{{ $purchasedStory->final_price }}
+                        £{{ number_format($purchasedStory->final_price) }}
                     </td>
                 </tr>
+                <?php $total = $total + $purchasedStory->final_price; ?>
                 @endforeach
             @endforeach
+            <tr>
+                <td colspan="13" class="text-right">
+                    <strong>£{{ number_format($total) }}</strong>
+                </td>
+            </tr>
         </table>
     </div>
 @endsection
