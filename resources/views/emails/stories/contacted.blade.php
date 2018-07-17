@@ -26,6 +26,6 @@ to talk to you about an article I'm currently researching called <strong>{{ $sto
 
 <div>&nbsp;</div>
 
-{!! (isset($story->user) ? '<div>'.$story->user->full_name.'</div>' : '') !!}
+{!! (isset($story->user->full_name) ? '<div>'.$story->user->full_name.'</div>' : '') !!}
 <div>The UNILAD Team.</div>
 @stop

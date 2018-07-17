@@ -8,7 +8,7 @@ Please reply directly to this email or email stories@unilad.co.uk
 
 Regards,
 
-{{ (isset($story->user) ? $story->user->full_name : '') }}
+{{ (isset($story->user->full_name) ? $story->user->full_name : '') }}
 The UNILAD Team
 
 (powered by Sniffr)
