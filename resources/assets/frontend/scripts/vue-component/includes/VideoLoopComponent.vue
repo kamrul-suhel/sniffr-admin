@@ -106,7 +106,7 @@
                 window.history.pushState(null, "page 2",url);
 
                 this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
-                this.$store.commit('setRouteObject', this.$route);
+                this.$store.commit('setCurrentRouteObject', this.$route);
                 this.$store.commit('setVideoDialogBox', true);
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: video.alpha_id});

@@ -1,6 +1,7 @@
 const state = {
     //Dialog box
     videoDialogBox: false,
+    videoLoading:false,
 
 
     videos: null,
@@ -98,13 +99,14 @@ const getters = {
 
     getVideoDetailTags(state) {
         return state.tags;
+    },
+
+    getCurrentRouteObject(state){
+        return state.current_route_obj;
     }
 };
 
 const mutations = {
-    setVideoDialogBox(state, value){
-        state.videoDialogBox = value;
-    },
 
     setVideoData(state, data) {
         state.videos = data;
@@ -119,17 +121,15 @@ const mutations = {
     },
 
 
+
+
     /**
      * Video dialog box setter
      */
 
-    // setVideoDialogBox(state, data) {
-    //     state.video_dialog_box = true;
-    //     state.currentVideoAlphaId = data.current_video.alpha_id;
-    //     state.currentVideo = data.current_video;
-    //     state.videoNextAlphaId = data.next_video_alpha_id;
-    //     state.videoPreviousAlphaId = data.prev_video_alpha_id;
-    // },
+    setVideoDialogBox(state, value){
+        state.videoDialogBox = value;
+    },
 
     setCurrentVideoAlphaId(state, alphaId){
         state.currentVideoAlphaId = alphaId;
@@ -143,7 +143,7 @@ const mutations = {
         }
     },
 
-    setRouteObject(state, route) {
+    setCurrentRouteObject(state, route) {
         state.current_route_obj = route;
     },
 
