@@ -132,7 +132,10 @@
             },
 
             goToDetail() {
-                VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
+                this.$store.commit('setVideoDialogBox', false);
+                setTimeout(()=> {
+                    this.$router.push({name: 'videos_detail', params:{'alpha_id': this.video_detail.alpha_id}});
+                }, 500)
             }
         }
     }

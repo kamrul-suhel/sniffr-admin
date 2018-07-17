@@ -224,36 +224,28 @@ const actions = {
      */
 
     getVideoNextAndPrevLink({commit, state}, payload) {
-        let data = {};
+        let data = {
+            'alpha_id': payload.alpha_id
+        };
         let request_url = state.current_route_obj.name;
 
 
-        if(request_url === 'videos'){
-            data = {'alpha_id': payload.alpha_id};
-        }
-
         if(state.current_route_obj.query.search){
-            data = {
-                'alpha_id': payload.alpha_id,
-                'search' : state.current_route_obj.query.search
-            }
+            data.search = state.current_route_obj.query.search
         }
 
         if(state.current_route_obj.query.tag){
-            data = {
-                'alpha_id': payload.alpha_id,
-                'tag' : state.current_route_obj.query.tag
-            }
+            data.tag = state.current_route_obj.query.tag
         }
 
         //Featured videos
         if (request_url === 'home') {
-            data = {'featured':'true', 'alpha_id': payload.alpha_id};
+            data.featured = true;
         }
 
         //Search video url
         if (request_url === 'videos_search') {
-            data = {'value':state.current_route_obj.query.value}
+            data.value = current_route_obj.query.value
         }
 
         axios.post('/search/videos', data)

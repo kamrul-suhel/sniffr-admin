@@ -96,12 +96,20 @@
 
         computed: {
             ...mapGetters({
-                video: 'getVideoDetailData',
-                tags : 'getVideoDetailTags'
-            })
-        },
 
-        watch: {
+            }),
+
+            video: {
+                get(){
+                    console.log(this.$store.getters.getCurrentVideo);
+                    return this.$store.getters.getCurrentVideo;
+                }
+            },
+
+            tags(){
+                return this.$store.getters.getCurrentVideoTags;
+            }
+
         },
 
         created() {
@@ -111,6 +119,9 @@
             }
 
             let alpha_id = this.$route.params.alpha_id;
+
+            this.$store.commit('setCurrentVideoAlphaId', alpha_id);
+            this.$store.commit('setCurrentRouteObject', this.$route);
             this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id});
 
 
