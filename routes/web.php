@@ -2,6 +2,11 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
+
+Route::get('email-test', function() {
+    return view('emails.new.partials.base');
+});
+
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
