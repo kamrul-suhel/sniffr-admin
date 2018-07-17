@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Jobs\Auth\QueueEmailClientPasswordUpdated;
 use App\Jobs\QueueEmail;
 use App\User;
 use App\Traits\FrontendResponse;
@@ -320,6 +321,9 @@ class AuthController extends Controller
                 if($request->ajax()){
 
                     if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+
+                        QueueEmailClientPasswordUpdated::dispatch(auth()->user());
+
                         return $this->successResponse([
                             'user' => auth()->user(),
                             'success_message' => 'Your password has been reset.'
@@ -333,12 +337,14 @@ class AuthController extends Controller
 
                 // attempt login with new password
                 if(auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+
+                    QueueEmailClientPasswordUpdated::dispatch(auth()->user());
+
                     return redirect()->intended('videos')->with([
                         'note' => 'Your password has been successfully reset. Please login ',
                         'note_type' => 'success'
                     ]);
                 }
-
 
             default:
                 if($request->ajax()){
