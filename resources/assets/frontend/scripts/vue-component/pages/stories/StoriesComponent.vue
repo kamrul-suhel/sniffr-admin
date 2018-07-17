@@ -1,18 +1,27 @@
 <template>
     <div class="stories-component">
-        <!--<section id="header" class="page-videos">-->
-            <!--<div class="header-content">-->
-                <!--<div class="position-center">-->
-                    <!--<h1 class="heading">Stories</h1>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</section>-->
-
         <section class="stories-section section-space">
+
+            <v-container grid-list-lg class="stories pt-0" v-if="client_logged_in && mailer_stories.length > 0">
+                <v-layout row wrap>
+                    <v-flex xs12 class="text-center">
+                        <h2 class="text-uppercase">Your Suggested Stories</h2>
+                        <p>We've gone ahead and procured a list of stories we think you will love!</p>
+                    </v-flex>
+                </v-layout>
+
+                <v-layout align-content-center style="overflow-x:scroll;">
+                    <story-loop-component
+                            v-for="mailer in mailer_stories"
+                            :story="mailer"
+                            :key="mailer.alpha_id"
+                    ></story-loop-component>
+                </v-layout>
+            </v-container>
 
             <v-container grid-lig-lg class="py-0">
                 <v-layout row wrap class="s-pagination-goto">
-                    <v-flex xs12 class="pt-0 mb-3">
+                    <v-flex xs12 class="pt-0 mb-0">
                         <h2 class="text-center text-uppercase">All Stories</h2>
                     </v-flex>
                 </v-layout>
@@ -21,22 +30,6 @@
             <search-component @searchOption="searchOption($event)"></search-component>
 
             <v-container grid-list-lg class="stories pt-0">
-                <div v-if="client_logged_in && mailer_stories.length > 0">
-                    <h3 class="sub-heading">Your Suggested Stories</h3>
-                    <hr>
-                    <p><b>We've gone ahead and procured a list of stories we think you will love!</b></p>
-                    <v-card-text class="overflow-hidden" style="overflow:auto; width:100% !important; margin: 0px; padding:0px;">
-                        <v-layout align-content-center style="overflow-x:scroll;">
-                            <story-loop-component
-                                    v-for="mailer in mailer_stories"
-                                    :story="mailer"
-                                    :key="mailer.alpha_id"
-                            ></story-loop-component>
-                        </v-layout>
-                    </v-card-text>
-                    <br>
-                </div>
-
                 <v-layout row wrap>
                     <story-loop-component
                             v-for="story in stories"
@@ -81,7 +74,7 @@
                 stories: '',
                 paginate: '',
                 mailer_stories: [],
-                logged_in : false,
+                logged_in: false,
             }
         },
 

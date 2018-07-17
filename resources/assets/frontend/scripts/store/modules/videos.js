@@ -113,7 +113,6 @@ const mutations = {
 
     setMailerVideoData(state, data) {
         state.mailer_videos = data;
-        console.log(typeof state.mailer_videos);
     },
 
     setVideoPaginationObject(state, paginate) {
