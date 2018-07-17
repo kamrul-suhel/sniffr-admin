@@ -118,10 +118,7 @@
 						            <span class="input-group-addon">
 						                Source URL
 						            </span>
-									<select name="source_type" id="source_type" class="form-control drop-25">
-										<option value="other">Other</option>
-								    </select>
-									<input type="text" class="form-control js-story-get-source drop-75" name="source" id="source" placeholder="" value="{{ isset($asset) ? $asset->source : '' }}" />
+									<input type="text" class="form-control js-story-get-source" name="source" id="source" placeholder="" value="{{ isset($asset) ? $asset->source : '' }}" />
 						        </span>
 
 								<br />
