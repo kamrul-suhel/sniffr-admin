@@ -59,7 +59,6 @@
     import SearchComponent from '../../includes/SearchComponent';
     import StoryLoopComponent from './modules/StoryLoopComponent';
     import PaginationComponent from '../../includes/PaginationComponent';
-    import LoginEventBus from '../../../event-bus/login-event-bus';
     import {mapGetters} from 'vuex';
 
     export default {

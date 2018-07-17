@@ -60,9 +60,6 @@
             }
         },
 
-        created(){
-        },
-
         methods:{
             defaultImage(){
                 this.video_image = '/assets/frontend/images/placeholder.png';
