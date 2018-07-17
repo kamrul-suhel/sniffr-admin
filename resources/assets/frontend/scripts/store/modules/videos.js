@@ -16,17 +16,17 @@ const state = {
     currentVideoAlphaId:'',
     currentVideo:'',
     currentVideoTags: [],
-    videoNextAlphaId : '',
-    videoPreviousAlphaId: '',
+    nextVideoAlphaId : '',
+    previousVideoAlphaId: '',
 
     current_route_obj: '',
+    previewRouteObject:'',
 
 
     /**
      * Video detail page property
      */
     video_detail: {},
-    tags: [],
 };
 
 const getters = {
@@ -36,6 +36,10 @@ const getters = {
 
     getVideos(state) {
         return state.videos;
+    },
+
+    getCurrentVideoTags(state){
+        return state.currentVideoTags;
     },
 
     getCurrentVideo(state){
@@ -56,6 +60,10 @@ const getters = {
       */
 
     getEnterStateUrl(state) {
+        return state.previewRouteObject.fullPath;
+    },
+
+    getCurrentStateUrl(state){
         return state.current_route_obj.fullPath;
     },
 
@@ -63,9 +71,7 @@ const getters = {
         return state.videoLoading;
     },
 
-    getCurrentVideoTags(state){
-        return state.currentVideoTags;
-    },
+
 
 
     getCurrentVideo(state) {
@@ -77,11 +83,11 @@ const getters = {
     },
 
     getNextVideoAlphaId() {
-        return state.videoNextAlphaId;
+        return state.nextVideoAlphaId;
     },
 
-    getPrevVideoAlphaId() {
-        return state.videoPreviousAlphaId;
+    getPreviousVideoAlphaId() {
+        return state.previousVideoAlphaId;
     },
 
 
@@ -93,9 +99,6 @@ const getters = {
         return state.video_detail;
     },
 
-    getVideoDetailTags(state) {
-        return state.tags;
-    },
 
     getCurrentRouteObject(state){
         return state.current_route_obj;
@@ -139,16 +142,29 @@ const mutations = {
         state.currentVideoAlphaId = alphaId;
     },
 
+    setNextVideoAlphaId(state, alphaId){
+        state.nextVideoAlphaId = alphaId;
+    },
+
+    setPreviousVideoAlphaId(state, alphaId){
+        state.previousVideoAlphaId = alphaId
+    },
+
     setCurrentVideoTags(state, data){
+        state.currentVideoTags = [];
         if (data.current_video.tags.length > 0) {
-            state.tags.push(...data.current_video.tags);
+            state.currentVideoTags.push(...data.current_video.tags);
         } else {
-            this.tags = [];
+            this.currentVideoTags = [];
         }
     },
 
     setCurrentRouteObject(state, route) {
         state.current_route_obj = route;
+    },
+
+    setEntereRouteObject(state, route) {
+        state.previewRouteObject = route;
     },
 
     setResetVideoDialogObject(state) {
@@ -158,6 +174,7 @@ const mutations = {
         state.videoPreviousAlphaId = '';
         state.videoDialogBox = false;
         state.current_route_obj = ''
+        state.previewRouteObject = '';
     },
 
 
@@ -169,12 +186,6 @@ const mutations = {
     setVideoDetailData(state, data) {
         state.video_detail = data.video;
         state.video_detail.iframe = data.iframe;
-    },
-
-    setVideoDetailTags(state, data) {
-        if (data.video.tags.length > 0) {
-            state.tags.push(...data.video.tags);
-        }
     }
 };
 
@@ -215,8 +226,6 @@ const actions = {
     getVideoNextAndPrevLink({commit, state}, payload) {
         let data = {};
         let request_url = state.current_route_obj.name;
-        
-        console.log(request_url);
 
 
         if(request_url === 'videos'){
@@ -251,6 +260,8 @@ const actions = {
             .then((response) => {
                 commit('setCurrentVideo', response.data.current_video);
                 commit('setCurrentVideoTags', response.data);
+                commit('setNextVideoAlphaId', response.data.next_video_alpha_id);
+                commit('setPreviousVideoAlphaId', response.data.prev_video_alpha_id);
                 commit('setVideoLoading', false);
             })
             .catch((error) => {
@@ -269,10 +280,8 @@ const actions = {
         }
         axios.get(url)
             .then((response) => {
-                console.log(response);
                 commit('');
                 commit('setVideoDetailData', response.data);
-                commit('setVideoDetailTags', response.data);
             })
             .catch((error) => {
                 console.log(error);

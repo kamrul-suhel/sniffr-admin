@@ -87,22 +87,23 @@
             },
 
             openVideoDialog(video){
-                let url = '/videos/'+video.alpha_id;
+                let url = '/videos?id='+video.alpha_id;
 
                 if(this.$route.query.tag){
-                    url += '?tag='+this.$route.query.tag;
+                    url += '&tag='+this.$route.query.tag;
                 }
 
                 if(this.$route.query.search){
-                    url += '?search='+this.$route.query.search;
+                    url += '&search='+this.$route.query.search;
                 }
 
                 if(this.type === 'suggest'){
-                    url = '/videos/'+video.alpha_id;
-                    url += '?suggest=true';
+                    url = '/videos?id='+video.alpha_id;
+                    url += '&suggest=true';
                 }
+                this.$store.commit('setEntereRouteObject', this.$route);
 
-                window.history.pushState(null, video.alpha_id,url);
+                this.$router.push({path: url});
 
                 this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);

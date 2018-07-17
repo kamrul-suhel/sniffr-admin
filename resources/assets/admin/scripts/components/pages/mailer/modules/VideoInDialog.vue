@@ -72,11 +72,9 @@
             video_dialog() {
                 if(this.video_dialog === false){
                     let url = this.$store.getters.getEnterStateUrl;
-                    window.history.pushState(null, '', url);
+                    this.$router.push({path: url});
                     setTimeout(() => {
                         this.$store.commit('setResetVideoDialogObject');
-
-                        VideoDialogBoxEventBus.onResetCurrentVideoIndialog();
                     }, 500)
                 }
             }
@@ -136,25 +134,18 @@
             },
 
             onPreviousVideo(){
-                let alpha_id = this.$store.getters.getPrevVideoAlphaId;
-                let url = '/videos/'+alpha_id;
-                window.history.pushState(null, "page 2",url);
+
                 VideoDialogBoxEventBus.videoDialogPrevButtonClick()
             },
 
             onNextVideo(){
-                let alpha_id = this.$store.getters.getNextVideoAlphaId;
-                let url = '/videos/'+alpha_id;
-                window.history.pushState(null, "page 2",url);
+
                 VideoDialogBoxEventBus.videoDialogNextButtonClick()
 
             },
 
             onCloseDialogBox() {
                 this.video_dialog = false;
-                let url = this.$store.getters.getEnterStateUrl;
-                window.history.pushState(null, '', url)
-                this.$store.commit('setResetVideoDialogObject');
             },
 
             checkAlphaIdExists() {
