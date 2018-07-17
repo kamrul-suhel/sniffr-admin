@@ -249,7 +249,7 @@ class AuthController extends Controller
                     } else {
                         return $this->errorResponse([
                             'error_message' => 'There was a problem logging you in. Please try again.'
-                        ]);
+                        ], 400);
                     }
                 }
 
@@ -259,13 +259,13 @@ class AuthController extends Controller
                 }
 
                 return Redirect::to('videos')->with([
-                    'note' => 'Your account is now active. Please login to use Sniffr.',
+                    'note' => 'Your account is now active.',
                     'note_type' => 'success'
                 ]);
 
             default:
                 if($request->ajax()){
-                    return $this->errorResponse(trans($response));
+                    return $this->errorResponse(trans($response), 400);
                 }
 
                 return redirect()->back()->with([
@@ -322,12 +322,12 @@ class AuthController extends Controller
                     if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
                         return $this->successResponse([
                             'user' => auth()->user(),
-                            'success_message' => 'You password has been reset.'
+                            'success_message' => 'Your password has been reset.'
                         ]);
                     } else {
                         return $this->errorResponse([
                             'error_message' => 'There was a problem logging you in. Please try again.'
-                        ]);
+                        ], 400);
                     }
                 }
 
@@ -342,7 +342,7 @@ class AuthController extends Controller
 
             default:
                 if($request->ajax()){
-                    return $this->errorResponse(trans($response));
+                    return $this->errorResponse(trans($response), 400);
                 }
 
                 return redirect()->back()->with([

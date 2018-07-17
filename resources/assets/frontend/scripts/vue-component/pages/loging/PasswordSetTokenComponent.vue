@@ -12,6 +12,7 @@
                         </v-flex>
 
                         <v-flex xs12>
+                            <small style="color:red" v-if="error && errors.email">{{ errors.email[0] }}</small>
                             <v-text-field
                                     name="email"
                                     color="dark"
@@ -21,7 +22,7 @@
                         </v-flex>
 
                         <v-flex xs12>
-                            <small style="color:red" v-if="errors.password">{{ errors.password[0] }}</small>
+                            <small style="color:red" v-if="error && errors.password">{{ errors.password[0] }}</small>
                             <v-text-field
                                     name="password"
                                     color="dark"
@@ -60,7 +61,7 @@
                                     dark
                                     :loading="loading"
                                     :disabled="loading || buttonDisable"
-                                    @click="onPasswordsetSubmit()"
+                                    @click="onPasswordSetSubmit()"
                             >set password</v-btn>
                         </v-flex>
 
@@ -76,8 +77,12 @@
 </template>
 <script>
     import LoginEventBus from '../../../event-bus/login-event-bus';
+    import SnackbarEventBus from '../../../event-bus/snackbar-event-bus';
 
     export default {
+        components: {
+            SnackbarEventBus: SnackbarEventBus
+        },
         data() {
             return {
                 // validation & data
@@ -122,7 +127,7 @@
         },
 
         methods: {
-            onPasswordsetSubmit(){
+            onPasswordSetSubmit(){
                 if(this.$refs.password_set_form.validate()){
                     //collect form data
                     let passworchangeform = new FormData();
@@ -136,19 +141,29 @@
                     axios.post(requestUrl, passworchangeform)
                         .then(response => {
                             this.showMessage = true;
+                            this.error = false;
                             this.buttonDisable = true;
                             if(!response.data.error){
-                                this.message = response.data.success_message;
-
                                 this.$store.commit('setUserState', response.data);
                                 LoginEventBus.loginSuccess();
-                            }else{
-                                this.error = true;
-                                this.message = response.data.error_message;
+
+                                this.$router.push('/videos');
+                                SnackbarEventBus.displayMessage(5000, response.data.success_message);
                             }
                         })
                         .catch(error => {
-                            this.errors = error.response.data.errors;
+                            this.error = false;
+                            this.showMessage = false;
+
+                            if(error.response.data.error_message === undefined) {
+                                this.error = true;
+                                this.errors = error.response.data.errors;
+                                console.log('error_message = undefined');
+                            } else {
+                                this.showMessage = true;
+                                console.log('error_message exists');
+                                this.message = error.response.data.error_message;
+                            }
                         });
                 }
             }

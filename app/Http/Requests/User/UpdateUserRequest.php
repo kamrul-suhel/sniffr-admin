@@ -37,4 +37,13 @@ class UpdateUserRequest extends FormRequest
             'file' => 'file|mimes:jpg,gif,png|min:1|max:500000',
         ];
     }
+
+    public function response(array $errors)
+    {
+        return response()->json([
+            'error' => 'true',
+            'errors' => [$errors],
+            'error_message' => 'There are validation errors',
+        ], 400);
+    }
 }
