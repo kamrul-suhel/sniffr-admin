@@ -8,7 +8,7 @@
 					<i class="fa fa-user-circle"></i>
 					<a href="{{ route('users.index') }}" style="text-decoration: underline">Users</a>
                     >
-                    Emails Sent to <strong>{{ $user->username }}</strong>
+                    Emails Sent to <strong>{{ $user->full_name }}</strong>
                     <i>({{ $user->email }})</i>
 				</h3>
 			</div>

@@ -5,7 +5,7 @@
         <div class="section-title">
             @if($user)
                 <h1>
-                    <i class="fa fa-user"></i> {{ $user->username ?? 'New User' }}
+                    <i class="fa fa-user"></i> {{ $user->full_name ?? 'New User' }}
                 </h1>
             @else
                 <h3><i class="fa fa-users"></i> Add New User</h3>
@@ -74,7 +74,7 @@
 
                             <label>User's Email Address</label>
                             <input type="text" class="form-control" name="email" id="email" autocomplete="off"
-                                   value="{{ ($user) ? $user->email : old('email') }}" readonly
+                                   value="{{ ($user) ? $user->email : old('email') }}"
                                    onfocus="this.removeAttribute('readonly');"/>
 
                             <br>

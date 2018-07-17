@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <p>Hi {{ $data['username'] }}</p>
+    <p>Hi {{ $data['full_name'] }}</p>
     <br>
 
     <div class="col-lg-12">

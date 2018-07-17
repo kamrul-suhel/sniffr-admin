@@ -14,7 +14,7 @@
                 {{ $comment->comment }}
             </p>
             <div class="text-right">
-                {{ $comment->user->username }} |
+                {{ $comment->user->full_name }} |
                 {{ $comment->created_at->diffForHumans() }}
                 @if($user->isAdmin() || $comment->user_id == $user->id)
                     &nbsp

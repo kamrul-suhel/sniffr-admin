@@ -13,10 +13,10 @@
 
                 <select id="user_id" name="user_id">
                     <option value="">Not assigned</option>
-                    @foreach($users as $user2)
-                        <option value="{{ $user2->id }}"
-                                @if(($asset) && ($user2->id == $asset->user_id)) selected="selected" @endif>
-                            {{ $user2->username }}
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}"
+                                @if(($asset) && ($user->id == $asset->user_id)) selected="selected" @endif>
+                            {{ $user->full_name }}
                         </option>
                     @endforeach
                 </select>

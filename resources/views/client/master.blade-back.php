@@ -67,7 +67,7 @@
                             <li><a href="/stories" class=""><i aria-hidden="true" class="v-icon white--text v-icon--left material-icons">art_track</i>Stories</a></li>
                             <li>
                                 <div class="v-menu" style="display: inline-block;">
-                                    <div class="v-menu__activator"><a><i aria-hidden="true" class="v-icon white--text material-icons">face</i> {{ auth()->user()->username }}</a></div>
+                                    <div class="v-menu__activator"><a><i aria-hidden="true" class="v-icon white--text material-icons">face</i> {{ auth()->user()->full_name }}</a></div>
                                 </div>
                             </li>
                         </ul>
