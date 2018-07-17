@@ -58,9 +58,10 @@ class SearchController extends Controller
 		$mailerVideos = [];
 		$tagValue = $request->tag;
 		$searchValue = $request->search;
-		$currentVideoId = request()->get('alpha_id');
-		$featured = request()->get('featured');
+		$currentVideoId = $request->alpha_id;
+		$featured = $request->featured;
 		$settings = config('settings.site');
+
 
 		if($currentVideoId){
 			$currentVideo = $this->getCurrentVideo($currentVideoId);
@@ -156,7 +157,7 @@ class SearchController extends Controller
 		$data = [];
 		$mailerStories = [];
 		$searchValue = $request->search;
-		$currentStoryId = request()->get('alpha_id');
+		$currentStoryId = $request->alpha_id;
 		$settings = config('settings.site');
 
 		if($currentStoryId) {

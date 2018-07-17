@@ -9,14 +9,13 @@
         <v-app>
             <v-content>
                 <ol class="breadcrumb">
-                    <li><a href="/admin/mailers/"><i class="fa fa-tasks"></i> All Client Mailers </a></li>
-                    <li><a href="/admin/mailers/create_mailer/"> Create Mailer </a></li>
+                    <li><a href="/admin/mailers"><i class="fa fa-tasks"></i> All Client Mailers </a></li>
+                    <li><a href="/admin/mailers/create"> Create Mailer </a></li>
                 </ol>
                 <router-view></router-view>
             </v-content>
         </v-app>
     </div>
-
 @endsection
 
 @section('javascript')
