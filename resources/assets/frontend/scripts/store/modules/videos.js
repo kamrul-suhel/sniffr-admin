@@ -59,20 +59,16 @@ const getters = {
         return state.current_route_obj.fullPath;
     },
 
+    getVideoLoading(state){
+        return state.videoLoading;
+    },
+
     getCurrentVideoTags(state){
         return state.currentVideoTags;
     },
 
 
-    getCurrentVideoForDialog(state) {
-        return state.currentVideo;
-    },
-
-    getCurrentRecommendedForDialog(state) {
-        return state.currentVideo;
-    },
-
-    getCurrentMailerVideoForDialog(state) {
+    getCurrentVideo(state) {
         return state.currentVideo;
     },
 
@@ -131,6 +127,14 @@ const mutations = {
         state.videoDialogBox = value;
     },
 
+    setVideoLoading(state, value){
+        state.videoLoading = value;
+    },
+
+    setCurrentVideo(state, currentVideo){
+        state.currentVideo = currentVideo;
+    },
+
     setCurrentVideoAlphaId(state, alphaId){
         state.currentVideoAlphaId = alphaId;
     },
@@ -152,7 +156,7 @@ const mutations = {
         state.currentVideo = '';
         state.videoNextAlphaId = '';
         state.videoPreviousAlphaId = '';
-
+        state.videoDialogBox = false;
         state.current_route_obj = ''
     },
 
@@ -245,10 +249,9 @@ const actions = {
 
         axios.post('/search/videos', data)
             .then((response) => {
-                commit('setVideoDialogBox', response.data);
+                commit('setCurrentVideo', response.data.current_video);
                 commit('setCurrentVideoTags', response.data);
-
-
+                commit('setVideoLoading', false);
             })
             .catch((error) => {
                 console.log(error);
@@ -266,6 +269,8 @@ const actions = {
         }
         axios.get(url)
             .then((response) => {
+                console.log(response);
+                commit('');
                 commit('setVideoDetailData', response.data);
                 commit('setVideoDetailTags', response.data);
             })

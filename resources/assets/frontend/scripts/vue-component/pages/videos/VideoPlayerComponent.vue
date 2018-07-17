@@ -77,11 +77,7 @@
             }
         },
 
-        computed: {
-            ...mapGetters({
-                video: 'getCurrentVideoForDialog'
-            })
-        },
+        props:['video'],
 
         watch: {
             video() {

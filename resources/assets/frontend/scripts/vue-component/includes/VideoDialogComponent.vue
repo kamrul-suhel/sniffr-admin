@@ -7,7 +7,7 @@
             class="video-dialog-container"
             content-class="video-dialog-container"
     >
-        <div class="dialog-box-loading" v-if="!loadData">
+        <div class="dialog-box-loading" v-if="loadData">
             <div class="dialog-box-loading-content">
                 <v-progress-circular :size="50" indeterminate color="dark"></v-progress-circular>
             </div>
@@ -87,24 +87,31 @@
 
                 previousPageExists: true,
                 previousPageAlphaId: '',
-                swipeDirection:'',
-
-                loadData : false,
+                swipeDirection:''
 
             }
         },
 
         computed: {
+            ...mapGetters({
+                loadData: 'getVideoLoading'
+            }),
+
             video_dialog:{
                 get(){
-                    console.log(this.$route);
                     return this.$store.getters.getVideoDialogBox
                 },
 
                 set(value){
-                    this.$store.commit('setVideoDialogBox',value);
+                    let url = this.$store.getters.getEnterStateUrl;
+                    window.history.pushState(null, '', url);
+                    setTimeout(() => {
+                        this.$store.commit('setResetVideoDialogObject');
+                    }, 500)
                 }
             },
+
+
 
             current_video(){
                 return this.$store.getters.getCurrentVideo;
@@ -112,16 +119,6 @@
         },
 
         watch: {
-            video_dialog() {
-                if(this.video_dialog === false){
-                    let url = this.$store.getters.getEnterStateUrl;
-                    window.history.pushState(null, '', url);
-                    setTimeout(() => {
-                        this.$store.commit('setResetVideoDialogObject');
-                        LoginEventBus.$emit('onResetCurrentVideoIndialog');
-                    }, 500)
-                }
-            }
         },
 
         components: {
@@ -204,7 +201,7 @@
                 }
 
 
-                window.history.pushState(null, "page 2",url);
+                // window.history.pushState(null, "page 2",url);
                 VideoDialogBoxEventBus.videoDialogPrevButtonClick()
             },
 

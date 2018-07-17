@@ -67,7 +67,6 @@
     import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
     import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
-
     export default {
         components: {
             BuyQuoteButtonComponent,
@@ -85,12 +84,8 @@
         computed: {
             video_detail: {
                 get(){
-                    return this.$store.getters.getCurrentVideoForDialog;
-                },
-                set(value){
-                    this.$store.commit('');
+                    return this.$store.getters.getCurrentVideo;
                 }
-
             },
 
             tags(){

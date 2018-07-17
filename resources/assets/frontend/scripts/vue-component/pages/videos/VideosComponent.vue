@@ -1,15 +1,6 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
     <div class="videos-section s-pagination-goto">
-        <!--<section id="header" class="page-videos">-->
-            <!--<div class="header-content">-->
-                <!--<div class="position-center">-->
-                    <!--<h1 class="heading">Videos</h1>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</section>-->
-
-
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
 

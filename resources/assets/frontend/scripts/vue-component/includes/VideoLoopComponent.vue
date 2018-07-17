@@ -42,7 +42,6 @@
 </template>
 
 <script>
-    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus'
     export default {
         data() {
             return {
@@ -103,15 +102,14 @@
                     url += '?suggest=true';
                 }
 
-                window.history.pushState(null, "page 2",url);
+                window.history.pushState(null, video.alpha_id,url);
 
                 this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);
                 this.$store.commit('setVideoDialogBox', true);
+                this.$store.commit('setVideoLoading', true);
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: video.alpha_id});
-
-                // VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
             }
         },
 
