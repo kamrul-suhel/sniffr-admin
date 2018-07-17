@@ -9,10 +9,20 @@
             <!--</div>-->
         <!--</section>-->
 
-        <search-component @searchOption="searchOption($event)"></search-component>
 
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
+
+            <v-container grid-list-lg class="py-0">
+                    <v-layout row wrap>
+                        <v-flex xs12 class="mb-0 pt-0">
+                            <h2 class="text-center text-uppercase">All Videos</h2>
+                        </v-flex>
+                    </v-layout>
+            </v-container>
+
+            <search-component @searchOption="searchOption($event)"></search-component>
+
             <v-container grid-list-lg class="py-0">
                 <v-layout
                         row
@@ -22,24 +32,6 @@
                         <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
                         <p><b>We've gone ahead and procured a list of videos we think you will love!</b></p>
-                    </v-flex>
-
-                    <v-flex xs12>
-                            <div style="overflow-x:scroll; display:flex">
-                                <video-loop-component
-                                        v-for="(mailer, index) in mailer_videos"
-                                        :video="mailer"
-                                        :key="mailer.id"
-                                        :type="'suggest'"
-                                ></video-loop-component>
-                            </div>
-                    </v-flex>
-                </v-layout>
-
-                <v-layout row wrap>
-                    <v-flex xs12 class="mb-3 pt-0">
-                        <h3 class="sub-heading">All Videos</h3>
-                        <hr>
                     </v-flex>
                 </v-layout>
 

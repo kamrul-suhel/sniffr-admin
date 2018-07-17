@@ -1,6 +1,6 @@
 <template>
 	<section class="videos-filter-section">
-	    <div  class="videos-filter-form">
+	    <div  class="videos-filter-form" style="background:#fafafa;">
 	        <v-container grid-list-lg pt-2 pb-2>
 	            <v-layout row wrap>
 	                <v-flex xs12>
@@ -9,8 +9,7 @@
 	                                type="text"
 	                                name="value"
 									v-model="value"
-	                                color="white"
-									dark
+	                                color="dark"
 	                                label="Search"
 	                                append-icon="search"
 	                                aria-describedby="filterhelp"

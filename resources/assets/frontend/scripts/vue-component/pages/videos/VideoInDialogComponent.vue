@@ -83,8 +83,14 @@
         },
 
         computed: {
-            video_detail(){
-                return this.$store.getters.getCurrentVideoForDialog;
+            video_detail: {
+                get(){
+                    return this.$store.getters.getCurrentVideoForDialog;
+                },
+                set(value){
+                    this.$store.commit('');
+                }
+
             },
 
             tags(){
