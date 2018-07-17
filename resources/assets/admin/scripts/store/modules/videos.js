@@ -1,5 +1,6 @@
 const state = {
     selectedVideos: [],
+    videos: {}
 }
 
 const mutations = {
@@ -30,12 +31,29 @@ const mutations = {
     }
 }
 
-const actions = {}
+const actions = {
+    getMailerVideos({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            axios.post(payload)
+                .then((videos) => {
+                        state.videos = videos.data.videos;
+                        resolve();
+                    },
+                    (error) => {
+                        return reject();
+                    });
+        })
+    }
+}
 
 const getters = {
     getAllSelectedVideos(state) {
         return state.selectedVideos;
-    }
+    },
+
+    getVideos(state) {
+        return state.videos;
+    },
 }
 
 export default {

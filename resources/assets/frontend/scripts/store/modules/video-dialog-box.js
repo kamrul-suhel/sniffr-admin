@@ -36,8 +36,23 @@ const actions = {
             let data = {};
             let request_url = state.current_route_obj.name;
 
+
             if(request_url === 'videos'){
                 data = {'alpha_id': payload.alpha_id};
+            }
+
+            if(state.current_route_obj.query.search){
+                data = {
+                    'alpha_id': payload.alpha_id,
+                    'search' : state.current_route_obj.query.search
+                }
+            }
+
+            if(state.current_route_obj.query.tag){
+                data = {
+                    'alpha_id': payload.alpha_id,
+                    'tag' : state.current_route_obj.query.tag
+                }
             }
 
             //Featured videos
@@ -53,7 +68,6 @@ const actions = {
             //Search by tag video url
             if (request_url === 'videos_tag') {
             }
-
             axios.post('/search/videos', data)
                 .then((response) => {
                     commit('setVideoDialogBox', response.data);

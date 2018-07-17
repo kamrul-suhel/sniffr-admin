@@ -73,7 +73,7 @@
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
-                Accept
+                Buy Now
             </v-btn>
 
             <v-btn
@@ -102,7 +102,7 @@
     export default {
         data () {
             return {
-                button_text: 'Download Video',
+                button_text: 'Download Story',
                 purchased: false,
                 decline: false,
 

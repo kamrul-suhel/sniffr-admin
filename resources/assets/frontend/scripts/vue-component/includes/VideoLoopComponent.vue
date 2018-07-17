@@ -73,12 +73,21 @@
                 if(this.$route.name === 'client_videos'){
                     this.$router.push({name: 'client_video_download', params: {alpha_id: this.video.alpha_id}});
                 }else{
-                    this.$router.push({name: 'videos_detail', params: {id: this.video.alpha_id}});
+                    this.$router.push({name: 'videos_detail', params: {alpha_id: this.video.alpha_id}});
                 }
             },
 
             openVideoDialog(video){
                 let url = '/videos/'+video.alpha_id;
+
+                if(this.$route.query.tag){
+                    url += '?tag='+this.$route.query.tag;
+                }
+
+                if(this.$route.query.search){
+                    url += '?search='+this.$route.query.search;
+                }
+
                 window.history.pushState(null, "page 2",url);
                 VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
             }

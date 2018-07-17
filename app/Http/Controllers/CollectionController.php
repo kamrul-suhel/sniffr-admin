@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserQuoteRequest;
-use App\Jobs\QueueEmailRetractQuote;
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use App\Traits\FrontendResponse;
 use Auth;
 use App\Client;
@@ -16,6 +16,7 @@ use App\Story;
 use App\CollectionVideo;
 use App\CollectionStory;
 use App\CollectionQuote;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Redirect;
 use App\Notifications\RequestQuote;
@@ -188,9 +189,11 @@ class CollectionController extends Controller
 
         auth()->attempt(['email' => $user->email, 'password' => $password]);
 
-        return response([
+        return $this->successResponse([
             'user' => $user,
-        ], 200);
+            'message' => "You have also successfully registered.
+             Check your emails to set your password or you will not be able to login again."
+        ]);
 
     }
 
@@ -265,7 +268,7 @@ class CollectionController extends Controller
 		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
 		$collection = $collectionAsset->collection;
 
-        if($collectionAsset->status == 'expired') {
+        if($collectionAsset->status === 'expired') {
             if($isJson){
                 return $this->errorResponse([
                     'collection' => $collection,
@@ -275,7 +278,7 @@ class CollectionController extends Controller
             }
         }
 
-		if($collection->status == "closed") {
+		if($collection->status === "closed") {
             if($isJson){
                 return $this->errorResponse([
                     'collection' => $collection,
@@ -288,18 +291,22 @@ class CollectionController extends Controller
 		$collection->save();
 
 		$collectionAsset->status = "purchased";
+		$collectionAsset->license_ends_at = $collectionAsset->calculateLicenseEndTime();
+		$collectionAsset->licensed_at = Carbon::now();
 		$collectionAsset->save();
 
-		//If exclusive type of asset is purchased, Expire all other collections with same asset. Close collection too
+		// If exclusive type of asset is purchased,
+        // Expire all other collections with same asset. Close collection too
 		if($collectionAsset->type === 'exclusive') {
 		    $itemInCollectionAsset = $this->{'collection'.ucfirst($type)}
                 ->where('video_id', $collectionAsset->video_id)
+                ->where('status', '!=', 'purchased')
                 ->where('id', '!=', $collectionAsset->id);
 
             $itemInCollectionAsset
                 ->update([
                     'status' => 'expired',
-                    'reason' => 'Asset bought Exclusively by '. $collectionAsset->collection->user->client->name
+                    'reason' => 'Asset bought Exclusively by '. $collectionAsset->collection->user->client->name . '. (id:'.$collectionAsset->id.')'
                 ]);
 
 		    $itemsInCollectionAssetCollectionIds = $itemInCollectionAsset->pluck('collection_id');
@@ -309,10 +316,14 @@ class CollectionController extends Controller
                 ->update(['status' => 'closed']);
 
 		    foreach($itemInCollectionAsset->get() as $collectionAsset) {
-		        QueueEmailRetractQuote::dispatch(
-		            $collectionAsset,
-                    $type
-                );
+		        if(isset($collectionAsset->collection->user)){
+                    QueueEmailRetractQuote::dispatch(
+                        $collectionAsset,
+                        $type
+                    );
+                }
+
+
             }
 
         }
@@ -442,4 +453,18 @@ class CollectionController extends Controller
             ]);
     }
 
+    /**
+     * Get alpha id of all assets that have ongoing exclusive license agreements
+     * @param $type
+     * @return \Illuminate\Support\Collection
+     */
+    public function getExclusivePurchasedAsset($type)
+    {
+        $collectionAsset = $this->{'collection'.ucfirst($type)};
+        $exclusiveAsset = $collectionAsset->getAssetByTypeStatus('exclusive', 'purchased');
+
+        return $this->successResponse([
+            'data' => $this->{$type}->whereIn('id', $exclusiveAsset->pluck('video_id'))->pluck('alpha_id')
+        ]);
+    }
 }

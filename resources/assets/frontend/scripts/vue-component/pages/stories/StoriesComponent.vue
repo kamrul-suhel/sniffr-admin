@@ -30,7 +30,7 @@
 
 
                 <v-layout row wrap class="s-pagination-goto">
-                    <v-flex xs12 class=" mb-3">
+                    <v-flex xs12 class="pt-0 mb-3">
                         <h3 class="sub-heading">All Stories</h3>
                         <hr>
                     </v-flex>
@@ -40,7 +40,8 @@
                     <story-loop-component
                             v-for="story in stories"
                             :story="story"
-                            :key="story.id"></story-loop-component>
+                            :key="story.id"
+                    ></story-loop-component>
                 </v-layout>
             </v-container>
 

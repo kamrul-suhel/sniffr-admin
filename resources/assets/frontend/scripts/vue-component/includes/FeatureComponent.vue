@@ -1,9 +1,9 @@
 <template>
     <!-- FEATURE SECTION -->
     <section class="feature-section section-space">
-        <v-container grid-list-lg>
+        <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
-                <v-flex xs12 text-center>
+                <v-flex xs12 text-center class="py-0">
                     <div class="featured-section-title">
                         <h1 class="heading">FEATURED VIDEOS</h1>
                     </div>

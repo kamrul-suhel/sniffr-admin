@@ -8,8 +8,8 @@
         </span>
     </span>
     <span class="col-md-6">
-        @if($video->image != 'placeholder.gif')
-            <img src="{{ $video->image }}" class="video-img" width="200"/>
+        @if($asset->image != 'placeholder.gif')
+            <img src="{{ $asset->image }}" class="video-img" width="200"/>
         @endif
     </span>
 </div>

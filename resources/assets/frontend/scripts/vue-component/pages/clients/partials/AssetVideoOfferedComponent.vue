@@ -169,7 +169,6 @@
 
         created() {
             this.assetType = this.type;
-            console.log(this.assetType);
             if(this.video.expired){
                 this.expired = true;
             }

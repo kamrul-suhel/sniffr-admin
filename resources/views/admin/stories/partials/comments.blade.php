@@ -6,6 +6,6 @@
         </div>
     </div>
     <div class="panel-body" style="display: block;">
-        <textarea class="form-control" name="excerpt" id="excerpt">@if(!empty($story->excerpt)){{ htmlspecialchars($story->excerpt) }}@endif</textarea>
+        <textarea class="form-control" name="excerpt" id="excerpt">@if(!empty($asset->excerpt)){{ htmlspecialchars($asset->excerpt) }}@endif</textarea>
     </div>
 </div>

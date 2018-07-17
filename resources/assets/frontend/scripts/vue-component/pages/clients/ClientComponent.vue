@@ -32,17 +32,5 @@
         updated(){
 
         },
-
-        methods: {
-            onClientEmail(){
-                this.$router.push({name: 'client_mail'});
-            },
-
-            onClientStories(){
-                this.$router.push({name: 'client'});
-
-
-            }
-        }
     }
 </script>

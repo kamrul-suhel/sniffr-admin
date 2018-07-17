@@ -54,17 +54,17 @@
                                     <h3 id="tags">Tags:</h3>
                                     <ul>
                                         <li v-for="tag in tags">
-                                            <router-link :to="'/videos/tag/'+tag.name">
+                                            <router-link :to="'/videos?tag='+tag.name">
                                                 #{{ tag.name }}
                                             </router-link>
                                         </li>
                                     </ul>
                                 </div>
 
-                                <quote-button-component
+                                <buy-quote-button-component
                                         :type="'video'"
                                         :asset="video_detail.video"
-                                ></quote-button-component>
+                                ></buy-quote-button-component>
                             </v-flex>
                         </v-layout>
                     </v-flex>
@@ -76,11 +76,11 @@
 
 <script>
     import VideoPlayer from './VideoPlayerComponent'
-    import QuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
+    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
 
     export default {
         components: {
-            QuoteButtonComponent,
+            BuyQuoteButtonComponent,
             videoPlayer: VideoPlayer,
         },
 
@@ -108,8 +108,8 @@
                 this.content_padding = false;
             }
 
-            let id = this.$route.params.id;
-            this.$store.dispatch('getVideoDetailData', {alpha_id: id}).then(() => {
+            let alpha_id = this.$route.params.alpha_id;
+            this.$store.dispatch('getVideoDetailData', {alpha_id: alpha_id}).then(() => {
                 this.video_detail = this.$store.getters.getVideoDetailData;
                 this.video_detail.video.iframe = this.video_detail.iframe;
 

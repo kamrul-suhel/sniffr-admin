@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Jobs\QueueEmailCompany;
+use App\Jobs\Auth\QueueEmailCompany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;

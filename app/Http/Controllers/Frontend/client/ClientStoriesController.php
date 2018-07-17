@@ -113,6 +113,7 @@ class ClientStoriesController extends Controller
 			$data = [
 				'stories' => $stories,
 			];
+
 			return $this->successResponse($data);
 		}
 		return view('frontend.master');

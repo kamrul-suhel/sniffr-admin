@@ -150,6 +150,7 @@
     import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus.js';
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
     import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
+    import LoginEventBus from '../../event-bus/login-event-bus';
 
 
     export default {
@@ -174,6 +175,7 @@
                 platforms: [],
                 lengths: [],
                 errors: [],
+                setPasswordMessage: null,
 
                 //Form data
                 request_quote: {
@@ -251,7 +253,6 @@
                 this.type = type;
                 this.asset = asset;
                 this.collection = collection;
-                // this.$refs.quote_form.reset();
 
                 if (this.type === 'video') {
                     this.settings = this.$store.getters.getSettingsObject;
@@ -270,7 +271,7 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                }else if (this.type == 'story') {
+                }else if (this.type === 'story') {
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.disabled = false;
@@ -279,11 +280,6 @@
                 this.open_quote_dialog = true;
 
 
-            });
-
-            VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
-                //this.$router.push('client/purchased');
-                //TODO - Decide where to send user based on type of view
             });
 
             ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
@@ -301,7 +297,6 @@
             onQuoteDialogClose() {
                 setTimeout(()=> {
                     this.disabled = true;
-                    this.buy_dialog = false;
                     this.loading = false;
                 }, 500);
             },
@@ -344,8 +339,9 @@
                             
                             setTimeout(()=> {
                                 this.$refs.quote_form.reset();
-                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly';
-                                ThankYouDialogBoxEventBus.openThankYouDialog(message);
+                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly.';
+
+                                ThankYouDialogBoxEventBus.openThankYouDialog(message, this.setPasswordMessage);
                             }, 500)
                         })
                         .catch(error => {
@@ -370,10 +366,11 @@
                     form_data.append('license_length', this.license_length);
                     form_data.append('notes', this.notes);
 
-
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
-
+                            this.$store.commit('setUserState', response.data);
+                            LoginEventBus.loginSuccess();
+                            this.setPasswordMessage = response.data.message;
                             this.requestQuote();
                         })
                         .catch(error => {
@@ -381,10 +378,6 @@
                             this.loading = false;
                         });
                 }
-            },
-
-            initializeData(collection, ){
-
             }
         }
     }

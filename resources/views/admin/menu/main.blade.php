@@ -146,13 +146,7 @@
         <a href="{{ url('admin/quotes') }}" class="tlink">
             <i class="fa fa-exclamation"></i>
             <small class="badge">
-                {{
-                    \App\Collection::whereHas('collectionVideos', function($query) {
-                        $query->where('status', 'requested');
-                    })->orWhereHas('collectionStories', function($query) {
-                        $query->where('status', 'requested');
-                    })->with('collectionVideos')->with('collectionStories')->count()
-                }}
+                {{ \App\Collection::getQuotesByStatus('requested')->count() }}
             </small>
             <span class="title">Quotes</span>
         </a>

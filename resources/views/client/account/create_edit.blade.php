@@ -1,9 +1,9 @@
 @extends('client.master')
 
 @section('content')
-    <div id="container">
+    <div class="container pt-0" >
         <div class="section-title">
-            <h1>{!! ($company) ? ' <i class="fa fa-industry"></i> '. $company->name : '<i class="fa fa-plus"></i> Add New Client' !!}</h1>
+            <h1 class="mt-0">{!! ($company) ? ' <i class="fa fa-industry"></i> '. $company->name : '<i class="fa fa-plus"></i> Add New Client' !!}</h1>
         </div>
         <div class="clear"></div>
 
@@ -146,8 +146,9 @@
                         </div>
                     </div>
                 </div>
-
-                @include('client.account.partials.users')
+                @if($company->active)
+                    @include('client.account.partials.users')
+                @endif
             @endif
 
             <input type="submit" value="{{ ($company) ? 'Update Company' : 'Create Company' }}"

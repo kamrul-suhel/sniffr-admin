@@ -297,7 +297,7 @@
                             this.loading = false;
                             this.open_buy_dialog = false;
                             setTimeout(()=> {
-                                let message = "Thank you for purchasing "+ this.asset.title
+                                let message = "Thank you for purchasing "+ this.asset.title;
                                 ThankYouDialogBoxEventBus.openThankYouDialog(message);
                                 this.$refs.quote_form.reset();
                             }, 500)

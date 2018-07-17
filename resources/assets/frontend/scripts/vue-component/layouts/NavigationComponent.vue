@@ -14,7 +14,7 @@
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
-                                <router-link to="/upload">
+                                <router-link :to="{name: 'upload_video'}">
                                     <v-icon color="white" left>file_upload</v-icon> Upload
                                 </router-link>
                             </li>
@@ -26,14 +26,14 @@
                             </li>
 
                             <li>
-                                <router-link to="/videos">
+                                <router-link :to="{name: 'videos'}">
                                     <v-icon color="white" left>videocam</v-icon> Videos
                                 </router-link>
                             </li>
 
 
                             <li>
-                                <router-link to="/stories">
+                                <router-link :to="{name: 'stories'}">
                                     <v-icon color="white" left>art_track</v-icon> Stories
                                 </router-link>
                             </li>
@@ -55,9 +55,9 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <a href="/client/profile">
+                                                <router-link :to="{name: 'client_profile'}">
                                                     <v-icon color="white" left size="20px">settings</v-icon> Account Settings
-                                                </a>
+                                                </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 
@@ -86,17 +86,6 @@
             </v-layout>
         </v-container>
 
-        <!-- Login component -->
-        <login-component></login-component>
-        <!-- End login component -->
-
-        <!-- Password reset dialog box -->
-        <forgot-password-component></forgot-password-component>
-        <!-- End password reset -->
-
-        <!-- Quote Component -->
-        <quote-component></quote-component>
-        <!-- End request quote component -->
 
         <!-- Logout snackbars -->
         <v-snackbar
@@ -107,18 +96,15 @@
             <v-btn flat color="light" @click.native="logout = false">Close</v-btn>
         </v-snackbar>
         <!-- End logout -->
+
     </section>
 </template>
 <script>
-    import LoginComponent from '../includes/LoginComponent'
-    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
-    import QuoteComponent from '../includes/QuoteComponent'
+
     import LoginEventBus from '../../event-bus/login-event-bus'
     export default {
         components: {
-            LoginComponent,
-            ForgotPasswordComponent,
-            QuoteComponent
+
         },
         data() {
             return {
@@ -176,9 +162,7 @@
                 this.client_login = this.$store.getters.isClientLogin;
             });
 
-            this.$store.dispatch('setSettingObjectFromServer').then(() => {
-                this.settings = this.$store.getters.getSettingsObject;
-            });
+            this.settings = this.$store.getters.getSettingsObject;
 
 
             if(this.$route.name !== 'home'){

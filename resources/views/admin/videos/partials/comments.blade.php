@@ -5,11 +5,11 @@
         </div>
     </div>
     <div class="panel-body" style="display: block;">
-        @if(!count($video->comments))
+        @if(!count($asset->comments))
             <p>No Comments</p>
         @endif
 
-        @foreach($video->comments as $comment)
+        @foreach($asset->comments as $comment)
             <p>
                 {{ $comment->comment }}
             </p>
@@ -24,8 +24,8 @@
                         'method' => 'DELETE'
                     ]) !!}
                     <button class="fa fa-trash-o"></button>
-                    {{ Form::hidden('alpha_id', $video->alpha_id) }}
-                    {{ Form::hidden('video_id', $video->id) }}
+                    {{ Form::hidden('alpha_id', $asset->alpha_id) }}
+                    {{ Form::hidden('video_id', $asset->id) }}
                     {!! Form::close() !!}
                 @endif
             </div>
@@ -37,8 +37,8 @@
         <form method="POST" action="{{ route('comment.store') }}" id="comment-form" name="comment-form"
               accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="video_id" value="{{ $video->id }}"/>
-            <input type="hidden" name="alpha_id" value="{{ $video->alpha_id }}"/>
+            <input type="hidden" name="video_id" value="{{ $asset->id }}"/>
+            <input type="hidden" name="alpha_id" value="{{ $asset->alpha_id }}"/>
             <div class="form-group">
                 <label for="comment">Add a comment</label>
                 <textarea class="form-control" id="comment" name="comment">{{ old('comment') }}</textarea>

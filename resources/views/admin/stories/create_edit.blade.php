@@ -8,7 +8,7 @@
 	<ol class="breadcrumb">
 		<li> <a href="{{ (isset($decision) ? '/admin/stories/?decision='.$decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a> </li>
 		<li class="active">
-			@if(!empty($story->id))
+			@if(!empty($asset->id))
 				<strong>Edit Story</strong>
 			@else
 				<strong>New Story</strong>
@@ -21,14 +21,14 @@
 	</div>
 	<div class="clear"></div>
 
-	<form method="POST" action="{{ $post_route }}" {{ (isset($story) ? '' : 'id=js-story-update') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<form method="POST" action="{{ $post_route }}" {{ (isset($asset) ? '' : 'id=js-story-update') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 		<div class="row">
 
 			<div class="col-sm-12">
 
 				<div class="panel panel-primary" data-collapsed="0">
-					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($story->title)){{ $story->title }}@endif" />
+					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($asset->title)){{ $asset->title }}@endif" />
 				</div>
 
 			</div>
@@ -53,7 +53,7 @@
 							<div class="panel-body" style="display: block;">
 								<select name="type" id="type" class="form-control">
 									@foreach(config('stories.story_type') as $type)
-									<option value="{{ $type }}" {{ (isset($story)  &&  $story->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
+									<option value="{{ $type }}" {{ (isset($asset)  &&  $asset->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -69,7 +69,7 @@
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="description" id="description">@if(!empty($story->description)){{ htmlspecialchars($story->description) }}@endif</textarea>
+								<textarea class="form-control" name="description" id="description">@if(!empty($asset->description)){{ htmlspecialchars($asset->description) }}@endif</textarea>
 							</div>
 						</div>
 
@@ -98,7 +98,17 @@
 
 							<div class="panel-body">
 								<div class="video-inputs-wrapper">
-
+									@if(isset($asset))
+										@foreach($asset->videos as $video)
+											<div class="form-group input-group">
+												<input type="text" class="form-control" value="{{ $video->title }}" disabled />
+												<input type="hidden" name="videos[]" value="{{ $video->id }}" />
+												<span class="input-group-btn">
+													<button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button>
+												</span>
+											</div>
+										@endforeach
+									@endif
 								</div>
 
                                 <br>
@@ -134,18 +144,17 @@
 								<select id="user_id" name="user_id" class="form-control">
 									<option value="">Not assigned</option>
 									@foreach($users as $user2)
-										<option value="{{ $user2->id }}" @if(isset($story)) @if(!empty($user2->id == $story->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
+										<option value="{{ $user2->id }}" @if(isset($asset)) @if(!empty($user2->id == $asset->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
 									@endforeach
 								</select>
 							</div>
 						</div>
 
-
-						@if(!empty($story))
+						@if(!empty($asset))
 
 						@include('admin.stories.partials.rights_status')
 
-						@include('admin.stories.partials.contract')
+						@include('admin.contracts.partials.form')
 
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
@@ -156,7 +165,7 @@
 								</div>
 							</div>
 							<div class="panel-body" style="display: block;">
-								<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($story)&&$story->notes) {{ $story->notes }} @endif</textarea>
+								<textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($asset)&&$asset->notes) {{ $asset->notes }} @endif</textarea>
 							</div>
 						</div>
 
@@ -172,7 +181,7 @@
 							<div class="panel-body" style="display: block;">
 								<select name="state" id="state" class="form-control">
 									@foreach(config('stories.states') as $state)
-									<option value="{{ $state }}" @if (isset($story) && $story->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
+									<option value="{{ $state }}" @if (isset($asset) && $asset->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -188,35 +197,35 @@
 
 		</div>
 
-		@if(isset($story->id))
-			<input type="hidden" id="id" name="id" value="{{ $story->id }}" />
-			<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $story->alpha_id }}" />
+		@if(isset($asset->id))
+			<input type="hidden" id="id" name="id" value="{{ $asset->id }}" />
+			<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}" />
 			<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
-			<a href="{{ url('admin/stories/delete/'.$story->alpha_id) }}" class="btn btn-danger">Delete Story</a>
+			<a href="{{ url('admin/stories/delete/'.$asset->alpha_id) }}" class="btn btn-danger">Delete Story</a>
 		@endif
 
 		<input type="hidden" name="_token" value="<?= csrf_token() ?>" />
 		<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
-		<input type="hidden" name="type" value="{{ (isset($story) ? $story->type : 'new') }}" />
+		<input type="hidden" name="type" value="{{ (isset($asset) ? $asset->type : 'new') }}" />
 
-		@if(isset($story->id)&&isset($decision)&&$decision=='licensing')
-			@if($story->state=='licensing'||$story->state=='unlicensed'||$story->state=='unapproved'||$story->state=='rejected')
-				<a href="{{ url('admin/stories/status/licensed/'.$story->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
+		@if(isset($asset->id)&&isset($decision)&&$decision=='licensing')
+			@if($asset->state=='licensing'||$asset->state=='unlicensed'||$asset->state=='unapproved'||$asset->state=='rejected')
+				<a href="{{ url('admin/stories/status/licensed/'.$asset->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
 			@endif
 		@endif
 
 		<input type="submit" value="{{ $button_text }}" class="btn btn-success pull-right" />
 
-		@if(isset($story) && isset($decision) && $decision!='content-sourced' && $story->url)
-			<a href="{{ $story->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
+		@if(isset($asset) && isset($decision) && $decision!='content-sourced' && $asset->url)
+			<a href="{{ $asset->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
 		@endif
 
 	</form>
 
 	<div class="clear"></div>
 
-	@if(isset($story))
-        @include('admin.stories.partials.contract_modal')
+	@if(isset($asset))
+        @include('admin.contracts.partials.contract_modal')
     @endif
 </div>
 

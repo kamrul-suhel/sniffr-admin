@@ -56,7 +56,7 @@
                 this.setData();
             },
 
-            searchTerm(){
+            searchTerm() {
                 this.page = 1;
                 this.setData();
             },
@@ -77,11 +77,16 @@
 
                 this.videos.splice(videoIndex, 1);
 
-                this.videos.forEach((video) => {
+                this.videos.forEach((video, index) => {
+                    console.log(index);
+                    if(videoIndex === index){
+                        temp_video.push(currentVideo);
+                    }
+
                     video.change_value = !video.change_value;
 
-                    if(video.alpha_id === currentVideo.alpha_id) {
-                        if(currentVideo.type === "exclusive" && video.type === "exclusive"){
+                    if (currentVideo.type === "exclusive") {
+                        if (video.alpha_id === currentVideo.alpha_id) {
                             video.expired = true;
                         }
                     }
@@ -97,12 +102,12 @@
         },
 
         methods: {
-            setData(){
-                if(this.type === 'offered'){
+            setData() {
+                if (this.type === 'offered') {
                     this.getOfferedVideosData(this.getQueryObject());
                 }
 
-                if(this.type === 'purchased'){
+                if (this.type === 'purchased') {
                     this.getPurchasedVideosData(this.getQueryObject());
                 }
             },
@@ -113,8 +118,8 @@
                     url += '?page=' + queryObject.page;
                 }
 
-                if(queryObject.searchTerm != ''){
-                    url += '&search='+ queryObject.searchTerm;
+                if (queryObject.searchTerm != '') {
+                    url += '&search=' + queryObject.searchTerm;
                 }
 
                 this.$store.dispatch('fetchOfferedVideos', url)
@@ -122,7 +127,7 @@
                         var videos = this.$store.getters.getOfferedVideos;
 
                         // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
-                        if(typeof videos.data == 'object'){
+                        if (typeof videos.data == 'object') {
                             videos.data = Object.values(videos.data);
                         }
                         this.videos = [];
@@ -147,8 +152,8 @@
                     url += '?page=' + queryObject.page;
                 }
 
-                if(queryObject.searchTerm != ''){
-                    url += '&search='+ queryObject.searchTerm;
+                if (queryObject.searchTerm != '') {
+                    url += '&search=' + queryObject.searchTerm;
                 }
 
                 this.$store.dispatch('fetchPurchasedVideos', url)
@@ -156,7 +161,7 @@
                         var videos = this.$store.getters.getPurchasedVideos;
 
                         // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
-                        if(typeof videos.data == 'object'){
+                        if (typeof videos.data == 'object') {
                             videos.data = Object.values(videos.data);
                         }
                         this.videos = [];
@@ -176,8 +181,8 @@
                     })
             },
 
-            getQueryObject(){
-                return  {
+            getQueryObject() {
+                return {
                     page: this.page,
                     searchTerm: this.searchTerm
                 };

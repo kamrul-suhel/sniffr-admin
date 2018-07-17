@@ -2,16 +2,29 @@
  * Created by kamrulahmed on 13/04/2018.
  */
 const state = {
-    username: sniffr_app ? sniffr_app.user.username : '',
-    name: sniffr_app ? sniffr_app.user.username : '',
+    // username: sniffr_app ? sniffr_app.user.username : '',
+    // name: sniffr_app ? sniffr_app.user.username : '',
+    // avatar: '',
+    // email: '',
+    // user_login: false,
+    // user_id:'',
+    // client_id: sniffr_app ? sniffr_app.user.client_id : '',
+    // user_role: '',
+    // route_url: '',
+    // offers: sniffr_app.user_offers,
+    // active: '',
+
+    username: '',
+    name:  '',
     avatar: '',
     email: '',
     user_login: false,
     user_id:'',
-    client_id: sniffr_app ? sniffr_app.user.client_id : '',
+    client_id:  '',
     user_role: '',
     route_url: '',
-    offers: sniffr_app.user_offers,
+    offers: '',
+    active: '',
 };
 
 const mutations = {
@@ -24,11 +37,12 @@ const mutations = {
         state.user_id = '';
         state.user_role = '';
         state.offers = '';
+        state.active = '';
     },
 
     setUserState(state, data){
         let user = data.user;
-        if(user){
+        if(user.username){
             state.username = user.username;
             state.name = user.username;
             state.email = user.email;
@@ -38,6 +52,7 @@ const mutations = {
             state.client_id = user.client_id;
             state.user_role = user.role;
             state.offers = data.user_offers;
+            state.active = user.active;
         }
     },
 
@@ -54,7 +69,18 @@ const mutations = {
 const actions = {
     getLoginStatus({commit}) {
         return new Promise(function (resolve, reject) {
-            commit('setUserState', sniffr_app);
+            axios.get('/settings_object')
+                .then((response) => {
+                    let data = response.data;
+                    if (!data.error) {
+                        commit('setUserState', data.sniffr_app);
+                        resolve();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject();
+                });
             resolve();
         });
     },
@@ -84,7 +110,7 @@ const getters = {
     },
 
     isClientLogin(state) {
-        return state.client_id ? true : false;
+        return !!state.client_id;
     },
 
     getUser(state) {
@@ -96,6 +122,7 @@ const getters = {
             client_id: state.client_id,
             role: state.user_role,
             offers: state.offers,
+            active: state.active,
         }
     },
 

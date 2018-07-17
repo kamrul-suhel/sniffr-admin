@@ -8,33 +8,33 @@
             <input type="file" multiple="true" class="form-control" name="file" id="file"/>
         </span>
 
-        @if($video->file)
+        @if($asset->file)
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Original
             </span>
 
-            <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $video->file }}" disabled/>
+            <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $asset->file }}" disabled/>
         </span>
         @endif
 
-        @if($video->file_watermark)
+        @if($asset->file_watermark)
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Watermark
             </span>
 
-            <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $video->file_watermark }}" disabled/>
+            <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $asset->file_watermark }}" disabled/>
         </span>
         @endif
 
-        @if($video->file_watermark_dirty)
+        @if($asset->file_watermark_dirty)
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Dirty
             </span>
 
-            <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $video->file_watermark_dirty }}" disabled/>
+            <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $asset->file_watermark_dirty }}" disabled/>
         </span>
         @endif
     </div>
@@ -46,7 +46,7 @@
             </span>
 
             <input type="text" class="form-control" name="url" id="url"
-                   @if(is_null($video->url)) placeholder="Current video is an uploaded file" @endif value="{{ $video->url or null }}" title="URL"/>
+                   @if(is_null($asset->url)) placeholder="Current video is an uploaded file" @endif value="{{ $asset->url or null }}" title="URL"/>
         </span>
     </div>
 
@@ -56,7 +56,7 @@
                 Embed Code
             </span>
 
-            <textarea class="form-control" name="embed_code" id="embed_code" title="Embed Code" rows="4">{{ !empty($video->embed_code) ? $video->embed_code : null }}</textarea>
+            <textarea class="form-control" name="embed_code" id="embed_code" title="Embed Code" rows="4">{{ !empty($asset->embed_code) ? $asset->embed_code : null }}</textarea>
         </span>
     </div>
 
@@ -66,7 +66,7 @@
                 Youtube Id
             </span>
 
-            <input type="text" class="form-control" name="youtube_id" id="youtube_id" value="{{ !empty($video->youtube_id) ? $video->youtube_id : '' }}" />
+            <input type="text" class="form-control" name="youtube_id" id="youtube_id" value="{{ !empty($asset->youtube_id) ? $asset->youtube_id : '' }}" />
         </span>
     </div>
 </div>

@@ -53,33 +53,38 @@ class AdminClientMailerController extends Controller
         return view('admin.mailers.index', $data); //return response()->json($formatted_posts);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create_mailer(Request $request)
-    {
-        if ($request->ajax()) {
-            if($request->search){
-                $stories = Story::where('title', 'LIKE', '%'.$request->search. '%')
-                    ->orWhere('alpha_id', 'LIKE', '%'. $request->search . '%')
-                    ->orderBy('date_ingested', 'DESC')
-                    ->paginate(12);
-            }else{
-                $stories = Story::orderBy('date_ingested', 'DESC')
-                    ->paginate(12);
-            }
 
-            $data = [
-                'stories' => $stories
-            ];
-            return $this->successResponse($data);
-        }
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function create(Request $request)
+	{
+		$stories = json_decode($request->stories, true);
+		$videos = json_decode($request->videos, true);
 
-        return view('admin.mailers.create');
-    }
+		if ($stories || $videos) {
+			$mailer = new ClientMailer();
+			$mailer->alpha_id = VideoHelper::quickRandom();
+			$mailer->user_id = (Auth::user() ? Auth::user()->id : NULL);
+			$mailer->active = 1;
+			$mailer->save();
 
-    /**
+			$mailer->stories()->sync($stories);
+			$mailer->videos()->sync($videos);
+
+			return response()->json([
+				'status' => 'success',
+				'mailer_id' => $mailer->id,
+				'message' => 'all good',
+			]);
+		}
+
+		return view('admin.mailers.create');
+	}
+
+
+	/**
      * @return \Illuminate\Http\JsonResponse
      */
     public function refresh()
@@ -139,38 +144,6 @@ class AdminClientMailerController extends Controller
             'status' => 'success',
             'jobs' => $jobs,
             'message' => 'all good',
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function create(Request $request)
-    {
-        $stories = json_decode($request->stories, true);
-        $videos = json_decode($request->videos, true);
-
-        if ($stories || $videos) {
-            $mailer = new ClientMailer();
-            $mailer->alpha_id = VideoHelper::quickRandom();
-            $mailer->user_id = (Auth::user() ? Auth::user()->id : NULL);
-            $mailer->active = 1;
-            $mailer->save();
-
-            $mailer->stories()->sync($stories);
-            $mailer->videos()->sync($videos);
-
-            return response()->json([
-                'status' => 'success',
-                'mailer_id' => $mailer->id,
-                'message' => 'all good',
-            ]);
-        }
-
-        return response()->json([
-            'status' => 'failed',
-            'message' => 'dammit'
         ]);
     }
 

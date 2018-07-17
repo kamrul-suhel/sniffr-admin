@@ -4,11 +4,7 @@
 
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
-    Route::get('/settings_object', function () {
-    	$settings['public'] = config('settings.public');
-    	$settings['pricing'] = config('pricing');
-        return response($settings);
-    });
+    Route::get('/settings_object', 'SettingController@index')->name('setting_object');
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
@@ -157,20 +153,18 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
 
     Route::get('stories', 'Admin\AdminStoryController@index');
-    Route::get('stories/create', 'Admin\AdminStoryController@create');
+    Route::get('stories/create', 'Admin\AdminStoryController@create')->name('admin.stories.create');
     Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
-    Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit');
-    Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'));
+    Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit')->name('admin.stories.edit');
+    Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'))->name('admin.stories.update');
     Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
     Route::get('stories/status/{state}/{id}', array('uses' => 'Admin\AdminStoryController@status'));
     Route::get('stories/update_field', array('uses' => 'Admin\AdminStoryController@updateField'));
     Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');
-    Route::get('mailers/create_mailer', 'Admin\AdminClientMailerController@create_mailer');
     Route::get('mailers/refresh', array('uses' => 'Admin\AdminClientMailerController@refresh'));
     Route::get('mailers/checkjobs', 'Admin\AdminClientMailerController@checkJobs');
-    Route::get('mailers/videos', 'Admin\AdminStoryController@getMailerVideos')->name('admin.mailer.videos');
     Route::get('mailers/create', 'Admin\AdminClientMailerController@create');
     Route::post('mailers/store', array('uses' => 'Admin\AdminClientMailerController@store'));
     Route::get('mailers/edit/{id}', 'Admin\AdminClientMailerController@edit');
@@ -190,8 +184,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     Route::resource('collections', 'Admin\AdminCollectionController', ['as' => 'admin']);
 
-    Route::get('contacts/autocomplete', 'Contact\ContactController@autocomplete')->name('contact.autocomplete');
-    Route::resource('contacts', 'Contact\ContactController');
+    Route::get('contacts/autocomplete', 'Admin\AdminContactController@autocomplete')->name('contact.autocomplete');
+    Route::resource('contacts', 'Admin\AdminContactController');
 
     Route::resource('users', 'Admin\AdminUsersController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
 
@@ -240,15 +234,21 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
     Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
     Route::get('videos/offered', 'Frontend\Client\ClientVideosController@getOfferedVideos')->name('client.purchased.videos');
+	Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
+	Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
 
     /*
     |--------------------------------------------------------------------------
     | Download Stories
     |--------------------------------------------------------------------------
     */
+
+
     Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
     Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
     Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.purchased.stories');
+	Route::get('stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
+	Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
 
     /*
     |--------------------------------------------------------------------------
@@ -285,35 +285,32 @@ Route::post('client/collections', 'CollectionController@store')->name('client.st
 
 /*
 |--------------------------------------------------------------------------
-| Client Frontend Routes
+| Frontend Videos Routes
 |--------------------------------------------------------------------------
 */
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show');
-Route::get('client/stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
-Route::get('client/stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
 
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show');
-Route::get('client/videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-Route::get('client/videos/{alpha_id}', 'Frontend\VideoController@show')->name('client.videos.show');;
+Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
 
 
 /*
 |--------------------------------------------------------------------------
-| Frontend video dialog box, getting current video, next & previous link
+| Frontend Stories Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
+Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| Frontend Search video/story dialog box, getting current video, next & previous link
 |--------------------------------------------------------------------------
 */
 
 Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
 Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Stories route
-|--------------------------------------------------------------------------
-*/
-Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
-Route::post('/request_quote_process', 'Frontend\StoryController@requestQuote')->name('frontend.request.quote');
-
 
 /*
 |--------------------------------------------------------------------------

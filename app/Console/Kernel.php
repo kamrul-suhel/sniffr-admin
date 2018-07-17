@@ -40,6 +40,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('stats:getVideoStats')
             ->everyTenMinutes()
             ->appendOutputTo($filePath);
+
+        $schedule->command('licenses:monitorLicenseEndTimes')
+            ->everyFiveMinutes()
+            ->appendOutputTo($filePath);
     }
 
     /**

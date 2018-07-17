@@ -14,7 +14,11 @@
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
             <v-container grid-list-lg class="py-0">
-                <v-layout row wrap v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
+                <v-layout
+                        row
+                        wrap
+                        v-if="client_logged_in && Object.keys(mailer_videos).length > 0"
+                class="pb-5">
                     <v-flex xs12>
                         <h3 class="sub-heading">Your Suggested Videos</h3>
                         <hr>
@@ -33,24 +37,20 @@
                 </v-layout>
 
                 <v-layout row wrap>
-                    <v-flex xs12 class="mb-3">
-                        <br>
+                    <v-flex xs12 class="mb-3 pt-0">
                         <h3 class="sub-heading">All Videos</h3>
                         <hr>
                     </v-flex>
                 </v-layout>
 
-                    <transition-group
-                            name="slide-fade"
-                            tag="div"
-                            class="layout row wrap"
-                            v-if="videos.length > 0">
+                    <v-layout row wrap>
                         <video-loop-component
                                 v-for="(video, index) in videos"
                                 :video="video"
                                 :key="video.alpha_id"
                         ></video-loop-component>
-                    </transition-group>
+                    </v-layout>
+                
             </v-container>
         </section>
 

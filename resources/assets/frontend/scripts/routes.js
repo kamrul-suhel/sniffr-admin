@@ -12,12 +12,16 @@ import TermsConditionsComponent from './vue-component/pages/termscondition/Terms
 import ContractComponent from './vue-component/pages/contract/ContractComponent';
 import Notfound from './vue-component/pages/404Component.vue';
 import StoriesComponent from './vue-component/pages/stories/StoriesComponent';
+import StoryDetailComponent from './vue-component/pages/stories/StoryDetailComponent.vue';
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
-import ClientStoriesComponent from './vue-component/pages/clients/stories/ClientStoriesComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
-import ClientVideosComponent from './vue-component/pages/clients/videos/ClientVideosComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
 import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
+
+import ClientProfileComponent from './vue-component/pages/clients/ProfileComponent';
+import ClientUserComponent from './vue-component/pages/clients/CreateUserComponent';
+import ClientEditUserComponent from './vue-component/pages/clients/EditUserComponent';
+
 import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
 import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
@@ -49,9 +53,15 @@ export const routes = [
     },
 
     {
-        path: '/videos/:id',
+        path: '/videos/:alpha_id',
         name: 'videos_detail',
         component: VideoDetailComponent
+    },
+
+    {
+        path: '/stories/:alpha_id',
+        name: 'stories_detail',
+        component: StoryDetailComponent
     },
 
     {
@@ -113,6 +123,7 @@ export const routes = [
         name: 'unsubscribe_user',
         component: UnsubscribeComponent
     },
+
     {
         path: '/terms',
         name: 'termsconditions',
@@ -124,15 +135,23 @@ export const routes = [
         component: ClientComponent,
         children: [
             {
-                path: '',
-                name: 'client',
-                component: ClientVideosComponent
+                path: 'profile',
+                name: 'client_profile',
+                component: ClientProfileComponent,
             },
 
             {
-                path: 'stories',
-                name: 'client_stories',
-                component: ClientStoriesComponent
+                path: 'profile/:slug/users/create',
+                name: 'client_create_user',
+                component: ClientUserComponent
+
+            },
+
+            {
+                path: '/client/profile/:slug/users/:userid/edit',
+                name: 'client_edit_create_user',
+                component: ClientEditUserComponent
+
             },
 
             {
@@ -148,18 +167,10 @@ export const routes = [
             },
 
             {
-                path: 'videos',
-                name: 'client_videos',
-                component: ClientVideosComponent,
-            },
-
-            {
                 path: 'videos/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
             },
-
-
             {
                 path: 'purchased',
                 name: 'client_purchased_assets',
