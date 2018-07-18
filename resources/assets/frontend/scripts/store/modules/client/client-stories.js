@@ -12,10 +12,6 @@ const mutations = {
         state.stories = stories.stories;
     },
 
-    setCurrentStory(state, story){
-        state.currentStory = story.story;
-    },
-
     setClientGobBckRoute(state, route_name){
         state.client_goback_route_name = route_name;
     }

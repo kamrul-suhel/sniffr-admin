@@ -1,7 +1,10 @@
 <template>
     <v-flex xs6 sm6 md12 lg12 xl12>
-        <div class="thumbnail" :style="{backgroundImage:'url('+thumbnailImg+')'}" @click="onOpenDialog(asset.id)">
-            <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
+        <div class="thumbnail"
+             :style="{backgroundImage:'url('+thumbnailImg+')'}"
+             @click="onOpenDialog(asset.id)">
+            <div class="video-icon"
+                 v-if="asset.mime_type === 'video/mp4'">
                 <v-icon dark medium>play_circle_outline</v-icon>
             </div>
         </div>
@@ -14,23 +17,33 @@
                 max-width="1200px"
         >
             <div class="dialog-box-switch prev">
-                <v-btn color="dark ma-0" fab small dark @click="onPreviousVideo()" :disabled="!previousImgExists">
+                <v-btn color="dark ma-0"
+                       fab
+                       small
+                       dark
+                       @click="onPreviousVideo()"
+                       :disabled="!previousImgExists">
                     <v-icon>chevron_left</v-icon>
                 </v-btn>
             </div>
 
             <div class="dialog-box-switch next">
-                <v-btn color="dark ma-0" fab small dark @click="onNextVideo()" :disabled="!nextImgExists">
+                <v-btn color="dark ma-0"
+                       fab
+                       small
+                       dark
+                       @click="onNextVideo()"
+                       :disabled="!nextImgExists">
                     <v-icon>chevron_right</v-icon>
                 </v-btn>
             </div>
 
-            <v-card flat>
+            <v-card flat v-if="story_dialog">
 
                 <v-card-media
-                        :src="current_item.mime_type === 'video/mp4'? current_item.thumbnail : current_item.url"
                         v-if="!showVideo"
-                        contain="true">
+                        :src="current_item.mime_type === 'video/mp4'? current_item.thumbnail : current_item.url"
+                        contain>
                     <div class="video-button" v-if="current_item.mime_type === 'video/mp4'" @click="onPlayVideo()">
                         <v-btn dark fab class="dark" medium>
                             <v-icon dark large>play_arrow</v-icon>
@@ -72,7 +85,11 @@
             }
         },
 
-        props: ['asset', 'story_id', 'assets'],
+        props: [
+            'asset',
+            'story_id',
+            'assets'
+        ],
 
         watch: {
             loader() {
@@ -112,14 +129,10 @@
                 window.location = url;
             },
 
-            onClickAsset() {
-            },
-
             onOpenDialog(id) {
-                this.story_dialog = true;
 
                 this.assets.forEach((item, index) => {
-                    if (item.id == id) {
+                    if (item.id === id) {
                         this.current_item = item;
                         this.nextImgObj = this.assets[index + 1];
                         this.previousImgObj = this.assets[index - 1];
@@ -133,6 +146,8 @@
                         }
                     }
                 })
+
+                this.story_dialog = true;
             },
 
 

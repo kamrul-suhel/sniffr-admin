@@ -4,7 +4,8 @@ const state = {
     paginate: '',
 
     currentStories:'',
-    currentStoriesAssets:[]
+    currentStoriesAssets:[],
+
 };
 
 const getters = {
@@ -46,10 +47,14 @@ const mutations = {
         state.paginate = paginate;
     },
 
-    setCurrentStoriesAssets(state, assets){
+    setCurrentStory(state, story){
+        state.currentStories = story.story;
+    },
+
+    setCurrentStoriesAssets(state, story){
         state.currentStoriesAssets = [];
-        if(assets.length > 0){
-            state.currentStoriesAssets = assets;
+        if(story.assets.length > 0){
+            state.currentStoriesAssets = story.assets;
         }
     },
 
@@ -84,7 +89,20 @@ const actions = {
                 .catch((error) => {
                     console.log('Not connect: '+error);
             });
-    }
+    },
+
+    fetchCurrentStory({commit}, alpha_id){
+        let url = '/stories/' + alpha_id;
+
+        axios.get(url)
+            .then((response) => {
+                commit('setCurrentStory', response.data);
+                commit('setCurrentStoriesAssets', response.data.story);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
 };
 
 export default {
