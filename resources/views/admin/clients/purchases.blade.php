@@ -160,4 +160,4 @@
             </tr>
         </table>
     </div>
-@endsection
+@stop

@@ -1,5 +1,5 @@
 <div class="@if(isset($contact)) col-lg-9 @else col-lg-12 @endif">
-    <form method="POST" action="{{ (isset($contact)) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
+    <form id="sniffr-create-contact" method="POST" action="{{ (isset($contact)) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
         <div class="row">
             <div class="col-md-12">
                 <h2>Contact Information</h2>
@@ -8,20 +8,24 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group input-group">
-                    <span class="input-group-addon">Full Name</span>
-                    <input type="text" class="form-control" id="full_name" name="full_name" value="{{
-                    $contact->full_name or old('full_name')
-                    }}" title="full name">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Full Name</span>
+                        <input type="text" class="form-control" id="full_name" name="full_name" value="{{
+                        $contact->full_name or old('full_name')
+                        }}" title="full name">
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group input-group">
-                    <span class="input-group-addon">Email</span>
-                    <input type="text" class="form-control" id="email" name="email" value="{{ $contact->email or old('email') }}">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Email</span>
+                        <input type="text" class="form-control" id="email" name="email" value="{{ $contact->email or old('email') }}">
+                    </div>
                 </div>
             </div>
         </div>

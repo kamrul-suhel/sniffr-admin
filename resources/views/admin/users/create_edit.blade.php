@@ -280,7 +280,7 @@
 	    {!! Form::close() !!}
 	@endif
 </div>
-@endsection
+@stop
 @section('javascript')
 	<script type="text/javascript">
 		$ = jQuery;
@@ -368,4 +368,4 @@
 		font-size:larger;
 	}
 	</style>
-@endsection
+@stop

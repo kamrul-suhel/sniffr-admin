@@ -52,7 +52,7 @@ var public_vars = public_vars || {};
             minLength: 3,
             select: function(event, ui) {
                 $('#js-autocomplete-contact').val(ui.item.value);
-                $('#contact-id').val(ui.item.id);
+                $('#js-contact-id').val(ui.item.id);
             }
         });
 
@@ -294,17 +294,6 @@ var public_vars = public_vars || {};
 	            $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
 	            $('#story_asset_modal_set_featured').val(url);
 	        }
-	    });
-
-		$('#js-story-new').on('submit', function(e){
-	        e.preventDefault();
-	        var contact_id = $('#contact-id').val();
-	        if(contact_id) {
-				$('#js-story-new')[0].submit();
-			} else {
-				// no contact added to story?
-				swal({  title: 'Please add a contact before saving your story', icon: 'error', closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
-			}
 	    });
 
 	    $('.js-story-set-asset').click(function (e) {

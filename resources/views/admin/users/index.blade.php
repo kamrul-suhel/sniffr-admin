@@ -101,7 +101,7 @@
 				</tr>
 			@endforeach
 	</table>
-@endsection
+@stop
 
 @section('javascript')
 		<script>
@@ -116,4 +116,4 @@
 				});
 			});
 		</script>
-@endsection
+@stop
