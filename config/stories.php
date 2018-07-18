@@ -55,10 +55,6 @@ return [
                 'dropdown' => 'Licensed',
                 'value' => 'licensed',
             ],
-            // 'unlicensed' => [
-            //     'dropdown' => 'Unlicensable',
-            //     'value' => 'unlicensed',
-            // ],
 		],
         'writing' => [
             'licensed' => [
@@ -96,6 +92,10 @@ return [
             'published' => [
                 'dropdown' => 'Published',
                 'value' => 'published',
+            ],
+            'hacks-unassigned' => [
+                'dropdown' => 'Archived',
+                'value' => 'hacks-unassigned',
             ],
 		],
     ],

@@ -220,7 +220,7 @@
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state approved btn-mini btn-mini-border left" title="Back to Sourced"><i class="fa fa-times"></i></a>
                                     <a href="{{ url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) }}" class="text-success btn-mini btn-mini-border" title="Edit License"> Edit License</a>
 
-                                @elseif($story->state == 'licensed'||$story->state == 'hacks-unassigned')
+                                @elseif($story->state == 'licensed')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
                                     @if($decision=='licensing-in-progress')
@@ -255,6 +255,10 @@
                                 @elseif($story->state == 'rejected')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="js-story-state unapproved btn-mini btn-mini-border left" title="Rejected"><i class="fa fa-times"></i> Rejected</a>
+
+								@elseif($story->state == 'hacks-unassigned')
+
+                                    <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border left" title="Archived"> Archived</a>
 
                                 @else
 
