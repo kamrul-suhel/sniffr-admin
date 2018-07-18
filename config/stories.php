@@ -5,6 +5,7 @@ return [
         'unapproved' ,
         // 'approved',
         'rejected',
+        'contacted',
         'unlicensed',
         'licensing',
         'licensed',
@@ -27,6 +28,10 @@ return [
 			'unapproved' => [
                 'dropdown' => 'Unapproved', // dropdown name
                 'value' => 'unapproved', // dropdown value
+            ],
+            'approved' => [
+                'dropdown' => 'Awaiting Contact',
+                'value' => 'approved',
             ],
             'unlicensed' => [
                 'dropdown' => 'Approved',

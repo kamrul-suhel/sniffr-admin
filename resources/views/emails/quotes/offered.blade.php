@@ -1,36 +1,30 @@
 @extends('emails.template_sniffr')
 
 @section('content')
-    <p>Hi {{ $data['username'] }}</p>
-    <br>
-    <p>We've reviewed your request for: </p>
+
+    <p>Hi {{ $data['full_name'] }}</p>
     <br>
 
     <div class="col-lg-12">
-        <div class="col-lg-6">
-            <h2>{{ $data['collectionAsset']->{$data['type']}->title }}</h2>
-            <img style="width:50%;" src="{{$data['collectionAsset']->{$data['type']}->image ?? $data['collectionAsset']->{$data['type']}->thumb }}"/>
-        </div>
-        @if($data['type'] == 'Video')
+        <div class="container">
+            <h2>We have an offer for you!</h2>
+            <p>Your Reference number: <b>{{ ucwords($data['collectionAsset']->collection->name) }}</b></p>
             <div class="col-lg-6">
-                <p>With the following terms:</p>
-                <ul>
-                    <li>
-                        <p>Video Name:<b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b></p>
-                    </li>
-                    <li>
-                        <p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->type)) }}</b></p>
-                    </li>
-                    <li>
-                        <p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->platform)) }}</b>
-                        </p>
-                    </li>
-                    <li>
-                        <p>License Length: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->length)) }}</b></p>
-                    </li>
-                </ul>
+                <h2>{{ $data['collectionAsset']->{$data['type']}->title }}</h2>
+                <img style="width:50%;" src="{{$data['collectionAsset']->{$data['type']}->image ?? $data['collectionAsset']->{$data['type']}->thumb }}"/>
             </div>
-        @endif
+            @if($data['type'] == 'Video')
+                <div class="col-lg-6">
+                    <p>With the following terms:</p>
+                    <ul>
+                        <li><p>Video Name:<b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b></p></li>
+                        <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->type)) }}</b></p></li>
+                        <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->platform)) }}</b></p></li>
+                        <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->length)) }}</b></p></li>
+                    </ul>
+                </div>
+            @endif
+        </div>
     </div>
     <br>
     <h1>Our quote price is: <strong>£{{ $data['quote'] }}</strong></h1>

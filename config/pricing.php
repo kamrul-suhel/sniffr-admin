@@ -171,42 +171,49 @@ return [
 		'day' => [
 			'slug' => 'day',
 			'name' => '24 hours',
-			'modifier' => 1
+			'modifier' => 1,
+            'end_date' => \Carbon\Carbon::now()->addDay(1)
 		],
 		'week' => [
 			'slug' => 'week',
 			'name' => '1 week',
-			'modifier' => 1.1
+			'modifier' => 1.1,
+            'end_date' => \Carbon\Carbon::now()->addDays(7)
 		],
 		'month' => [
 			'slug' => 'month',
 			'name' => '1 month',
-			'modifier' => 1.2
+			'modifier' => 1.2,
+            'end_date' => \Carbon\Carbon::now()->addMonth(1)
 		],
 		'six_months' => [
-			'slug' => '6 months',
-			'name' => '1 - 4 years',
-			'modifier' => 1.3
+			'slug' => 'six_months',
+			'name' => '6 months',
+			'modifier' => 1.3,
+            'end_date' => \Carbon\Carbon::now()->addMonths(6)
 		],
 		'year' => [
 			'slug' => 'year',
 			'name' => '1 year',
-			'modifier' => 1.4
+			'modifier' => 1.4,
+            'end_date' => \Carbon\Carbon::now()->addYear(1)
 		],
 		'five_years' => [
 			'slug' => 'five_years',
 			'name' => '1 - 5 years',
-			'modifier' => 1.6
+			'modifier' => 1.6,
+            'end_date' => \Carbon\Carbon::now()->addYears(5)
 		],
 		'ten_years' => [
 			'slug' => 'ten_years',
 			'name' => '5 - 10 years',
-			'modifier' => 1.7
+			'modifier' => 1.7,
+            'end_date' => \Carbon\Carbon::now()->addYears(10)
 		],
 		'perpetuity' => [
 			'slug' => 'perpetuity',
 			'name' => 'In Perpituity',
-			'modifier' => 1.75
+			'modifier' => 1.75,
 		]
 	],
     'location' => [

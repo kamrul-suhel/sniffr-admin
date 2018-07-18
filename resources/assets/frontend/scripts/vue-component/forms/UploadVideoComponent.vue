@@ -1,9 +1,9 @@
 <template>
     <!-- UPLODA VIDEO SECTION -->
     <section class="upload-video-section section-space" :class="{'iframe-style': is_iframe}">
-        <v-container grid-list-xl>
+        <v-container grid-list-xl class="pt-0">
             <v-layout row  wrap v-if="source">
-                <v-flex xs12 class="text-xs-center">
+                <v-flex xs12 class="text-xs-center pt-0">
                     <h1 class="heading text-uppercase">Share your content and grab £100 while you’re at it!</h1>
                 </v-flex>
 

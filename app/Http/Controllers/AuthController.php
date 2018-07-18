@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Jobs\Auth\QueueEmailClientPasswordUpdated;
 use App\Jobs\QueueEmail;
 use App\User;
 use App\Traits\FrontendResponse;
@@ -181,7 +183,7 @@ class AuthController extends Controller
 
             case PasswordBroker::INVALID_USER:
                 if($request->ajax()){
-                    return $this->errorResponse('User is not found in our database');
+                    return $this->errorResponse('That email does not exist.');
                 }
                 return redirect()->back()->with([
                     'note' => trans($response),
@@ -221,7 +223,7 @@ class AuthController extends Controller
      * @param $email
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function setPasswordPost(Request $request, $token, $email)
+    public function setPasswordPost(UpdateUserRequest $request, $token, $email)
     {
 
         $credentials = $credentials = [
@@ -242,12 +244,13 @@ class AuthController extends Controller
 
                     if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
                         return $this->successResponse([
+                            'user' => auth()->user(),
                             'success_message' => 'Your account is now active.'
                         ]);
                     } else {
                         return $this->errorResponse([
                             'error_message' => 'There was a problem logging you in. Please try again.'
-                        ]);
+                        ], 400);
                     }
                 }
 
@@ -257,13 +260,13 @@ class AuthController extends Controller
                 }
 
                 return Redirect::to('videos')->with([
-                    'note' => 'Your account is now active. Please login to use Sniffr.',
+                    'note' => 'Your account is now active.',
                     'note_type' => 'success'
                 ]);
 
             default:
                 if($request->ajax()){
-                    return $this->errorResponse(trans($response));
+                    return $this->errorResponse(trans($response), 400);
                 }
 
                 return redirect()->back()->with([
@@ -298,7 +301,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password_reset_post(Request $request)
+    public function password_reset_post(UpdateUserRequest $request)
     {
         $credentials = $credentials = [
             'email' => $request->input('email'),
@@ -318,28 +321,34 @@ class AuthController extends Controller
                 if($request->ajax()){
 
                     if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+
+                        QueueEmailClientPasswordUpdated::dispatch(auth()->user());
+
                         return $this->successResponse([
-                            'success_message' => 'You password has been reset.'
+                            'user' => auth()->user(),
+                            'success_message' => 'Your password has been reset.'
                         ]);
                     } else {
                         return $this->errorResponse([
                             'error_message' => 'There was a problem logging you in. Please try again.'
-                        ]);
+                        ], 400);
                     }
                 }
 
                 // attempt login with new password
                 if(auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+
+                    QueueEmailClientPasswordUpdated::dispatch(auth()->user());
+
                     return redirect()->intended('videos')->with([
                         'note' => 'Your password has been successfully reset. Please login ',
                         'note_type' => 'success'
                     ]);
                 }
 
-
             default:
                 if($request->ajax()){
-                    return $this->errorResponse(trans($response));
+                    return $this->errorResponse(trans($response), 400);
                 }
 
                 return redirect()->back()->with([

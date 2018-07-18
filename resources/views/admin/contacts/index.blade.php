@@ -51,4 +51,4 @@
     <div class="clear"></div>
 
     <div class="text-center">{{ $contacts->render() }}</div>
-@endsection
+@stop
