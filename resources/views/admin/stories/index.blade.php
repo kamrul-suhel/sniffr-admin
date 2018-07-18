@@ -199,7 +199,7 @@
 									@elseif($story->contacted_at && $story->contact_made)
 										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> <a href="#">{{ date('jS M Y h:i:s',strtotime($story->contacted_at)) }}</a>
 									@else
-										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted</strong> <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ($story->state!='unapproved' ? 'Contact Source' : '') }}</a>
+										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted</strong> <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ($story->state!='unapproved' ? 'Contacted Source' : '') }}</a>
 									@endif
                                 </div>
                             </div>
