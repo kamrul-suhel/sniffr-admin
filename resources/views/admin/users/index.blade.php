@@ -32,6 +32,7 @@
 		<tr class="table-header">
 			<th>Username</th>
 			<th>Email</th>
+			<th>Company</th>
 			<th>User Type</th>
 			<th>Active</th>
 
@@ -45,6 +46,7 @@
 						{{ (strlen($user->username) > 40) ? substr($user->username, 0, 40) . '...' : $user->username }}
 					</td>
 					<td>{{ $user->email }}</td>
+					<td>{{ $user->client->name ?? 'N/A' }}</td>
 					<td>
 						@if($user->role == 'client' || $user->role == 'client_admin')
 							<div class="label label-success"><i class="fa fa-users"></i>
