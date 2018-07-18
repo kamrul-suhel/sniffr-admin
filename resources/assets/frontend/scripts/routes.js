@@ -25,6 +25,9 @@ import ClientEditUserComponent from './vue-component/pages/clients/EditUserCompo
 import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
 import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
+import ClientPurchaseOfferedComponent from './vue-component/pages/clients/PurchasedOfferedComponent'
+
+
 
 export const routes = [
     {
@@ -180,7 +183,8 @@ export const routes = [
             {
                 path: 'offered',
                 name: 'client_offered_assets',
-                component: ClientOfferedAssetsComponent,
+                component: ClientPurchaseOfferedComponent,
+                // component: ClientOfferedAssetsComponent,
             },
 
             {

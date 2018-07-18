@@ -44,7 +44,7 @@
                     }
 
                     if(this.type === 'purchased'){
-                        return this.getPurchasedStoriesData(this.getQueryObject());
+                        return this.$store.getters.getPurchasedStories;
                     }
                 }
             },

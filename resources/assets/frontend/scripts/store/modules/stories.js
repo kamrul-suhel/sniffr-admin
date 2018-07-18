@@ -43,7 +43,7 @@ const getters = {
     },
 
     getTotalOfferedStories(state){
-        return state.offeredStories.length;
+        return state.paginate.total;
     }
 };
 
@@ -102,8 +102,20 @@ const mutations = {
         state.offeredStories = allStories;
     },
 
-    setPurchasedStories(state, purchasedStories){
+    setPurchasedStories(state, stories){
+        state.offeredStories = [];
 
+        if(typeof stories.data === 'object'){
+            stories.data = Object.values(stories.data);
+        }
+        let allStories = [];
+        stories.data.forEach((story) => {
+            story[0].story.final_price = story[0].final_price;
+            story[0].story.collection_story_id = story[0].id;
+            allStories.push(story[0].story);
+        });
+
+        state.purchasedStories = allStories;
     }
 };
 

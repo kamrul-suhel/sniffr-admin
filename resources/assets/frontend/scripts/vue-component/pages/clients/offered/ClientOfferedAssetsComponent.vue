@@ -9,7 +9,6 @@
 
                 <v-flex xs12>
                     <v-tabs
-                            v-model="active"
                             dark
                             color="white"
                             slider-color="black">
@@ -20,21 +19,20 @@
                             </v-badge>
                         </v-tab>
 
-                        <v-tab-item
-                                value="'video'">
+                        <v-tab-item>
                             <videos-component
                                 :type="'offered'"
                             ></videos-component>
                         </v-tab-item>
 
-                        <v-tab v-if="totalStories > 0">
+                        <v-tab>
                             <v-badge right color="black">
                                 <span slot="badge">{{totalStories}}</span>
                                 Stories
                             </v-badge>
                         </v-tab>
 
-                        <v-tab-item value="'stories'">
+                        <v-tab-item>
                             <stories-component
                                 :type="'offered'"
                             ></stories-component>
@@ -68,12 +66,7 @@
 
         data() {
             return {
-                active: 'video',
-
-                notSelectedError: false,
-                errorMessage: '',
-
-                indeterminate: true,
+                active: null,
             }
         },
 

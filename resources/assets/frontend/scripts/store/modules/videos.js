@@ -40,7 +40,7 @@ const getters = {
     },
 
     getTotalOfferedVideos(state){
-        return state.offeredVideos.length;
+        return state.paginate.total;
     },
 
     getVideos(state) {
@@ -121,6 +121,15 @@ const getters = {
      */
     getOfferedVideos(state){
         return state.offeredVideos;
+    },
+
+    /**
+     * ***************************************
+     * Purchased vides
+     * ***************************************
+     */
+    getPurchasedVideos(state){
+        return state.purchasedVideos;
     }
 };
 
@@ -230,8 +239,7 @@ const mutations = {
         });
 
         state.offeredVideos = allVideos;
-    }
-
+    },
 
 
     /**
@@ -239,6 +247,22 @@ const mutations = {
      * Purchased video
      * ***************************************
      */
+    setPurchasedVideos(state, videos){
+        if (typeof videos.data == 'object') {
+            videos.data = Object.values(videos.data);
+        }
+        let allVideos = [];
+        videos.data.forEach((video) => {
+            video[0].video.final_price = video[0].final_price;
+            video[0].video.platform = video[0].platform;
+            video[0].video.type = video[0].type;
+            video[0].video.length = video[0].length;
+            video[0].video.collection_video_id = video[0].id;
+            allVideos.push(video[0].video);
+        });
+
+        state.purchasedVideos = allVideos;
+    }
 
 
 };
@@ -358,16 +382,14 @@ const actions = {
      */
 
     fetchPurchasedVideos({commit}, payload){
-        return new Promise((resolve, reject) => {
 
-            axios.get(payload)
-                .then((response) => {
-                        commit('', response.data.videos);
-                        resolve();
-                    },
-                    (error) => {
-                    });
-        })
+        axios.get(payload)
+            .then((response) => {
+                    commit('setPurchasedVideos', response.data.videos);
+                    commit('setVideoPaginationObject', response.data.videos);
+                },
+                (error) => {
+                });
     }
 
 
