@@ -43,12 +43,27 @@
         data() {
             return {
                 page: 1,
-                videos: [],
                 searchTerm: '',
-                numberOfPages: 1,
-                totalVideos: 0,
-                videosPerPage: 0,
             }
+        },
+
+        computed:{
+            videos(){
+                return this.$store.getters.getOfferedVideos
+            },
+
+            videosPerPage(){
+                return this.$store.getters.getVideoPaginateObject.per_page;
+            },
+
+            totalVideos(){
+                return this.$store.getters.getVideoPaginateObject.total;
+            },
+
+            numberOfPages(){
+                return this.$store.getters.getVideoPaginateObject.last_page;
+            }
+
         },
 
         watch: {
@@ -61,9 +76,6 @@
                 this.setData();
             },
 
-            videos() {
-
-            }
         },
 
         created() {
@@ -123,27 +135,6 @@
                 }
 
                 this.$store.dispatch('fetchOfferedVideos', url)
-                    .then(() => {
-                        var videos = this.$store.getters.getOfferedVideos;
-
-                        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
-                        if (typeof videos.data == 'object') {
-                            videos.data = Object.values(videos.data);
-                        }
-                        this.videos = [];
-                        videos.data.forEach((video) => {
-                            video[0].video.final_price = video[0].final_price;
-                            video[0].video.platform = video[0].platform;
-                            video[0].video.type = video[0].type;
-                            video[0].video.length = video[0].length;
-                            video[0].video.collection_video_id = video[0].id;
-                            this.videos.push(video[0].video);
-                        });
-
-                        this.videosPerPage = videos.per_page;
-                        this.totalVideos = videos.total;
-                        this.numberOfPages = videos.last_page;
-                    })
             },
 
             getPurchasedVideosData(queryObject = null) {

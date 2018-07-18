@@ -28,11 +28,19 @@ const state = {
      */
     video_detail: {},
 
+    purchasedVideos: [],
+    offeredVideos:[],
+
+
 };
 
 const getters = {
     getVideoDialogBox(state){
         return state.videoDialogBox;
+    },
+
+    getTotalOfferedVideos(state){
+        return state.offeredVideos.length;
     },
 
     getVideos(state) {
@@ -103,6 +111,16 @@ const getters = {
 
     getCurrentRouteObject(state){
         return state.current_route_obj;
+    },
+
+
+    /**
+     * ***************************************
+     * Offered video
+     * ***************************************
+     */
+    getOfferedVideos(state){
+        return state.offeredVideos;
     }
 };
 
@@ -188,6 +206,39 @@ const mutations = {
         state.video_detail = data.video;
         state.video_detail.iframe = data.iframe;
     },
+
+
+    /**
+     * ***************************************
+     * Offered video
+     * ***************************************
+     */
+    setOfferedVideos(state, videos){
+
+        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
+        if (typeof videos.data == 'object') {
+            videos.data = Object.values(videos.data);
+        }
+        let allVideos = [];
+        videos.data.forEach((video) => {
+            video[0].video.final_price = video[0].final_price;
+            video[0].video.platform = video[0].platform;
+            video[0].video.type = video[0].type;
+            video[0].video.length = video[0].length;
+            video[0].video.collection_video_id = video[0].id;
+            allVideos.push(video[0].video);
+        });
+
+        state.offeredVideos = allVideos;
+    }
+
+
+
+    /**
+     * ***************************************
+     * Purchased video
+     * ***************************************
+     */
 
 
 };
@@ -280,7 +331,45 @@ const actions = {
             .catch((error) => {
                 console.log(error);
             });
+    },
+
+
+    /**
+     * ***************************************
+     * Offered video
+     * ***************************************
+     */
+    fetchOfferedVideos({commit}, payload){
+        axios.get(payload)
+            .then((response) => {
+                commit('setOfferedVideos', response.data.videos);
+                commit('setVideoPaginationObject', response.data.videos);
+            },
+            (error) => {
+                console.log(error);
+            });
+    },
+
+
+    /**
+     * ***************************************
+     * Purchased video
+     * ***************************************
+     */
+
+    fetchPurchasedVideos({commit}, payload){
+        return new Promise((resolve, reject) => {
+
+            axios.get(payload)
+                .then((response) => {
+                        commit('', response.data.videos);
+                        resolve();
+                    },
+                    (error) => {
+                    });
+        })
     }
+
 
 };
 

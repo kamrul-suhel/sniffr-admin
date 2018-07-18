@@ -4,7 +4,7 @@ const state = {
     mailStories: '',
     client_goback_route_name:'',
     purchased_stories:'',
-    offered_stories:''
+
 }
 
 const mutations = {
@@ -39,49 +39,6 @@ const actions = {
 
         })
     },
-
-    getCurrentStory({commit}, alpha_id){
-        return new Promise((resolve, reject) => {
-            let url = '/stories/' + alpha_id;
-
-            axios.get(url)
-                .then((response) => {
-                    commit('setCurrentStory', response.data);
-                    resolve();
-                })
-                .catch((error) => {
-                    reject();
-                    console.log(error);
-                });
-        })
-    },
-
-    fetchOfferedStories({commit}, payload){
-        return new Promise((resolve, reject) => {
-            axios.get(payload)
-                .then((response) => {
-                        state.offered_stories = response.data.stories;
-                        resolve();
-                    },
-                    (error) => {
-                        return reject();
-                    });
-        })
-    },
-
-    fetchPurchasedStories({commit}, payload){
-        return new Promise((resolve, reject) => {
-            axios.get(payload)
-                .then((response) => {
-                        state.purchased_stories = response.data.stories;
-                        resolve();
-                    },
-                    (error) => {
-                        return reject();
-                    });
-        })
-    }
-
 }
 
 const getters = {

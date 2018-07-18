@@ -6,6 +6,11 @@ const state = {
     currentStories:'',
     currentStoriesAssets:[],
 
+    offeredStories:[],
+
+    purchasedStories: [],
+
+
 };
 
 const getters = {
@@ -27,6 +32,18 @@ const getters = {
 
     getCurrentStoryAssets(state){
         return state.currentStoriesAssets;
+    },
+
+    getOfferedStories(state){
+        return state.offeredStories;
+    },
+
+    getPurchasedStories(state){
+        return state.purchasedStories;
+    },
+
+    getTotalOfferedStories(state){
+        return state.offeredStories.length;
     }
 };
 
@@ -64,6 +81,29 @@ const mutations = {
         state.paginate= '',
         state.currentStories= '',
         state.currentStoriesAssets= []
+    },
+
+    setOfferedStories(state, offeredStories){
+        state.offeredStories = [];
+
+        if(typeof offeredStories.data === 'object'){
+            offeredStories.data = Object.values(offeredStories.data);
+        }
+        let allStories = [];
+        offeredStories.data.forEach((story) => {
+            story[0].story.final_price = story[0].final_price;
+            story[0].story.collection_story_id = story[0].id;
+            allStories.push(story[0].story);
+        });
+
+
+
+
+        state.offeredStories = allStories;
+    },
+
+    setPurchasedStories(state, purchasedStories){
+
     }
 };
 
@@ -103,6 +143,28 @@ const actions = {
                 console.log(error);
             });
     },
+
+    fetchOfferedStories({commit}, payload){
+        axios.get(payload)
+            .then((response) => {
+                commit('setOfferedStories', response.data.stories);
+                commit('setStoriesPaginateObject', response.data.stories);
+            },
+            (error) => {
+                console.log(error);
+            });
+    },
+
+    fetchPurchasedStories({commit}, payload){
+        axios.get(payload)
+            .then((response) => {
+                commit('setPurchasedStories', response.data.stories);
+                commit('setStoriesPaginateObject', response.data.stories);
+            },
+            (error) => {
+                console.log(error);
+            });
+    }
 };
 
 export default {
