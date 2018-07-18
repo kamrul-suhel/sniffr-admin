@@ -59,14 +59,4 @@
             <textarea class="form-control" name="embed_code" id="embed_code" title="Embed Code" rows="4">{{ !empty($asset->embed_code) ? $asset->embed_code : null }}</textarea>
         </span>
     </div>
-
-    <div class="col-md-12">
-        <span class="form-group input-group">
-            <span class="input-group-addon">
-                Youtube Id
-            </span>
-
-            <input type="text" class="form-control" name="youtube_id" id="youtube_id" value="{{ !empty($asset->youtube_id) ? $asset->youtube_id : '' }}" />
-        </span>
-    </div>
 </div>
