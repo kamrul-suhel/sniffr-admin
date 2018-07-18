@@ -114,7 +114,8 @@ class VideoController extends Controller
         $video->rights = 'ex';
         $video->terms = Input::get('terms') ? 1 : 0;
         $video->source = Input::get('source');
-        $video->ip = (filter_var($_SERVER['X-Real-IP'], FILTER_VALIDATE_IP) ? $_SERVER['X-Real-IP'] : '');
+        $video->ip = $_SERVER[‘REMOTE_ADDR’];
+        //($_SERVER['HTTP_X_FORWARDED_FOR'] ? $_SERVER['HTTP_X_FORWARDED_FOR'] : ($_SERVER['HTTP_CLIENT_IP'] ? $_SERVER['HTTP_CLIENT_IP'] : $request->ip()));
         $video->user_agent = $request->header('User-Agent');
         $video->save();
 
