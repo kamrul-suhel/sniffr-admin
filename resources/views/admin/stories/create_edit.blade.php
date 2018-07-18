@@ -1,7 +1,6 @@
 @extends('admin.master')
 
 @section('content')
-
 <div id="admin-container">
 <!-- This is where -->
 
@@ -18,26 +17,20 @@
 
 	<div class="clear"></div>
 
-	<form method="POST" action="{{ $post_route }}" {{ (isset($story) ? '' : 'id=js-story-new') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-
+	<form method="POST" action="{{ $post_route }}" {{ (isset($story) ? '' : 'id=js-story-form') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 		<div class="row">
-
 			<div class="col-sm-12">
-
-				<div class="panel panel-primary" data-collapsed="0">
-					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($asset->title)){{ $asset->title }}@endif" />
+				<div class="form-group">
+					<div>
+						<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($asset->title)){{ $asset->title }}@endif" />
+					</div>
 				</div>
-
 			</div>
-
 		</div>
 
 		<div class="row">
-
 			<div class="col-sm-4"> <!-- first column -->
-
 				<div class="row">
-
 					<div class="col-sm-12">
 
 						<!-- <div class="panel panel-primary" data-collapsed="0">
@@ -65,21 +58,17 @@
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
 								</div>
 							</div>
+
 							<div class="panel-body" style="display: block;">
 								<textarea class="form-control" name="description" id="description">@if(!empty($asset->description)){{ htmlspecialchars($asset->description) }}@endif</textarea>
 							</div>
 						</div>
-
 					</div>
-
 				</div>
-
 			</div>
 
 			<div class="col-sm-4"> <!-- second column -->
-
 				<div class="row">
-
 					<div class="col-sm-12">
 
 						@include('admin.stories.partials.licensing_information')
@@ -117,17 +106,12 @@
 						@include('admin.stories.partials.comments')
 
 					</div>
-
 				</div>
-
 			</div>
 
 			<div class="col-sm-4"> <!-- third column -->
-
 				<div class="row">
-
 					<div class="col-sm-12">
-
 						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
 								<div class="panel-title">Assigned to</div>
@@ -187,11 +171,8 @@
 						@endif
 
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
 
 		@if(isset($asset->id))
@@ -226,8 +207,10 @@
     @endif
 </div>
 
-	@include('admin.modals.add_contact_modal')
+	@include('admin.contacts.partials.modal')
+@stop
 
-	@include('admin.stories.partials.javascript')
-
+@section('javascript')
+	@include('admin.stories.partials.js')
+	@include('admin.contacts.partials.js')
 @stop

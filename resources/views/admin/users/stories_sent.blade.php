@@ -34,4 +34,4 @@
             </tr>
         @endforeach
 	</table>
-@endsection
+@stop

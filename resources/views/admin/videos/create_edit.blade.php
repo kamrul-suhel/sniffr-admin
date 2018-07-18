@@ -183,9 +183,10 @@
         @include('admin.contracts.partials.contract_modal')
     @endif
 
-    @include('admin.modals.add_contact_modal')
-@endsection
+    @include('admin.contacts.partials.modal')
+@stop
 
 @section('javascript')
-    @include('admin.videos.partials.javascript')
-@endsection
+    @include('admin.videos.partials.js')
+    @include('admin.contacts.partials.js')
+@stop
