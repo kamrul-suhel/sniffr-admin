@@ -66,7 +66,6 @@
                                 <v-flex xs12>
                                     <v-select
                                             label="License Type"
-
                                             color="light"
                                             :items="licenses"
                                             v-model="license_type"
@@ -85,6 +84,7 @@
                                             :items="platforms"
                                             v-model="license_platform"
                                             item-value="slug"
+                                            multiple
                                             item-text="name"
                                             :rules="platformRules"
                                             :error="validation.error"
