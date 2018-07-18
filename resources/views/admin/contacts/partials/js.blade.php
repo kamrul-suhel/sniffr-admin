@@ -6,7 +6,6 @@
                     required: true
                 },
                 email: {
-                    required: true,
                     email: true
                 },
             },
@@ -26,9 +25,8 @@
                     type: form.method,
                     data: $(form).serialize(),
                     success: function(response) {
-                        console.log('moo');
-                        console.log(response);
-                        $('#js-autocomplete-contact').val(response.contact_email);
+                        var contact = response.contact_email ? response.contact_email : response.contact_name;
+                        $('#js-autocomplete-contact').val(contact);
                         $('#js-contact-id').val(response.contact_id);
                         $('#add_contact_modal').modal('hide');
                     },

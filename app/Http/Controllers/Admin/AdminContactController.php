@@ -101,6 +101,7 @@ class AdminContactController extends Controller
 			$data = [
 				'status' => 'success',
 				'message' => 'Contact Successfully Added!',
+				'contact_name' => $contact->full_name,
 				'contact_email' => $contact->email,
 				'contact_id' => $contact->id
 			];
@@ -140,6 +141,8 @@ class AdminContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
+		$isJson = $request->ajax();
+
         $contact->full_name = $request->input('full_name');
         $contact->email = $request->input('email');
         $contact->tel = $request->input('tel');
@@ -154,6 +157,17 @@ class AdminContactController extends Controller
         $contact->reddit = $request->input('reddit');
         $contact->other = $request->input('other');
         $contact->save();
+
+		if ($isJson) {
+			$data = [
+				'status' => 'success',
+				'message' => 'Contact Successfully Updated!',
+				'contact_name' => $contact->full_name,
+				'contact_email' => $contact->email,
+				'contact_id' => $contact->id
+			];
+			return $this->successResponse($data);
+		}
 
         return redirect()->route('contacts.edit' , ['id' => $contact->id])->with([
             'note' => 'Successfully Updated Contact!',

@@ -1,4 +1,4 @@
-<div class="@if(isset($contact)) col-lg-9 @else col-lg-12 @endif">
+<div class="col-lg-12">
     <form id="sniffr-create-contact" method="POST" action="{{ (isset($contact)) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
         <div class="row">
             <div class="col-md-12">
@@ -135,6 +135,15 @@
                     <span class="input-group-addon">Youtube</span>
                     <input type="text" class="form-control" id="youtube" name="youtube" value="{{
                     $contact->youtube or old('youtube')
+                    }}">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group input-group">
+                    <span class="input-group-addon">Imgur</span>
+                    <input type="text" class="form-control" id="imgur" name="imgur" value="{{
+                    $contact->imgur or old('imgur')
                     }}">
                 </div>
             </div>
