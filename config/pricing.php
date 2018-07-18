@@ -187,8 +187,8 @@ return [
             'end_date' => \Carbon\Carbon::now()->addMonth(1)
 		],
 		'six_months' => [
-			'slug' => '6 months',
-			'name' => '1 - 4 years',
+			'slug' => 'six_months',
+			'name' => '6 months',
 			'modifier' => 1.3,
             'end_date' => \Carbon\Carbon::now()->addMonths(6)
 		],

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Client;
 use App\Http\Requests\Company\UpdateUserRequest;
+use App\Http\Requests\User\CreateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
 use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\ImageHandler;
@@ -45,12 +46,12 @@ class ClientUserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CreateUserRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
+
         $user = new User();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
@@ -66,7 +67,7 @@ class ClientUserController extends Controller
         $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
 
         $user->role = $role;
-        $user->active = $request->input('active', 0);
+        $user->active = 1;
 
         $client_id = in_array(Auth::user()->role, ['client_owner', 'client_admin'])
             ? Auth::user()->client_id

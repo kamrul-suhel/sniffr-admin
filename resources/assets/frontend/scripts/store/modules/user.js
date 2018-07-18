@@ -42,9 +42,9 @@ const mutations = {
 
     setUserState(state, data){
         let user = data.user;
-        if(user.username){
+        if(user.id){
             state.username = user.username;
-            state.name = user.username;
+            state.name = user.full_name ? user.full_name : user.username;
             state.email = user.email;
             state.avatar = user.avatar;
             state.user_login = true;
@@ -115,7 +115,7 @@ const getters = {
 
     getUser(state) {
         return {
-            name: state.username,
+            name: state.name,
             email: state.email,
             avatar: state.avatar,
             id: state.user_id,
