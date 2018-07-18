@@ -1,42 +1,69 @@
 const state = {
-    stories: null,
-    mailer_stories: [],
-    paginate: ''
+    stories: [],
+    mailerStories: [],
+    paginate: '',
+
+    currentStories:'',
+    currentStoriesAssets:[]
 };
 
 const getters = {
-    getStoriesData(state){
+    getStories(state){
         return state.stories;
     },
 
-    getMailerStoriesData(state){
-        return state.mailer_stories;
+    getMailerStories(state){
+        return state.mailerStories;
     },
 
     getStoriesPaginateObject(state){
         return state.paginate;
     },
+
+    getCurrentStory(state){
+        return state.currentStories;
+    },
+
+    getCurrentStoryAssets(state){
+        return state.currentStoriesAssets;
+    }
 };
 
 const mutations = {
-    setStoriesData(state, data){
+    setStories(state, data){
         state.stories = data;
     },
 
-    setMailerStoriesData(state, data){
-        if(typeof data !== "undefined"){
-            state.mailer_stories = data;
+    setMailerStories(state, storiesObject){
+        //In feature if we need to do something with stories.
+        // all stories with paginate object.
+        if(typeof storiesObject.data !== "undefined"){
+            state.mailerStories = storiesObject.data;
         }
     },
 
     setStoriesPaginateObject(state, paginate){
         state.paginate = paginate;
     },
+
+    setCurrentStoriesAssets(state, assets){
+        state.currentStoriesAssets = [];
+        if(assets.length > 0){
+            state.currentStoriesAssets = assets;
+        }
+    },
+
+    setResetStories(state){
+        state.stories = [],
+        state.mailerStories= [],
+        state.paginate= '',
+        state.currentStories= '',
+        state.currentStoriesAssets= []
+    }
 };
 
 const actions = {
-    getStoryData({commit}, payload = {}){
-        return new Promise(function (resolve, reject) {
+    fetchStories({commit}, payload = {}){
             let url = 'search/stories';
 
             if (payload.page && payload.page != 0) {
@@ -50,16 +77,13 @@ const actions = {
             axios.post(url)
                 .then((response) => {
                     let data = response.data;
-                    commit('setStoriesData', data.stories.data);
-                    commit('setMailerStoriesData', data.mailer_stories.data);
+                    commit('setStories', data.stories.data);
+                    commit('setMailerStories', data.mailer_stories);
                     commit('setStoriesPaginateObject', data.stories);
-                    resolve();
                 })
                 .catch((error) => {
                     console.log('Not connect: '+error);
-                    reject();
-                });
-        });
+            });
     }
 };
 

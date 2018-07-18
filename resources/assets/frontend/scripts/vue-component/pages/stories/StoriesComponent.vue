@@ -2,7 +2,7 @@
     <div class="stories-component">
         <section class="stories-section section-space">
 
-            <v-container grid-list-lg class="stories pt-0" v-if="client_logged_in && mailer_stories.length > 0">
+            <v-container grid-list-lg class="stories pt-0" v-if="client_logged_in && mailerStories.length > 0">
                 <v-layout row wrap>
                     <v-flex xs12 class="text-center">
                         <h2 class="text-uppercase">Your Suggested Stories</h2>
@@ -12,7 +12,7 @@
 
                 <v-layout align-content-center style="overflow-x:scroll;">
                     <story-loop-component
-                            v-for="mailer in mailer_stories"
+                            v-for="mailer in mailerStories"
                             :story="mailer"
                             :key="mailer.alpha_id"
                     ></story-loop-component>
@@ -64,36 +64,32 @@
         computed: {
             ...mapGetters({
                 client_logged_in: 'getClientLogin',
-                // mailer_videos: 'getMailerVideoData',
+                stories: 'getStories',
+                paginate: 'getStoriesPaginateObject',
+                mailerStories: 'getMailerStories'
             }),
 
         },
 
         data() {
             return {
-                stories: '',
-                paginate: '',
-                mailer_stories: [],
+
             }
         },
 
         watch: {
             '$route'(to, from, next) {
-                this.setAllStoryData(this.getQueryObject());
+                this.fetchStories(this.getQueryObject());
             }
         },
 
         created() {
-            this.setAllStoryData(this.getQueryObject());
+            this.fetchStories(this.getQueryObject());
         },
 
         methods: {
-            setAllStoryData(query) {
-                this.$store.dispatch('getStoryData', query).then(() => {
-                    this.stories = this.$store.getters.getStoriesData;
-                    this.paginate = this.$store.getters.getStoriesPaginateObject;
-                    this.mailer_stories = this.$store.getters.getMailerStoriesData;
-                })
+            fetchStories(query) {
+                this.$store.dispatch('fetchStories', query);
             },
 
             getQueryObject() {
@@ -102,6 +98,11 @@
                     search: this.$route.query.search
                 };
             }
+        },
+
+        destroyed(){
+            //reset stories store
+            this.$store.commit('setResetStories');
         }
     }
 </script>
