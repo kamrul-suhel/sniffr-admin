@@ -30,7 +30,7 @@
 
 	<table class="table table-striped">
 		<tr class="table-header">
-			<th>Username</th>
+			<th>Name</th>
 			<th>Email</th>
 			<th>Company</th>
 			<th>User Type</th>
@@ -43,7 +43,7 @@
 			@foreach($users as $user)
 				<tr>
 					<td>
-						{{ (strlen($user->username) > 40) ? substr($user->username, 0, 40) . '...' : $user->username }}
+						{{ (strlen($user->full_name) > 40) ? substr($user->full_name, 0, 40) . '...' : $user->full_names }}
 					</td>
 					<td>{{ $user->email }}</td>
 					<td>{{ $user->client->name ?? 'N/A' }}</td>

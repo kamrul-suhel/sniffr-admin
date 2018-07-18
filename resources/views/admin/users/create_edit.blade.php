@@ -6,7 +6,7 @@
 	<div class="admin-section-title">
 		@if($user)
 			<h3>
-				<i class="fa fa-users"></i> {{ $user->username }}
+				<i class="fa fa-users"></i> {{ $user->full_name }}
 			</h3>
 		@else
 			<h3><i class="fa fa-users"></i> Add New User</h3>
@@ -223,6 +223,38 @@
 								<option value="client_owner"{{ ((($user) && ($user->role == 'client_owner')) || (old('role') == 'client_owner')) ? ' selected' : '' }}>
 									Client Owner
 								</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4" id="client-box">
+					<div class="panel panel-primary" data-collapsed="0">
+						<div class="panel-heading">
+							<div class="panel-title">Client</div>
+
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+							</div>
+						</div>
+
+						<div class="panel-body" style="display: block;">
+							@if($errors->first('client_id'))
+								<div class="alert alert-danger">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									{{ $errors->first('client_id') }}
+								</div>
+							@endif
+							<p>Select user client</p>
+							<select id="client_id" name="client_id">
+								@if(isset($clients))
+									<option value="">Please Select</option>
+									@foreach($clients as $client)
+										<option value="{{ $client->id }}" {{
+									(($user) && ($client->id == $user->client_id) || (($client->id == old('client_id')))) ? 'selected' : ''
+									}}>{{ $client->name }}</option>
+									@endforeach
+								@endif
 							</select>
 						</div>
 					</div>

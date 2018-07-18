@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
-
+use App\Jobs\QueueEmail;
 use App\Jobs\QueueStory;
 
 class AdminStoryController extends Controller
@@ -263,11 +263,23 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-        // need states for when syncing stories to WP
-        return Redirect::to('admin/stories/?decision='.$decision)->with([
+        $data = [
+            'headline' => '<i class="fa fa-edit"></i> Edit Story',
+			'asset' => $story,
+			'asset_type' => 'story',
+            'post_route' => url('admin/stories/update'),
+            'button_text' => 'Save Draft',
+            'decision' => $decision,
+            'user' => Auth::user(),
+            'users' => User::all(),
+			'contact' => null,
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
-        ]);
+        ];
+
+        return view('admin.stories.create_edit', $data);
     }
 
     /**
@@ -284,16 +296,26 @@ class AdminStoryController extends Controller
 
         $story = Story::where('alpha_id', $id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
-        $story->save();
 
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'unapproved' || $state == 'rejected' || $state == 'approved'):
+            case ($state == 'unapproved' || $state == 'rejected'):
+                break;
+            case ($state == 'approved'):
+                // make initial contact (will need to add twitter/fb/reddit in future)
+                if($story->id) {
+                    $story->contacted_at = now();
+                    QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+                }
                 break;
             case ($state == 'unlicensed'):
+                // contact has been made (set in db)
+                if($story->id) {
+                    $story->contact_made = 1;
+                }
                 // add new post to WP
                 QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
@@ -306,6 +328,8 @@ class AdminStoryController extends Controller
                 $message = 'Just updated content from WP';
                 break;
         }
+
+        $story->save();
 
         if ($isJson) {
             return response()->json([
@@ -421,6 +445,34 @@ class AdminStoryController extends Controller
                 'message' => 'Error',
             ]);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendReminder(Request $request, $id)
+    {
+        $decision = $request->input('decision');
+
+        $story = Story::where('alpha_id', $id)->first();
+
+        if(isset($story->contact)) {
+            $story->contacted_at = now();
+            $story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
+            QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+            $story->save();
+            $status = 'success';
+            $message = 'Reminder Sent';
+        } else {
+            $status = 'error';
+            $message = 'A contact needs to be added to the story first';
+        }
+
+        return Redirect::to('admin/stories/?decision='.$decision)->with([
+            'note' => $message,
+            'note_type' => $status
+        ]);
     }
 
     /**

@@ -32,12 +32,9 @@ const mutations = {
 const actions = {
     getStoryNextAndPrevLink({commit, state}, payload) {
         return new Promise(function (resolve, reject) {
-            let url = '';
-            let request_url = state.current_route_obj.name;
+            let url = '/search/stories/'+payload.alpha_id;
 
-            url = '/admin/storydialogbox/'+payload.alpha_id;
-
-            axios.get(url)
+            axios.post(url)
                 .then((response) => {
                     commit('setStoryDialogBox', response.data);
                     resolve();

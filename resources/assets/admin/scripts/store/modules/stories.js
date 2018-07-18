@@ -36,7 +36,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios.post(payload)
                 .then((stories) => {
-                        console.log(stories);
                         state.stories = stories.data.stories;
                         resolve();
                     },

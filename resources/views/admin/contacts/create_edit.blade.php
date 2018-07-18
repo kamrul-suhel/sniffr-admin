@@ -23,8 +23,8 @@
     <div class="panel-body tab-content">
         @include('admin.contacts.partials.errors')
         <div class="tab-pane @if(!request()->has('tab')) active @endif" id="contact">
-            @include('admin.contacts.partials.form')
             @if($contact)
+                @include('admin.contacts.partials.form')
                 @include('admin.contacts.partials.comments')
             @endif
         </div>

@@ -5,7 +5,7 @@
         <div class="section-title">
             @if($user)
                 <h1>
-                    <i class="fa fa-user"></i> {{ $user->username ?? 'New User' }}
+                    <i class="fa fa-user"></i> {{ $user->full_name ?? 'New User' }}
                 </h1>
             @else
                 <h3><i class="fa fa-users"></i> Add New User</h3>

@@ -57,48 +57,51 @@ class AdminLabelController extends Controller {
          $search_value = substr($search_value, 0, strrpos($search_value, '.'));
          if($search_value){
              $search = array();
-             for ($i = 1; $i < 15; ++$i) {
+             for ($i = 1; $i < 10; ++$i) {
                  $search[] = $search_value.'-'.sprintf("%04s", $i).'.png';
              }
-         } else {
-            $search = '';
          }
 
-         //search database for labels associated with search index
-         $files = Label::whereIn('frame', $search)->get();
+         if(isset($search)) {
+             //search database for labels associated with search index
+             $files = Label::whereIn('frame', $search)
+                ->get();
 
-         // create array with all labels obtained through image analysis
-         $labels = array();
-         $count = 0;
-         foreach ($files as $file) {
-             $temps = $file->labels;
-             if(count($temps)) {
-                 foreach ($temps as $temp){
-                     if (!in_array($temp['Name'], $blacklist)) {
-                         if($temp['Confidence']>85) {
-                             $labels[$count]['Name'] = $temp['Name'];
-                             $labels[$count]['Confidence'] = $temp['Confidence'];
-                             $count++;
+             // create array with all labels obtained through image analysis
+             $labels = array();
+             $count = 0;
+             foreach ($files as $file) {
+                 $temps = $file->labels;
+                 if(is_array($temps)&&count($temps)) {
+                     foreach ($temps as $temp){
+                         if (!in_array($temp['Name'], $blacklist)) {
+                             if($temp['Confidence']>85) {
+                                 $labels[$count]['Name'] = $temp['Name'];
+                                 $labels[$count]['Confidence'] = $temp['Confidence'];
+                                 $count++;
+                             }
                          }
                      }
                  }
              }
-         }
 
-         // remove duplicates and order labels array by confidence
-         $labels = super_unique($labels,'Name');
+             // remove duplicates and order labels array by confidence
+             $labels = super_unique($labels,'Name');
 
-         //dd($labels);
+             // if array exists then display labels
+             if (!empty($labels)) {
 
-         // if array exists then display labels
-         if (!empty($labels)) {
-             // foreach ($labels as $label){
-             //     echo $label['Name'].'['.round($label['Confidence'],0).']<br />';
-             // }
-             return response()->json(['status' => 'success', 'message' => 'Labels found.', 'labels' => $labels]);
+                 return response()->json(['status' => 'success', 'message' => 'Labels found.', 'labels' => $labels]);
+             } else {
+
+                 return response()->json(['status' => 'fail', 'message' => 'No labels found.']);
+             }
+
          } else {
+
              return response()->json(['status' => 'fail', 'message' => 'No labels found.']);
          }
+
      }
 
      public function analyseVideo() {
