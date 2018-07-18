@@ -306,9 +306,8 @@ class AdminStoryController extends Controller
                 if($story->id) {
                 	if($story->contact->email){
 						QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+						$story->contacted_at = now();
 					}
-
-					$story->contacted_at = now();
                 }
                 break;
             case ($state == 'unlicensed'):
