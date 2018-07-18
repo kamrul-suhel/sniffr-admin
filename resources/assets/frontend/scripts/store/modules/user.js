@@ -52,7 +52,7 @@ const mutations = {
             state.user_id = user.id;
             state.client_id = user.client_id;
             state.user_role = user.role;
-            state.offers = '';
+            state.offers = data.user_offers;
             state.active = user.active;
         }
 

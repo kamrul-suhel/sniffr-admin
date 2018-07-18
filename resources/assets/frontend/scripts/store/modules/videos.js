@@ -27,6 +27,7 @@ const state = {
      * Video detail page property
      */
     video_detail: {},
+
 };
 
 const getters = {
@@ -186,7 +187,9 @@ const mutations = {
     setVideoDetailData(state, data) {
         state.video_detail = data.video;
         state.video_detail.iframe = data.iframe;
-    }
+    },
+
+
 };
 
 const actions = {

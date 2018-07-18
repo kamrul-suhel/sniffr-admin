@@ -74,7 +74,6 @@
                 stories: '',
                 paginate: '',
                 mailer_stories: [],
-                logged_in: false,
             }
         },
 

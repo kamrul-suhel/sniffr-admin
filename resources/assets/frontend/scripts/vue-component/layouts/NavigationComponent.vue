@@ -19,9 +19,9 @@
                                 </router-link>
                             </li>
 
-                            <li v-if="client_login && this.$store.getters.getUserStatus.offers >= 1">
+                            <li v-if="client_login && user.offers >= 1">
                                 <router-link :to="{name: 'client_offered_assets'}">
-                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ this.$store.getters.getUser.offers }})
+                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ user.offers }})
                                 </router-link>
                             </li>
 
@@ -134,18 +134,9 @@
 
         computed: {
             ...mapGetters({
-                client_login: 'getClientLogin'
+                client_login: 'getClientLogin',
+                user: 'getUserStatus'
             }),
-
-            user: {
-                set(value){
-                    this.$store.commit('setUserStatus', value)
-                },
-
-                get(){
-                    return this.$store.getters.getUserStatus;
-                }
-            },
         },
 
         watch: {
@@ -165,7 +156,6 @@
         created(){
             this.setPrevRoute();
             this.settings = this.$store.getters.getSettingsObject;
-
 
             if(this.$route.name !== 'home'){
                 this.nav_background = true;
@@ -192,22 +182,13 @@
             },
 
             onLogout(){
+                this.logout = true;
                 this.$store.dispatch('userLogout');
             },
 
             // Login component trigger this methods when change any value
-            onChangeLogin(changeLogin){
-                if(!changeLogin){
-                    this.login_dialog = false;
-                }
-            },
-
             onLoginClick(){
                 this.$store.commit('setLoginDialog', true);
-            },
-
-            logoutStateChange() {
-              this.is_login = false;
             }
         }
     }

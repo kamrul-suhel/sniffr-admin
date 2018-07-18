@@ -74,7 +74,6 @@
     export default {
         data() {
             return {
-                margin_content: true,
                 current_page: 0,
 
                 nextPageAlphaId: '',
@@ -86,25 +85,14 @@
 
         computed: {
             ...mapGetters({
-
             }),
 
-            nextPageExists: {
-                get(){
-                    return this.$store.getters.getNextVideoAlphaId ? true : false;
-                },
-                set(value){
-
-                }
+            nextPageExists(){
+                return this.$store.getters.getNextVideoAlphaId ? true : false;
             },
 
-            previousPageExists: {
-                get(){
-                    return this.$store.getters.getPreviousVideoAlphaId ? true : false;
-                },
-                set(){
-
-                }
+            previousPageExists() {
+                return this.$store.getters.getPreviousVideoAlphaId ? true : false;
             },
 
             loadData: {
@@ -133,8 +121,6 @@
                 }
             },
 
-
-
             current_video(){
                 return this.$store.getters.getCurrentVideo;
             }
@@ -145,12 +131,6 @@
         },
 
         created() {
-
-            let current_device = this.$vuetify.breakpoint.name;
-            if(current_device === 'sm' || current_device === 'xs'){
-                this.margin_content = false;
-            }
-
         },
 
         methods: {
