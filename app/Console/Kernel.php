@@ -31,12 +31,14 @@ class Kernel extends ConsoleKernel
         // }
 
         // this is for running commands in scheduler (uncomment if needed to run daily)
-        $filePath = 'storage/logs/scheduler.log';
+        $AutomateEmailReminders = 'storage/logs/scheduler.log';
+        $AutomateBumps = 'storage/logs/scheduler_bumps.log';
+
         $schedule->command('AutomateEmailReminders:sendReminders')
             ->hourly()
             ->between('8:00', '21:00')
-            ->appendOutputTo($filePath);
-        
+            ->appendOutputTo($AutomateEmailReminders);
+
         $schedule->command('stats:getVideoStats')
             ->everyTenMinutes()
             ->appendOutputTo($filePath);
