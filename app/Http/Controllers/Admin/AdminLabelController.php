@@ -65,6 +65,7 @@ class AdminLabelController extends Controller {
          if(isset($search)) {
              //search database for labels associated with search index
              $files = Label::whereIn('frame', $search)
+                ->take(3)
                 ->get();
 
              // create array with all labels obtained through image analysis

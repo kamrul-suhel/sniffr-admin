@@ -315,6 +315,9 @@ class AdminStoryController extends Controller
                 if($story->id) {
                     $story->contact_made = 1;
                 }
+                $message = 'Set to contact made';
+                break;
+            case ($state == 'licensed'):
                 // add new post to WP
                 QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
