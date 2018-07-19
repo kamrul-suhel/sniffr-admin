@@ -465,14 +465,17 @@ class AdminStoryController extends Controller
         if(isset($asset->contact)) {
 			if($asset->contact->canAutoBump()){
 				QueueBump::dispatch($asset->id);
+
 				$status = 'success';
 				$message = 'Reminder Sent';
 			}else{
 				$asset->contacted_at = now();
 				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
 				$asset->save();
-			}
 
+				$status = 'success';
+				$message = 'Thanks for letting us know you\'ve reached out manually';
+			}
         } else {
             $status = 'error';
             $message = 'A contact needs to be added to the story first';
