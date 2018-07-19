@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
-use App\Jobs\QueueEmail;
 use App\Jobs\QueueBump;
 use App\Jobs\QueueStory;
 
@@ -304,13 +303,8 @@ class AdminStoryController extends Controller
                 break;
             case ($state == 'approved'):
                 // make initial contact (will need to add twitter/fb/reddit in future)
-                if($story->id) {
-                	if($story->contact->email){
-                        if($story->contact->canAutoBump()){
-						    QueueEmail::dispatch($story->id, 'story_contacted', 'story');
-                        }
-						$story->contacted_at = now();
-					}
+                if($story->id && $story->contact->canAutoBump()){
+                    QueueBump::dispatch($story->id);
                 }
                 break;
             case ($state == 'unlicensed'):
