@@ -109,7 +109,8 @@
             },
 
             goToTagSearch(tag) {
-                VideoDialogBoxEventBus.closeDialogByTagSearch(tag);
+                this.$store.commit('setVideoDialogBox', false);
+                this.$router.push({name: 'videos', query:{page: 1, search: tag.name}});
             },
 
             goToDetail() {

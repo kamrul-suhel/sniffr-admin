@@ -89,8 +89,6 @@
         data() {
             return {
                 content_padding:true,
-                client_logged_in:'',
-                canBuy:false
             }
         },
 

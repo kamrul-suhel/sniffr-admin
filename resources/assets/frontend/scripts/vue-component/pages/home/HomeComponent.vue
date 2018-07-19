@@ -24,13 +24,6 @@
         data() {
             return {
                 fullwidth_height:0,
-                settings: '',
-
-                //user auth
-                is_login: false,
-
-                //if user login all data
-                user: '',
             }
         },
 
@@ -47,34 +40,19 @@
             }
         },
 
+        created(){
+            let browserHeight = window.innerHeight;
+            this.fullwidth_height = browserHeight+'px';
+        },
+
         methods: {
             onUploadVideo(){
                 this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
                 setTimeout(() => {
                     this.$router.push({name: 'upload_video'});
                 }, 500);
-            },
-
-            onLoginClick() {
-                LoginEventBus.openLoginDialog();
-            },
-
-            logoutStateChange() {
-                this.is_login = false;
             }
-        },
 
-        created(){
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.is_login = false;
-            });
-
-            var browserheight = window.innerHeight;
-            this.fullwidth_height = browserheight+'px';
-        },
-
-        mounted() {
-            var browserheight = window.innerHeight;
         }
 
     }
