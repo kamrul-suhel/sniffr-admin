@@ -177,7 +177,7 @@ export const routes = [
             {
                 path: 'purchased',
                 name: 'client_purchased_assets',
-                component: ClientPurchasedAssetsComponent,
+                component: ClientPurchaseOfferedComponent,
             },
 
             {

@@ -12,7 +12,7 @@
                             dark
                             color="white"
                             slider-color="black">
-                        <v-tab v-if="totalVideos">
+                        <v-tab>
                             <v-badge right color="black">
                                 <span slot="badge">{{ totalVideos }}</span>
                                 Videos
@@ -54,6 +54,14 @@
         },
 
         computed:{
+            initStories(){
+                // return this.$store.getters.getInitStories;
+            },
+
+            initVideos(){
+              return this.$store.getters.getinitVideo;
+            },
+
             totalStories() {
                 return this.$store.getters.getTotalOfferedStories;
             },

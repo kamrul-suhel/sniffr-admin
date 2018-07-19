@@ -99,7 +99,6 @@
             },
 
             getOfferedStoriesData(queryObject = null) {
-
                 let url = this.generateUrl(queryObject);
                 this.$store.dispatch('fetchOfferedStories', url);
             },

@@ -3,90 +3,98 @@ const state = {
     mailerStories: [],
     paginate: '',
 
-    currentStories:'',
-    currentStoriesAssets:[],
+    currentStories: '',
+    currentStoriesAssets: [],
 
-    offeredStories:[],
+    offeredStories: [],
 
     purchasedStories: [],
+    initStory: false,
 
 
 };
 
 const getters = {
-    getStories(state){
+    getStories(state) {
         return state.stories;
     },
 
-    getMailerStories(state){
+    getMailerStories(state) {
         return state.mailerStories;
     },
 
-    getStoriesPaginateObject(state){
+    getStoriesPaginateObject(state) {
         return state.paginate;
     },
 
-    getCurrentStory(state){
+    getCurrentStory(state) {
         return state.currentStories;
     },
 
-    getCurrentStoryAssets(state){
+    getCurrentStoryAssets(state) {
         return state.currentStoriesAssets;
     },
 
-    getOfferedStories(state){
+    getOfferedStories(state) {
         return state.offeredStories;
     },
 
-    getPurchasedStories(state){
+    getPurchasedStories(state) {
         return state.purchasedStories;
     },
 
-    getTotalOfferedStories(state){
+    getTotalOfferedStories(state) {
         return state.paginate.total;
+    },
+
+    getInitStory(state) {
+        return state.initStory;
     }
 };
 
 const mutations = {
-    setStories(state, data){
+    setStories(state, data) {
         state.stories = data;
     },
 
-    setMailerStories(state, storiesObject){
+    setMailerStories(state, storiesObject) {
         //In feature if we need to do something with stories.
         // all stories with paginate object.
-        if(typeof storiesObject.data !== "undefined"){
+        if (typeof storiesObject.data !== "undefined") {
             state.mailerStories = storiesObject.data;
         }
     },
 
-    setStoriesPaginateObject(state, paginate){
+    setStoriesPaginateObject(state, paginate) {
         state.paginate = paginate;
     },
 
-    setCurrentStory(state, story){
+    setCurrentStory(state, story) {
         state.currentStories = story.story;
     },
 
-    setCurrentStoriesAssets(state, story){
+    setCurrentStoriesAssets(state, story) {
         state.currentStoriesAssets = [];
-        if(story.assets.length > 0){
+        if (story.assets.length > 0) {
             state.currentStoriesAssets = story.assets;
         }
     },
 
-    setResetStories(state){
-        state.stories = [],
-        state.mailerStories= [],
-        state.paginate= '',
-        state.currentStories= '',
-        state.currentStoriesAssets= []
+    setResetStories(state) {
+        state.stories = [];
+        state.mailerStories = [];
+        state.paginate = '';
+        state.currentStories = '';
+        state.currentStoriesAssets = [];
+        state.offeredStories = [];
+        state.purchasedStories = [];
+        state.initStory = false
     },
 
-    setOfferedStories(state, offeredStories){
+    setOfferedStories(state, offeredStories) {
         state.offeredStories = [];
 
-        if(typeof offeredStories.data === 'object'){
+        if (typeof offeredStories.data === 'object') {
             offeredStories.data = Object.values(offeredStories.data);
         }
         let allStories = [];
@@ -97,15 +105,13 @@ const mutations = {
         });
 
 
-
-
         state.offeredStories = allStories;
     },
 
-    setPurchasedStories(state, stories){
+    setPurchasedStories(state, stories) {
         state.offeredStories = [];
 
-        if(typeof stories.data === 'object'){
+        if (typeof stories.data === 'object') {
             stories.data = Object.values(stories.data);
         }
         let allStories = [];
@@ -116,34 +122,38 @@ const mutations = {
         });
 
         state.purchasedStories = allStories;
+    },
+
+    setInitStory(state, value) {
+        state.initStory = value;
     }
 };
 
 const actions = {
-    fetchStories({commit}, payload = {}){
-            let url = 'search/stories';
+    fetchStories({commit}, payload = {}) {
+        let url = 'search/stories';
 
-            if (payload.page && payload.page != 0) {
-                url = url + '?page=' + payload.page;
-            }
+        if (payload.page && payload.page != 0) {
+            url = url + '?page=' + payload.page;
+        }
 
-            if(payload.search && payload.search != ''){
-                url = url + '&search='+payload.search;
-            }
+        if (payload.search && payload.search != '') {
+            url = url + '&search=' + payload.search;
+        }
 
-            axios.post(url)
-                .then((response) => {
-                    let data = response.data;
-                    commit('setStories', data.stories.data);
-                    commit('setMailerStories', data.mailer_stories);
-                    commit('setStoriesPaginateObject', data.stories);
-                })
-                .catch((error) => {
-                    console.log('Not connect: '+error);
+        axios.post(url)
+            .then((response) => {
+                let data = response.data;
+                commit('setStories', data.stories.data);
+                commit('setMailerStories', data.mailer_stories);
+                commit('setStoriesPaginateObject', data.stories);
+            })
+            .catch((error) => {
+                console.log('Not connect: ' + error);
             });
     },
 
-    fetchCurrentStory({commit}, alpha_id){
+    fetchCurrentStory({commit}, alpha_id) {
         let url = '/stories/' + alpha_id;
 
         axios.get(url)
@@ -156,26 +166,28 @@ const actions = {
             });
     },
 
-    fetchOfferedStories({commit}, payload){
+    fetchOfferedStories({commit}, payload) {
         axios.get(payload)
             .then((response) => {
-                commit('setOfferedStories', response.data.stories);
-                commit('setStoriesPaginateObject', response.data.stories);
-            },
-            (error) => {
-                console.log(error);
-            });
+                    commit('setOfferedStories', response.data.stories);
+                    commit('setStoriesPaginateObject', response.data.stories);
+                    commit('setInitStory', true);
+                },
+                (error) => {
+                    console.log(error);
+                });
     },
 
-    fetchPurchasedStories({commit}, payload){
+    fetchPurchasedStories({commit}, payload) {
         axios.get(payload)
             .then((response) => {
-                commit('setPurchasedStories', response.data.stories);
-                commit('setStoriesPaginateObject', response.data.stories);
-            },
-            (error) => {
-                console.log(error);
-            });
+                    commit('setPurchasedStories', response.data.stories);
+                    commit('setStoriesPaginateObject', response.data.stories);
+                    commit('setInitStory', true);
+                },
+                (error) => {
+                    console.log(error);
+                });
     }
 };
 

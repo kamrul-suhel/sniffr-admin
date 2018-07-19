@@ -20,7 +20,7 @@
                             </li>
 
                             <li v-if="client_login && user.offers >= 1">
-                                <router-link :to="{name: 'client_offered_assets'}">
+                                <router-link :to="{name: 'client_offered_assets', query:{type: 'offered'}}">
                                     <v-icon color="white" left>gavel</v-icon> My Offers ({{ user.offers }})
                                 </router-link>
                             </li>
@@ -63,7 +63,7 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link :to="{name: 'client_purchased_assets'}">
+                                                <router-link :to="{name: 'client_purchased_assets', query:{type: 'purchased'}}">
                                                     <v-icon color="white" left size="20px">attach_money</v-icon> Order History
                                                 </router-link>
                                             </v-list-tile-title>

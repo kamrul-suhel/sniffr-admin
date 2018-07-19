@@ -30,6 +30,7 @@ const state = {
 
     purchasedVideos: [],
     offeredVideos:[],
+    initVideo:false,
 
 
 };
@@ -130,6 +131,10 @@ const getters = {
      */
     getPurchasedVideos(state){
         return state.purchasedVideos;
+    },
+
+    getinitVideo(state){
+        return state.initVideo;
     }
 };
 
@@ -205,7 +210,24 @@ const mutations = {
         state.previewRouteObject = '';
     },
 
-
+    setResetVideos(state){
+        state.currentVideoAlphaId = '';
+        state.currentVideo = '';
+        state.videoDialogBox = false;
+        state.current_route_obj = ''
+        state.previewRouteObject = '';
+        state.videoLoading =false;
+        state.videos= []
+        state.mailer_videos = []
+        state.paginate = ''
+        state.currentVideoTags= []
+        state.nextVideoAlphaId = ''
+        state.previousVideoAlphaId= ''
+        state.video_detail = {}
+        state.purchasedVideos = []
+        state.offeredVideos = []
+        state.initVideo = false
+    },
 
     /**
      * Video detail page setters
@@ -262,6 +284,10 @@ const mutations = {
         });
 
         state.purchasedVideos = allVideos;
+    },
+
+    setInitVideo(state, value){
+        state.initVideo = value;
     }
 
 
@@ -368,6 +394,7 @@ const actions = {
             .then((response) => {
                 commit('setOfferedVideos', response.data.videos);
                 commit('setVideoPaginationObject', response.data.videos);
+                commit('setInitVideo', true);
             },
             (error) => {
                 console.log(error);
