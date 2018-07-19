@@ -503,7 +503,7 @@ class AdminStoryController extends Controller
      * @param $state
      * @return string
      */
-    public static function checkDropdownValue($state)
+    public static function getStateValue($state, $value = 'dropdown')
     {
         $found='';
         foreach(config('stories.decisions') as $decision1 => $decision1_values) {
