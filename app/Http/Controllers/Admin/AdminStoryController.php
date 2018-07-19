@@ -462,20 +462,14 @@ class AdminStoryController extends Controller
 
 		QueueBump::dispatch($story->id);
 
-//        if(isset($story->contact)) {
-//        	if($story->contact->email){
-//				QueueEmail::dispatch($story->id, 'story_contacted', 'story');
-//			}
-//
-//			$story->contacted_at = now();
-//			$story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
-//            $story->save();
+        if(isset($story->contact)) {
+			QueueBump::dispatch($story->id);
             $status = 'success';
             $message = 'Reminder Sent';
-//        } else {
-//            $status = 'error';
-//            $message = 'A contact needs to be added to the story first';
-//        }
+        } else {
+            $status = 'error';
+            $message = 'A contact needs to be added to the story first';
+        }
 
         return Redirect::to('admin/stories/?decision='.$decision)->with([
             'note' => $message,
