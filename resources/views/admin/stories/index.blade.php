@@ -183,10 +183,8 @@
                         <footer>
 							<div class="album-images-count">
                                 <div class="album-info-extra">
-                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->updated_at)) }}
-								</div>
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->updated_at)) }} <br>
 
-								<div class="album-info-extra">
 									@if($story->contacted_at && $story->contact_made)
 										<i class="fa fa-check-circle-o" title="Made Contact"></i>
 										<strong>Made Contact:</strong>
@@ -199,7 +197,9 @@
 									@else
 										<i class="fa fa-question-circle-o" title="Not Contacted"></i>
 										<strong>Not Contacted</strong>
-										<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ($story->state!='unapproved' ? 'Contacted Source' : 'hello') }}</a>
+										@if($story->state != 'unapproved')
+											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ( $story->contact->canAutoBump() ? 'Contacted Source' : '') }}</a>
+										@endif
 									@endif
                                 </div>
                             </div>
