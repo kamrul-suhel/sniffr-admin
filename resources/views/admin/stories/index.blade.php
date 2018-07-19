@@ -161,7 +161,7 @@
                                         </div>
                                         <div class="options-body">
 											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												<option>{{ AdminStoryController::getStateValue($story->state) }}</option>
+												<option>{{ AdminStoryController::getStateValue($story->state)['dropdown'] }}</option>
 											</select>
                                         </div>
                                         <hr>
@@ -206,6 +206,12 @@
                             </div>
 
                             <div class="album-options no-border">
+								@php
+									$stateValues = AdminStoryController::getStateValue($story->state);
+								@endphp
+
+								<p>{{ $stateValues['dropdown'] }}</p>
+
                                 @if($story->state == 'unapproved')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
