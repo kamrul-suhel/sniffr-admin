@@ -210,8 +210,6 @@
 									$stateValues = AdminStoryController::getStateValue($story->state);
 								@endphp
 
-								<p>{{ $stateValues['dropdown'] }}</p>
-
                                 @if($story->state == 'unapproved')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
