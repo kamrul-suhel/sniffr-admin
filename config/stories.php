@@ -9,7 +9,7 @@ return [
         'unlicensed',
         'licensing',
         'licensed',
-        'hacks-unassigned',
+        // 'hacks-unassigned',
         'writing-inprogress',
         'writing-completed',
         'subs-unassigned',
@@ -20,7 +20,8 @@ return [
         // 'edits-inprogress',
         // 'edits-approved',
         // 'edits-rejected',
-        'published'
+        'published',
+        'archive',
     ],
 
     'decisions' => [

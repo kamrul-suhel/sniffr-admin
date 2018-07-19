@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Label;
 use App\Video;
+use App\Story;
 use Carbon\Carbon as Carbon;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -267,6 +268,84 @@ class AdminLabelController extends Controller {
     }
 
     public function automateEmailReminders() {
+
+        $assets = Story::where([['state', 'approved'], ['contact_id', '!=', NULL], ['contact_made', NULL], ['contacted_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
+        ->where(function ($query) {
+            $query->where('reminders', '<', 4)
+                ->orWhereNull('reminders');
+        })
+        ->orderBy('contacted_at', 'DESC')
+        ->get();
+
+        if(count($assets)>0) {
+
+            // Set incremental queue delay
+            $queue_delay = 10;
+
+            // Loop through stories
+            foreach ($assets as $asset) {
+                // Check previous reminders and whether the story fits within the range: 24 hours, 48 hours, 72 hours (archive)
+                $ok = false;
+                switch (true) {
+                    case ($asset->reminders == NULL && $asset->contacted_at < Carbon::now()->subDays(1)->toDateTimeString()): // no reminders sent, this will be the first to be sent
+                        $type = '24 hours';
+                        $ok = true; //After 24 hours
+                        break;
+                    case ($asset->reminders == 1 && $asset->contacted_at < Carbon::now()->subDays(1)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(2)->toDateTimeString()): // this will be the second to be sent
+                        $type = '48 hours';
+                        $ok = true; //After 48 hours
+                        break;
+                    case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(2)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(3)->toDateTimeString()): // this will move story into archive
+                        $type = 'Archive';
+                        $ok = true; //After 72 hours
+                        break;
+                }
+
+                // Only send reminder if within above range plus if story has a contact
+                if(isset($asset->contact) && $ok == true) {
+
+                    // Which method to contact (if not archiving story)
+                    if($type!='Archive') {
+
+                        switch (true) {
+                            case (isset($asset->contact->email)):
+                                // Schedule email reminder to be sent via queue/job
+                                // QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
+                                //     ->delay(now()->addSeconds($queue_delay));
+                                break;
+                            case (isset($asset->contact->twitter)):
+                                // Schedule twitter reminder to be sent via queue/job
+                                // QueueTweet::dispatch($asset->id, 'story_contacted', 'story')
+                                //     ->delay(now()->addSeconds($queue_delay));
+                                break;
+                            case (isset($asset->contact->reddit)):
+                                // Schedule reddit reminder to be sent via queue/job
+                                // QueueReddit::dispatch($asset->id, 'story_contacted', 'story')
+                                //     ->delay(now()->addSeconds($queue_delay));
+                                break;
+                        }
+
+                    }
+
+                    // Output to schedule log
+                    echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$asset->alpha_id.' : '.$asset->title.' : '.$asset->contacted_at.' : '.($asset->reminders ? $asset->reminders : 0).' : '.$asset->contact->full_name. "<br />";
+
+                    // Need to update story reminder count and contacted_at sent timestamp
+                    $asset->contacted_at = now();
+                    $asset->reminders = ($asset->reminders ? $asset->reminders+1 : 1);
+                    $asset->state = ($type=='Archive' ? 'archive' : $asset->state); // Set story state to archive
+                    $asset->save();
+
+                    // Increment queue delay
+                    $queue_delay = $queue_delay + 10;
+
+                }
+            }
+        }
+
+    }
+
+    public function automateEmailReminders2() {
 
         $videos = Video::where([['state', 'accepted'], ['contact_id', '!=', 0], ['more_details', NULL], ['more_details_code', '!=', NULL], ['more_details_sent', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
         ->where(function ($query) {
