@@ -94,9 +94,9 @@ return [
                 'dropdown' => 'Published',
                 'value' => 'published',
             ],
-            'hacks-unassigned' => [
+            'archive' => [
                 'dropdown' => 'Archived',
-                'value' => 'hacks-unassigned',
+                'value' => 'archive',
             ],
 		],
     ],
@@ -211,6 +211,7 @@ return [
         'edits-approved' => 'default',
         'edits-rejected' => 'default',
         'published' => 'success',
+        'archive' => 'default',
     ],
 
     'icons' => [

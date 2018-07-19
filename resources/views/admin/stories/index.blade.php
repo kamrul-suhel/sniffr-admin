@@ -256,7 +256,7 @@
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="js-story-state unapproved btn-mini btn-mini-border left" title="Rejected"><i class="fa fa-times"></i> Rejected</a>
 
-								@elseif($story->state == 'hacks-unassigned')
+								@elseif($story->state == 'archive')
 
                                     <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border left" title="Archived"> Archived</a>
 
