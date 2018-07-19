@@ -161,7 +161,7 @@
                                         </div>
                                         <div class="options-body">
 											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												<option>{{ AdminStoryController::checkDropdownValue($story->state) }}</option>
+												<option>{{ AdminStoryController::getStateValue($story->state) }}</option>
 											</select>
                                         </div>
                                         <hr>
