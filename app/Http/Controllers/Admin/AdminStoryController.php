@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueBump;
 use App\Jobs\QueueStory;
 
 class AdminStoryController extends Controller
@@ -459,20 +460,22 @@ class AdminStoryController extends Controller
 
         $story = Story::where('alpha_id', $id)->first();
 
-        if(isset($story->contact)) {
-        	if($story->contact->email){
-				QueueEmail::dispatch($story->id, 'story_contacted', 'story');
-			}
+		QueueBump::dispatch($story->id);
 
-			$story->contacted_at = now();
-			$story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
-            $story->save();
+//        if(isset($story->contact)) {
+//        	if($story->contact->email){
+//				QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+//			}
+//
+//			$story->contacted_at = now();
+//			$story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
+//            $story->save();
             $status = 'success';
             $message = 'Reminder Sent';
-        } else {
-            $status = 'error';
-            $message = 'A contact needs to be added to the story first';
-        }
+//        } else {
+//            $status = 'error';
+//            $message = 'A contact needs to be added to the story first';
+//        }
 
         return Redirect::to('admin/stories/?decision='.$decision)->with([
             'note' => $message,

@@ -1,5 +1,10 @@
 <?php
 
+Route::get('/tweet', function()
+{
+	return Twitter::postTweet(array('screen_name' => '@wrightly_so', 'in_reply_to_status_id' => '1019884032736325634', 'status' => '“Hey @wrightly_so! It’s Ian Lainchbury from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)”', 'format' => 'json'));
+});
+
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
