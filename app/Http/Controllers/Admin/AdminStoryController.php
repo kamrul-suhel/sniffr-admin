@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
 use Goutte;

@@ -77,7 +77,7 @@ class Contact extends Model
 	 */
 	public function canAutoBump()
 	{
-		if($this->email || $this->twitter){
+		if($this->email || $this->twitter || $this->reddit){
 			return true;
 		}
 
