@@ -306,7 +306,9 @@ class AdminStoryController extends Controller
                 // make initial contact (will need to add twitter/fb/reddit in future)
                 if($story->id) {
                 	if($story->contact->email){
-						QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+                        if($story->contact->canAutoBump()){
+						    QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+                        }
 						$story->contacted_at = now();
 					}
                 }
@@ -504,13 +506,13 @@ class AdminStoryController extends Controller
      * @param $state
      * @return string
      */
-    public static function getStateValue($state, $value = 'dropdown')
+    public static function getStateValue($state)
     {
-        $found='';
+        $found = Array();
         foreach(config('stories.decisions') as $decision1 => $decision1_values) {
             foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values) {
                 if($state==$current_state) {
-                    $found=$state_values['dropdown'];
+                    $found=$state_values;
                 }
             }
         }
