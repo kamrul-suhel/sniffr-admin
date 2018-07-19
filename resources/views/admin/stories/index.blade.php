@@ -201,6 +201,9 @@
 											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
 											@endif
 										@endif
+									@else
+										<i class="fa fa-exclamation-circle-o" title="No Contact"></i>
+										<strong>No Contact</strong>
 									@endif
                                 </div>
                             </div>
