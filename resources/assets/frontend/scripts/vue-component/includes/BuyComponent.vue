@@ -12,7 +12,7 @@
                         <v-layout row wrap id="buy-section">
 
                             <v-flex xs12>
-                                <h2 class="text-center text-uppercase">Buy </h2>
+                                <h2 class="text-center text-uppercase">Buy</h2>
                                 <p class="text-xs-center">Please provide us with your requirements</p>
                             </v-flex>
 
@@ -84,9 +84,7 @@
                                             size="medium"
                                             :loading="loading"
                                             :disabled="disabled"
-                                            @click="acceptPrice()">
-                                        Buy now
-                                    </v-btn>
+                                            @click="acceptPrice()">Buy now</v-btn>
                                 </div>
                             </v-flex>
                         </v-layout>
@@ -100,24 +98,20 @@
     import BuyDialogBoxEventBus from '../../event-bus/buy-dialog-box-event-bus.js';
     import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
     import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
+    import {mapGetters} from 'vuex';
 
     export default {
         data() {
             return {
                 alpha_name: '',
                 disabled: true,
-                settings: {},
                 price: false,
                 show_price: false,
                 show_thanks: false,
                 showThanksMessage:'',
 
                 button_text: '',
-                asset: {},
-                type: '',
-                collection: {},
                 collection_asset_id: '',
-                open_buy_dialog: false,
 
                 valid:false,
                 license_type: null,
@@ -190,25 +184,35 @@
                 }
             },
 
-            open_buy_dialog(val){
-                if(!val){
-                    this.onQuoteDialogClose();
-                }
-            }
+            // open_buy_dialog(val){
+            //     if(!val){
+            //         this.onQuoteDialogClose();
+            //     }
+            // }
         },
 
-        created() {
-            BuyDialogBoxEventBus.$on('buyDialogStateChange', (collection, asset, type) => {
+        computed:{
+            ...mapGetters({
+                collection : 'getBuyQuoteCollection',
+                asset: 'getBuyQuoteAsset',
+                settings: 'getSettingsObject'
+            }),
 
-                this.$refs.quote_form.reset();
-                this.open_buy_dialog = true;
-                this.type = type;
-                this.asset = asset;
-                this.collection = collection;
+            open_buy_dialog: {
+                get(){
+                    return this.$store.getters.getBuyDialog
+                },
 
+                set(value){
+                    console.log('open_buy_dialog'+ value);
+                    this.$store.commit('setBuyDialog', value);
+                }
+            },
 
-                if (this.type === 'video') {
-                    this.settings = this.$store.getters.getSettingsObject;
+            type(){
+                let type = this.$store.getters.getBuyQuoteType;
+                // this.$refs.quote_form.reset();
+                if (type === 'video') {
 
                     Object.values(this.settings.pricing.type).forEach((type) =>{
                         this.licenses.push(type);
@@ -224,18 +228,17 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                }else if (this.type == 'story') {
+                }else if (type == 'story') {
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.disabled = false;
                 }
 
-            });
+                return type;
+            }
+        },
 
-            VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
-                //this.$router.push('client/purchased');
-                //TODO - Decide where to send user based on type of view
-            });
+        created() {
 
             ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
                 setTimeout(()=> {
@@ -246,9 +249,6 @@
         },
 
         methods: {
-            openBuyDialog(event){
-                this.open_buy_dialog = event;
-            },
 
             onQuoteDialogClose() {
                 setTimeout(()=> {
@@ -284,7 +284,6 @@
 
             closeDialogBoxes(){
                 this.open_buy_dialog = false;
-                VideoDialogBoxEventBus.closeVideoDialogFromBuy();
             },
 
             acceptPrice() {
@@ -298,7 +297,8 @@
                             this.open_buy_dialog = false;
                             setTimeout(()=> {
                                 let message = "Thank you for purchasing "+ this.asset.title
-                                ThankYouDialogBoxEventBus.openThankYouDialog(message);
+                                this.$store.commit('setThankYouMessage', message);
+                                this.$store.commit('setThankYouDialog', true);
                                 this.$refs.quote_form.reset();
                             }, 500)
 

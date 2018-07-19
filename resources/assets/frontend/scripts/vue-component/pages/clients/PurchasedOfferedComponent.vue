@@ -7,7 +7,7 @@
                     <h2 class="text-center text-uppercase">{{ headingText }}</h2>
                 </v-flex>
 
-                <v-flex xs12 class="text-xs-center" v-if="totalStories <= 0 && totalStories <= 0">
+                <v-flex xs12 class="text-xs-center" v-if="totalStories <= 0 && totalVideos <= 0">
                     <h2>Sorry history is empty</h2>
                 </v-flex>
 
@@ -37,7 +37,7 @@
                                     <v-text-field
                                             color="dark"
                                             append-icon="search"
-                                            v-model="searchTerm"
+                                            v-model="searchVideoTerm"
                                             label="Search">
                                     </v-text-field>
                                 </v-flex>
@@ -66,7 +66,7 @@
                                     <v-text-field
                                             color="dark"
                                             append-icon="search"
-                                            v-model="searchTerm"
+                                            v-model="searchStoryTerm"
                                             label="Search">
                                     </v-text-field>
                                 </v-flex>
@@ -111,6 +111,8 @@
                 videoPage: 1,
                 storyPage:1,
                 searchTerm: '',
+                searchVideoTerm:'',
+                searchStoryTerm:'',
                 tabItems:['Video', 'Stories']
             }
         },
@@ -122,7 +124,6 @@
                 },
 
                 set(value){
-                    console.log('type computed call' + value);
                     return value;
                 }
             },
@@ -186,15 +187,28 @@
                 this.setData('story');
             },
 
-            searchTerm() {
-                this.page = 1;
-                this.setData();
-            },
+            // searchTerm() {
+            //     this.page = 1;
+            //     this.setData();
+            // },
 
             '$route'(to, next, previous){
                 this.type = this.$route.query.type;
-                console.log(this.$route.query.type);
+                this.searchVideoTerm = '';
+                this.searchStoryTerm = '';
                 this.setData();
+            },
+
+            searchVideoTerm(value){
+                this.searchTerm = this.searchVideoTerm;
+                this.page = 1;
+                this.setData('video');
+            },
+
+            searchStoryTerm(){
+                this.searchTerm = this.searchStoryTerm;
+                this.page = 1;
+                this.setData('story');
             }
         },
 

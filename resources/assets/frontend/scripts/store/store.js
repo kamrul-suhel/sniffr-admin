@@ -4,8 +4,8 @@ import Settings from './modules/settings'
 import User from './modules/user'
 import Videos from './modules/videos'
 import Stories from './modules/stories'
-// import ClientStories from './modules/client/client-stories'
-// import ClientVideos from './modules/client/client-videos'
+import BuyQuote from './modules/buyquote'
+import Dialog from './modules/dialog'
 
 Vue.use(Vuex)
 
@@ -26,8 +26,8 @@ export const store = new Vuex.Store({
 		Settings,
 		User,
 		Videos,
-		// ClientStories,
-		// ClientVideos,
-		Stories
+		Stories,
+		BuyQuote,
+		Dialog
 	}
 })

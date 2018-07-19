@@ -147,25 +147,14 @@
     </section>
 </template>
 <script>
-    import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus.js';
-    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
-    import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
-    import LoginEventBus from '../../event-bus/login-event-bus';
-
+    import {mapGetters} from 'vuex'
 
     export default {
         data() {
             return {
                 alpha_name: '',
-                client_logged_in: false,
                 disabled: true,
-                settings: {},
-
-                asset: {},
-                type: '',
-                collection: {},
                 collection_asset_id: '',
-                open_quote_dialog: false,
                 valid:false,
                 license_type: null,
                 license_platform: null,
@@ -217,6 +206,51 @@
             }
         },
 
+        computed:{
+            ...mapGetters({
+                client_logged_in: 'getClientLogin',
+                collection : 'getBuyQuoteCollection',
+                asset: 'getBuyQuoteAsset',
+                settings: 'getSettingsObject'
+            }),
+
+            open_quote_dialog: {
+                get(){
+                    return this.$store.getters.getQuoteDialog
+                },
+
+                set(value){
+                    this.$store.commit('setQuoteDialog', value);
+                }
+            },
+
+            type() {
+                let type = this.$store.getters.getBuyQuoteType;
+                if (type === 'video') {
+
+                    Object.values(this.settings.pricing.type).forEach((type) =>{
+                        this.licenses.push(type);
+                    });
+
+                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
+                        this.platforms.push(platform);
+                    });
+
+                    Object.values(this.settings.pricing.length).forEach((length) =>{
+                        this.lengths.push(length);
+                    });
+
+                    this.collection_asset_id = this.collection.collection_video_id;
+                    this.alpha_name = 'video_alpha_id';
+                }else if (type == 'story') {
+                    this.collection_asset_id = this.collection.collection_story_id;
+                    this.alpha_name = 'story_alpha_id';
+                    this.disabled = false;
+                }
+                return type;
+            }
+        },
+
         watch: {
             open_quote_dialog(val){
                 if(!val){
@@ -245,53 +279,6 @@
         },
 
         created() {
-
-            QuoteDialogBoxEventBus.$on('quoteDialogStateChange', (collection, asset, type) => {
-                this.client_logged_in = this.$store.getters.getClientLogin;
-
-                this.type = type;
-                this.asset = asset;
-                this.collection = collection;
-                // this.$refs.quote_form.reset();
-
-                if (this.type === 'video') {
-                    this.settings = this.$store.getters.getSettingsObject;
-
-                    Object.values(this.settings.pricing.type).forEach((type) =>{
-                        this.licenses.push(type);
-                    });
-
-                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
-                        this.platforms.push(platform);
-                    });
-
-                    Object.values(this.settings.pricing.length).forEach((length) =>{
-                        this.lengths.push(length);
-                    });
-
-                    this.collection_asset_id = this.collection.collection_video_id;
-                    this.alpha_name = 'video_alpha_id';
-                }else if (this.type == 'story') {
-                    this.collection_asset_id = this.collection.collection_story_id;
-                    this.alpha_name = 'story_alpha_id';
-                    this.disabled = false;
-                }
-
-                this.open_quote_dialog = true;
-
-
-            });
-
-            VideoDialogBoxEventBus.$on('videoDialogBoxCloseFromBuy', () => {
-                //this.$router.push('client/purchased');
-                //TODO - Decide where to send user based on type of view
-            });
-
-            ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
-                setTimeout(()=> {
-                    this.open_quote_dialog = false;
-                }, 500);
-            })
         },
 
         methods: {
@@ -314,16 +301,15 @@
             },
 
             buttonClicked(){
-                if(this.$store.getters.getUser.id === '') {
+                if(this.$store.getters.getUserStatus.id === '') {
                     return this.registerUser();
                 }
 
-                return this.requestQuote();
+                this.requestQuote();
             },
 
             closeDialogBoxes(){
                 this.open_quote_dialog = false;
-                VideoDialogBoxEventBus.closeVideoDialogFromBuy();
             },
 
             requestQuote() {
@@ -341,12 +327,14 @@
                     axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
                         .then(response => {
                             this.loading = false;
-                            this.open_buy_dialog = false;
+                            this.open_quote_dialog = false;
                             
                             setTimeout(()=> {
                                 this.$refs.quote_form.reset();
                                 let message = 'Thanks for your request, someone from our licensing team will be in touch shortly';
-                                ThankYouDialogBoxEventBus.openThankYouDialog(message);
+                                this.$store.commit('setThankYouMessage', message);
+                                this.$store.commit('setThankYouDialog', true);
+
                             }, 500)
                         })
                         .catch(error => {
@@ -375,8 +363,6 @@
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
                             this.$store.commit('setUserStatus', response.data);
-                            LoginEventBus.loginSuccess();
-
                             this.requestQuote();
                         })
                         .catch(error => {
