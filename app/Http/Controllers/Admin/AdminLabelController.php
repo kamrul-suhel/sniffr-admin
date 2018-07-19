@@ -290,15 +290,15 @@ class AdminLabelController extends Controller {
                 switch (true) {
                     case ($asset->reminders == NULL && $asset->contacted_at < Carbon::now()->subDays(1)->toDateTimeString()): // no reminders sent, this will be the first to be sent
                         $type = '24 hours';
-                        $ok = true; //After 24 hours
+                        $ok = true; //After 24 hours of first contact
                         break;
-                    case ($asset->reminders == 1 && $asset->contacted_at < Carbon::now()->subDays(1)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(2)->toDateTimeString()): // this will be the second to be sent
+                    case ($asset->reminders == 1 && $asset->contacted_at < Carbon::now()->subDays(2)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(3)->toDateTimeString()): // this will be the second to be sent
                         $type = '48 hours';
-                        $ok = true; //After 48 hours
+                        $ok = true; //After 48 hours of last contact
                         break;
                     case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(3)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(15)->toDateTimeString()): // this will move story into archive
                         $type = 'Archive';
-                        $ok = true; //After 72 hours
+                        $ok = true; //After 72 hours of last contact
                         break;
                 }
 
