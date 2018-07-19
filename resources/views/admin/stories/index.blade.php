@@ -182,19 +182,27 @@
 
                         <footer>
 							<div class="album-images-count">
-                                <div class="album-info-extra top">
-                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}
-								</div>
-								<div class="album-info-extra bottom">
-									@if($story->contacted_at && !$story->contact_made)
-											<i class="fa fa-clock-o" title="Contacted"></i> <strong> @if($story->reminders) {{ $story->reminders }} Reminder{{ ($story->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong> {{ (isset($story->contacted_at) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet') }} <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ isset($story->contact->email) ? 'Remind' : 'Manually' }}</a>
-									@elseif($story->contacted_at && $story->contact_made)
-										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> <a href="#">{{ date('jS M h:i:s',strtotime($story->contacted_at)) }}</a>
+                                <div class="album-info-extra">
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->updated_at)) }} <br>
+
+									@if($story->contacted_at && $story->contact_made)
+										<i class="fa fa-check-circle-o" title="Made Contact"></i>
+										<strong>Made Contact:</strong>
+										<a href="#">{{ date('jS M h:i:s',strtotime($story->contacted_at)) }}</a>
+									@elseif($story->contacted_at && !$story->contact_made)
+										<i class="fa fa-clock-o" title="Contacted"></i>
+										<strong>@if($story->reminders) {{ $story->reminders }} Reminder{{ ($story->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong>{{ $story->contacted_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet' }}
+										<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
 									@else
-										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted</strong> <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ($story->state!='unapproved' ? 'Contacted Source' : '') }}</a>
+										<i class="fa fa-question-circle-o" title="Not Contacted"></i>
+										<strong>Not Contacted</strong>
+										@if($story->state != 'unapproved')
+										<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
+										@endif
 									@endif
                                 </div>
                             </div>
+
                             <div class="album-options no-border">
 								@php
 									$stateValues = AdminStoryController::getStateValue($story->state);

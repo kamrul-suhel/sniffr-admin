@@ -462,8 +462,6 @@ class AdminStoryController extends Controller
 
         $asset = Story::where('alpha_id', $id)->first();
 
-		QueueBump::dispatch($asset->id);
-
         if(isset($asset->contact)) {
 			if($asset->contact->canAutoBump()){
 				QueueBump::dispatch($asset->id);
