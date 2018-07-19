@@ -10,9 +10,6 @@ use Validator;
 use Redirect;
 use App\User;
 use App\Story;
-use App\Asset;
-use App\Video;
-use App\Contact;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\Libraries\VideoHelper;
@@ -199,7 +196,7 @@ class AdminStoryController extends Controller
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
-			'contact' => null,
+			'contact' => $asset->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all()
         ];
@@ -272,7 +269,7 @@ class AdminStoryController extends Controller
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
-			'contact' => null,
+			'contact' => $story->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
             'note' => 'Successfully Saved Story!',
@@ -307,8 +304,10 @@ class AdminStoryController extends Controller
             case ($state == 'approved'):
                 // make initial contact (will need to add twitter/fb/reddit in future)
                 if($story->id) {
-                    $story->contacted_at = now();
-                    QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+                	if($story->contact->email){
+						QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+						$story->contacted_at = now();
+					}
                 }
                 break;
             case ($state == 'unlicensed'):
@@ -316,6 +315,9 @@ class AdminStoryController extends Controller
                 if($story->id) {
                     $story->contact_made = 1;
                 }
+                $message = 'Set to contact made';
+                break;
+            case ($state == 'licensed'):
                 // add new post to WP
                 QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
@@ -458,9 +460,12 @@ class AdminStoryController extends Controller
         $story = Story::where('alpha_id', $id)->first();
 
         if(isset($story->contact)) {
-            $story->contacted_at = now();
-            $story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
-            QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+        	if($story->contact->email){
+				QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+			}
+
+			$story->contacted_at = now();
+			$story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
             $story->save();
             $status = 'success';
             $message = 'Reminder Sent';

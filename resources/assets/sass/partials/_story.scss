@@ -58,6 +58,7 @@
 select.btn-mini {
     width: 120px;
     height: auto;
+    font-size: 12px;
     line-height: 14px;
     border:#f0f0f0 solid 1px;
 }
@@ -100,7 +101,7 @@ select.btn-mini + .caret {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .btn-mini-border.left {
-    margin-right:6px;
+    margin-right:0px;
 }
 .panel-options .panel-options-grey {
     margin: 0px !important;
@@ -113,7 +114,7 @@ select.btn-mini + .caret {
     height:180px;
 }
 .options-body {
-    margin: 10px 5px;
+    margin: 10px 0px;
     padding: 0px;
     text-align: center;
 }

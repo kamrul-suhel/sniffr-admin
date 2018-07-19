@@ -10,13 +10,14 @@ use App\Comment;
 use App\Contact;
 use App\Video;
 use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminContactController extends Controller
 {
-    use VideoHelper;
+    use VideoHelper, FrontendResponse;
 
     protected $rules = [
         'full_name' => 'required'
@@ -75,6 +76,8 @@ class AdminContactController extends Controller
      */
     public function store(CreateContactRequest $request)
     {
+		$isJson = $request->ajax();
+
         $contact = new Contact();
         $contact->full_name = $request->input('full_name');
         $contact->email = $request->input('email');
@@ -93,6 +96,17 @@ class AdminContactController extends Controller
 
         $redirect_url = $request->input('referral', 'contacts.index');
         $redirect_url_id = $request->input('referral_id', '');
+
+		if ($isJson) {
+			$data = [
+				'status' => 'success',
+				'message' => 'Contact Successfully Added!',
+				'contact_name' => $contact->full_name,
+				'contact_email' => $contact->email,
+				'contact_id' => $contact->id
+			];
+			return $this->successResponse($data);
+		}
 
         return redirect()->route($redirect_url, $redirect_url_id)->with([
             'note' => 'New Creator Successfully Added!',
@@ -127,6 +141,8 @@ class AdminContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
+		$isJson = $request->ajax();
+
         $contact->full_name = $request->input('full_name');
         $contact->email = $request->input('email');
         $contact->tel = $request->input('tel');
@@ -141,6 +157,17 @@ class AdminContactController extends Controller
         $contact->reddit = $request->input('reddit');
         $contact->other = $request->input('other');
         $contact->save();
+
+		if ($isJson) {
+			$data = [
+				'status' => 'success',
+				'message' => 'Contact Successfully Updated!',
+				'contact_name' => $contact->full_name,
+				'contact_email' => $contact->email,
+				'contact_id' => $contact->id
+			];
+			return $this->successResponse($data);
+		}
 
         return redirect()->route('contacts.edit' , ['id' => $contact->id])->with([
             'note' => 'Successfully Updated Contact!',
