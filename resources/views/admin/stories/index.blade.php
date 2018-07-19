@@ -202,7 +202,7 @@
 											@endif
 										@endif
 									@else
-										<i class="fa fa-exclamation-circle-o" title="No Contact"></i>
+										<i class="fa fa-exclamation-circle" title="No Contact"></i>
 										<strong>No Contact</strong>
 									@endif
                                 </div>
