@@ -296,7 +296,7 @@ class AdminLabelController extends Controller {
                         $type = '48 hours';
                         $ok = true; //After 48 hours
                         break;
-                    case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(2)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(3)->toDateTimeString()): // this will move story into archive
+                    case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(3)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(15)->toDateTimeString()): // this will move story into archive
                         $type = 'Archive';
                         $ok = true; //After 72 hours
                         break;
@@ -308,23 +308,8 @@ class AdminLabelController extends Controller {
                     // Which method to contact (if not archiving story)
                     if($type!='Archive') {
 
-                        switch (true) {
-                            case (isset($asset->contact->email)):
-                                // Schedule email reminder to be sent via queue/job
-                                // QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
-                                //     ->delay(now()->addSeconds($queue_delay));
-                                break;
-                            case (isset($asset->contact->twitter)):
-                                // Schedule twitter reminder to be sent via queue/job
-                                // QueueTweet::dispatch($asset->id, 'story_contacted', 'story')
-                                //     ->delay(now()->addSeconds($queue_delay));
-                                break;
-                            case (isset($asset->contact->reddit)):
-                                // Schedule reddit reminder to be sent via queue/job
-                                // QueueReddit::dispatch($asset->id, 'story_contacted', 'story')
-                                //     ->delay(now()->addSeconds($queue_delay));
-                                break;
-                        }
+                        // QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
+                        //     ->delay(now()->addSeconds($queue_delay));
 
                     }
 
@@ -332,10 +317,10 @@ class AdminLabelController extends Controller {
                     echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$asset->alpha_id.' : '.$asset->title.' : '.$asset->contacted_at.' : '.($asset->reminders ? $asset->reminders : 0).' : '.$asset->contact->full_name. "<br />";
 
                     // Need to update story reminder count and contacted_at sent timestamp
-                    $asset->contacted_at = now();
-                    $asset->reminders = ($asset->reminders ? $asset->reminders+1 : 1);
-                    $asset->state = ($type=='Archive' ? 'archive' : $asset->state); // Set story state to archive
-                    $asset->save();
+                    // $asset->contacted_at = now();
+                    // $asset->reminders = ($asset->reminders ? $asset->reminders+1 : 1);
+                    // $asset->state = ($type=='Archive' ? 'archive' : $asset->state); // Set story state to archive
+                    // $asset->save();
 
                     // Increment queue delay
                     $queue_delay = $queue_delay + 10;

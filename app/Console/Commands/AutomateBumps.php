@@ -50,7 +50,7 @@ class AutomateBumps extends Command
      */
     public function handle()
     {
-        $assets = Story::where([['state', 'approved'], ['contact_id', '!=', 0], ['contact_made', NULL], ['contacted_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
+        $assets = Story::where([['state', 'approved'], ['contact_id', '!=', NULL], ['contact_made', NULL], ['contacted_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
         ->where(function ($query) {
             $query->where('reminders', '<', 4)
                 ->orWhereNull('reminders');
@@ -76,7 +76,7 @@ class AutomateBumps extends Command
                         $type = '48 hours';
                         $ok = true; //After 48 hours of last contact
                         break;
-                    case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(2)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(3)->toDateTimeString()): // this will move story into archive
+                    case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(3)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(15)->toDateTimeString()): // this will move story into archive
                         $type = 'Archive';
                         $ok = true; //After 72 hours of last contact
                         break;
@@ -88,28 +88,13 @@ class AutomateBumps extends Command
                     // Which method to contact (if not archiving story)
                     if($type!='Archive') {
 
-                        switch (true) {
-                            case (isset($asset->contact->email)):
-                                // Schedule email reminder to be sent via queue/job
-                                QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
-                                    ->delay(now()->addSeconds($queue_delay));
-                                break;
-                            case (isset($asset->contact->twitter)):
-                                // Schedule twitter reminder to be sent via queue/job
-                                // QueueTweet::dispatch($asset->id, 'story_contacted', 'story')
-                                //     ->delay(now()->addSeconds($queue_delay));
-                                break;
-                            case (isset($asset->contact->reddit)):
-                                // Schedule reddit reminder to be sent via queue/job
-                                // QueueReddit::dispatch($asset->id, 'story_contacted', 'story')
-                                //     ->delay(now()->addSeconds($queue_delay));
-                                break;
-                        }
+                        QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
+                            ->delay(now()->addSeconds($queue_delay));
 
                     }
 
                     // Output to schedule log
-                    echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$asset->alpha_id.' : '.$asset->title.' : '.$asset->contacted_at.' : '.($asset->reminders ? $asset->reminders : '0').' : '.$asset->contact->full_name. PHP_EOL;
+                    echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$asset->alpha_id.' : '.$asset->title.' : '.$asset->contacted_at.' : '.($asset->reminders ? $asset->reminders : '0').' : '.$asset->contact->full_name.' ('.$asset->contact->id.')'. PHP_EOL;
 
                     // Need to update story reminder count and contacted_at sent timestamp
                     $asset->contacted_at = now();
