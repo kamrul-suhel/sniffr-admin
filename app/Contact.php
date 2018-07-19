@@ -71,6 +71,19 @@ class Contact extends Model
         'terms'
     ];
 
+
+	/**
+	 * @return Beumping happens automatically
+	 */
+	public function canAutoBump()
+	{
+		if($this->email || $this->twitter){
+			return true;
+		}
+
+		return false;
+	}
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

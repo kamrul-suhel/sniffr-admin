@@ -458,14 +458,21 @@ class AdminStoryController extends Controller
     {
         $decision = $request->input('decision');
 
-        $story = Story::where('alpha_id', $id)->first();
+        $asset = Story::where('alpha_id', $id)->first();
 
-		QueueBump::dispatch($story->id);
+		QueueBump::dispatch($asset->id);
 
-        if(isset($story->contact)) {
-			QueueBump::dispatch($story->id);
-            $status = 'success';
-            $message = 'Reminder Sent';
+        if(isset($asset->contact)) {
+			if($asset->contact->canAutoBump()){
+				QueueBump::dispatch($asset->id);
+				$status = 'success';
+				$message = 'Reminder Sent';
+			}else{
+				$asset->contacted_at = now();
+				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
+				$asset->save();
+			}
+
         } else {
             $status = 'error';
             $message = 'A contact needs to be added to the story first';
