@@ -72,7 +72,7 @@ class AutomateBumps extends Command
                         $type = '24 hours';
                         $ok = true; //After 24 hours of first contact
                         break;
-                    case ($asset->reminders == 1 && $asset->contacted_at < Carbon::now()->subDays(1)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(2)->toDateTimeString()): // this will be the second to be sent
+                    case ($asset->reminders == 1 && $asset->contacted_at < Carbon::now()->subDays(2)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(3)->toDateTimeString()): // this will be the second to be sent
                         $type = '48 hours';
                         $ok = true; //After 48 hours of last contact
                         break;
@@ -87,10 +87,8 @@ class AutomateBumps extends Command
 
                     // Which method to contact (if not archiving story)
                     if($type!='Archive') {
-
                         QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
                             ->delay(now()->addSeconds($queue_delay));
-
                     }
 
                     // Output to schedule log
