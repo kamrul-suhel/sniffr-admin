@@ -59,20 +59,20 @@ class QueueBump implements ShouldQueue
 
 				switch ($asset->reminders) {
 					case '':
-						$dmMessage = 'Hey! how are you? I\'m a senior writer from UNILAD and would love to talk to you about your tweet for an article. Do you have some time to talk to me today? ' . $from . ' x';
-						$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
-						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
+						$dmMessage = 'Hey! how are you? I\'m a senior writer from UNILAD and would love to talk to you about your tweet for an article. Do you have some time to talk to me today? ' . $from .' Ref: '.$asset->alpha_id;
+						$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :) Ref: '.$asset->alpha_id;
+						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :) Ref: '.$asset->alpha_id;
 						break;
 					case 0:
-						$dmMessage = 'Hey! Would be great to chat. Do you have some time today?';
-						$replyMessage = 'Hello again ' . $twitterHandle . '! UNILAD here, I would love to have a chat with you. Could you DM me :)';
-						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just sent you a DM!';
+						$dmMessage = 'Hey! Would be great to chat. Do you have some time today? Ref: '.$asset->alpha_id;
+						$replyMessage = 'Hello again ' . $twitterHandle . '! UNILAD here, I would love to have a chat with you. Could you DM me :) Ref: '.$asset->alpha_id;
+						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just sent you a DM! Ref: '.$asset->alpha_id;
 						break;
 					case 1:
 					default:
-						$dmMessage = 'Hey did you get my message? :)';
-						$replyMessage = 'Hey ' . $twitterHandle . '! Could you DM me :)';
-						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just DM\'d you!';
+						$dmMessage = 'Hey, did you get my message? :) Ref: '.$asset->alpha_id;
+						$replyMessage = 'Hey ' . $twitterHandle . '! Could you DM me :) Ref: '.$asset->alpha_id;
+						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just DM\'d you! Ref: '.$asset->alpha_id;
 						break;
 				}
 
