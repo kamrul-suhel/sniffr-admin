@@ -86,6 +86,7 @@ return [
         \TalvBansal\MediaManager\Providers\MediaManagerServiceProvider::class,
         ComoCode\LaravelAb\LaravelAbServiceProvider::class,
         Weidner\Goutte\GoutteServiceProvider::class,
+		CodeWizz\RedditAPI\RedditAPIServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -157,6 +158,7 @@ return [
         'Rekognition' => 'MichaelJWright\Rekognition\RekognitionFacade',
         'Zipper' => Chumper\Zipper\Zipper::class,
         'Goutte' => Weidner\Goutte\GoutteFacade::class,
+		'RedditAPI' => CodeWizz\RedditAPI\RedditAPIFacade::class,
     ],
 
 ];

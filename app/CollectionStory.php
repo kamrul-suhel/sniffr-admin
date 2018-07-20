@@ -35,4 +35,9 @@ class CollectionStory extends Model
     {
         return $this->where([['type', $type], ['status', $status]])->get();
     }
+
+	public function calculateLicenseEndTime()
+	{
+		return null;
+	}
 }

@@ -131,21 +131,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">
-                                <div class="panel-title">Email Domains Usable With this Account</div>
-                            </div>
-                            <div class="panel-body" style="display: block;">
-                                <input type="text" class="form-control" name="usable_domains" id="usable_domains"
-                                       placeholder="bbc.co.uk, news.bbc.co.uk, etc" value="{{
-                                       ($company->usable_domains) ? $company->usable_domains : '' }}"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 @if($company->active)
                     @include('client.account.partials.users')
                 @endif

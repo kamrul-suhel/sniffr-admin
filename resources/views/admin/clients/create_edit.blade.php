@@ -410,7 +410,7 @@
 
         <div class="clear"></div>
     </div>
-@endsection
+@stop
 
 @section('javascript')
     <!-- Vue scripts -->
@@ -503,4 +503,4 @@
             });
         });
     </script>
-@endsection
+@stop

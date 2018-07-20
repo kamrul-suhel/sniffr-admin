@@ -1,8 +1,3 @@
-<?php
-$asset = isset($video) ? $video : $story;
-$assetType = isset($video) ? 'video' : 'story';
-?>
-
 <div id="contract_modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -90,7 +85,7 @@ $assetType = isset($video) ? 'video' : 'story';
                             {{ csrf_field() }}
                             {{ method_field('POST') }}
                             <input type="hidden" id="asset_id" name="asset_id" value="{{ $asset->id }}"/>
-                            <input type="hidden" id="asset_type" name="asset_type" value="{{ $assetType }}"/>
+                            <input type="hidden" id="asset_type" name="asset_type" value="{{ $asset_type }}"/>
                             <input type="hidden" id="asset_alpha_id" name="asset_alpha_id" value="{{ $asset->alpha_id }}"/>
                         </div>
                     </div>

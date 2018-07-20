@@ -2,22 +2,21 @@
 
 @section('css')
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-@endsection
+@stop
 
 @section('content')
     <div id="admin-mailer">
         <v-app>
             <v-content>
                 <ol class="breadcrumb">
-                    <li><a href="/admin/mailers/"><i class="fa fa-tasks"></i> All Client Mailers </a></li>
-                    <li><a href="/admin/mailers/create_mailer/"> Create Mailer </a></li>
+                    <li><a href="/admin/mailers"><i class="fa fa-tasks"></i> All Client Mailers </a></li>
+                    <li><a href="/admin/mailers/create"> Create Mailer </a></li>
                 </ol>
                 <router-view></router-view>
             </v-content>
         </v-app>
     </div>
-
-@endsection
+@stop
 
 @section('javascript')
     <!-- Vue scripts -->
@@ -35,4 +34,4 @@
             });
         });
     </script>
-@endsection
+@stop

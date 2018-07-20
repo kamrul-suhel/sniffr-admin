@@ -187,12 +187,12 @@ class CollectionController extends Controller
 
         $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
 
-        auth()->attempt(['email' => $user->email, 'password' => $password]);
+        //auth()->attempt(['email' => $user->email, 'password' => $password]);
 
         return $this->successResponse([
             'user' => $user,
             'message' => "You have also successfully registered.
-             Check your emails to set your password or you will not be able to login again."
+             Check your emails to set your password, and activate your account."
         ]);
 
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Label;
 use App\Video;
+use App\Story;
 use Carbon\Carbon as Carbon;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -57,48 +58,52 @@ class AdminLabelController extends Controller {
          $search_value = substr($search_value, 0, strrpos($search_value, '.'));
          if($search_value){
              $search = array();
-             for ($i = 1; $i < 15; ++$i) {
+             for ($i = 1; $i < 10; ++$i) {
                  $search[] = $search_value.'-'.sprintf("%04s", $i).'.png';
              }
-         } else {
-            $search = '';
          }
 
-         //search database for labels associated with search index
-         $files = Label::whereIn('frame', $search)->get();
+         if(isset($search)) {
+             //search database for labels associated with search index
+             $files = Label::whereIn('frame', $search)
+                ->take(3)
+                ->get();
 
-         // create array with all labels obtained through image analysis
-         $labels = array();
-         $count = 0;
-         foreach ($files as $file) {
-             $temps = $file->labels;
-             if(count($temps)) {
-                 foreach ($temps as $temp){
-                     if (!in_array($temp['Name'], $blacklist)) {
-                         if($temp['Confidence']>85) {
-                             $labels[$count]['Name'] = $temp['Name'];
-                             $labels[$count]['Confidence'] = $temp['Confidence'];
-                             $count++;
+             // create array with all labels obtained through image analysis
+             $labels = array();
+             $count = 0;
+             foreach ($files as $file) {
+                 $temps = $file->labels;
+                 if(is_array($temps)&&count($temps)) {
+                     foreach ($temps as $temp){
+                         if (!in_array($temp['Name'], $blacklist)) {
+                             if($temp['Confidence']>85) {
+                                 $labels[$count]['Name'] = $temp['Name'];
+                                 $labels[$count]['Confidence'] = $temp['Confidence'];
+                                 $count++;
+                             }
                          }
                      }
                  }
              }
-         }
 
-         // remove duplicates and order labels array by confidence
-         $labels = super_unique($labels,'Name');
+             // remove duplicates and order labels array by confidence
+             $labels = super_unique($labels,'Name');
 
-         //dd($labels);
+             // if array exists then display labels
+             if (!empty($labels)) {
 
-         // if array exists then display labels
-         if (!empty($labels)) {
-             // foreach ($labels as $label){
-             //     echo $label['Name'].'['.round($label['Confidence'],0).']<br />';
-             // }
-             return response()->json(['status' => 'success', 'message' => 'Labels found.', 'labels' => $labels]);
+                 return response()->json(['status' => 'success', 'message' => 'Labels found.', 'labels' => $labels]);
+             } else {
+
+                 return response()->json(['status' => 'fail', 'message' => 'No labels found.']);
+             }
+
          } else {
+
              return response()->json(['status' => 'fail', 'message' => 'No labels found.']);
          }
+
      }
 
      public function analyseVideo() {
@@ -264,6 +269,69 @@ class AdminLabelController extends Controller {
     }
 
     public function automateEmailReminders() {
+
+        $assets = Story::where([['state', 'approved'], ['contact_id', '!=', NULL], ['contact_made', NULL], ['contacted_at', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
+        ->where(function ($query) {
+            $query->where('reminders', '<', 4)
+                ->orWhereNull('reminders');
+        })
+        ->orderBy('contacted_at', 'DESC')
+        ->get();
+
+        if(count($assets)>0) {
+
+            // Set incremental queue delay
+            $queue_delay = 10;
+
+            // Loop through stories
+            foreach ($assets as $asset) {
+                // Check previous reminders and whether the story fits within the range: 24 hours, 48 hours, 72 hours (archive)
+                $ok = false;
+                switch (true) {
+                    case ($asset->reminders == NULL && $asset->contacted_at < Carbon::now()->subDays(1)->toDateTimeString()): // no reminders sent, this will be the first to be sent
+                        $type = '24 hours';
+                        $ok = true; //After 24 hours of first contact
+                        break;
+                    case ($asset->reminders == 1 && $asset->contacted_at < Carbon::now()->subDays(2)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(3)->toDateTimeString()): // this will be the second to be sent
+                        $type = '48 hours';
+                        $ok = true; //After 48 hours of last contact
+                        break;
+                    case ($asset->reminders == 2 && $asset->contacted_at < Carbon::now()->subDays(3)->toDateTimeString() && $asset->contacted_at > Carbon::now()->subDays(15)->toDateTimeString()): // this will move story into archive
+                        $type = 'Archive';
+                        $ok = true; //After 72 hours of last contact
+                        break;
+                }
+
+                // Only send reminder if within above range plus if story has a contact
+                if(isset($asset->contact) && $ok == true) {
+
+                    // Which method to contact (if not archiving story)
+                    if($type!='Archive') {
+
+                        // QueueEmail::dispatch($asset->id, 'story_contacted', 'story')
+                        //     ->delay(now()->addSeconds($queue_delay));
+
+                    }
+
+                    // Output to schedule log
+                    echo Carbon::now()->toDateTimeString().' : '.$type.' : '.$asset->alpha_id.' : '.$asset->title.' : '.$asset->contacted_at.' : '.($asset->reminders ? $asset->reminders : 0).' : '.$asset->contact->full_name. "<br />";
+
+                    // Need to update story reminder count and contacted_at sent timestamp
+                    // $asset->contacted_at = now();
+                    // $asset->reminders = ($asset->reminders ? $asset->reminders+1 : 1);
+                    // $asset->state = ($type=='Archive' ? 'archive' : $asset->state); // Set story state to archive
+                    // $asset->save();
+
+                    // Increment queue delay
+                    $queue_delay = $queue_delay + 10;
+
+                }
+            }
+        }
+
+    }
+
+    public function automateEmailReminders2() {
 
         $videos = Video::where([['state', 'accepted'], ['contact_id', '!=', 0], ['more_details', NULL], ['more_details_code', '!=', NULL], ['more_details_sent', '>', Carbon::now()->subDays(30)->toDateTimeString()]])
         ->where(function ($query) {

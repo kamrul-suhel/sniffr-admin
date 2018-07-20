@@ -33,16 +33,10 @@ const mutations = {
 const actions = {
     getVideoNextAndPrevLink({commit, state}, payload) {
         return new Promise(function (resolve, reject) {
-            let url = '';
-            let request_url = state.current_route_obj.name;
+            let url = '/search/videos/'+payload.alpha_id;
 
-            url = '/videosdialogbox/'+payload.alpha_id;
-
-            axios.get(url)
+            axios.post(url)
                 .then((response) => {
-                    console.log('It is passing');
-                    console.log(url);
-                    console.log(response);
                     commit('setVideoDialogBox', response.data);
                     resolve();
                 })

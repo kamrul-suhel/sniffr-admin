@@ -21,6 +21,7 @@ use App\Mail\SubmissionThanks;
 use App\Mail\SubmissionThanksNonEx;
 use App\Mail\ContractMailable;
 use App\Mail\ContractSignedThanks;
+use App\Mail\StoryContacted;
 
 
 class QueueEmail implements ShouldQueue
@@ -58,7 +59,7 @@ class QueueEmail implements ShouldQueue
 
         //check if contact has unsubcribed (contact_id!=0)
         if (isset($asset->id)) {
-            if ($asset->contact_id == 0) {
+            if ($asset->contact_id == 0 || $asset->contact_id == NULL) {
 				$user = new User();
 				$user->slackChannel('alerts')->notify(new SubmissionAlert('a job failed to send an ' . $this->email_type . ' email due to unsubscribe or no contact email (Id: ' . $this->asset_id . ')'));
             } else {
@@ -89,6 +90,9 @@ class QueueEmail implements ShouldQueue
 						break;
 					case 'sign_contract':
                         Mail::to($asset->contact->email)->send(new ContractMailable($asset->id, $asset->currentContract, $this->type));
+                        break;
+                    case 'story_contacted':
+                        Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->reminders>0 ? ' (Reminder)' : '')));
                         break;
                 }
             }

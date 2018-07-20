@@ -6,7 +6,7 @@
         </span>
     </div>
 
-    @foreach($video->socialLinks as $link)
+    @foreach($asset->socialLinks as $link)
         <div class="col-lg-6" style="padding: 20px; padding-bottom: 20px;">
             <span class="input-group">
                 <span class="input-group-addon">

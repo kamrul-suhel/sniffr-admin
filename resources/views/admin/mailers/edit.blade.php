@@ -190,7 +190,7 @@
                             	@if($client->users()->count())
                                 <optgroup label="{{ $client->name }}">
                                 @foreach($client->users()->get() as $user)
-                                    <option value="{{ $user->id }}"{{ isset($mailer) && $mailer->users()->get()->contains($user->id)  ? " selected" : "" }}>{{ $user->username }} ({{ $user->email }})</option>
+                                    <option value="{{ $user->id }}"{{ isset($mailer) && $mailer->users()->get()->contains($user->id)  ? " selected" : "" }}>{{ $user->full_name }} ({{ $user->email }})</option>
                                 @endforeach
                                 </optgroup>
                                 @endif
