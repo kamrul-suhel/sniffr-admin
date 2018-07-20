@@ -49,7 +49,7 @@ class QueueBump implements ShouldQueue
         $success = false;
 
 		if($contact->email){ // Email
-			Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->reminders ? ' (Reminder)' : '')));
+			Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->reminders >= 0  ? ' (Reminder)' : '')));
 			$success = true;
 		}elseif($contact->twitter) { // Twitter
 			if (str_contains($asset->source, 'twitter.com')){
@@ -76,18 +76,25 @@ class QueueBump implements ShouldQueue
 				}
 
 				// Attempt DM
-				$dmResponse = Twitter::postDm(array('screen_name' => $twitterHandle, 'text' => $dmMessage, 'format' => 'json'));
+                try {
+                    $dmResponse = Twitter::postDm(array('screen_name' => $twitterHandle, 'text' => $dmMessage, 'format' => 'json'));
+                    $success = true;
+                } catch (Exception $e) {
+                    $success = false;
+                }
 
 				// DM Successfull
-				if ($dmResponse) {
+				if ($success) {
 					$replyMessage = $replyMessageDmSuccess;
 				}
 
-				$replyResponse = Twitter::postTweet(array('screen_name' => $twitterHandle, 'in_reply_to_status_id' => $tweetId, 'status' => $replyMessage, 'format' => 'json'));
+                try {
+                    $replyResponse = Twitter::postTweet(array('screen_name' => $twitterHandle, 'in_reply_to_status_id' => $tweetId, 'status' => $replyMessage, 'format' => 'json'));
+                    $success = true;
+                } catch (Exception $e) {
+                    $success = false;
+                }
 
-				if($replyResponse){
-					$success = true;
-				}
 			}else{
 				$user = new User();
 				$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed tweeting someone because the source was not from twitter (Id: ' . $asset->asset_id . ')'));
@@ -113,8 +120,9 @@ class QueueBump implements ShouldQueue
 		}
 
 		if($success){
+            $asset->reminders = (isset($asset->contacted_at) ? $asset->reminders + 1 : 0);
 			$asset->contacted_at = now();
-			$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
+
 			$asset->save();
 		}
     }
