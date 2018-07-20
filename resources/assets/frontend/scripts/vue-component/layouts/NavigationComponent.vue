@@ -113,7 +113,6 @@
     import LoginComponent from '../includes/LoginComponent'
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
     import QuoteComponent from '../includes/QuoteComponent'
-    import LoginEventBus from '../../event-bus/login-event-bus'
 
     import { mapGetters } from 'vuex';
     export default {

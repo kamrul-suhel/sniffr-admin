@@ -95,9 +95,6 @@
     </section>
 </template>
 <script>
-    import BuyDialogBoxEventBus from '../../event-bus/buy-dialog-box-event-bus.js';
-    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus.js';
-    import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
     import {mapGetters} from 'vuex';
 
     export default {
@@ -240,11 +237,11 @@
 
         created() {
 
-            ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
-                setTimeout(()=> {
-                    this.open_quote_dialog = false;
-                }, 500);
-            })
+            // ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
+            //     setTimeout(()=> {
+            //         this.open_quote_dialog = false;
+            //     }, 500);
+            // })
 
         },
 

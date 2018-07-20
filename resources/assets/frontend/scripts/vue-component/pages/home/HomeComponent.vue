@@ -14,7 +14,6 @@
 </template>
 <script>
     import FeatureComponent from '../../includes/FeatureComponent.vue';
-    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components:{

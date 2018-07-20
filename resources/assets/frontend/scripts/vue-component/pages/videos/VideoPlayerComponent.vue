@@ -41,7 +41,6 @@
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
     import {PlyrVideo} from './player/videoPlayer'
     import '../../../../../admin/css/plugins/video-plyr.css';
-    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
 
     import { mapGetters } from 'vuex';
 
@@ -87,13 +86,13 @@
 
         created() {
 
-            VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-                this.showVideo = false;
-            });
-
-            VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
-                this.showVideo = false;
-            });
+            // VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
+            //     this.showVideo = false;
+            // });
+            //
+            // VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
+            //     this.showVideo = false;
+            // });
         },
 
 

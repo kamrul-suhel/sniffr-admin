@@ -70,7 +70,6 @@
     </v-card>
 </template>
 <script>
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
 
     export default {
         data() {
@@ -166,7 +165,7 @@
             onForgotforgotDialog() {
                 this.$store.commit('setLoginDialog', false);
                 setTimeout(() => {
-                    LoginEventBus.openPasswordResetDialog();
+                    // LoginEventBus.openPasswordResetDialog();
                 }, 500);
 
             },

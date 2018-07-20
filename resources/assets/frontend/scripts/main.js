@@ -63,16 +63,6 @@ require('./filters/filters');
 
 /*
  ********************************************************
- * Login event bus
- ********************************************************
- */
-
-import {LoginEventBus} from './event-bus/login-event-bus';
-import {VideoDialogBoxEventBux} from './event-bus/video-dialog-box-event-bus';
-
-
-/*
- ********************************************************
  * Plugins & root Vue init
  ********************************************************
  */
@@ -97,7 +87,7 @@ new Vue({
     },
 
     created(){
-        // initialize code go here before load any of component. like user
+        // initialize code go here before load any of component. like user, settings
         this.$store.dispatch('setSettingObjectFromServer')
             .then((data) => {
                 this.$store.commit('setUserStatus', data.sniffr_app);

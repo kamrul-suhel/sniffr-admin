@@ -74,7 +74,6 @@
     </v-container>
 </template>
 <script>
-    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default {
         data() {
@@ -138,7 +137,7 @@
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
                                     this.$router.push({name: 'videos'});
-                                    LoginEventBus.loginSuccess();
+                                    // LoginEventBus.loginSuccess();
                                 });
                             }else{
                                 this.error = true;

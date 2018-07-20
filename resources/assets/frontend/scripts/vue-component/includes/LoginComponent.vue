@@ -11,7 +11,6 @@
 	</div>
 </template>
 <script>
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
     import LoginForm from '../forms/LoginFormComponent.vue';
 
 	export default {
@@ -49,11 +48,11 @@
             //     this.open_login_dialog = event;
             // },
             //
-			// onLoginDialogClose() {
-            //   this.login_dialog = false;
-            //   this.loading = false;
-            //   this.$refs.login_form.reset();
-            // }
+			onLoginDialogClose() {
+              this.login_dialog = false;
+              this.loading = false;
+              this.$refs.login_form.reset();
+            }
 		}
 	}
 </script>

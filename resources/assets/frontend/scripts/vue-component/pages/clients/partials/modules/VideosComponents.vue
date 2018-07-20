@@ -31,7 +31,6 @@
 
 <script>
     import AssetVideoOfferedComponent from '../AssetVideoOfferedComponent';
-    import ClientVideoOfferPurchasedEventBus from '../../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
         components: {
@@ -92,36 +91,6 @@
 
         created() {
             this.setData();
-
-            ClientVideoOfferPurchasedEventBus.$on("clientRemoveVideo", (videoIndex) => {
-                let currentVideo = this.videos[videoIndex];
-                let temp_video = [];
-                currentVideo.purchased = true;
-                temp_video.push(currentVideo);
-
-                this.videos.splice(videoIndex, 1);
-
-                this.videos.forEach((video, index) => {
-                    if(videoIndex === index){
-                        temp_video.push(currentVideo);
-                    }
-
-                    video.change_value = !video.change_value;
-
-                    if (currentVideo.type === "exclusive") {
-                        if (video.alpha_id === currentVideo.alpha_id) {
-                            video.expired = true;
-                        }
-                    }
-
-                    temp_video.push(video);
-                })
-
-                this.videos = [];
-                setTimeout(() => {
-                    this.videos = temp_video;
-                }, 100);
-            })
         },
 
         methods: {
@@ -166,6 +135,37 @@
                     page: this.page,
                     searchTerm: this.searchTerm
                 };
+            },
+
+            clientEventBus(videoIndex){
+                return new Promise((resolve, reject) => {
+                    let currentVideo = this.videos[videoIndex];
+                    let temp_video = [];
+                    currentVideo.purchased = true;
+                    temp_video.push(currentVideo);
+
+                    this.videos.splice(videoIndex, 1);
+
+                    this.videos.forEach((video, index) => {
+                        if(videoIndex === index){
+                            temp_video.push(currentVideo);
+                        }
+
+                        video.change_value = !video.change_value;
+
+                        if (currentVideo.type === "exclusive") {
+                            if (video.alpha_id === currentVideo.alpha_id) {
+                                video.expired = true;
+                            }
+                        }
+
+                        temp_video.push(video);
+                        this.videos = [];
+                        resolve(temp_video);
+                    })
+                }).then((data)=> {
+                    this.videos = temp_video;
+                })
             }
         },
     }

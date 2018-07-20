@@ -63,7 +63,6 @@
 </template>
 
 <script>
-    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
     import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
     export default {

@@ -52,7 +52,6 @@
 </template>
 
 <script>
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
 
 	export default {
 		data() {
@@ -85,12 +84,12 @@
 		},
 
         created() {
-            LoginEventBus.$on('openPasswordResetDialog', this.openPasswordForgotDialog)
+            // LoginEventBus.$on('openPasswordResetDialog', this.openPasswordForgotDialog)
         },
 
 		watch: {
 			open_dialog() {
-				LoginEventBus.closePasswordresetDialog();
+				// LoginEventBus.closePasswordresetDialog();
 			}
 		},
 

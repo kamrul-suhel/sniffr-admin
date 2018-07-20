@@ -58,7 +58,6 @@
     import SearchComponent from '../../includes/SearchComponent';
     import VideoLoopComponent from '../../includes/VideoLoopComponent';
     import PaginationComponent from '../../includes/PaginationComponent';
-    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     import {mapGetters} from 'vuex';
 

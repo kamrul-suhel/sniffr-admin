@@ -126,8 +126,6 @@
 </template>
 
 <script>
-    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus';
-    import ClientVideoOfferPurchasedEventBus from '../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
         data() {
@@ -221,10 +219,10 @@
                         this.acceptLoading = false;
                         this.assetType = "purchased";
                         this.purchased = true;
-                        SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
+                        // SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
                         // After purchased, if we need to to change another component data this event need to enable
-                        ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
+                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
                     }
                 });
             },
@@ -239,7 +237,7 @@
 
                         this.assetDeclined = true;
                         this.decline = true;
-                        SnackbarEventBus.displayMessage(5000, 'Video has declined');
+                        // SnackbarEventBus.displayMessage(5000, 'Video has declined');
                     }
                 });
 
