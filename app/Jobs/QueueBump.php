@@ -63,11 +63,12 @@ class QueueBump implements ShouldQueue
 						$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
 						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
 						break;
-					case 1:
+					case 0:
 						$dmMessage = 'Hey! Would be great to chat. Do you have some time today?';
 						$replyMessage = 'Hello again ' . $twitterHandle . '! UNILAD here, I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
 						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just sent you a DM!';
 						break;
+					case 1:
 					default:
 						$dmMessage = 'Hey did you get my message? :)';
 						$replyMessage = 'Hey ' . $twitterHandle . '! Could you DM me or email stories@unilad.co.uk :)';
@@ -75,12 +76,13 @@ class QueueBump implements ShouldQueue
 						break;
 				}
 
+				$success = true;
+
 				// Attempt DM
                 try {
                     $dmResponse = Twitter::postDm(array('screen_name' => $twitterHandle, 'text' => $dmMessage, 'format' => 'json'));
-                    $success = true;
                 } catch (\Exception $e) {
-                    $success = false;
+                    // No dm
                 }
 
 				// DM Successfull
@@ -90,13 +92,10 @@ class QueueBump implements ShouldQueue
 
                 try {
                     $replyResponse = Twitter::postTweet(array('screen_name' => $twitterHandle, 'in_reply_to_status_id' => $tweetId, 'status' => $replyMessage, 'format' => 'json'));
-                    $success = true;
                 } catch (\Exception $e) {
 					$user = new User();
 					$user->slackChannel('alerts')->notify(new SubmissionAlert('Reply tweet failed to send to '.$twitterHandle.', '.$e->getMessage().' (Id: ' . $asset->asset_id . ')'));
-					$success = false;
                 }
-
 			}else{
 				$user = new User();
 				$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed tweeting someone because the source was not from twitter (Id: ' . $asset->asset_id . ')'));
