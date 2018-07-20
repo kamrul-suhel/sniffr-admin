@@ -27,7 +27,7 @@
              xs12 sm12 md7 lg7 xl7>
 
             <v-card flat class="video-player-poster">
-                <v-card-media :src="video.image.includes('instagram')? defaultImage : video.image "></v-card-media>
+                <v-card-media :src="getThnumbnail()"></v-card-media>
                 <v-btn @click="change()" class="dark player-play" dark fab medium>
                     <v-icon large>play_arrow</v-icon>
                 </v-btn>
@@ -41,7 +41,8 @@
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
     import {PlyrVideo} from './player/videoPlayer'
     import '../../../../../admin/css/plugins/video-plyr.css';
-    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
+
+    import { mapGetters } from 'vuex';
 
     export default {
         components: {
@@ -55,7 +56,7 @@
 
                 showVideo: false,
 
-                s3_video:false,
+                s3_video: false,
                 videos: [],
 
                 youtubeID: '',
@@ -75,35 +76,45 @@
             }
         },
 
-        props: ['video'],
+        props:['video'],
 
         watch: {
-            video(){
+            video() {
                 this.showVideo = false;
             }
         },
 
         created() {
-            VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-                this.showVideo = false;
-            });
 
-            VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
-                this.showVideo = false;
-            });
+            // VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
+            //     this.showVideo = false;
+            // });
+            //
+            // VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
+            //     this.showVideo = false;
+            // });
         },
 
 
         methods: {
+            getThnumbnail() {
+                var string = "instagram";
+                if (this.video.image && this.video.image.indexOf(string) !== -1) {
+                    return this.defaultImage;
+                }
+                    return this.video.image;
+            },
+
+
             change() {
                 this.showVideo = true;
                 this.resetShowVideo();
 
-                if(this.video.file_watermark_dirty !== null){
+                if (this.video.file_watermark_dirty !== null) {
                     this.s3_video = true;
-                    let video = { src: this.video.file_watermark_dirty};
+                    let video = {src: this.video.file_watermark_dirty};
 
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         document.getElementById('video_player').play();
                         $('.plyr__control.plyr__control--overlaid').click()
 
@@ -114,15 +125,15 @@
                 if (this.video.youtube_id != null && this.video.youtube_id != '') {
                     this.youtubeID = this.video.youtube_id;
                     this.youtubeVideo = true;
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         $('.plyr__control.plyr__control--overlaid').click()
                     }, 100);
                 }
 
 
-                if(new RegExp('instagram', 'i').test(this.video.url)){
+                if (new RegExp('instagram', 'i').test(this.video.url)) {
 
-                    let promise = new Promise((resolve, reject)=>{
+                    let promise = new Promise((resolve, reject) => {
                         this.socialVideo = true;
                         resolve();
                     });
@@ -132,8 +143,8 @@
 
                 }
 
-                if(new RegExp('twitter','i').test(this.video.url)){
-                    var promise  = new Promise((resolve, reject)=>{
+                if (new RegExp('twitter', 'i').test(this.video.url)) {
+                    var promise = new Promise((resolve, reject) => {
                         this.socialVideo = true;
                         resolve();
                     });
@@ -143,9 +154,9 @@
                     }, 100)
                 }
 
-                if(new RegExp('facebook', 'i').test(this.video.url)){
+                if (new RegExp('facebook', 'i').test(this.video.url)) {
                     this.socialVideo = true;
-                    var promise = new Promise((resolve, reject)=>{
+                    var promise = new Promise((resolve, reject) => {
                         this.socialVideo = true;
                         resolve();
                     })

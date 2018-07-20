@@ -1,17 +1,15 @@
 <template>
 	<section class="videos-filter-section">
-	    <div  class="videos-filter-form">
+	    <div  class="videos-filter-form" style="background:#fafafa;">
 	        <v-container grid-list-lg pt-2 pb-2>
 	            <v-layout row wrap>
 	                <v-flex xs12>
 	                    <div class="form-group">
 	                        <v-text-field
-									dark
 	                                type="text"
 	                                name="value"
 									v-model="value"
-	                                color="white"
-									dark
+	                                color="dark"
 	                                label="Search"
 	                                append-icon="search"
 	                                aria-describedby="filterhelp"
@@ -42,6 +40,7 @@
 		methods:{
             onSearchActive(){
                 if(this.$route.name === 'stories'){
+                    console.log('story page called');
 					this.$router.push({name: 'stories', query: { search: this.value, page: 1}});
 				}else{
 					this.$router.push({name: 'videos', query: { search: this.value, page: 1}});

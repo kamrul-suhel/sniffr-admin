@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3 style="min-width:380px;">
+    <v-flex xs12 sm6 md4 lg4 xl3>
         <v-card class="video-card block">
             <v-card-media class="video-card-thumb-wrapper"
                 :src="onGetThumbnailImage()">
@@ -42,16 +42,22 @@
 </template>
 
 <script>
-    import VideoDialogBoxEventBus from '../../event-bus/video-dialog-box-event-bus'
     export default {
         data() {
             return {
                 video_image: '/assets/frontend/images/placeholder.png',
             }
         },
-        props:['video'],
+        props:{
+            video: {
+                type: Object,
+                required: true
+            },
 
-        created(){
+            type: {
+                type: String,
+                required: false
+            }
         },
 
         methods:{
@@ -78,18 +84,32 @@
             },
 
             openVideoDialog(video){
-                let url = '/videos/'+video.alpha_id;
+                let url = '/videos?id='+video.alpha_id;
 
                 if(this.$route.query.tag){
-                    url += '?tag='+this.$route.query.tag;
+                    url += '&tag='+this.$route.query.tag;
                 }
 
                 if(this.$route.query.search){
-                    url += '?search='+this.$route.query.search;
+                    url += '&search='+this.$route.query.search;
                 }
 
-                window.history.pushState(null, "page 2",url);
-                VideoDialogBoxEventBus.openVideoDialog(video.alpha_id);
+                if(this.type === 'suggest'){
+                    url = '/videos?id='+video.alpha_id;
+                    url += '&suggest=true';
+                }
+                this.$store.commit('setEntereRouteObject', this.$route);
+
+                if(this.$route.name != 'home'){
+                    this.$router.push({path: url});
+                }
+
+                this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
+                this.$store.commit('setCurrentRouteObject', this.$route);
+                this.$store.commit('setVideoDialogBox', true);
+                this.$store.commit('setVideoLoading', true);
+
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: video.alpha_id});
             }
         },
 

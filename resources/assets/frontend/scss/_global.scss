@@ -227,3 +227,18 @@ p {
 .thank-you-dialog{
   display:none;
 }
+
+
+/* ************************* Pagination style ******************* */
+.v-pagination__item--active{
+  border:none;
+  &:focus{
+    outline:none;
+  }
+}
+
+.v-pagination__item{
+  &:focus{
+    outline:none;
+  }
+}

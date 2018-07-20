@@ -17,7 +17,6 @@
 </template>
 
 <script>
-    import SnackbarEventBus from '../../event-bus/snackbar-event-bus'
 
     export default {
         data(){
@@ -29,13 +28,13 @@
         },
 
         created(){
-            SnackbarEventBus.$on('displayMessage', (timeout, message) => {
-                console.log(message);
-                this.timeout = Number(timeout);
-                this.message = message;
-
-                this.snackbar = true;
-            });
+            // SnackbarEventBus.$on('displayMessage', (timeout, message) => {
+            //     console.log(message);
+            //     this.timeout = Number(timeout);
+            //     this.message = message;
+            //
+            //     this.snackbar = true;
+            // });
         },
 
         methods: {

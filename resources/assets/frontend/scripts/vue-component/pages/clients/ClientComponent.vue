@@ -11,8 +11,6 @@
 </template>
 
 <script>
-    import LoginEventBus from "../../../event-bus/login-event-bus";
-
     export default {
         data() {
             return {
@@ -24,9 +22,9 @@
             this.content_show = this;
 
             //Logout button click then you can not see any of page
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.$router.push({name: 'home'});
-            });
+            // LoginEventBus.$on('logoutChangeState', () => {
+            //     this.$router.push({name: 'home'});
+            // });
         },
 
         updated(){

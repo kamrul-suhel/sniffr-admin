@@ -17,9 +17,8 @@
 </template>
 
 <script>
-    import QuoteDialogBoxEventBus from '../../event-bus/quote-dialog-box-event-bus';
-    import BuyDialogBoxEventBus from '../../event-bus/buy-dialog-box-event-bus';
-    import LoginEventBus from '../../event-bus/login-event-bus';
+
+    import {mapGetters} from 'vuex';
     export default {
         props:[
             'type',
@@ -28,9 +27,7 @@
 
         data() {
             return {
-                client_logged_in:'',
                 canBuy:false,
-                user:''
             }
         },
 
@@ -40,17 +37,16 @@
           }
         },
 
+        computed: {
+            ...mapGetters({
+                user: 'getUserStatus',
+                client_logged_in:'getClientLogin'
+            })
+        },
+
         created() {
             // Set button component
             this.checkLogin();
-
-            LoginEventBus.$on('loginSuccess', () => {
-                this.checkLogin();
-            })
-
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.checkLogin();
-            })
         },
 
         methods: {
@@ -62,7 +58,11 @@
 
                 axios.post('/client/collections', form_data)
                     .then(response => {
-                        QuoteDialogBoxEventBus.openQuoteDialog(response.data, this.asset, this.type);
+                        this.$store.commit('setBuyQuoteCollection', response.data);
+                        this.$store.commit('setBuyQuoteAsset', this.asset);
+                        this.$store.commit('setBuyQuoteType', this.type);
+                        this.$store.commit('setQuoteDialog', true);
+
                     })
                     .catch(error => {
                         console.log(error);
@@ -77,7 +77,10 @@
 
                 axios.post('/client/collections', form_data)
                     .then(response => {
-                        BuyDialogBoxEventBus.openBuyDialog(response.data, this.asset, this.type);
+                        this.$store.commit('setBuyQuoteCollection', response.data);
+                        this.$store.commit('setBuyQuoteAsset', this.asset);
+                        this.$store.commit('setBuyQuoteType', this.type);
+                        this.$store.commit('setBuyDialog', true);
                     })
                     .catch(error => {
                         console.log(error);
@@ -85,9 +88,6 @@
             },
 
             checkLogin(){
-                // Set button component
-                this.client_logged_in = this.$store.getters.isClientLogin;
-                this.user = this.$store.getters.getUser;
                 this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 0 ) ? false : true;
             }
         }

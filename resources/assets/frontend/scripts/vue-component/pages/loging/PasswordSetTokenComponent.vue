@@ -76,13 +76,8 @@
     </v-container>
 </template>
 <script>
-    import LoginEventBus from '../../../event-bus/login-event-bus';
-    import SnackbarEventBus from '../../../event-bus/snackbar-event-bus';
 
     export default {
-        components: {
-            SnackbarEventBus: SnackbarEventBus
-        },
         data() {
             return {
                 // validation & data
@@ -117,9 +112,6 @@
                 errors: [],
             }
         },
-        beforeRouteEnter(to, from, next){
-            next();
-        },
 
         created() {
             this.token = this.$route.params.token;
@@ -143,12 +135,9 @@
                             this.showMessage = true;
                             this.error = false;
                             this.buttonDisable = true;
-                            if(!response.data.error){
+                            if(!response.data.error) {
                                 this.$store.commit('setUserState', response.data);
-                                LoginEventBus.loginSuccess();
-
-                                this.$router.push('/videos');
-                                SnackbarEventBus.displayMessage(5000, response.data.success_message);
+                                this.message = response.data.success_message;
                             }
                         })
                         .catch(error => {
