@@ -93,7 +93,7 @@ class QueueBump implements ShouldQueue
                     $success = true;
                 } catch (\Exception $e) {
 					$user = new User();
-					$user->slackChannel('alerts')->notify(new SubmissionAlert('Reply tweet failed to send to '.$twitterHandle.', '.implode($e).' (Id: ' . $asset->asset_id . ')'));
+					$user->slackChannel('alerts')->notify(new SubmissionAlert('Reply tweet failed to send to '.$twitterHandle.', '.implode(', ',$e).' (Id: ' . $asset->asset_id . ')'));
 					$success = false;
                 }
 
