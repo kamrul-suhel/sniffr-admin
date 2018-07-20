@@ -92,7 +92,9 @@ class QueueBump implements ShouldQueue
                     $replyResponse = Twitter::postTweet(array('screen_name' => $twitterHandle, 'in_reply_to_status_id' => $tweetId, 'status' => $replyMessage, 'format' => 'json'));
                     $success = true;
                 } catch (\Exception $e) {
-                    $success = false;
+					$user = new User();
+					$user->slackChannel('alerts')->notify(new SubmissionAlert('Reply tweet failed to send to '.$twitterHandle.', '.$replyResponse.' (Id: ' . $asset->asset_id . ')'));
+					$success = false;
                 }
 
 			}else{
