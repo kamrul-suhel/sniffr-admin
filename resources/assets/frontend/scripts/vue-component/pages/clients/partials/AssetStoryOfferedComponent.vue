@@ -33,7 +33,7 @@
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
                     <div v-html="story.excerpt"></div>
 
-                    <div class="final-price">
+                    <div class="final-price" v-if="story.collection_status != 'requested'">
                         <h4>Final price: <span>£{{ story.final_price }}</span></h4>
                     </div>
                 </v-flex>
