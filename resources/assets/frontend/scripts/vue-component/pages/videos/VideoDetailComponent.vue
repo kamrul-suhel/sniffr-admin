@@ -1,19 +1,19 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
     <section class="videos-section">
-        <div id="header" class="page-videos">
-            <div class="header-content">
-                <div class="position-center">
-                    <v-container grid-list-lg>
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <h1 class="heading">{{video.title ? video.title : ''}}</h1>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </div>
-            </div>
-        </div>
+        <!--<div id="header" class="page-videos">-->
+            <!--<div class="header-content">-->
+                <!--<div class="position-center">-->
+                    <!--<v-container grid-list-lg>-->
+                        <!--<v-layout row wrap>-->
+                            <!--<v-flex xs12>-->
+                                <!--<h1 class="heading">{{video.title ? video.title : ''}}</h1>-->
+                            <!--</v-flex>-->
+                        <!--</v-layout>-->
+                    <!--</v-container>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
 
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
@@ -99,7 +99,6 @@
 
             video: {
                 get(){
-                    console.log(this.$store.getters.getCurrentVideo);
                     return this.$store.getters.getCurrentVideo;
                 }
             },
