@@ -65,13 +65,13 @@ class QueueBump implements ShouldQueue
 						break;
 					case 1:
 						$dmMessage = 'Hey! Would be great to chat. Do you have some time today?';
-						$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
+						$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' again from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
 						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just sent you a DM!';
 						break;
 					default:
 						$dmMessage = 'Hey did you get my message? :)';
-						$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :)';
-						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just sent you a DM!';
+						$replyMessage = 'Hey ' . $twitterHandle . '! Could you DM me or email stories@unilad.co.uk :)';
+						$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. I’ve just DM\'d you!';
 						break;
 				}
 
