@@ -71,11 +71,10 @@ class QueueBump implements ShouldQueue
 					$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :) Ref: '.$asset->alpha_id;
 				}
 
-				$success = true;
-
 				// Attempt DM
                 try {
                     $dmResponse = Twitter::postDm(array('screen_name' => $twitterHandle, 'text' => $dmMessage, 'format' => 'json'));
+					$success = true;
                 } catch (\Exception $e) {
                     // No dm
                 }
@@ -91,6 +90,8 @@ class QueueBump implements ShouldQueue
 					$user = new User();
 					$user->slackChannel('alerts')->notify(new SubmissionAlert('Reply tweet failed to send to '.$twitterHandle.', with message: '.$replyMessage.', error: '.$e->getMessage().' (Id: ' . $asset->asset_id . ')'));
                 }
+
+				$success = true;
 			}else{
 				$user = new User();
 				$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed tweeting someone because the source was not from twitter (Id: ' . $asset->asset_id . ')'));
