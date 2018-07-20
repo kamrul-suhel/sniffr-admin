@@ -67,7 +67,7 @@
                 @if($asset->collection->client->region)<p>Region: <b>{{ config('pricing.region.'.$asset->collection->client->region.'.name') }} </b></p>@endif
                 @if($asset->collection->client->tier)<p>Tier: <b>{{ config('pricing.tier.'.$asset->collection->client->tier.'.name') }} </b></p>@endif
                 @if($asset->type)<p>License: <b>{{ config('pricing.type.'.$asset->type.'.name') }} </b></p>@endif
-                @if($asset->platform)<p>Platform: <b>{{ config('pricing.platform.'.$asset->platform.'.name') }} </b></p>@endif
+                @if($asset->platform)<p>Platform: <b>{{ ucwords(str_replace(',',', ', $asset->platform)) }} </b></p>@endif
                 @if($asset->length)<p>License Length: <b>{{ config('pricing.length.'.$asset->length.'.name') }} </b></p>@endif
             </div>
         </div>

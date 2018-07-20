@@ -47,10 +47,17 @@ class CollectionVideo extends Model
         $price = $price * (config('pricing.class.' . $data['class'] . '.modifier') ?: 1);
         $price = $price * (config('pricing.locations.' . $data['location'] . '.modifier') ?: 1);
         $price = $price * (config('pricing.tier.' . $data['tier'] . '.modifier') ?: 1);
-
         $price = $price * (config('pricing.type.' . $data['license_type'] . '.modifier') ?: 1);
-        $price = $price * (config('pricing.platform.' . $data['license_platform'] . '.modifier') ?: 1);
         $price = $price * (config('pricing.length.' . $data['license_length'] . '.modifier') ?: 1);
+
+        $modifier = 1;
+        $platforms = explode(',', $data['license_platform']);
+
+        foreach($platforms as $platform) {
+            $modifier += config('pricing.platform.' . $platform . '.modifier') ?: 1;
+        }
+        $price = $price * $modifier;
+
 
         return $price = round($price, 2);
     }
