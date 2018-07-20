@@ -1,18 +1,5 @@
 <?php
 
-Route::get('/tweet', function(){
-	try {
-		$replyResponse = Twitter::postTweet(array('screen_name' => '@wrightly_so', 'in_reply_to_status_id' => '1020270286699196416', 'status' => 'Hi mike', 'format' => 'json'));
-		$success = true;
-	} catch (\Exception $e) {
-		dd($e->getMessage());
-		$user = new User();
-		$user->slackChannel('alerts')->notify(new SubmissionAlert('Reply tweet failed to send to '.$twitterHandle.', '.$e->message.' (Id: ' . $asset->asset_id . ')'));
-		$success = false;
-	}
-});
-
-
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
