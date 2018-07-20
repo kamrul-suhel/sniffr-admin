@@ -79,7 +79,7 @@ class QueueBump implements ShouldQueue
                 try {
                     $dmResponse = Twitter::postDm(array('screen_name' => $twitterHandle, 'text' => $dmMessage, 'format' => 'json'));
                     $success = true;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $success = false;
                 }
 
@@ -91,7 +91,7 @@ class QueueBump implements ShouldQueue
                 try {
                     $replyResponse = Twitter::postTweet(array('screen_name' => $twitterHandle, 'in_reply_to_status_id' => $tweetId, 'status' => $replyMessage, 'format' => 'json'));
                     $success = true;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $success = false;
                 }
 

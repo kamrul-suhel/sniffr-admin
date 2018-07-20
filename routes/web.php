@@ -4,7 +4,7 @@
 //     $assets = \App\Story::where([['state', 'approved'], ['reminders', '<', 2], ['contact_id', '!=', NULL], ['contact_made', NULL], ['contacted_at', '<', \Carbon\Carbon::now()->subDays(1)->toDateTimeString()]])
 //     ->orderBy('contacted_at', 'DESC')
 //     ->get();
-//     dd($assets);
+//     dd($success);
 // });
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
