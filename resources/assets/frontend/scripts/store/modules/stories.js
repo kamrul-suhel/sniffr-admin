@@ -101,6 +101,7 @@ const mutations = {
         offeredStories.data.forEach((story) => {
             story[0].story.final_price = story[0].final_price;
             story[0].story.collection_story_id = story[0].id;
+            story[0].story.collection_status = story[0].status;
             allStories.push(story[0].story);
         });
 
@@ -118,6 +119,7 @@ const mutations = {
         stories.data.forEach((story) => {
             story[0].story.final_price = story[0].final_price;
             story[0].story.collection_story_id = story[0].id;
+            story[0].story.collection_status = story[0].status;
             allStories.push(story[0].story);
         });
 

@@ -15,7 +15,8 @@ const state = {
     active: '',
 
     // Login dialog box variable: boolean
-    loginDialog: false
+    loginDialog: false,
+    forgotPasswordDialog: false,
 };
 
 const mutations = {
@@ -63,8 +64,11 @@ const mutations = {
     },
 
     setUserOffers(state, data) {
-        let user = data.user;
         state.offers = data;
+    },
+
+    setForgotPasswordDialog(state, value){
+        state.forgotPasswordDialog = value;
     }
 };
 
@@ -100,6 +104,10 @@ const getters = {
 
     getRouteUrl(state) {
         return state.route_url;
+    },
+
+    getForgotPasswordDialog(state){
+        return state.forgotPasswordDialog;
     }
 };
 

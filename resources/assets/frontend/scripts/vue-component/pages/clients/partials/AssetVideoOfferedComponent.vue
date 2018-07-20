@@ -50,7 +50,7 @@
                         </v-layout>
                     </div>
 
-                    <div class="final-price">
+                    <div class="final-price" v-if="video.collection_status != 'requested'">
                         <h4>Final price: <span>£{{ video.final_price }}</span></h4>
                     </div>
                 </v-flex>
@@ -67,6 +67,13 @@
                     class="mb-3">
                 No Longer Available
             </v-btn>
+        </v-flex>
+
+        <v-flex
+                v-else-if="video.collection_status === 'requested'"
+                xs12 sm12 md3 lg3 xl3 pl-3
+                align-content-center justify-center>
+            <p class="text-xs-center darken-4">Waiting for quote</p>
         </v-flex>
 
         <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 lg3 xl3 pl-3>

@@ -165,7 +165,7 @@
             onForgotforgotDialog() {
                 this.$store.commit('setLoginDialog', false);
                 setTimeout(() => {
-                    // LoginEventBus.openPasswordResetDialog();
+                    this.$store.commit('setForgotPasswordDialog', true);
                 }, 500);
 
             },

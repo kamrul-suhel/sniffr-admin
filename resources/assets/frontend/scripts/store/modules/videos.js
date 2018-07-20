@@ -257,9 +257,9 @@ const mutations = {
             video[0].video.type = video[0].type;
             video[0].video.length = video[0].length;
             video[0].video.collection_video_id = video[0].id;
+            video[0].video.collection_status = video[0].status;
             allVideos.push(video[0].video);
         });
-
         state.offeredVideos = allVideos;
     },
 
@@ -280,6 +280,7 @@ const mutations = {
             video[0].video.type = video[0].type;
             video[0].video.length = video[0].length;
             video[0].video.collection_video_id = video[0].id;
+            video[0].video.collection_status = video[0].status;
             allVideos.push(video[0].video);
         });
 

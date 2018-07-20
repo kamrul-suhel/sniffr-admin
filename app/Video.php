@@ -177,6 +177,13 @@ class Video extends Model
         return 'https://hooks.slack.com/services/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';
     }
 
+
+
+    public function videoCollections()
+    {
+        return $this->hasMany(CollectionVideo::class);
+    }
+
     /**
      * @param int $page
      * @return string

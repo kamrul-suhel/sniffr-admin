@@ -100,7 +100,9 @@
                 }
                 this.$store.commit('setEntereRouteObject', this.$route);
 
-                this.$router.push({path: url});
+                if(this.$route.name != 'home'){
+                    this.$router.push({path: url});
+                }
 
                 this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);

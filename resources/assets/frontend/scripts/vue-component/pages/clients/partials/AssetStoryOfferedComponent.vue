@@ -63,6 +63,11 @@
                 {{ button_text }}
             </v-btn>
         </v-flex>
+
+        <v-flex v-else-if="story.collection_status === 'requested'" xs12 sm12 md3 lg3 xl3 pl-3>
+            <p>Waiting for quote</p>
+        </v-flex>
+
         <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block

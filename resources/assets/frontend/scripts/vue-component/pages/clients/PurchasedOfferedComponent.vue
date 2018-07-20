@@ -7,7 +7,7 @@
                     <h2 class="text-center text-uppercase">{{ headingText }}</h2>
                 </v-flex>
 
-                <v-flex xs12 class="text-xs-center" v-if="totalStories <= 0 && totalVideos <= 0">
+                <v-flex xs12 class="text-xs-center" v-if="totalStories <= 0 && totalVideos <= 0 && !searchVideoTerm">
                     <h2>Sorry history is empty</h2>
                 </v-flex>
 
@@ -17,21 +17,21 @@
                             dark
                             color="white"
                             slider-color="black">
-                        <v-tab v-if="totalVideos > 0">
+                        <v-tab v-if="totalVideos > 0 || searchVideoTerm">
                             <v-badge right color="black">
                                 <span slot="badge">{{ totalVideos }}</span>
                                 Videos
                             </v-badge>
                         </v-tab>
 
-                        <v-tab v-if="totalStories > 0">
+                        <v-tab v-if="totalStories > 0 || searchStoryTerm">
                             <v-badge right color="black">
                                 <span slot="badge">{{totalStories}}</span>
                                 Stories
                             </v-badge>
                         </v-tab>
 
-                        <v-tab-item v-if="totalVideos > 0">
+                        <v-tab-item v-if="totalVideos > 0 || searchVideoTerm">
                             <v-layout row wrap>
                                 <v-flex xs12 class="text-xs-right">
                                     <v-text-field
@@ -60,7 +60,7 @@
                             </div>
                         </v-tab-item>
 
-                        <v-tab-item v-if="totalStories > 0">
+                        <v-tab-item v-if="totalStories > 0 || searchStoryTerm">
                             <v-layout row wrap>
                                 <v-flex xs12 class="text-xs-right">
                                     <v-text-field
