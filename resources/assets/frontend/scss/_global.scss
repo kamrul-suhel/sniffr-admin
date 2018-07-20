@@ -13,6 +13,10 @@ section.section-space {
   //}
 }
 
+.all-dialog-box{
+  display:none;
+}
+
 @include small-device {
   section.section-space {
     padding: $section-spacing-mobile 0px;

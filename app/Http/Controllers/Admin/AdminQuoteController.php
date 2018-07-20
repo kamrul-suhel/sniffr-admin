@@ -8,8 +8,8 @@ use App\CollectionVideo;
 use App\CollectionStory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Quote\CreateQuote;
-use App\Jobs\QueueEmailOfferedQuote;
-use App\Jobs\QueueEmailRetractQuote;
+use App\Jobs\Quotes\QueueEmailOfferedQuote;
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Http\Request;
 
 class AdminQuoteController extends Controller {

@@ -10,6 +10,7 @@
         "baopham/dynamodb": "^4.1",
         "barryvdh/laravel-dompdf": "^0.8.2",
         "chumper/zipper": "^1.0",
+        "codewizz/laravel-reddit-api": "^0.1.2",
         "comocode/laravel-ab": "dev-master",
         "doctrine/dbal": "^2.6",
         "dumpk/elastcoder": "^0.9.1",

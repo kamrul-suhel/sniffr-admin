@@ -2,13 +2,12 @@
 
 @section('content')
 
-    <p>Hi {{ $data['collection']->user->username }}</p>
-    <br>
-    <p>Sorry but your quote has been retracted.</p>
+    <p>Hi {{ $data['collection']->user->full_name ?? $data['collection']->user->username ?? $data['collection']->user->first_name }}</p>
     <br>
 
     <div class="col-lg-12">
         <div class="container">
+            <h2>Sorry but your offer has expired.</h2>
             @if($data['collection'])
                 <p>Your Reference number: <b>{{ ucwords($data['collection']->name) }}</b></p>
                 <br>
@@ -17,11 +16,8 @@
                     <img src="{{$video->video->image}}" style="width:50%;" alt="" class="text-center">
                     <ul>
                         <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $video->type)) }}</b></p></li>
-                        <br>
                         <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $video->platform)) }}</b></p></li>
-                        <br>
                         <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $video->length)) }}</b></p></li>
-                        <br>
                         @if(isset($video->notes))
                             <li><p>Your Comments: </p></li>
                             <pre style="white-space: pre-wrap;">{{ $video->notes }}</pre>

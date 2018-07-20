@@ -1,7 +1,6 @@
 <template>
     <div class="video-dialog-content">
         <v-layout row wrap>
-
             <v-flex xs12 sm12 md7 lg7 xl7>
                 <v-container grid-list-sm fluid>
                     <v-layout row wrap>
@@ -112,8 +111,6 @@
 
         methods: {
             getStoryData(alpha_id) {
-                console.log('is passing');
-
                 this.$store.dispatch('getStoryNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.story_detail = this.$store.getters.getCurrentStoryForDialog;
                     if (this.story_detail.assets.length > 0) {

@@ -6,7 +6,7 @@
 	<div class="admin-section-title">
 		@if($user)
 			<h3>
-				<i class="fa fa-users"></i> {{ $user->username }}
+				<i class="fa fa-users"></i> {{ $user->full_name }}
 			</h3>
 		@else
 			<h3><i class="fa fa-users"></i> Add New User</h3>
@@ -229,7 +229,6 @@
 				</div>
 
 				<div class="col-sm-4" id="client-box">
-
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
 							<div class="panel-title">Client</div>
@@ -251,7 +250,7 @@
 								@if(isset($clients))
 									<option value="">Please Select</option>
 									@foreach($clients as $client)
-									<option value="{{ $client->id }}" {{
+										<option value="{{ $client->id }}" {{
 									(($user) && ($client->id == $user->client_id) || (($client->id == old('client_id')))) ? 'selected' : ''
 									}}>{{ $client->name }}</option>
 									@endforeach
@@ -281,7 +280,7 @@
 	    {!! Form::close() !!}
 	@endif
 </div>
-@endsection
+@stop
 @section('javascript')
 	<script type="text/javascript">
 		$ = jQuery;
@@ -369,4 +368,4 @@
 		font-size:larger;
 	}
 	</style>
-@endsection
+@stop

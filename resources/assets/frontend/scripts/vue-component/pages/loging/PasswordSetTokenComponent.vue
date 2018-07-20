@@ -12,6 +12,7 @@
                         </v-flex>
 
                         <v-flex xs12>
+                            <small style="color:red" v-if="error && errors.email">{{ errors.email[0] }}</small>
                             <v-text-field
                                     name="email"
                                     color="dark"
@@ -21,6 +22,7 @@
                         </v-flex>
 
                         <v-flex xs12>
+                            <small style="color:red" v-if="error && errors.password">{{ errors.password[0] }}</small>
                             <v-text-field
                                     name="password"
                                     color="dark"
@@ -59,7 +61,7 @@
                                     dark
                                     :loading="loading"
                                     :disabled="loading || buttonDisable"
-                                    @click="onPasswordsetSubmit()"
+                                    @click="onPasswordSetSubmit()"
                             >set password</v-btn>
                         </v-flex>
 
@@ -106,7 +108,8 @@
 
                 showMessage: false,
                 message: '',
-                error: false
+                error: false,
+                errors: [],
             }
         },
 
@@ -116,7 +119,7 @@
         },
 
         methods: {
-            onPasswordsetSubmit(){
+            onPasswordSetSubmit(){
                 if(this.$refs.password_set_form.validate()){
                     //collect form data
                     let passworchangeform = new FormData();
@@ -130,22 +133,26 @@
                     axios.post(requestUrl, passworchangeform)
                         .then(response => {
                             this.showMessage = true;
+                            this.error = false;
                             this.buttonDisable = true;
-                            if(!response.data.error){
+                            if(!response.data.error) {
+                                this.$store.commit('setUserState', response.data);
                                 this.message = response.data.success_message;
-
-                                // Set the user store
-                                this.$store.dispatch('getLoginStatus').then((response) => {
-                                    this.$router.push({name: 'videos'});
-                                    // LoginEventBus.loginSuccess();
-                                });
-                            }else{
-                                this.error = true;
-                                this.message = response.data.error_message;
                             }
                         })
                         .catch(error => {
-                            console.log(error);
+                            this.error = false;
+                            this.showMessage = false;
+
+                            if(error.response.data.error_message === undefined) {
+                                this.error = true;
+                                this.errors = error.response.data.errors;
+                                console.log('error_message = undefined');
+                            } else {
+                                this.showMessage = true;
+                                console.log('error_message exists');
+                                this.message = error.response.data.error_message;
+                            }
                         });
                 }
             }

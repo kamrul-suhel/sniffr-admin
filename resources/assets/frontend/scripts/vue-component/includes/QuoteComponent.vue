@@ -66,7 +66,6 @@
                                 <v-flex xs12>
                                     <v-select
                                             label="License Type"
-
                                             color="light"
                                             :items="licenses"
                                             v-model="license_type"
@@ -85,6 +84,7 @@
                                             :items="platforms"
                                             v-model="license_platform"
                                             item-value="slug"
+                                            multiple
                                             item-text="name"
                                             :rules="platformRules"
                                             :error="validation.error"
@@ -164,6 +164,7 @@
                 platforms: [],
                 lengths: [],
                 errors: [],
+                setPasswordMessage: null,
 
                 //Form data
                 request_quote: {
@@ -289,7 +290,6 @@
             onQuoteDialogClose() {
                 setTimeout(()=> {
                     this.disabled = true;
-                    this.buy_dialog = false;
                     this.loading = false;
                 }, 500);
             },
@@ -360,9 +360,9 @@
                     form_data.append('license_length', this.license_length);
                     form_data.append('notes', this.notes);
 
-
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
+                            this.setPasswordMessage = response.data.message;
                             this.$store.commit('setUserStatus', response.data);
                             this.requestQuote();
                         })

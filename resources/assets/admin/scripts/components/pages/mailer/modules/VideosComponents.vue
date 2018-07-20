@@ -65,9 +65,9 @@
 
         data() {
             return {
+                page: 1,
                 videos: {},
                 totalPage: 0,
-                page: 1,
                 searchTerm:''
             }
         },
@@ -90,7 +90,7 @@
 
         methods: {
             getVideosData(queryObject = null) {
-                let url = '/admin/mailers/videos';
+                let url = '/search/videos';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
                 }
@@ -98,10 +98,11 @@
                 if(queryObject.searchTerm != ''){
                     url += '&search='+ queryObject.searchTerm;
                 }
-                axios.get(url)
-                    .then((videos) => {
-                        this.videos = videos.data.videos;
-                        this.totalPage = videos.data.videos.last_page;
+
+                this.$store.dispatch('getMailerVideos', url)
+                    .then(() => {
+                        this.videos = this.$store.getters.getVideos;
+                        this.totalPage = this.videos.last_page;
                     });
             },
 

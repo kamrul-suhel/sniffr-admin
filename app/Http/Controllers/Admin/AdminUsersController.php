@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Jobs\QueueEmailClient;
+use App\Jobs\Auth\QueueEmailClient;
 use App\Libraries\VideoHelper;
 use Auth;
 use Password;
@@ -23,6 +23,7 @@ use App\Http\Controllers\Controller;
 class AdminUsersController extends Controller
 {
     use ResetsPasswords;
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -70,7 +71,7 @@ class AdminUsersController extends Controller
     public function store(CreateUserRequest $request)
     {
         $user = new User();
-        $user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom();
+        //$user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom();
         $user->email = $request->input('email');
 
         if (!$request->input('password')) {
@@ -124,6 +125,10 @@ class AdminUsersController extends Controller
         ]);
     }
 
+    /**
+     * @param User $user
+     * @return int
+     */
     protected function deleteExisting(User $user)
     {
         return \DB::table('password_resets')
@@ -131,6 +136,11 @@ class AdminUsersController extends Controller
             ->delete();
     }
 
+    /**
+     * @param $email
+     * @param $token
+     * @return array
+     */
     protected function getPayload($email, $token)
     {
         return ['email' => $email, 'token' => $token, 'created_at' => new Carbon];
@@ -166,7 +176,7 @@ class AdminUsersController extends Controller
             abort(404);
         }
 
-        $user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom() : $user->username);
+        //$user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom() : $user->username);
         $user->email = $request->input('email', $user->email);
         $user->full_name = $request->input('full_name', $user->full_name);
         $user->tel = $request->input('tel', $user->tel);
@@ -224,6 +234,11 @@ class AdminUsersController extends Controller
         ]);
     }
 
+    /**
+     * @param $email
+     * @param $user
+     * @return mixed
+     */
     public function getToken($email, $user)
     {
         $token = app('auth.password.broker')->createToken($user);

@@ -38,6 +38,7 @@
                                             :items="platforms"
                                             v-model="license_platform"
                                             item-value="slug"
+                                            multiple
                                             item-text="name"
                                             :rules="platformRules"
                                             :error="validation.error"

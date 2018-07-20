@@ -63,4 +63,13 @@ class Collection extends Model
 		return CollectionStory::create($data);
 	}
 
+	public static function getQuotesByStatus($status = 'requested')
+    {
+        return Collection::whereHas('collectionVideos', function($query) use ($status) {
+            $query->where('status', $status);
+        })->orWhereHas('collectionStories', function($query) use ($status) {
+            $query->where('status', $status);
+        })->with('collectionVideos')->with('collectionStories');
+
+    }
 }

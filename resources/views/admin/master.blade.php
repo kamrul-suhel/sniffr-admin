@@ -65,7 +65,7 @@
 					<!-- Profile Info -->
 					<li class="profile"><!-- add class "pull-right" if you want to place this from right -->
 						<img src="{{ Config::get('site.uploads_dir') . Auth::user()->avatar }}" alt="" class="img-circle" width="26" />
-						<span>Howdy, {{ ucfirst(Auth::user()->username) }}</span>
+						<span>Howdy, {{ ucfirst(Auth::user()->full_name) }}</span>
 					</li>
 				</ul>
 			</div>

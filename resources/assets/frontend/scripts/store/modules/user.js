@@ -44,9 +44,9 @@ const mutations = {
 
     setUserStatus(state, data) {
         let user = data.user;
-        if (user.username) {
+        if(user.id){
             state.username = user.username;
-            state.name = user.username;
+            state.name = user.full_name ? user.full_name : user.username;
             state.email = user.email;
             state.avatar = user.avatar;
             state.user_login = true;

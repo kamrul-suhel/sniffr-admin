@@ -68,7 +68,7 @@ class QueueStory implements ShouldQueue
     			$story->alpha_id = VideoHelper::quickRandom();
     			$story->wp_id = $this->post->id;
     			$story->active = 1;
-                $story->state = 'unlicensed';
+                $story->state = 'licensed';
             } elseif($this->update_type == 'sync') {
                 $version = VideoHelper::quickRandom();
                 $story = Story::where([['alpha_id', $this->post]])->first();
@@ -78,7 +78,7 @@ class QueueStory implements ShouldQueue
     		}
 
     		// get assets from curl request (as a function)
-            if($this->post->featured_media) {
+            if(isset($this->post->featured_media)&&$this->post->featured_media) {
                 $asset_ids = $this->createAssets($this->post->featured_media, $this->post->content->rendered);
         		if(count($asset_ids)) {
         			$story->thumb = (Asset::find($asset_ids[0])->url ? Asset::find($asset_ids[0])->url : NULL);
@@ -86,12 +86,12 @@ class QueueStory implements ShouldQueue
             }
 
     		// get author from curl request
-    		if($this->post->author) {
+    		if(isset($this->post->author)&&$this->post->author) {
     			$author = $this->apiRequest('users/' . $this->post->author);
     			$story->author = isset($author->name) ? $author->name : NULL;
     		}
 
-    		if($this->post->content->rendered){
+    		if(isset($this->post->content->rendered)&&$this->post->content->rendered){
     			$description = preg_replace('/copyrightHolder\">([^<]+)</is','copyrightHolder"><',$this->post->content->rendered); // Remove UNILAD
     			$description = preg_replace('/<script(.*?)>(.*?)<\/script>/is', '', $description); // Remove scripts
     			$description = strip_tags($description, '<p><blockquote>'); // Strip tags (except p and blockquote)

@@ -27,19 +27,11 @@
         </v-flex>
 
         <v-flex xs6 sm6 md6 lg1 xl1>
-            <!--<input type="checkbox" v-model="selected">-->
             <v-checkbox
                     color="black"
                     v-model="selected"
             ></v-checkbox>
         </v-flex>
-
-        <!--<v-flex xs6 sm6 md6 lg1 xl1>
-            <v-btn @click="onEditStories()">
-                <v-icon>edit</v-icon>
-                Edit
-            </v-btn>
-        </v-flex>-->
 
         <v-flex xs12>
             <v-divider></v-divider>
@@ -62,7 +54,7 @@
         watch: {
             selected(selected) {
                 if (selected) {
-                    this.$store.commit('setStory', this.currStory);
+                    this.$store.commit('addStory', this.currStory);
                 } else {
                     this.$store.commit('removeStory', this.currStory);
                 }

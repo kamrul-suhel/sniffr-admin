@@ -15,7 +15,7 @@
                     <p>{{ $comment->comment }}
                         <br><br>
                         <strong class="">
-                            By {{ ucwords($comment->user->username) }} |
+                            By {{ ucwords($comment->user->full_name) }} |
                             {{ $comment->created_at->diffForHumans() }}
                         </strong>
                     </p>

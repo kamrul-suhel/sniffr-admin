@@ -13,6 +13,7 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => null,
                 'username' => 'ianlainchbury',
+				'full_name' => 'Ian Lainchbury',
                 'email' => 'ian@unilad.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'admin',
@@ -31,6 +32,7 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => NULL,
                 'username' => 'mikewright',
+				'full_name' => 'Mike Wright',
                 'email' => 'mike@unilad.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'admin',
@@ -49,6 +51,7 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => 1,
                 'username' => 'dailymail',
+				'full_name' => 'DailyMail',
                 'email' => 'admin@dailymail.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'client_admin',
@@ -67,6 +70,7 @@ class UsersTableSeeder extends Seeder
 			[
 				'client_id' => 1,
 				'username' => 'dailymailvideo',
+				'full_name' => 'DailyMail Video',
 				'email' => 'video@dailymail.co.uk',
 				'avatar' => 'default.jpg',
 				'role' => 'client',
@@ -85,6 +89,7 @@ class UsersTableSeeder extends Seeder
 			[
 				'client_id' => 1,
 				'username' => 'dailymailpicture',
+				'full_name' => 'DailyMail Picture',
 				'email' => 'picture@dailymail.co.uk',
 				'avatar' => 'default.jpg',
 				'role' => 'client',
@@ -103,6 +108,7 @@ class UsersTableSeeder extends Seeder
 			[
 				'client_id' => 2,
 				'username' => 'thesun',
+				'full_name' => 'The Sun',
 				'email' => 'thesun@unilad.co.uk',
 				'avatar' => 'default.jpg',
 				'role' => 'client',
@@ -121,25 +127,8 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => NULL,
                 'username' => 'kahmed',
+				'full_name' => 'Kamrul',
                 'email' => 'kamrul@unilad.co.uk',
-                'avatar' => 'default.jpg',
-                'role' => 'admin',
-                'active' => 1,
-                'activation_code' => NULL,
-                'stripe_active' => 0,
-                'stripe_id' => NULL,
-                'stripe_subscription' => NULL,
-                'stripe_plan' => NULL,
-                'last_four' => NULL,
-                'trial_ends_at' => NULL,
-                'subscription_ends_at' => NULL,
-                'created_at' => $faker->date(),
-                'password' => Hash::make(env('ADMIN_PASSWORD')),
-            ],
-            [
-                'client_id' => NULL,
-                'username' => 'frank',
-                'email' => 'frank@unilad.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'admin',
                 'active' => 1,
@@ -157,6 +146,7 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => null,
                 'username' => 'hemmkerrai',
+				'full_name' => 'Hemm Kerrai',
                 'email' => 'hemmit.kerrai@unilad.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'admin',
@@ -175,6 +165,7 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => NULL,
                 'username' => 'manager',
+				'full_name' => 'Manager',
                 'email' => 'manager@unilad.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'manager',
@@ -193,6 +184,7 @@ class UsersTableSeeder extends Seeder
             [
                 'client_id' => NULL,
                 'username' => 'editorial',
+				'full_name' => 'Editor',
                 'email' => 'editorial@unilad.co.uk',
                 'avatar' => 'default.jpg',
                 'role' => 'editorial',

@@ -13,6 +13,10 @@
                         <v-flex xs12 text-xs-center>
                             <h2 class="buy-title">Thanks</h2>
                             <p>{{ message }}</p>
+
+                            <div v-if="passwordMessage">
+                                <p>{{ passwordMessage }}</p>
+                            </div>
                         </v-flex>
 
                         <v-flex xs12 text-xs-center>
@@ -38,6 +42,7 @@
     export default {
         data() {
             return {
+                passwordMessage: null,
             }
         },
 
