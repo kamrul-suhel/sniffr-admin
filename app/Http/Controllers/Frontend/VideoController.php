@@ -108,7 +108,7 @@ class VideoController extends Controller
         // save Video
         $video = new Video();
         $video->alpha_id = VideoHelper::quickRandom();
-		$video->contact_id = $request->input('contact_id') ?:  $request->input('contact_id');
+		$video->contact_id = $contact->id;
         $video->title = $request->input('title') ?: ('Untitled ' . $video->alpha_id);
         $video->state = 'new';
         $video->rights = 'ex';
