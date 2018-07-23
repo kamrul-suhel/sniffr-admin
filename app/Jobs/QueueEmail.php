@@ -92,7 +92,7 @@ class QueueEmail implements ShouldQueue
                         Mail::to($asset->contact->email)->send(new ContractMailable($asset->id, $asset->currentContract, $this->type));
                         break;
                     case 'story_contacted':
-                        Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->reminders>0 ? ' (Reminder)' : '')));
+                        Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->contacted_at ? ' (Reminder)' : '')));
                         break;
                 }
             }
