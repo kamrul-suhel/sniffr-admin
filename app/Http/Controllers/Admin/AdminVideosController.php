@@ -95,15 +95,16 @@ class AdminVideosController extends Controller
         }
 
         if ($state != 'all') {
-            if ($state == 'deleted') {
-                $videos = $videos->onlyTrashed();
-            }
             $videos = $videos->where('state', $state);
-
             session(['state' => $state]);
         }
 
         $videos = $videos->orderByRaw('CASE WHEN licensed_at IS NULL THEN created_at ELSE licensed_at END DESC')->paginate(24);
+
+        //override all for deleted videos
+        if ($state == 'deleted') {
+            $videos = Video::onlyTrashed()->paginate(24);
+        }
 
         $data = [
             'state' => $state,
