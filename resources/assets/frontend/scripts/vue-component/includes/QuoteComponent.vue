@@ -167,6 +167,7 @@
                 lengths: [],
                 errors: [],
                 setPasswordMessage: null,
+                assetType: null,
 
                 //Form data
                 request_quote: {
@@ -228,8 +229,8 @@
             },
 
             type() {
-                let type = this.$store.getters.getBuyQuoteType;
-                if (type === 'video') {
+                this.assetType = this.$store.getters.getBuyQuoteType;
+                if (this.assetType === 'video') {
 
                     Object.values(this.settings.pricing.type).forEach((type) => {
                         this.licenses.push(type);
@@ -245,12 +246,12 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                } else if (type === 'story') {
+                } else if (this.assetType === 'story') {
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.disabled = false;
                 }
-                return type;
+                return this.assetType;
             }
         },
 
@@ -328,7 +329,7 @@
                     form_data.append('license_platform', this.license_platform);
                     form_data.append('license_length', this.license_length);
                     form_data.append('collection_asset_id', this.collection_asset_id);
-                    form_data.append('type', this.$store.getters.getBuyQuoteType);
+                    form_data.append('type', this.assetType);
                     form_data.append('notes', this.notes);
 
                     axios.post('/client/collections/register_user/' + this.collection.collection_id, form_data)
