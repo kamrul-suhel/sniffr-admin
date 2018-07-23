@@ -93,13 +93,13 @@
                         <v-container grid-list-lg>
                             <v-layout row wrap>
                                 <v-flex xs12>
-                                    <v-text-field
+                                    <v-textarea
                                             v-model="notes"
                                             label="Notes"
                                             name="notes"
                                             color="dark"
                                             hint="If we need to know anything about the video, let us know here"
-                                            multi-line></v-text-field>
+                                            ></v-textarea>
                                 </v-flex>
 
                                 <v-flex xs12>
