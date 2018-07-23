@@ -101,7 +101,7 @@ select.btn-mini + .caret {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .btn-mini-border.left {
-    margin-right:6px;
+    margin-right:0px;
 }
 .panel-options .panel-options-grey {
     margin: 0px !important;
@@ -151,7 +151,7 @@ select.btn-mini + .caret {
 }
 #story_image_source {
     background-size: cover;
-    background-position: 0px 0px;
+    background-position: 50% 50%;
     width: 100%;
     height: 340px;
     border: #ccc solid 1px;

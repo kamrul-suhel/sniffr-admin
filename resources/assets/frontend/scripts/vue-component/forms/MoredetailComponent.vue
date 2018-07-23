@@ -288,9 +288,10 @@
     </div>
 </template>
 <script>
+    import {mapGetters} from 'vuex';
+
     export default {
         data: () => ({
-            settings: '',
             video: '',
             valid: false,
 
@@ -334,6 +335,13 @@
             error: false,
 
         }),
+
+        computed: {
+            ...mapGetters({
+                settings: 'getSettingsObject'
+            }),
+        },
+
         mounted() {
             this.code = this.$route.params.code;
             if (!this.code) {
@@ -364,8 +372,6 @@
                 .catch((error) => {
                     this.http_error = true;
                 });
-
-            this.settings = this.$store.getters.getSettingsObject;
         },
 
         created() {

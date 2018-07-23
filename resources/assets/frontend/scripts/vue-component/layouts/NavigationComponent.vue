@@ -2,7 +2,7 @@
     <section id="nav" class="section-space" :class="{ 'nav-background' : nav_background}">
         <v-container grid-list-lg>
             <v-layout row wrap>
-                <v-flex xs12 sm6 md4 lg4>
+                <v-flex xs12 sm4 md4 lg4>
                     <div class="logo">
                         <router-link to="/">
                             <img src="/assets/frontend/images/logo-sniffr-white.png"/>
@@ -10,7 +10,7 @@
                     </div>
                 </v-flex>
 
-                <v-flex xs12 sm6 md8 lg8>
+                <v-flex xs12 sm8 md8 lg8>
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
@@ -19,9 +19,9 @@
                                 </router-link>
                             </li>
 
-                            <li v-if="client_login && this.$store.getters.getUser.offers >= 1">
-                                <router-link :to="{name: 'client_offered_assets'}">
-                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ this.$store.getters.getUser.offers }})
+                            <li v-if="client_login && user.offers >= 1">
+                                <router-link :to="{name: 'client_offered_assets', query:{type: 'offered'}}">
+                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ user.offers }})
                                 </router-link>
                             </li>
 
@@ -39,7 +39,7 @@
                             </li>
 
                             <li>
-                                <a  @click.stop.prevent="onLoginClick()" v-if="!is_login">
+                                <a  @click.stop.prevent="onLoginClick()" v-if="!user.user_login">
                                     <v-icon color="white" left>lock_open</v-icon> Login
                                 </a>
                                 <v-menu bottom open-on-hover offset-y v-else min-width="140px">
@@ -63,8 +63,8 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link :to="{name: 'client_purchased_assets'}">
-                                                    <v-icon color="white" left size="20px">attach_money</v-icon> Order History
+                                                <router-link :to="{name: 'client_purchased_assets', query:{type: 'purchased'}}">
+                                                    <v-icon color="white" left size="20px">history</v-icon> Order History
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -86,6 +86,17 @@
             </v-layout>
         </v-container>
 
+        <!-- Login component -->
+        <login-component></login-component>
+        <!-- End login component -->
+
+        <!-- Password reset dialog box -->
+        <forgot-password-component></forgot-password-component>
+        <!-- End password reset -->
+
+        <!-- Quote Component -->
+        <quote-component></quote-component>
+        <!-- End request quote component -->
 
         <!-- Logout snackbars -->
         <v-snackbar
@@ -96,35 +107,37 @@
             <v-btn flat color="light" @click.native="logout = false">Close</v-btn>
         </v-snackbar>
         <!-- End logout -->
-
     </section>
 </template>
 <script>
+    import LoginComponent from '../includes/LoginComponent'
+    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
+    import QuoteComponent from '../includes/QuoteComponent'
 
-    import LoginEventBus from '../../event-bus/login-event-bus'
+    import { mapGetters } from 'vuex';
     export default {
         components: {
-
+            LoginComponent,
+            ForgotPasswordComponent,
+            QuoteComponent
         },
         data() {
             return {
                 nav_background: false,
-                //Password reset section
-                password_reset_dialog: false,
-
-                //user auth
-                is_login: false,
-                client_login: false,
-
                 //logout
                 logout: false,
                 logoutTime: 3000,
                 logout_text: 'You have successfully logged out',
-
-                //if user login all data
-                user: '',
             }
         },
+
+        computed: {
+            ...mapGetters({
+                client_login: 'getClientLogin',
+                user: 'getUserStatus'
+            }),
+        },
+
         watch: {
             // Detach which page and set navigation background
             $route(to, from, next){
@@ -141,29 +154,7 @@
         },
         created(){
             this.setPrevRoute();
-
-            this.user = this.$store.getters.getUser;
-
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.is_login = false;
-                this.client_login = false;
-            });
-
-            // If client has logged in
-            LoginEventBus.$on('loginSuccess', () => {
-                this.user = this.$store.getters.getUser;
-                this.is_login = this.$store.getters.isUserLogin;
-                this.client_login = this.$store.getters.isClientLogin;
-            });
-
-            // On every navigation load, check to see if user is logged in
-            this.$store.dispatch('getLoginStatus').then((response) => {
-                this.is_login = this.$store.getters.isUserLogin;
-                this.client_login = this.$store.getters.isClientLogin;
-            });
-
             this.settings = this.$store.getters.getSettingsObject;
-
 
             if(this.$route.name !== 'home'){
                 this.nav_background = true;
@@ -190,30 +181,13 @@
             },
 
             onLogout(){
-                this.$store.dispatch('userLogout')
-                    .then((response) => {
-                        this.logout = true;
-                        this.is_login = this.$store.getters.isUserLogin;
-                        LoginEventBus.logoutStateChange();
-                        setTimeout(() => {
-                            this.logout = false;
-                        }, 3500);
-                    });
+                this.logout = true;
+                this.$store.dispatch('userLogout');
             },
 
             // Login component trigger this methods when change any value
-            onChangeLogin(changeLogin){
-                if(!changeLogin){
-                    this.login_dialog = false;
-                }
-            },
-
             onLoginClick(){
-                LoginEventBus.openLoginDialog();
-            },
-
-            logoutStateChange() {
-              this.is_login = false;
+                this.$store.commit('setLoginDialog', true);
             }
         }
     }

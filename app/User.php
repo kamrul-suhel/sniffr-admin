@@ -82,11 +82,7 @@ class User extends Authenticatable
 
     public function userOffers()
     {
-        return Collection::whereHas('collectionVideos', function($query) {
-            $query->where('status', 'offered');
-        })->orWhereHas('collectionStories', function($query) {
-            $query->where('status', 'offered');
-        })->where('user_id', $this->id)->with('collectionVideos')->with('collectionStories')->count();
+        return Collection::where([['client_id', '=',  $this->client_id] , ['status', '=', 'open']])->count();
     }
 
     public function routeNotificationForSlack()

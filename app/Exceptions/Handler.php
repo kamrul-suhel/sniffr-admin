@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler
             $airbrakeNotifier = \App::make('Airbrake\Notifier');
             $airbrakeNotifier->notify($exception);
         }
-        
+
         parent::report($exception);
     }
 

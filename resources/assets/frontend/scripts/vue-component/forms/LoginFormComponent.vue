@@ -1,85 +1,105 @@
 <template>
-    <v-card raised>
-        <v-card-text class="login-section pa-0">
-            <v-form method="post" v-model="valid" ref="login_form">
-                <v-container grid-list-lg>
-                    <v-layout row wrap id="login-section">
+    <div class="login">
+        <v-card raised>
+            <v-card-text class="login-section pa-0">
+                <v-form method="post" v-model="valid" ref="login_form">
+                    <v-container grid-list-lg>
+                        <v-layout row wrap id="login-section">
 
-                        <v-flex xs12>
-                            <h2 class="login-title">LOGIN</h2>
-                        </v-flex>
+                            <v-flex xs12>
+                                <h2 class="login-title">LOGIN</h2>
+                            </v-flex>
 
-                        <v-flex xs12>
-                            <v-text-field
-                                    color="dark"
-                                    label="Email:"
-                                    v-model="user.email"
-                                    :rules="emailRules"
-                                    required
-                                    validate-on-blur
-                                    :error="validation.error"
-                            >
-                            </v-text-field>
-                        </v-flex>
+                            <v-flex xs12>
+                                <v-text-field
+                                        color="dark"
+                                        label="Email:"
+                                        v-model="user.email"
+                                        :rules="emailRules"
+                                        required
+                                        validate-on-blur
+                                        :error="validation.error"
+                                >
+                                </v-text-field>
+                            </v-flex>
 
-                        <v-flex xs12>
-                            <v-text-field
-                                    class="email"
-                                    color="dark"
-                                    label="Enter your password"
-                                    v-model="user.password"
-                                    :append-icon="showpassword ? 'visibility' : 'visibility_off'"
-                                    @click:append="showpassword = !showpassword"
-                                    :type="showpassword ? 'password' : 'text'"
-                                    :rules="passwordRules"
-                                    @keyup.enter="onSubmit()"
-                                    :error="validation.error"
-                                    required
-                            ></v-text-field>
-                        </v-flex>
+                            <v-flex xs12>
+                                <v-text-field
+                                        class="email"
+                                        color="dark"
+                                        label="Enter your password"
+                                        v-model="user.password"
+                                        :append-icon="showpassword ? 'visibility' : 'visibility_off'"
+                                        @click:append="showpassword = !showpassword"
+                                        :type="showpassword ? 'password' : 'text'"
+                                        :rules="passwordRules"
+                                        @keyup.enter="onSubmit()"
+                                        :error="validation.error"
+                                        required
+                                ></v-text-field>
+                            </v-flex>
 
-                    </v-layout>
+                        </v-layout>
 
-                    <v-layout row justify-center v-if="validation.error">
-                        <v-flex>
-                            <div class="red--text text-xs-center">{{validation.message}}</div>
-                        </v-flex>
-                    </v-layout>
+                        <v-layout row justify-center v-if="validation.error">
+                            <v-flex>
+                                <div class="red--text text-xs-center">{{validation.message}}</div>
+                            </v-flex>
+                        </v-layout>
 
-                    <v-layout row wrap fluid class="text-xs-center">
-                        <v-flex xs12>
-                            <input type="hidden" name="_token"/>
-                            <v-btn
-                                    raised
-                                    dark
-                                    :loading="loading"
-                                    :disabled="loading"
-                                    @click="onSubmit()">
-                                LOGIN
-                            </v-btn>
-                        </v-flex>
+                        <v-layout row wrap fluid class="text-xs-center">
+                            <v-flex xs12>
+                                <input type="hidden" name="_token"/>
+                                <v-btn
+                                        raised
+                                        dark
+                                        :loading="loading"
+                                        :disabled="loading"
+                                        @click="onSubmit()">
+                                    LOGIN
+                                </v-btn>
+                            </v-flex>
 
-                        <v-flex xs12>
-                            <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+                            <v-flex xs12>
+                                <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
 
-            </v-form>
-        </v-card-text>
-    </v-card>
+                </v-form>
+            </v-card-text>
+        </v-card>
+
+        <v-dialog
+                v-model="loginDelay"
+                max-width="200"
+                persistent
+                flat
+                style="background:none;box-shadow:none;"
+                content-class="loin-delay-dialog"
+        >
+            <div class="loading-delay-box text-xs-center">
+                <v-progress-circular
+                        :size="50"
+                        :width="5"
+                        color="white"
+                        indeterminate
+                ></v-progress-circular>
+                <p class="white--text">Loading...</p>
+            </div>
+        </v-dialog>
+    </div>
 </template>
 <script>
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
 
     export default {
         data() {
             return {
-                open_login_dialog: false,
 
                 showpassword: true,
                 valid: false,
                 login_progress: false,
+                loginDelay: false,
                 user: {
                     email: '',
                     password: ''
@@ -104,29 +124,18 @@
         },
 
         watch: {
-            open_login_dialog() {
-                this.$emit('changeLogin_dialog', this.open_login_dialog);
-            },
+            openLoginDialog(){
+                this.$refs.login_form.reset();
+            }
         },
 
-        created() {
-            LoginEventBus.$on('openLoginDialog', this.openLoginDialog);
-            LoginEventBus.$on('closeLoginDialog', () => {
-                this.open_login_dialog = false;
-            });
-
+        computed: {
+            openLoginDialog(){
+                return this.$store.getters.getLoginDialog;
+            }
         },
 
         methods: {
-            openLoginDialog(event) {
-                this.open_login_dialog = event;
-            },
-
-            onLoginDialogClose() {
-                this.login_dialog = false;
-                this.loading = false;
-                this.$refs.login_form.reset();
-            },
 
             onSubmit() {
                 if (this.$refs.login_form.validate()) {
@@ -155,8 +164,8 @@
                                 return;
                             }
 
-                            this.$store.commit('setUserState', data);
-                            LoginEventBus.loginSuccess();
+                            this.$store.commit('setUserStatus', data);
+                            this.$store.commit('setLoginDialog', false);
 
                             // if has previous page then do this
                             let request_url = this.$route.query.request_url;
@@ -166,6 +175,7 @@
                             }
 
                             if (data.redirect_url != '') {
+                                this.loginDelay = true;
                                 window.location.href = data.redirect_url;
                             }
                         })
@@ -176,9 +186,9 @@
             },
 
             onForgotforgotDialog() {
-                this.open_login_dialog = false;
+                this.$store.commit('setLoginDialog', false);
                 setTimeout(() => {
-                    LoginEventBus.openPasswordResetDialog();
+                    this.$store.commit('setForgotPasswordDialog', true);
                 }, 500);
 
             },

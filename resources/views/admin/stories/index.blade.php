@@ -161,7 +161,7 @@
                                         </div>
                                         <div class="options-body">
 											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												<option>{{ AdminStoryController::checkDropdownValue($story->state) }}</option>
+												<option>{{ AdminStoryController::getStateValue($story->state)['dropdown'] }}</option>
 											</select>
                                         </div>
                                         <hr>
@@ -182,86 +182,41 @@
 
                         <footer>
 							<div class="album-images-count">
-                                <div class="album-info-extra top">
-                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s',strtotime($story->updated_at)) }}
-								</div>
-								<div class="album-info-extra bottom">
-									@if($story->contacted_at && !$story->contact_made)
-											<i class="fa fa-clock-o" title="Contacted"></i> <strong> @if($story->reminders) {{ $story->reminders }} Reminder{{ ($story->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong> {{ (isset($story->contacted_at) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet') }} <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ isset($story->contact->email) ? 'Remind' : 'Manually' }}</a>
-									@elseif($story->contacted_at && $story->contact_made)
-										<i class="fa fa-check-circle-o" title="Made Contact"></i> <strong>Made Contact:</strong> <a href="#">{{ date('jS M h:i:s',strtotime($story->contacted_at)) }}</a>
+                                <div class="album-info-extra">
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->updated_at)) }} <br>
+
+									@if(isset($story->contact))
+										@if($story->contacted_at && $story->contact_made)
+											<i class="fa fa-check-circle-o" title="Made Contact"></i>
+											<strong>Made Contact:</strong>
+											<a href="#">{{ date('jS M h:i:s',strtotime($story->contacted_at)) }}</a>
+										@elseif($story->contacted_at && !$story->contact_made)
+											<i class="fa fa-clock-o" title="Contacted"></i>
+											<strong>@if($story->reminders) {{ $story->reminders }} Reminder{{ ($story->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong>{{ $story->contacted_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet' }}
+											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
+										@else
+											<i class="fa fa-question-circle-o" title="Not Contacted"></i>
+											<strong>Not Contacted</strong>
+											@if($story->state != 'unapproved')
+											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
+											@endif
+										@endif
 									@else
-										<i class="fa fa-question-circle-o" title="Not Contacted"></i> <strong>Not Contacted</strong> <a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger">{{ ($story->state!='unapproved' ? 'Contacted Source' : '') }}</a>
+										<i class="fa fa-exclamation-circle" title="No Contact"></i>
+										<strong>No Contact</strong>
 									@endif
                                 </div>
                             </div>
+
                             <div class="album-options no-border">
-                                @if($story->state == 'unapproved')
 
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state approved btn-mini btn-mini-border" title="Approve"><i class="fa fa-check"></i> Approve</a>
+								@php
+									$stateValues = AdminStoryController::getStateValue($story->state);
+								@endphp
 
-								@elseif($story->state == 'approved')
+								@if($stateValues['negative_label']) <a href="#" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['negative_class'] }} btn-mini btn-mini-border left" title="{{ $stateValues['negative_label'] }}"><i class="fa fa-times"></i></a> @endif
+								@if($stateValues['positive_label']) <a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['positive_class'] }} btn-mini btn-mini-border" title="{{ $stateValues['positive_label'] }}"><i class="fa fa-check"></i> {{ $stateValues['positive_label'] }}</a> @endif
 
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state unlicensed btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-check"></i> Made Contact</a>
-
-                                @elseif($story->state == 'unlicensed')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state rejected btn-mini btn-mini-border left" title="Reject"><i class="fa fa-times"></i></a>
-                                    @if($decision=='content-sourced')
-                                        <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-thumbs-up"></i> Made Contact</a>
-                                    @else
-                                        <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state licensing btn-mini btn-mini-border" title="License Story"><i class="fa fa-check"></i> License</a>
-                                    @endif
-
-                                @elseif($story->state == 'licensing')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state approved btn-mini btn-mini-border left" title="Back to Sourced"><i class="fa fa-times"></i></a>
-                                    <a href="{{ url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) }}" class="text-success btn-mini btn-mini-border" title="Edit License"> Edit License</a>
-
-                                @elseif($story->state == 'licensed'||$story->state == 'hacks-unassigned')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
-                                    @if($decision=='licensing-in-progress')
-                                        <a href="#" data-id="{{ $story->alpha_id }}" class="btn-mini btn-mini-border" title="Licensed"><i class="fa fa-thumbs-up"></i> Licensed</a>
-                                    @else
-                                        <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border" title="Write Story"><i class="fa fa-check"></i> Write</a>
-                                    @endif
-
-                                @elseif($story->state == 'writing-inprogress'||$story->state == 'subs-rejected')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-completed btn-mini btn-mini-border" title="Submit to Sub"><i class="fa fa-check"></i> Submit to Sub</a>
-
-                                @elseif($story->state == 'subs-unassigned'||$story->state == 'writing-completed')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state writing-inprogress btn-mini btn-mini-border left" title="Back to Writing"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state subs-inprogress btn-mini btn-mini-border left" title="Sub Story"><i class="fa fa-check"></i> Sub Story</a>
-
-                                @elseif($story->state == 'subs-inprogress')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state subs-unassigned btn-mini btn-mini-border left" title="Back to Subs"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state subs-approved btn-mini btn-mini-border left" title="Story Ready"><i class="fa fa-check"></i> Story Ready</a>
-
-                                @elseif($story->state == 'subs-approved')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state published btn-mini btn-mini-border left" title="Ready to Publish"> Ready to Publish</a>
-
-                                @elseif($story->state == 'published')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state subs-inprogress btn-mini btn-mini-border left" title="Back to Subbing"><i class="fa fa-times"></i></a>
-                                    <a href="{{ ($story->url ? $story->url : '#') }}" target="_blank" class="btn-mini btn-mini-border" title="View Story"> View Story</a>
-
-                                @elseif($story->state == 'rejected')
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="js-story-state unapproved btn-mini btn-mini-border left" title="Rejected"><i class="fa fa-times"></i> Rejected</a>
-
-                                @else
-
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-danger js-story-state unlicensed btn-mini btn-mini-border left" title="Unlicensed"><i class="fa fa-times"></i></a>
-                                    <a href="#" data-id="{{ $story->alpha_id }}" class="text-success js-story-state writing-inprogress btn-mini btn-mini-border left" title="Next State"><i class="fa fa-check"></i> Pick Up</a>
-
-                                @endif
                             </div>
                         </footer>
 

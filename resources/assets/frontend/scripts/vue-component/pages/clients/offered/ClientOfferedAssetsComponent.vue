@@ -1,5 +1,5 @@
 <template>
-    <div class="admin-mailer-section">
+    <div class="client-offer-section">
         <!-- End refresh stories dialog box -->
         <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
@@ -8,15 +8,15 @@
                 </v-flex>
 
                 <v-flex xs12>
-
                     <v-tabs
-                            v-model="active"
                             dark
                             color="white"
-                            slider-color="black"
-                    >
+                            slider-color="black">
                         <v-tab>
-                            Videos
+                            <v-badge right color="black">
+                                <span slot="badge">{{ totalVideos }}</span>
+                                Videos
+                            </v-badge>
                         </v-tab>
 
                         <v-tab-item>
@@ -26,7 +26,10 @@
                         </v-tab-item>
 
                         <v-tab>
-                            Stories
+                            <v-badge right color="black">
+                                <span slot="badge">{{totalStories}}</span>
+                                Stories
+                            </v-badge>
                         </v-tab>
 
                         <v-tab-item>
@@ -50,14 +53,28 @@
             VideosComponent
         },
 
+        computed:{
+            initStories(){
+                // return this.$store.getters.getInitStories;
+            },
+
+            initVideos(){
+              return this.$store.getters.getinitVideo;
+            },
+
+            totalStories() {
+                return this.$store.getters.getTotalOfferedStories;
+            },
+
+            totalVideos(){
+                return this.$store.getters.getTotalOfferedVideos;
+            },
+
+        },
+
         data() {
             return {
                 active: null,
-
-                notSelectedError: false,
-                errorMessage: '',
-
-                indeterminate: true,
             }
         },
 

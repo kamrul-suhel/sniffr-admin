@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
 use Goutte;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
-use App\Jobs\QueueEmail;
+use App\Jobs\QueueBump;
 use App\Jobs\QueueStory;
 
 class AdminStoryController extends Controller
@@ -303,11 +304,8 @@ class AdminStoryController extends Controller
                 break;
             case ($state == 'approved'):
                 // make initial contact (will need to add twitter/fb/reddit in future)
-                if($story->id) {
-                	if($story->contact->email){
-						QueueEmail::dispatch($story->id, 'story_contacted', 'story');
-						$story->contacted_at = now();
-					}
+                if($story->id && $story->contact->canAutoBump()){
+                    QueueBump::dispatch($story->id);
                 }
                 break;
             case ($state == 'unlicensed'):
@@ -315,6 +313,9 @@ class AdminStoryController extends Controller
                 if($story->id) {
                     $story->contact_made = 1;
                 }
+                $message = 'Set to contact made';
+                break;
+            case ($state == 'licensed'):
                 // add new post to WP
                 QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
@@ -454,18 +455,22 @@ class AdminStoryController extends Controller
     {
         $decision = $request->input('decision');
 
-        $story = Story::where('alpha_id', $id)->first();
+        $asset = Story::where('alpha_id', $id)->first();
 
-        if(isset($story->contact)) {
-        	if($story->contact->email){
-				QueueEmail::dispatch($story->id, 'story_contacted', 'story');
+        if(isset($asset->contact)) {
+			if($asset->contact->canAutoBump()){
+				QueueBump::dispatch($asset->id);
+
+				$status = 'success';
+				$message = 'Reminder Sent';
+			}else{
+				$asset->contacted_at = now();
+				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
+				$asset->save();
+
+				$status = 'success';
+				$message = 'Thanks for letting us know you\'ve reached out manually';
 			}
-
-			$story->contacted_at = now();
-			$story->reminders = (isset($story->reminders) ? $story->reminders : 0) + 1;
-            $story->save();
-            $status = 'success';
-            $message = 'Reminder Sent';
         } else {
             $status = 'error';
             $message = 'A contact needs to be added to the story first';
@@ -497,13 +502,13 @@ class AdminStoryController extends Controller
      * @param $state
      * @return string
      */
-    public static function checkDropdownValue($state)
+    public static function getStateValue($state)
     {
-        $found='';
+        $found = Array();
         foreach(config('stories.decisions') as $decision1 => $decision1_values) {
             foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values) {
                 if($state==$current_state) {
-                    $found=$state_values['dropdown'];
+                    $found=$state_values;
                 }
             }
         }

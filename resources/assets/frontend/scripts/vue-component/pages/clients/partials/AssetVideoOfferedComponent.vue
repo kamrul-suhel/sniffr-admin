@@ -50,7 +50,7 @@
                         </v-layout>
                     </div>
 
-                    <div class="final-price">
+                    <div class="final-price" v-if="video.collection_status != 'requested'">
                         <h4>Final price: <span>£{{ video.final_price }}</span></h4>
                     </div>
                 </v-flex>
@@ -67,6 +67,13 @@
                     class="mb-3">
                 No Longer Available
             </v-btn>
+        </v-flex>
+
+        <v-flex
+                v-else-if="video.collection_status === 'requested'"
+                xs12 sm12 md3 lg3 xl3 pl-3
+                align-content-center justify-center>
+            <p class="text-xs-center darken-4">Waiting for quote</p>
         </v-flex>
 
         <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 lg3 xl3 pl-3>
@@ -126,8 +133,6 @@
 </template>
 
 <script>
-    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus';
-    import ClientVideoOfferPurchasedEventBus from '../../../../event-bus/client-video-offer-purchased-event-bus'
 
     export default {
         data() {
@@ -217,14 +222,14 @@
 
                 axios.get(url).then((response) => {
                     if (response.data.success === '1') {
-                        this.$store.commit('setUserOffers', this.$store.getters.getUser.offers - 1);
+                        this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
                         this.assetType = "purchased";
                         this.purchased = true;
-                        SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
+                        // SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
 
                         // After purchased, if we need to to change another component data this event need to enable
-                        ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
+                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
                     }
                 });
             },
@@ -239,7 +244,7 @@
 
                         this.assetDeclined = true;
                         this.decline = true;
-                        SnackbarEventBus.displayMessage(5000, 'Video has declined');
+                        // SnackbarEventBus.displayMessage(5000, 'Video has declined');
                     }
                 });
 

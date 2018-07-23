@@ -12,7 +12,7 @@
                             publishing on SNIFFR.</p>
                         <p>I agree to submit and licence this video and its content to SNIFFR and their associated
                             companies for their use at their sole discretion, in exchange you will be given the
-                            opportunity to receive a one of fee of £100 if the video is used on the SNIFFR facebook page
+                            opportunity to receive a one off payment of £100 if the video is used on the SNIFFR facebook page
                             as a stand alone post, not part of a compilation.</p>
                         <h2>Video Publishing Acknowledgement</h2>
                         <p>I understand that the video I am submitting may be published to SNIFFR web properties
@@ -57,7 +57,7 @@
                             publishing on SNIFFR.</p>
                         <p>I agree to submit and licence this video and its content to SNIFFR and their associated
                             companies for their use at their sole discretion, in exchange you will be given the
-                            opportunity to receive a one of fee of £100.</p>
+                            opportunity to receive a one off payment of £100.</p>
                     </v-flex>
                 </v-layout>
             </v-container>

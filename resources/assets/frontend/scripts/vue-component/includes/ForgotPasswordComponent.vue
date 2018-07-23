@@ -24,7 +24,10 @@
                             </v-flex>
 
                             <v-flex xs12 v-if="active_password_reset">
-                                <p :class="{'red--text': password_reset_error, 'green--text': password_reset_success}">{{ password_reset_text }}</p>
+                                <p
+                                        :class="{'red--text': password_reset_error, 'green--text': password_reset_success}">
+                                    {{ password_reset_text }}
+                                </p>
                             </v-flex>
 
                         </v-layout>
@@ -52,8 +55,7 @@
 </template>
 
 <script>
-    import LoginEventBus from '../../event-bus/login-event-bus.js';
-
+    import {mapGetters} from 'vuex';
 	export default {
 		data() {
 			return {
@@ -76,7 +78,6 @@
                 loader: null,
 
                 //Password reset section
-                open_dialog : false,
                 active_password_reset: false,
                 password_reset_error: false,
                 password_reset_success: false,
@@ -84,14 +85,27 @@
 			}
 		},
 
+        computed: {
+            ...mapGetters({
+
+            }),
+
+            open_dialog: {
+                get(){
+                    return this.$store.getters.getForgotPasswordDialog
+                },
+
+                set(value){
+                    this.$store.commit('setForgotPasswordDialog', value)
+                }
+            }
+        },
+
         created() {
-            LoginEventBus.$on('openPasswordResetDialog', this.openPasswordForgotDialog)
         },
 
 		watch: {
-			open_dialog() {
-				LoginEventBus.closePasswordresetDialog();
-			}
+
 		},
 
 		methods: {

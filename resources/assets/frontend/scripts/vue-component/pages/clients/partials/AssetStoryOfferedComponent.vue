@@ -33,7 +33,7 @@
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
                     <div v-html="story.excerpt"></div>
 
-                    <div class="final-price">
+                    <div class="final-price" v-if="story.collection_status != 'requested'">
                         <h4>Final price: <span>£{{ story.final_price }}</span></h4>
                     </div>
                 </v-flex>
@@ -63,6 +63,11 @@
                 {{ button_text }}
             </v-btn>
         </v-flex>
+
+        <v-flex v-else-if="story.collection_status === 'requested'" xs12 sm12 md3 lg3 xl3 pl-3>
+            <p>Waiting for quote</p>
+        </v-flex>
+
         <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
             <v-btn
                     block
@@ -96,8 +101,6 @@
 </template>
 
 <script>
-    import SnackbarEventBus from '../../../../event-bus/snackbar-event-bus'
-    import ComponentServices from '../../../../services/ComponentServices';
 
     export default {
         data () {
@@ -185,7 +188,7 @@
                         this.acceptLoading = false;
                         this.assetType = "purchased"
                         this.purchased = true
-                        SnackbarEventBus.displayMessage(5000, 'Story has successfully purchased');
+                        // SnackbarEventBus.displayMessage(5000, 'Story has successfully purchased');
 
                         // After purchased, if we need to to change another component data this event need to enable
                         // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
@@ -203,7 +206,7 @@
 
                         this.assetDeclined = true;
                         this.decline = true;
-                        SnackbarEventBus.displayMessage(5000, 'Story has declined');
+                        // SnackbarEventBus.displayMessage(5000, 'Story has declined');
                     }
                 });
 

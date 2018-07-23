@@ -13,8 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //This is the line of code added, at the end, we the have class name of AutomateEmailReminders.php inside app\console\commands
+        //This is the line of code added, at the end, we have an example class name of AutomateEmailReminders.php inside app\console\commands
         '\App\Console\Commands\AutomateEmailReminders',
+        '\App\Console\Commands\AutomateBumps',
+        '\App\Console\Commands\AutomateArchive'
     ];
 
     /**
@@ -31,19 +33,31 @@ class Kernel extends ConsoleKernel
         // }
 
         // this is for running commands in scheduler (uncomment if needed to run daily)
-        $filePath = 'storage/logs/scheduler.log';
+        $genericPath = 'storage/logs/scheduler.log';
+        $automateEmailReminders = 'storage/logs/scheduler.log';
+        $automateBumps = 'storage/logs/scheduler_bumps.log';
+
         $schedule->command('AutomateEmailReminders:sendReminders')
             ->hourly()
             ->between('8:00', '21:00')
-            ->appendOutputTo($filePath);
-        
+            ->appendOutputTo($automateEmailReminders);
+
+        $schedule->command('AutomateBumps:sendBumps')
+            ->hourly()
+            ->between('8:00', '21:00')
+            ->appendOutputTo($automateBumps);
+
+        $schedule->command('AutomateArchive:archive')
+            ->hourly()
+            ->appendOutputTo($automateBumps);
+
         $schedule->command('stats:getVideoStats')
             ->everyTenMinutes()
-            ->appendOutputTo($filePath);
+            ->appendOutputTo($genericPath);
 
         $schedule->command('licenses:monitorLicenseEndTimes')
             ->everyFiveMinutes()
-            ->appendOutputTo($filePath);
+            ->appendOutputTo($genericPath);
     }
 
     /**

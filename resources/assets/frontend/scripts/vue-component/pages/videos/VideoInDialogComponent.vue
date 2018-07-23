@@ -63,11 +63,8 @@
 </template>
 
 <script>
-    import VideoDialogBoxEventBus from '../../../event-bus/video-dialog-box-event-bus';
-    import LoginEventBus from '../../../event-bus/login-event-bus';
     import VideoPlayer from './VideoPlayerComponent';
     import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
-
     export default {
         components: {
             BuyQuoteButtonComponent,
@@ -75,72 +72,51 @@
         },
         data() {
             return {
-                video_detail: '',
                 user: {},
-                tags: [],
                 ready_to_show: true,
                 content_padding: true,
-                client_logged_in:'',
                 canBuy:false
+            }
+        },
+
+        computed: {
+            video_detail: {
+                get(){
+                    return this.$store.getters.getCurrentVideo;
+                }
+            },
+
+            tags(){
+                return this.$store.getters.getCurrentVideoTags;
             }
         },
 
         created() {
 
-            this.user = this.$store.getters.getUser;
+            this.user = this.$store.getters.getUserStatus;
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;
             }
-
-            VideoDialogBoxEventBus.$on('videoDialogStateChange', (alpha_id) => {
-                this.getVideoData(alpha_id);
-            });
-
-            VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
-                let alpha_id = this.$store.getters.getNextVideoAlphaId;
-                this.getVideoData(alpha_id);
-            });
-
-            VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-                let alpha_id = this.$store.getters.getPrevVideoAlphaId;
-                this.getVideoData(alpha_id);
-            });
-
-            LoginEventBus.$on('onResetCurrentVideoIndialog', () => {
-                this.video_detail = '';
-            });
         },
 
         methods: {
             getVideoData(alpha_id) {
                 this.$store.commit('setRouteObject', this.$route);
 
-                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
-                    this.video_detail = this.$store.getters.getCurrentVideoForDialog;
-
-                    // Set button component
-                    this.client_logged_in = this.$store.getters.isClientLogin;
-                    this.user = this.$store.getters.getUser;
-                    this.canBuy = (!this.client_logged_in || this.video_detail.class === 'exceptional' || this.video_detail.class === '' || !this.video_detail.class || this.user.active === 0) ? false : true;
-
-                    if (this.video_detail.tags.length > 0) {
-                        this.tags.push(...this.video_detail.tags);
-                    } else {
-                        this.tags = [];
-                    }
-
-                    VideoDialogBoxEventBus.$emit('setNextPrevButton');
-
-                });
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: alpha_id});
             },
 
             goToTagSearch(tag) {
-                VideoDialogBoxEventBus.closeDialogByTagSearch(tag);
+                this.$store.commit('setVideoDialogBox', false);
+                this.$router.push({name: 'videos', query:{page: 1, search: tag.name}});
             },
 
             goToDetail() {
-                VideoDialogBoxEventBus.closeVideoDialog(this.video_detail);
+                this.$store.commit('setVideoDialogBox', false);
+                setTimeout(()=> {
+                    this.$router.push({name: 'videos_detail', params:{'alpha_id': this.video_detail.alpha_id}});
+                }, 500)
             }
         }
     }

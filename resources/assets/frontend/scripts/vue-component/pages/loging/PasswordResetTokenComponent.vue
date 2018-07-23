@@ -75,14 +75,7 @@
     </v-container>
 </template>
 <script>
-
-    import LoginEventBus from '../../../event-bus/login-event-bus';
-    import SnackbarEventBus from '../../../event-bus/snackbar-event-bus';
-
     export default {
-        components: {
-            SnackbarEventBus: SnackbarEventBus
-        },
         data() {
             return {
                 // validation & data
@@ -141,15 +134,18 @@
                             this.error = false;
                             this.buttonDisable = true;
                             if(!response.data.error){
-                                this.$store.commit('setUserState', response.data);
-                                LoginEventBus.loginSuccess();
+                                this.message = response.data.success_message;
 
-                                this.$router.push('/videos');
-                                SnackbarEventBus.displayMessage(5000, response.data.success_message);
+                                // Set the user store
+                                this.$store.dispatch('getLoginStatus').then((response) => {
+                                    this.$router.push({name: 'videos'});
+                                    // LoginEventBus.loginSuccess();
+
+                                });
                             }
                         })
                         .catch(error => {
-                            this.error = false;
+                            his.error = false;
                             this.showMessage = false;
 
                             if(error.response.data.error_message === undefined) {
@@ -162,6 +158,7 @@
                                 this.message = error.response.data.error_message;
                             }
                         });
+
                 }
             }
         }

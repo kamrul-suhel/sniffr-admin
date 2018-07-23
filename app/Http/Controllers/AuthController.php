@@ -69,7 +69,7 @@ class AuthController extends Controller
             'settings'=> $settings
         ];
 
-        return view('frontend.pages.login.login', $data);
+        return view('frontend.master', $data);
     }
 
     /**
