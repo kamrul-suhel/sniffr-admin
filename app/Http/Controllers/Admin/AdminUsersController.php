@@ -187,7 +187,7 @@ class AdminUsersController extends Controller
         }
 
         $user->role = $request->input('role', $user->role);
-        $user->active = $request->input('active', $user->active);
+        $user->active = $request->has('active') ? $request->get('active') : 0;
         if($user->client_id) {
              $user->client_id = $request->input('client_id', $user->client_id);
         }
