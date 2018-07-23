@@ -17,10 +17,10 @@
                 <div class="col-lg-6">
                     <p>With the following terms:</p>
                     <ul>
-                        <li><p>Video Name:<b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b></p></li>
-                        <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->type)) }}</b></p></li>
-                        <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->platform)) }}</b></p></li>
-                        <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->length)) }}</b></p></li>
+                        <li><p>Video Name:<b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b></p></li><br>
+                        <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->type)) }}</b></p></li><br>
+                        <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->platform)) }}</b></p></li><br>
+                        <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->length)) }}</b></p></li><br>
                     </ul>
                 </div>
             @endif

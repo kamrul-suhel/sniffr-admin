@@ -13,10 +13,6 @@
                         <v-flex xs12 text-xs-center>
                             <h2 class="buy-title">Thanks</h2>
                             <p>{{ message }}</p>
-
-                            <div v-if="passwordMessage">
-                                <p>{{ passwordMessage }}</p>
-                            </div>
                         </v-flex>
 
                         <v-flex xs12 text-xs-center>
@@ -40,12 +36,6 @@
 <script>
     import {mapGetters} from 'vuex';
     export default {
-        data() {
-            return {
-                passwordMessage: null,
-            }
-        },
-
         computed:{
             ...mapGetters({
                 message: 'getThankYouMessage'
