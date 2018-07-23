@@ -15,7 +15,7 @@ trait VideoHelper{
         $path = '/admin/videos/'.$path;
         $sHTML = '';
 
-        $sHTML .= '<div class="video-container'.(  $embed && !$video->youtube_id ? ' embedded' : '').'">';
+        $sHTML .= '<div class="video-container'.(  $embed && !isset($video->youtube_id) ? ' embedded' : '').'">';
 
         if($video->nsfw==1) {
             $sHTML .= '<div class="nsfw nsfw-active" rel="'.$video->alpha_id.'">
