@@ -62,7 +62,6 @@ class SearchController extends Controller
 		$featured = $request->featured;
 		$settings = config('settings.site');
 
-
 		if($currentVideoId){
 			$currentVideo = $this->getCurrentVideo($currentVideoId);
 		}
@@ -124,7 +123,6 @@ class SearchController extends Controller
             $data['videos'] = $videos;
         }
 
-
         // Recommended Videos via the Mailer
 		if(auth()->check()){
 			$mailers = $this->clientMailerUser->where('user_id', auth()->user()->id)
@@ -138,11 +136,11 @@ class SearchController extends Controller
 				->whereIn('id', $mailerVideoIds)
 				->whereNotIn('id', $unsearchableVideos)
                 ->orderBy('licensed_at', 'DESC')
+                ->limit(10)
                 ->get();
 		}
 
 		$data['mailer_videos'] = $mailerVideos;
-
 
 		return $this->successResponse($data);
 	}
@@ -164,9 +162,6 @@ class SearchController extends Controller
 			$currentStory = $this->getCurrentstory($currentStoryId);
 		}
 
-		//Remove any exclusive based collections that have been purchased and downloaded.
-		//$unsearchableStories = CollectionStory::where(['type'=>'exclusive','status'=>'purchased'])->pluck('story_id');
-
 		$stories = $this->story::where('state', 'licensed');
 
 		if($searchValue){
@@ -175,7 +170,6 @@ class SearchController extends Controller
 			});
 		}
 
-		//$stories = $stories->whereNotIn('id', $unsearchableStories);
 		$stories = $stories->orderBy('id', 'DESC');
 		$stories = $stories->paginate($settings['posts_per_page']);
 

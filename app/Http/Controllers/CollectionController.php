@@ -187,7 +187,7 @@ class CollectionController extends Controller
 
         $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
 
-        //auth()->attempt(['email' => $user->email, 'password' => $password]);
+        $this->requestAfterRegister($data, $user, $data['type']);
 
         return $this->successResponse([
             'user' => $user,
@@ -195,6 +195,60 @@ class CollectionController extends Controller
              Check your emails to set your password, and activate your account."
         ]);
 
+    }
+
+    /**
+     * @param $data
+     * @param $user
+     * @param string $type
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function requestAfterRegister($data, $user, $type = 'video')
+    {
+        $client = $user->client;
+        $collection_asset_id = $data['collection_asset_id'];
+
+        if ($type == 'video'){
+            $collectionVideo = $this->collectionVideo->find($collection_asset_id);
+            $collectionVideo->update([
+                'type' => $data['license_type'] ?? $collectionVideo->type,
+                'platform' => $data['license_platform'] ?? $collectionVideo->platform,
+                'length' => $data['license_length'] ?? $collectionVideo->length,
+                'company_location' => $client->region,
+                'company_tier' => $client->tier,
+                'notes' => $data['notes'] ?? '',
+                'status' => 'requested',
+                'final_price' => null,
+            ]);
+
+            $collection = $collectionVideo->collection;
+            $asset = $collectionVideo->video;
+        }else{
+            $collectionStory = $this->collectionStory->find($collection_asset_id);
+            $collectionStory->update([
+                'notes' => $data['notes'] ?? '',
+                'status' => 'requested',
+                'final_price' => null,
+            ]);
+
+            $collection = $collectionStory->collection;
+            $asset = $collectionStory->story;
+
+            $params = [
+                'username' => is_null($user->full_name) ? $user->username : $user->full_name,
+                'user' => $user->email,
+                'collection' => $collection
+            ];
+
+            $collectionQuote = new CollectionQuote;
+            $collectionQuote->emailPendingQuote($params);
+
+            $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+
+            return response([
+                'message' => 'Email has been sent to new user'
+            ], 200);
+        }
     }
 
     /**

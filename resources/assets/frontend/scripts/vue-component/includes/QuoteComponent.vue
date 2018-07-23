@@ -53,7 +53,8 @@
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <small style="color:red" v-if="errors.company_name">{{ errors.company_name[0] }}</small>
+                                    <small style="color:red" v-if="errors.company_name">{{ errors.company_name[0] }}
+                                    </small>
                                     <v-text-field
                                             label="Company"
                                             v-model="request_quote.company"
@@ -120,7 +121,8 @@
 
                         <v-layout row justify-center>
                             <v-flex>
-                                <div v-if="validation.error" class="red--text text-xs-center">{{validation.message}}</div>
+                                <div v-if="validation.error" class="red--text text-xs-center">{{validation.message}}
+                                </div>
                             </v-flex>
                         </v-layout>
 
@@ -155,7 +157,7 @@
                 alpha_name: '',
                 disabled: true,
                 collection_asset_id: '',
-                valid:false,
+                valid: false,
                 license_type: null,
                 license_platform: null,
                 license_length: null,
@@ -192,35 +194,35 @@
                     v => !!v || 'Length is required'
                 ],
 
-                validation:{
+                validation: {
                     error: false,
-                    message:''
+                    message: ''
                 },
 
                 //Loading button
                 loading: false,
                 loader: null,
-                buy_progress:false,
+                buy_progress: false,
 
                 //Form validation error
-                emailError:''
+                emailError: ''
             }
         },
 
-        computed:{
+        computed: {
             ...mapGetters({
                 client_logged_in: 'getClientLogin',
-                collection : 'getBuyQuoteCollection',
+                collection: 'getBuyQuoteCollection',
                 asset: 'getBuyQuoteAsset',
                 settings: 'getSettingsObject'
             }),
 
             open_quote_dialog: {
-                get(){
+                get() {
                     return this.$store.getters.getQuoteDialog
                 },
 
-                set(value){
+                set(value) {
                     this.$store.commit('setQuoteDialog', value);
                 }
             },
@@ -229,21 +231,21 @@
                 let type = this.$store.getters.getBuyQuoteType;
                 if (type === 'video') {
 
-                    Object.values(this.settings.pricing.type).forEach((type) =>{
+                    Object.values(this.settings.pricing.type).forEach((type) => {
                         this.licenses.push(type);
                     });
 
-                    Object.values(this.settings.pricing.platform).forEach((platform) =>{
+                    Object.values(this.settings.pricing.platform).forEach((platform) => {
                         this.platforms.push(platform);
                     });
 
-                    Object.values(this.settings.pricing.length).forEach((length) =>{
+                    Object.values(this.settings.pricing.length).forEach((length) => {
                         this.lengths.push(length);
                     });
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                }else if (type === 'story') {
+                } else if (type === 'story') {
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.disabled = false;
@@ -253,27 +255,27 @@
         },
 
         watch: {
-            open_quote_dialog(val){
-                if(!val){
+            open_quote_dialog(val) {
+                if (!val) {
                     this.$refs.quote_form.reset();
                     this.onQuoteDialogClose();
                 }
             },
 
-            license_type(val){
-                if(val){
+            license_type(val) {
+                if (val) {
                     this.disabledCheck()
                 }
             },
 
-            license_platform(val){
-                if(val) {
+            license_platform(val) {
+                if (val) {
                     this.disabledCheck()
                 }
             },
 
-            license_length(val){
-                if(val) {
+            license_length(val) {
+                if (val) {
                     this.disabledCheck()
                 }
             }
@@ -283,71 +285,37 @@
         },
 
         methods: {
-            openBuyDialog(event){
+            openBuyDialog(event) {
                 this.open_quote_dialog = event;
             },
 
             onQuoteDialogClose() {
-                setTimeout(()=> {
+                setTimeout(() => {
                     this.disabled = true;
                     this.loading = false;
                 }, 500);
             },
 
-            disabledCheck(){
-                if(this.license_type && this.license_platform && this.license_length){
+            disabledCheck() {
+                if (this.license_type && this.license_platform && this.license_length) {
                     this.disabled = false;
                 }
             },
 
-            buttonClicked(){
-                if(this.$store.getters.getUserStatus.id === '') {
-                    return this.registerUser();
+            buttonClicked() {
+                if (this.$store.getters.getUserStatus.id === '') {
+                    return this.registerUserAndRequestQuote();
                 }
 
                 this.requestQuote();
             },
 
-            closeDialogBoxes(){
+            closeDialogBoxes() {
                 this.open_quote_dialog = false;
             },
 
-            requestQuote() {
-                if(this.$refs.quote_form.validate()){
-                    this.loading = true;
-
-                    let form_data = new FormData();
-                    form_data.append(this.alpha_name, this.asset.alpha_id);
-                    form_data.append('license_type', this.license_type);
-                    form_data.append('license_platform', this.license_platform);
-                    form_data.append('license_length', this.license_length);
-                    form_data.append('notes', this.notes);
-
-                    // submit data with ajax request
-                    axios.post('/client/collections/request_quote/'+this.type+'/'+this.collection_asset_id, form_data)
-                        .then(response => {
-                            this.loading = false;
-                            this.open_quote_dialog = false;
-                            
-                            setTimeout(()=> {
-                                this.$refs.quote_form.reset();
-                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly';
-                                if(this.setPasswordMessage) {
-                                    message = message + '. ' + this.setPasswordMessage;
-                                }
-                                this.$store.commit('setThankYouMessage', message);
-                                this.$store.commit('setThankYouDialog', true);
-                            }, 500)
-                        })
-                        .catch(error => {
-                            this.errors = error.response.data.errors;
-                            console.log(error);
-                        });
-                }
-            },
-
-            registerUser() {
-                if(this.$refs.quote_form.validate()) {
+            registerUserAndRequestQuote() {
+                if (this.$refs.quote_form.validate()) {
                     this.loading = true;
 
                     let form_data = new FormData();
@@ -359,19 +327,58 @@
                     form_data.append('license_type', this.license_type);
                     form_data.append('license_platform', this.license_platform);
                     form_data.append('license_length', this.license_length);
+                    form_data.append('collection_asset_id', this.collection_asset_id);
+                    form_data.append('type', this.$store.getters.getBuyQuoteType);
                     form_data.append('notes', this.notes);
 
-                    axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
+                    axios.post('/client/collections/register_user/' + this.collection.collection_id, form_data)
                         .then(response => {
-                            this.setPasswordMessage = response.data.message;
-                            this.requestQuote();
+                            this.loading = false;
+                            this.open_quote_dialog = false;
+
+                            setTimeout(() => {
+                                this.$refs.quote_form.reset();
+                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly. ' + response.data.message;
+                                this.$store.commit('setThankYouMessage', message);
+                                this.$store.commit('setThankYouDialog', true);
+                            }, 500)
                         })
                         .catch(error => {
                             this.errors = error.response.data.errors;
                             this.loading = false;
                         });
                 }
-            }
+            },
+
+            requestQuote() {
+                if (this.$refs.quote_form.validate()) {
+                    this.loading = true;
+                    let form_data = new FormData();
+                    form_data.append(this.alpha_name, this.asset.alpha_id);
+                    form_data.append('license_type', this.license_type);
+                    form_data.append('license_platform', this.license_platform);
+                    form_data.append('license_length', this.license_length);
+                    form_data.append('notes', this.notes);
+
+                    // submit data with ajax request
+                    axios.post('/client/collections/request_quote/' + this.type + '/' + this.collection_asset_id, form_data)
+                        .then(response => {
+                            this.loading = false;
+                            this.open_quote_dialog = false;
+
+                            setTimeout(() => {
+                                this.$refs.quote_form.reset();
+                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly.';
+                                this.$store.commit('setThankYouMessage', message);
+                                this.$store.commit('setThankYouDialog', true);
+                            }, 500)
+                        })
+                        .catch(error => {
+                            this.errors = error.response.data.errors;
+                        });
+                }
+            },
+
         }
     }
 </script>
