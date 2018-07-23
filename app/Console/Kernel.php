@@ -43,12 +43,12 @@ class Kernel extends ConsoleKernel
             ->appendOutputTo($automateEmailReminders);
 
         $schedule->command('AutomateBumps:sendBumps')
-            ->everyMinute()
+            ->hourly()
             ->between('8:00', '21:00')
             ->appendOutputTo($automateBumps);
 
         $schedule->command('AutomateArchive:archive')
-            ->everyMinute()
+            ->hourly()
             ->appendOutputTo($automateBumps);
 
         $schedule->command('stats:getVideoStats')
