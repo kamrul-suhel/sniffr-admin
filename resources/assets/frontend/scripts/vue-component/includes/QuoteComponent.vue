@@ -243,7 +243,7 @@
 
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
-                }else if (type == 'story') {
+                }else if (type === 'story') {
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
                     this.disabled = false;
@@ -332,10 +332,11 @@
                             setTimeout(()=> {
                                 this.$refs.quote_form.reset();
                                 let message = 'Thanks for your request, someone from our licensing team will be in touch shortly';
+                                if(this.setPasswordMessage) {
+                                    message = message + '. ' + this.setPasswordMessage;
+                                }
                                 this.$store.commit('setThankYouMessage', message);
                                 this.$store.commit('setThankYouDialog', true);
-                                this.$store.dispatch('getLoginStatus')
-
                             }, 500)
                         })
                         .catch(error => {
@@ -363,7 +364,6 @@
                     axios.post('/client/collections/register_user/'+this.collection.collection_id, form_data)
                         .then(response => {
                             this.setPasswordMessage = response.data.message;
-                            this.$store.commit('setUserStatus', response.data);
                             this.requestQuote();
                         })
                         .catch(error => {
