@@ -91,6 +91,7 @@ class AdminContactController extends Controller
         $contact->instagram = $request->input('instagram');
         $contact->twitter = $request->input('twitter');
         $contact->reddit = $request->input('reddit');
+        $contact->imgur = $request->input('imgur');
         $contact->other = $request->input('other');
         $contact->save();
 
@@ -155,6 +156,7 @@ class AdminContactController extends Controller
         $contact->instagram = $request->input('instagram');
         $contact->twitter = $request->input('twitter');
         $contact->reddit = $request->input('reddit');
+        $contact->imgur = $request->input('imgur');
         $contact->other = $request->input('other');
         $contact->save();
 
