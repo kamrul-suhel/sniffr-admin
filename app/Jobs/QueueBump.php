@@ -57,7 +57,7 @@ class QueueBump implements ShouldQueue
 				preg_match('/\/([\d]+)/', $asset->source, $matches);
 				$tweetId = $matches[1];
 
-                if(!$asset->contact_at) {
+                if(!$asset->contacted_at) {
                     $dmMessage = 'Hey! how are you? I\'m a senior writer from UNILAD and would love to talk to you about your tweet for an article. Do you have some time to talk to me today? ' . $from .' Ref: '.$asset->alpha_id;
 					$replyMessage = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :) Ref: '.$asset->alpha_id;
 					$replyMessageDmSuccess = 'Hey ' . $twitterHandle . '! It’s ' . $from . ' from UNILAD and I would love to have a chat with you. Could you DM me or email stories@unilad.co.uk :) Ref: '.$asset->alpha_id;
