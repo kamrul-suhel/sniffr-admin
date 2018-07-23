@@ -1,6 +1,6 @@
 Hi there!
 
-How are you? I'm a journalist from UNILAD and would love to talk to you about an article I'm currently researching called {{ $story->title }}.
+How are you? I'm a journalist from UNILAD and would love to talk to you about an article I'm currently researching.
 
 Do you have some time to talk to me?
 

@@ -10,7 +10,7 @@
 <div>&nbsp;</div>
 
 <div>How are you? I'm a journalist from UNILAD and would love
-to talk to you about an article I'm currently researching called <strong>{{ $story->title }}</strong>.</div>
+to talk to you about an article I'm currently researching.</div>
 
 <div>&nbsp;</div>
 
