@@ -27,15 +27,23 @@
                 </v-layout>
             </v-container>
 
-            <search-component @searchOption="searchOption($event)"></search-component>
+            <search-component @searchOption="searchOption($event)" v-if="stories.length > 0"></search-component>
 
-            <v-container grid-list-lg class="stories pt-0">
+            <v-container grid-list-lg class="stories pt-0" v-if="stories.length > 0">
                 <v-layout row wrap>
                     <story-loop-component
                             v-for="story in stories"
                             :story="story"
                             :key="story.id"
                     ></story-loop-component>
+                </v-layout>
+            </v-container>
+
+            <v-container grid-list-lg class="stories pt-0" v-else>
+                <v-layout row wrap>
+                    <v-flex xs12 class="text-center">
+                        <h2>Sorry no story found</h2>
+                    </v-flex>
                 </v-layout>
             </v-container>
 

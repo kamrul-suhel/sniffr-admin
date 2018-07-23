@@ -156,7 +156,8 @@
             },
 
             onGetVideo(alphaId){
-                let url = '/videos?id='+alphaId;
+                let url = this.$route.fullPath;
+                    url = '?id='+alphaId;
 
                 if(this.$route.query.tag){
                     url += '&tag='+this.$route.query.tag;
