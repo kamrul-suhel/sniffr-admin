@@ -49,7 +49,7 @@ class QueueBump implements ShouldQueue
         $success = false;
 
 		if($contact->email){ // Email
-			Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->reminders >= 0  ? ' (Reminder)' : '')));
+			Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->contacted_at  ? ' (Reminder)' : '')));
 			$success = true;
 		}elseif($contact->twitter) { // Twitter
 			if (str_contains($asset->source, 'twitter.com')){
