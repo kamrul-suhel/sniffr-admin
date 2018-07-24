@@ -103,7 +103,7 @@ class AdminVideosController extends Controller
 
         //override all for deleted videos
         if ($state == 'deleted') {
-            $videos = Video::onlyTrashed()->paginate(24);
+            $videos = Video::onlyTrashed()->orderBy('updated_at', 'desc')->paginate(24);
         }
 
         $data = [
