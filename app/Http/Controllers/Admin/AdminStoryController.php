@@ -105,6 +105,7 @@ class AdminStoryController extends Controller
 			'users' => User::all(),
 			'contact' => null,
 			'asset' => null,
+            'decision' => 'content-sourced',
 			'asset_type' => 'story',
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
@@ -458,19 +459,25 @@ class AdminStoryController extends Controller
         $asset = Story::where('alpha_id', $id)->first();
 
         if(isset($asset->contact)) {
-			if($asset->contact->canAutoBump()){
-				QueueBump::dispatch($asset->id);
+            if($asset->reminders >= 2) {
+                $status = 'error';
+                $message = 'Looks like you have already sent lots of reminders!';
+            } else {
+                if($asset->contact->canAutoBump()){
+    				QueueBump::dispatch($asset->id);
 
-				$status = 'success';
-				$message = 'Reminder Sent';
-			}else{
-				$asset->contacted_at = now();
-				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
-				$asset->save();
+    				$status = 'success';
+    				$message = 'Reminder Sent';
+    			}else{
+    				$asset->contacted_at = now();
+    				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
+    				$asset->save();
 
-				$status = 'success';
-				$message = 'Thanks for letting us know you\'ve reached out manually';
-			}
+    				$status = 'success';
+    				$message = 'Thanks for letting us know you\'ve reached out manually';
+    			}
+            }
+
         } else {
             $status = 'error';
             $message = 'A contact needs to be added to the story first';

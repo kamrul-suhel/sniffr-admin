@@ -198,6 +198,8 @@
 			<a href="{{ $asset->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
 		@endif
 
+		<a href="{{ url('admin/stories/?decision='.(isset($decision) ? $decision : '').'&state='.(isset($asset->state) ? $asset->state : '')) }}" class="btn btn-grey pull-right" style="margin-right:10px;">Close</a>
+
 	</form>
 
 	<div class="clear"></div>
