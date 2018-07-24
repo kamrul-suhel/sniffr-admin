@@ -24,7 +24,7 @@ class CreateContactRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'email|required|unique:contacts|max:255',
+            'email' => 'nullable|email|unique:contacts|max:255',
             'full_name' => 'required'
         ];
     }

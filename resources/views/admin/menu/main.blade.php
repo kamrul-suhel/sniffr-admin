@@ -84,19 +84,19 @@
     @endif
 
     @if(Auth::user()->isAdmin())
-    <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
-        <a href="{{ url('admin/stories') }}" class="tlink">
-            <i class="fa fa-tasks"></i>
-            <span class="title">Stories</span>
-        </a>
-    </li>
+        <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
+            <a href="{{ url('admin/stories') }}" class="tlink">
+                <i class="fa fa-tasks"></i>
+                <span class="title">Stories</span>
+            </a>
+        </li>
 
-    <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
-        <a href="{{ url('admin/mailers') }}" class="tlink">
-            <i class="fa fa-envelope-open"></i>
-            <span class="title">Mailers</span>
-        </a>
-    </li>
+        <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
+            <a href="{{ url('admin/mailers') }}" class="tlink">
+                <i class="fa fa-envelope-open"></i>
+                <span class="title">Mailers</span>
+            </a>
+        </li>
 
     <!-- <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
         <a href="{{ url('admin/media') }}">
@@ -106,7 +106,7 @@
     </li> -->
     @endif
 
-    @if(Auth::user()->role != 'client')
+    @if(auth()->user()->isAdmin())
         <li class="{{ Request::segment(2) == 'contacts' ? 'active' : '' }}">
             <a href="{{ url('admin/contacts') }}" class="tlink">
                 <i class="fa fa-address-book"></i>
@@ -118,26 +118,19 @@
     @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'clients' ? 'active' : '' }}">
             <a href="{{ url('admin/clients') }}" class="tlink">
-                <i class="fa fa-users"></i>
+                <i class="fa fa-building"></i>
                 <span class="title">Clients</span>
+                <small style="position:relative; margin:-8px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\Client::where('active', 0)->count() > 0 ? \App\Client::where('active', 0)->count() : null }}</small>
             </a>
         </li>
     @endif
 
     @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
-        <a href="{{ url('admin/users') }}" class="tlink">
-            <i class="fa fa-user-circle"></i>
-            <span class="title">Users</span>
-        </a>
-    </li>
-    @endif
-
-    @if((Auth::user()->role == 'client') && (Auth::user()->id == Auth::user()->client()->account_owner_id))
-        <li class="{{ Request::segment(2) == 'users' ? 'active' : '' }}">
-            <a href="{{ url('client/users') }}" class="tlink">
-                <i class="fa fa-user-circle"></i>
+            <a href="{{ url('admin/users') }}" class="tlink">
+                <i class="fa fa-user"></i>
                 <span class="title">Users</span>
+                <small style="position:relative; margin:-8px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\User::where('active', 0)->count() > 0 ? \App\User::where('active', 0)->count() : null }}</small>
             </a>
         </li>
     @endif
@@ -145,16 +138,8 @@
     <li class="{{ Request::segment(2) == 'quotes' ? 'active' : '' }}">
         <a href="{{ url('admin/quotes') }}" class="tlink">
             <i class="fa fa-exclamation"></i>
-            <small class="badge">
-                {{
-                    \App\Collection::whereHas('collectionVideos', function($query) {
-                        $query->where('status', 'requested');
-                    })->orWhereHas('collectionStories', function($query) {
-                        $query->where('status', 'requested');
-                    })->with('collectionVideos')->with('collectionStories')->count()
-                }}
-            </small>
             <span class="title">Quotes</span>
+            <small style="position:relative; margin:-2px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\Collection::getQuotesByStatus('requested')->count() > 0 ? \App\Collection::getQuotesByStatus('requested')->count() : null }}</small>
         </a>
         <ul>
             <li>

@@ -14,9 +14,9 @@ trait FrontendResponse
         return response()->json($data);
     }
 
-    protected function errorResponse($message)
+    protected function errorResponse($message, $code = 200)
     {
-        return response()->json(['error' => 'true', 'error_message' => $message]);
+        return response()->json(['error' => 'true', 'error_message' => $message], $code);
     }
 
     protected function getVideoFieldsForFrontend()
@@ -55,7 +55,8 @@ trait FrontendResponse
             'is_exclusive',
             'terms',
             'views',
-            'licensed_at'
+            'licensed_at',
+			'created_at'
         ];
 
         return $fields;

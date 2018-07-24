@@ -1,8 +1,8 @@
 <template>
     <div class="text-xs-center pagination-section">
-        <v-container grid-list-lg class="py-0">
+        <v-container grid-list-lg class="py-0 mb-5">
             <v-layout justify-center>
-                <v-flex xs12>
+                <v-flex xs12 class="pa-0">
                     <v-pagination
                             color="black"
                             class="dark"
@@ -20,7 +20,7 @@
     export default {
         data() {
             return {
-                current_page: 1,
+                current_page: this.$route.query.page ? Number(this.$route.query.page): 1,
                 total_visible: 10,
             }
         },

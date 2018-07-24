@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CollectionStory;
+use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
 use Goutte;
@@ -10,9 +12,6 @@ use Validator;
 use Redirect;
 use App\User;
 use App\Story;
-use App\Asset;
-use App\Video;
-use App\Contact;
 use App\VideoCategory;
 use App\VideoCollection;
 use App\Libraries\VideoHelper;
@@ -22,7 +21,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
-
+use App\Jobs\QueueBump;
 use App\Jobs\QueueStory;
 
 class AdminStoryController extends Controller
@@ -98,33 +97,6 @@ class AdminStoryController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getMailerVideos(Request $request)
-    {
-        if ($request->ajax()) {
-
-            if ($request->search) {
-                $search_value = $request->search;
-                $videos = Video::where([['state', 'licensed'], ['file', '!=', NULL], ['title', 'LIKE', '%' . $search_value . '%']])
-                    ->orWhere('alpha_id', $search_value)
-                    ->orderBy('licensed_at', 'DESC')
-                    ->paginate(12);
-            } else {
-                $videos = Video::with('createdUser')
-                    ->where([['state', 'licensed'], ['file', '!=', NULL]])
-                    ->orderBy('licensed_at', 'DESC')
-                    ->paginate(12);
-            }
-            $data = [
-                'videos' => $videos
-            ];
-            return $this->successResponse($data);
-        }
-    }
-
-    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
@@ -132,8 +104,10 @@ class AdminStoryController extends Controller
         $data = [
 			'user' => Auth::user(),
 			'users' => User::all(),
-			'videos' => Video::all(),
 			'contact' => null,
+			'asset' => null,
+            'decision' => 'content-sourced',
+			'asset_type' => 'story',
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
             'video_categories' => VideoCategory::all(),
@@ -210,7 +184,7 @@ class AdminStoryController extends Controller
      */
     public function edit($id)
     {
-        $story = Story::with('currentContract')->where('alpha_id', $id)
+        $asset = Story::with('currentContract')->where('alpha_id', $id)
             ->first();
 
         $decision = Input::get('decision');
@@ -218,13 +192,14 @@ class AdminStoryController extends Controller
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
-            'story' => $story,
+            'asset' => $asset,
+			'asset_type' => 'story',
             'post_route' => url('admin/stories/update'),
             'button_text' => 'Save Draft',
             'decision' => $decision,
             'user' => Auth::user(),
             'users' => User::all(),
-			'contact' => null,
+			'contact' => $asset->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all()
         ];
@@ -279,7 +254,7 @@ class AdminStoryController extends Controller
         $story->rights = (Input::get('rights') ? Input::get('rights') : '');
         $story->rights_type = (Input::get('rights_type') ? Input::get('rights_type') : '');
         $story->user_id = (Input::get('user_id') ? Input::get('user_id') : $story->user_id);
-        $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('username')->first() : NULL);
+        $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('full_name')->first() : NULL);
 		$story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
 
 		$story->save();
@@ -288,11 +263,23 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-        // need states for when syncing stories to WP
-        return Redirect::to('admin/stories/?decision='.$decision)->with([
+        $data = [
+            'headline' => '<i class="fa fa-edit"></i> Edit Story',
+			'asset' => $story,
+			'asset_type' => 'story',
+            'post_route' => url('admin/stories/update'),
+            'button_text' => 'Save Draft',
+            'decision' => $decision,
+            'user' => Auth::user(),
+            'users' => User::all(),
+			'contact' => $story->contact,
+            'video_categories' => VideoCategory::all(),
+            'video_collections' => VideoCollection::all(),
             'note' => 'Successfully Saved Story!',
             'note_type' => 'success'
-        ]);
+        ];
+
+        return view('admin.stories.create_edit', $data);
     }
 
     /**
@@ -309,16 +296,28 @@ class AdminStoryController extends Controller
 
         $story = Story::where('alpha_id', $id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
-        $story->save();
 
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'unapproved' || $state == 'rejected' || $state == 'approved'):
+            case ($state == 'unapproved' || $state == 'rejected'):
+                break;
+            case ($state == 'approved'):
+                // make initial contact (will need to add twitter/fb/reddit in future)
+                if($story->id && $story->contact->canAutoBump()){
+                    QueueBump::dispatch($story->id);
+                }
                 break;
             case ($state == 'unlicensed'):
+                // contact has been made (set in db)
+                if($story->id) {
+                    $story->contact_made = 1;
+                }
+                $message = 'Set to contact made';
+                break;
+            case ($state == 'licensed'):
                 // add new post to WP
                 QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
                 $message = 'Pushed to WP + Ready to license';
@@ -331,6 +330,8 @@ class AdminStoryController extends Controller
                 $message = 'Just updated content from WP';
                 break;
         }
+
+        $story->save();
 
         if ($isJson) {
             return response()->json([
@@ -449,6 +450,47 @@ class AdminStoryController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendReminder(Request $request, $id)
+    {
+        $decision = $request->input('decision');
+
+        $asset = Story::where('alpha_id', $id)->first();
+
+        if(isset($asset->contact)) {
+            if($asset->reminders >= 2) {
+                $status = 'error';
+                $message = 'Looks like you have already sent lots of reminders!';
+            } else {
+                if($asset->contact->canAutoBump()){
+    				QueueBump::dispatch($asset->id);
+
+    				$status = 'success';
+    				$message = 'Reminder Sent';
+    			}else{
+    				$asset->contacted_at = now();
+    				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
+    				$asset->save();
+
+    				$status = 'success';
+    				$message = 'Thanks for letting us know you\'ve reached out manually';
+    			}
+            }
+
+        } else {
+            $status = 'error';
+            $message = 'A contact needs to be added to the story first';
+        }
+
+        return Redirect::to('admin/stories/?decision='.$decision)->with([
+            'note' => $message,
+            'note_type' => $status
+        ]);
+    }
+
+    /**
      * @param UploadedFile $imageFile
      * @return string
      */
@@ -468,13 +510,13 @@ class AdminStoryController extends Controller
      * @param $state
      * @return string
      */
-    public static function checkDropdownValue($state)
+    public static function getStateValue($state)
     {
-        $found='';
+        $found = Array();
         foreach(config('stories.decisions') as $decision1 => $decision1_values) {
             foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values) {
                 if($state==$current_state) {
-                    $found=$state_values['dropdown'];
+                    $found=$state_values;
                 }
             }
         }
@@ -492,6 +534,9 @@ class AdminStoryController extends Controller
         if (!$story) {
             abort(404);
         }
+
+        CollectionStory::where('story_id', $story->id)->delete();
+        //TODO - EMAIL Existing quotes pending/offered that story has been removed from Sniffr.
 
         $story->destroy($story->id);
 

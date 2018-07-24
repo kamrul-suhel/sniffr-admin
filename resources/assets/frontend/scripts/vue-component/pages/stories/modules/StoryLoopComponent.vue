@@ -35,7 +35,6 @@
 
 <script>
     import BuyQuoteButtonComponent from '../../../includes/BuyQuoteButtonComponent'
-    import LoginEventBus from '../../../../event-bus/login-event-bus'
 
     export default  {
         components :{
@@ -51,13 +50,13 @@
         props:['story'],
 
         created(){
-            LoginEventBus.$on('loginSuccess', () => {
-                this.checkLoginStatus();
-            });
-
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.checkLoginStatus();
-            })
+            // LoginEventBus.$on('loginSuccess', () => {
+            //     this.checkLoginStatus();
+            // });
+            //
+            // LoginEventBus.$on('logoutChangeState', () => {
+            //     this.checkLoginStatus();
+            // })
 
             this.checkLoginStatus();
         },

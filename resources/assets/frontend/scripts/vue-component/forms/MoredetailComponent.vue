@@ -288,9 +288,10 @@
     </div>
 </template>
 <script>
+    import {mapGetters} from 'vuex';
+
     export default {
         data: () => ({
-            settings: '',
             video: '',
             valid: false,
 
@@ -334,6 +335,13 @@
             error: false,
 
         }),
+
+        computed: {
+            ...mapGetters({
+                settings: 'getSettingsObject'
+            }),
+        },
+
         mounted() {
             this.code = this.$route.params.code;
             if (!this.code) {
@@ -364,11 +372,6 @@
                 .catch((error) => {
                     this.http_error = true;
                 });
-
-
-            this.$store.dispatch('setSettingObjectFromServer').then(() => {
-                this.settings = this.$store.getters.getSettingsObject;
-            });
         },
 
         created() {
@@ -397,11 +400,12 @@
                 form.append('filmed_by_me', this.filmed_by_me);
                 form.append('permission', this.permission);
 
+                let submiteElseWhere = this.submitted_elsewhere;
                 if (!this.submitted_where) {
-                    this.submitted_elsewhere = 0;
+                    submiteElseWhere = 0;
                 }
 
-                form.append('submitted_elsewhere', this.submitted_elsewhere);
+                form.append('submitted_elsewhere', submiteElseWhere);
                 form.append('submitted_where', this.submitted_where);
                 form.append('contact_is_owner', this.contact_is_owner);
                 form.append('allow_publish', this.allow_publish);

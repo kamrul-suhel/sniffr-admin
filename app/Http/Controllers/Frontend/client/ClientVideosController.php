@@ -114,13 +114,13 @@ class ClientVideosController extends Controller
                 ->orderBy('created_at', 'DESC')
                 ->whereHas('collectionVideos', function($query) {
                     $query->where('status', 'offered');
+                    $query->orWhere('status', 'requested');
                 })
                 ->get()
-                ->pluck('collectionVideos')->all();
+                ->pluck('collectionVideos');
 
             //Paginate collection object
             $videos = $this->paginate($offeredVideos,self::PAGINATE_PER_PAGE, $request->page);
-
             $data = [
                 'videos' => $videos,
             ];

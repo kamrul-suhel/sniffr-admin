@@ -34,27 +34,30 @@
     </section>
 </template>
 <script>
-    import ThankYouDialogBoxEventBus from '../../event-bus/thank-you-dialog-event-bus';
-
+    import {mapGetters} from 'vuex';
     export default {
-        data() {
-            return {
-                thankYouDialog:false,
-                message: ''
+        computed:{
+            ...mapGetters({
+                message: 'getThankYouMessage'
+            }),
+
+            thankYouDialog:{
+                get(){
+                    return this.$store.getters.getThankYouDialog;
+                },
+
+                set(value){
+                    this.$store.commit('setThankYouDialog', value);
+                }
             }
         },
 
         created() {
-            ThankYouDialogBoxEventBus.$on('openThankYouDialog', (message) => {
-                this.message = message;
-                this.thankYouDialog = true;
-            });
         },
 
         methods: {
             closeDialogBoxes(){
                 this.thankYouDialog = false;
-                ThankYouDialogBoxEventBus.$emit('closeThankYouDialog');
             }
 
         }

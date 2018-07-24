@@ -4,12 +4,8 @@ import Settings from './modules/settings'
 import User from './modules/user'
 import Videos from './modules/videos'
 import Stories from './modules/stories'
-import VideoDetail from './modules/video-detail'
-import VideoDialogBox from './modules/video-dialog-box'
-import VideoSearch from './modules/search'
-import VideoTagSearch from './modules/videos_tag_search'
-import ClientStories from './modules/client/client-stories'
-import ClientVideos from './modules/client/client-videos'
+import BuyQuote from './modules/buyquote'
+import Dialog from './modules/dialog'
 
 Vue.use(Vuex)
 
@@ -30,12 +26,8 @@ export const store = new Vuex.Store({
 		Settings,
 		User,
 		Videos,
-		VideoDetail,
-		VideoDialogBox,
-		VideoSearch,
-		VideoTagSearch,
-		ClientStories,
-		ClientVideos,
-		Stories
+		Stories,
+		BuyQuote,
+		Dialog
 	}
 })

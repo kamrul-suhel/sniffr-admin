@@ -13,6 +13,10 @@ section.section-space {
   //}
 }
 
+.all-dialog-box{
+  display:none;
+}
+
 @include small-device {
   section.section-space {
     padding: $section-spacing-mobile 0px;
@@ -222,4 +226,24 @@ p {
 
 .thank-you-dialog{
   display:none;
+}
+
+
+/* ************************* Pagination style ******************* */
+.v-pagination__item--active{
+  border:none;
+  &:focus{
+    outline:none;
+  }
+}
+
+.v-pagination__item{
+  &:focus{
+    outline:none;
+  }
+}
+
+
+.v-dialog.loin-delay-dialog {
+  box-shadow: 0 0px 15px 0px rgba(0,0,0,0), 0 4px 17px 0px rgba(0,0,0,0), 0 0px 8px -4px rgba(0,0,0,0);
 }

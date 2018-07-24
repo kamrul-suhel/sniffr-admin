@@ -2,13 +2,18 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CollectionVideo extends Model
 {
+
+    use SoftDeletes;
+
     protected $table = 'collection_videos';
 
-    protected $fillable = ['collection_id', 'video_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status'];
+    protected $fillable = ['collection_id', 'video_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status', 'licensed_at', 'license_ends_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -46,11 +51,34 @@ class CollectionVideo extends Model
         $price = $price * (config('pricing.class.' . $data['class'] . '.modifier') ?: 1);
         $price = $price * (config('pricing.locations.' . $data['location'] . '.modifier') ?: 1);
         $price = $price * (config('pricing.tier.' . $data['tier'] . '.modifier') ?: 1);
-
         $price = $price * (config('pricing.type.' . $data['license_type'] . '.modifier') ?: 1);
-        $price = $price * (config('pricing.platform.' . $data['license_platform'] . '.modifier') ?: 1);
         $price = $price * (config('pricing.length.' . $data['license_length'] . '.modifier') ?: 1);
 
+        $modifier = 1;
+        $platforms = explode(',', $data['license_platform']);
+
+        foreach($platforms as $platform) {
+            $modifier += config('pricing.platform.' . $platform . '.modifier') ?: 1;
+        }
+        $price = $price * $modifier;
+
+
         return $price = round($price, 2);
+    }
+
+    /**
+     * Get a video of a specific type and status. (common occurrence throughout site)
+     * @param $type
+     * @param $status
+     * @return mixed
+     */
+    public function getAssetByTypeStatus($type, $status)
+    {
+        return $this->where([['type', $type], ['status', $status]])->get();
+    }
+
+    public function calculateLicenseEndTime()
+    {
+        return config('pricing.length.'. $this->length .'.end_date');
     }
 }

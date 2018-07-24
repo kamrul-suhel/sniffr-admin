@@ -26,11 +26,24 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
+        $passwordValidation = 'required|string|min:8';
+        if(request()->segment(1) === 'admin') {
+            $passwordValidation = 'nullable|string|min:8';
+        }
         return [
-            'password' => 'nullable|string|min:6',
+            'password' => $passwordValidation,
             'email' => 'required|email',
             'client_id' => 'required_if:role,client',
             'file' => 'file|mimes:jpg,gif,png|min:1|max:500000',
         ];
+    }
+
+    public function response(array $errors)
+    {
+        return response()->json([
+            'error' => 'true',
+            'errors' => [$errors],
+            'error_message' => 'There are validation errors',
+        ], 400);
     }
 }

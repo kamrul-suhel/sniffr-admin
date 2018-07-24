@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Client;
 use App\Http\Requests\Company\UpdateUserRequest;
-use App\Jobs\QueueEmailClient;
-use App\Jobs\QueueEmailCompany;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Jobs\Auth\QueueEmailClient;
+use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\ImageHandler;
 use App\Libraries\VideoHelper;
 use App\User;
@@ -31,22 +32,26 @@ class ClientUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($slug)
+    public function create(Request $request)
     {
 
-        return view('client.users.create_edit')
-            ->with('user', null)
-            ->with('slug', $slug);
+        if($request->ajax()){
+            return view('client.users.create_edit')
+                ->with('user', null)
+                ->with('slug', $request->slug);
+        }
+
+        return view('frontend.master');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CreateUserRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
+
         $user = new User();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
@@ -62,7 +67,7 @@ class ClientUserController extends Controller
         $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
 
         $user->role = $role;
-        $user->active = $request->input('active', 0);
+        $user->active = 1;
 
         $client_id = in_array(Auth::user()->role, ['client_owner', 'client_admin'])
             ? Auth::user()->client_id
@@ -119,22 +124,24 @@ class ClientUserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-    public function edit($slug, $user_id)
+    public function edit(Request $request, $slug, $user_id)
     {
-        $user = User::find($user_id);
+        if($request->ajax()){
+            $user = User::find($user_id);
 
-        if(!$user && !$user->client->slug == $slug) {
-            return redirect('videos');
+            if(!$user && !$user->client->slug == $slug) {
+                return redirect('videos');
+            }
+
+            return view('client.users.create_edit')
+                ->with('user', $user)
+                ->with('slug', $slug);
         }
 
-        return view('client.users.create_edit')
-            ->with('user', $user)
-            ->with('slug', $slug);
+        return view('frontend.master');
     }
 
     /**

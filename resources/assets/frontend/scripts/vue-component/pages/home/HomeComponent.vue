@@ -14,7 +14,6 @@
 </template>
 <script>
     import FeatureComponent from '../../includes/FeatureComponent.vue';
-    import LoginEventBus from '../../../event-bus/login-event-bus';
 
     export default{
         components:{
@@ -24,13 +23,6 @@
         data() {
             return {
                 fullwidth_height:0,
-                settings: '',
-
-                //user auth
-                is_login: false,
-
-                //if user login all data
-                user: '',
             }
         },
 
@@ -47,46 +39,19 @@
             }
         },
 
+        created(){
+            let browserHeight = window.innerHeight;
+            this.fullwidth_height = browserHeight+'px';
+        },
+
         methods: {
             onUploadVideo(){
                 this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
                 setTimeout(() => {
                     this.$router.push({name: 'upload_video'});
                 }, 500);
-            },
-
-            onLoginClick() {
-                LoginEventBus.openLoginDialog();
-            },
-
-            logoutStateChange() {
-                this.is_login = false;
             }
-        },
 
-        created(){
-            LoginEventBus.$on('logoutChangeState', () => {
-                this.is_login = false;
-            });
-
-            var browserheight = window.innerHeight;
-            this.fullwidth_height = browserheight+'px';
-        },
-
-        mounted() {
-            var browserheight = window.innerHeight;
-            var first_nav_pos = $('#nav').position();
-            var second_nav_pos = $('.second-navigation').position();
-            var second_nav_height = $('.second-navigation').outerHeight();
-            var hide_nav_position = browserheight - second_nav_height;
-
-            // $(window).scroll(function(e){
-            //     if(window.pageYOffset > hide_nav_position){
-            //         $('#nav').hide();
-            //     }else{
-            //         $('#nav').show();
-            //     }
-            // });
         }
 
     }

@@ -5,7 +5,7 @@
         <div class="section-title">
             @if($user)
                 <h1>
-                    <i class="fa fa-user"></i> {{ $user->username ?? 'New User' }}
+                    <i class="fa fa-user"></i> {{ $user->full_name ?? 'New User' }}
                 </h1>
             @else
                 <h3><i class="fa fa-users"></i> Add New User</h3>
@@ -22,6 +22,7 @@
 
         <form method="POST" action="{{ ($user) ? route($update_path, ['slug' => $slug, 'user' => $user->id]) : route($store_path, ['slug' => $slug]) }}" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             {{ method_field($user ? 'PATCH' : 'POST') }}
+            <input type="hidden" name="client_id" value="{{ auth()->user()->client->id }}">
             <div id="user-badge">
                 <img src="{{ Config::get('site.uploads_url') }}{{ ($user && $user->avatar) ? $user->avatar : 'default.jpg' }}"/>
                 <label for="avatar">{{ ($user) ? ucfirst($user->first_name) . '\'s' : '' }} Profile Image</label>
@@ -66,16 +67,14 @@
 
                             @if($errors->first('email'))
                                 <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     {{ $errors->first('email') }}
                                 </div>
                             @endif
 
                             <label>User's Email Address</label>
                             <input type="text" class="form-control" name="email" id="email" autocomplete="off"
-                                   value="{{ ($user) ? $user->email : old('email') }}" readonly
-                                   onfocus="this.removeAttribute('readonly');"/>
+                                   value="{{ ($user) ? $user->email : old('email') }}" @if(request()->segment(1) === 'admin')readonly @endif onfocus="this.removeAttribute('readonly');"/>
 
                             <br>
 
@@ -86,6 +85,7 @@
                                     {{ $errors->first('tel') }}
                                 </div>
                             @endif
+
                             <label>User's Phone Number</label>
                             <input type="text" class="form-control" name="tel" id="tel" autocomplete="off"
                                    value="{{($user) ? $user->tel : old('tel') }}"/>
@@ -93,21 +93,23 @@
 
                             <br>
 
-                            @if($errors->first('password'))
-                                <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                                    </button>
-                                    {{ $errors->first('password') }}
-                                </div>
+                            @if(request()->segment(1) === 'admin')
+                                @if($errors->first('password'))
+                                    <div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                        </button>
+                                        {{ $errors->first('password') }}
+                                    </div>
+                                @endif
+
+                                <label>{{ ($user) ? '(leave empty to keep your original password)' : 'Enter users password:' }}</label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                       autocomplete="off"
+                                       value=""
+                                       readonly onfocus="this.removeAttribute('readonly');" title="password"/>
+
+                                <br>
                             @endif
-
-                            <label>{{ ($user) ? '(leave empty to keep your original password)' : 'Enter users password:' }}</label>
-                            <input type="password" class="form-control" name="password" id="password"
-                                   autocomplete="off"
-                                   value=""
-                                   readonly onfocus="this.removeAttribute('readonly');" title="password"/>
-
-                            <br>
 
                             @if(auth()->user()->role == 'client_admin' || auth()->user()->role == 'client_owner')
                                 {{--@if($user && auth()->user()->id !== $user->id)--}}

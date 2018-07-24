@@ -25,7 +25,7 @@ class UpdateContactRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'email|required|unique:contacts,email,' . $this->contact->id,
+        	'email' => 'nullable|email|unique:contacts|max:255' . $this->contact->id,
             'full_name' => 'required'
         ];
     }
