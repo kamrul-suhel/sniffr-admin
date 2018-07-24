@@ -139,22 +139,19 @@
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
                                     this.$router.push({name: 'videos'});
-                                    // LoginEventBus.loginSuccess();
-
                                 });
                             }
                         })
                         .catch(error => {
-                            his.error = false;
+                            this.error = false;
                             this.showMessage = false;
 
                             if(error.response.data.error_message === undefined) {
                                 this.error = true;
                                 this.errors = error.response.data.errors;
-                                console.log('error_message = undefined');
                             } else {
+                                this.error = true;
                                 this.showMessage = true;
-                                console.log('error_message exists');
                                 this.message = error.response.data.error_message;
                             }
                         });
