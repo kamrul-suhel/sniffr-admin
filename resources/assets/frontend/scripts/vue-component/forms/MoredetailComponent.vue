@@ -400,11 +400,12 @@
                 form.append('filmed_by_me', this.filmed_by_me);
                 form.append('permission', this.permission);
 
+                let submiteElseWhere = this.submitted_elsewhere;
                 if (!this.submitted_where) {
-                    this.submitted_elsewhere = 0;
+                    submiteElseWhere = 0;
                 }
 
-                form.append('submitted_elsewhere', this.submitted_elsewhere);
+                form.append('submitted_elsewhere', submiteElseWhere);
                 form.append('submitted_where', this.submitted_where);
                 form.append('contact_is_owner', this.contact_is_owner);
                 form.append('allow_publish', this.allow_publish);

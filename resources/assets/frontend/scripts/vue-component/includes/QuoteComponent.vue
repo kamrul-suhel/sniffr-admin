@@ -372,6 +372,7 @@
                                 let message = 'Thanks for your request, someone from our licensing team will be in touch shortly.';
                                 this.$store.commit('setThankYouMessage', message);
                                 this.$store.commit('setThankYouDialog', true);
+                                this.$store.dispatch('getLoginStatus');
                             }, 500)
                         })
                         .catch(error => {
