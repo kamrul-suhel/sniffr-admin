@@ -162,7 +162,7 @@ class SearchController extends Controller
 			$currentStory = $this->getCurrentstory($currentStoryId);
 		}
 
-		$stories = $this->story::where('state', 'licensed');
+		$stories = $this->story::where('state', 'published');
 
 		if($searchValue){
 			$stories = $stories->where(function ($query) use ($searchValue) {

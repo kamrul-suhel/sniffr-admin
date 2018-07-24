@@ -19,7 +19,7 @@
 						Stories: {!! ($state ? ucfirst($state) : 'All') !!}
 					</a>
                     @endif
-					<a href="{{ url('admin/stories/create') }}" class="btn btn-success pull-right">
+					<a href="{{ url('admin/stories/create/?decision='.(isset($decision) ? $decision : '')) }}" class="btn btn-success pull-right">
 						<i class="fa fa-plus-circle"></i>
 						Add New Story
 					</a>
