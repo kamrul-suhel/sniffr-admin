@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CollectionVideo;
 use App\Services\VideoService;
 use App\VideoSocialLink;
 use App\VideoStats;
@@ -653,6 +654,9 @@ class AdminVideosController extends Controller
         if (!$video) {
             abort(404);
         }
+
+        CollectionVideo::where('video_id', $video->id)->delete();
+        //TODO - EMAIL Existing quotes pending/offered that video has been removed from Sniffr.
 
         $video->destroy($video->id);
 

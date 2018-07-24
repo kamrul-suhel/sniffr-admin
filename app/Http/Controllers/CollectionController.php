@@ -187,6 +187,13 @@ class CollectionController extends Controller
 
         $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
 
+
+        //TODO fucking disgusting
+        $data['type'] = 'video';
+        if(isset($data['story_alpha_id'])) {
+            $data['type'] = 'story';
+        }
+
         $this->requestAfterRegister($data, $user, $data['type']);
 
         return $this->successResponse([
@@ -233,22 +240,22 @@ class CollectionController extends Controller
 
             $collection = $collectionStory->collection;
             $asset = $collectionStory->story;
-
-            $params = [
-                'username' => is_null($user->full_name) ? $user->username : $user->full_name,
-                'user' => $user->email,
-                'collection' => $collection
-            ];
-
-            $collectionQuote = new CollectionQuote;
-            $collectionQuote->emailPendingQuote($params);
-
-            $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
-
-            return response([
-                'message' => 'Email has been sent to new user'
-            ], 200);
         }
+
+        $params = [
+            'username' => is_null($user->full_name) ? $user->username : $user->full_name,
+            'user' => $user->email,
+            'collection' => $collection
+        ];
+
+        $collectionQuote = new CollectionQuote;
+        $collectionQuote->emailPendingQuote($params);
+
+        $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+
+        return response([
+            'message' => 'Email has been sent to new user'
+        ], 200);
     }
 
     /**

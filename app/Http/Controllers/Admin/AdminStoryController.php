@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CollectionStory;
 use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
@@ -533,6 +534,9 @@ class AdminStoryController extends Controller
         if (!$story) {
             abort(404);
         }
+
+        CollectionStory::where('story_id', $story->id)->delete();
+        //TODO - EMAIL Existing quotes pending/offered that story has been removed from Sniffr.
 
         $story->destroy($story->id);
 
