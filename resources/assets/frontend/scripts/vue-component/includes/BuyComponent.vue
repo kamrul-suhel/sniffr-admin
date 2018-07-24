@@ -238,12 +238,6 @@
 
         created() {
 
-            // ThankYouDialogBoxEventBus.$on('closeThankYouDialog', () => {
-            //     setTimeout(()=> {
-            //         this.open_quote_dialog = false;
-            //     }, 500);
-            // })
-
         },
 
         methods: {
