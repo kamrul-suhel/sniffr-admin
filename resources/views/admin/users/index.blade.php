@@ -43,7 +43,7 @@
 			@foreach($users as $user)
 				<tr>
 					<td>
-						{{ (strlen($user->full_name) > 40) ? substr($user->full_name, 0, 40) . '...' : $user->full_names }}
+						{{ (strlen($user->full_name) > 40) ? substr($user->full_name, 0, 40) . '...' : $user->full_name }}
 					</td>
 					<td>{{ $user->email }}</td>
 					<td>{{ $user->client->name ?? 'N/A' }}</td>
