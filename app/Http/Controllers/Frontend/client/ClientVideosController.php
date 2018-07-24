@@ -98,34 +98,6 @@ class ClientVideosController extends Controller
 
     public function getOfferedVideos(Request $request)
     {
-
-//        $clientId = Auth::user()->client_id;
-//
-//        $offeredVideos = Collection::with('collectionVideos.video');
-//        // If search passed through
-//        if ($request->search) {
-//            $search = $request->search;
-//            $offeredVideos = $offeredVideos->whereHas('collectionVideos.video', function ($query) use ($search) {
-//                $query->where('title', 'LIKE', '%' . $search . '%');
-//            });
-//        }
-//        $offeredVideos = $offeredVideos->where('client_id', $clientId)
-////                ->where('status', 'open')
-//            ->orderBy('created_at', 'DESC')
-//            ->whereHas('collectionVideos', function($query) {
-////                $query->where('status', 'offered');
-//            })
-//            ->get();
-//
-////        $offeredVideos = $offeredVideos->each(function($collection){
-////            $collection->video->each(function($video) use ($collection){
-////                $video['collection'] = $collection;
-////            });
-////        });
-//
-//        dd($offeredVideos);
-
-
         if ($request->ajax()) {
             $clientId = Auth::user()->client_id;
 
@@ -141,17 +113,11 @@ class ClientVideosController extends Controller
                 ->where('status', 'open')
                 ->orderBy('created_at', 'DESC')
                 ->whereHas('collectionVideos', function($query) {
-//                    $query->where('status', 'offered');
+                    $query->where('status', 'offered');
+                    $query->orWhere('status', 'requested');
                 })
                 ->get()
                 ->pluck('collectionVideos');
-//            ->collapse();
-
-//            $offeredVideos = $offeredVideos->each(function($collection){
-//               $collection->video->each(function($video) use ($collection){
-//                   $video['collection'] = $collection;
-//               });
-//            });
 
             //Paginate collection object
             $videos = $this->paginate($offeredVideos,self::PAGINATE_PER_PAGE, $request->page);
