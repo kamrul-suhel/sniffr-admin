@@ -25,6 +25,7 @@ use App\VideoCategory;
 class AuthController extends Controller
 {
     use FrontendResponse;
+
     /**
      * @param  $data []
      * @return \Illuminate\Contracts\Validation\Validator
@@ -66,7 +67,7 @@ class AuthController extends Controller
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
             'pages' => Page::where('active', '=', 1)->get(),
-            'settings'=> $settings
+            'settings' => $settings
         ];
 
         return view('frontend.master', $data);
@@ -135,11 +136,12 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
         Session::flush();
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             $data = ['success' => 'You are successfully logout'];
             return $this->successResponse($data);
         }
@@ -165,14 +167,13 @@ class AuthController extends Controller
     {
         $credentials = ['email' => $request->input('email')];
 
-        $response = Password::sendResetLink($credentials, function($message){
+        $response = Password::sendResetLink($credentials, function ($message) {
             $message->subject('Password Reset Info');
         });
 
-        switch ($response)
-        {
+        switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:
-                if($request->ajax()){
+                if ($request->ajax()) {
                     $data = ['success_message' => 'We\'ve just sent you a reset password link, please check your email'];
                     return $this->successResponse($data);
                 }
@@ -182,7 +183,7 @@ class AuthController extends Controller
                 ]);
 
             case PasswordBroker::INVALID_USER:
-                if($request->ajax()){
+                if ($request->ajax()) {
                     return $this->errorResponse('That email does not exist.');
                 }
                 return redirect()->back()->with([
@@ -195,8 +196,9 @@ class AuthController extends Controller
     /**
      *
      */
-    public function isLogin(){
-        if(Auth::user()){
+    public function isLogin()
+    {
+        if (Auth::user()) {
             return $this->successResponse(Auth::user());
         }
         return $this->errorResponse('Your are not login');
@@ -212,7 +214,7 @@ class AuthController extends Controller
         Auth::logout();
         Session::flush();
 
-        return view('frontend.pages.login.password_set_form')
+        return view('frontend.master')
             ->with('token', $token)
             ->with('email', $email);
     }
@@ -240,9 +242,11 @@ class AuthController extends Controller
 
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
-                if($request->ajax()){
 
-                    if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                if ($request->ajax()) {
+
+                    if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+
                         return $this->successResponse([
                             'user' => auth()->user(),
                             'success_message' => 'Your account is now active.'
@@ -255,8 +259,12 @@ class AuthController extends Controller
                 }
 
                 // attempt login with new password
-                if(auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
-                    return redirect()->intended('videos');
+                if (auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+
+                    return redirect()->intended('videos')->with([
+                        'note' => 'Your password has been successfully set.',
+                        'note_type' => 'success'
+                    ]);
                 }
 
                 return Redirect::to('videos')->with([
@@ -265,7 +273,7 @@ class AuthController extends Controller
                 ]);
 
             default:
-                if($request->ajax()){
+                if ($request->ajax()) {
                     return $this->errorResponse(trans($response), 400);
                 }
 
@@ -275,7 +283,6 @@ class AuthController extends Controller
                 ]);
         }
     }
-
 
 
     /**
@@ -318,9 +325,9 @@ class AuthController extends Controller
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
 
-                if($request->ajax()){
+                if ($request->ajax()) {
 
-                    if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                    if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
 
                         QueueEmailClientPasswordUpdated::dispatch(auth()->user());
 
@@ -336,18 +343,18 @@ class AuthController extends Controller
                 }
 
                 // attempt login with new password
-                if(auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+                if (auth()->attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
 
                     QueueEmailClientPasswordUpdated::dispatch(auth()->user());
 
                     return redirect()->intended('videos')->with([
-                        'note' => 'Your password has been successfully reset. Please login ',
+                        'note' => 'Your password has been successfully reset.',
                         'note_type' => 'success'
                     ]);
                 }
 
             default:
-                if($request->ajax()){
+                if ($request->ajax()) {
                     return $this->errorResponse(trans($response), 400);
                 }
 
