@@ -257,7 +257,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
     |--------------------------------------------------------------------------
     */
     Route::get('profile', 'Client\ClientAccountController@myAccount')->name('client.profile.edit');
-    Route::put('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
+    Route::post('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
     Route::resource('profile/{slug}/users', 'Client\ClientUserController', ['as' => 'clients']);
 
     /*

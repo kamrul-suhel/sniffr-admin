@@ -8,7 +8,7 @@
                 </v-flex>
 
                 <v-flex xs12 class="text-xs-center" v-if="totalStories <= 0 && totalVideos <= 0 && !searchVideoTerm">
-                    <h2>You have no purchases yet. You can buy or request quotes for any of our <a href="/videos">Videos</a>, and <a href="/stories">Stories</a>.</h2>
+                    <h2>You have no offers yet. You can buy or request quotes for any of our <a href="/videos">Videos</a>, and <a href="/stories">Stories</a>.</h2>
                 </v-flex>
 
                 <v-flex xs12 v-else>

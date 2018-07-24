@@ -8,6 +8,7 @@ use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponse;
 use App\User;
 use Auth;
 use Redirect;
@@ -19,26 +20,33 @@ use App\Http\Controllers\Controller;
 
 class ClientAccountController extends Controller
 {
-    use Slug;
+
+    use Slug, FrontendResponse;
+
+    protected $client, $user;
 
     /**
-     * ClientUserController constructor.
+     * ClientAccountController constructor.
+     * @param Client $client
+     * @param User $user
      */
-    public function __construct()
+    public function __construct(Client $client, User $user)
     {
         $this->middleware('client_admin');
+        $this->client = $client;
+        $this->user = $user;
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
+        $clients = $this->client->orderBy('created_at', 'DESC')->paginate(10);
 
         $data = [
             'clients' => $clients,
-            'user' => Auth::user()
+            'user' => auth()->user()
         ];
 
         return view('admin.clients.index', $data);
@@ -49,11 +57,7 @@ class ClientAccountController extends Controller
      */
     public function create()
     {
-        return view('admin.clients.create_edit', [
-            'company' => null,
-            'user' => null,
-        ]);
-
+        return view('admin.clients.create_edit', ['company' => null, 'user' => null,]);
     }
 
     /**
@@ -64,14 +68,14 @@ class ClientAccountController extends Controller
     {
         $company_slug = $this->slugify($request->get('company_name'));
 
-        $company_id = Client::insertGetId([
+        $company_id = $this->client->insertGetId([
             'name' => $request->get('company_name'),
             'slug' => $company_slug,
         ]);
 
         $password = VideoHelper::quickRandom();
 
-        $user_id = User::insertGetId([
+        $user_id = $this->user->insertGetId([
             'username' => $company_slug,
             'email' => $request->get('user_email'),
             'first_name' => $request->get('user_first_name'),
@@ -81,9 +85,9 @@ class ClientAccountController extends Controller
             'client_id' => $company_id
         ]);
 
-        $user = User::find($user_id);
+        $user = $this->user->find($user_id);
 
-        $client = Client::find($company_id);
+        $client = $this->client->find($company_id);
         $client->account_owner_id = $user_id;
         $client->save();
 
@@ -99,7 +103,7 @@ class ClientAccountController extends Controller
             );
         }
 
-        return Redirect::to('admin/clients')->with([
+        return redirect('admin/clients')->with([
             'note' => 'New Company Successfully Added!',
             'note_type' => 'success'
         ]);
@@ -113,16 +117,14 @@ class ClientAccountController extends Controller
     public function myAccount(EditCompanyRequest $request)
     {
 
-        $company = Client::find(Auth::user()->client_id);
-
-
+        $company = $this->client->find(auth()->user()->client_id);
 
         if($request->ajax()){
-            return view('client.account.create_edit', [
+            return $this->successResponse([
                 'company' => $company,
-                'user' => Auth::user(),
+                'user' => auth()->user(),
                 'update_path' => 'client.update',
-                'company_users' => User::where('client_id', $company->id)->get()
+                'company_users' => $this->user->where('client_id', $company->id)->get()
             ]);
         }
 
@@ -137,7 +139,7 @@ class ClientAccountController extends Controller
     public function update(UpdateCompanyRequest $request, int $id)
     {
 
-        $company = Client::findOrFail($id);
+        $company = $this->client->findOrFail($id);
 
         $company->slug = $this->slugify($request->input('company_name'));
         $company->name = $request->input('company_name');
@@ -158,7 +160,7 @@ class ClientAccountController extends Controller
         $company->update();
 
         if (!$redirect_path) {
-            $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
+            $redirect_path = (auth()->user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
         }
 
         return redirect($redirect_path)->with([
@@ -173,7 +175,7 @@ class ClientAccountController extends Controller
      */
     public function destroy($id)
     {
-        $client = Client::find($id);
+        $client = $this->client->find($id);
 
         if(!$client){
             abort(404);
@@ -181,7 +183,7 @@ class ClientAccountController extends Controller
 
         $client->destroy($id);
 
-        return Redirect::to('client/profile')->with([
+        return redirect('client/profile')->with([
             'note' => 'Successfully Deleted Client',
             'note_type' => 'success'
         ]);
