@@ -1,8 +1,8 @@
 <template>
     <v-container grid-list-lg fill-height class="section-space">
         <v-layout align-center justify-center v-if="display_thank_you">
-            <div v-if="signed">
-                Thank you!
+            <div v-if="signed" class="headline text-xs-center">
+                Thank you for signing the contract. We have sent you an email confirmation which includes a link to download the contract that you just accepted.
             </div>
             <v-form ref="contract_accept_form" @submit.prevent="onContractAcceptSubmit()" v-else>
                 <v-card>
