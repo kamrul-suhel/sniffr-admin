@@ -9,7 +9,7 @@
                     </h2>
                 </v-flex>
 
-                <v-form ref="form" id="company-update-form">
+                <v-form ref="form" v-model="valid" id="company-update-form">
 
                     <!--Company Name-->
                     <v-container grid-list-lg>
@@ -21,6 +21,7 @@
                                         v-model="company.company_name"
                                         name="company_name"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required
                                 ></v-text-field>
                             </v-flex>
@@ -45,6 +46,7 @@
                                         name="address_line1"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -56,6 +58,7 @@
                                         name="vat_number"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -67,6 +70,7 @@
                                         name="address_line2"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -78,6 +82,7 @@
                                         name="billing_name"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -89,6 +94,7 @@
                                         name="city"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -97,9 +103,11 @@
                                 <v-text-field
                                         label="Billing Email Address"
                                         v-model="company.billing_email"
-                                        name="billing_tel"
-                                        type="text"
+                                        name="billing_email"
+                                        type="email"
                                         color="dark"
+                                        :rules="emailRules"
+                                        :error-messages="emailError"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -111,6 +119,7 @@
                                         name="postcode"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -122,6 +131,7 @@
                                         name="billing_tel"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -133,6 +143,7 @@
                                         name="country"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
@@ -184,15 +195,19 @@
 
             </v-layout>
         </v-container>
-    </div>
 
+        <!-- Success Message -->
+        <v-snackbar
+                top="top"
+                :timeout="3000"
+                v-model="success">{{ successMessage }}
+            <v-btn flat color="light" @click.native="success = false">Close</v-btn>
+        </v-snackbar>
+    </div>
 
 </template>
 
 <script>
-
-    import {mapGetters} from 'vuex';
-
     export default {
         data() {
             return {
@@ -200,6 +215,8 @@
                 company: null,
                 user: null,
                 companyUsers: null,
+                success: false,
+                successMessage: false,
 
                 headers: [
                     {text: 'Name', align: 'left', sortable: true, value: 'name'},
@@ -207,7 +224,13 @@
                     {text: 'Role', align: 'left', sortable: true, value: 'role'},
                     {text: 'Status', align: 'left', sortable: true, value: 'status'},
                     {text: '', align: 'left', sortable: true, value: ''},
-                ]
+                ],
+
+                emailRules: [
+                    v => !!v || 'Email is required',
+                    v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                ],
+                emailError: '',
             }
         },
 
@@ -237,7 +260,10 @@
             },
 
             editUser(userId) {
-                this.$router.push({name: 'client_edit_create_user'}, this.company.slug, userId);
+                this.$router.push({
+                    name: 'client_edit_create_user',
+                    params: {slug: this.companyData.slug, userid: userId}
+                });
             },
 
             onSubmit() {
@@ -255,8 +281,13 @@
                     companyUpdateForm.append('billing_email', this.company.billing_email);
                     companyUpdateForm.append('billing_tel', this.company.billing_tel);
 
-                    axios.post('/client/profile', companyUpdateForm)
+                    axios.post('/client/profile/' + this.companyData.id, companyUpdateForm)
                         .then(response => {
+
+                            if(response.data.success) {
+                                this.success = true;
+                                this.successMessage = response.data.message;
+                            }
 
                         }).catch(error => {
 

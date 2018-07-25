@@ -119,7 +119,7 @@ class ClientAccountController extends Controller
 
         $company = $this->client->find(auth()->user()->client_id);
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             return $this->successResponse([
                 'company' => $company,
                 'user' => auth()->user(),
@@ -141,17 +141,17 @@ class ClientAccountController extends Controller
 
         $company = $this->client->findOrFail($id);
 
-        $company->slug = $this->slugify($request->input('company_name'));
-        $company->name = $request->input('company_name');
-        $company->address_line1 = $request->input('address_line1');
-        $company->address_line2 = $request->input('address_line2');
-        $company->city = $request->input('city');
-        $company->postcode = $request->input('postcode');
-        $company->country = $request->input('country');
-        $company->vat_number = $request->input('vat_number');
-        $company->billing_tel = $request->input('billing_tel');
-        $company->billing_email = $request->input('billing_email');
-        $company->billing_name = $request->input('billing_name');
+        $company->slug = !is_null($request->input('company_name')) ? $this->slugify($request->input('company_name')) : null;
+        $company->name = !is_null($request->input('company_name')) ? $request->input('company_name') : null;
+        $company->address_line1 = !is_null($request->input('address_line1')) ? $request->input('address_line1') : null;
+        $company->address_line2 = !is_null($request->input('address_line2')) ? $request->input('address_line2') : null;
+        $company->city = !is_null($request->input('city')) ? $request->input('city') : null;
+        $company->postcode = !is_null($request->input('postcode')) ? $request->input('postcode') : null;
+        $company->country = !is_null($request->input('country')) ? $request->input('country') : null;
+        $company->vat_number = !is_null($request->input('vat_number')) ? $request->input('vat_number') : null;
+        $company->billing_tel = !is_null($request->input('billing_tel')) ? $request->input('billing_tel') : null;
+        $company->billing_email = !is_null($request->input('billing_email')) ? $request->input('billing_email') : null;
+        $company->billing_name = !is_null($request->input('billing_name')) ? $request->input('billing_name') : null;
 
         $redirect_path = '';
 
@@ -159,13 +159,9 @@ class ClientAccountController extends Controller
 
         $company->update();
 
-        if (!$redirect_path) {
-            $redirect_path = (auth()->user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
-        }
-
-        return redirect($redirect_path)->with([
-            'note' => 'Successfully Updated Client!',
-            'note_type' => 'success'
+        return $this->successResponse([
+            'success' => true,
+            'message' => 'Your settings have been saved.',
         ]);
     }
 
@@ -177,7 +173,7 @@ class ClientAccountController extends Controller
     {
         $client = $this->client->find($id);
 
-        if(!$client){
+        if (!$client) {
             abort(404);
         }
 
