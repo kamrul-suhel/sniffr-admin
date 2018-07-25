@@ -384,10 +384,10 @@ class AdminVideosController extends Controller
 		$video->active = $request->input('active') ?: 0;
 		$video->featured = $request->input('featured') ?: 0;
 		$video->class = $request->input('class') ?: null;
-		$video->video_collection_id = $request->input('video_collection_id', null);
-		$video->video_shottype_id = $request->input('video_shottype_id', null);
-		$video->video_category_id = $request->input('video_category_id', null);
-		$video->contact_id = $request->input('contact_id', null);
+		$video->video_collection_id = ($request->input('video_collection_id') ? $request->input('video_collection_id') : $video->video_collection_id);
+		$video->video_shottype_id = ($request->input('video_shottype_id') ? $request->input('video_shottype_id') : $video->video_shottype_id);
+		$video->video_category_id = ($request->input('video_category_id') ? $request->input('video_category_id') : $video->video_category_id);
+		$video->contact_id = ($request->input('contact_id') ? $request->input('contact_id') : $video->contact_id);
 		$video->title = $title;
 		$video->location = $request->input('location');
 		$video->details = $request->input('details');
