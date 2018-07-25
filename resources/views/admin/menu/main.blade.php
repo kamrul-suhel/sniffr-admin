@@ -81,16 +81,16 @@
                 @endif
             </ul>
         </li>
-    @endif
 
-    @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
             <a href="{{ url('admin/stories') }}" class="tlink">
                 <i class="fa fa-tasks"></i>
                 <span class="title">Stories</span>
             </a>
         </li>
+    @endif
 
+    @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
             <a href="{{ url('admin/mailers') }}" class="tlink">
                 <i class="fa fa-envelope-open"></i>
