@@ -288,44 +288,51 @@ class AdminStoryController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function status(Request $request, $state, $id)
+    public function status(Request $request, $state, $alpha_id)
     {
         $isJson = $request->ajax();
         $decision = $request->input('decision');
         $remove = 'no';
+        $softDelete = false;
 
-        $story = Story::where('alpha_id', $id)->first();
+        $story = Story::where('alpha_id', $alpha_id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
+        $story_id = $story->id;
 
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'unapproved' || $state == 'rejected'):
+            case ($state == 'unapproved'):
+                break;
+            case ($state == 'rejected'):
+                $softDelete = true;
                 break;
             case ($state == 'approved'):
                 // make initial contact (will need to add twitter/fb/reddit in future)
-                if($story->id && $story->contact->canAutoBump()){
-                    QueueBump::dispatch($story->id);
+                if($story_id && $story->contact->canAutoBump()){
+                    QueueBump::dispatch($story_id);
                 }
                 break;
             case ($state == 'unlicensed'):
                 // contact has been made (set in db)
-                if($story->id) {
+                if($story_id) {
                     $story->contact_made = 1;
                 }
                 $message = 'Set to contact made';
                 break;
             case ($state == 'licensed'):
                 // add new post to WP
-                QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
+                if($story_id) {
+                    QueueStory::dispatch($alpha_id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
+                }
                 $message = 'Pushed to WP + Ready to license';
                 break;
             case ($state == 'writing-completed' || $state == 'subs-approved'):
                 // update story content from WP (including assets)
                 if($story->wp_id) {
-                    QueueStory::dispatch($id, 'sync', (!empty(Auth::id()) ? Auth::id() : 0));
+                    QueueStory::dispatch($alpha_id, 'sync', (!empty(Auth::id()) ? Auth::id() : 0));
                 }
                 $message = 'Just updated content from WP';
                 break;
@@ -333,14 +340,19 @@ class AdminStoryController extends Controller
 
         $story->save();
 
+        // changes story state but if "rejected" also soft deletes (requested by Liam)
+        if ($softDelete) {
+            $story->destroy($story_id);
+        }
+
         if ($isJson) {
             return response()->json([
                 'status' => 'success',
                 'message' => $message,
                 'state' => $state,
                 'remove' => $remove,
-                'story_id' => $story->id,
-                'story_alpha_id' => $id,
+                'story_id' => $story_id,
+                'story_alpha_id' => $alpha_id,
                 'decision' => $decision,
             ]);
         } else {

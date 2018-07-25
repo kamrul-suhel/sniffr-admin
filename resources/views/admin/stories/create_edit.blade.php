@@ -188,7 +188,7 @@
 
 		@if(isset($asset->id)&&isset($decision)&&$decision=='licensing')
 			@if($asset->state=='licensing'||$asset->state=='unlicensed'||$asset->state=='unapproved'||$asset->state=='rejected')
-				<a href="{{ url('admin/stories/status/licensed/'.$asset->alpha_id) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
+				<a href="{{ url('admin/stories/status/licensed/'.$asset->alpha_id.'/?decision='.(isset($decision) ? $decision : '')) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
 			@endif
 		@endif
 
