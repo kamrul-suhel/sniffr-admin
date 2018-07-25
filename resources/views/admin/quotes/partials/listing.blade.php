@@ -13,7 +13,7 @@
 
         <b title="{{ $asset->collection->user->email }}">
             {{ $asset->collection->user->full_name
-            ?? $asset->collection->user->username }} @ {{ $asset->collection->user->client->name }}
+            ?? $asset->collection->user->username }} @ {{ (isset($asset->collection->user->client->name) ? $asset->collection->user->client->name : 'unknown') }}
             @if($asset->collection->user->tel) -
                 <b>{{ $asset->collection->user->tel }}</b>
             @endif
