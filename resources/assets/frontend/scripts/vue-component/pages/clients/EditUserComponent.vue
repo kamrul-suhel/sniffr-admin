@@ -148,8 +148,9 @@
                     updateUserForm.append('email', this.user.email);
                     updateUserForm.append('tel', this.user.tel);
                     updateUserForm.append('role', this.user.role);
+                    updateUserForm.append('_method', 'patch'); 
 
-                    axios.patch('/client/profile/' + slug + '/users/' + this.user.id, updateUserForm)
+                    axios.post('/client/profile/' + slug + '/users/' + this.user.id, updateUserForm)
                         .then(response => {
 
                             if (response.data.success) {
