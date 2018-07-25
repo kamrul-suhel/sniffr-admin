@@ -3,138 +3,78 @@
         <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
                 <v-flex xs12>
-                    <h2 class="text-center text-uppercase">
-                        <v-icon color="white" left size="20px">settings</v-icon>
-                        Account Settings
-                    </h2>
+                    <h2 class="text-center text-uppercase">New User</h2>
                 </v-flex>
 
-                <v-form ref="form" id="company-update-form">
+                <v-form ref="form" v-model="valid" id="user-create-form">
 
-                    <!--Company Name-->
+                    <!--User Details -->
                     <v-container grid-list-lg>
 
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <v-text-field
-                                        label="Company Name:"
-                                        v-model="company.company_name"
-                                        name="company_name"
+                                        label="Full Name:"
+                                        v-model="user.full_name"
+                                        name="full_name"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
 
-                    </v-container>
-
-                    <!-- Billing Info-->
-                    <v-container grid-list-lg>
-
                         <v-layout row wrap>
                             <v-flex xs12>
-                                <h4 class="text-xs-center text-uppercase">Company &amp; Billing Information</h4>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout row wrap>
-                            <v-flex xs6>
                                 <v-text-field
-                                        label="Address Line 1"
-                                        v-model="company.address_line1"
-                                        name="address_line1"
+                                        label="Job Title"
+                                        v-model="user.job_title"
+                                        name="job_title"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
+                            <v-flex xs12>
                                 <v-text-field
-                                        label="VAT Number"
-                                        v-model="company.vat_number"
-                                        name="vat_number"
+                                        label="Email Address"
+                                        v-model="user.email"
+                                        name="email"
                                         type="text"
                                         color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
+                                        required>
+                                </v-text-field>
+                                <small class="red--text" v-if="error && errors.email">{{ errors.email[0] }}</small>
+                            </v-flex>
+
+                            <v-flex xs12>
+                                <v-text-field
+                                        label="Phone Number"
+                                        v-model="user.tel"
+                                        name="tel"
+                                        type="text"
+                                        color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
                                         required>
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="Address Line 2"
-                                        v-model="company.address_line2"
-                                        name="address_line2"
-                                        type="text"
+                            <v-flex xs12>
+                                <v-select
+                                        :items="clientRoles"
+                                        v-model="user.role"
+                                        label="Client role"
+                                        name="role"
+                                        :rules="[v => !!v || 'Field is required']"
                                         color="dark"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="Billing Name"
-                                        v-model="company.billing_name"
-                                        name="billing_name"
-                                        type="text"
-                                        color="dark"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="City"
-                                        v-model="company.city"
-                                        name="city"
-                                        type="text"
-                                        color="dark"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="Billing Email Address"
-                                        v-model="company.billing_email"
-                                        name="billing_tel"
-                                        type="text"
-                                        color="dark"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="Postcode"
-                                        v-model="company.postcode"
-                                        name="postcode"
-                                        type="text"
-                                        color="dark"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="Billing Phone Number"
-                                        v-model="company.billing_tel"
-                                        name="billing_tel"
-                                        type="text"
-                                        color="dark"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="Country"
-                                        v-model="company.country"
-                                        name="country"
-                                        type="text"
-                                        color="dark"
-                                        required>
-                                </v-text-field>
+                                        item-text="name"
+                                        item-value="id"
+                                        return object
+                                        required
+                                ></v-select>
                             </v-flex>
                         </v-layout>
 
@@ -142,41 +82,14 @@
 
                     <!-- CTA -->
                     <v-container grid-list-lg>
+
                         <v-layout row wrap>
                             <v-flex xsl2 text-xs-right pa-0>
                                 <v-btn dark
-                                       @click="onSubmit()">Update Settings
+                                       @click="onSubmit()">Create User
                                 </v-btn>
                             </v-flex>
                         </v-layout>
-                    </v-container>
-
-                    <!-- Company User Accounts -->
-                    <v-container grid-list-lg>
-
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <h4 class="text-xs-center text-uppercase">User Accounts</h4>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="name">
-
-                            <template slot="items" slot-scope="props">
-                                <tr @click="props.expanded = !props.expanded">
-                                    <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}
-                                    </td>
-                                    <td class="">{{ props.item.tel }}</td>
-                                    <td class="">{{ props.item.role }}</td>
-                                    <td class="">{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
-                                    <td class="right">
-                                        <v-btn dark @click="editUser(props.item.id)">
-                                            <v-icon color="white" size="20px">edit</v-icon>
-                                        </v-btn>
-                                    </td>
-                                </tr>
-                            </template>
-                        </v-data-table>
 
                     </v-container>
 
@@ -191,19 +104,60 @@
     export default {
         data() {
             return {
-                html:''
+                error: false,
+                errors: null,
+                valid: false,
+                user: {
+                    full_name: null,
+                    job_title: null,
+                    email: null,
+                    tel: null,
+                    role: null,
+                },
+                emailRules: [
+                    v => !!v || 'Email is required',
+                    v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                ],
+                emailError: '',
+                clientRoles: [
+                    {id: 'client', name: 'Client'},
+                    {id: 'client_admin', name: 'Client Admin'},
+                ],
             }
         },
 
-        created(){
-            let slug = this.$route.params.slug;
-            axios.get('/client/profile/'+slug+'/users/create').then((response) => {
-                this.html = response.data;
-            });
+        created() {
+
         },
 
         methods: {
+            onSubmit() {
+                this.errors = null;
+                this.error = false;
 
+                if (this.$refs.form.validate()) {
+                    let slug = this.$route.params.slug;
+                    let createUserForm = new FormData();
+
+                    createUserForm.append('full_name', this.user.full_name);
+                    createUserForm.append('job_title', this.user.job_title);
+                    createUserForm.append('email', this.user.email);
+                    createUserForm.append('tel', this.user.tel);
+                    createUserForm.append('role', this.user.role);
+
+                    axios.post('/client/profile/' + slug + '/users', createUserForm)
+                        .then(response => {
+
+                            if (response.data.success) {
+                                this.$router.push({name: 'client_profile'});
+                            }
+
+                        }).catch(error => {
+                        this.errors = error.response.data.errors;
+                        this.error = true;
+                    });
+                }
+            }
         },
     }
 </script>

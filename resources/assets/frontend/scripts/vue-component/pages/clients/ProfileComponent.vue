@@ -3,10 +3,7 @@
         <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
                 <v-flex xs12>
-                    <h2 class="text-center text-uppercase">
-                        <v-icon color="white" left size="20px">settings</v-icon>
-                        Account Settings
-                    </h2>
+                    <h2 class="text-center text-uppercase">Account Settings</h2>
                 </v-flex>
 
                 <v-form ref="form" v-model="valid" id="company-update-form">
@@ -178,7 +175,7 @@
                                     <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}
                                     </td>
                                     <td class="">{{ props.item.tel }}</td>
-                                    <td class="">{{ props.item.role }}</td>
+                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', ' ') }}</td>
                                     <td class="">{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
                                     <td class="right">
                                         <v-btn dark @click="editUser(props.item.id)">
@@ -189,6 +186,18 @@
                             </template>
                         </v-data-table>
 
+                    </v-container>
+
+                    <!-- Users CTA -->
+                    <br>
+                    <v-container grid-list-lg>
+                        <v-layout row wrap>
+                            <v-flex xsl2 text-xs-right pa-0>
+                                <router-link :to="{name: 'client_create_user', params:{slug : companyData.slug}}">
+                                    <v-btn dark>New User</v-btn>
+                                </router-link>
+                            </v-flex>
+                        </v-layout>
                     </v-container>
 
                 </v-form>
@@ -211,6 +220,7 @@
     export default {
         data() {
             return {
+                valid: false,
                 companyData: null,
                 company: null,
                 user: null,
@@ -284,7 +294,7 @@
                     axios.post('/client/profile/' + this.companyData.id, companyUpdateForm)
                         .then(response => {
 
-                            if(response.data.success) {
+                            if (response.data.success) {
                                 this.success = true;
                                 this.successMessage = response.data.message;
                             }

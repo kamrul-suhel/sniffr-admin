@@ -9,6 +9,7 @@ use App\Jobs\Auth\QueueEmailClient;
 use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\ImageHandler;
 use App\Libraries\VideoHelper;
+use App\Traits\FrontendResponse;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Hash;
 
 class ClientUserController extends Controller
 {
+
+    use FrontendResponse;
 
     /**
      * ClientUserController constructor.
@@ -63,15 +66,15 @@ class ClientUserController extends Controller
         }
 
         $user->password = Hash::make($password);
-
         $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
-
         $user->role = $role;
         $user->active = 1;
 
+        $currentClientId = auth()->user()->client->id;
+
         $client_id = in_array(Auth::user()->role, ['client_owner', 'client_admin'])
             ? Auth::user()->client_id
-            : $request->input('client_id', null);
+            : $request->input('client_id', $currentClientId);
 
         $user->client_id = $client_id;
         $user->full_name = $request->input('full_name');
@@ -99,7 +102,10 @@ class ClientUserController extends Controller
             );
         }
 
-        return redirect('client/profile');
+        return $this->successResponse([
+            'success' => true,
+            'message' => 'User has been created. They will receive an email to complete their registration.',
+        ]);
     }
 
     public function getToken($email, $user)
@@ -136,62 +142,64 @@ class ClientUserController extends Controller
                 return redirect('videos');
             }
 
-            return view('client.users.create_edit')
-                ->with('user', $user)
-                ->with('slug', $slug);
+            return $this->successResponse([
+                'user' => $user,
+                'slug' => $slug,
+            ]);
         }
 
         return view('frontend.master');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $slug
+     * @param $userId
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug, $userId)
     {
 
-        $user = User::find($request->get('id'));
-        if(!$user) {
-            abort(404);
+        if($request->ajax()) {
+            $user = User::find($userId);
+            if (!$user) {
+                abort(404);
+            }
+
+            $user->username = $request->input('username', $user->username);
+            $user->email = $request->input('email', $user->email);
+            $user->full_name = $request->input('full_name', $user->first_name);
+            $user->tel = $request->input('tel', $user->tel);
+            $user->job_title = $request->input('job_title', $user->job_title);
+
+            if ($request->input('password', null)) {
+                $user->password = Hash::make($request->input('password'));
+            }
+
+            $user->role = $request->input('role', $user->role);
+            $user->active = $request->input('active', $user->active);
+            if ($user->client_id) {
+                $user->client_id = $request->input('client_id', $user->client_id);
+            }
+
+            if ($request->hasFile('avatar')) {
+                $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
+            }
+
+            $user->update();
+            $user->save();
+
+            return $this->successResponse([
+                'success' => true,
+                'message' => 'User has been updated',
+            ]);
         }
-
-        $user->username = $request->input('username', $user->username);
-        $user->email = $request->input('email', $user->email);
-        $user->full_name = $request->input('full_name', $user->first_name);
-        $user->tel = $request->input('tel', $user->tel);
-        $user->job_title = $request->input('job_title', $user->job_title);
-
-        if ($request->input('password', null)) {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $user->role = $request->input('role', $user->role);
-        $user->active = $request->input('active', $user->active);
-        if($user->client_id) {
-            $user->client_id = $request->input('client_id', $user->client_id);
-        }
-
-        if ($request->hasFile('avatar')) {
-            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
-        }
-        $user->update();
-        $user->save();
-
-        return redirect()->back()->with([
-            'note' => 'Successfully Updated User Settings',
-            'note_type' => 'success'
-        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy($slug, $id)
     {
