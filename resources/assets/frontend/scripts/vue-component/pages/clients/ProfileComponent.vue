@@ -151,7 +151,6 @@
                                         v-model="companyOwner"
                                         label="Change Owner - Note: Once the account owner is changed, you will lose access to these settings."
                                         name="client_owner_id"
-                                        :rules="[v => !!v || 'Field is required']"
                                         color="dark"
                                         item-text="name"
                                         item-value="id"
