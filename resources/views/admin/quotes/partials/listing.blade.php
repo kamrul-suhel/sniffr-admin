@@ -13,7 +13,7 @@
 
         <b title="{{ $asset->collection->user->email }}">
             {{ $asset->collection->user->full_name
-            ?? $asset->collection->user->username }} @ {{ (isset($asset->collection->user->client->name) ? $asset->collection->user->client->name : 'unknown') }}
+            ?? $asset->collection->user->username }} @ {{ $asset->collection->user->client ?  $asset->collection->user->client->name : 'No Company' }}
             @if($asset->collection->user->tel) -
                 <b>{{ $asset->collection->user->tel }}</b>
             @endif
@@ -41,7 +41,7 @@
                                 <button type="submit" class="btn btn-danger pull-right">Retract</button>
                             </span>
                         </div>
-                    @elseif($asset->collection->client->active)
+                    @elseif($asset->collection->client && $asset->collection->client->active)
                         <div class="form-group input-group">
                             <span class="input-group-addon">Quote <b class="pull-right">£</b></span>
                             <input placeholder="10000" value="{{ $asset->final_price }}" name="final_price" type="text" class="form-control">
@@ -50,7 +50,11 @@
                             </span>
                         </div>
                     @else
-                        <a class="btn btn-danger pull-right" href="{{ url('/admin/clients/edit', $asset->collection->client->id) }}">Moderate</a>
+                        @if($asset->collection->client)
+                            <a class="btn btn-danger pull-right" href="{{ url('/admin/clients/edit', $asset->collection->client->id) }}">Moderate Company</a>
+                        @else
+                            <a class="btn btn-danger pull-right" href="{{ url('/admin/users/edit', $asset->collection->user->id) }}">Moderate User</a>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -63,9 +67,9 @@
             </div>
             {{-- License Terms --}}
             <div class="col-lg-6">
-                @if($asset->collection->client->name)<p>Name: <b>{{ $asset->collection->user->client->name }} </b></p>@endif
-                @if($asset->collection->client->region)<p>Region: <b>{{ config('pricing.region.'.$asset->collection->client->region.'.name') }} </b></p>@endif
-                @if($asset->collection->client->tier)<p>Tier: <b>{{ config('pricing.tier.'.$asset->collection->client->tier.'.name') }} </b></p>@endif
+                @if($asset->collection->client)<p>Name: <b>{{ $asset->collection->user->client->name }} </b></p>@endif
+                @if($asset->collection->client)<p>Region: <b>{{ config('pricing.region.'.$asset->collection->client->region.'.name') }} </b></p>@endif
+                @if($asset->collection->client)<p>Tier: <b>{{ config('pricing.tier.'.$asset->collection->client->tier.'.name') }} </b></p>@endif
                 @if($asset->type)<p>License: <b>{{ config('pricing.type.'.$asset->type.'.name') }} </b></p>@endif
                 @if($asset->platform)<p>Platform: <b>{{ ucwords(str_replace(',',', ', $asset->platform)) }} </b></p>@endif
                 @if($asset->length)<p>License Length: <b>{{ config('pricing.length.'.$asset->length.'.name') }} </b></p>@endif
