@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
-use App\Http\Requests\Comment\CreateComment;
-use App\Http\Requests\Comment\DeleteComment;
+// use App\Http\Requests\Comment\CreateComment;
+// use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -14,7 +14,7 @@ class CommentController extends Controller
      * @param CreateComment $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateComment $request)
+    public function store(Request $request)
     {
         $comment = new Comment();
         $comment->comment = $request->get('comment') ?? null;
