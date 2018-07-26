@@ -5,11 +5,16 @@
         </div>
     </div>
     <div class="panel-body" style="display: block;">
-        @if(!count($asset->comments))
+        @php
+            $asset_type = (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story'));
+            $comments = ($asset_type == 'video' ? \App\Comment::where('video_id', $asset->id)->get() : \App\Comment::where('story_id', $asset->id)->get() );
+        @endphp
+
+        @if(!count($comments))
             <p>No Comments</p>
         @endif
 
-        @foreach($asset->comments as $comment)
+        @foreach($comments as $comment)
             <p>
                 {{ $comment->comment }}
             </p>
@@ -26,7 +31,7 @@
                     <button class="fa fa-trash-o"></button>
                     {{ Form::hidden('alpha_id', $asset->alpha_id) }}
                     {{ Form::hidden('asset_id', $asset->id) }}
-                    {{ Form::hidden('asset_type', (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story')) }}
+                    {{ Form::hidden('asset_type', $asset_type) }}
                     {!! Form::close() !!}
                 @endif
             </div>
