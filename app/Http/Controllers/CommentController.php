@@ -23,10 +23,8 @@ class CommentController extends Controller
 
         if($request->get('asset_type')=='video') {
             $comment->video_id = $request->get('asset_id');
-            $comment->story_id = 0;
         } else {
             $comment->story_id = $request->get('asset_id');
-            $comment->video_id = 0;
         }
 
         $comment->save();
