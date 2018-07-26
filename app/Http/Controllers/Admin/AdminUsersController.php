@@ -7,17 +7,14 @@ use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
 use App\Libraries\VideoHelper;
-use Auth;
 use Password;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Redirect;
 use App\Client;
 use App\User;
 use App\Libraries\ImageHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminUsersController extends Controller
@@ -87,70 +84,29 @@ class AdminUsersController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $user = new User();
-        //$user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom();
-        $user->email = $request->input('email');
+        $data = request()->all();
 
-        if (!$request->input('password')) {
-            $user->password = Hash::make(VideoHelper::quickRandom());
-        } else {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $role = (auth()->user()->role == 'client') ? 'client' : $request->input('role');
-
-        $user->role = $role;
-        $user->active = $request->input('active', 0);
-
-        $client_id = (auth()->user()->role == 'client') ? auth()->user()->client_id : $request->input('client_id', null);
-
-        $user->client_id = $client_id;
-        $user->full_name = $request->input('full_name');
-        $user->tel = $request->input('tel');
-        $user->job_title = $request->input('job_title');
-        $user->avatar = 'default.jpg';
-
-        if ($request->hasFile('avatar')) {
-            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
-        }
-
-        $user->save();
+        $user = $this->user->createUser($data);
 
         if (in_array($user->role, ['client_owner', 'client_admin', 'client'])) {
-            $email = $user->getEmailForPasswordReset();
-            $this->deleteExisting($user);
-
-            $token = $this->getToken($email, $user);
+            $token = $this->getToken($user->email, $user);
 
             QueueEmailClient::dispatch(
-                ($client_id ? $client_id : 0),
-                $request->get('email'),
-                $request->get('full_name') ?? 'New User',
+                $user->client_id,
+                $user->email,
+                $user->full_name,
                 $token
             );
         } else {
-            if (!$request->input('password', null)) {
-                Password::sendResetLink(['email' => $request->input('email')]);
+            if ($data['password']) {
+                Password::sendResetLink(['email' => $user->email]);
             }
         }
 
-        $redirect_path = (auth()->user()->role == 'client') ? 'client/users' : 'admin/users';
-
-        return redirect()->to($redirect_path)->with([
+        return redirect()->to('admin/users')->with([
             'note' => 'Successfully Created New User',
             'note_type' => 'success'
         ]);
-    }
-
-    /**
-     * @param User $user
-     * @return int
-     */
-    protected function deleteExisting(User $user)
-    {
-        return \DB::table('password_resets')
-            ->where('email', $user->getEmailForPasswordReset())
-            ->delete();
     }
 
     /**
@@ -183,33 +139,16 @@ class AdminUsersController extends Controller
 
     /**
      * @param UpdateUserRequest $request
+     * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, $id)
     {
-        $user = $this->user->find($request->get('id'));
-        if (!$user) {
-            abort(404);
-        }
+        $data = request()->all();
 
-        //$user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom() : $user->username);
-        $user->email = $request->input('email', $user->email);
-        $user->full_name = $request->input('full_name', $user->full_name);
-        $user->tel = $request->input('tel', $user->tel);
-        $user->job_title = $request->input('job_title', $user->job_title);
+        $user = $this->user->find($id);
 
-        if ($request->input('password', null)) {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $user->role = $request->input('role', $user->role);
-        $user->active = $request->has('active') ? $request->get('active') : 0;
-        $user->client_id = $request->input('client_id', $user->client_id);
-        
-        if ($request->hasFile('avatar')) {
-            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
-        }
-        $user->update();
+        $user->updateUser($data);
 
         return redirect()->route('users.edit', ['id' => $user->id])->with([
             'note' => 'Successfully Updated User Settings',

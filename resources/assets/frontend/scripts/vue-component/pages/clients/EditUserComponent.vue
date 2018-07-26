@@ -6,95 +6,96 @@
                     <h2 class="text-center text-uppercase">Edit {{ user.full_name }} </h2>
                 </v-flex>
 
-                <v-form ref="form" v-model="valid" id="user-create-form">
+                <v-flex xs12>
+                    <v-form ref="form" v-model="valid" id="user-create-form">
 
-                    <!--User Details -->
-                    <v-container grid-list-lg>
+                        <!--User Details -->
+                        <v-container grid-list-lg>
 
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <v-text-field
-                                        label="Full Name:"
-                                        v-model="user.full_name"
-                                        name="full_name"
-                                        color="dark"
-                                        :rules="[v => !!v || 'Field is required']"
-                                        required
-                                ></v-text-field>
-                            </v-flex>
-                        </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Full Name:"
+                                            v-model="user.full_name"
+                                            name="full_name"
+                                            color="dark"
+                                            :rules="[v => !!v || 'Field is required']"
+                                            required
+                                    ></v-text-field>
+                                </v-flex>
+                            </v-layout>
 
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <v-text-field
-                                        label="Job Title"
-                                        v-model="user.job_title"
-                                        name="job_title"
-                                        type="text"
-                                        color="dark"
-                                        :rules="[v => !!v || 'Field is required']"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Job Title"
+                                            v-model="user.job_title"
+                                            name="job_title"
+                                            type="text"
+                                            color="dark"
+                                            :rules="[v => !!v || 'Field is required']"
+                                            required>
+                                    </v-text-field>
+                                </v-flex>
 
-                            <v-flex xs12>
-                                <v-text-field
-                                        label="Email Address"
-                                        v-model="user.email"
-                                        name="email"
-                                        type="text"
-                                        color="dark"
-                                        :rules="[v => !!v || 'Field is required']"
-                                        required>
-                                </v-text-field>
-                                <small class="red--text" v-if="error && errors.email">{{ errors.email[0] }}</small>
-                            </v-flex>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Email Address"
+                                            v-model="user.email"
+                                            name="email"
+                                            type="text"
+                                            color="dark"
+                                            :rules="[v => !!v || 'Field is required']"
+                                            required>
+                                    </v-text-field>
+                                    <small class="red--text" v-if="error && errors.email">{{ errors.email[0] }}</small>
+                                </v-flex>
 
-                            <v-flex xs12>
-                                <v-text-field
-                                        label="Phone Number"
-                                        v-model="user.tel"
-                                        name="tel"
-                                        type="text"
-                                        color="dark"
-                                        :rules="[v => !!v || 'Field is required']"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            label="Phone Number"
+                                            v-model="user.tel"
+                                            name="tel"
+                                            type="text"
+                                            color="dark"
+                                            :rules="[v => !!v || 'Field is required']"
+                                            required>
+                                    </v-text-field>
+                                </v-flex>
 
-                            <v-flex xs12>
-                                <v-select
-                                        :items="clientRoles"
-                                        v-model="user.role"
-                                        label="Client role"
-                                        name="role"
-                                        :rules="[v => !!v || 'Field is required']"
-                                        color="dark"
-                                        item-text="name"
-                                        item-value="id"
-                                        return object
-                                        required
-                                ></v-select>
-                            </v-flex>
-                        </v-layout>
+                                <v-flex xs12>
+                                    <v-select
+                                            :items="clientRoles"
+                                            v-model="user.role"
+                                            label="Client role"
+                                            name="role"
+                                            :rules="[v => !!v || 'Field is required']"
+                                            color="dark"
+                                            item-text="name"
+                                            item-value="id"
+                                            return object
+                                            required
+                                    ></v-select>
+                                </v-flex>
+                            </v-layout>
 
-                    </v-container>
+                        </v-container>
 
-                    <!-- CTA -->
-                    <v-container grid-list-lg>
+                        <!-- CTA -->
+                        <v-container grid-list-lg>
 
-                        <v-layout row wrap>
-                            <v-flex xsl2 text-xs-right pa-0>
-                                <v-btn dark
-                                       @click="onSubmit()">Update User
-                                </v-btn>
-                            </v-flex>
-                        </v-layout>
+                            <v-layout row wrap>
+                                <v-flex xsl2 text-xs-right pa-0>
+                                    <v-btn dark
+                                           @click="onSubmit()">Update User
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
 
-                    </v-container>
+                        </v-container>
 
-                </v-form>
-
+                    </v-form>
+                </v-flex>
             </v-layout>
         </v-container>
     </div>

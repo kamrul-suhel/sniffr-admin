@@ -174,7 +174,7 @@
                     </v-container>
 
                     <!-- Company User Accounts -->
-                    <v-container grid-list-lg>
+                    <v-container grid-list-lg v-if="user.id === companyData.account_owner_id">
 
                         <v-layout row wrap>
                             <v-flex xs12>
@@ -202,7 +202,7 @@
 
                     <!-- Users CTA -->
                     <br>
-                    <v-container grid-list-lg>
+                    <v-container grid-list-lg v-if="user.id === companyData.account_owner_id">
                         <v-layout row wrap>
                             <v-flex xsl2 text-xs-right pa-0>
                                 <router-link :to="{name: 'client_create_user', params:{slug : companyData.slug}}">
@@ -262,9 +262,11 @@
             this.getCompanyData();
         },
 
+
         methods: {
             getCompanyData() {
                 axios.get('/client/profile').then((response) => {
+                    this.user = response.data.user;
                     this.companyData = response.data.company;
                     this.companyUsers = response.data.company_users;
                     this.companyOwner = this.companyData.account_owner_id;
@@ -288,6 +290,11 @@
                         billing_tel: this.companyData.billing_tel,
                         account_owner_id: this.companyData.account_owner_id,
                     };
+
+                    if(this.user.id !== this.companyOwner || user.role !== 'client_admin') {
+                        console.log('here');
+                        this.editUser(this.user.id);
+                    }
                 });
             },
 
