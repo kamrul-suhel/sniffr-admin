@@ -26,6 +26,12 @@ class AdminUsersController extends Controller
 
     protected $user, $client, $clientMailer;
 
+    /**
+     * AdminUsersController constructor.
+     * @param User $user
+     * @param Client $client
+     * @param ClientMailer $clientMailer
+     */
     public function __construct(User $user, Client $client, ClientMailer $clientMailer)
     {
         $this->middleware('admin');

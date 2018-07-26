@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Hash;
 
 class ClientUserController extends Controller
 {
-
     use FrontendResponse;
 
     protected $user;
@@ -112,6 +111,11 @@ class ClientUserController extends Controller
         ]);
     }
 
+    /**
+     * @param $email
+     * @param $user
+     * @return mixed
+     */
     public function getToken($email, $user)
     {
         $token = app('auth.password.broker')->createToken($user);
@@ -121,11 +125,20 @@ class ClientUserController extends Controller
         return $token;
     }
 
+    /**
+     * @param $email
+     * @param $token
+     * @return array
+     */
     protected function getPayload($email, $token)
     {
         return ['email' => $email, 'token' => $token, 'created_at' => new Carbon];
     }
 
+    /**
+     * @param User $user
+     * @return int
+     */
     protected function deleteExisting(User $user)
     {
         return \DB::table('password_resets')
