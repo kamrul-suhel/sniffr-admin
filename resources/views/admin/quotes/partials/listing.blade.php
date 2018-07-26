@@ -53,7 +53,7 @@
                         @if($asset->collection->client)
                             <a class="btn btn-danger pull-right" href="{{ url('/admin/clients/edit', $asset->collection->client->id) }}">Moderate Company</a>
                         @else
-                            <a class="btn btn-danger pull-right" href="{{ url('/admin/users/edit', $asset->collection->user->id) }}">Moderate User</a>
+                            <a class="btn btn-danger pull-right" href="{{ url('/admin/users/'.$asset->collection->user->id.'/edit') }}">Moderate User</a>
                         @endif
                     @endif
                 </div>

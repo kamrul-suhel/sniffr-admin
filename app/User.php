@@ -27,7 +27,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
     public $webhook;
 
@@ -78,6 +78,14 @@ class User extends Authenticatable
     public function collections()
     {
         return $this->hasMany(Collection::class);
+    }
+
+    public function deleteUsersCollections()
+    {
+        $collections = Collection::where('user_id', $this->id);
+        $collectionVideos = CollectionVideo::whereIn('collection_id', $collections->pluck('id'))->delete();
+        $collectionStories = CollectionStory::whereIn('collection_id', $collections->pluck('id'))->delete();
+        $collections->delete();
     }
 
     public function userOffers()

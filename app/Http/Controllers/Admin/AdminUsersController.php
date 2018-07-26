@@ -233,10 +233,8 @@ class AdminUsersController extends Controller
 
         $user = User::find($id);
 
-        $collections = Collection::where('user_id', $user->id);
-        $collectionVideos = CollectionVideo::whereIn('collection_id', $collections->pluck('id'))->delete();
-        $collectionStories = CollectionStory::whereIn('collection_id', $collections->pluck('id'))->delete();
-        $collections->delete();
+        $user->deleteUsersCollections();
+
         $user->delete();
 
         return Redirect::to('admin/users')->with([
