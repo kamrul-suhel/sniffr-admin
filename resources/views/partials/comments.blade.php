@@ -37,7 +37,8 @@
         <form method="POST" action="{{ route('comment.store') }}" id="comment-form" name="comment-form"
               accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="video_id" value="{{ $asset->id }}"/>
+            <input type="hidden" name="asset_id" value="{{ $asset->id }}"/>
+            <input type="hidden" name="asset_type" value="{{ (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story') }}"/>
             <input type="hidden" name="alpha_id" value="{{ $asset->alpha_id }}"/>
             <div class="form-group">
                 <label for="comment">Add a comment</label>

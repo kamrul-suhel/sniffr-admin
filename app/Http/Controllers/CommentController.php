@@ -17,9 +17,15 @@ class CommentController extends Controller
     {
         $comment = new Comment();
         $comment->comment = $request->get('comment') ?? null;
-        $comment->video_id = $request->get('video_id') ?? null;
         $comment->contact_id = $request->get('contact_id') ?? null;
         $comment->user_id = Auth::id();
+
+        if($request->get('asset_type')=='video') {
+            $comment->video_id = $request->get('asset_id') ?? null;
+        } else {
+            $comment->story_id = $request->get('asset_id') ?? null;
+        }
+
         $comment->save();
 
         //If comment is from contacts/{id}/edit
@@ -27,7 +33,11 @@ class CommentController extends Controller
             return redirect('admin/contacts/'.$request->get('contact_id').'/edit');
         }
 
-        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')]);
+        if($request->get('asset_type')=='video') {
+            return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')]);
+        } else {
+            return redirect()->route('admin.stories.edit', ['id' => $request->get('alpha_id')]);
+        }
     }
 
     /**
