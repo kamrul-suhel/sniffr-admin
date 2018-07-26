@@ -21,9 +21,11 @@ class CommentController extends Controller
         $comment->user_id = Auth::id();
 
         if($request->get('asset_type')=='video') {
-            $comment->video_id = $request->get('asset_id') ?? null;
+            $comment->video_id = $request->get('asset_id');
+            $comment->story_id = 0;
         } else {
-            $comment->story_id = $request->get('asset_id') ?? null;
+            $comment->story_id = $request->get('asset_id');
+            $comment->video_id = 0;
         }
 
         $comment->save();
@@ -48,6 +50,8 @@ class CommentController extends Controller
      */
     public function destroy(DeleteComment $request, $id)
     {
+        dd($request);
+
         $note = 'Not Authorized to delete this comment!';
         $note_type = 'error';
 
@@ -58,6 +62,12 @@ class CommentController extends Controller
 
             $note = 'Comment Deleted';
             $note_type = 'success';
+        }
+
+        if($request->get('asset_type')=='video') {
+            $route = '';
+        } else {
+            $route = '';
         }
 
         return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')])->with([
