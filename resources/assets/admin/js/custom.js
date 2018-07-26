@@ -445,7 +445,7 @@ var public_vars = public_vars || {};
 								$('#video-'+videoId).fadeOut();
 								$('#video-'+videoId).remove();
 							}
-							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
+							swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
 							$('.swal-button-container').css('display','inline-block');
 						} else {
 							$('.swal-button-container').css('display','inline-block');
