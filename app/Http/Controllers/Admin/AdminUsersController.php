@@ -24,21 +24,32 @@ class AdminUsersController extends Controller
 {
     use ResetsPasswords;
 
+    protected $user, $client, $clientMailer;
+
+    public function __construct(User $user, Client $client, ClientMailer $clientMailer)
+    {
+        $this->middleware('admin');
+
+        $this->user = $user;
+        $this->clientMailer = $clientMailer;
+        $this->client = $client;
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function index()
-	{
-        $search_value = Input::get('s');
+    public function index()
+    {
+        $search_value = request()->get('s');
 
-        if ((!empty($search_value))&&(Auth::user()->role != 'client')) {
-            $users = User::where('username', 'LIKE', '%' . $search_value . '%')
+        if ((!empty($search_value)) && (auth()->user()->role != 'client')) {
+            $users = $this->user->where('username', 'LIKE', '%' . $search_value . '%')
                 ->orWhere('email', 'LIKE', '%' . $search_value . '%')
                 ->orderBy('created_at', 'desc')->get();
-        } elseif((Auth::user()->role == 'client')&&(Auth::user()->client()->account_owner_id == Auth::user()->id)) {
-            $users = User::where('client_id', Auth::user()->client_id)->get();
+        } elseif ((auth()->user()->role == 'client') && (auth()->user()->client()->account_owner_id == auth()->user()->id)) {
+            $users = $this->user->where('client_id', auth()->user()->client_id)->get();
         } else {
-            $users = User::all();
+            $users = $this->user->all();
         }
 
         return view('admin.users.index', [
@@ -51,11 +62,11 @@ class AdminUsersController extends Controller
      */
     public function create()
     {
-        $clients = Client::get();
+        $clients = $this->client->get();
 
         $data = [
             'post_route' => url('admin/user/store'),
-            'admin_user' => Auth::user(),
+            'admin_user' => auth()->user(),
             'button_text' => 'Create User',
             'clients' => $clients,
             'user' => null
@@ -80,12 +91,12 @@ class AdminUsersController extends Controller
             $user->password = Hash::make($request->input('password'));
         }
 
-        $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
+        $role = (auth()->user()->role == 'client') ? 'client' : $request->input('role');
 
         $user->role = $role;
         $user->active = $request->input('active', 0);
 
-        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id', null);
+        $client_id = (auth()->user()->role == 'client') ? auth()->user()->client_id : $request->input('client_id', null);
 
         $user->client_id = $client_id;
         $user->full_name = $request->input('full_name');
@@ -117,9 +128,9 @@ class AdminUsersController extends Controller
             }
         }
 
-        $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
+        $redirect_path = (auth()->user()->role == 'client') ? 'client/users' : 'admin/users';
 
-        return Redirect::to($redirect_path)->with([
+        return redirect()->to($redirect_path)->with([
             'note' => 'Successfully Created New User',
             'note_type' => 'success'
         ]);
@@ -152,10 +163,10 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = $this->user->find($id);
 
         $data = [
-            'clients' => Client::get(),
+            'clients' => $this->client->get(),
             'post_route' => url('admin/user/update'),
             'user' => $user,
             'button_text' => 'Update User',
@@ -170,9 +181,8 @@ class AdminUsersController extends Controller
      */
     public function update(UpdateUserRequest $request)
     {
-
-        $user = User::find($request->get('id'));
-        if(!$user) {
+        $user = $this->user->find($request->get('id'));
+        if (!$user) {
             abort(404);
         }
 
@@ -188,10 +198,8 @@ class AdminUsersController extends Controller
 
         $user->role = $request->input('role', $user->role);
         $user->active = $request->has('active') ? $request->get('active') : 0;
-        if($user->client_id) {
-             $user->client_id = $request->input('client_id', $user->client_id);
-        }
-
+        $user->client_id = $request->input('client_id', $user->client_id);
+        
         if ($request->hasFile('avatar')) {
             $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
         }
@@ -210,8 +218,8 @@ class AdminUsersController extends Controller
      */
     public function storiesSent(Request $request, $user_id)
     {
-        $user = User::find($user_id);
-        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) use ($user_id) {
+        $user = $this->user->find($user_id);
+        $client_mailers = $this->clientMailer->with('stories')->whereHas('users', function ($query) use ($user_id) {
             $query->where('users.id', '=', $user_id);
         })->orderBy('sent_at', 'DESC')->get();
 
@@ -227,8 +235,8 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        return Redirect::to('admin/users')->with([
+        $this->user->destroy($id);
+        return redirect()->to('admin/users')->with([
             'note' => 'Successfully Deleted User',
             'note_type' => 'success'
         ]);

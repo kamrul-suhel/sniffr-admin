@@ -22,12 +22,17 @@ class ClientUserController extends Controller
 
     use FrontendResponse;
 
+    protected $user;
+
     /**
      * ClientUserController constructor.
+     * @param User $user
      */
-    public function __construct()
+    public function __construct(User $user)
     {
         $this->middleware('client');
+
+        $this->user = $user;
     }
 
     /**
@@ -37,8 +42,7 @@ class ClientUserController extends Controller
      */
     public function create(Request $request)
     {
-
-        if($request->ajax()){
+        if ($request->ajax()) {
             return view('client.users.create_edit')
                 ->with('user', null)
                 ->with('slug', $request->slug);
@@ -55,7 +59,7 @@ class ClientUserController extends Controller
     public function store(CreateUserRequest $request)
     {
 
-        $user = new User();
+        $user = new $this->user;
         $user->username = $request->input('username');
         $user->email = $request->input('email');
 
@@ -66,14 +70,14 @@ class ClientUserController extends Controller
         }
 
         $user->password = Hash::make($password);
-        $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
+        $role = (auth()->user()->role == 'client') ? 'client' : $request->input('role');
         $user->role = $role;
         $user->active = 1;
 
         $currentClientId = auth()->user()->client->id;
 
-        $client_id = in_array(Auth::user()->role, ['client_owner', 'client_admin'])
-            ? Auth::user()->client_id
+        $client_id = in_array(auth()->user()->role, ['client_owner', 'client_admin'])
+            ? auth()->user()->client_id
             : $request->input('client_id', $currentClientId);
 
         $user->client_id = $client_id;
@@ -131,14 +135,18 @@ class ClientUserController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * @param $slug
+     * @param $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|
+     * \Illuminate\Http\RedirectResponse|
+     * \Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function edit(Request $request, $slug, $user_id)
     {
-        if($request->ajax()){
-            $user = User::find($user_id);
+        if ($request->ajax()) {
+            $user = $this->user->find($user_id);
 
-            if(!$user && !$user->client->slug == $slug) {
+            if (!$user && !$user->client->slug == $slug) {
                 return redirect('videos');
             }
 
@@ -155,12 +163,13 @@ class ClientUserController extends Controller
      * @param Request $request
      * @param $slug
      * @param $userId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $slug, $userId)
     {
 
-        if($request->ajax()) {
-            $user = User::find($userId);
+        if ($request->ajax()) {
+            $user = $this->user->find($userId);
             if (!$user) {
                 abort(404);
             }
@@ -203,7 +212,7 @@ class ClientUserController extends Controller
      */
     public function destroy($slug, $id)
     {
-        $user = User::find($id);
+        $user = $this->user->find($id);
 
         $user->delete();
 
