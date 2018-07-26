@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use Illuminate\Http\Request;
 use App\Http\Requests\Comment\CreateComment;
 use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
@@ -36,10 +37,12 @@ class CommentController extends Controller
         }
 
         if($request->get('asset_type')=='video') {
-            return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')]);
+            $route = 'admin_video_edit';
         } else {
-            return redirect()->route('admin.stories.edit', ['id' => $request->get('alpha_id')]);
+            $route = 'admin.stories.edit';
         }
+
+        return redirect()->route($route, ['id' => $request->get('alpha_id')]);
     }
 
     /**
@@ -48,29 +51,29 @@ class CommentController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy(DeleteComment $request, $id)
+    public function destroy(Request $request, $id)
     {
-        dd($request);
-
         $note = 'Not Authorized to delete this comment!';
         $note_type = 'error';
 
         $comment = Comment::find($id);
 
-        if(($comment) && ($request->authorize())) {
-            $comment->delete();
+        if($comment) {
+            if (Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id)) {
+                $comment->delete();
 
-            $note = 'Comment Deleted';
-            $note_type = 'success';
+                $note = 'Comment Deleted';
+                $note_type = 'success';
+            }
         }
 
         if($request->get('asset_type')=='video') {
-            $route = '';
+            $route = 'admin_video_edit';
         } else {
-            $route = '';
+            $route = 'admin.stories.edit';
         }
 
-        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')])->with([
+        return redirect()->route($route, ['id' => $request->get('alpha_id')])->with([
             'note' => $note,
             'note_type' => $note_type
         ]);

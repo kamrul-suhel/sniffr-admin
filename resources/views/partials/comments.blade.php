@@ -25,7 +25,8 @@
                     ]) !!}
                     <button class="fa fa-trash-o"></button>
                     {{ Form::hidden('alpha_id', $asset->alpha_id) }}
-                    {{ Form::hidden('video_id', $asset->id) }}
+                    {{ Form::hidden('asset_id', $asset->id) }}
+                    {{ Form::hidden('asset_type', (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story')) }}
                     {!! Form::close() !!}
                 @endif
             </div>
