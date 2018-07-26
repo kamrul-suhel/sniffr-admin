@@ -6,7 +6,7 @@
     </div>
     <div class="panel-body" style="display: block;">
         @php
-            $asset_type = (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story'));
+            $asset_type = (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story');
             $comments = ($asset_type == 'video' ? \App\Comment::where('video_id', $asset->id)->get() : \App\Comment::where('story_id', $asset->id)->get() );
         @endphp
 

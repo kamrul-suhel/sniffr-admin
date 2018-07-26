@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Comment extends Model
 {
-    //use SoftDeletes;
+    use SoftDeletes;
     protected $guarded = [];
     public static $rules = [];
     protected $table = 'comments';

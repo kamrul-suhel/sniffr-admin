@@ -26,7 +26,7 @@ class AddStoryIdComments extends Migration
 	public function down()
 	{
 		Schema::table('comments', function (Blueprint $table) {
-			$table->integer('story_id');
+			$table->dropColumn('story_id');
 		});
 	}
 }
