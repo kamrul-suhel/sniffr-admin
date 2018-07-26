@@ -291,7 +291,7 @@
                         account_owner_id: this.companyData.account_owner_id,
                     };
 
-                    if(this.user.id !== this.companyOwner || user.role !== 'client_admin') {
+                    if(this.user.id !== this.companyOwner || this.user.role !== 'client_admin') {
                         console.log('here');
                         this.editUser(this.user.id);
                     }

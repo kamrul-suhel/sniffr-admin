@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\User\CreateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
-use App\Libraries\ImageHandler;
-use App\Libraries\VideoHelper;
 use App\Traits\FrontendResponse;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 
 class ClientUserController extends Controller
 {

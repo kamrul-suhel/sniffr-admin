@@ -6,14 +6,11 @@ use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
-use App\Libraries\VideoHelper;
 use Password;
 use Carbon\Carbon;
-use Hash;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use App\Client;
 use App\User;
-use App\Libraries\ImageHandler;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
