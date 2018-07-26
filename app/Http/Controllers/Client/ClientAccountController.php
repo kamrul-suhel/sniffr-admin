@@ -32,7 +32,7 @@ class ClientAccountController extends Controller
      */
     public function __construct(Client $client, User $user)
     {
-        $this->middleware('client_admin');
+        $this->middleware('client');
         $this->client = $client;
         $this->user = $user;
     }
@@ -116,8 +116,8 @@ class ClientAccountController extends Controller
      */
     public function myAccount(EditCompanyRequest $request)
     {
-
         $company = $this->client->find(auth()->user()->client_id);
+
         $companyUsers = $this->user->where('client_id', $company->id);
 
         if ($request->ajax()) {
