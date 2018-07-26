@@ -144,6 +144,21 @@
                                         required>
                                 </v-text-field>
                             </v-flex>
+
+                            <v-flex xs12>
+                                <v-select
+                                        :items="companyOwners"
+                                        v-model="companyOwner"
+                                        label="Change Owner - Note: Once the account owner is changed, you will lose access to these settings."
+                                        name="client_owner_id"
+                                        :rules="[v => !!v || 'Field is required']"
+                                        color="dark"
+                                        item-text="name"
+                                        item-value="id"
+                                        return object
+                                ></v-select>
+                            </v-flex>
+
                         </v-layout>
 
                     </v-container>
@@ -169,13 +184,11 @@
                         </v-layout>
 
                         <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="name">
-
                             <template slot="items" slot-scope="props">
                                 <tr @click="props.expanded = !props.expanded">
-                                    <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}
-                                    </td>
+                                    <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
                                     <td class="">{{ props.item.tel }}</td>
-                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', ' ') }}</td>
+                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}</td>
                                     <td class="">{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
                                     <td class="right">
                                         <v-btn dark @click="editUser(props.item.id)">
@@ -225,6 +238,8 @@
                 company: null,
                 user: null,
                 companyUsers: null,
+                companyOwners: null,
+                companyOwner: null,
                 success: false,
                 successMessage: false,
 
@@ -253,6 +268,13 @@
                 axios.get('/client/profile').then((response) => {
                     this.companyData = response.data.company;
                     this.companyUsers = response.data.company_users;
+                    this.companyOwner = this.companyData.account_owner_id;
+                    let companyOwners = [];
+                    let users = Object.entries(response.data.account_owner_users);
+                    users.forEach(function (index, value) {
+                        companyOwners.push({id: index[0], name: index[1]});
+                    });
+                    this.companyOwners = companyOwners;
 
                     this.company = {
                         company_name: this.companyData.name,
@@ -265,6 +287,7 @@
                         billing_name: this.companyData.billing_name,
                         billing_email: this.companyData.billing_email,
                         billing_tel: this.companyData.billing_tel,
+                        account_owner_id: this.companyData.account_owner_id,
                     };
                 });
             },
@@ -290,6 +313,7 @@
                     companyUpdateForm.append('billing_name', this.company.billing_name);
                     companyUpdateForm.append('billing_email', this.company.billing_email);
                     companyUpdateForm.append('billing_tel', this.company.billing_tel);
+                    companyUpdateForm.append('client_owner_id', this.companyOwner);
 
                     axios.post('/client/profile/' + this.companyData.id, companyUpdateForm)
                         .then(response => {

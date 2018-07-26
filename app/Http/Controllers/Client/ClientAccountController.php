@@ -118,13 +118,15 @@ class ClientAccountController extends Controller
     {
 
         $company = $this->client->find(auth()->user()->client_id);
+        $companyUsers = $this->user->where('client_id', $company->id);
 
         if ($request->ajax()) {
             return $this->successResponse([
                 'company' => $company,
                 'user' => auth()->user(),
                 'update_path' => 'client.update',
-                'company_users' => $this->user->where('client_id', $company->id)->get()
+                'company_users' => $companyUsers->get(),
+                'account_owner_users' => $companyUsers->pluck('full_name', 'id'),
             ]);
         }
 
@@ -138,7 +140,6 @@ class ClientAccountController extends Controller
      */
     public function update(UpdateCompanyRequest $request, int $id)
     {
-
         $company = $this->client->findOrFail($id);
 
         $company->slug = !is_null($request->input('company_name')) ? $this->slugify($request->input('company_name')) : null;
