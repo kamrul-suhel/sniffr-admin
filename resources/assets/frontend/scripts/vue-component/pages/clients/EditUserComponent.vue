@@ -2,6 +2,13 @@
     <div class="client-user-create">
         <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
+                <v-flex xs12 pt-0>
+                    <v-btn outline @click="onGoback()" class="ml-0">
+                        <v-icon>chevron_left</v-icon>
+                        Go back
+                    </v-btn>
+                </v-flex>
+
                 <v-flex xs12>
                     <h2 class="text-center text-uppercase">Edit {{ user.full_name }} </h2>
                 </v-flex>
@@ -136,6 +143,14 @@
         },
 
         methods: {
+            onGoback() {
+                let prevRoute = this.$store.getters.getRouteUrl;
+                if(prevRoute != ''){
+                    this.$router.push({name : this.$store.getters.getRouteUrl});
+                }else{
+                    this.$router.go(-1);
+                }
+            },
             onSubmit() {
                 this.errors = null;
                 this.error = false;

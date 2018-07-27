@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Jobs\Auth\QueueEmailCompany;
+use App\Traits\Slug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -28,7 +29,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class Client extends Model
 {
-    use Notifiable;
+    use Notifiable, Slug;
 
     protected $guarded = [];
     public static $rules = [];
@@ -64,6 +65,42 @@ class Client extends Model
     public function collections()
     {
         return $this->hasMany(Collection::class);
+    }
+
+    public function updateClient($data)
+    {
+        $this->slug = isset($data['company_name']) ? $this->slugify($data['company_name']) : $this->slug;
+        $this->name = isset($data['company_name']) ? $data['company_name'] : $this->name;
+        $this->address_line1 = isset($data['address_line1']) ? $data['address_line1'] : $this->address_line1;
+        $this->address_line2 = isset($data['address_line2']) ? $data['address_line2'] : $this->address_line2;
+        $this->city = isset($data['city']) ? $data['city'] : $this->city;
+        $this->region = isset($data['region']) ? $data['region'] : $this->region;
+        $this->tier =  isset($data['tier']) ? $data['tier'] : $this->tier;
+        $this->postcode = isset($data['postcode']) ? $data['postcode'] : $this->postcode;
+        $this->country = isset($data['country']) ? $data['country'] : $this->country;
+        $this->vat_number = isset($data['vat_number']) ? $data['vat_number'] : $this->vat_number;
+        $this->billing_tel = isset($data['billing_tel']) ? $data['billing_tel'] : $this->billing_tel;
+        $this->billing_email = isset($data['billing_email']) ? $data['billing_email'] : $this->billing_email;
+        $this->billing_name = isset($data['billing_name']) ? $data['billing_name'] : $this->billing_name;
+
+        if ($this->account_owner_id != $data['account_owner_id']) {
+            $currentOwner = $this->account_owner_id;
+            $this->account_owner_id = $data['account_owner_id'];
+        }
+
+        if(request()->segment(1) === 'admin') {
+            if(isset($data['active'])) {
+                $this->active = 0;
+                if($data['active'] || $data['active'] == 'on') {
+                    $this->active = 1;
+                }
+            }
+        }
+
+        $this->update();
+
+        return $this;
+
     }
 
     /**

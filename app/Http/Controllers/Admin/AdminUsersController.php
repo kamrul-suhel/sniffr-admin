@@ -31,7 +31,9 @@ class AdminUsersController extends Controller
         $this->middleware('admin');
 
         $this->user = $user;
+
         $this->clientMailer = $clientMailer;
+
         $this->client = $client;
     }
 

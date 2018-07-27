@@ -10,10 +10,6 @@ use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\VideoHelper;
 use App\Traits\FrontendResponse;
 use App\User;
-use Auth;
-use Redirect;
-use App\Story;
-use App\Download;
 use App\Traits\Slug;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -140,25 +136,11 @@ class ClientAccountController extends Controller
      */
     public function update(UpdateCompanyRequest $request, int $id)
     {
+        $data = request()->all();
+
         $company = $this->client->findOrFail($id);
 
-        $company->slug = !is_null($request->input('company_name')) ? $this->slugify($request->input('company_name')) : null;
-        $company->name = !is_null($request->input('company_name')) ? $request->input('company_name') : null;
-        $company->address_line1 = !is_null($request->input('address_line1')) ? $request->input('address_line1') : null;
-        $company->address_line2 = !is_null($request->input('address_line2')) ? $request->input('address_line2') : null;
-        $company->city = !is_null($request->input('city')) ? $request->input('city') : null;
-        $company->postcode = !is_null($request->input('postcode')) ? $request->input('postcode') : null;
-        $company->country = !is_null($request->input('country')) ? $request->input('country') : null;
-        $company->vat_number = !is_null($request->input('vat_number')) ? $request->input('vat_number') : null;
-        $company->billing_tel = !is_null($request->input('billing_tel')) ? $request->input('billing_tel') : null;
-        $company->billing_email = !is_null($request->input('billing_email')) ? $request->input('billing_email') : null;
-        $company->billing_name = !is_null($request->input('billing_name')) ? $request->input('billing_name') : null;
-
-        $redirect_path = '';
-
-        $company->usable_domains = $request->input('usable_domains');
-
-        $company->update();
+        $company = $company->updateClient($data);
 
         return $this->successResponse([
             'success' => true,

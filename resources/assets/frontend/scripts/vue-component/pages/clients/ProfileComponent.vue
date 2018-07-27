@@ -174,7 +174,7 @@
                     </v-container>
 
                     <!-- Company User Accounts -->
-                    <v-container grid-list-lg v-if="user.id === companyData.account_owner_id">
+                    <v-container grid-list-lg v-if="isAccountOwner()">
 
                         <v-layout row wrap>
                             <v-flex xs12>
@@ -202,7 +202,7 @@
 
                     <!-- Users CTA -->
                     <br>
-                    <v-container grid-list-lg v-if="user.id === companyData.account_owner_id">
+                    <v-container grid-list-lg v-if="isAccountOwner()">
                         <v-layout row wrap>
                             <v-flex xsl2 text-xs-right pa-0>
                                 <router-link :to="{name: 'client_create_user', params:{slug : companyData.slug}}">
@@ -292,7 +292,6 @@
                     };
 
                     if(this.user.id !== this.companyOwner || this.user.role !== 'client_admin') {
-                        console.log('here');
                         this.editUser(this.user.id);
                     }
                 });
@@ -319,7 +318,7 @@
                     companyUpdateForm.append('billing_name', this.company.billing_name);
                     companyUpdateForm.append('billing_email', this.company.billing_email);
                     companyUpdateForm.append('billing_tel', this.company.billing_tel);
-                    companyUpdateForm.append('client_owner_id', this.companyOwner);
+                    companyUpdateForm.append('account_owner_id', this.companyOwner);
 
                     axios.post('/client/profile/' + this.companyData.id, companyUpdateForm)
                         .then(response => {
@@ -329,11 +328,19 @@
                                 this.successMessage = response.data.message;
                             }
 
+                            if(!this.isAccountOwner()) {
+                                this.editUser(this.user.id);
+                            }
+
                         }).catch(error => {
 
                     });
 
                 }
+            },
+
+            isAccountOwner() {
+                return this.user.id === this.companyData.account_owner_id
             }
         },
     }
