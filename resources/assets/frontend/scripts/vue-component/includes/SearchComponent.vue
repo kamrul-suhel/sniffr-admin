@@ -40,7 +40,6 @@
 		methods:{
             onSearchActive(){
                 if(this.$route.name === 'stories'){
-                    console.log('story page called');
 					this.$router.push({name: 'stories', query: { search: this.value, page: 1}});
 				}else{
 					this.$router.push({name: 'videos', query: { search: this.value, page: 1}});

@@ -293,7 +293,6 @@ class AdminStoryController extends Controller
         $isJson = $request->ajax();
         $decision = $request->input('decision');
         $remove = 'no';
-        $softDelete = false;
 
         $story = Story::where('alpha_id', $alpha_id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
@@ -307,7 +306,6 @@ class AdminStoryController extends Controller
             case ($state == 'unapproved'):
                 break;
             case ($state == 'rejected'):
-                $softDelete = true;
                 break;
             case ($state == 'approved'):
                 // make initial contact (will need to add twitter/fb/reddit in future)
@@ -339,11 +337,6 @@ class AdminStoryController extends Controller
         }
 
         $story->save();
-
-        // changes story state but if "rejected" also soft deletes (requested by Liam)
-        if ($softDelete) {
-            $story->destroy($story_id);
-        }
 
         if ($isJson) {
             return response()->json([

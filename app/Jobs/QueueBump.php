@@ -45,7 +45,7 @@ class QueueBump implements ShouldQueue
     {
         $asset = Story::find($this->asset_id);
         $contact = $asset->contact;
-		$from = $asset->author ? $asset->author : User::find($asset->user_id)->full_name;
+		$from = $asset->author ? strtok($asset->author, " ") : strtok(User::find($asset->user_id)->full_name, " ");
         $success = false;
 
 		if($contact->email){ // Email

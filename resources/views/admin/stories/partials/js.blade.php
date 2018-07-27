@@ -23,6 +23,11 @@ $(document).ready(function(){
         },
     });
 
+    $("#saveStory").click(function (e) {
+        e.preventDefault();
+        $('#js-story-form').submit();
+    });
+
     $('#sourced_at').datetimepicker({
         // format: 'YYYY-MM-DD HH:MM:SS',
         defaultDate: @if(!empty($story->sourced_at)) '{{ $story->sourced_at }}' @else $.now() @endif

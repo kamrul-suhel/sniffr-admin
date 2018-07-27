@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
-use App\Http\Requests\Comment\CreateComment;
-use App\Http\Requests\Comment\DeleteComment;
+use Illuminate\Http\Request;
+// use App\Http\Requests\Comment\CreateComment;
+// use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -13,13 +14,22 @@ class CommentController extends Controller
      * @param CreateComment $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateComment $request)
+    public function store(Request $request)
     {
         $comment = new Comment();
         $comment->comment = $request->get('comment') ?? null;
-        $comment->video_id = $request->get('video_id') ?? null;
         $comment->contact_id = $request->get('contact_id') ?? null;
+        $comment->state = $request->get('state') ?? null;
         $comment->user_id = Auth::id();
+
+        if($request->get('asset_type')=='video') {
+            $comment->video_id = $request->get('asset_id');
+            $comment->story_id = 0;
+        } else {
+            $comment->story_id = $request->get('asset_id');
+            $comment->video_id = 0;
+        }
+
         $comment->save();
 
         //If comment is from contacts/{id}/edit
@@ -27,7 +37,13 @@ class CommentController extends Controller
             return redirect('admin/contacts/'.$request->get('contact_id').'/edit');
         }
 
-        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')]);
+        if($request->get('asset_type')=='video') {
+            $route = 'admin_video_edit';
+        } else {
+            $route = 'admin.stories.edit';
+        }
+
+        return redirect()->route($route, ['id' => $request->get('alpha_id')]);
     }
 
     /**
@@ -36,21 +52,29 @@ class CommentController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy(DeleteComment $request, $id)
+    public function destroy(Request $request, $id)
     {
         $note = 'Not Authorized to delete this comment!';
         $note_type = 'error';
 
         $comment = Comment::find($id);
 
-        if(($comment) && ($request->authorize())) {
-            $comment->delete();
+        if($comment) {
+            if (Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id)) {
+                $comment->delete();
 
-            $note = 'Comment Deleted';
-            $note_type = 'success';
+                $note = 'Comment Deleted';
+                $note_type = 'success';
+            }
         }
 
-        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')])->with([
+        if($request->get('asset_type')=='video') {
+            $route = 'admin_video_edit';
+        } else {
+            $route = 'admin.stories.edit';
+        }
+
+        return redirect()->route($route, ['id' => $request->get('alpha_id')])->with([
             'note' => $note,
             'note_type' => $note_type
         ]);

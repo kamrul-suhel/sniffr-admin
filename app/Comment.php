@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Contact|null $contact
  * @property-read \App\User $user
  * @property-read \App\Video|null $video
+ * @property-read \App\Story|null $story
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereContactId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereCreatedAt($value)
@@ -31,7 +32,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Comment extends Model
 {
-    //use SoftDeletes;
+    use SoftDeletes;
+    protected $guarded = [];
+    public static $rules = [];
+    protected $table = 'comments';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -47,6 +51,14 @@ class Comment extends Model
     public function video()
     {
         return $this->belongsTo(Video::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function story()
+    {
+        return $this->belongsTo(Story::class);
     }
 
     /**

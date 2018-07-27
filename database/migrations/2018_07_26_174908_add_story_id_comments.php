@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddImgurContacts extends Migration
+class AddStoryIdComments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddImgurContacts extends Migration
      */
 	public function up()
 	{
-		Schema::table('contacts', function (Blueprint $table) {
-			$table->string('imgur')->nullable()->after('reddit');
+		Schema::table('comments', function (Blueprint $table) {
+			$table->integer('story_id')->unsigned()->nullable()->after('video_id');
+			$table->string('state')->nullable()->after('user_id');
 		});
 	}
 
@@ -25,8 +26,8 @@ class AddImgurContacts extends Migration
 	 */
 	public function down()
 	{
-		Schema::table('contacts', function (Blueprint $table) {
-			$table->dropColumn('imgur');
+		Schema::table('comments', function (Blueprint $table) {
+			$table->dropColumn('state');
 		});
 	}
 }
