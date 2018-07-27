@@ -56,7 +56,10 @@ class ContractController extends Controller
             ]);
         } else {
 
-            return redirect()->route('admin.stories.edit', ['id' => $asset->alpha_id]);
+            return redirect()->route('admin.stories.edit', ['id' => $asset->alpha_id])->with([
+                'note' => $note,
+                'note_type' => $note_type
+            ]);
         }
 
     }
@@ -112,7 +115,10 @@ class ContractController extends Controller
             ]);
         } else {
 
-            return redirect()->route('admin.stories.edit', ['id' => $request->get('asset_alpha_id')]);
+            return redirect()->route('admin.stories.edit', ['id' => $request->get('asset_alpha_id')])->with([
+                'note' => 'Contract Saved!',
+                'note_type' => 'success'
+            ]);
         }
 
     }
@@ -175,7 +181,10 @@ class ContractController extends Controller
             // Send contract signed notification email
     		QueueEmail::dispatch($story->id, 'sign_contract', 'story');
 
-            return redirect()->route('admin.stories.edit', ['id' => $story->alpha_id]);
+            return redirect()->route('admin.stories.edit', ['id' => $story->alpha_id])->with([
+                'note' => 'Contract Sent!',
+                'note_type' => 'success'
+            ]);
         }
 
     }
