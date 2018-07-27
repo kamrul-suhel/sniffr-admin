@@ -251,7 +251,9 @@ class CollectionController extends Controller
         $collectionQuote = new CollectionQuote;
         $collectionQuote->emailPendingQuote($params);
 
-        $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+        if(env('APP_ENV') === 'prod') {
+            $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+        }
 
         return response([
             'message' => 'Email has been sent to new user'
@@ -308,7 +310,9 @@ class CollectionController extends Controller
 		$collectionQuote = new CollectionQuote;
 		$collectionQuote->emailPendingQuote($params);
 
-		$user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+		if(env('APP_ENV') === 'prod') {
+            $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+        }
 
         return response([
             'message' => 'Email has been sent to new user'
