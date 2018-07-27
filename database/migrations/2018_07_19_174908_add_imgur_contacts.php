@@ -26,7 +26,7 @@ class AddImgurContacts extends Migration
 	public function down()
 	{
 		Schema::table('contacts', function (Blueprint $table) {
-			$table->string('imgur');
+			$table->dropColumn('imgur');
 		});
 	}
 }
