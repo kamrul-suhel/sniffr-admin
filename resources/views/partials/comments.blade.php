@@ -5,11 +5,16 @@
         </div>
     </div>
     <div class="panel-body" style="display: block;">
-        @if(!count($asset->comments))
+        @php
+            $asset_type = (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story');
+            $comments = ($asset_type == 'video' ? \App\Comment::where('video_id', $asset->id)->get() : \App\Comment::where('story_id', $asset->id)->get() );
+        @endphp
+
+        @if(!count($comments))
             <p>No Comments</p>
         @endif
 
-        @foreach($asset->comments as $comment)
+        @foreach($comments as $comment)
             <p>
                 {{ $comment->comment }}
             </p>
@@ -25,7 +30,8 @@
                     ]) !!}
                     <button class="fa fa-trash-o"></button>
                     {{ Form::hidden('alpha_id', $asset->alpha_id) }}
-                    {{ Form::hidden('video_id', $asset->id) }}
+                    {{ Form::hidden('asset_id', $asset->id) }}
+                    {{ Form::hidden('asset_type', $asset_type) }}
                     {!! Form::close() !!}
                 @endif
             </div>
@@ -37,13 +43,15 @@
         <form method="POST" action="{{ route('comment.store') }}" id="comment-form" name="comment-form"
               accept-charset="UTF-8" file="1" enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="video_id" value="{{ $asset->id }}"/>
+            <input type="hidden" name="asset_id" value="{{ $asset->id }}"/>
+            <input type="hidden" name="state" value="{{ $asset->state }}"/>
+            <input type="hidden" name="asset_type" value="{{ (str_contains(\Route::currentRouteName(), 'video') ? 'video' : 'story') }}"/>
             <input type="hidden" name="alpha_id" value="{{ $asset->alpha_id }}"/>
             <div class="form-group">
                 <label for="comment">Add a comment</label>
                 <textarea class="form-control" id="comment" name="comment">{{ old('comment') }}</textarea>
             </div>
-            <input type="submit" value="Add Comment" class="btn btn-success pull-right"/>
+            <input type="submit" value="Add Comment" class="btn btn-primary pull-right"/>
         </form>
         <span class="clearfix"></span>
     </div>

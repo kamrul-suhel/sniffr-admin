@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Client;
+use App\Collection;
+use App\CollectionStory;
+use App\CollectionVideo;
 use App\Http\Requests\Company\UpdateUserRequest;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
@@ -196,8 +199,7 @@ class ClientUserController extends Controller
     public function destroy($slug, $id)
     {
         $user = User::find($id);
-
-        $user->delete();
+        $user->destroy();
 
         return redirect('client/profile')->with([
             'note' => 'User Deleted',

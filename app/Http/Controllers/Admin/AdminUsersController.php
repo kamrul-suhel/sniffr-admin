@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ClientMailer;
+use App\Collection;
+use App\CollectionStory;
+use App\CollectionVideo;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
@@ -227,7 +230,13 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
+
+        $user = User::find($id);
+
+        $user->deleteUsersCollections();
+
+        $user->delete();
+
         return Redirect::to('admin/users')->with([
             'note' => 'Successfully Deleted User',
             'note_type' => 'success'

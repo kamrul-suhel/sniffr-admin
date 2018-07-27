@@ -35,7 +35,7 @@ return [
                 'negative_class' => 'text-danger js-story-state rejected', // class for the negative button
             ],
             'approved' => [
-                'dropdown' => 'Awaiting Contact',
+                'dropdown' => 'Awaiting Reply',
                 'value' => 'approved',
                 'positive_label' => 'Made Contact',
                 'negative_label' => 'Unapprove',
@@ -43,7 +43,7 @@ return [
                 'negative_class' => 'text-danger js-story-state unapproved',
             ],
             'unlicensed' => [
-                'dropdown' => 'Approved',
+                'dropdown' => 'In Conversation',
                 'value' => 'unlicensed',
                 'positive_label' => 'Made Contact',
                 'negative_label' => 'Unapprove',

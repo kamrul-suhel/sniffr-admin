@@ -333,7 +333,7 @@ class AdminVideosController extends Controller
 			abort(404);
 		}
 
-		$tags = $request->input('tags', null);
+		$tags = $request->input('tags');
 
 		if ($tags) {
 			$this->addUpdateVideoTags($video, $tags);
@@ -377,7 +377,7 @@ class AdminVideosController extends Controller
 			$this->videoService->saveVideoLink($video, $request->get('url'));
 		}
 
-		$duration = $request->input('duration', null);
+		$duration = $request->input('duration');
 		$video->duration = $this->getDuration($video, $duration);
 
 		$video->user_id = Auth::id();

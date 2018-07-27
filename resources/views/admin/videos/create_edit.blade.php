@@ -179,7 +179,7 @@
 
                     @include('admin.videos.partials.contact')
 
-                    @include('admin.videos.partials.comments')
+                    @include('partials.comments')
                 @endif
             </div>
         </div>
