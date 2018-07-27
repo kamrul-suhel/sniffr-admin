@@ -20,6 +20,11 @@
 .album-grey {
     background: #fcfcfc;
 }
+.gallery-env .album .album-grey h3 {
+    max-height: 40px;
+    height: 40px;
+    white-space: normal;
+}
 .album-grey h3 a {
     font-weight: 600;
 }
