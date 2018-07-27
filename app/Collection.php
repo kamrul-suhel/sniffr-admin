@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Collection extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'collections';
 
     protected $fillable = ['name', 'user_id', 'client_id', 'status'];

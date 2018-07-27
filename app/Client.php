@@ -5,6 +5,7 @@ namespace App;
 use App\Jobs\Auth\QueueEmailCompany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 /**
@@ -28,7 +29,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class Client extends Model
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
     protected $guarded = [];
     public static $rules = [];
