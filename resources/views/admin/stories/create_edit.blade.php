@@ -17,7 +17,7 @@
 
 	<div class="clear"></div>
 
-	<form method="POST" action="{{ $post_route }}" {{ (isset($story) ? '' : 'id=js-story-form') }} accept-charset="UTF-8" file="1" enctype="multipart/form-data">
+	<form method="POST" action="{{ $post_route }}" id="js-story-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
 
 	<div class="row">
 		<div class="col-sm-12">
@@ -164,16 +164,18 @@
 					<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
 					<input type="hidden" name="type" value="{{ (isset($asset) ? $asset->type : 'new') }}" />
 
-					</form>
-
-					@if(isset($asset->id))
-						@include('partials.comments')
-					@endif
-
 				</div>
 			</div>
 		</div>
 	</div>
+
+	</form>
+
+	@if(isset($asset->id))
+		@include('partials.comments')
+	@endif
+
+	<hr>
 
 	@if(isset($asset->id))
 		<a href="{{ url('admin/stories/delete/'.$asset->alpha_id) }}" class="btn btn-danger">Delete Story</a>
@@ -195,10 +197,11 @@
 
 	<div class="clear"></div>
 
-	@if(isset($asset))
-        @include('admin.contracts.partials.contract_modal')
-    @endif
 </div>
+
+@if(isset($asset))
+	@include('admin.contracts.partials.contract_modal')
+@endif
 
 @include('admin.contacts.partials.modal')
 

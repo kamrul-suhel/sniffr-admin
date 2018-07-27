@@ -36,11 +36,12 @@ class ContractController extends Controller
         $note_type = 'error';
         $note = 'Can\'t delete a contract that is already signed';
 
+        $asset = ($contract->video_id ? Video::find($contract->video_id) : Story::find($contract->story_id));
+        $type = ($contract->video_id ? 'video' : 'story');
+
         if(!$contract->signed_at) {
             $note = 'Contract Deleted!';
             $note_type = 'success';
-            $asset = ($contract->video_id ? Video::find($contract->video_id) : Story::find($contract->story_id));
-            $type = ($contract->video_id ? 'video' : 'story');
             $contract->delete();
             $contract->save();
         }
@@ -54,24 +55,8 @@ class ContractController extends Controller
                 'note_type' => $note_type
             ]);
         } else {
-            $data = [
-                'note' => 'Contract Deleted!',
-                'note_type' => 'success',
-                'headline' => '<i class="fa fa-edit"></i> Edit Story',
-                'story' => $asset,
-                'post_route' => url('admin/stories/update'),
-                'button_text' => 'Save Draft',
-                'decision' => '',
-                'contact' => null,
-                'user' => Auth::user(),
-                'users' => User::all(),
-                'contacts' => Contact::all(),
-                'video_categories' => VideoCategory::all(),
-                'video_collections' => VideoCollection::all(),
-                'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
-            ];
 
-            return redirect()->back()->with($data);
+            return redirect()->route('admin.stories.edit', ['id' => $asset->alpha_id]);
         }
 
     }
@@ -126,29 +111,8 @@ class ContractController extends Controller
                 'note_type' => 'success'
             ]);
         } else {
-            $story = Story::where('id', $request->input('asset_id'))
-                ->first();
 
-            $decision = '';
-
-            $data = [
-                'note' => 'Contract Saved!',
-                'note_type' => 'success',
-                'headline' => '<i class="fa fa-edit"></i> Edit Story',
-                'story' => $story,
-                'post_route' => url('admin/stories/update'),
-                'button_text' => 'Save Draft',
-                'decision' => $decision,
-                'contact' => null,
-                'user' => Auth::user(),
-                'users' => User::all(),
-                'contacts' => Contact::all(),
-                'video_categories' => VideoCategory::all(),
-                'video_collections' => VideoCollection::all(),
-                'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
-            ];
-
-            return redirect()->back()->with($data);
+            return redirect()->route('admin.stories.edit', ['id' => $request->get('asset_alpha_id')]);
         }
 
     }
@@ -211,26 +175,7 @@ class ContractController extends Controller
             // Send contract signed notification email
     		QueueEmail::dispatch($story->id, 'sign_contract', 'story');
 
-            $decision = ''; //Input::get('decision');
-
-            $data = [
-                'note' => 'Contract Sent!',
-                'note_type' => 'success',
-                'headline' => '<i class="fa fa-edit"></i> Edit Story',
-                'story' => $story,
-                'post_route' => url('admin/stories/update'),
-                'button_text' => 'Save Draft',
-                'decision' => $decision,
-                'contact' => null,
-                'user' => Auth::user(),
-                'users' => User::all(),
-                'contacts' => Contact::all(),
-                'video_categories' => VideoCategory::all(),
-                'video_collections' => VideoCollection::all(),
-                'videos' => Video::where([['state', 'licensed'], ['file', '!=', NULL]])->get()
-            ];
-
-            return redirect()->back()->with($data);
+            return redirect()->route('admin.stories.edit', ['id' => $story->alpha_id]);
         }
 
     }

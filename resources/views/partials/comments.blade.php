@@ -51,7 +51,7 @@
                 <label for="comment">Add a comment</label>
                 <textarea class="form-control" id="comment" name="comment">{{ old('comment') }}</textarea>
             </div>
-            <input type="submit" value="Add Comment" class="btn btn-success pull-right"/>
+            <input type="submit" value="Add Comment" class="btn btn-primary pull-right"/>
         </form>
         <span class="clearfix"></span>
     </div>
