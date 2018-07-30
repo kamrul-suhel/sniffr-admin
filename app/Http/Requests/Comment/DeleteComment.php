@@ -30,7 +30,7 @@ class DeleteComment extends FormRequest
     public function rules()
     {
         return [
-            'alpha_id' => 'required|exists:videos,alpha_id',
+            // 'alpha_id' => 'required|exists:videos,alpha_id',
         ];
     }
 
