@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         //This is the line of code added, at the end, we have an example class name of AutomateEmailReminders.php inside app\console\commands
         '\App\Console\Commands\AutomateEmailReminders',
         '\App\Console\Commands\AutomateBumps',
-        '\App\Console\Commands\AutomateArchive'
+        '\App\Console\Commands\AutomateArchive',
+        '\App\Console\Commands\AutomateDeleteRejected'
     ];
 
     /**
@@ -50,6 +51,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('AutomateArchive:archive')
             ->hourly()
+            ->appendOutputTo($automateBumps);
+
+        $schedule->command('AutomateDeleteRejected:delete')
+            ->daily()
             ->appendOutputTo($automateBumps);
 
         $schedule->command('stats:getVideoStats')
