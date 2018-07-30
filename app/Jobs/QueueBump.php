@@ -102,7 +102,7 @@ class QueueBump implements ShouldQueue
 			}
 		}elseif($contact->reddit){ // Reddit
 			switch ($asset->reminders) {
-				case 2:
+				case 1:
 					$message = 'Hey, It’s '.$from.' from UNILAD! Did you get my previous messages? :)';
 					break;
 				default:
