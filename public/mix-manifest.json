@@ -1,19 +1,11 @@
 {
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=69c41176461b9e9b67d5",
-    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=75c81d727a607fc2b4ff",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=e66f0081c22121ac6005",
-    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=8fc32c9da0273b937bb5",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=af995a7f3c6fdac1806a",
-    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=c1a02911854c64b92bd8",
-    "/assets/js/app.js": "/assets/js/app.js?id=9eadb0eed905201b4e19",
-    "/assets/css/admin.css": "/assets/css/admin.css?id=2f3ed36158c06d18a66a",
-    "/assets/frontend/css/client/nav-styles.css": "/assets/frontend/css/client/nav-styles.css?id=1aa89eb6ba7ecdd5c9e1",
-    "/assets/frontend/css/client/footer-styles.css": "/assets/frontend/css/client/footer-styles.css?id=89c63c77588ed79cb2ee",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=04530ea8d19c62890f7d",
-    "/assets/js/app.js.map": "/assets/js/app.js.map?id=a7900af3df9e168888d2",
-    "/assets/css/admin.css.map": "/assets/css/admin.css.map?id=0fa1f8281f0b13486c7c",
-    "/assets/frontend/css/client/nav-styles.css.map": "/assets/frontend/css/client/nav-styles.css.map?id=3ea8de9b08a582cccc24",
-    "/assets/frontend/css/client/footer-styles.css.map": "/assets/frontend/css/client/footer-styles.css.map?id=962621a00671a75ddcc6",
-    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=f551c9ba8a70f5f14721",
-    "/assets/js/utils.js": "/assets/js/utils.js?id=77674366aa7b763b4210"
+    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js",
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
+    "/assets/js/app.js": "/assets/js/app.js",
+    "/assets/css/admin.css": "/assets/css/admin.css",
+    "/assets/frontend/css/client/nav-styles.css": "/assets/frontend/css/client/nav-styles.css",
+    "/assets/frontend/css/client/footer-styles.css": "/assets/frontend/css/client/footer-styles.css",
+    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
+    "/assets/js/utils.js": "/assets/js/utils.js"
 }
