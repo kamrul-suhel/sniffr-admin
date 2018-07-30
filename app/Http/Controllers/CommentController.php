@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
-// use App\Http\Requests\Comment\CreateComment;
-// use App\Http\Requests\Comment\DeleteComment;
+use App\Http\Requests\Comment\CreateComment;
+use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -14,8 +14,11 @@ class CommentController extends Controller
      * @param CreateComment $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CreateComment $request)
     {
+        $note = 'Comment Added';
+        $note_type = 'success';
+
         $comment = new Comment();
         $comment->comment = $request->get('comment') ?? null;
         $comment->contact_id = $request->get('contact_id') ?? null;
@@ -43,7 +46,10 @@ class CommentController extends Controller
             $route = 'admin.stories.edit';
         }
 
-        return redirect()->route($route, ['id' => $request->get('alpha_id')]);
+        return redirect()->route($route, ['id' => $request->get('alpha_id')])->with([
+            'note' => $note,
+            'note_type' => $note_type
+        ]);
     }
 
     /**
@@ -52,20 +58,18 @@ class CommentController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(DeleteComment $request, $id)
     {
         $note = 'Not Authorized to delete this comment!';
         $note_type = 'error';
 
         $comment = Comment::find($id);
 
-        if($comment) {
-            if (Auth::user()->isAdmin() || ($comment->user_id == Auth::user()->id)) {
-                $comment->delete();
+        if(($comment) && ($request->authorize())) {
+            $comment->delete();
 
-                $note = 'Comment Deleted';
-                $note_type = 'success';
-            }
+            $note = 'Comment Deleted';
+            $note_type = 'success';
         }
 
         if($request->get('asset_type')=='video') {
