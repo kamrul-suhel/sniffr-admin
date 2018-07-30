@@ -116,19 +116,13 @@
                                 <div class="col-sm-12">
                                     <h3><a href="{{ url('admin/stories/edit/'.$story->alpha_id.'/?decision='.$decision) }}" title="Edit Story on Sniffr">{{ $story->title }}</a></h3>
                                     <p>
-										<a href="@if($story->source) {{ $story->source }} @else # @endif" class="js-story-show-source btn btn-mini-info" title="Preview Source">
-											<i class="fa fa-info"></i>
+										<a href="@if(isset($story->contact->id)) {{ url('admin/contacts/'.$story->contact->id.'/edit/') }} @else # @endif" class="btn btn-mini-info" title="View Contact">
+											<i class="fa fa-address-book"></i> @if(isset($story->contact->id)) {{ $story->contact->full_name }} @else No Contact @endif
 										</a>
 
 										@if($story->url)
-										<a href="{{ $story->url }}" class="btn btn-mini-info" title="View on Wordpress" target="_blank">
-											<i class="fa fa-wordpress"></i>
-										</a>
-										@endif
-
-										@if($story->author)
-										<a href="#" class="btn btn-mini-info pull-right" title="Author on Wordpress">
-											<i class="fa fa-id-badge"></i> <strong>{{ $story->author }}</strong>
+										<a href="{{ $story->url }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
+											<i class="fa fa-wordpress"></i> @if($story->author) {{ $story->author }} @endif
 										</a>
 										@endif
 									</p>

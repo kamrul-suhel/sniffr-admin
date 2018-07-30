@@ -172,7 +172,7 @@
 	</form>
 
 	@if(isset($asset->id))
-		@include('partials.comments')
+		@include('admin.comments.partials.form')
 	@endif
 
 	<hr>
