@@ -47,6 +47,7 @@ class QueueBump implements ShouldQueue
         $contact = $asset->contact;
 		$from = $asset->author ? strtok($asset->author, " ") : strtok(User::find($asset->user_id)->full_name, " ");
         $success = false;
+        $errMessage = '';
 
 		if($contact->email){ // Email
 			Mail::to($asset->contact->email)->send(new StoryContacted($asset, 'Interview with UNILAD'.($asset->contacted_at  ? ' (Reminder)' : '')));
@@ -105,6 +106,8 @@ class QueueBump implements ShouldQueue
 
 			if(!count($response->json->errors)){
 				$success = true;
+			}else{
+				$errMessage = 'Reddit';
 			}
 		}else if($contact->imgur && str_contains($asset->source, 'imgur.com')){ // IMGUR
 			preg_match('/\/([\d\w]+)$/', $asset->source, $matches);
@@ -143,6 +146,8 @@ class QueueBump implements ShouldQueue
 
 			if(!$err && json_decode($response)->success){
 				$success = true;
+			}else{
+				$errMessage = $response;
 			}
 		}
 
@@ -153,7 +158,7 @@ class QueueBump implements ShouldQueue
 			$asset->save();
 		}else{
 			$user = new User();
-			$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed sending contact message  (Id: ' . $asset->asset_id . ')'));
+			$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed sending contact message  (Story Id: ' . $asset->alpha_id . ') '.$errMessage));
 		}
     }
 

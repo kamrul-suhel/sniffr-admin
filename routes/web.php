@@ -2,6 +2,41 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
+Route::get('imgur', function(){
+	preg_match('/\/([\d\w]+)$/', 'https://imgur.com/gallery/M87Hvmq', $matches);
+	$imageId = $matches[1];
+
+	$message = 'Test';//'Hi there! How are you? Im a journalist from UNILAD and would love to talk to you about your imgur post for an article. Do you have some time to talk to me? Please reply on here or email stories@unilad.co.uk ';
+
+	$data = [
+		'image_id' => $imageId,
+		'comment' => $message
+	];
+
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => "https://api.imgur.com/3/comment",
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_CUSTOMREQUEST => "POST",
+		CURLOPT_POSTFIELDS => $data,
+		CURLOPT_HTTPHEADER => array(
+			// Set here requred headers
+			"content-type: multipart/form-data",
+			"Authorization: Bearer ".env('IMGUR_ACCESS_TOKEN')
+		),
+	));
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+	curl_close($curl);
+
+	dd(json_decode($response));
+
+	if(!$err && json_decode($response)->success){
+		$success = true;
+	}
+});
+
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
