@@ -27,8 +27,12 @@ class CreateQuote extends FormRequest
      */
     public function rules()
     {
-        return [
-            'final_price' => 'required|min:1|numeric'
-        ];
+        $rules = ['final_price' => 'required|min:1|numeric'];
+
+        if(request()->has('delete')) {
+            $rules = [];
+        }
+
+        return $rules;
     }
 }

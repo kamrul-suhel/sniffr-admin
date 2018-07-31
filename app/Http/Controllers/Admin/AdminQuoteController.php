@@ -78,8 +78,9 @@ class AdminQuoteController extends Controller {
     	if($asset_type == 'video'){
 			//update collection video status, final_price
 			$collectionVideo = $this->collectionVideo->find($id);
-			$collectionVideo->final_price = $request->input('final_price');
-			$collectionVideo->status = 'offered';
+			$collectionVideo->final_price = request()->has('delete') ? null : $request->input('final_price');
+			$collectionVideo->status = request()->has('delete') ? 'closed' : 'offered';
+			$collectionVideo->reason = request()->has('delete') ? 'Ignored By Admin (id: '.auth()->user()->id.')' : null;
 			$collectionVideo->save();
 
 			$collection_video_id = $collectionVideo->id;
@@ -87,31 +88,34 @@ class AdminQuoteController extends Controller {
 		}else if($asset_type == 'story'){
 			//update collection video status, final_price
 			$collectionStory = $this->collectionStory->find($id);
-			$collectionStory->final_price = $request->input('final_price');
-			$collectionStory->status = 'offered';
+			$collectionStory->final_price = request()->has('delete') ? null : $request->input('final_price');
+			$collectionStory->status = request()->has('delete') ? 'closed' : 'offered';
+			$collectionStory->reason = request()->has('delete') ? 'Ignored By Admin (id: '.auth()->user()->id.')' : null;
 			$collectionStory->save();
 
 			$collection_story_id = $collectionStory->id;
 			$type = 'Story';
 		}
 
-		//create log of quoted amount for video
-		$collectionQuote = new CollectionQuote();
-		$collectionQuote->collection_video_id = $collection_video_id;
-		$collectionQuote->collection_story_id = $collection_story_id;
-		$collectionQuote->user_id = auth()->user()->id; //offered by the admin signed in
-		$collectionQuote->price = $request->input('final_price');
-		$collectionQuote->save();
+		if(!request()->has('delete')) {
+            //create log of quoted amount for video
+            $collectionQuote = new CollectionQuote();
+            $collectionQuote->collection_video_id = $collection_video_id;
+            $collectionQuote->collection_story_id = $collection_story_id;
+            $collectionQuote->user_id = auth()->user()->id; //offered by the admin signed in
+            $collectionQuote->price = $request->input('final_price');
+            $collectionQuote->save();
 
-        QueueEmailOfferedQuote::dispatch(
-			$collectionQuote,
-			$type
-        );
+            QueueEmailOfferedQuote::dispatch(
+                $collectionQuote,
+                $type
+            );
+        }
 
         return redirect('admin/quotes')->with([
-				'note' => 'Quote successfully sent',
+				'note' => request()->has('delete') ? 'Quote successfully Ignored' : ' Quote successfully Sent',
 				'note_type' => 'success'
-			]);;
+			]);
     }
 
     public function destroy(Request $request, $id)
