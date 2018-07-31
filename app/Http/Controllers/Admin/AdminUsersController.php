@@ -3,45 +3,55 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ClientMailer;
-use App\Collection;
-use App\CollectionStory;
-use App\CollectionVideo;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
-use App\Libraries\VideoHelper;
-use Auth;
 use Password;
 use Carbon\Carbon;
-use Hash;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Redirect;
 use App\Client;
 use App\User;
-use App\Libraries\ImageHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 class AdminUsersController extends Controller
 {
     use ResetsPasswords;
 
+    protected $user, $client, $clientMailer;
+
+    /**
+     * AdminUsersController constructor.
+     * @param User $user
+     * @param Client $client
+     * @param ClientMailer $clientMailer
+     */
+    public function __construct(User $user, Client $client, ClientMailer $clientMailer)
+    {
+        $this->middleware('admin');
+
+        $this->user = $user;
+
+        $this->clientMailer = $clientMailer;
+
+        $this->client = $client;
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function index()
-	{
-        $search_value = Input::get('s');
+    public function index()
+    {
+        $search_value = request()->get('s');
 
-        if ((!empty($search_value))&&(Auth::user()->role != 'client')) {
-            $users = User::where('username', 'LIKE', '%' . $search_value . '%')
+        if ((!empty($search_value)) && (auth()->user()->role != 'client')) {
+            $users = $this->user->where('username', 'LIKE', '%' . $search_value . '%')
                 ->orWhere('email', 'LIKE', '%' . $search_value . '%')
                 ->orderBy('created_at', 'desc')->get();
-        } elseif((Auth::user()->role == 'client')&&(Auth::user()->client()->account_owner_id == Auth::user()->id)) {
-            $users = User::where('client_id', Auth::user()->client_id)->get();
+        } elseif ((auth()->user()->role == 'client') && (auth()->user()->client()->account_owner_id == auth()->user()->id)) {
+            $users = $this->user->where('client_id', auth()->user()->client_id)->get();
         } else {
-            $users = User::all();
+            $users = $this->user->all();
         }
 
         return view('admin.users.index', [
@@ -54,11 +64,11 @@ class AdminUsersController extends Controller
      */
     public function create()
     {
-        $clients = Client::get();
+        $clients = $this->client->get();
 
         $data = [
             'post_route' => url('admin/user/store'),
-            'admin_user' => Auth::user(),
+            'admin_user' => auth()->user(),
             'button_text' => 'Create User',
             'clients' => $clients,
             'user' => null
@@ -73,70 +83,29 @@ class AdminUsersController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $user = new User();
-        //$user->username = preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom();
-        $user->email = $request->input('email');
+        $data = request()->all();
 
-        if (!$request->input('password')) {
-            $user->password = Hash::make(VideoHelper::quickRandom());
-        } else {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $role = (Auth::user()->role == 'client') ? 'client' : $request->input('role');
-
-        $user->role = $role;
-        $user->active = $request->input('active', 0);
-
-        $client_id = (Auth::user()->role == 'client') ? Auth::user()->client_id : $request->input('client_id', null);
-
-        $user->client_id = $client_id;
-        $user->full_name = $request->input('full_name');
-        $user->tel = $request->input('tel');
-        $user->job_title = $request->input('job_title');
-        $user->avatar = 'default.jpg';
-
-        if ($request->hasFile('avatar')) {
-            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
-        }
-
-        $user->save();
+        $user = $this->user->createUser($data);
 
         if (in_array($user->role, ['client_owner', 'client_admin', 'client'])) {
-            $email = $user->getEmailForPasswordReset();
-            $this->deleteExisting($user);
-
-            $token = $this->getToken($email, $user);
+            $token = $this->getToken($user->email, $user);
 
             QueueEmailClient::dispatch(
-                ($client_id ? $client_id : 0),
-                $request->get('email'),
-                $request->get('full_name') ?? 'New User',
+                $user->client_id,
+                $user->email,
+                $user->full_name,
                 $token
             );
         } else {
-            if (!$request->input('password', null)) {
-                Password::sendResetLink(['email' => $request->input('email')]);
+            if ($data['password']) {
+                Password::sendResetLink(['email' => $user->email]);
             }
         }
 
-        $redirect_path = (Auth::user()->role == 'client') ? 'client/users' : 'admin/users';
-
-        return Redirect::to($redirect_path)->with([
+        return redirect()->to('admin/users')->with([
             'note' => 'Successfully Created New User',
             'note_type' => 'success'
         ]);
-    }
-
-    /**
-     * @param User $user
-     * @return int
-     */
-    protected function deleteExisting(User $user)
-    {
-        return \DB::table('password_resets')
-            ->where('email', $user->getEmailForPasswordReset())
-            ->delete();
     }
 
     /**
@@ -155,10 +124,10 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = $this->user->find($id);
 
         $data = [
-            'clients' => Client::get(),
+            'clients' => $this->client->get(),
             'post_route' => url('admin/user/update'),
             'user' => $user,
             'button_text' => 'Update User',
@@ -169,36 +138,16 @@ class AdminUsersController extends Controller
 
     /**
      * @param UpdateUserRequest $request
+     * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, $id)
     {
+        $data = request()->all();
 
-        $user = User::find($request->get('id'));
-        if(!$user) {
-            abort(404);
-        }
+        $user = $this->user->find($id);
 
-        //$user->username = (!$user->username ? preg_replace('/([^@]*).*/', '$1', $request->input('email')).'_'.VideoHelper::quickRandom() : $user->username);
-        $user->email = $request->input('email', $user->email);
-        $user->full_name = $request->input('full_name', $user->full_name);
-        $user->tel = $request->input('tel', $user->tel);
-        $user->job_title = $request->input('job_title', $user->job_title);
-
-        if ($request->input('password', null)) {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $user->role = $request->input('role', $user->role);
-        $user->active = $request->has('active') ? $request->get('active') : 0;
-        if($user->client_id) {
-             $user->client_id = $request->input('client_id', $user->client_id);
-        }
-
-        if ($request->hasFile('avatar')) {
-            $user->avatar = ImageHandler::uploadImage($request->file('avatar'), 'avatars');
-        }
-        $user->update();
+        $user->updateUser($data);
 
         return redirect()->route('users.edit', ['id' => $user->id])->with([
             'note' => 'Successfully Updated User Settings',
@@ -213,8 +162,8 @@ class AdminUsersController extends Controller
      */
     public function storiesSent(Request $request, $user_id)
     {
-        $user = User::find($user_id);
-        $client_mailers = ClientMailer::with('stories')->whereHas('users', function ($query) use ($user_id) {
+        $user = $this->user->find($user_id);
+        $client_mailers = $this->clientMailer->with('stories')->whereHas('users', function ($query) use ($user_id) {
             $query->where('users.id', '=', $user_id);
         })->orderBy('sent_at', 'DESC')->get();
 
@@ -231,7 +180,7 @@ class AdminUsersController extends Controller
     public function destroy($id)
     {
 
-        $user = User::find($id);
+        $user = $this->user->find($id);
 
         $user->deleteUsersCollections();
 

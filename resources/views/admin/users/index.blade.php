@@ -33,7 +33,7 @@
 			<th>Name</th>
 			<th>Email</th>
 			<th>Company</th>
-			<th>User Type</th>
+			<th>Role</th>
 			<th>Active</th>
 
 			@if(Auth::user()->isAdmin())

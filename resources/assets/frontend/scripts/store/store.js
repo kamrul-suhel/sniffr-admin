@@ -7,7 +7,7 @@ import Stories from './modules/stories'
 import BuyQuote from './modules/buyquote'
 import Dialog from './modules/dialog'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state: {
@@ -30,4 +30,4 @@ export const store = new Vuex.Store({
 		BuyQuote,
 		Dialog
 	}
-})
+});
