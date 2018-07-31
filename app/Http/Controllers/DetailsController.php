@@ -116,8 +116,8 @@ class DetailsController extends Controller
 
         $video->location = Input::get('location');
         $video->description = Input::get('description');
-        $video->filmed_by_me = Input::get('filmed_by_me') == 'yes' || 1  ? 1 : 0;
-        $video->permission = Input::get('permission') == 'yes' || 1  ? 1 : 0;
+        $video->filmed_by_me = Input::get('filmed_by_me') == 1  ? 1 : 0;
+        $video->permission = Input::get('permission') == 1  ? 1 : 0;
         $video->submitted_elsewhere = Input::get('submitted_elsewhere') == 1 ? 1 : 0;
         $video->submitted_where = Input::get('submitted_where');
         $video->contact_is_owner = Input::get('contact_is_owner') == 'yes' || 1 ? 1 : 0;

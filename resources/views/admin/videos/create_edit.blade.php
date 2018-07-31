@@ -33,6 +33,10 @@
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
                         </li>
 
+                        <li>
+                            <a href="#credits" role="tab" data-toggle="tab">Credits</a>
+                        </li>
+
                         @if($asset->more_details)
                             <li>
                                 <a href="#moredetails" role="tab" data-toggle="tab">More Details</a>
@@ -85,6 +89,10 @@
 
                         <div class="tab-pane" id="metadata">
                             @include('admin.videos.partials.metadata')
+                        </div>
+
+                        <div class="tab-pane" id="credits">
+                            @include('admin.videos.partials.credits')
                         </div>
 
                         <div class="tab-pane" id="moredetails">
@@ -171,7 +179,7 @@
 
                     @include('admin.videos.partials.contact')
 
-                    @include('admin.videos.partials.comments')
+                    @include('admin.comments.partials.form')
                 @endif
             </div>
         </div>

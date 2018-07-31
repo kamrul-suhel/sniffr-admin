@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CollectionVideo;
 use App\Services\VideoService;
 use App\VideoSocialLink;
 use App\VideoStats;
@@ -103,7 +104,7 @@ class AdminVideosController extends Controller
 
         //override all for deleted videos
         if ($state == 'deleted') {
-            $videos = Video::onlyTrashed()->paginate(24);
+            $videos = Video::onlyTrashed()->orderBy('updated_at', 'desc')->paginate(24);
         }
 
         $data = [
@@ -332,7 +333,7 @@ class AdminVideosController extends Controller
 			abort(404);
 		}
 
-		$tags = $request->input('tags', null);
+		$tags = $request->input('tags');
 
 		if ($tags) {
 			$this->addUpdateVideoTags($video, $tags);
@@ -376,17 +377,17 @@ class AdminVideosController extends Controller
 			$this->videoService->saveVideoLink($video, $request->get('url'));
 		}
 
-		$duration = $request->input('duration', null);
+		$duration = $request->input('duration');
 		$video->duration = $this->getDuration($video, $duration);
 
 		$video->user_id = Auth::id();
 		$video->active = $request->input('active') ?: 0;
 		$video->featured = $request->input('featured') ?: 0;
 		$video->class = $request->input('class') ?: null;
-		$video->video_collection_id = $request->input('video_collection_id', null);
-		$video->video_shottype_id = $request->input('video_shottype_id', null);
-		$video->video_category_id = $request->input('video_category_id', null);
-		$video->contact_id = $request->input('contact_id', null);
+		$video->video_collection_id = ($request->input('video_collection_id') ? $request->input('video_collection_id') : $video->video_collection_id);
+		$video->video_shottype_id = ($request->input('video_shottype_id') ? $request->input('video_shottype_id') : $video->video_shottype_id);
+		$video->video_category_id = ($request->input('video_category_id') ? $request->input('video_category_id') : $video->video_category_id);
+		$video->contact_id = ($request->input('contact_id') ? $request->input('contact_id') : $video->contact_id);
 		$video->title = $title;
 		$video->location = $request->input('location');
 		$video->details = $request->input('details');
@@ -653,6 +654,9 @@ class AdminVideosController extends Controller
         if (!$video) {
             abort(404);
         }
+
+        CollectionVideo::where('video_id', $video->id)->delete();
+        //TODO - EMAIL Existing quotes pending/offered that video has been removed from Sniffr.
 
         $video->destroy($video->id);
 

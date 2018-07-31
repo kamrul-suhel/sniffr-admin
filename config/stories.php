@@ -35,21 +35,21 @@ return [
                 'negative_class' => 'text-danger js-story-state rejected', // class for the negative button
             ],
             'approved' => [
-                'dropdown' => 'Awaiting Contact',
+                'dropdown' => 'Awaiting Reply',
                 'value' => 'approved',
                 'positive_label' => 'Made Contact',
-                'negative_label' => 'Reject',
+                'negative_label' => 'Unapprove',
                 'positive_class' => 'text-success js-story-state unlicensed',
-                'negative_class' => 'text-danger js-story-state rejected',
+                'negative_class' => 'text-danger js-story-state unapproved',
             ],
-            'unlicensed' => [
-                'dropdown' => 'Approved',
-                'value' => 'unlicensed',
-                'positive_label' => 'Made Contact',
-                'negative_label' => 'Reject',
-                'positive_class' => '',
-                'negative_class' => 'text-danger js-story-state rejected',
-            ],
+            // 'unlicensed' => [
+            //     'dropdown' => 'In Conversation',
+            //     'value' => 'unlicensed',
+            //     'positive_label' => 'Made Contact',
+            //     'negative_label' => 'Unapprove',
+            //     'positive_class' => '',
+            //     'negative_class' => 'text-danger js-story-state unapproved',
+            // ],
             'rejected' => [
                 'dropdown' => 'Rejected',
                 'value' => 'rejected',
@@ -64,9 +64,9 @@ return [
                 'dropdown' => 'Ready for Pickup',
                 'value' => 'unlicensed',
                 'positive_label' => 'License Story',
-                'negative_label' => 'Reject',
+                'negative_label' => 'Unapprove',
                 'positive_class' => 'text-success js-story-state licensing',
-                'negative_class' => 'text-danger js-story-state rejected',
+                'negative_class' => 'text-danger js-story-state unapproved',
             ],
             'licensing' => [
                 'dropdown' => 'In Progress',
@@ -76,14 +76,14 @@ return [
                 'positive_class' => 'text-success',
                 'negative_class' => 'text-danger js-story-state unlicensed',
             ],
-            'licensed' => [
-                'dropdown' => 'Licensed',
-                'value' => 'licensed',
-                'positive_label' => 'Licensed',
-                'negative_label' => 'Unlicensed',
-                'positive_class' => '',
-                'negative_class' => 'text-danger js-story-state unlicensed',
-            ],
+            // 'licensed' => [
+            //     'dropdown' => 'Licensed',
+            //     'value' => 'licensed',
+            //     'positive_label' => 'Licensed',
+            //     'negative_label' => 'Unlicensed',
+            //     'positive_class' => '',
+            //     'negative_class' => 'text-danger js-story-state unlicensed',
+            // ],
 		],
         'writing' => [
             'licensed' => [

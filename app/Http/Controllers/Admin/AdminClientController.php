@@ -302,6 +302,12 @@ class AdminClientController extends Controller
             abort(404);
         }
 
+        $users = $client->users()->update(['active' => '0']);
+        foreach($client->users as $user) {
+            $user->deleteUsersCollections();
+        }
+        $client->users()->delete();
+
         $client->destroy($id);
 
         return redirect()->to('admin/clients')->with([

@@ -179,8 +179,14 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        $this->user->destroy($id);
-        return redirect()->to('admin/users')->with([
+
+        $user = $this->user->find($id);
+
+        $user->deleteUsersCollections();
+
+        $user->delete();
+
+        return Redirect::to('admin/users')->with([
             'note' => 'Successfully Deleted User',
             'note_type' => 'success'
         ]);

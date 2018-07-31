@@ -81,16 +81,16 @@
                 @endif
             </ul>
         </li>
-    @endif
 
-    @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
             <a href="{{ url('admin/stories') }}" class="tlink">
                 <i class="fa fa-tasks"></i>
                 <span class="title">Stories</span>
             </a>
         </li>
+    @endif
 
+    @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
             <a href="{{ url('admin/mailers') }}" class="tlink">
                 <i class="fa fa-envelope-open"></i>
@@ -120,7 +120,7 @@
             <a href="{{ url('admin/clients') }}" class="tlink">
                 <i class="fa fa-building"></i>
                 <span class="title">Clients</span>
-                <small style="position:fixed; margin:-8px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\Client::where('active', 0)->count() > 0 ? \App\Client::where('active', 0)->count() : null }}</small>
+                <small style="position:relative; margin:-8px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\Client::where('active', 0)->count() > 0 ? \App\Client::where('active', 0)->count() : null }}</small>
             </a>
         </li>
     @endif
@@ -130,7 +130,7 @@
             <a href="{{ url('admin/users') }}" class="tlink">
                 <i class="fa fa-user"></i>
                 <span class="title">Users</span>
-                <small style="position:fixed; margin:-8px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\User::where('active', 0)->count() > 0 ? \App\User::where('active', 0)->count() : null }}</small>
+                <small style="position:relative; margin:-8px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\User::where('active', 0)->count() > 0 ? \App\User::where('active', 0)->count() : null }}</small>
             </a>
         </li>
     @endif
@@ -139,7 +139,7 @@
         <a href="{{ url('admin/quotes') }}" class="tlink">
             <i class="fa fa-exclamation"></i>
             <span class="title">Quotes</span>
-            <small style="position:fixed; margin:-2px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\Collection::getQuotesByStatus('requested')->count() > 0 ? \App\Collection::getQuotesByStatus('requested')->count() : null }}</small>
+            <small style="position:relative; margin:-2px; padding:4px; border-radius: 20px" class="label label-danger">{{ \App\Collection::getQuotesByStatus('requested')->count() > 0 ? \App\Collection::getQuotesByStatus('requested')->count() : null }}</small>
         </a>
         <ul>
             <li>

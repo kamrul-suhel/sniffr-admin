@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use Illuminate\Http\Request;
 use App\Http\Requests\Comment\CreateComment;
 use App\Http\Requests\Comment\DeleteComment;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +16,23 @@ class CommentController extends Controller
      */
     public function store(CreateComment $request)
     {
+        $note = 'Comment Added';
+        $note_type = 'success';
+
         $comment = new Comment();
         $comment->comment = $request->get('comment') ?? null;
-        $comment->video_id = $request->get('video_id') ?? null;
         $comment->contact_id = $request->get('contact_id') ?? null;
+        $comment->state = $request->get('state') ?? null;
         $comment->user_id = Auth::id();
+
+        if($request->get('asset_type')=='video') {
+            $comment->video_id = $request->get('asset_id');
+            $comment->story_id = 0;
+        } else {
+            $comment->story_id = $request->get('asset_id');
+            $comment->video_id = 0;
+        }
+
         $comment->save();
 
         //If comment is from contacts/{id}/edit
@@ -27,7 +40,16 @@ class CommentController extends Controller
             return redirect('admin/contacts/'.$request->get('contact_id').'/edit');
         }
 
-        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')]);
+        if($request->get('asset_type')=='video') {
+            $route = 'admin_video_edit';
+        } else {
+            $route = 'admin.stories.edit';
+        }
+
+        return redirect()->route($route, ['id' => $request->get('alpha_id')])->with([
+            'note' => $note,
+            'note_type' => $note_type
+        ]);
     }
 
     /**
@@ -50,7 +72,13 @@ class CommentController extends Controller
             $note_type = 'success';
         }
 
-        return redirect()->route('admin_video_edit', ['id' => $request->get('alpha_id')])->with([
+        if($request->get('asset_type')=='video') {
+            $route = 'admin_video_edit';
+        } else {
+            $route = 'admin.stories.edit';
+        }
+
+        return redirect()->route($route, ['id' => $request->get('alpha_id')])->with([
             'note' => $note,
             'note_type' => $note_type
         ]);

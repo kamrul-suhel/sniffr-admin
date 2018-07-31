@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
     public $webhook;
 
@@ -97,12 +97,30 @@ class User extends Authenticatable
         return $this->hasMany(Collection::class);
     }
 
-    /**
-     * @return mixed
-     */
+	/**
+	 * @return void
+	 */
+    public function deleteUsersCollections()
+    {
+        $collections = Collection::where('user_id', $this->id);
+        $collectionVideos = CollectionVideo::whereIn('collection_id', $collections->pluck('id'))->delete();
+        $collectionStories = CollectionStory::whereIn('collection_id', $collections->pluck('id'))->delete();
+        $collections->delete();
+    }
+
+	/**
+	 * @return mixed
+	 */
     public function userOffers()
     {
-        return Collection::where([['client_id', '=',  $this->client_id] , ['status', '=', 'open']])->count();
+        $offeredVideos = Collection::with('collectionVideos.video');
+        return $offeredVideos->where('client_id', $this->client_id)
+            ->where('status', 'open')
+            ->orderBy('created_at', 'DESC')
+            ->whereHas('collectionVideos', function($query) {
+                $query->where('status', 'offered');
+                $query->orWhere('status', 'requested');
+            })->count();
     }
 
     /**

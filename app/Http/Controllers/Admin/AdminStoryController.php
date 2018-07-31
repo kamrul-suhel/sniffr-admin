@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CollectionStory;
 use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
@@ -54,7 +55,10 @@ class AdminStoryController extends Controller
                     ->orWhere('author', 'LIKE', '%' . $search_value . '%')
                     ->orWhere('excerpt', 'LIKE', '%' . $search_value . '%')
                     ->orWhere('description', 'LIKE', '%' . $search_value . '%')
-                    ->orWhere('alpha_id', $search_value);
+                    ->orWhere('alpha_id', $search_value)
+                    ->orWhereHas('contact', function ($q) use ($search_value) {
+                        $q->where('full_name', 'LIKE', '%' . $search_value . '%');
+                    });
             });
         }
 
@@ -105,6 +109,7 @@ class AdminStoryController extends Controller
 			'users' => User::all(),
 			'contact' => null,
 			'asset' => null,
+            'decision' => 'content-sourced',
 			'asset_type' => 'story',
             'post_route' => url('admin/stories/store'),
             'button_text' => 'Add New Story',
@@ -286,44 +291,49 @@ class AdminStoryController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function status(Request $request, $state, $id)
+    public function status(Request $request, $state, $alpha_id)
     {
         $isJson = $request->ajax();
         $decision = $request->input('decision');
         $remove = 'no';
 
-        $story = Story::where('alpha_id', $id)->first();
+        $story = Story::where('alpha_id', $alpha_id)->first();
         $story->state = ($story->state!=$state ? $state : $story->state);
+        $story_id = $story->id;
 
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
         // sync to WP + custom message + whether to remove from view (depending on state)
         switch (true) {
-            case ($state == 'unapproved' || $state == 'rejected'):
+            case ($state == 'unapproved'):
+                break;
+            case ($state == 'rejected'):
                 break;
             case ($state == 'approved'):
                 // make initial contact (will need to add twitter/fb/reddit in future)
-                if($story->id && $story->contact->canAutoBump()){
-                    QueueBump::dispatch($story->id);
+                if($story_id && $story->contact->canAutoBump()){
+                    QueueBump::dispatch($story_id);
                 }
                 break;
             case ($state == 'unlicensed'):
                 // contact has been made (set in db)
-                if($story->id) {
+                if($story_id) {
                     $story->contact_made = 1;
                 }
                 $message = 'Set to contact made';
                 break;
             case ($state == 'licensed'):
                 // add new post to WP
-                QueueStory::dispatch($id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
+                if($story_id) {
+                    QueueStory::dispatch($alpha_id, 'push', (!empty(Auth::id()) ? Auth::id() : 0));
+                }
                 $message = 'Pushed to WP + Ready to license';
                 break;
             case ($state == 'writing-completed' || $state == 'subs-approved'):
                 // update story content from WP (including assets)
                 if($story->wp_id) {
-                    QueueStory::dispatch($id, 'sync', (!empty(Auth::id()) ? Auth::id() : 0));
+                    QueueStory::dispatch($alpha_id, 'sync', (!empty(Auth::id()) ? Auth::id() : 0));
                 }
                 $message = 'Just updated content from WP';
                 break;
@@ -337,8 +347,8 @@ class AdminStoryController extends Controller
                 'message' => $message,
                 'state' => $state,
                 'remove' => $remove,
-                'story_id' => $story->id,
-                'story_alpha_id' => $id,
+                'story_id' => $story_id,
+                'story_alpha_id' => $alpha_id,
                 'decision' => $decision,
             ]);
         } else {
@@ -458,19 +468,25 @@ class AdminStoryController extends Controller
         $asset = Story::where('alpha_id', $id)->first();
 
         if(isset($asset->contact)) {
-			if($asset->contact->canAutoBump()){
-				QueueBump::dispatch($asset->id);
+            if($asset->reminders >= 2) {
+                $status = 'error';
+                $message = 'Looks like you have already sent lots of reminders!';
+            } else {
+                if($asset->contact->canAutoBump()){
+    				QueueBump::dispatch($asset->id);
 
-				$status = 'success';
-				$message = 'Reminder Sent';
-			}else{
-				$asset->contacted_at = now();
-				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
-				$asset->save();
+    				$status = 'success';
+    				$message = 'Reminder Sent';
+    			}else{
+    				$asset->contacted_at = now();
+    				$asset->reminders = (isset($asset->reminders) ? $asset->reminders : 0) + 1;
+    				$asset->save();
 
-				$status = 'success';
-				$message = 'Thanks for letting us know you\'ve reached out manually';
-			}
+    				$status = 'success';
+    				$message = 'Thanks for letting us know you\'ve reached out manually';
+    			}
+            }
+
         } else {
             $status = 'error';
             $message = 'A contact needs to be added to the story first';
@@ -526,6 +542,9 @@ class AdminStoryController extends Controller
         if (!$story) {
             abort(404);
         }
+
+        CollectionStory::where('story_id', $story->id)->delete();
+        //TODO - EMAIL Existing quotes pending/offered that story has been removed from Sniffr.
 
         $story->destroy($story->id);
 
