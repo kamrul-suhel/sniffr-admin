@@ -59,6 +59,13 @@ class VideosTableSeeder extends Seeder
                 'thumb' => 'https://pbs.twimg.com/ext_tw_video_thumb/938830057551753218/pu/img/nEXIVX9oFViS2lYf.jpg',
                 'youtube_id' => null,
             ],
+			'vimeo' => [
+				'platform' => 'vimeo',
+				'url' => 'https://vimeo.com/channels/staffpicks/222582596',
+				'image' => '',
+				'thumb' => '',
+				'youtube_id' => null,
+			],
             'youtube' => [
                 'platform' => 'youtube',
                 'url' => 'https://www.youtube.com/watch?v=hI_J8rK9jyw',
