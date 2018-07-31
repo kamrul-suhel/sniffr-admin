@@ -8,7 +8,7 @@
                         <div class="footer-logo">
                             <img src="/assets/frontend/images/logo-sniffr-white.png"/>
                         </div>
-                        
+
                         <div class="footer-text">
                             <p>Sniffr is your Video Licensing Platform. Browse our huge catalogue of videos.</p>
                         </div>
@@ -71,6 +71,9 @@
             <!-- Video dialog box -->
             <video-dialog-component></video-dialog-component>
 
+            <!-- Story dialog box -->
+            <story-dialog-component></story-dialog-component>
+
             <!-- Buy dialog box -->
             <buy-dialog-component></buy-dialog-component>
 
@@ -88,6 +91,7 @@
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
     import QuoteComponent from '../includes/QuoteComponent'
     import VideoDialogComponent from '../includes/VideoDialogComponent'
+    import StoryDialogComponent from '../pages/clients/partials/StoryDialog'
     import SnackbarComponent from '../includes/SnackbarComponent'
     import BuyDialogComponent from '../includes/BuyComponent'
     import ThankYouDialogBox from '../includes/ThankyouComponent'
@@ -111,6 +115,7 @@
             ForgotPasswordComponent,
             QuoteComponent,
             VideoDialogComponent,
+            StoryDialogComponent,
             SnackbarComponent,
             BuyDialogComponent,
             ThankYouDialogBox

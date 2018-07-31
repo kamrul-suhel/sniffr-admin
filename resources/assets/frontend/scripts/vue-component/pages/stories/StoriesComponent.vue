@@ -46,13 +46,14 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-
-            <pagination-component
-                    :pagination="paginate"
-                    :page="'stories'"
-                    v-if="paginate.last_page > 1"
-            ></pagination-component>
         </section>
+
+        <pagination-component
+                :pagination="paginate"
+                :page="'stories'"
+                v-if="paginate.last_page > 1"
+        ></pagination-component>
+
     </div>
 </template>
 

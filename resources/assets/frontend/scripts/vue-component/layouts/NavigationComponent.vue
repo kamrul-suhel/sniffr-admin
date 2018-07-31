@@ -150,6 +150,9 @@
                         this.nav_background = false;
                     }, 800);
                 }
+
+                //set offered page or not
+                this.$route.name === 'client_offered_assets' ? this.$store.commit('setIsOfferedPage', true) : this.$store.commit('setIsOfferedPage', false);
             }
         },
         created(){
@@ -161,6 +164,9 @@
             }else{
                 this.nav_background = false;
             }
+
+            //set offered page or not
+            this.$route.name === 'client_offered_assets' ? this.$store.commit('setIsOfferedPage', true) : this.$store.commit('setIsOfferedPage', false);
         },
         methods: {
             setPrevRoute(){

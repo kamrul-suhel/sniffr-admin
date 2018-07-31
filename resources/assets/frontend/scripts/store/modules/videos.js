@@ -31,6 +31,7 @@ const state = {
 
     purchasedVideos: [],
     offeredVideos:[],
+    assetOfferedCurrentIndex: '',
     initVideo:false,
 
 
@@ -55,6 +56,10 @@ const getters = {
 
     getCurrentVideo(state){
         return state.currentVideo;
+    },
+
+    getAssetOfferedCurrentIndex(state) {
+        return state.assetOfferedCurrentIndex;
     },
 
     getMailerVideoData(state) {
@@ -169,6 +174,10 @@ const mutations = {
         state.currentVideoAlphaId = alphaId;
     },
 
+    setAssetOfferedCurrentIndex(state, value) {
+        state.assetOfferedCurrentIndex = value;
+    },
+
     setNextVideoAlphaId(state, alphaId){
         state.nextVideoAlphaId = alphaId;
     },
@@ -240,7 +249,7 @@ const mutations = {
      */
     setOfferedVideos(state, videos){
 
-        let allVideos = AssetVideoServices.processVideoData(videos)
+        let allVideos = AssetVideoServices.processVideoData(videos);
         state.offeredVideos = allVideos;
     },
 

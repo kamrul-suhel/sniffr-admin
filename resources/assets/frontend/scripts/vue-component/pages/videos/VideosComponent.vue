@@ -86,15 +86,12 @@
 
         watch: {
             '$route'(to, from, next) {
-                this.current_page = to.query.page;
                 this.setAllVideoData(this.getQueryObject());
             }
         },
 
         created() {
-
             this.setAllVideoData(this.getQueryObject());
-
         },
 
         methods: {
@@ -104,7 +101,7 @@
 
             getQueryObject() {
                 let query = {
-                    page: this.$route.query.page ? this.$route.query.page : 1,
+                    page: this.$route.query.page ? this.$route.query.page : '',
                 };
 
                 if (this.$route.query.search && this.$route.query.search !== '') {
