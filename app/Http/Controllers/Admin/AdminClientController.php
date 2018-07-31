@@ -142,11 +142,10 @@ class AdminClientController extends Controller
     }
 
     /**
-     * @param EditCompanyRequest $request
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(EditCompanyRequest $request, int $id)
+    public function edit($id)
     {
         $company = $this->client->find($id);
 

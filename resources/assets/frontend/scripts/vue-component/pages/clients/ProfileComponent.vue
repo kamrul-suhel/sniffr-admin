@@ -187,7 +187,7 @@
                                 <tr @click="props.expanded = !props.expanded">
                                     <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
                                     <td class="">{{ props.item.tel }}</td>
-                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}</td>
+                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', ' ')}}</td>
                                     <td class="">{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
                                     <td class="right">
                                         <v-btn dark @click="editUser(props.item.id)">
