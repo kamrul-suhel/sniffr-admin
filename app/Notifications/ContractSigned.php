@@ -42,6 +42,6 @@ class ContractSigned extends Notification
     public function toSlack($notifiable)
     {
        return (new SlackMessage)
-           ->content('Contract Signed for for: ' . $notifiable->title .': '. url('admin/videos/edit/' . $this->video->alpha_id));
+           ->content('Contract Signed for for: ' . $this->video->title .': '. url('admin/videos/edit/' . $this->video->alpha_id));
     }
 }

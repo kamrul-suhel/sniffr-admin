@@ -21,7 +21,7 @@ class CreateCollectionVideosTable extends Migration
             $table->string('type')->nullable();
             $table->string('platform')->nullable();
             $table->string('length')->nullable();
-            $table->string('class')->nullable()->default(1)->comment('class at the time of request or purchase');
+            $table->string('class')->nullable()->comment('class at the time of request or purchase');
             $table->string('company_location')->nullable()->comment('location of company where they will use the video');
             $table->string('company_tier')->nullable()->comment('status and type of company');
 			$table->text('notes')->nullable();

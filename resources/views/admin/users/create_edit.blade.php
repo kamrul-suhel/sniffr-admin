@@ -17,24 +17,14 @@
 
 	<div class="clear"></div>
 	<?php
-	if (Auth::user()->role == 'client') {
-		$update_path = 'client.users.update';
-		$store_path = 'client.users.store';
-	} else {
 		$update_path = 'users.update';
 		$store_path = 'users.store';
-	}
+
 	?>
 
 	<form method="POST" action="{{ ($user) ? route($update_path, ['id' => $user->id]) : route($store_path) }}" id="update_profile_form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
-		<div id="user-badge">
-			<img src="{{ Config::get('site.uploads_url') }}{{ ($user && $user->avatar) ? $user->avatar : 'default.jpg' }}" />
-			<label for="avatar">{{ ($user) ? ucfirst($user->full_name) . '\'s' : '' }} Profile Image</label>
-			<input type="file" multiple="true" class="form-control" name="avatar" id="avatar" />
-		</div>
-
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">
@@ -62,7 +52,7 @@
 				</div>
 			</div>
 
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">
@@ -92,7 +82,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Email</div>
@@ -119,7 +109,7 @@
 
 			</div>
 
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
@@ -153,7 +143,7 @@
 
 		@if(Auth::user()->role != 'client')
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-6">
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
 							<div class="panel-title">Password</div>
@@ -180,7 +170,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4">
+				<div class="col-sm-6">
 					<div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
 						<div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
 						<div class="panel-body" style="display: block;">
@@ -192,7 +182,7 @@
 			</div>
 
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-6">
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
 							<div class="panel-title">User Role</div>
@@ -228,7 +218,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-4" id="client-box">
+				<div class="col-sm-6" id="client-box">
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
 							<div class="panel-title">Client</div>
