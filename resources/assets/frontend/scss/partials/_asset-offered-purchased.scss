@@ -27,3 +27,12 @@
     text-transform: capitalize;
   }
 }
+
+.client-video-thumbnail{
+    cursor:pointer;
+  transition:all ease-in-out .3s;
+  &:hover{
+    box-shadow:0px 0px 5px rgba(0,0,0,.9);
+    opacity:.9;
+  }
+}

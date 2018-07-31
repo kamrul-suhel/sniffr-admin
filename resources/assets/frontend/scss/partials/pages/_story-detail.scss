@@ -26,13 +26,10 @@
   }
 
   .story-content {
-
     padding-right: 24px;
 
     .badge {
-
       .badge__badge {
-
         span {
           font-weight: bold;
 
@@ -43,8 +40,4 @@
       }
     }
   }
-}
-
-.application .client-story-detail-section .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat)  {
-  background-color: hsla(0,0%,0%,1)!important;
 }

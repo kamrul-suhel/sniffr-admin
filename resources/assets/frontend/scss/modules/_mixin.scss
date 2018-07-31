@@ -36,9 +36,14 @@
 }
 
 
+// Extra Small devices (phones, 576px and down)
+@mixin extra-small-device{
+  @media only screen and (max-width: 576px) {
+    @content
+  }
+}
+
 // Small devices (landscape phones, 576px and up)
-
-
 @mixin small-device{
   @media (min-width: 576px) {
     @content

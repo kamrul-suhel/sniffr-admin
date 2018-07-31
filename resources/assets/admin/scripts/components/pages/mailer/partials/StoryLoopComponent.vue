@@ -70,6 +70,18 @@
                     this.selected = true;
                 }
             });
+
+            StoryDialogBoxEventBus.$on('addedStoryFromDialog', (addedStory)=> {
+                if(addedStory === this.currStory.id){
+                    this.selected = true;
+                }
+            })
+
+            StoryDialogBoxEventBus.$on('removedStoryFromDialog', (removedStory)=> {
+                if(addedStory === this.currStory.id){
+                    this.selected = false;
+                }
+            })
         },
 
 

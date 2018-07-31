@@ -1,7 +1,3 @@
-.client-video-download-section {
-
-}
-
 .cd-box {
   h2 {
     line-height: 28px;
@@ -13,6 +9,13 @@
     background-position: center !important;
     background-size: cover !important;
     position: relative;
+    cursor:pointer;
+    transition: all ease-in-out .3s;
+
+    &:hover{
+      box-shadow:0px 0px 5px rgba(0,0,0,.5);
+      opacity:.9;
+    }
 
     .cdi-label {
       position: absolute;
@@ -49,15 +52,3 @@
     margin-bottom: 10px;
   }
 }
-
-.application .videos-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
-  background-color: hsla(0, 0%, 0%, 1) !important;
-}
-
-.application .cd-box .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
-  background-color: hsla(0, 0%, 0%, 1) !important;
-}
-
-.application .videos-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
-   background-color: hsla(0, 0%, 0%, 1) !important;
- }

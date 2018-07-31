@@ -90,7 +90,7 @@ class ClientStoriesController extends Controller
 		if ($request->ajax()) {
 			$clientId = Auth::user()->client_id;
 
-			$offeredStories = Collection::with('collectionStories.story');
+			$offeredStories = Collection::with('collectionStories.story.assets');
 			// If search passed through
 			if ($request->search) {
 				$search = $request->search;
@@ -99,10 +99,11 @@ class ClientStoriesController extends Controller
 				});
 			}
 			$offeredStories = $offeredStories->where('client_id', $clientId)
-//				->where('status', 'open')
+				->where('status', 'open')
 				->orderBy('created_at', 'DESC')
 				->whereHas('collectionStories', function($query) {
-//					$query->where('status', 'offered');
+					$query->where('status', 'offered');
+					$query->orWhere('status', 'requested');
 				})
 				->get()
 				->pluck('collectionStories')->all();
@@ -128,7 +129,7 @@ class ClientStoriesController extends Controller
         if ($request->ajax()) {
             $client_id = Auth::user()->client_id;
 
-			$purchasedStories = Collection::with('collectionStories.story');
+			$purchasedStories = Collection::with('collectionStories.story.assets');
 			// If search passed through
             if ($request->search) {
 				$search = $request->search;

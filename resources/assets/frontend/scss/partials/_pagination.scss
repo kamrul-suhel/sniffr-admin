@@ -9,3 +9,16 @@
       }
     }
 }
+
+.v-pagination__item--active{
+  border:none;
+  &:focus{
+    outline:none;
+  }
+}
+
+.v-pagination__item{
+  &:focus{
+    outline:none;
+  }
+}

@@ -228,22 +228,20 @@ p {
   display:none;
 }
 
+/* ************************* Overrides vuetify style    ******************* */
 
-/* ************************* Pagination style ******************* */
-.v-pagination__item--active{
-  border:none;
-  &:focus{
-    outline:none;
-  }
+.application .videos-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
+  background-color: hsla(0, 0%, 0%, 1) !important;
 }
 
-.v-pagination__item{
-  &:focus{
-    outline:none;
-  }
+.application .cd-box .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
+  background-color: hsla(0, 0%, 0%, 1) !important;
 }
 
+.application .videos-section .btn.btn--disabled:not(.btn--icon):not(.btn--flat) {
+  background-color: hsla(0, 0%, 0%, 1) !important;
+}
 
-.v-dialog.loin-delay-dialog {
-  box-shadow: 0 0px 15px 0px rgba(0,0,0,0), 0 4px 17px 0px rgba(0,0,0,0), 0 0px 8px -4px rgba(0,0,0,0);
+.application .client-story-detail-section .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat)  {
+  background-color: hsla(0,0%,0%,1)!important;
 }
