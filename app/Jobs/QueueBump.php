@@ -118,7 +118,7 @@ class QueueBump implements ShouldQueue
 					$message = 'Hey, It’s '.$from.' from UNILAD! Did you get my previous messages? :)';
 					break;
 				default:
-					$message = 'Hi there! How are you? Im a journalist from UNILAD and would love to talk to you about your imgur post for an article. Do you have some time to talk to me? Please reply on here or email stories@unilad.co.uk '.$from;
+					$message = 'Hi! Im a journalist from UNILAD and would love to talk to you about your imgur post for an article? To reply email stories@unilad.co.uk';
 					break;
 			}
 
