@@ -58,10 +58,8 @@ const mutations = {
     },
 
     setMailerStories(state, storiesObject) {
-        //In feature if we need to do something with stories.
-        // all stories with paginate object.
-        if (typeof storiesObject.data !== "undefined") {
-            state.mailerStories = storiesObject.data;
+        if (typeof storiesObject !== "undefined") {
+            state.mailerStories = storiesObject;
         }
     },
 
