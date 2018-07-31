@@ -39,7 +39,22 @@ class CollectionStory extends Model
         return $this->where([['type', $type], ['status', $status]])->get();
     }
 
-	public function calculateLicenseEndTime()
+    /**
+     * is the given story id currently being licensed?
+     * @param $storyId
+     * @return bool
+     */
+    public static function isStoryLicensed($storyId)
+    {
+        return CollectionStory::where('story_id', $storyId)
+                ->where('status', 'purchased')
+                ->whereNotNull('licensed_at')
+                ->whereNotNull('license_ends_at')
+                ->count() > 0;
+    }
+
+
+    public function calculateLicenseEndTime()
 	{
 		return null;
 	}
