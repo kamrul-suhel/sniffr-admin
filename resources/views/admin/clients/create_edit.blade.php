@@ -375,6 +375,14 @@
                     <div class="col-sm-6">
                         <div class="panel panel-primary" data-collapsed="0"> <div class="panel-heading">
                                 <div class="panel-title">Active</div> <div class="panel-options"> <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a> </div></div>
+                            @if($errors->first('account_owner_id'))
+                                <div class="alert alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <strong>Error:</strong>
+                                    {{ $errors->first('account_owner_id') }}
+                                </div>
+                            @endif
                             <div class="panel-body" style="display: block;">
                                 <label>Client Owner</label>
                                 <select id="account_owner_id" name="account_owner_id">

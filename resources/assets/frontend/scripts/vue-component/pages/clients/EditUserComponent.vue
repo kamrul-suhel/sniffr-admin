@@ -2,7 +2,7 @@
     <div class="client-user-create">
         <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
-                <v-flex xs12 pt-0>
+                <v-flex xs12 pt-0 v-if="user.role !== 'client'">
                     <v-btn outline @click="onGoback()" class="ml-0">
                         <v-icon>chevron_left</v-icon>
                         Go back
@@ -70,7 +70,7 @@
                                     </v-text-field>
                                 </v-flex>
 
-                                <v-flex xs12>
+                                <v-flex xs12 v-if="user.role !== 'client'">
                                     <v-select
                                             :items="clientRoles"
                                             v-model="user.role"

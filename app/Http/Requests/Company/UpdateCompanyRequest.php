@@ -35,6 +35,7 @@ class UpdateCompanyRequest extends FormRequest
 
         return [
             'company_name' => 'required|unique:clients,name,' . $client_id,
+            'account_owner_id' => 'required_with:active'
         ];
     }
 }
