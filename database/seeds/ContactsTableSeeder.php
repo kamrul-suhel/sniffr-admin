@@ -28,5 +28,20 @@ class ContactsTableSeeder extends Seeder
                 'other' => NULL,
             ]);
         }
+
+		Contact::create([
+			'full_name' => 'REDDIT IAN - Test',
+			'reddit' => 'schooch',
+		]);
+
+		Contact::create([
+			'full_name' => 'TWITTER IAN - Test',
+			'twitter' => 'ian_tweettest',
+		]);
+
+		Contact::create([
+			'full_name' => 'IMGUR IAN - Test',
+			'imgur' => 'schoooch',
+		]);
     }
 }
