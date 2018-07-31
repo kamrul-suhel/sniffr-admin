@@ -102,7 +102,8 @@ class ClientStoriesController extends Controller
 //				->where('status', 'open')
 				->orderBy('created_at', 'DESC')
 				->whereHas('collectionStories', function($query) {
-//					$query->where('status', 'offered');
+					$query->where('status', 'offered');
+					$query->orWhere('status', 'requested');
 				})
 				->get()
 				->pluck('collectionStories')->all();

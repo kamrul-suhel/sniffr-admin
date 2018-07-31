@@ -63,7 +63,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex v-if="type === 'video'">
+                            <v-flex v-if="type === 'video' || type === 'story'">
                                 <v-flex xs12>
                                     <v-select
                                             label="License Type"
@@ -231,26 +231,26 @@
             type() {
                 this.assetType = this.$store.getters.getBuyQuoteType;
                 if (this.assetType === 'video') {
-
-                    Object.values(this.settings.pricing.type).forEach((type) => {
-                        this.licenses.push(type);
-                    });
-
-                    Object.values(this.settings.pricing.platform).forEach((platform) => {
-                        this.platforms.push(platform);
-                    });
-
-                    Object.values(this.settings.pricing.length).forEach((length) => {
-                        this.lengths.push(length);
-                    });
-
                     this.collection_asset_id = this.collection.collection_video_id;
                     this.alpha_name = 'video_alpha_id';
                 } else if (this.assetType === 'story') {
                     this.collection_asset_id = this.collection.collection_story_id;
                     this.alpha_name = 'story_alpha_id';
-                    this.disabled = false;
                 }
+
+                Object.values(this.settings.pricing.type).forEach((type) => {
+                    this.licenses.push(type);
+                });
+
+                Object.values(this.settings.pricing.platform).forEach((platform) => {
+                    this.platforms.push(platform);
+                });
+
+                Object.values(this.settings.pricing.length).forEach((length) => {
+                    this.lengths.push(length);
+                });
+
+
                 return this.assetType;
             }
         },

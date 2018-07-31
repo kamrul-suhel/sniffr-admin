@@ -229,7 +229,6 @@ const mutations = {
      */
     setOfferedVideos(state, videos){
 
-        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
         if (typeof videos.data == 'object') {
             videos.data = Object.values(videos.data);
         }
@@ -304,8 +303,6 @@ const actions = {
                 console.log('Not connect: ' + error);
             });
     },
-
-
 
     /**
      * Video dialog box action
