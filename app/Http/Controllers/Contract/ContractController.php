@@ -278,6 +278,8 @@ class ContractController extends Controller
             // Send contract signed notification email
     		QueueEmail::dispatch($story->id, 'contract_signed', 'story');
 
+            // Need to add slack alert for stories (like videos)
+
             $video = '';
         }
 
