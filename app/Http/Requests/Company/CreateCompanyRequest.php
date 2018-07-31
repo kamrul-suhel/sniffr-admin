@@ -25,6 +25,7 @@ class CreateCompanyRequest extends FormRequest
     {
         return [
             'company_name' => 'required|unique:clients,name',
+            'account_owner_id' => 'required_with:active'
         ];
     }
 }
