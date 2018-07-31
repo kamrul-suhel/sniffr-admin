@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Client;
 use App\Collection;
+use App\CollectionStory;
+use App\CollectionVideo;
 use App\Http\Requests\Company\CreateCompanyRequest;
 use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
@@ -12,8 +14,6 @@ use App\Jobs\Auth\QueueEmailModerateCompany;
 use App\Libraries\VideoHelper;
 use App\User;
 use App\Download;
-use Auth;
-use Redirect;
 use App\Video;
 use App\Story;
 use App\Traits\Slug;
@@ -24,16 +24,30 @@ class AdminClientController extends Controller
 {
     use Slug;
 
+    protected $user, $client, $video, $story, $collection, $collectionVideo, $collectionStory;
+
+    public function __construct(User $user, Client $client, Video $video, Story $story, Collection $collection, CollectionStory $collectionStory, CollectionVideo $collectionVideo)
+    {
+        $this->middleware('admin');
+        $this->user = $user;
+        $this->client = $client;
+        $this->video = $video;
+        $this->story = $story;
+        $this->collection = $collection;
+        $this->collectionStory = $collectionStory;
+        $this->collectionVideo = $collectionVideo;
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $clients = Client::orderBy('created_at', 'DESC')->paginate(10);
+        $clients = $this->client->orderBy('created_at', 'DESC')->paginate(10);
 
         $data = [
             'clients' => $clients,
-            'user' => Auth::user()
+            'user' => auth()->user()
         ];
 
          return view('admin.clients.index', $data);
@@ -44,7 +58,7 @@ class AdminClientController extends Controller
      */
     public function create()
     {
-        $videos = Video::where('state', 'licensed')
+        $videos = $this->video->where('state', 'licensed')
             ->orderBy('licensed_at', 'DESC')
             ->limit(50)
             ->get();
@@ -70,14 +84,14 @@ class AdminClientController extends Controller
     {
         $company_slug = $this->slugify($request->get('company_name'));
 
-        $company_id = Client::insertGetId([
+        $company_id = $this->client->insertGetId([
             'name' => $request->get('company_name'),
             'slug' => $company_slug,
         ]);
 
         $password = VideoHelper::quickRandom();
 
-        $user_id = User::insertGetId([
+        $user_id = $this->user->insertGetId([
             'username' => $company_slug,
             'email' => $request->get('user_email'),
             'full_name' => $request->get('user_full_name'),
@@ -86,9 +100,9 @@ class AdminClientController extends Controller
             'client_id' => $company_id
         ]);
 
-        $user = User::find($user_id);
+        $user = $this->user->find($user_id);
 
-        $client = Client::find($company_id);
+        $client = $this->client->find($company_id);
         $client->account_owner_id = $user_id;
         $client->save();
 
@@ -104,7 +118,7 @@ class AdminClientController extends Controller
             );
         }
 
-        return Redirect::to('admin/clients')->with([
+        return redirect()->to('admin/clients')->with([
             'note' => 'New Company Successfully Added!',
             'note_type' => 'success'
         ]);
@@ -117,13 +131,13 @@ class AdminClientController extends Controller
      */
     public function myAccount(EditCompanyRequest $request)
     {
-        $company = Client::find(Auth::user()->client_id);
+        $company = $this->client->find(auth()->user()->client_id);
 
         return view('admin.clients.create_edit', [
             'company' => $company,
-            'user' => Auth::user(),
+            'user' => auth()->user(),
             'update_path' => 'client.update',
-            'company_users' => User::where('client_id', $company->id)->get()
+            'company_users' => $this->user->where('client_id', $company->id)->get()
         ]);
     }
 
@@ -134,14 +148,14 @@ class AdminClientController extends Controller
      */
     public function edit(EditCompanyRequest $request, int $id)
     {
-        $company = Client::find($id);
+        $company = $this->client->find($id);
 
         return view('admin.clients.create_edit', [
             'company' => $company,
             'post_route' => url('admin/clients/update'),
-            'user' => Auth::user(),
+            'user' => auth()->user(),
             'update_path' => 'clients.update',
-            'company_users' => User::where('client_id', $company->id)->get()
+            'company_users' => $this->user->where('client_id', $company->id)->get()
         ]);
     }
 
@@ -152,40 +166,15 @@ class AdminClientController extends Controller
      */
     public function update(UpdateCompanyRequest $request, int $id)
     {
-        $redirect_path = '';
+        $data = request()->all();
 
-        $company = Client::findOrFail($id);
-        $company->slug = $this->slugify($request->input('company_name'));
-        $company->name = $request->input('company_name');
-        $company->address_line1 = $request->input('address_line1');
-        $company->address_line2 = $request->input('address_line2');
-        $company->city = $request->input('city');
-        $company->postcode = $request->input('postcode');
-        $company->country = $request->input('country');
-        $company->region = $request->input('region');
-        $company->tier = $request->input('tier');
-        $company->vat_number = $request->input('vat_number');
-        $company->billing_tel = $request->input('billing_tel');
-        $company->billing_email = $request->input('billing_email');
-        $company->billing_name = $request->input('billing_name');
-        $company->tier = $request->input('tier');
-        $company->location = $request->input('location');
-        $company->active = $request->input('active') == 'on' ? 1 : 0;
-        $company->usable_domains = $request->input('usable_domains');
+        $company = $this->client->find($id);
 
-        if ($company->account_owner_id != $request->input('account_owner_id')) {
-            $currentOwner = $company->account_owner_id;
-            $company->account_owner_id = $request->input('account_owner_id');
-            //TODO - send email to new owner that they are the account owner
-            //TODO - send email to old owner saying they've been kicked off.
-        }
-
-        $company->update();
+        $company = $company->updateClient($data);
 
         if($company->active == 1) {
             QueueEmailModerateCompany::dispatch($company);
         }
-
 
         //Update all new users linked with this company so they become active
         $users = $company->users()->get();
@@ -194,12 +183,8 @@ class AdminClientController extends Controller
             $user->save();
         }
 
-        if (!$redirect_path) {
-            $redirect_path = (Auth::user()->role == 'admin') ? 'admin/clients/edit/' . $company->id : '/client/profile';
-        }
-
-        return redirect($redirect_path)->with([
-            'note' => 'Successfully Updated Client!',
+        return redirect()->route('clients.edit', ['id' => $company->id])->with([
+            'note' => 'Successfully Updated Client Settings',
             'note_type' => 'success'
         ]);
     }
@@ -211,9 +196,9 @@ class AdminClientController extends Controller
 	 */
 	public function purchases(Request $request, $client_id)
 	{
-		$client = Client::find($client_id);
+		$client = $this->client->find($client_id);
 
-		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {
+		$collectionPurchasesVideos = $this->collection->whereHas('collectionVideos', function($query) {
 			$query->where('status', 'purchased');
 		})
 			->where('client_id', $client_id)
@@ -222,7 +207,7 @@ class AdminClientController extends Controller
 			->with('user')
 			->paginate(20, ['*'], 'purchased_videos');
 
-		$collectionPurchasesStories = Collection::whereHas('collectionStories', function($query) {
+		$collectionPurchasesStories = $this->collection->whereHas('collectionStories', function($query) {
 			$query->where('status', 'purchased');
 		})
 			->where('client_id', $client_id)
@@ -248,7 +233,7 @@ class AdminClientController extends Controller
      */
 	public function purchases_csv(Request $request, $client_id)
 	{
-		$collectionPurchasesVideos = Collection::whereHas('collectionVideos', function($query) {
+		$collectionPurchasesVideos = $this->collection->whereHas('collectionVideos', function($query) {
 			$query->where('status', 'purchased');
 		})
 			->where('client_id', $client_id)
@@ -257,7 +242,7 @@ class AdminClientController extends Controller
 			->with('user')
 			->paginate(20, ['*'], 'purchased_videos');
 
-		$collectionPurchasesStories = Collection::whereHas('collectionStories', function($query) {
+		$collectionPurchasesStories = $this->collection->whereHas('collectionStories', function($query) {
 			$query->where('status', 'purchased');
 		})
 			->where('client_id', $client_id)
@@ -311,7 +296,7 @@ class AdminClientController extends Controller
      */
     public function destroy($id)
     {
-        $client = Client::find($id);
+        $client = $this->client->find($id);
 
         if(!$client){
             abort(404);
@@ -325,7 +310,7 @@ class AdminClientController extends Controller
 
         $client->destroy($id);
 
-        return Redirect::to('admin/clients')->with([
+        return redirect()->to('admin/clients')->with([
             'note' => 'Successfully Deleted Client',
             'note_type' => 'success'
         ]);

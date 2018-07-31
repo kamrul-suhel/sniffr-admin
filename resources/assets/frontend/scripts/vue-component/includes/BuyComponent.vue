@@ -171,7 +171,7 @@
             },
 
             license_platform(val){
-                if(val) {
+                if(val && val.length) { // This is meant to be .length, something to do with multiple select
                     this.getVideoPrice();
                 }
             },
@@ -180,13 +180,7 @@
                 if(val) {
                     this.getVideoPrice();
                 }
-            },
-
-            // open_buy_dialog(val){
-            //     if(!val){
-            //         this.onQuoteDialogClose();
-            //     }
-            // }
+            }
         },
 
         computed:{
@@ -256,7 +250,7 @@
                 }
             },
 
-            getVideoPrice(){
+            getVideoPrice(test){
                 this.disabledCheck();
 
                 let form_data = new FormData();

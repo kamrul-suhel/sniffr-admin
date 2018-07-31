@@ -120,6 +120,12 @@
 											<i class="fa fa-address-book"></i> @if(isset($story->contact->id)) {{ $story->contact->full_name }} @else No Contact @endif
 										</a>
 
+										@if($story->source)
+										<a href="{{ $story->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">
+											<i class="fa fa-info"></i>
+										</a>
+										@endif
+
 										@if($story->url)
 										<a href="{{ $story->url }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
 											<i class="fa fa-wordpress"></i> @if($story->author) {{ $story->author }} @endif
