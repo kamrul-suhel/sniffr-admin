@@ -83,5 +83,13 @@
                 <textarea class="form-control" id="notes" rows="7" disabled>{{ $asset->notes }}</textarea>
             @endif
         </div>
+
+        @if($asset->status !== 'offered')
+            <div class="row">
+                <div class="col-lg-12">
+                    <button class="btn btn-danger pull-right" name="delete" value="true" type="submit">Reject/Ignore</button>
+                </div>
+            </div>
+        @endif
     </div>
 </div>

@@ -183,6 +183,7 @@
             onLogout(){
                 this.logout = true;
                 this.$store.dispatch('userLogout');
+                return this.$router.push({name: 'home'});
             },
 
             // Login component trigger this methods when change any value
