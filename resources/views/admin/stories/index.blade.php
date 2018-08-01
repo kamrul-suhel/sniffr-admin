@@ -3,8 +3,6 @@
 
 @section('content')
 
-@php use App\Http\Controllers\Admin\AdminStoryController @endphp
-
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
@@ -36,9 +34,6 @@
                 <div class="col-md-2">
 					<div class="form-group">
 						<select id="decision" name="decision" class="form-control" title="Steps">
-							@if(!$decision)
-							<option value="">Steps</option>
-							@endif
                             @foreach(config('stories.decisions') as $decision_state_key => $decision_state)
 							<option value="{{ $decision_state_key }}" @if($decision==@$decision_state_key) selected @endif>{{ ucwords(str_replace('-', ' ', $decision_state_key)) }}</option>
                             @endforeach
@@ -49,16 +44,10 @@
                 <div class="col-md-2">
 					<div class="form-group">
 						<select id="state" name="state" class="form-control" title="State">
-                            @if($decision)
-								@if(!$state)
-								<option value="">States</option>
-								@endif
-                                @foreach(config('stories.decisions.'.$decision) as $current_state => $state_values)
-							    <option value="{{ $state_values['value'] }}" @if($state==$state_values['value']) selected @endif>{{ $state_values['dropdown'] }}</option>
-                                @endforeach
-                            @else
-								<option value="">Select a Step first</option>
-                            @endif
+							<option value="">States</option>
+							@foreach(config('stories.decisions.'.$decision) as $current_state => $state_values)
+							<option value="{{ $state_values['value'] }}" @if($state==$state_values['value']) selected @endif>{{ $state_values['dropdown'] }}</option>
+							@endforeach
 						</select>
 					</div>
 				</div>
@@ -173,7 +162,13 @@
                                         </div>
                                         <div class="options-body">
 											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												<option>{{ AdminStoryController::getStateValue($story->state)['dropdown'] }}</option>
+												@foreach(config('stories.decisions') as $decision1 => $decision1_values)
+													@foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values)
+														@if($story->state == $current_state)
+															<option>{{ $state_values['dropdown'] }}</option>
+														@endif
+													@endforeach
+												@endforeach
 											</select>
                                         </div>
                                         <hr>
@@ -222,12 +217,14 @@
 
                             <div class="album-options no-border">
 
-								@php
-									$stateValues = AdminStoryController::getStateValue($story->state);
-								@endphp
-
-								@if($stateValues['negative_label']) <a href="#" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['negative_class'] }} btn-mini btn-mini-border left" title="{{ $stateValues['negative_label'] }}"><i class="fa fa-times"></i></a> @endif
-								@if($stateValues['positive_label']) <a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['positive_class'] }} btn-mini btn-mini-border" title="{{ $stateValues['positive_label'] }}"><i class="fa fa-check"></i> {{ $stateValues['positive_label'] }}</a> @endif
+								@foreach(config('stories.decisions') as $decision1 => $decision1_values)
+									@foreach(config('stories.decisions.'.$decision1) as $current_state => $stateValues)
+										@if($story->state == $current_state)
+											@if($stateValues['negative_label']) <a href="#" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['negative_class'] }} btn-mini btn-mini-border left" title="{{ $stateValues['negative_label'] }}"><i class="fa fa-times"></i></a> @endif
+											@if($stateValues['positive_label']) <a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['positive_class'] }} btn-mini btn-mini-border" title="{{ $stateValues['positive_label'] }}"><i class="fa fa-check"></i> {{ $stateValues['positive_label'] }}</a> @endif
+										@endif
+									@endforeach
+								@endforeach
 
                             </div>
                         </footer>
@@ -251,25 +248,8 @@
             </div>
         </div>
     </div>
+@stop
 
-    @section('javascript')
-
-	<script type="text/javascript">
-	$ = jQuery;
-
-	$(document).ready(function(){
-
-		// $('#decision').change(function(e) {
-        //     e.preventDefault();
-		// 	var decision = $(this).val();
-		// 	var search = $.url('?search_value')
-		// 	console.log(search);
-        //     window.location.href = 'http://example.com';
-		// });
-
-	});
-	</script>
-
-	@stop
-
+@section('javascript')
+	@include('admin.stories.partials.js')
 @stop

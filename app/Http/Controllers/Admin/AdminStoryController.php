@@ -66,24 +66,44 @@ class AdminStoryController extends Controller
             $stories = $stories->where('user_id', $assigned_to);
         }
 
-        // only display states within selected decision point
-        if($decision) {
-            $found=0;
-            foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-                if($state==$state_values['value']) {
-                    $found=1;
-                }
-            }
-            // ^ ABOVE: need a better way to search state values to see if state exists within a decision array
-            if($found==1) {
-                $stories = $stories->where('state', $state);
-            } else {
-                $state = ''; //$current_state[0]; //set current state to first state within decision
-                foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-                    $stories = $stories->orWhere('state', $state_values['value']);
-                }
-            }
-        }
+        // Need to check if state exists in current decision tree
+		$stateExists = false;
+		foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+			if($state == $state_values['value']) {
+				$stateExists = true;
+			}
+		}
+
+		if ($stateExists && $state) {
+			$stories = $stories->where('state', $state);
+		}else{
+			$stories = $stories->where(function($q) use ($decision){
+				foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+					$q->orWhere('state', $state_values['value']);
+				}
+			});
+		}
+
+
+//		// only display states within selected decision point
+//        if($decision) {
+//            $found=0;
+//            foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+//                if($state==$state_values['value']) {
+//                    $found=1;
+//                }
+//            }
+//
+//            // ^ ABOVE: need a better way to search state values to see if state exists within a decision array
+//            if($found==1) {
+//                $stories = $stories->where('state', $state);
+//            } else {
+//                $state = ''; //$current_state[0]; //set current state to first state within decision
+//                foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+//                    $stories = $stories->orWhere('state', $state_values['value']);
+//                }
+//            }
+//        }
 
         $stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
 
@@ -512,23 +532,6 @@ class AdminStoryController extends Controller
         }
 
         return \Storage::disk('s3')->url($imageFileName);
-    }
-
-    /**
-     * @param $state
-     * @return string
-     */
-    public static function getStateValue($state)
-    {
-        $found = Array();
-        foreach(config('stories.decisions') as $decision1 => $decision1_values) {
-            foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values) {
-                if($state==$current_state) {
-                    $found=$state_values;
-                }
-            }
-        }
-        return $found;
     }
 
     /**

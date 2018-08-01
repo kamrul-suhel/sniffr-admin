@@ -159,7 +159,7 @@ var public_vars = public_vars || {};
             var fieldId = $(this).attr("id");
 			var fieldValue = $(this).val();
 
-            if(storyId&&fieldId&&fieldValue) {
+            if( storyId && fieldId && fieldValue ) {
 				$.ajax({
 				    type: 'GET',
 				    url: '/admin/stories/update_field',
