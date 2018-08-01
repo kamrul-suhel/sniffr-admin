@@ -29,7 +29,9 @@
                 </v-layout>
             </v-container>
 
-            <search-component @searchOption="searchOption($event)" v-if="stories.length > 0"></search-component>
+            <search-component
+                    @searchOption="searchOption($event)"
+                    v-if="stories.length > 0"></search-component>
 
             <v-container grid-list-lg class="stories pt-0" v-if="stories.length > 0">
                 <v-layout row wrap>

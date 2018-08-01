@@ -51,7 +51,7 @@ Vue.filter('convertTime', function (duration) {
 
 
 Vue.filter('convertDate', function (date) {
-    if(date === undefined){
+    if(typeof date === "undefined"){
         return date;
     }
     var current_date = new Date(date.replace(/-/g, "/"));
