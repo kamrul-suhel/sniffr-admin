@@ -89,8 +89,10 @@ class ClientStoriesController extends Controller
 	{
 		if ($request->ajax()) {
 			$clientId = Auth::user()->client_id;
+			$userId = Auth::user()->user_id;
 
 			$offeredStories = Collection::with('collectionStories.story');
+
 			// If search passed through
 			if ($request->search) {
 				$search = $request->search;
@@ -99,14 +101,16 @@ class ClientStoriesController extends Controller
 				});
 			}
 			$offeredStories = $offeredStories->where('client_id', $clientId)
-//				->where('status', 'open')
-				->orderBy('created_at', 'DESC')
-				->whereHas('collectionStories', function($query) {
-					$query->where('status', 'offered');
-					$query->orWhere('status', 'requested');
-				})
-				->get()
-				->pluck('collectionStories')->all();
+                ->where('user_id', $userId)
+                ->where('client_id', $clientId)
+                ->where('status', 'open')
+                ->orderBy('created_at', 'DESC')
+                ->whereHas('collectionStories', function($query) {
+                    $query->where('status', 'offered');
+                    $query->orWhere('status', 'requested');
+                })
+                ->get()
+                ->pluck('collectionVideos');
 
 			//Paginate collection object
 			$stories = $this->paginate($offeredStories,self::PAGINATE_PER_PAGE, $request->page);
@@ -127,7 +131,8 @@ class ClientStoriesController extends Controller
     public function getPurchasedStories(Request $request)
     {
         if ($request->ajax()) {
-            $client_id = Auth::user()->client_id;
+            $clientId = auth()->user()->client_id;
+            $userId = auth()->user()->id;
 
 			$purchasedStories = Collection::with('collectionStories.story');
 			// If search passed through
@@ -137,7 +142,9 @@ class ClientStoriesController extends Controller
 					$query->where('title', 'LIKE', '%' . $search . '%');
 				});
             }
-			$purchasedStories = $purchasedStories->where('client_id', $client_id)
+			$purchasedStories = $purchasedStories
+                ->where('client_id', $clientId)
+                ->where('user_id', $userId)
 				->where('status', 'closed')
 				->orderBy('created_at', 'DESC')
 				->whereHas('collectionStories', function($query) {
