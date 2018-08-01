@@ -182,7 +182,7 @@
                             </v-flex>
                         </v-layout>
 
-                        <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="name">
+                        <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="id">
                             <template slot="items" slot-scope="props">
                                 <tr @click="props.expanded = !props.expanded">
                                     <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
