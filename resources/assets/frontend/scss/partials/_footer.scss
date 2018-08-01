@@ -84,28 +84,51 @@
           }
         }
       }
-    }
 
-    @include small-device{
-      .social-section{
-        text-align:center;
-      }
-    }
 
-    @include medium-device{
-      .social-section{
-        text-align:center;
+
+      @media only screen and (max-width: 576px) {
+        ul{
+          justify-content: center;
+        }
       }
-    }
-    @include large-device{
-      .social-section{
-        text-align:right;
+
+
+      // Small devices (landscape phones, 576px and up)
+
+      @media (min-width: 576px) {
+        ul{
+          justify-content: center;
+        }
       }
-    }
-    @include extra-large-device{
-      .social-section{
-        text-align:right;
+
+
+      // Medium devices (tablets, 768px and up)
+
+      @media (min-width: 768px) {
+        ul{
+          justify-content: flex-end;
+        }
       }
+
+
+      // Large devices (desktops, 992px and up)
+
+      @media (min-width: 992px) {
+        ul{
+          justify-content: flex-end;
+        }
+      }
+
+
+      // Extra large devices (large desktops, 1200px and up)
+
+      @media (min-width: 1200px) {
+        ul{
+          justify-content: flex-end;
+        }
+      }
+
     }
 
   }
