@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Libraries\ImageHandler;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -114,13 +115,24 @@ class User extends Authenticatable
     public function userOffers()
     {
         $offeredVideos = Collection::with('collectionVideos.video');
-        return $offeredVideos->where('client_id', $this->client_id)
+        $videoCount = $offeredVideos->where('client_id', $this->client_id)
             ->where('status', 'open')
             ->orderBy('created_at', 'DESC')
             ->whereHas('collectionVideos', function($query) {
                 $query->where('status', 'offered');
                 $query->orWhere('status', 'requested');
             })->count();
+
+        $offeredStories = Collection::with('collectionStories.video');
+        $storyCount = $offeredStories->where('client_id', $this->client_id)
+            ->where('status', 'open')
+            ->orderBy('created_at', 'DESC')
+            ->whereHas('collectionStories', function($query) {
+                $query->where('status', 'offered');
+                $query->orWhere('status', 'requested');
+            })->count();
+
+        return $videoCount + $storyCount;
     }
 
     /**
@@ -193,6 +205,28 @@ class User extends Authenticatable
         $this->save();
 
         return $this;
+    }
+
+    public function activeLicences()
+    {
+        $collections = $this->collections()
+            ->with('collectionVideos')
+            ->with('collectionStories')
+            ->whereHas('collectionVideos', function($query) {
+                $query->where('user_id', $this->id);
+                $query->where('status', 'purchased');
+                $query->whereNotNull('licensed_at');
+                $query->whereNotNull('license_ends_at');
+            })
+            ->orWhereHas('collectionStories', function($query) {
+                $query->where('user_id', $this->id);
+                $query->where('status', 'purchased');
+                $query->whereNotNull('licensed_at');
+                $query->whereNotNull('license_ends_at');
+            })
+            ->count();
+
+        return $collections;
     }
 
     /**

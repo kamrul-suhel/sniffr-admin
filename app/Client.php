@@ -104,6 +104,29 @@ class Client extends Model
 
     }
 
+    public function activeLicences()
+    {
+
+        $collections = $this->collections()
+            ->with('collectionVideos')
+            ->with('collectionStories')
+            ->whereHas('collectionVideos', function($query) {
+                $query->where('client_id', $this->id);
+                $query->where('status', 'purchased');
+                $query->whereNotNull('licensed_at');
+                $query->whereNotNull('license_ends_at');
+            })
+            ->orWhereHas('collectionStories', function($query) {
+                $query->where('client_id', $this->id);
+                $query->where('status', 'purchased');
+                $query->whereNotNull('licensed_at');
+                $query->whereNotNull('license_ends_at');
+            })
+            ->count();
+
+        return $collections;
+    }
+
     /**
      * @param $params
      * @return \Illuminate\Foundation\Bus\PendingDispatch

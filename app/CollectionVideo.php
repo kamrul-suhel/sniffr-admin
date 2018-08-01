@@ -67,6 +67,20 @@ class CollectionVideo extends Model
     }
 
     /**
+     * is the given video id currently being licensed?
+     * @param $videoId
+     * @return bool
+     */
+    public static function isVideoLicensed($videoId)
+    {
+        return CollectionVideo::where('video_id', $videoId)
+            ->where('status', 'purchased')
+            ->whereNotNull('licensed_at')
+            ->whereNotNull('license_ends_at')
+            ->count() > 0;
+    }
+
+    /**
      * Get a video of a specific type and status. (common occurrence throughout site)
      * @param $type
      * @param $status

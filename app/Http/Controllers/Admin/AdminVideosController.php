@@ -641,18 +641,15 @@ class AdminVideosController extends Controller
 
         $video = Video::where('alpha_id', $id)->first();
 
-        // Detach and delete any unused tags
-        // foreach ($video->tags as $tag) {
-        //     $this->detachTagFromVideo($video, $tag->id);
-        //     if (!$this->isTagContainedInAnyVideos($tag->name)) {
-        //         $tag->delete();
-        //     }
-        // }
-
-        //$this->deleteVideoImages($video);
-
         if (!$video) {
             abort(404);
+        }
+
+        if(CollectionVideo::isVideoLicensed($video->id)) {
+            return Redirect::back()->with([
+                'note' => 'Cannot delete video that is currently being licensed',
+                'note_type' => 'error'
+            ]);
         }
 
         CollectionVideo::where('video_id', $video->id)->delete();

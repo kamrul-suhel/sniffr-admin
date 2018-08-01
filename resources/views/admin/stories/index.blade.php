@@ -102,13 +102,25 @@
 
 			@foreach($stories as $story)
 
+				@php
+					$date = \Carbon\Carbon::parse($story->updated_at)->isToday() ? 'Today' : date('jS M',strtotime($story->updated_at));
+					$panelColour = ($story->priority=='high' ? 'danger' : ($story->priority=='medium' ? 'warning' : '')); //config('stories.colors'); $panelColour[$story->state]
+				@endphp
+
+				@if($currentDay != $date)
+					@php
+						$currentDay = $date;
+					@endphp
+					<div class="col-xs-12 date-header">
+						<h2>
+							{{ $date }}
+						</h2>
+					</div>
+				@endif
+
 				<div class="col-sm-6 col-md-4" id="story-{{ $story->alpha_id }}">
 
-                    @php
-        				$panelColour = config('stories.colors');
-        			@endphp
-
-					<article class="album {{ $panelColour[$story->state] }}">
+					<article class="album {{ $panelColour }}">
                         <div class="album-story-update" id="story-update-{{ $story->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
                         <div class="album-story-update-error" id="story-update-error-{{ $story->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
 						<section class="album-info album-grey">

@@ -99,9 +99,11 @@ class ClientVideosController extends Controller
     public function getOfferedVideos(Request $request)
     {
         if ($request->ajax()) {
-            $clientId = Auth::user()->client_id;
+            $clientId = auth()->user()->client_id;
+            $userId = auth()->user()->id;
 
             $offeredVideos = Collection::with('collectionVideos.video');
+
             // If search passed through
             if ($request->search) {
                 $search = $request->search;
@@ -109,7 +111,9 @@ class ClientVideosController extends Controller
                     $query->where('title', 'LIKE', '%' . $search . '%');
                 });
             }
-            $offeredVideos = $offeredVideos->where('client_id', $clientId)
+            $offeredVideos = $offeredVideos
+                ->where('client_id', $clientId)
+                ->where('user_id', $userId)
                 ->where('status', 'open')
                 ->orderBy('created_at', 'DESC')
                 ->whereHas('collectionVideos', function($query) {
@@ -121,9 +125,11 @@ class ClientVideosController extends Controller
 
             //Paginate collection object
             $videos = $this->paginate($offeredVideos,self::PAGINATE_PER_PAGE, $request->page);
+
             $data = [
                 'videos' => $videos,
             ];
+
             return $this->successResponse($data);
         }
         return view('frontend.master');
@@ -132,9 +138,11 @@ class ClientVideosController extends Controller
 	public function getPurchasedVideos(Request $request)
 	{
 		if ($request->ajax()) {
-			$client_id = Auth::user()->client_id;
+            $clientId = auth()->user()->client_id;
+            $userId = auth()->user()->id;
 
 			$purchasedVideos = Collection::with('collectionVideos.video');
+
 			// If search passed through
 			if ($request->search) {
 				$search = $request->search;
@@ -142,14 +150,16 @@ class ClientVideosController extends Controller
 					$query->where('title', 'LIKE', '%' . $search . '%');
 				});
 			}
-			$purchasedVideos = $purchasedVideos->where('client_id', $client_id)
+			$purchasedVideos = $purchasedVideos
+                ->where('client_id', $clientId)
+                ->where('user_id', $userId)
 				->where('status', 'closed')
 				->orderBy('created_at', 'DESC')
 				->whereHas('collectionVideos', function($query) {
 					$query->where('status', 'purchased');
 				})
 				->get()
-				->pluck('collectionVideos')->all();
+				->pluck('collectionVideos');
 
 			//Paginate collection object
 			$videos = $this->paginate($purchasedVideos, self::PAGINATE_PER_PAGE, $request->page);
