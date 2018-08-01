@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Libraries\ImageHandler;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -204,6 +205,28 @@ class User extends Authenticatable
         $this->save();
 
         return $this;
+    }
+
+    public function activeLicences()
+    {
+        $collections = $this->collections()
+            ->with('collectionVideos')
+            ->with('collectionStories')
+            ->whereHas('collectionVideos', function($query) {
+                $query->where('user_id', $this->id);
+                $query->where('status', 'purchased');
+                $query->whereNotNull('licensed_at');
+                $query->whereNotNull('license_ends_at');
+            })
+            ->orWhereHas('collectionStories', function($query) {
+                $query->where('user_id', $this->id);
+                $query->where('status', 'purchased');
+                $query->whereNotNull('licensed_at');
+                $query->whereNotNull('license_ends_at');
+            })
+            ->count();
+
+        return $collections;
     }
 
     /**
