@@ -99,7 +99,7 @@
             >
                 {{ button_text }}
             </v-btn>
-            <div class="caption text-xs-center pt-2">{{ getTimeRemaining(video.license_ends_at) }}</div>
+            <div class="caption text-xs-center pt-2" v-if="assetType === 'purchased'">{{ getTimeRemaining(video.license_ends_at) }}</div>
         </v-flex>
 
         <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>

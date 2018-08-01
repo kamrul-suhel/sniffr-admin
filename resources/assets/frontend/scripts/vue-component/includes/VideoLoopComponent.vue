@@ -106,7 +106,7 @@
                     url = '/videos?id='+video.alpha_id;
                     url += '&suggest=true';
                 }
-                this.$store.commit('setEntereRouteObject', this.$route);
+                this.$store.commit('setEnterRouteObject', this.$route);
 
                 window.history.pushState({}, null, url);
 

@@ -199,7 +199,7 @@ const mutations = {
         state.current_route_obj = route;
     },
 
-    setEntereRouteObject(state, route) {
+    setEnterRouteObject(state, route) {
         state.previewRouteObject = route;
     },
 
