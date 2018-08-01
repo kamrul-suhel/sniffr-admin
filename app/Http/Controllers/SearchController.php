@@ -132,7 +132,8 @@ class SearchController extends Controller
 			$mailerVideoIds = $this->clientMailerVideo->whereIn('client_mailer_id', $mailers)
                 ->pluck('video_id');
 
-			$mailerVideos = $this->video->select($this->getVideoFieldsForFrontend())
+			$mailerVideos = $this->video
+                ->select($this->getVideoFieldsForFrontend())
 				->whereIn('id', $mailerVideoIds)
 				->whereNotIn('id', $unsearchableVideos)
                 ->orderBy('licensed_at', 'DESC')
@@ -162,14 +163,18 @@ class SearchController extends Controller
 			$currentStory = $this->getCurrentstory($currentStoryId);
 		}
 
-		$stories = $this->story::where('state', 'published');
+        //Remove any exclusive based collections that have been purchased and downloaded.
+        $unsearchableStories = $this->collectionStory->getAssetByTypeStatus('exclusive', 'purchased')->pluck('story_id');
 
-		if($searchValue){
+        $stories = $this->story::where('state', 'published');
+
+        if($searchValue){
 			$stories = $stories->where(function ($query) use ($searchValue) {
 				$query->where('title', 'LIKE', '%' . $searchValue . '%');
 			});
 		}
 
+        $stories = $stories->whereNotIn('id', $unsearchableStories);
 		$stories = $stories->orderBy('id', 'DESC');
 		$stories = $stories->paginate($settings['posts_per_page']);
 
@@ -195,16 +200,22 @@ class SearchController extends Controller
 		}
 
 		if(auth()->check()){
-			$mailers =$this->clientMailerUser->where('user_id', auth()->user()->id)
+			$mailers = $this->clientMailerUser
+                ->where('user_id', auth()->user()->id)
                 ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
                 ->pluck('client_mailer_id');
 
-			$mailerStoryIds = $this->clientMailerStory->whereIn('client_mailer_id', $mailers)
+			$mailerStoryIds = $this->clientMailerStory
+                ->whereIn('client_mailer_id', $mailers)
                 ->pluck('story_id');
 
-			$mailerStories = $this->story->whereIn('id', $mailerStoryIds);
-			$mailerStories = $mailerStories->paginate();
-		}
+			$mailerStories = $this->story
+                ->whereIn('id', $mailerStoryIds)
+                ->whereNotIn('id', $unsearchableStories)
+                ->orderBy('licensed_at', 'DESC')
+                ->limit(10)
+                ->get();
+        }
 
 		$data['mailer_stories'] = $mailerStories;
 		$data['stories'] = $stories;

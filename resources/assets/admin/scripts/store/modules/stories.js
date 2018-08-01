@@ -1,7 +1,7 @@
 const state = {
     selectedStories: [],
     stories: {}
-}
+};
 
 const mutations = {
     addStory(state, curStory) {
@@ -29,14 +29,14 @@ const mutations = {
             }
         })
     }
-}
+};
 
 const actions = {
     getMailerStories({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             axios.post(payload)
                 .then((stories) => {
-                        state.stories = stories.data.stories;
+                        state.mailerStories = stories.data.mailer_stories;
                         resolve();
                     },
                     (error) => {
@@ -44,7 +44,7 @@ const actions = {
                     });
         })
     }
-}
+};
 
 const getters = {
     getAllSelectedStories(state) {
@@ -54,11 +54,11 @@ const getters = {
     getStories(state) {
         return state.stories;
     },
-}
+};
 
 export default {
     state,
     mutations,
     actions,
     getters
-}
+};

@@ -35,9 +35,9 @@
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
 
                     <div class="quote" v-if="type === 'offered' || type === 'purchased'">
-                        <v-layout row wrap>
-                            <v-flex xs6 class="pb-0">
-                                <span>Platform: {{ video.platform | convertHyphenToSpace}}</span>
+                        <v-layout align-center justify-space-around row fill-height>
+                            <v-flex xs12 class="pb-0">
+                                <span>Platform: {{ video.platform.replace(',', ', ') | convertHyphenToSpace}}</span>
                             </v-flex>
 
                             <v-flex xs6 class="pb-0">

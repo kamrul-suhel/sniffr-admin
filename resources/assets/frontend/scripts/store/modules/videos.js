@@ -3,11 +3,9 @@ const state = {
     videoDialogBox: false,
     videoLoading:false,
 
-
     videos: [],
     mailer_videos: [],
     paginate: '',
-
 
     /**
      * Video Dialog box property
@@ -22,17 +20,13 @@ const state = {
     current_route_obj: '',
     previewRouteObject:'',
 
-
     /**
      * Video detail page property
      */
     video_detail: {},
-
     purchasedVideos: [],
     offeredVideos:[],
     initVideo:false,
-
-
 };
 
 const getters = {
@@ -52,10 +46,6 @@ const getters = {
         return state.currentVideoTags;
     },
 
-    getCurrentVideo(state){
-        return state.currentVideo;
-    },
-
     getMailerVideoData(state) {
         return state.mailer_videos;
     },
@@ -68,7 +58,6 @@ const getters = {
     /**
      * Video dialog box property
       */
-
     getEnterStateUrl(state) {
         return state.previewRouteObject.fullPath;
     },
@@ -80,9 +69,6 @@ const getters = {
     getVideoLoading(state){
         return state.videoLoading;
     },
-
-
-
 
     getCurrentVideo(state) {
         return state.currentVideo;
@@ -104,16 +90,13 @@ const getters = {
     /**
      * Video detail getters
      */
-
     getVideoDetailData(state) {
         return state.video_detail;
     },
 
-
     getCurrentRouteObject(state){
         return state.current_route_obj;
     },
-
 
     /**
      * ***************************************
@@ -246,7 +229,6 @@ const mutations = {
      */
     setOfferedVideos(state, videos){
 
-        // IAN: Need to convert it to an arrray if it returns an object, for some stupid reason the pagination returns an object
         if (typeof videos.data == 'object') {
             videos.data = Object.values(videos.data);
         }
@@ -321,8 +303,6 @@ const actions = {
                 console.log('Not connect: ' + error);
             });
     },
-
-
 
     /**
      * Video dialog box action

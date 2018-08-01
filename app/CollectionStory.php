@@ -12,7 +12,7 @@ class CollectionStory extends Model
 
     protected $table = 'collection_stories';
 
-	protected $fillable = ['collection_id', 'story_id', 'final_price', 'notes', 'status', 'licensed_at', 'license_ends_at'];
+	protected $fillable = ['collection_id', 'story_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status', 'licensed_at', 'license_ends_at'];
 
     public function collection()
     {
@@ -57,6 +57,6 @@ class CollectionStory extends Model
 
     public function calculateLicenseEndTime()
 	{
-		return null;
+		return config('pricing.length.'. $this->length .'.end_date');
 	}
 }
