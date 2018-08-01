@@ -12,11 +12,11 @@
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
 
-                    <span class="label" :class="video.state == 'licensed' ? 'label-licensed': 'label-danger'">
+                    <span class="label" :class="video.state === 'licensed' ? 'label-licensed': 'label-danger'">
                         {{video.state}}
                     </span>
 
-                    <span v-if="video.nsfw == '1'" class="label" :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
+                    <span v-if="video.nsfw === '1'" class="label" :class="video.nsfw === '1' ? 'label-nsfw': 'label-danger'">
                         NSFW
                     </span>
 
@@ -33,7 +33,7 @@
             </v-card-title>
 
             <v-card-text class="pt-0">
-                <p class="video-card-text" v-if="video.description != 'null'">
+                <p class="video-card-text" v-if="video.description !== 'null'">
                     {{ video.description | readmore(100, '...') }}
                 </p>
             </v-card-text>
@@ -100,7 +100,7 @@
                 }
                 this.$store.commit('setEntereRouteObject', this.$route);
 
-                if(this.$route.name != 'home'){
+                if(this.$route.name !== 'home'){
                     this.$router.push({path: url});
                 }
 
@@ -123,7 +123,7 @@
                         let img_tag = document.createElement('img');
                         img_tag.src = img_src;
                         el.appendChild(img_tag);
-                    }
+                    };
 
                     image.onerror = function(){
                         let default_img = '/assets/frontend/images/placeholder.png';
@@ -131,7 +131,7 @@
                         let img_tag = document.createElement('img');
                         img_tag.src = default_img;
                         el.appendChild(img_tag);
-                    }
+                    };
                 }
             }
         }

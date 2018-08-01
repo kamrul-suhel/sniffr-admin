@@ -31,7 +31,23 @@
                 <v-flex xs12 pb-0>
                     <h2 v-html="story.title"></h2>
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
-                    <div v-html="story.excerpt"></div>
+                    <div>{{ story.excerpt | readmore(200, '...') }}</div>
+
+                    <div class="quote" v-if="type === 'offered' || type === 'purchased'">
+                        <v-layout align-center justify-space-around row fill-height>
+                            <v-flex xs12 class="pb-0">
+                                <span>Platform: {{ story.platform.replace(',', ', ') | convertHyphenToSpace }}</span>
+                            </v-flex>
+
+                            <v-flex xs6 class="pb-0">
+                                <span>Length: {{ story.length | convertHyphenToSpace }}</span>
+                            </v-flex>
+
+                            <v-flex xs6 class="pb-0">
+                                <span>Type: {{ story.type | convertHyphenToSpace }}</span>
+                            </v-flex>
+                        </v-layout>
+                    </div>
 
                     <div class="final-price" v-if="story.collection_status != 'requested'">
                         <h4>Final price: <span>£{{ story.final_price }}</span></h4>
@@ -186,12 +202,8 @@
                     console.log(response);
                     if (response.data.success === '1') {
                         this.acceptLoading = false;
-                        this.assetType = "purchased"
-                        this.purchased = true
-                        // SnackbarEventBus.displayMessage(5000, 'Story has successfully purchased');
-
-                        // After purchased, if we need to to change another component data this event need to enable
-                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
+                        this.assetType = "purchased";
+                        this.purchased = true;
                     }
                 });
             },
@@ -203,10 +215,8 @@
                     if (response.data.success === '1') {
                         // Do some action when they accept
                         this.declineLoading = false;
-
                         this.assetDeclined = true;
                         this.decline = true;
-                        // SnackbarEventBus.displayMessage(5000, 'Story has declined');
                     }
                 });
 
