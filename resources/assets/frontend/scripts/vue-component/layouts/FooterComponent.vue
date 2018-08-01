@@ -58,7 +58,6 @@
         <div class="all-dialog-box">
             <!-- Login component -->
             <login-component></login-component>
-            <!-- End login component -->
 
             <!-- Password reset dialog box -->
             <forgot-password-component></forgot-password-component>
@@ -66,7 +65,6 @@
 
             <!-- Quote Component -->
             <quote-component></quote-component>
-            <!-- End request quote component -->
 
             <!-- Video dialog box -->
             <video-dialog-component></video-dialog-component>
