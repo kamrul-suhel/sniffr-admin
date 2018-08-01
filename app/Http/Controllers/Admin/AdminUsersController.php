@@ -175,12 +175,19 @@ class AdminUsersController extends Controller
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return mixed
+     * @throws \Exception
      */
     public function destroy($id)
     {
-
         $user = $this->user->find($id);
+
+        if($user->activeLicences() > 0) {
+            return redirect()->back()->with([
+                'note' => 'Cannot delete user that is currently licensing assets',
+                'note_type' => 'error'
+            ]);
+        }
 
         $user->deleteUsersCollections();
 
