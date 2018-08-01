@@ -31,7 +31,7 @@
                             <p>{{ video_detail.description | readmore(300, '...')}}</p>
                         </div>
 
-                        <div class="read-more text-xs-right">
+                        <div class="read-more text-xs-right" v-if="!isOfferedPage">
                             <a @click.stop="goToDetail()">
                                 <v-icon small>keyboard_arrow_right</v-icon>
                                 Read more</a>
@@ -49,7 +49,7 @@
                         </div>
                     </v-flex>
 
-                    <v-flex xs12>
+                    <v-flex xs12 v-if="!isOfferedPage">
                         <buy-quote-button-component
                                 :type="'video'"
                                 :asset="video_detail"
@@ -65,6 +65,7 @@
 <script>
     import VideoPlayer from './VideoPlayerComponent';
     import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
+    import {mapGetters} from 'vuex';
     export default {
         components: {
             BuyQuoteButtonComponent,
@@ -72,14 +73,18 @@
         },
         data() {
             return {
-                user: {},
-                ready_to_show: true,
                 content_padding: true,
-                canBuy:false
+                canBuy:false,
+                isPurchasedPage: false
             }
         },
 
         computed: {
+            ...mapGetters({
+                user: 'getUserStatus',
+                isOfferedPage: 'getOsOfferedPage'
+            }),
+
             video_detail: {
                 get(){
                     return this.$store.getters.getCurrentVideo;
@@ -93,7 +98,6 @@
 
         created() {
 
-            this.user = this.$store.getters.getUserStatus;
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;

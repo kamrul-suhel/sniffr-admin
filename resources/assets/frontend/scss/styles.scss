@@ -1,18 +1,18 @@
-@import "./basic-reset";
-@import "./variables";
-@import "./fonts";
-@import "./mixin";
-@import "./global";
-@import "./plugin";
+@import "modules/basic-reset";
+@import "modules/variables";
+@import "modules/typography";
+@import "modules/mixin";
+@import "modules/global";
+@import "vendor/plugin";
 @import "../../../../node_modules/vuetify/dist/vuetify.min.css";
 
 
 /* ************************* Animation css ******************* */
-@import "./animation";
+@import "modules/animation";
 
 
 /* ************************* Header style ******************* */
-@import "layout/header";
+@import "partials/header";
 
 
 /* ************************* NAV style ******************* */
@@ -21,50 +21,53 @@
 
 
 /* ************************* Home Page style ******************* */
-@import "pages/home";
+@import "partials/pages/home";
 
 /* ************************* Login Page style ******************* */
-@import "includes/login";
-
-/* ************************* Quote Page style ******************* */
-@import "pages/quote";
+@import "partials/login";
 
 /* ************************* Videos Page style ******************* */
-@import "pages/videos";
+@import "partials/pages/videos";
 
 /* ************************* Video dialog box section style ******************* */
-@import "includes/video-dialog-box";
+@import "partials/asset-video-dialog-box";
 
 /* ************************* Video dialog box section style ******************* */
-@import "pages/stories";
+@import "partials/pages/stories";
 
 
 /* ************************* Video detail style ******************* */
-@import "pages/video-detail";
+@import "partials/pages/video-detail";
 
 
 /* ************************* Video upload page style ******************* */
-@import "form/video-upload";
+@import "partials/pages/upload-form";
 
 
-/* ************************* Footer style ******************* */
-//@import "layout/footer";
+/* ************************* Search style ******************* */
+@import "partials/search";
 
 
 /* ************************* Pagination style ******************* */
-@import "includes/pagination";
+@import "partials/pagination";
 
 
 /* ************************* Submission form page ******************* */
-@import "form/submission-form";
+@import "partials/pages/submission-form";
 
 /* ************************* More detail form page ******************* */
-@import "form/more-detail";
+@import "partials/pages/more-detail-form";
+
+/* ************************* Quote buy dialog component ******************* */
+@import "partials/quote-buy-dialog";
 
 
-@import "partials/buttons";
-@import "partials/modals";
-@import "partials/video-card";
+@import "modules/buttons";
+@import "partials/asset-video-card";
+
+
+@include extra-small-device{
+}
 
 @include small-device{
 }

@@ -31,7 +31,7 @@
                     </div>
                     <v-checkbox
                             v-model="selected"
-                            @click="onStoryClick()"
+                            @change="onStoryClick()"
                             ></v-checkbox>
                 </v-toolbar-items>
             </v-toolbar>
@@ -134,7 +134,7 @@
             });
 
         },
-        
+
 
         methods: {
             swipe (direction) {
@@ -176,11 +176,11 @@
             },
 
             onStoryClick(){
-                console.log(this.selected);
-                return;
-                if (selected) {
-                    this.$store.commit('setStory', this.current_story);
+                if (this.selected) {
+                    this.$store.commit('addStory', this.current_story);
+                    StoryDialogBoxEventBus.$emit('addedStoryFromDialog', this.current_story.id);
                 } else {
+                    StoryDialogBoxEventBus.$emit('removedStoryFromDialog', this.current_story.id);
                     this.$store.commit('removeStory', this.current_story);
                 }
             },

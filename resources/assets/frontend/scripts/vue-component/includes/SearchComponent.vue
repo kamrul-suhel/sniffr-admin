@@ -1,6 +1,6 @@
 <template>
 	<section class="videos-filter-section">
-	    <div  class="videos-filter-form" style="background:#fafafa;">
+	    <div  class="videos-filter-form">
 	        <v-container grid-list-lg pt-2 pb-2>
 	            <v-layout row wrap>
 	                <v-flex xs12>

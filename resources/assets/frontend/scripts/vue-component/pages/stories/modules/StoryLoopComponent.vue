@@ -1,5 +1,5 @@
 <template>
-    <v-flex d-flex xs12 sm12 md6 lg6 xl6 class="pa-3">
+    <v-flex d-flex xs12 sm12 md6 lg6 xl6 class="story-content pb-3">
         <v-layout row wrap>
             <v-flex xs12 sm5 md5 lg5 xl5>
                 <v-card contain class="story-media-thumbnail">
@@ -7,7 +7,7 @@
                 </v-card>
             </v-flex>
 
-            <v-flex xs12 sm7 md7 lg7 xl7>
+            <v-flex xs12 sm7 md7 lg7 xl7 class="py-2">
                 <h2 v-html="getFilterText(story.title, 50)"></h2>
                 <div v-html="getFilterText(story.description, 220)" class="description"></div>
                 <v-layout row wrap align-end>
@@ -35,10 +35,17 @@
 
 <script>
     import BuyQuoteButtonComponent from '../../../includes/BuyQuoteButtonComponent'
+    import {mapGetters} from 'vuex'
 
     export default  {
         components :{
             BuyQuoteButtonComponent,
+        },
+
+        computed:{
+            ...mapGetters({
+                client_login: 'getClientLogin'
+            }),
         },
 
         data(){
@@ -50,15 +57,6 @@
         props:['story'],
 
         created(){
-            // LoginEventBus.$on('loginSuccess', () => {
-            //     this.checkLoginStatus();
-            // });
-            //
-            // LoginEventBus.$on('logoutChangeState', () => {
-            //     this.checkLoginStatus();
-            // })
-
-            this.checkLoginStatus();
         },
 
         methods:{
@@ -71,10 +69,6 @@
 
             onStoryDetail(){
                 this.$router.push({name: 'stories_detail', params: {'alpha_id': this.story.alpha_id}})
-            },
-
-            checkLoginStatus(){
-                this.client_login = this.$store.getters.isClientLogin;
             }
         }
     }

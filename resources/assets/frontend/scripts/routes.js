@@ -3,8 +3,8 @@ import LoginComponent from './vue-component/pages/login/LoginComponent.vue';
 import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
 import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
-import PasswordResetTokenComponent from './vue-component/pages/loging/PasswordResetTokenComponent.vue';
-import PasswordSetTokenComponent from './vue-component/pages/loging/PasswordSetTokenComponent.vue';
+import PasswordResetTokenComponent from './vue-component/pages/login/PasswordResetTokenComponent.vue';
+import PasswordSetTokenComponent from './vue-component/pages/login/PasswordSetTokenComponent.vue';
 import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
 import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
@@ -16,13 +16,11 @@ import StoryDetailComponent from './vue-component/pages/stories/StoryDetailCompo
 import ClientComponent from './vue-component/pages/clients/ClientComponent';
 import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
 import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
-import ClientPurchasedAssetsComponent from './vue-component/pages/clients/purchased/ClientPurchasedAssetsComponent';
 
 import ClientProfileComponent from './vue-component/pages/clients/ProfileComponent';
 import ClientUserComponent from './vue-component/pages/clients/CreateUserComponent';
 import ClientEditUserComponent from './vue-component/pages/clients/EditUserComponent';
 
-import ClientOfferedAssetsComponent from './vue-component/pages/clients/offered/ClientOfferedAssetsComponent';
 import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
 
 import ClientPurchaseOfferedComponent from './vue-component/pages/clients/PurchasedOfferedComponent'
@@ -153,12 +151,6 @@ export const routes = [
                 path: '/client/profile/:slug/users/:userid/edit',
                 name: 'client_edit_create_user',
                 component: ClientEditUserComponent
-            },
-
-            {
-                path: 'collections/accept_price/:collection_video_id',
-                name: 'accept_quote',
-                component: ClientPurchasedAssetsComponent
             },
 
             {

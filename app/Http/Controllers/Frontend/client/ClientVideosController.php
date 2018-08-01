@@ -101,7 +101,9 @@ class ClientVideosController extends Controller
         if ($request->ajax()) {
             $clientId = Auth::user()->client_id;
 
-            $offeredVideos = Collection::with('collectionVideos.video');
+            $offeredVideos = Collection::with(['collectionVideos.video' => function($query){
+                $query->select($this->getVideoFieldsForFrontend());
+            }]);
             // If search passed through
             if ($request->search) {
                 $search = $request->search;
