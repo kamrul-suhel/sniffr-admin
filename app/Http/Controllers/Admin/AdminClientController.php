@@ -297,8 +297,11 @@ class AdminClientController extends Controller
     {
         $client = $this->client->find($id);
 
-        if(!$client){
-            abort(404);
+        if($client->activeLicences() > 0) {
+            return redirect()->back()->with([
+                'note' => 'Cannot delete client that is currently licensing assets',
+                'note_type' => 'error'
+            ]);
         }
 
         $users = $client->users()->update(['active' => '0']);

@@ -47,7 +47,16 @@
             }
         },
 
-        props:['story'],
+        props:{
+            story: {
+                type: Object,
+                required: true,
+            },
+            type: {
+                type: String,
+                required: false,
+            }
+        },
 
         created(){
             // LoginEventBus.$on('loginSuccess', () => {

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             DownloadsTableSeeder::class,
             MenuTableSeeder::class,
             PagesTableSeeder::class,
+			StoriesTableSeeder::class,
             TagsTableSeeder::class,
             TagVideoTableSeeder::class,
             YoutubeAccessTableSeeder::class,

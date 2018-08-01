@@ -166,9 +166,20 @@ var public_vars = public_vars || {};
 				    data: { story_id: storyId, field_id: fieldId, field_value: fieldValue },
 				    dataType: 'json',
 				    success: function (data) {
-                        //console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
+                        // console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
 						if(data.status=='success') {
                             $('#story-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+							if(data.field_id=='priority') {
+								if(data.field_value=='high'){
+									$('#story-'+data.story_alpha_id+' .album').removeClass('warning');
+									$('#story-'+data.story_alpha_id+' .album').addClass('danger', 1000);
+								}else if(data.field_value=='medium'){
+									$('#story-'+data.story_alpha_id+' .album').removeClass('danger');
+									$('#story-'+data.story_alpha_id+' .album').addClass('warning', 1000);
+								} else {
+									$('#story-'+data.story_alpha_id+' .album').removeClass('danger warning', 1000);
+								}
+							}
 							if(data.field_id=='state') {
 								window.location.reload();
 								// if(data.field_value=='published') {

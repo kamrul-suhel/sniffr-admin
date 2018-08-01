@@ -55,7 +55,7 @@
 
         computed:{
             initStories(){
-                // return this.$store.getters.getInitStories;
+                //return this.$store.getters.getInitStories;
             },
 
             initVideos(){

@@ -58,10 +58,8 @@ const mutations = {
     },
 
     setMailerStories(state, storiesObject) {
-        //In feature if we need to do something with stories.
-        // all stories with paginate object.
-        if (typeof storiesObject.data !== "undefined") {
-            state.mailerStories = storiesObject.data;
+        if (typeof storiesObject !== "undefined") {
+            state.mailerStories = storiesObject;
         }
     },
 
@@ -100,12 +98,13 @@ const mutations = {
         let allStories = [];
         offeredStories.data.forEach((story) => {
             story[0].story.final_price = story[0].final_price;
+            story[0].story.platform = story[0].platform;
+            story[0].story.type = story[0].type;
+            story[0].story.length = story[0].length;
             story[0].story.collection_story_id = story[0].id;
             story[0].story.collection_status = story[0].status;
             allStories.push(story[0].story);
         });
-
-
         state.offeredStories = allStories;
     },
 
@@ -118,6 +117,9 @@ const mutations = {
         let allStories = [];
         stories.data.forEach((story) => {
             story[0].story.final_price = story[0].final_price;
+            story[0].story.platform = story[0].platform;
+            story[0].story.type = story[0].type;
+            story[0].story.length = story[0].length;
             story[0].story.collection_story_id = story[0].id;
             story[0].story.collection_status = story[0].status;
             allStories.push(story[0].story);
@@ -147,7 +149,7 @@ const actions = {
             .then((response) => {
                 let data = response.data;
                 commit('setStories', data.stories.data);
-                commit('setMailerStories', data.mailer_stories);
+                commit('setMailerStories', data.mailerStories);
                 commit('setStoriesPaginateObject', data.stories);
             })
             .catch((error) => {

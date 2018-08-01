@@ -543,6 +543,13 @@ class AdminStoryController extends Controller
             abort(404);
         }
 
+        if(CollectionStory::isStoryLicensed($story->id)) {
+            return Redirect::back()->with([
+                'note' => 'Cannot delete story that is currently being licensed',
+                'note_type' => 'error'
+            ]);
+        }
+
         CollectionStory::where('story_id', $story->id)->delete();
         //TODO - EMAIL Existing quotes pending/offered that story has been removed from Sniffr.
 

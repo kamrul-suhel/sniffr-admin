@@ -54,8 +54,7 @@ class CollectionController extends Controller
     }
 
     /**
-     * TODO - Check if video already exists for client (not just user)
-     * TODO - Create CollectionVideo/CollectionStory instance. (assoc to this collection)
+     * Create new collection and collection_asset type for new quote building.
      * @param Request $request
      * @return mixed
      */
@@ -187,8 +186,6 @@ class CollectionController extends Controller
 
         $collection->update(['user_id' => $user->id, 'client_id' => $client->id]);
 
-
-        //TODO fucking disgusting
         $data['type'] = 'video';
         if(isset($data['story_alpha_id'])) {
             $data['type'] = 'story';
@@ -233,6 +230,11 @@ class CollectionController extends Controller
         }else{
             $collectionStory = $this->collectionStory->find($collection_asset_id);
             $collectionStory->update([
+                'type' => $data['license_type'] ?? $collectionStory->type,
+                'platform' => $data['license_platform'] ?? $collectionStory->platform,
+                'length' => $data['license_length'] ?? $collectionStory->length,
+                'company_location' => $client->region,
+                'company_tier' => $client->tier,
                 'notes' => $data['notes'] ?? '',
                 'status' => 'requested',
                 'final_price' => null,
@@ -291,6 +293,11 @@ class CollectionController extends Controller
 		}else{
 			$collectionStory = $this->collectionStory->find($collection_asset_id);
 			$collectionStory->update([
+                'type' => $data['license_type'] ?? $collectionStory->type,
+                'platform' => $data['license_platform'] ?? $collectionStory->platform,
+                'length' => $data['license_length'] ?? $collectionStory->length,
+                'company_location' => $client->region,
+                'company_tier' => $client->tier,
 				'notes' => $data['notes'] ?? '',
 				'status' => 'requested',
 				'final_price' => null,
@@ -363,8 +370,11 @@ class CollectionController extends Controller
 		// If exclusive type of asset is purchased,
         // Expire all other collections with same asset. Close collection too
 		if($collectionAsset->type === 'exclusive') {
+		    $column = $type == 'video' ? 'video_id' : 'story_id';
+		    $object = $type == 'video' ? $collectionAsset->video_id : $collectionAsset->story_id;
+
 		    $itemInCollectionAsset = $this->{'collection'.ucfirst($type)}
-                ->where('video_id', $collectionAsset->video_id)
+                ->where($column, $object)
                 ->where('status', '!=', 'purchased')
                 ->where('id', '!=', $collectionAsset->id);
 
@@ -387,10 +397,7 @@ class CollectionController extends Controller
                         $type
                     );
                 }
-
-
             }
-
         }
 
 		if($isJson){
