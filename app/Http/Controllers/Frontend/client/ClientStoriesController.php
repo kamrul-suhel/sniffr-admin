@@ -89,7 +89,7 @@ class ClientStoriesController extends Controller
 	{
 		if ($request->ajax()) {
 			$clientId = Auth::user()->client_id;
-			$userId = Auth::user()->user_id;
+			$userId = Auth::user()->id;
 
 			$offeredStories = Collection::with('collectionStories.story');
 
@@ -100,7 +100,7 @@ class ClientStoriesController extends Controller
 					$query->where('title', 'LIKE', '%' . $search . '%');
 				});
 			}
-			$offeredStories = $offeredStories->where('client_id', $clientId)
+			$offeredStories = $offeredStories
                 ->where('user_id', $userId)
                 ->where('client_id', $clientId)
                 ->where('status', 'open')
@@ -110,7 +110,7 @@ class ClientStoriesController extends Controller
                     $query->orWhere('status', 'requested');
                 })
                 ->get()
-                ->pluck('collectionVideos');
+                ->pluck('collectionStories');
 
 			//Paginate collection object
 			$stories = $this->paginate($offeredStories,self::PAGINATE_PER_PAGE, $request->page);
@@ -151,7 +151,7 @@ class ClientStoriesController extends Controller
 					$query->where('status', 'purchased');
 				})
 				->get()
-				->pluck('collectionStories')->all();
+				->pluck('collectionStories');
 
 			//Paginate collection object
 			$stories = $this->paginate($purchasedStories, self::PAGINATE_PER_PAGE, $request->page);

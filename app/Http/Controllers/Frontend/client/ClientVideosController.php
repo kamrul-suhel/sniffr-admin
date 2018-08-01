@@ -159,7 +159,7 @@ class ClientVideosController extends Controller
 					$query->where('status', 'purchased');
 				})
 				->get()
-				->pluck('collectionVideos')->all();
+				->pluck('collectionVideos');
 
 			//Paginate collection object
 			$videos = $this->paginate($purchasedVideos, self::PAGINATE_PER_PAGE, $request->page);
