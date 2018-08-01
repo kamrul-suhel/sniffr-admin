@@ -50,7 +50,6 @@
 
         data(){
             return {
-                client_login:''
             }
         },
 

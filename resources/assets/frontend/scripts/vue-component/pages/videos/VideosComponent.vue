@@ -3,7 +3,8 @@
     <div class="videos-section s-pagination-goto">
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
-            <v-container grid-list-lg class="py-0"
+            <v-container grid-list-lg
+                         class="pt-0 pb-5"
                          v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
                 <v-layout row wrap>
                     <v-flex xs12 class="text-center">

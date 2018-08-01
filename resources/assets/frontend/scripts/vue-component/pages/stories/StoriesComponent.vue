@@ -2,7 +2,9 @@
     <div class="stories-component">
         <section class="stories-section section-space">
 
-            <v-container grid-list-lg class="stories pt-0" v-if="client_logged_in && mailerStories.length > 0">
+            <v-container grid-list-lg
+                         class="stories pt-0 pb-5"
+                         v-if="client_logged_in && mailerStories.length > 0">
                 <v-layout row wrap>
                     <v-flex xs12 class="text-center">
                         <h2 class="text-uppercase">Your Suggested Stories</h2>
