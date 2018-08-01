@@ -62,7 +62,7 @@
                                         <td>{{ $collection->collectionStories->count() }}</td>
                                         <td>
                                             @foreach($collection->collectionStories as $collectionStory)
-                                                - <a target="_blank" href="{{ url('videos', $collectionStory->story->alpha_id) }}">{{ $collectionStory->story->alpha_id }}
+                                                - <a target="_blank" href="{{ url('stories', $collectionStory->story->alpha_id) }}">{{ $collectionStory->story->alpha_id }}
                                                     <i class="fa fa-external-link"></i></a>(£{{$collectionStory->final_price}}) - {{ $collectionStory->status }}
                                                     @if(isset($collectionStory->reason))
                                                         ({{ $collectionStory->reason }})
