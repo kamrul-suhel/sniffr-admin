@@ -17,6 +17,7 @@
                                     v-for="(mailer, index) in mailer_videos"
                                     :video="mailer"
                                     :key="mailer.alpha_id"
+                                    :width="'350px'"
                             ></video-loop-component>
                         </v-layout>
                     </v-flex>

@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12 sm6 md4 lg4 xl3 class="asset-video-content">
-        <v-card class="video-card block" style="min-width: 250px;">
+        <v-card class="video-card block" :style="width ? {'min-width': width}: ''">
             <v-card-media class="video-card-thumb-wrapper"
                 :src="onGetThumbnailImage()">
                 <a
@@ -56,6 +56,11 @@
             },
 
             type: {
+                type: String,
+                required: false
+            },
+
+            width: {
                 type: String,
                 required: false
             }

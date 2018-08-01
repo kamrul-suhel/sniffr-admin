@@ -196,7 +196,6 @@
                 },
 
                 set(value){
-                    console.log('open_buy_dialog'+ value);
                     this.$store.commit('setBuyDialog', value);
                 }
             },
