@@ -1,6 +1,6 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3>
-        <v-card class="video-card block" style="min-width: 350px;">
+    <v-flex xs12 sm6 md4 lg4 xl3 class="asset-video-content">
+        <v-card class="video-card block" :style="width ? {'min-width': width}: ''">
             <v-card-media class="video-card-thumb-wrapper"
                 :src="onGetThumbnailImage()">
                 <a
@@ -12,11 +12,12 @@
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
 
-                    <span class="label" :class="video.state === 'licensed' ? 'label-licensed': 'label-danger'">
-                        {{video.state}}
+                    <span class="label label-licensed" v-if="getVidePurchased()">
+                        Purchased
                     </span>
 
-                    <span v-if="video.nsfw === '1'" class="label" :class="video.nsfw === '1' ? 'label-nsfw': 'label-danger'">
+                    <span v-if="video.nsfw == '1'" class="label"
+                          :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
                         NSFW
                     </span>
 
@@ -57,10 +58,22 @@
             type: {
                 type: String,
                 required: false
+            },
+
+            width: {
+                type: String,
+                required: false
             }
         },
 
         methods:{
+            getVidePurchased() {
+                if (this.video.video_collections && this.video.video_collections.length > 0) {
+                    return true;
+                }
+                return false;
+            },
+
             defaultImage(){
                 this.video_image = '/assets/frontend/images/placeholder.png';
             },
@@ -98,11 +111,9 @@
                     url = '/videos?id='+video.alpha_id;
                     url += '&suggest=true';
                 }
-                this.$store.commit('setEntereRouteObject', this.$route);
+                this.$store.commit('setEnterRouteObject', this.$route);
 
-                if(this.$route.name !== 'home'){
-                    this.$router.push({path: url});
-                }
+                window.history.pushState({}, null, url);
 
                 this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);

@@ -5,6 +5,7 @@
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
                         height="250px"
+                        @click="onVideoDialog()"
                         class="client-video-thumbnail cdi-content">
                     <div class="cdi-label" v-if="purchased">
                         <v-tooltip top>
@@ -98,6 +99,7 @@
             >
                 {{ button_text }}
             </v-btn>
+            <div class="caption text-xs-center pt-2" v-if="assetType === 'purchased'">{{ getTimeRemaining(video.license_ends_at) }}</div>
         </v-flex>
 
         <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
@@ -126,7 +128,7 @@
             </v-btn>
         </v-flex>
 
-        <v-flex xs12 class="my-4">
+        <v-flex xs12 class="my-2">
             <v-divider></v-divider>
         </v-flex>
     </v-layout>
@@ -248,6 +250,67 @@
                     }
                 });
 
+            },
+
+            onVideoDialog(){
+                let url = this.$route.path;
+
+                url += '?type='+this.type;
+                url += '&id='+this.video.alpha_id;
+
+                if(this.$route.query.tag){
+                    url += '&tag='+this.$route.query.tag;
+                }
+                this.$route.query.alpha_id = this.video.alpha_id;
+
+
+                this.$store.commit('setEnterRouteObject', this.$route);
+
+                window.history.pushState({}, null, url);
+
+
+                if(this.$route.name === 'client_offered_assets'){
+                    // client offered page
+
+                    let index = this.index;
+                    this.$store.commit('setAssetOfferedCurrentIndex', index);
+                    this.$store.dispatch('fetchOfferedDialogNextPrevious');
+
+                    this.$store.commit('setVideoDialogBox', true);
+                    this.$store.commit('setVideoLoading', true);
+                    return;
+                }
+
+
+
+                this.$store.commit('setCurrentVideoAlphaId', this.video.alpha_id);
+                this.$store.commit('setCurrentRouteObject', this.$route);
+                this.$store.commit('setVideoDialogBox', true);
+                this.$store.commit('setVideoLoading', true);
+
+                this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: this.video.alpha_id});
+            },
+
+            getTimeRemaining(endtime){
+                // check if endtime exists
+                if(!endtime){
+                    return endtime;
+                }
+
+                let formatTime = endtime.replace('-', '/').replace('-', '/');
+                let t = Date.parse(formatTime) - Date.parse(new Date());
+                let seconds = Math.floor( (t/1000) % 60 );
+                let minutes = Math.floor( (t/1000/60) % 60 );
+                let hours = Math.floor( (t/(1000*60*60)) % 24 );
+                let days = Math.floor( t/(1000*60*60*24) );
+                return days + ' days '+ hours + ' Hours ' + minutes + ' minutes left';
+                return {
+                    'total': t,
+                    'days': days,
+                    'hours': hours,
+                    'minutes': minutes,
+                    'seconds': seconds
+                };
             }
         }
     }

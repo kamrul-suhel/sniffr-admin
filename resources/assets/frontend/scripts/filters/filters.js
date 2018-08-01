@@ -51,6 +51,9 @@ Vue.filter('convertTime', function (duration) {
 
 
 Vue.filter('convertDate', function (date) {
+    if(typeof date === "undefined"){
+        return date;
+    }
     var current_date = new Date(date.replace(/-/g, "/"));
     var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var monthsOfYear = ["January", "February", "March", "April", "May", "June", "July", "August",

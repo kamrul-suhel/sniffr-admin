@@ -53,7 +53,7 @@
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <small style="color:red" v-if="errors.company_name">{{ errors.company_name[0] }}
+                                    <small class="red--text" v-if="errors.company_name">{{ errors.company_name[0] }}
                                     </small>
                                     <v-text-field
                                             label="Company"
@@ -80,6 +80,8 @@
 
                                 <v-flex xs12>
                                     <v-select
+                                            content-class="s-platform"
+                                            class="s-platform"
                                             label="Platform"
                                             color="dark"
                                             :items="platforms"
