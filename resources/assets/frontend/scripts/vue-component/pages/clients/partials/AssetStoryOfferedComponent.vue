@@ -1,7 +1,10 @@
 <template>
     <v-layout row wrap class="cd-box">
         <v-flex xs12 sm12 md3 lg3 xl3>
-            <div class="cdi-content" :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }">
+            <div class="cdi-content"
+                 :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }"
+                 @click="onStoryClick()"
+            >
                 <div class="cdi-label" v-if="purchased">
                     <v-tooltip top>
                         <v-btn slot="activator" flat icon raised light color="white">
@@ -78,6 +81,10 @@
             >
                 {{ button_text }}
             </v-btn>
+
+            <div class="caption text-xs-center pt-2"
+                 v-if="assetType === 'purchased'">{{ story.license_ends_at | licenseExpired }}
+            </div>
         </v-flex>
 
         <v-flex v-else-if="story.collection_status === 'requested'" xs12 sm12 md3 lg3 xl3 pl-3>
@@ -117,7 +124,7 @@
 </template>
 
 <script>
-
+    import StoryDialogBoxEventBus from '../../../../event-bus/story-dialog-box-event-bus'
     export default {
         data () {
             return {
@@ -220,6 +227,10 @@
                     }
                 });
 
+            },
+
+            onStoryClick(){
+                StoryDialogBoxEventBus.$emit('openStoryDialog', this.story);
             }
         }
     }

@@ -125,6 +125,7 @@
 
         watch: {
             openLoginDialog(){
+                this.validation.error = false;
                 this.$refs.login_form.reset();
             }
         },

@@ -9,20 +9,6 @@
                     </v-btn>
                 </v-flex>
 
-                <v-flex xs12 sm12 md5 lg4 xl4 class="client-assets">
-                    <h2>Assets</h2>
-
-                    <v-divider style="margin-bottom:20px;"></v-divider>
-
-                    <v-layout row wrap>
-                        <asset-component v-for="asset in story.assets"
-                                         :key="asset.alpha_id"
-                                         :asset="asset"
-                                         :assets="story.assets"
-                                         :story_id="story.alpha_id"></asset-component>
-                    </v-layout>
-                </v-flex>
-
                 <v-flex xs12 sm12 md7 lg8 xl8>
                     <div class="story-content">
                         <v-badge right color="black" v-if="order">
@@ -46,6 +32,20 @@
                     </div>
                 </v-flex>
 
+                <v-flex xs12 sm12 md5 lg4 xl4 class="client-assets">
+                    <h2>Assets</h2>
+
+                    <v-divider style="margin-bottom:20px;"></v-divider>
+
+                    <v-layout row wrap>
+                        <asset-component v-for="asset in story.assets"
+                                         :key="asset.alpha_id"
+                                         :asset="asset"
+                                         :assets="story.assets"
+                                         :story_id="story.alpha_id"></asset-component>
+                    </v-layout>
+                </v-flex>
+
             </v-layout>
         </v-container>
     </div>
@@ -56,16 +56,24 @@
     import VideoReloadServices from '../../../../services/VideoReloadServices';
     import QuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
+    import {mapGetters} from 'vuex';
+
     export default {
         components: {
             QuoteButtonComponent,
             assetComponent: AssetComponent
         },
 
+        computed :{
+            ...mapGetters({
+                story: 'getCurrentStory',
+                assets: 'getCurrentStoryAssets',
+                user: 'getUserStatus'
+            })
+        },
+
         data() {
             return {
-                story: '',
-                user: {},
                 loading: false,
                 loader: null,
                 order: false,
@@ -73,12 +81,9 @@
         },
 
         created() {
-            this.user = this.$store.getters.getUser;
-
             this.getStoryDetail();
 
             var video_reload = new VideoReloadServices();
-            video_reload.reloadAll();
         },
 
         watch: {
@@ -104,11 +109,7 @@
 
             getStoryDetail(){
                 let alpha_id = this.$route.params.alpha_id;
-
-                this.$store.dispatch('getCurrentStory', alpha_id)
-                    .then(() => {
-                        this.story = this.$store.getters.getCurrentStory;
-                    });
+                this.$store.dispatch('fetchCurrentStory', alpha_id);
             },
 
             dateFormater(date){

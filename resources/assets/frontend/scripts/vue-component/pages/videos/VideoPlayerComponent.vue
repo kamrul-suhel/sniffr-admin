@@ -13,6 +13,11 @@
             </div>
 
             <div class="social-video" v-else-if="socialVideo">
+                <!--<v-progress-circular-->
+                <!--:size="40"-->
+                <!--color="dark"-->
+                <!--indeterminate-->
+                <!--&gt;</v-progress-circular>-->
                 <div v-html="video.iframe"></div>
             </div>
 
@@ -85,14 +90,6 @@
         },
 
         created() {
-
-            // VideoDialogBoxEventBus.$on('onDialogClickPrev', () => {
-            //     this.showVideo = false;
-            // });
-            //
-            // VideoDialogBoxEventBus.$on('onDialogClickNext', () => {
-            //     this.showVideo = false;
-            // });
         },
 
 

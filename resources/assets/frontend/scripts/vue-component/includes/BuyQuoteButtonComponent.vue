@@ -1,46 +1,53 @@
 <template>
-    <v-btn
-            v-if="canBuy"
-            dark
-            block
-            class="mb-0"
-            @click.stop="createCollection()"
-    >Buy now</v-btn>
+    <v-layout row wrap>
+        <v-flex xs12>
+            <v-btn
+                    v-if="canBuy"
+                    dark
+                    block
+                    class="mb-0"
+                    @click.stop="createCollection()"
+            >Buy now
+            </v-btn>
 
-    <v-btn
-            v-else
-            dark
-            block
-            class="mb-0"
-            @click.stop="openQuoteDialog()"
-    >Request Quote</v-btn>
+            <v-btn
+                    v-else
+                    dark
+                    block
+                    class="mb-0"
+                    @click.stop="openQuoteDialog()"
+            >Request Quote
+            </v-btn>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
 
     import {mapGetters} from 'vuex';
+
     export default {
-        props:[
+        props: [
             'type',
             'asset'
         ],
 
         data() {
             return {
-                canBuy:false,
+                canBuy: false,
             }
         },
 
         watch: {
-          asset(){
-              this.checkLogin();
-          }
+            asset() {
+                this.checkLogin();
+            }
         },
 
         computed: {
             ...mapGetters({
                 user: 'getUserStatus',
-                client_logged_in:'getClientLogin'
+                client_logged_in: 'getClientLogin'
             })
         },
 
@@ -50,7 +57,7 @@
         },
 
         methods: {
-            openQuoteDialog(){
+            openQuoteDialog() {
                 let form_data = {
                     'type': this.type,
                     'asset_alpha_id': this.asset.alpha_id
@@ -87,8 +94,8 @@
                     });
             },
 
-            checkLogin(){
-                this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 0 ) ? false : true;
+            checkLogin() {
+                this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 0) ? false : true;
             }
         }
     }

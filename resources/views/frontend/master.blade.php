@@ -8,8 +8,8 @@
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
-    <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/nav-styles.css') }}">
-    <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/footer-styles.css') }}">
+    <link rel="stylesheet" href="{{ mix('/assets/frontend/css/nav-styles.css') }}">
+    <link rel="stylesheet" href="{{ mix('/assets/frontend/css/footer-styles.css') }}">
     <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}" />
 
     <!-- If we need to add page specific style -->

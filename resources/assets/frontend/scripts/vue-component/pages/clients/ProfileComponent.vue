@@ -1,12 +1,12 @@
 <template>
     <div class="client-profile">
         <v-container grid-list-lg class="pt-0">
-            <v-layout row wrap>
+            <v-layout row wrap v-if="stateReady">
                 <v-flex xs12>
                     <h2 class="text-center text-uppercase">Account Settings</h2>
                 </v-flex>
 
-                <v-form ref="form" v-model="valid" id="company-update-form">
+                <v-form ref="form" v-model="valid" id="company-update-form" >
 
                     <!--Company Name-->
                     <v-container grid-list-lg>
@@ -182,7 +182,7 @@
                             </v-flex>
                         </v-layout>
 
-                        <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="name">
+                        <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="id">
                             <template slot="items" slot-scope="props">
                                 <tr @click="props.expanded = !props.expanded">
                                     <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
@@ -232,6 +232,7 @@
     export default {
         data() {
             return {
+                stateReady: false,
                 valid: false,
                 companyData: null,
                 company: null,
@@ -290,6 +291,8 @@
                         billing_tel: this.companyData.billing_tel,
                         account_owner_id: this.companyData.account_owner_id,
                     };
+
+                    this.stateReady = true;
 
                     if(this.user.id !== this.companyOwner || this.user.role !== 'client_admin') {
                         this.editUser(this.user.id);
