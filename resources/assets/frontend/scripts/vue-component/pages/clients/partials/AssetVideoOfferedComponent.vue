@@ -99,7 +99,10 @@
             >
                 {{ button_text }}
             </v-btn>
-            <div class="caption text-xs-center pt-2" v-if="assetType === 'purchased'">{{ getTimeRemaining(video.license_ends_at) }}</div>
+
+            <div class="caption text-xs-center pt-2"
+                 v-if="assetType === 'purchased'">{{ video.license_ends_at | licenseExpired }}
+            </div>
         </v-flex>
 
         <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
@@ -289,28 +292,6 @@
                 this.$store.commit('setVideoLoading', true);
 
                 this.$store.dispatch('getVideoNextAndPrevLink', {alpha_id: this.video.alpha_id});
-            },
-
-            getTimeRemaining(endtime){
-                // check if endtime exists
-                if(!endtime){
-                    return endtime;
-                }
-
-                let formatTime = endtime.replace('-', '/').replace('-', '/');
-                let t = Date.parse(formatTime) - Date.parse(new Date());
-                let seconds = Math.floor( (t/1000) % 60 );
-                let minutes = Math.floor( (t/1000/60) % 60 );
-                let hours = Math.floor( (t/(1000*60*60)) % 24 );
-                let days = Math.floor( t/(1000*60*60*24) );
-                return days + ' days '+ hours + ' Hours ' + minutes + ' minutes left';
-                return {
-                    'total': t,
-                    'days': days,
-                    'hours': hours,
-                    'minutes': minutes,
-                    'seconds': seconds
-                };
             }
         }
     }

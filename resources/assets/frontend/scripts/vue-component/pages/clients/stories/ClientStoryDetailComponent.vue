@@ -74,8 +74,6 @@
 
         data() {
             return {
-                story: '',
-                user: {},
                 loading: false,
                 loader: null,
                 order: false,
@@ -83,12 +81,9 @@
         },
 
         created() {
-            this.user = this.$store.getters.getUser;
-
             this.getStoryDetail();
 
             var video_reload = new VideoReloadServices();
-            video_reload.reloadAll();
         },
 
         watch: {
