@@ -27,15 +27,17 @@
 
     <table class="table table-striped pages-table">
         <tr class="table-header">
-            <th>Videos</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Videos</th>
+            <th>Stories</th>
             <th>Edit</th>
         @foreach($contacts as $contact)
             <tr>
-                <td>{{ count($contact->videos) }}</td>
                 <td>{{ $contact->full_name }}</td>
                 <td>{{ $contact->email }}</td>
+                <td>{{ count($contact->videos) }}</td>
+                <td>{{ count($contact->stories) }}</td>
                 <td>
                     <p>
                         <a href="{{ route('contacts.edit', ['id' => $contact->id]) }}" class="btn btn-xs btn-info">
