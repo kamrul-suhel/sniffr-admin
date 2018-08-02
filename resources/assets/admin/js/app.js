@@ -20,7 +20,7 @@ window.Vue = require('vue');
 //     el: '#app'
 // });
 
-require('../../talvbansal/media-manager/js/media-manager');
+// require('../../talvbansal/media-manager/js/media-manager');
 
 // Vue.component('NewPostModal', {
 //   template: `<div class="modal-body">
@@ -34,20 +34,20 @@ require('../../talvbansal/media-manager/js/media-manager');
 //     </div>`,
 // });
 
-const app = new Vue({
-        el: '#app',
-        data:{
-            showMediaManager: false,
-            showModal: false,
-            selectedEventName: 'editor'
-        },
-        mounted(){
-            window.eventHub.$on('media-manager-selected-editor', (file) => {
-                console.log(file.name);
-                console.log(file.mimeType);
-                console.log(file.relativePath);
-                console.log(file.webPath);
-                this.showMediaManager = false;
-            });
-        }
-    });
+// const app = new Vue({
+//         el: '#app',
+//         data:{
+//             showMediaManager: false,
+//             showModal: false,
+//             selectedEventName: 'editor'
+//         },
+//         mounted(){
+//             window.eventHub.$on('media-manager-selected-editor', (file) => {
+//                 console.log(file.name);
+//                 console.log(file.mimeType);
+//                 console.log(file.relativePath);
+//                 console.log(file.webPath);
+//                 this.showMediaManager = false;
+//             });
+//         }
+//     });

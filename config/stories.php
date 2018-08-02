@@ -36,8 +36,8 @@ return [
             ],
             'approved' => [
                 'dropdown' => 'Approved',
-				'value' => 'unapproved', // dropdown value
-                'positive_label' => '',
+				'value' => 'approved', // dropdown value
+                'positive_label' => false,
                 'negative_label' => 'Unapprove',
                 'positive_class' => 'text-success js-story-state unlicensed',
                 'negative_class' => 'text-danger js-story-state unapproved',

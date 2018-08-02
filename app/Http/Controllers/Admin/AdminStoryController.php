@@ -46,7 +46,7 @@ class AdminStoryController extends Controller
         $search_value = $request->input('search_value', null);
         $state = $request->input('state') ? $request->input('state') : Cookie::get('sniffr_admin_state');
         $decision = $request->input('decision', (Cookie::get('sniffr_admin_decision') ?? 'content-sourced'));
-        $assigned_to = $request->input('assigned_to', null);
+        $assigned_to = $request->input('assigned_to', (Cookie::get('sniffr_admin_assigned') ?? null));
 
         $stories = new Story;
 
@@ -78,9 +78,6 @@ class AdminStoryController extends Controller
 		if (!$stateExists) { // Get the first (default) state in the array
 			$state = key(config('stories.decisions.'.$decision));
 		}
-
-		var_dump('Decision: '.$decision);
-		var_dump('State: '.$state);
 
 		$stories = $stories->where('state', $state);
 
@@ -117,6 +114,7 @@ class AdminStoryController extends Controller
 
 		Cookie::queue('sniffr_admin_decision', $decision);
 		Cookie::queue('sniffr_admin_state', $state);
+		Cookie::queue('sniffr_admin_assigned', $assigned_to);
 
         return view('admin.stories.index', $data);
     }
