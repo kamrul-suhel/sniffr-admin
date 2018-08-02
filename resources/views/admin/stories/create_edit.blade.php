@@ -21,6 +21,13 @@
 
 	<div class="row">
 		<div class="col-sm-12">
+			@if(\App\CollectionStory::isOffered($asset->id)->count() > 0
+                || \App\CollectionStory::isRequested($asset->id)->count() > 0)
+				<div class="col-lg-12 label label-warning">
+					{{ \App\CollectionStory::isOffered($asset->id)->count() > 0 ? "Offered: ".\App\CollectionStory::isOffered($asset->id)->count() : '' }}
+					{{ \App\CollectionStory::isRequested($asset->id)->count() > 0 ? "Requested: ".\App\CollectionStory::isRequested($asset->id)->count() : '' }}
+				</div>
+			@endif
 			<div class="form-group">
 				<div>
 					<input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($asset->title)){{ $asset->title }}@endif" />

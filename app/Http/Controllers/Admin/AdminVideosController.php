@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\CollectionVideo;
+use App\Jobs\Quotes\QueueEmailExpiredQuote;
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use App\Services\VideoService;
 use App\VideoSocialLink;
 use App\VideoStats;
@@ -652,18 +654,31 @@ class AdminVideosController extends Controller
             ]);
         }
 
-        CollectionVideo::where('video_id', $video->id)->delete();
-        //TODO - EMAIL Existing quotes pending/offered that video has been removed from Sniffr.
+        $offeredAndPendingVideos = CollectionVideo::where('video_id', $video->id)
+            ->where('status', 'requested')
+            ->orWhere('status', 'offered');
 
+        if($offeredAndPendingVideos->count() > 0) {
+            foreach($offeredAndPendingVideos->get() as $emailForDeletion) {
+                QueueEmailRetractQuote::dispatch(
+                    $emailForDeletion,
+                    'video'
+                );
+            }
+        }
+
+        CollectionVideo::where('video_id', $video->id)->delete();
         $video->destroy($video->id);
 
         if ($isJson) {
             return response()->json([
-                'status' => 'success', 'message' => 'Successfully Removed Video',
-                'remove' => 'yes', 'video_id' => $video->alpha_id,
+                'status' => 'success',
+                'message' => 'Successfully Removed Video',
+                'remove' => 'yes',
+                'video_id' => $video->alpha_id,
             ]);
         } else {
-            return Redirect::to('admin/videos/' . session('state'))->with([
+            return Redirect::to('admin/videos/')->with([
                 'note' => 'Successfully Deleted Video',
                 'note_type' => 'success',
             ]);

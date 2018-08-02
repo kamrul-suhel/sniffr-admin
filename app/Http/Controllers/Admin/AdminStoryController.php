@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\CollectionStory;
+use App\Jobs\Quotes\QueueEmailExpiredQuote;
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
@@ -550,9 +552,20 @@ class AdminStoryController extends Controller
             ]);
         }
 
-        CollectionStory::where('story_id', $story->id)->delete();
-        //TODO - EMAIL Existing quotes pending/offered that story has been removed from Sniffr.
+        $offeredAndPendingStories = CollectionStory::where('story_id', $story->id)
+            ->orWhere('status', 'purchased')
+            ->where('status', 'offered');
 
+        if($offeredAndPendingStories->count() > 0) {
+            foreach($offeredAndPendingStories->get() as $emailForDeletion) {
+                QueueEmailRetractQuote::dispatch(
+                    $emailForDeletion,
+                    'story'
+                );
+            }
+        }
+
+        CollectionStory::where('story_id', $story->id)->delete();
         $story->destroy($story->id);
 
         return Redirect::to('admin/stories')->with([

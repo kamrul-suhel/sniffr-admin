@@ -7,7 +7,7 @@
                 @else
                     <span class="label label-success">{{ \Carbon\Carbon::parse($asset->created_at)->diffForHumans() }}</span>
                 @endif
-                <b>{{ $collection->name }} : ({{ $collection->{'collection'.str_plural($type)}->count() }} video)</b>
+                <b>{{ $collection->name }} : ({{ $collection->{'collection'.str_plural($type)}->count() }} {{ ucwords($type) }})</b>
             </b>
        </h4>
 
@@ -26,7 +26,7 @@
                 {{--Title --}}
                 <div class="col-lg-6">
                     <h3 class="title">
-                        <a target="_blank" href="{{ url('admin/videos/edit/'.$asset->{$type}->alpha_id) }}">
+                        <a target="_blank" href="{{ url('admin/'.str_plural($type).'/edit/'.$asset->{$type}->alpha_id) }}">
                             {{ $asset->{$type}->title }} <i class="fa fa-external-link"></i>
                         </a>
                     </h3>
@@ -87,6 +87,7 @@
         @if($asset->status !== 'offered')
             <div class="row">
                 <div class="col-lg-12">
+                    <br>
                     <button class="btn btn-danger pull-right" name="delete" value="true" type="submit">Reject/Ignore</button>
                 </div>
             </div>
