@@ -84,6 +84,10 @@ const getters = {
         return state.currentVideo;
     },
 
+    getAssetOfferedCurrentIndex(state) {
+        return state.assetOfferedCurrentIndex;
+    },
+
     getCurrentVideoAlphaId() {
         return state.currentVideoAlphaId;
     },

@@ -183,7 +183,7 @@
                     if(direction === 'prev'){
                         index -= 1;
                     }
-                    
+
                     this.$store.commit('setMailerVideoCurrentIndex', index);
                     this.$store.commit('setSuggestNextPrevious');
                     return;
