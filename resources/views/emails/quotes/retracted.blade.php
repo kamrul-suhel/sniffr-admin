@@ -7,7 +7,7 @@
 
     <div class="col-lg-12">
         <div class="container">
-            <h2>Sorry but your offer has expired.</h2>
+            <h2>Sorry but your offer has been revoked.</h2>
             @if($data['collection'])
                 <p>Your Reference number: <b>{{ ucwords($data['collection']->name) }}</b></p>
                 <br>
@@ -40,7 +40,6 @@
             <br>
             <hr>
             <p>
-                You can try to request a quote again <a href="{{ url('client/'.str_plural($data['type']).'/'.$data['collectionAsset']->{$data['type']}->alpha_id) }}">here</a>.
                 <br><br>
                 Rest assured we have many more <a href="{{ url('videos') }}">Videos</a> and <a href="{{ url('stories') }}">Stories</a> for you!
             </p>
