@@ -169,9 +169,24 @@
                 }
 
                 if(type === 'suggest'){
+                    this.$store.commit('setVideoDialogBox', true);
+                    this.$store.commit('setVideoLoading', true);
+
                     url = this.$route.path;
                     url += '?id='+alphaId;
                     url += '&suggest=true';
+                    let index = this.$store.getters.getMailerVideoCurrentIndex;
+                    if(direction === 'next'){
+                        index += 1;
+                    }
+
+                    if(direction === 'prev'){
+                        index -= 1;
+                    }
+                    
+                    this.$store.commit('setMailerVideoCurrentIndex', index);
+                    this.$store.commit('setSuggestNextPrevious');
+                    return;
                 }
 
                 if(type === 'offered'){

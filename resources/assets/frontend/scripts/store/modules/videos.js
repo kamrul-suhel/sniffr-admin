@@ -266,10 +266,11 @@ const mutations = {
         state.initVideo = value;
     },
 
-    setSuggestNextPrevious({commit, state}) {
-        let currIndex = state.assetOfferedCurrentIndex;
+    setSuggestNextPrevious(state) {
+        let currIndex = state.mailerVideoCurrentIndex;
         let allVideos = state.mailer_videos;
         let currentAlphaId = '';
+        let currentVideo = '';
         let previousAlphaId = '';
         let nextAlphaId = '';
         let currentVideoPosition = currIndex;
@@ -278,6 +279,7 @@ const mutations = {
 
         if (allVideos[Object.keys(allVideos)[currIndex]]) {
             currentAlphaId = allVideos[Object.keys(allVideos)[currIndex]].alpha_id;
+            currentVideo = allVideos[Object.keys(allVideos)[currIndex]];
         }
 
         if (allVideos[Object.keys(allVideos)[currIndex - 1]]) {
@@ -288,24 +290,12 @@ const mutations = {
             nextAlphaId = allVideos[Object.keys(allVideos)[currIndex + 1]].alpha_id;
         }
 
-        if (currentVideoPosition === totalVideos && hasNextPage) {
-            // if has next page, do next page fetch the data
-        }
-
         state.previousVideoAlphaId = previousAlphaId;
         state.currentVideoAlphaId = currentAlphaId;
         state.nextVideoAlphaId = nextAlphaId;
 
-        // now fetch the data form server
-        let data = {alpha_id: currentAlphaId};
-        let url = '/search/videos';
-
-        axios.post(url, data)
-            .then((response) => {
-                let currVideo = response.data.current_video;
-                commit('setCurrentVideo', currVideo)
-                commit('setVideoLoading', false)
-            });
+        state.currentVideo = currentVideo;
+        state.videoLoading =  false;
 
     }
 

@@ -112,22 +112,27 @@
                     url += '&search='+this.$route.query.search;
                 }
 
+
                 if(this.type === 'suggest'){
-                    url = '/videos?id='+video.alpha_id;
-                    url += '&suggest=true';
-                    this.$route.query.type = 'suggest';
-                    let index = this.index;
-                    this.$store.commit('setMailerVideoCurrentIndex', index);
-                    this.$store.commit('setSuggestNextPrevious');
 
                     this.$store.commit('setVideoDialogBox', true);
                     this.$store.commit('setVideoLoading', true);
+
+                    url = '/videos?id='+video.alpha_id;
+                    url += '&suggest=true';
+                    window.history.pushState({}, null, url);
+                    this.$route.query.type = 'suggest';
+                    let index = this.index;
+
+                    this.$store.commit('setEnterRouteObject', this.$route);
+                    this.$store.commit('setMailerVideoCurrentIndex', index);
+                    this.$store.commit('setSuggestNextPrevious');
                     return;
                 }
 
-                this.$store.commit('setEnterRouteObject', this.$route);
-
                 window.history.pushState({}, null, url);
+
+                this.$store.commit('setEnterRouteObject', this.$route);
 
                 this.$store.commit('setCurrentVideoAlphaId', video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);
