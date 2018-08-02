@@ -38,7 +38,7 @@
         }
 
         .album-info{
-            padding: 20px;
+            padding: 15px;
 
             p{
                 max-height: 30px;
@@ -112,7 +112,6 @@
                 a{
                     color: #8d929a;
                     font-size: 18px;
-                    margin-right: 10px;
                     display: inline-block;
                     border-radius: 3px;
                     background-clip: padding-box;
@@ -136,7 +135,7 @@
                     }
 
                     + a{
-                        margin-left: 5px;
+                        margin-left: 15px;
                     }
                 }
             }

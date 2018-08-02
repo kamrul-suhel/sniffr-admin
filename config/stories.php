@@ -35,9 +35,9 @@ return [
                 'negative_class' => 'text-danger js-story-state rejected', // class for the negative button
             ],
             'approved' => [
-                'dropdown' => 'Awaiting Reply',
-                'value' => 'approved',
-                'positive_label' => 'Made Contact',
+                'dropdown' => 'Approved',
+				'value' => 'unapproved', // dropdown value
+                'positive_label' => '',
                 'negative_label' => 'Unapprove',
                 'positive_class' => 'text-success js-story-state unlicensed',
                 'negative_class' => 'text-danger js-story-state unapproved',
@@ -60,9 +60,9 @@ return [
             ],
 		],
         'licensing' => [
-            'unlicensed' => [
+            'approved' => [
                 'dropdown' => 'Ready for Pickup',
-                'value' => 'unlicensed',
+                'value' => 'approved',
                 'positive_label' => 'License Story',
                 'negative_label' => 'Unapprove',
                 'positive_class' => 'text-success js-story-state licensing',

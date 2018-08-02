@@ -44,7 +44,6 @@
                 <div class="col-md-2">
 					<div class="form-group">
 						<select id="state" name="state" class="form-control" title="State">
-							<option value="">States</option>
 							@foreach(config('stories.decisions.'.$decision) as $current_state => $state_values)
 							<option value="{{ $state_values['value'] }}" @if($state==$state_values['value']) selected @endif>{{ $state_values['dropdown'] }}</option>
 							@endforeach
@@ -161,7 +160,7 @@
                                             <span class="caret"></span>
                                         </div>
                                         <div class="options-body">
-											<select id="statex" name="statex" class="btn btn-mini no-caret">
+											<select id="state" name="state" class="btn btn-mini no-caret">
 												@foreach(config('stories.decisions') as $decision1 => $decision1_values)
 													@foreach(config('stories.decisions.'.$decision1) as $current_state => $state_values)
 														@if($story->state == $current_state)
@@ -176,8 +175,9 @@
 											<!-- <strong>Assigned in Sniffr:</strong> -->
                                             <select id="assign_to" name="assign_to" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Assign To">
                                                 <option value="">Select User</option>
+												<?php $storyUserId = $story->user()->first()->id; ?>
                                                 @foreach($users as $user)
-                    							<option value="{{ $user->id }}" @if($story->user()->first()->id==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+                    							<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
                                                 @endforeach
                     						</select>
                                             <span class="caret"></span>
@@ -201,6 +201,8 @@
 											<i class="fa fa-clock-o" title="Contacted"></i>
 											<strong>@if($story->reminders) {{ $story->reminders }} Reminder{{ ($story->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong>{{ $story->contacted_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet' }}
 											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger btn-mini">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
+
+											<a href="{{ url('admin/stories/contact_made/'.$story->alpha_id) }}" data-id="{{ $story->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
 										@else
 											<i class="fa fa-question-circle-o" title="Not Contacted"></i>
 											<strong>Not Contacted</strong>
@@ -216,17 +218,15 @@
                             </div>
 
                             <div class="album-options no-border">
-
-								@foreach(config('stories.decisions') as $decision1 => $decision1_values)
-									@foreach(config('stories.decisions.'.$decision1) as $current_state => $stateValues)
-										@if($story->state == $current_state)
-											@if($stateValues['negative_label']) <a href="#" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['negative_class'] }} btn-mini btn-mini-border left" title="{{ $stateValues['negative_label'] }}"><i class="fa fa-times"></i></a> @endif
-											@if($stateValues['positive_label']) <a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['positive_class'] }} btn-mini btn-mini-border" title="{{ $stateValues['positive_label'] }}"><i class="fa fa-check"></i> {{ $stateValues['positive_label'] }}</a> @endif
-										@endif
-									@endforeach
+								@foreach(config('stories.decisions.'.$decision1) as $current_state => $stateValues)
+									@if($story->state == $current_state)
+										<?php $state_values = $stateValues; ?>
+									@endif
 								@endforeach
 
-                            </div>
+								@if($state_values['negative_label']) <a href="#" data-id="{{ $story->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a> @endif
+								@if($state_values['positive_label']) <a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
+							</div>
                         </footer>
 
 					</article>

@@ -23,6 +23,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 use App\Jobs\QueueBump;
 use App\Jobs\QueueStory;
+use Illuminate\Support\Facades\Cookie;
 
 class AdminStoryController extends Controller
 {
@@ -43,8 +44,8 @@ class AdminStoryController extends Controller
     public function index(Request $request)
     {
         $search_value = $request->input('search_value', null);
-        $state = ($request->input('state') ? $request->input('state') : '');
-        $decision = $request->input('decision', 'content-sourced');
+        $state = $request->input('state') ? $request->input('state') : Cookie::get('sniffr_admin_state');
+        $decision = $request->input('decision', (Cookie::get('sniffr_admin_decision') ?? 'content-sourced'));
         $assigned_to = $request->input('assigned_to', null);
 
         $stories = new Story;
@@ -74,16 +75,14 @@ class AdminStoryController extends Controller
 			}
 		}
 
-		if ($stateExists && $state) {
-			$stories = $stories->where('state', $state);
-		}else{
-			$stories = $stories->where(function($q) use ($decision){
-				foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-					$q->orWhere('state', $state_values['value']);
-				}
-			});
+		if (!$stateExists) { // Get the first (default) state in the array
+			$state = key(config('stories.decisions.'.$decision));
 		}
 
+		var_dump('Decision: '.$decision);
+		var_dump('State: '.$state);
+
+		$stories = $stories->where('state', $state);
 
 //		// only display states within selected decision point
 //        if($decision) {
@@ -115,6 +114,9 @@ class AdminStoryController extends Controller
             'users' => User::where([['client_id', NULL]])->get(),
             'user' => Auth::user(),
         ];
+
+		Cookie::queue('sniffr_admin_decision', $decision);
+		Cookie::queue('sniffr_admin_state', $state);
 
         return view('admin.stories.index', $data);
     }
@@ -336,13 +338,13 @@ class AdminStoryController extends Controller
                     QueueBump::dispatch($story_id);
                 }
                 break;
-            case ($state == 'unlicensed'):
-                // contact has been made (set in db)
-                if($story_id) {
-                    $story->contact_made = 1;
-                }
-                $message = 'Set to contact made';
-                break;
+//            case ($state == 'unlicensed'):
+//                // contact has been made (set in db)
+//                if($story_id) {
+//                    $story->contact_made = 1;
+//                }
+//                $message = 'Set to contact made';
+//                break;
             case ($state == 'licensed'):
                 // add new post to WP
                 if($story_id) {
@@ -378,7 +380,6 @@ class AdminStoryController extends Controller
                     'note_type' => 'success',
                 ]);
         }
-
     }
 
     /**
@@ -517,6 +518,32 @@ class AdminStoryController extends Controller
             'note_type' => $status
         ]);
     }
+
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function contactMade(Request $request, $alpha_id){
+		$isJson = $request->ajax();
+
+		$story = Story::where('alpha_id', $alpha_id)->first();
+		$story->contact_made = 1;
+		$story->save();
+
+		if ($isJson) {
+			return response()->json([
+				'status' => 'success',
+				'message' => 'Contact updated',
+				'story_alpha_id' => $alpha_id,
+			]);
+		} else {
+			return Redirect::to('admin/stories/?decision=' .  Cookie::get('sniffr_admin_decision') . '&state=' .  Cookie::get('sniffr_admin_state'))
+				->with([
+					'note' => 'Story Updated',
+					'note_type' => 'success',
+				]);
+		}
+	}
 
     /**
      * @param UploadedFile $imageFile
