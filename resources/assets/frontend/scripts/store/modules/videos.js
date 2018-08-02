@@ -6,6 +6,7 @@ const state = {
 
     videos: [],
     mailer_videos: [],
+    mailerVideoCurrentIndex: '',
     paginate: '',
 
     /**
@@ -50,6 +51,10 @@ const getters = {
 
     getMailerVideoData(state) {
         return state.mailer_videos;
+    },
+
+    getMailerVideoCurrentIndex(state){
+        return state.mailerVideoCurrentIndex
     },
 
     getVideoPaginateObject(state) {
@@ -134,6 +139,10 @@ const mutations = {
 
     setMailerVideoData(state, data) {
         state.mailer_videos = data;
+    },
+
+    setMailerVideoCurrentIndex(state, value){
+        state.mailerVideoCurrentIndex = value;
     },
 
     setVideoPaginationObject(state, paginate) {
@@ -255,6 +264,49 @@ const mutations = {
 
     setInitVideo(state, value){
         state.initVideo = value;
+    },
+
+    setSuggestNextPrevious({commit, state}) {
+        let currIndex = state.assetOfferedCurrentIndex;
+        let allVideos = state.mailer_videos;
+        let currentAlphaId = '';
+        let previousAlphaId = '';
+        let nextAlphaId = '';
+        let currentVideoPosition = currIndex;
+        let totalVideos = allVideos.length - 1;
+        let hasNextPage = state.paginate.last_page;
+
+        if (allVideos[Object.keys(allVideos)[currIndex]]) {
+            currentAlphaId = allVideos[Object.keys(allVideos)[currIndex]].alpha_id;
+        }
+
+        if (allVideos[Object.keys(allVideos)[currIndex - 1]]) {
+            previousAlphaId = allVideos[Object.keys(allVideos)[currIndex - 1]].alpha_id;
+        }
+
+        if (allVideos[Object.keys(allVideos)[currIndex + 1]]) {
+            nextAlphaId = allVideos[Object.keys(allVideos)[currIndex + 1]].alpha_id;
+        }
+
+        if (currentVideoPosition === totalVideos && hasNextPage) {
+            // if has next page, do next page fetch the data
+        }
+
+        state.previousVideoAlphaId = previousAlphaId;
+        state.currentVideoAlphaId = currentAlphaId;
+        state.nextVideoAlphaId = nextAlphaId;
+
+        // now fetch the data form server
+        let data = {alpha_id: currentAlphaId};
+        let url = '/search/videos';
+
+        axios.post(url, data)
+            .then((response) => {
+                let currVideo = response.data.current_video;
+                commit('setCurrentVideo', currVideo)
+                commit('setVideoLoading', false)
+            });
+
     }
 
 
@@ -322,7 +374,7 @@ const actions = {
         }
         let url = '/search/videos';
 
-        axios.post('/search/videos', data)
+        axios.post(url, data)
             .then((response) => {
                 commit('setCurrentVideo', response.data.current_video);
                 commit('setCurrentVideoTags', response.data);

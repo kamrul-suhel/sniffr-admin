@@ -173,6 +173,7 @@
                     url += '?id='+alphaId;
                     url += '&suggest=true';
                 }
+
                 if(type === 'offered'){
                     url += '&type=offered'
                 }

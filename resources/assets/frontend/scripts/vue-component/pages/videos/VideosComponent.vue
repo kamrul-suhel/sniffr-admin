@@ -18,6 +18,8 @@
                                     v-for="(mailer, index) in mailer_videos"
                                     :video="mailer"
                                     :key="mailer.alpha_id"
+                                    :type="'suggest'"
+                                    :index="index"
                                     :width="'350px'"
                             ></video-loop-component>
                         </v-layout>

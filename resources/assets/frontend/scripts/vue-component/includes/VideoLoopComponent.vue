@@ -63,6 +63,11 @@
             width: {
                 type: String,
                 required: false
+            },
+
+            index: {
+                type: Number,
+                required: false
             }
         },
 
@@ -110,7 +115,16 @@
                 if(this.type === 'suggest'){
                     url = '/videos?id='+video.alpha_id;
                     url += '&suggest=true';
+                    this.$route.query.type = 'suggest';
+                    let index = this.index;
+                    this.$store.commit('setMailerVideoCurrentIndex', index);
+                    this.$store.commit('setSuggestNextPrevious');
+
+                    this.$store.commit('setVideoDialogBox', true);
+                    this.$store.commit('setVideoLoading', true);
+                    return;
                 }
+
                 this.$store.commit('setEnterRouteObject', this.$route);
 
                 window.history.pushState({}, null, url);

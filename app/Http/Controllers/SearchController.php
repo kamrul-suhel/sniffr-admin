@@ -148,6 +148,11 @@ class SearchController extends Controller
                 ->orderBy('licensed_at', 'DESC')
                 ->limit(10)
                 ->get();
+
+			// Need iframe into every mailer video, so We do not need to call every time.
+			foreach($mailerVideos as $mailerVideo){
+               $mailerVideo->iframe = $this->getVideoHtml($mailerVideo, true);
+            }
 		}
 
 		$data['mailer_videos'] = $mailerVideos;
