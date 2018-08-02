@@ -277,7 +277,7 @@ class ContractController extends Controller
             $story->save();
 
             // Push story to WP
-            QueueStory::dispatch($alpha_id, 'push', 0);
+            QueueStory::dispatch($story->alpha_id, 'push', 0);
 
             // Send contract signed notification email
     		QueueEmail::dispatch($story->id, 'contract_signed', 'story');
