@@ -17,10 +17,8 @@ mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/
             'resources/assets/admin/js/switch.js'],
         'public/assets/admin/js'
     )
-    .sass(
-        'resources/assets/sass/admin.scss',
-        'public/assets/css/admin.css'
-    );
+    .sass('resources/assets/sass/admin.scss',
+        'public/assets/css/admin.css');
 
 /*
 * *********************************************

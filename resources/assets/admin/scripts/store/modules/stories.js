@@ -1,6 +1,6 @@
 const state = {
     selectedStories: [],
-    stories: {}
+    mailerStories: {}
 };
 
 const mutations = {
@@ -36,7 +36,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios.post(payload)
                 .then((stories) => {
-                        state.mailerStories = stories.data.mailer_stories;
+                        state.mailerStories = stories.data.stories;
                         resolve();
                     },
                     (error) => {
@@ -52,7 +52,7 @@ const getters = {
     },
 
     getStories(state) {
-        return state.stories;
+        return state.mailerStories;
     },
 };
 

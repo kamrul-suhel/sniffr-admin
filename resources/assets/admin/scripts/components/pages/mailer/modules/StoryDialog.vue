@@ -25,7 +25,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-toolbar-items>
+                <v-toolbar-items class="mailer-toolbar">
                     <div class="mailer-label">
                         Add to mailer
                     </div>
