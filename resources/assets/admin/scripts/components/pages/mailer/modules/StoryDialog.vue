@@ -31,7 +31,7 @@
                     </div>
                     <v-checkbox
                             v-model="selected"
-                            @click="onStoryClick()"
+                            @change="onStoryClick()"
                             ></v-checkbox>
                 </v-toolbar-items>
             </v-toolbar>
@@ -85,7 +85,6 @@
                 if(this.story_dialog === false){
                     setTimeout(() => {
                         this.$store.commit('setResetStoryDialogObject');
-
                         StoryDialogBoxEventBus.onResetCurrentStoryIndialog();
                     }, 500)
                 }
@@ -176,11 +175,12 @@
             },
 
             onStoryClick(){
-                console.log(this.selected);
-                return;
-                if (selected) {
-                    this.$store.commit('setStory', this.current_story);
+
+                if (this.selected) {
+                    this.$store.commit('addStory', this.current_story);
+                    StoryDialogBoxEventBus.$emit('addedStoryFromDialog', this.current_story.id);
                 } else {
+                    StoryDialogBoxEventBus.$emit('removedStoryFromDialog', this.current_story.id);
                     this.$store.commit('removeStory', this.current_story);
                 }
             },
@@ -200,3 +200,35 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .video-dialog-container{
+        margin: 0 80px;
+        position: relative;
+        overflow: initial;
+
+        .dialog-box-switch{
+            position: absolute;
+            z-index: 100;
+            top:50%;
+            &.prev{
+                left:-45px;
+            }
+
+            &.next{
+                right:-45px;
+            }
+        }
+
+        .v-toolbar__items{
+            align-items:center;
+
+            .v-input{
+                display: block;
+                height: 32px;
+                margin-left: 10px;
+            }
+        }
+
+    }
+</style>

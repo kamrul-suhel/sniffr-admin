@@ -6,6 +6,7 @@ import Videos from './modules/videos'
 import Stories from './modules/stories'
 import BuyQuote from './modules/buyquote'
 import Dialog from './modules/dialog'
+import Page from './modules/page'
 
 Vue.use(Vuex);
 
@@ -13,10 +14,10 @@ export const store = new Vuex.Store({
 	state: {
 	},
 	mutations: {
-		
+
 	},
 	getters: {
-		
+
 	},
 
 	actions: {
@@ -28,6 +29,7 @@ export const store = new Vuex.Store({
 		Videos,
 		Stories,
 		BuyQuote,
-		Dialog
+		Dialog,
+        Page
 	}
 });

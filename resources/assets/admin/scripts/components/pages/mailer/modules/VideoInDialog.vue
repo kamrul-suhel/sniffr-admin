@@ -22,7 +22,18 @@
                 <v-btn icon dark @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <!--<v-toolbar-title>Swipe Direction: {{ swipeDirection }}</v-toolbar-title>-->
+
+                <v-spacer></v-spacer>
+
+                <v-toolbar-items>
+                    <div class="mailer-label">
+                        Add to mailer
+                    </div>
+                    <v-checkbox
+                            v-model="selected"
+                            @change="onVideoClick()"
+                    ></v-checkbox>
+                </v-toolbar-items>
 
             </v-toolbar>
 
@@ -53,6 +64,7 @@
     export default {
         data() {
             return {
+                selected:false,
                 current_video: '',
                 video_dialog: false,
                 margin_content: true,
@@ -101,6 +113,8 @@
                 this.checkAlphaIdExists();
                 this.current_video = this.$store.getters.getCurrentVideoForDialog;
 
+                this.isVideoSelected()
+
             })
 
             VideoDialogBoxEventBus.$on('videoDialogBoxClose', (video) => {
@@ -144,6 +158,16 @@
 
             },
 
+            onVideoClick(){
+                if (this.selected) {
+                    this.$store.commit('addVideo', this.current_video);
+                    VideoDialogBoxEventBus.$emit('addedVideoFromDialog', this.current_video.id);
+                } else {
+                    VideoDialogBoxEventBus.$emit('removeVideoFromDialog', this.current_video.id);
+                    this.$store.commit('removeVideo', this.current_video);
+                }
+            },
+
             onCloseDialogBox() {
                 this.video_dialog = false;
             },
@@ -162,6 +186,445 @@
                 }
             },
 
+            isVideoSelected(){
+                let videos = this.$store.getters.getAllSelectedVideos;
+
+                //set initialize state
+                this.selected = false;
+                videos.forEach((video) => {
+                    if (video.id === this.current_video.id) {
+                        this.selected = true;
+                    }
+                });
+            }
+
         }
     }
 </script>
+
+<style lang="scss">
+
+    @mixin small-device{
+        @media (min-width: 576px) {
+            @content
+        }
+    }
+
+    // Medium devices (tablets, 768px and up)
+    @mixin medium-device{
+        @media (min-width: 768px) {
+            @content
+        }
+    }
+
+    // Large devices (desktops, 992px and up)
+    @mixin large-device{
+        @media (min-width: 992px) {
+            @content
+        }
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @mixin extra-large-device{
+        @media (min-width: 1200px) {
+            @content
+        }
+    }
+    // ===== COLOR =====
+    $text-color:#222;
+    $ternary-color:#999b9e;
+    $link-color:#secondary-color;
+    $link-hover-color:#000;
+    $menu-item-color:white;
+    $section-padding: 40px;
+    $section-title-after-space: 20px;
+    $title-color: #000;
+    $gray-5: rgba(0,0,0,.54);
+
+
+    // ===== SECTION SPACING =====
+    $section-spacing : 50px;
+    $section-spacing-mobile : 30px;
+
+    // ===== HOME PAGE COLOR =====
+    $home-textcolor: #ffffff;
+
+
+    /*
+     ********* HEADING SPACE *********
+     */
+
+    $heading_bottom_space: 20px;
+
+
+    /*
+     ********* FEATURE SECTION THEME *********
+     */
+    $featured-title-color : #000000;
+    $feature-container-spacing: 15px;
+    $featured-title-space : 0;
+
+
+    // ===== FOOTER SECTION THEME =====
+    $footer-background-color: #000;
+
+    // ===== UPLOAD VIDEO SECTION THEME =====
+    $upload-video-title-color: #000;
+
+    // ===== FONTS =====
+    $text-font:JosefinSansregular, Arial, sans-serif;
+    $heading-font: JosefinSansbold, Georgia, serif;
+
+
+    // ===== SIZES =====
+    $content-width:960;
+    $header-height:60px;
+    $footer-height:90px;
+
+    .video-dialog-container {
+        border-radius: 0px;
+        position: relative;
+        overflow:unset;
+        width:95%;
+
+        @include small-device {
+            width:95%;
+        }
+
+        @include medium-device {
+            width:70%;
+        }
+
+        @include large-device {
+            width:80%;
+        }
+
+        @include extra-large-device {
+            width:80%;
+        }
+
+
+
+        .dialog-box-switch {
+            position: absolute;
+            z-index: 10;
+            top: calc(50% - 20px);
+
+            &.prev {
+                left: -50px;
+            }
+
+            &.next {
+                right: -50px;
+            }
+        }
+
+        .dialog-box-loading {
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 64px);
+            z-index: 11;
+            background: rgba(255, 255, 255, .5);
+            bottom: 0px;
+
+            .dialog-box-loading-content {
+                position: absolute;
+                top: calc(50% - 25px);
+                left: calc(50% - 25px);
+            }
+        }
+
+
+
+        .video-player-poster{
+            position:relative;
+
+            > div{
+                padding-top:56.26%;
+            }
+
+            .player-play{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -28px;
+                margin-left: -28px;
+            }
+        }
+
+    }
+
+    .video-dialog-box {
+        position: relative;
+
+        .video-detail-content{
+            .read-more{
+                margin-bottom: 15px;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5px;
+
+                a{
+                    font-style:italic;
+                    color:#777;
+                    transition:all ease-in-out .3s;
+
+                    i{
+                        font-size: 17px;
+                        margin-bottom: 3px;
+                    }
+
+                    &:hover{
+                        color:#000;
+                    }
+                }
+            }
+        }
+
+        .nsfw {
+            position: absolute;
+            right: 0;
+            display: inline-block;
+            background: #da0039;
+            padding: 5px 10px;
+
+            a {
+                text-decoration: none;
+                color: #fff;
+            }
+
+        }
+    }
+
+    .video-dialog-content {
+        #video_player {
+            width: 100%;
+            height: 350px;
+        }
+
+        .fb_iframe_widget {
+            span {
+                height: auto !important;
+                max-height: 540px;
+                width: 100% !important;
+
+                @include small-device {
+                    & {
+                        height: 530px !important;
+                        max-height: 540px;
+                    }
+                }
+
+                @include medium-device {
+                    & {
+                        height: 530px !important;
+                        max-height: 540px;
+                    }
+                }
+
+                @include large-device {
+                    & {
+                        height: 530px !important;
+                        max-height: 540px;
+                    }
+                }
+
+                @include extra-large-device {
+                    & {
+                        height: 530px !important;
+                        max-height: 540px;
+                    }
+                }
+
+            }
+        }
+
+        .horizontal {
+            .video-container {
+                video {
+                    max-height: 350px;
+                }
+                .fb-video {
+                    width: 530px !important;
+                }
+            }
+        }
+
+        .vertical {
+            .video-container {
+                .fb-video {
+                    width: 530px !important;
+                    max-height: 530px !important;
+                }
+            }
+        }
+
+        .video-container {
+            display: flex;
+            width: 100%;
+            position: relative;
+
+            .video_player-dimensions {
+                width: 100%;
+                height: 450px;
+                position: relative;
+            }
+
+            .vjs-control-bar {
+                display: none;
+            }
+
+            .vjs-caption-settings {
+                display: none;
+            }
+
+            iframe {
+                width: 100%;
+
+                &.youtube-iframe {
+                    height: 300px;
+                }
+                &.instagram-media {
+                    margin: 0 auto !important; // to overwrite default style
+                }
+
+                @include small-device {
+                    &.youtube-iframe {
+                        height: 300px;
+                    }
+                }
+
+                @include medium-device {
+                    &.youtube-iframe {
+                        height: 450px;
+                    }
+                }
+
+                @include large-device {
+                    &.youtube-iframe {
+                        height: 450px;
+                    }
+                }
+
+                @include extra-large-device {
+                    &.youtube-iframe {
+                        height: 450px;
+                    }
+                }
+            }
+            .fb-video {
+                width: 95% !important;
+                margin: 0;
+            }
+        }
+
+        .embedded {
+            background: #fff;
+        }
+
+        .video-detail-content {
+            margin-top: 30px;
+
+            h2 {
+                text-transform: uppercase;
+                margin-top: 0;
+            }
+
+            .video-title-caption{
+                padding: 5px 0;
+                //border-top: 1px solid #ddd;
+                //border-bottom: 1px solid #ddd;
+                margin: 0 0 10px 0;
+                color: #777;
+                font-style: italic;
+
+                i{
+                    color:#777;
+                    margin-bottom:2px;
+                }
+            }
+
+            a {
+                text-decoration: none;
+                color: #000;
+
+                &:hover {
+                    color: #777;
+                }
+            }
+        }
+
+        .video-detail-tags {
+            ul {
+                list-style: none;
+                padding: 0;
+
+                li {
+                    display: inline-block;
+                    margin-right: 7px;
+
+                    a {
+                        color: #777;
+                        font-size: 16px;
+                        text-decoration: none;
+                        transition: all ease-in-out .3s;
+                    }
+
+                    a:hover {
+                        color: $link-hover-color;
+                    }
+                }
+            }
+        }
+
+        .video-detail-sidebar {
+            .video-detail-social-share {
+                width: 150px;
+                text-align: center;
+            }
+
+            .video-license {
+                width: 200px;
+                padding: 10px;
+                background: #000;
+                color: #fff;
+                text-align: center;
+                text-transform: uppercase;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .video-social-link {
+                h3 {
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    margin-bottom: 5px;
+                }
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+
+                    li {
+                        display: inline-block;
+                        margin-right: 10px;
+
+                        a {
+                            color: #000;
+                            transition: all ease-in-out .3s;
+                        }
+
+                        a:hover {
+                            opacity: .5;
+                        }
+                    }
+                }
+            }
+        }
+
+        .loading {
+            animation: loader 1s infinite;
+            display: flex;
+        }
+    }
+</style>

@@ -1,7 +1,7 @@
 const state = {
     selectedVideos: [],
     videos: {}
-};
+}
 
 const mutations = {
     addVideo(state, currVideo) {
@@ -15,7 +15,7 @@ const mutations = {
             if (story.id === currVideo.id) {
                 foundVideo = true;
             }
-        });
+        })
 
         if (!foundVideo) {
             state.selectedVideos.push(currVideo);
@@ -29,7 +29,7 @@ const mutations = {
             }
         })
     }
-};
+}
 
 const actions = {
     getMailerVideos({commit, state}, payload) {
@@ -44,7 +44,7 @@ const actions = {
                     });
         })
     }
-};
+}
 
 const getters = {
     getAllSelectedVideos(state) {
@@ -54,7 +54,7 @@ const getters = {
     getVideos(state) {
         return state.videos;
     },
-};
+}
 
 export default {
     state,

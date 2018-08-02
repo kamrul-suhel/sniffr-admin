@@ -26,7 +26,7 @@
             {{ story.created_at | convertDate }}
         </v-flex>
 
-        <v-flex xs6 sm6 md6 lg1 xl1>
+        <v-flex xs6 sm6 md6 lg1 xl1 class="story-input">
             <v-checkbox
                     color="black"
                     v-model="selected"
@@ -70,6 +70,19 @@
                     this.selected = true;
                 }
             });
+
+            StoryDialogBoxEventBus.$on('addedStoryFromDialog', (addedStory)=> {
+                if(addedStory === this.currStory.id){
+                    this.selected = true;
+                }
+            })
+
+            StoryDialogBoxEventBus.$on('removedStoryFromDialog', (removedStory)=> {
+                if(removedStory === this.currStory.id){
+                    this.selected = false;
+                }
+            })
+
         },
 
 
@@ -88,3 +101,12 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .story-input {
+        .v-input{
+            margin:0;
+            padding:0
+        }
+    }
+</style>

@@ -3,7 +3,8 @@
     <div class="videos-section s-pagination-goto">
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
-            <v-container grid-list-lg class="py-0"
+            <v-container grid-list-lg
+                         class="pt-0 pb-5"
                          v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
                 <v-layout row wrap>
                     <v-flex xs12 class="text-center">
@@ -17,6 +18,9 @@
                                     v-for="(mailer, index) in mailer_videos"
                                     :video="mailer"
                                     :key="mailer.alpha_id"
+                                    :type="'suggest'"
+                                    :index="index"
+                                    :width="'350px'"
                             ></video-loop-component>
                         </v-layout>
                     </v-flex>
@@ -86,15 +90,12 @@
 
         watch: {
             '$route'(to, from, next) {
-                this.current_page = to.query.page;
                 this.setAllVideoData(this.getQueryObject());
             }
         },
 
         created() {
-
             this.setAllVideoData(this.getQueryObject());
-
         },
 
         methods: {
@@ -104,7 +105,7 @@
 
             getQueryObject() {
                 let query = {
-                    page: this.$route.query.page ? this.$route.query.page : 1,
+                    page: this.$route.query.page ? this.$route.query.page : '',
                 };
 
                 if (this.$route.query.search && this.$route.query.search !== '') {

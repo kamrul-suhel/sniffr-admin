@@ -17,10 +17,8 @@ mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/
             'resources/assets/admin/js/switch.js'],
         'public/assets/admin/js'
     )
-    .sass(
-        'resources/assets/sass/admin.scss',
-        'public/assets/css/admin.css'
-    );
+    .sass('resources/assets/sass/admin.scss',
+        'public/assets/css/admin.css');
 
 /*
 * *********************************************
@@ -28,8 +26,8 @@ mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/
 * *********************************************
 */
 mix.sass(
-    'resources/assets/frontend/scss/nav-styles.scss',
-    'public/assets/frontend/css/client/nav-styles.css')
+    'resources/assets/frontend/scss/partials/nav-styles.scss',
+    'public/assets/frontend/css/nav-styles.css')
     .options({
         processCssUrls: false,
     })
@@ -41,8 +39,8 @@ mix.sass(
 * *********************************************
 */
 mix.sass(
-    'resources/assets/frontend/scss/footer-styles.scss',
-    'public/assets/frontend/css/client/footer-styles.css')
+    'resources/assets/frontend/scss/partials/footer-styles.scss',
+    'public/assets/frontend/css/footer-styles.css')
     .options({
         processCssUrls: false,
     })

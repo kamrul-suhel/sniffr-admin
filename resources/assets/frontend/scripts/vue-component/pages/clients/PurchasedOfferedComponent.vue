@@ -8,7 +8,10 @@
                 </v-flex>
 
                 <v-flex xs12 class="text-xs-center" v-if="totalStories <= 0 && totalVideos <= 0 && !searchVideoTerm">
-                    <h2>You have no offers yet. You can buy or request quotes for any of our <a href="/videos">Videos</a>, and <a href="/stories">Stories</a>.</h2>
+                    <h2>You have no offers yet. You can buy or request quotes for any of our
+                        <router-link tag="a"  :to="{path: '/videos'}">Videos</router-link>, and
+                        <router-link tag="a" :to="{path: '/stories'}">Stories</router-link>.
+                    </h2>
                 </v-flex>
 
                 <v-flex xs12 v-else>
@@ -43,6 +46,12 @@
                                 </v-flex>
                             </v-layout>
 
+                            <v-layout row wrap v-if="totalVideos <= 0">
+                                <v-flex xs12 class="text-xs-center">
+                                    <h2>We could not find any videos matching your search.</h2>
+                                </v-flex>
+                            </v-layout>
+
                             <asset-video-offered-component
                                     v-for="(video, index) in videos"
                                     :key="index"
@@ -72,6 +81,12 @@
                                 </v-flex>
                             </v-layout>
 
+                            <v-layout row wrap v-if="totalStories <= 0">
+                                <v-flex xs12 class="text-xs-center">
+                                    <h2>We could not find any stories matching your search.</h2>
+                                </v-flex>
+                            </v-layout>
+
                             <asset-story-offered-component
                                     v-for="(story, index) in stories"
                                     :key="index"
@@ -95,7 +110,7 @@
 </template>
 <script>
     import AssetStoryOfferedComponent from './partials/AssetStoryOfferedComponent'
-    import AssetVideoOfferedComponent from './partials/AssetVideoOfferedComponent';
+    import AssetVideoOfferedComponent from './partials/AssetVideoOfferedComponent'
 
     export default {
         components: {
@@ -140,18 +155,6 @@
                 }
             },
 
-            storiesPerPage() {
-                return this.$store.getters.getStoriesPaginateObject.per_page;
-            },
-
-            numberOfStoryPages() {
-                return this.$store.getters.getStoriesPaginateObject.last_page;
-            },
-
-            totalStories() {
-                return this.$store.getters.getStoriesPaginateObject.total;
-            },
-
             videos: {
                 get() {
                     if(this.type === 'offered'){
@@ -162,6 +165,18 @@
                         return this.$store.getters.getPurchasedVideos;
                     }
                 }
+            },
+
+            storiesPerPage() {
+                return this.$store.getters.getStoriesPaginateObject.per_page;
+            },
+
+            numberOfStoryPages() {
+                return this.$store.getters.getStoriesPaginateObject.last_page;
+            },
+
+            totalStories() {
+                return this.$store.getters.getStoriesPaginateObject.total;
             },
 
             videosPerPage(){
@@ -187,16 +202,13 @@
                 this.setData('story');
             },
 
-            // searchTerm() {
-            //     this.page = 1;
-            //     this.setData();
-            // },
-
             '$route'(to, next, previous){
-                this.type = this.$route.query.type;
-                this.searchVideoTerm = '';
-                this.searchStoryTerm = '';
-                this.setData();
+                if (!this.$route.query.id) {
+                    this.type = this.$route.query.type;
+                    this.searchVideoTerm = '';
+                    this.searchStoryTerm = '';
+                    this.setData();
+                }
             },
 
             searchVideoTerm(value){
@@ -221,7 +233,6 @@
 
             setData(term = null) {
                 //before set store clear all data
-
                 if (this.type === 'offered') {
                         this.headingText = 'Your offers'
                     if(term === 'video'){

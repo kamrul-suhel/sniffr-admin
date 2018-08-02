@@ -38,6 +38,7 @@
 
 <script>
     import VideoDialogBoxEventBus from '../../../../event-bus/video-dialog-box-event-bus';
+
     export default {
         data() {
             return {
@@ -63,6 +64,18 @@
                     this.selected = true;
                 }
             });
+
+            VideoDialogBoxEventBus.$on('addedVideoFromDialog', (addedVideo)=> {
+                if(addedVideo === this.video.id){
+                    this.selected = true;
+                }
+            })
+
+            VideoDialogBoxEventBus.$on('removeVideoFromDialog', (removedVideo)=> {
+                if(removedVideo === this.video.id){
+                    this.selected = false;
+                }
+            })
         },
 
 
@@ -71,9 +84,18 @@
                 return this.video.created_user ? this.video.created_user.username : '';
             },
 
-            onOpenVideoDialog(){
+            onOpenVideoDialog() {
                 VideoDialogBoxEventBus.openVideoDialog(this.video.alpha_id);
             }
         }
     }
 </script>
+
+<style lang="scss">
+    .mailer-videos {
+        .v-input {
+            margin: 0;
+            padding: 0
+        }
+    }
+</style>
