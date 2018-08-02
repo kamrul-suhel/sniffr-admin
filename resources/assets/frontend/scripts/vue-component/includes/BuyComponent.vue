@@ -34,6 +34,7 @@
                                 <v-flex xs12>
                                     <v-select
                                             label="Platform"
+                                            content-class="s-platform"
                                             color="dark"
                                             :items="platforms"
                                             v-model="license_platform"
