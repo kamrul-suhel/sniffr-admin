@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
 use App\Jobs\QueueVideoYoutubeUpload;
 use App\Jobs\QueueEmail;
+use App\Jobs\QueueStory;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -274,6 +275,9 @@ class ContractController extends Controller
             $story = Story::with('contact')->find($contract->story_id);
             $story->state = 'licensed';
             $story->save();
+
+            // Push story to WP
+            QueueStory::dispatch($alpha_id, 'push', 0);
 
             // Send contract signed notification email
     		QueueEmail::dispatch($story->id, 'contract_signed', 'story');
