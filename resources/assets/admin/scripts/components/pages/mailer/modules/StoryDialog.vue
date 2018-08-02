@@ -25,7 +25,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-toolbar-items class="mailer-toolbar">
+                <v-toolbar-items>
                     <div class="mailer-label">
                         Add to mailer
                     </div>
@@ -85,7 +85,6 @@
                 if(this.story_dialog === false){
                     setTimeout(() => {
                         this.$store.commit('setResetStoryDialogObject');
-
                         StoryDialogBoxEventBus.onResetCurrentStoryIndialog();
                     }, 500)
                 }
@@ -134,7 +133,7 @@
             });
 
         },
-
+        
 
         methods: {
             swipe (direction) {
@@ -176,6 +175,7 @@
             },
 
             onStoryClick(){
+
                 if (this.selected) {
                     this.$store.commit('addStory', this.current_story);
                     StoryDialogBoxEventBus.$emit('addedStoryFromDialog', this.current_story.id);
@@ -200,3 +200,35 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .video-dialog-container{
+        margin: 0 80px;
+        position: relative;
+        overflow: initial;
+
+        .dialog-box-switch{
+            position: absolute;
+            z-index: 100;
+            top:50%;
+            &.prev{
+                left:-45px;
+            }
+
+            &.next{
+                right:-45px;
+            }
+        }
+
+        .v-toolbar__items{
+            align-items:center;
+
+            .v-input{
+                display: block;
+                height: 32px;
+                margin-left: 10px;
+            }
+        }
+
+    }
+</style>
