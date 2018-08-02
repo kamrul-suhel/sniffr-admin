@@ -93,6 +93,14 @@ class Contact extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function stories()
+    {
+        return $this->hasMany(Story::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function comments()

@@ -122,11 +122,13 @@ class AdminContactController extends Controller
      */
     public function edit($id)
     {
+        $decision = request()->get('decision', 'content-sourced');
         $contact = Contact::find($id);
 
          $data = [
              'headline' => '<i class="fa fa-edit"></i> Edit Contact',
              'contact' => $contact,
+             'decision' => $decision,
              'user' => Auth::user(),
              'videos' => $contact->videos,
              'comments' => $contact->comments()->orderBy('created_at', 'desc')->paginate(6)
