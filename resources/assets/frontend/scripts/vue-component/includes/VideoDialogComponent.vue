@@ -24,14 +24,16 @@
                 <v-btn
                         icon
                         @click="onPreviousVideo"
-                        :disabled="!previousPageExists">
+                        :disabled="!previousPageExists"
+                        class="hidden-md-and-up">
                     <v-icon>navigate_before</v-icon>
                 </v-btn>
 
                 <v-btn
                         icon
                         @click="onNextVideo"
-                        :disabled="!nextPageExists">
+                        :disabled="!nextPageExists"
+                        class="hidden-md-and-up">
                     <v-icon>navigate_next</v-icon>
                 </v-btn>
 
@@ -53,13 +55,13 @@
             </v-card-text>
         </v-card>
 
-        <div class="dialog-box-switch prev">
+        <div class="dialog-box-switch prev hidden-md-and-down">
             <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onPreviousVideo()" :disabled="!previousPageExists" >
                 <v-icon>chevron_left</v-icon>
             </v-btn>
         </div>
 
-        <div class="dialog-box-switch next">
+        <div class="dialog-box-switch next hidden-md-and-down">
             <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onNextVideo()" :disabled="!nextPageExists" >
                 <v-icon>chevron_right</v-icon>
             </v-btn>
