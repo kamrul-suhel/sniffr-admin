@@ -12,7 +12,8 @@
             <div class="col-md-4">
                 <form method="get" role="form" class="search-form-full">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}">
+                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search..."
+                               value="{{ Request::get('s') }}">
                         <i class="fa fa-search"></i>
                     </div>
                 </form>
@@ -22,62 +23,80 @@
     <div class="clear"></div>
 
     <div class="panel">
-        <div class="panel-body">
-            <table class="table table-striped pages-table">
-                @foreach($companies as $company)
-                    @if($company->collections->count())
-                        <h3>{{ $company->name }}</h3>
-                        <tbody>
-                            <table class="table table-condensed table-striped">
-                                <thead>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Created</th>
-                                    <th class="text-center">By</th>
-                                    <th class="text-center">Videos</th>
-                                    <th class="text-center">Video Quotes</th>
-                                    <th class="text-center">Stories</th>
-                                    <th class="text-center">Story Quotes</th>
-                                </thead>
-                                <tbody>
-                                @foreach($company->collections as $collection)
-                                    <tr class="text-center">
-                                        <td>
-                                            <a href="{{ route('admin.collections.show', ['id' => $collection->id]) }}">{{ $collection->name }}</a> <br>
-                                            <small> {{ ucwords($collection->status) }} </small>
-                                        </td>
-                                        <td>{{ date('d F Y - H:i:s', strtotime($collection->created_at)) }}</td>
-                                        <td>{{ $collection->user->full_name ?? $collection->user->username }} <br> {{ $collection->user->email }}</td>
 
-                                        <td>{{ $collection->collectionVideos->count() }}</td>
-                                        <td>
+        <div class="panel-body">
+            @foreach($companies as $company)
+                @if($company->collections->count() > 0)
+                    <table class="table table-bordered">
+                        <thead>
+                        <th style="width: 90%;" colspan="2">
+                            <a target="_blank" href="{{ route('clients.edit', $company->id) }}">{{ $company->name }}
+                                <i class="fa fa-external-link"></i>
+                            </a>
+
+                            <small class="pull-right">
+                                Videos: {{ $company['collectionVideosCount'] }}
+                                Stories: {{ $company['collectionStoriesCount'] }}
+                            </small>
+                        </th>
+
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <table class="table table-striped table-condensed table-bordered"
+                                       style="width:100%; overflow-x:scroll;">
+                                    <thead>
+                                    <th class="text-center">
+                                        <small>Type</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Collection Name</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>User</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Asset</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Status</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Reason</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Licenced At</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Until</small>
+                                    </th>
+                                    <th class="text-center">
+                                        <small>Quote</small>
+                                    </th>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($company->collections as $collection)
+                                        @if($collection->collectionVideos && $collection->collectionVideos->count() > 0)
                                             @foreach($collection->collectionVideos as $collectionVideo)
-                                                - <a target="_blank" href="{{ url('videos', $collectionVideo->video->alpha_id) }}">{{ $collectionVideo->video->alpha_id }}
-                                                    <i class="fa fa-external-link"></i></a> (£{{$collectionVideo->final_price}}) - {{ $collectionVideo->status }}
-                                                    @if(isset($collectionVideo->reason))
-                                                        ({{ $collectionVideo->reason }})
-                                                    @endif
-                                                <br>
+                                                @include('admin.collections.partials.asset_listing', ['collectionAsset' => $collectionVideo, 'type' => 'video'])
                                             @endforeach
-                                        </td>
-                                        <td>{{ $collection->collectionStories->count() }}</td>
-                                        <td>
+                                        @endif
+
+                                        @if($collection->collectionStories && $collection->collectionStories->count() > 0)
                                             @foreach($collection->collectionStories as $collectionStory)
-                                                - <a target="_blank" href="{{ url('stories', $collectionStory->story->alpha_id) }}">{{ $collectionStory->story->alpha_id }}
-                                                    <i class="fa fa-external-link"></i></a>(£{{$collectionStory->final_price}}) - {{ $collectionStory->status }}
-                                                    @if(isset($collectionStory->reason))
-                                                        ({{ $collectionStory->reason }})
-                                                    @endif
-                                                <br>
+                                                @include('admin.collections.partials.asset_listing', ['collectionAsset' => $collectionStory, 'type' => 'story'])
                                             @endforeach
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                        @endif
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                         </tbody>
-                    @endif
-                @endforeach
-            </table>
+                    </table>
+                @endif
+            @endforeach
         </div>
     </div>
 

@@ -68,6 +68,10 @@ class Client extends Model
         return $this->hasMany(Collection::class);
     }
 
+    /**
+     * @param $data
+     * @return $this
+     */
     public function updateClient($data)
     {
         $this->slug = isset($data['company_name']) ? $this->slugify($data['company_name']) : $this->slug;
@@ -104,9 +108,11 @@ class Client extends Model
 
     }
 
+    /**
+     * @return int
+     */
     public function activeLicences()
     {
-
         $collections = $this->collections()
             ->with('collectionVideos')
             ->with('collectionStories')
