@@ -51,6 +51,10 @@
 ******************************************************
  */
 
+@import '../share/scss/core';
+@import '../share/scss/partials/asset-video-dialog-box';
+
+
 @import "partials/tagsinput";
 
 @import "~glyphicons-halflings/scss/glyphicons-halflings.scss";

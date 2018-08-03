@@ -37,7 +37,7 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
  * Root component
  ********************************************************
  */
-import MailerStoriesComponent from './components/pages/mailer/MailerComponent'
+import MailerStoriesComponent from './pages/mailer/MailerComponent'
 
 
 /*
