@@ -37,9 +37,9 @@ return [
             'approved' => [
                 'dropdown' => 'Approved',
 				'value' => 'approved', // dropdown value
-                'positive_label' => false,
+                'positive_label' => 'Approved',
                 'negative_label' => 'Unapprove',
-                'positive_class' => 'text-success js-story-state unlicensed',
+                'positive_class' => '',
                 'negative_class' => 'text-danger js-story-state unapproved',
             ],
             // 'unlicensed' => [
@@ -74,7 +74,7 @@ return [
                 'positive_label' => 'Edit License',
                 'negative_label' => 'Back to Sourced',
                 'positive_class' => 'text-success',
-                'negative_class' => 'text-danger js-story-state unlicensed',
+                'negative_class' => 'text-danger js-story-state approved',
             ],
             // 'licensed' => [
             //     'dropdown' => 'Licensed',
@@ -92,7 +92,7 @@ return [
                 'positive_label' => 'Write',
                 'negative_label' => 'Unlicensed',
                 'positive_class' => 'text-success js-story-state writing-inprogress',
-                'negative_class' => 'text-danger js-story-state unlicensed',
+                'negative_class' => 'text-danger js-story-state approved',
             ],
             'writing-inprogress' => [
                 'dropdown' => 'In Progress',
