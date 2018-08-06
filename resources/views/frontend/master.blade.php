@@ -35,8 +35,6 @@
     <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
     <script src="{{mix('assets/frontend/scripts/scripts.js')}}"></script>
 
-    @include('partials.ganalytics')
-
     @yield('page_script')
 </body>
 </html>
