@@ -59,9 +59,9 @@
 </template>
 
 <script>
-    import SearchComponent from '../../vue-component/includes/SearchComponent';
-    import VideoLoopComponent from '../../vue-component/includes/VideoLoopComponent';
-    import PaginationComponent from '../../vue-component/includes/PaginationComponent';
+    import SearchComponent from '../../includes/SearchComponent';
+    import VideoLoopComponent from '../../includes/VideoLoopComponent';
+    import PaginationComponent from '../../includes/PaginationComponent';
 
     import {mapGetters} from 'vuex';
 

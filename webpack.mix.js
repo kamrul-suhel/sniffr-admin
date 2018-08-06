@@ -10,18 +10,16 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/assets/js')
-    .js([
-            'resources/assets/admin/js/app.js',
-            'resources/assets/admin/js/custom.js',
-            'resources/assets/admin/js/switch.js'],
-        'public/assets/admin/js'
-    )
-    .sass('resources/assets/sass/admin.scss',
-        'public/assets/css/admin.css');
+mix.js(['resources/assets/admin/js/app.js',
+        'resources/assets/admin/js/custom.js',
+        'resources/assets/admin/js/switch.js'],
+    'public/assets/admin/js'
+)
+    .sass('resources/assets/admin/sass/admin.scss',
+        'public/assets/admin/css/admin.css');
 
 mix.sass('resources/assets/share/scss/admin.scss',
-    'public/assets/css/mailer-admin.css'
+    'public/assets/admin/css/mailer-admin.css'
 );
 
 /*
@@ -68,23 +66,11 @@ mix.js([
 ], 'public/assets/frontend/scripts/scripts.js')
     .sourceMaps();
 
-if (mix.inProduction()) {
-    mix.version();
-}
-
-if (!mix.inProduction()) {
-    mix.webpackConfig({devtool: 'inline-source-map'})
-}
-
 //Copying file from resource folder to public
 
 mix.copy(
-    'resources/assets/frontend/images',
-    'public/assets/frontend/images/'
-);
-mix.copy(
-    'resources/assets/admin/images',
-    'public/assets/admin/images/'
+    'resources/assets/images',
+    'public/assets/images'
 );
 
 /*
@@ -131,23 +117,34 @@ mix.copy(
     'node_modules/tinymce/plugins',
     'public/assets/admin/js/plugins'
 );
+
+// we are not using this utils.js anywhere
+// mix.copy(
+//     'node_modules/intl-tel-input/build/js/utils.js',
+//     'public/assets/js/utils.js'
+// );
+
 mix.copy(
-    'node_modules/intl-tel-input/build/js/utils.js',
-    'public/assets/js/utils.js'
+    'node_modules/intl-tel-input/build',
+    'public/assets/admin/css/intl-tel-input'
 );
+
 mix.copy(
-    'node_modules/intl-tel-input/build/css',
-    'public/assets/css/intl-tel-input/css'
+    'resources/assets/share/scripts/vendor/',
+    'public/assets/scripts/'
 );
+
+/*
+* *********************************************
+* All fonts
+* *********************************************
+*/
 mix.copy(
-    'node_modules/intl-tel-input/build/img',
-    'public/assets/css/intl-tel-input/img'
-);
-mix.copy(
-    'resources/assets/talvbansal/media-manager/fonts/',
-    'public/fonts/'
-);
-mix.copy(
-    'node_modules/bootstrap/fonts',
+    [
+        'resources/assets/talvbansal/media-manager/fonts',
+        'node_modules/bootstrap/fonts',
+        'node_modules/font-awesome/fonts',
+        'resources/assets/fonts'
+    ],
     'public/assets/fonts/'
 );

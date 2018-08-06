@@ -58,7 +58,7 @@
 
 <script>
     import StoryDialogBoxEventBus from '../event-bus/story-dialog-box-event-bus';
-    import VideoPlayer from '../../../share/scripts/vue-components/VideoPlayerComponent';
+    import VideoPlayer from '../../../share/scripts/components/VideoPlayerComponent';
     import VideoPlayerDialogBoxEventBus from '../event-bus/video-player-dialog-box-event-bus';
 
     export default {

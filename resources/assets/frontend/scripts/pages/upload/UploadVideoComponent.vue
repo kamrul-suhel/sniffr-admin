@@ -5,7 +5,7 @@
     </section>
 </template>
 <script>
-    import UploadVideoComponent from '../../vue-component/forms/UploadVideoComponent.vue';
+    import UploadVideoComponent from '../../component/forms/UploadVideoComponent.vue';
     export default {
         components: {
             uploadVideoComponent: UploadVideoComponent

@@ -3,12 +3,16 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
 // Libs
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "../../../../node_modules/bootstrap-select/dist/css/bootstrap-select.css";
+$icon-font-path: "../../fonts";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap-select/dist/css/bootstrap-select.css";
 
-@import "../../../../node_modules/font-awesome/scss/font-awesome";
-@import "../../../../node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css";
-@import "../../../../node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css";
+$fa-font-path:  "../../fonts";
+@import "~font-awesome/scss/font-awesome";
+
+
+@import "~bootstrap-tagsinput/dist/bootstrap-tagsinput.css";
+@import "~bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css";
 
 // Paritals
 @import "libs/nestable";
@@ -50,7 +54,7 @@
 
 @import "partials/tagsinput";
 
-@import "../../../../node_modules/glyphicons-halflings/scss/glyphicons-halflings";
+@import "~glyphicons-halflings/scss/glyphicons-halflings";
 
 // Media manager
 @import "../../talvbansal/media-manager/css/media-manager.css";

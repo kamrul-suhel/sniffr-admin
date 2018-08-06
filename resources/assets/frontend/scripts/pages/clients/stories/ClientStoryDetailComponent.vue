@@ -52,9 +52,9 @@
 </template>
 
 <script>
-    import AssetComponent from '../../../vue-component/includes/StoryAssetsComponent';
+    import AssetComponent from '../../../includes/StoryAssetsComponent';
     import VideoReloadServices from '../../../services/VideoReloadServices';
-    import QuoteButtonComponent from "../../../vue-component/includes/BuyQuoteButtonComponent";
+    import QuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
     import {mapGetters} from 'vuex';
 

@@ -8,7 +8,7 @@
     </v-container>
 </template>
 <script>
-    import LoginForm from '../../vue-component/forms/LoginFormComponent.vue';
+    import LoginForm from '../../component/forms/LoginFormComponent.vue';
 
     export default {
         components: {

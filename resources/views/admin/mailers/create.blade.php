@@ -2,7 +2,7 @@
 
 @section('css')
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <link href="{{asset('assets/css/mailer-admin.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/admin/css/mailer-admin.css')}}" rel="stylesheet">
 @stop
 
 @section('content')

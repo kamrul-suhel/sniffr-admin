@@ -63,8 +63,8 @@
 </template>
 
 <script>
-    import VideoPlayer from '../../../../share/scripts/vue-components/VideoPlayerComponent';
-    import BuyQuoteButtonComponent from "../../vue-component/includes/BuyQuoteButtonComponent";
+    import VideoPlayer from '../../../../share/scripts/components/VideoPlayerComponent';
+    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
     import {mapGetters} from 'vuex';
     export default {
         components: {

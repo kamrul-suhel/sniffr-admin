@@ -6,7 +6,7 @@ import UploadVideoComponent from './pages/upload/UploadVideoComponent.vue';
 import PasswordResetTokenComponent from './pages/login/PasswordResetTokenComponent.vue';
 import PasswordSetTokenComponent from './pages/login/PasswordSetTokenComponent.vue';
 import VideoMoreDetail from './pages/submission/VideomoredetailComponent.vue';
-import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
+import VideoSubmissionComponent from './component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './pages/unsubscribe/UnsubscribeComponent.vue';
 import TermsConditionsComponent from './pages/termscondition/TermsConditionComponent';
 import ContractComponent from './pages/contract/ContractComponent';
