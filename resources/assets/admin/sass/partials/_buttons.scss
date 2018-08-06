@@ -1,0 +1,19 @@
+
+.actions a{
+    font-size:10px;
+    padding:5px 10px;
+    background:#aaa;
+    color:#fff;
+    border-radius:3px;
+    cursor:pointer;
+}
+
+.actions .delete {
+    background:#EA6153;
+}
+
+.btn-group{
+    > .btn:first-child{
+        height:38px;
+    }
+}

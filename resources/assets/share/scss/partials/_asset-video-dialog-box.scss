@@ -20,6 +20,16 @@
     width:80%;
   }
 
+  .v-toolbar__items{
+    align-items:center;
+
+    .v-input{
+      display: block;
+      height: 32px;
+      margin-left: 10px;
+    }
+  }
+
 
 
   .dialog-box-switch {
@@ -33,16 +43,6 @@
 
     &.next {
       right: -50px;
-    }
-
-    .v-toolbar__items{
-      align-items:center;
-
-      .v-input{
-        display: block;
-        height: 32px;
-        margin-left: 10px;
-      }
     }
   }
 

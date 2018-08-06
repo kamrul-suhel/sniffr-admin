@@ -20,6 +20,10 @@ mix.js(['resources/assets/js/app.js', 'resources/assets/js/custom.js'], 'public/
     .sass('resources/assets/sass/admin.scss',
         'public/assets/css/admin.css');
 
+mix.sass('resources/assets/share/scss/admin.scss',
+    'public/assets/css/mailer-admin.css'
+);
+
 /*
 * *********************************************
 * Navigation styles

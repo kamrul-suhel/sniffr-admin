@@ -3,9 +3,10 @@
     "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
     "/assets/admin/js/app.js": "/assets/admin/js/app.js",
     "/assets/js/app.js": "/assets/js/app.js",
+    "/assets/css/admin.css": "/assets/css/admin.css",
+    "/assets/css/mailer-admin.css": "/assets/css/mailer-admin.css",
     "/assets/frontend/css/nav-styles.css": "/assets/frontend/css/nav-styles.css",
     "/assets/frontend/css/footer-styles.css": "/assets/frontend/css/footer-styles.css",
     "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css",
-    "/assets/js/utils.js": "/assets/js/utils.js",
-    "/assets/css/admin.css": "/assets/css/admin.css"
+    "/assets/js/utils.js": "/assets/js/utils.js"
 }

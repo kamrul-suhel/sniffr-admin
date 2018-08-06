@@ -12,7 +12,6 @@ window.Vuetify = require('Vuetify');
 
 import Vuerouter from 'vue-router';
 
-
 /*
  ********************************************************
  * Vuex package (store)

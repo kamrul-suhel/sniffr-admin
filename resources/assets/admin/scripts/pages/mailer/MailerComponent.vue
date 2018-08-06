@@ -240,7 +240,3 @@
         },
     }
 </script>
-
-<style lang="css" scoped>
-    @import "plugins/vuetify.min.css";
-</style>

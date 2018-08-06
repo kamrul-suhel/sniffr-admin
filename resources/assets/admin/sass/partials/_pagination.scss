@@ -1,0 +1,15 @@
+
+.pagination{
+    > .active{
+        span{
+            background-color: #303641;
+            border-color: #303641;
+        }
+    }
+
+    > li{
+        > a{
+            color: #303641;
+        }
+    }
+}

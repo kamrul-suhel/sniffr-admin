@@ -1,0 +1,48 @@
+
+.search-form-full .form-group,
+.search-form-full .form-group
+.form-control{
+    margin:0px;
+}
+
+.input-group-addon {
+    min-width: 150px;
+    text-align: left !important;
+}
+
+#new-menu-form{
+    input[type="radio"]{
+        margin-left:10px;
+    }
+
+    input[type="radio"]:first-child{
+        margin-left:0px;
+    }
+}
+
+#filename {
+   display: inline-flex;
+   margin-top: 2px;
+   margin-left: 3px;
+   vertical-align: -webkit-baseline-middle;
+   word-wrap: break-word;
+   overflow-wrap: break-word;
+   color:#666;
+   font-size:12px;
+   width:35px;
+}
+
+label{
+    font-weight: 400;
+}
+
+#selectpicker-contact{
+  .inner.open{
+    margin-top: 40px;
+  }
+}
+
+.input-group .form-control {
+  position: relative;
+  z-index: inherit !important;
+}

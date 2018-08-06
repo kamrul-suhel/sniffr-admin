@@ -89,7 +89,7 @@
     import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
     import QuoteComponent from '../includes/QuoteComponent'
     import VideoDialogComponent from '../includes/VideoDialogComponent'
-    import StoryDialogComponent from '../pages/clients/partials/StoryDialog'
+    import StoryDialogComponent from '../../pages/clients/partials/StoryDialog'
     import SnackbarComponent from '../includes/SnackbarComponent'
     import BuyDialogComponent from '../includes/BuyComponent'
     import ThankYouDialogBox from '../includes/ThankyouComponent'

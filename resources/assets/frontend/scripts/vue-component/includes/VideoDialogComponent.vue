@@ -70,7 +70,7 @@
 </template>
 
 <script>
-    import VideoInDialogComponent from '../pages/videos/VideoInDialogComponent';
+    import VideoInDialogComponent from '../../pages/videos/VideoInDialogComponent';
     import {mapGetters } from 'vuex';
 
     export default {
