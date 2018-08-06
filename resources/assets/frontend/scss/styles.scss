@@ -1,9 +1,5 @@
-@import '../../share/scss/core';
 @import "~vuetify/dist/vuetify.min.css";
-
-
-/* ************************* Animation css ******************* */
-@import "../../share/scss/modules/animation";
+@import '../../share/scss/frontend';
 
 
 /* ************************* Header style ******************* */
@@ -23,9 +19,6 @@
 
 /* ************************* Videos Page style ******************* */
 @import "partials/pages/videos";
-
-/* ************************* Video dialog box section style ******************* */
-@import "../../share/scss/partials/asset-video-dialog-box";
 
 /* ************************* Video dialog box section style ******************* */
 @import "partials/pages/stories";
@@ -57,7 +50,6 @@
 @import "partials/quote-buy-dialog";
 
 
-@import "../../share/scss/modules/buttons";
 @import "partials/asset-video-card";
 
 

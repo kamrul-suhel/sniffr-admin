@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-    import FeatureComponent from '../../includes/FeatureComponent.vue';
+    import FeatureComponent from '../../component/FeatureComponent.vue';
 
     export default{
         components:{

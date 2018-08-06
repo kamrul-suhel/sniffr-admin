@@ -26,7 +26,7 @@
 
 <script>
     import StoryDialogBoxEventBus from '../../../event-bus/story-dialog-box-event-bus';
-    import StoryDialogComponent from '../../../includes/StoryInDialogComponent';
+    import StoryDialogComponent from '../../../component/StoryInDialogComponent';
 
     export default {
         data() {

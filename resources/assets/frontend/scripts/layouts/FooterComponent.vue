@@ -86,12 +86,12 @@
 </template>
 <script>
     import LoginComponent from '../includes/LoginComponent'
-    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
-    import QuoteComponent from '../includes/QuoteComponent'
+    import ForgotPasswordComponent from '../component/ForgotPasswordComponent'
+    import QuoteComponent from '../component/QuoteComponent'
     import VideoDialogComponent from '../includes/VideoDialogComponent'
     import StoryDialogComponent from '../pages/clients/partials/StoryDialog'
     import SnackbarComponent from '../includes/SnackbarComponent'
-    import BuyDialogComponent from '../includes/BuyComponent'
+    import BuyDialogComponent from '../component/BuyComponent'
     import ThankYouDialogBox from '../includes/ThankyouComponent'
 
     export default {

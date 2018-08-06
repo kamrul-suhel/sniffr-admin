@@ -111,8 +111,8 @@
 </template>
 <script>
     import LoginComponent from '../includes/LoginComponent'
-    import ForgotPasswordComponent from '../includes/ForgotPasswordComponent'
-    import QuoteComponent from '../includes/QuoteComponent'
+    import ForgotPasswordComponent from '../component/ForgotPasswordComponent'
+    import QuoteComponent from '../component/QuoteComponent'
 
     import { mapGetters } from 'vuex';
     export default {
