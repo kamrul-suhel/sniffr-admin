@@ -39,12 +39,10 @@
                 <td>{{ count($contact->videos) }}</td>
                 <td>{{ count($contact->stories) }}</td>
                 <td>
-                    <p>
-                        <a href="{{ route('contacts.edit', ['id' => $contact->id]) }}" class="btn btn-xs btn-info">
-                            <span class="fa fa-edit"></span>
-                            Edit
-                        </a>
-                    </p>
+                    <a href="{{ route('contacts.edit', ['id' => $contact->id]) }}" class="btn btn-xs btn-info">
+                        <span class="fa fa-edit"></span>
+                        Edit
+                    </a>
                 </td>
             </tr>
         @endforeach
