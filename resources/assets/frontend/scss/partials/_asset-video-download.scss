@@ -9,12 +9,12 @@
     background-position: center !important;
     background-size: cover !important;
     position: relative;
-    cursor:pointer;
+    cursor: pointer;
     transition: all ease-in-out .3s;
 
-    &:hover{
-      box-shadow:0px 0px 5px rgba(0,0,0,.5);
-      opacity:.9;
+    &:hover {
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+      opacity: .9;
     }
 
     .cdi-label {
@@ -28,16 +28,16 @@
       }
     }
 
-    .hot-story{
-      position:absolute;
-      top:0;
-      left:0;
+    .hot-story {
+      position: absolute;
+      top: 0;
+      left: 0;
       padding: 5px 15px;
       background: #ff0000;
     }
 
-    .hot-story-content{
-      color:#fff;
+    .hot-story-content {
+      color: #fff;
     }
   }
 

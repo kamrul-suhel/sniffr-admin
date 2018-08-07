@@ -1,29 +1,29 @@
-import HomeComponent from './vue-component/pages/home/HomeComponent.vue';
-import LoginComponent from './vue-component/pages/login/LoginComponent.vue';
-import VideoComponent from './vue-component/pages/videos/VideosComponent.vue';
-import VideoDetailComponent from './vue-component/pages/videos/VideoDetailComponent.vue';
-import UploadVideoComponent from './vue-component/pages/upload/UploadVideoComponent.vue';
-import PasswordResetTokenComponent from './vue-component/pages/login/PasswordResetTokenComponent.vue';
-import PasswordSetTokenComponent from './vue-component/pages/login/PasswordSetTokenComponent.vue';
-import VideoMoreDetail from './vue-component/pages/submission/VideomoredetailComponent.vue';
-import VideoSubmissionComponent from './vue-component/forms/VideoSubmissionComponent.vue';
-import UnsubscribeComponent from './vue-component/pages/unsubscribe/UnsubscribeComponent.vue';
-import TermsConditionsComponent from './vue-component/pages/termscondition/TermsConditionComponent';
-import ContractComponent from './vue-component/pages/contract/ContractComponent';
-import Notfound from './vue-component/pages/404Component.vue';
-import StoriesComponent from './vue-component/pages/stories/StoriesComponent';
-import StoryDetailComponent from './vue-component/pages/stories/StoryDetailComponent.vue';
-import ClientComponent from './vue-component/pages/clients/ClientComponent';
-import ClientStoryDetailComponent from './vue-component/pages/clients/stories/ClientStoryDetailComponent';
-import ClientVideoDetailComponent from './vue-component/pages/clients/videos/ClientVideoDetailComponent';
+import HomeComponent from './pages/home/HomeComponent.vue';
+import LoginComponent from './pages/login/LoginComponent.vue';
+import VideoComponent from './pages/videos/VideosComponent.vue';
+import VideoDetailComponent from './pages/videos/VideoDetailComponent.vue';
+import UploadVideoComponent from './pages/upload/UploadVideoComponent.vue';
+import PasswordResetTokenComponent from './pages/login/PasswordResetTokenComponent.vue';
+import PasswordSetTokenComponent from './pages/login/PasswordSetTokenComponent.vue';
+import VideoMoreDetail from './pages/submission/VideomoredetailComponent.vue';
+import VideoSubmissionComponent from './component/forms/VideoSubmissionComponent.vue';
+import UnsubscribeComponent from './pages/unsubscribe/UnsubscribeComponent.vue';
+import TermsConditionsComponent from './pages/termscondition/TermsConditionComponent';
+import ContractComponent from './pages/contract/ContractComponent';
+import Notfound from './pages/404Component.vue';
+import StoriesComponent from './pages/stories/StoriesComponent';
+import StoryDetailComponent from './pages/stories/StoryDetailComponent.vue';
+import ClientComponent from './pages/clients/ClientComponent';
+import ClientStoryDetailComponent from './pages/clients/stories/ClientStoryDetailComponent';
+import ClientVideoDetailComponent from './pages/clients/videos/ClientVideoDetailComponent';
 
-import ClientProfileComponent from './vue-component/pages/clients/ProfileComponent';
-import ClientUserComponent from './vue-component/pages/clients/CreateUserComponent';
-import ClientEditUserComponent from './vue-component/pages/clients/EditUserComponent';
+import ClientProfileComponent from './pages/clients/ProfileComponent';
+import ClientUserComponent from './pages/clients/CreateUserComponent';
+import ClientEditUserComponent from './pages/clients/EditUserComponent';
 
-import ClientCollectionComponent from './vue-component/pages/collections/CollectionsComponent'
+import ClientCollectionComponent from './pages/collections/CollectionsComponent'
 
-import ClientPurchaseOfferedComponent from './vue-component/pages/clients/PurchasedOfferedComponent'
+import ClientPurchaseOfferedComponent from './pages/clients/PurchasedOfferedComponent'
 
 
 

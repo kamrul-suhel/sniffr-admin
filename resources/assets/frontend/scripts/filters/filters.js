@@ -7,7 +7,7 @@ Vue.filter('checkimage', function (value) {
         return value;
     }
     image.onerror = function () {
-        var newImage = '/assets/frontend/images/placeholder.png';
+        var newImage = '/assets/images/placeholder.png';
         return newImage;
     }
 });

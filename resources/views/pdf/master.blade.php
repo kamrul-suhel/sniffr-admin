@@ -11,7 +11,7 @@
 
     <title>{{ $settings['website_name'] . ' - ' . $settings['website_description'] }}</title>
 
-    <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
+    <link rel="stylesheet" href="{{ mix('/assets/admin/css/admin.css') }}">
 
     @yield('css')
 </head>

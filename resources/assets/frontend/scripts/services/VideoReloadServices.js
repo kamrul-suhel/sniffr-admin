@@ -42,11 +42,11 @@ export default class VideoReloadServices {
 
         let videojs1 = document.createElement('script');
         videojs1.type = "text/javascript";
-        videojs1.src = "/assets/admin/js/video.js";
+        videojs1.src = "/assets/scripts/video.js";
 
         let vimeo = document.createElement('script');
         vimeo.type = "text/javascript";
-        vimeo.src = "/assets/admin/js/videojs-vimeo.js";
+        vimeo.src = "/assets/scripts/videojs-vimeo.js";
         $('body').append(videojs1);
         $('body').append(vimeo);
 

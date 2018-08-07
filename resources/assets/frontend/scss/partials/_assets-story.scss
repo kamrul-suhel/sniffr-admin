@@ -5,29 +5,29 @@
     background: #777;
     background-size: cover !important;
     background-position: center !important;
-    position:relative;
-    overflow:hidden;
+    position: relative;
+    overflow: hidden;
     cursor: pointer;
-    transition:opacity ease-in-out .3s;
+    transition: opacity ease-in-out .3s;
 
-    .show{
-      bottom:10px;
+    .show {
+      bottom: 10px;
     }
 
-    &:hover{
+    &:hover {
       opacity: .5;
     }
 
-    .video-icon{
-      position:absolute;
-      top:10px;
-      right:10px;
+    .video-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
   }
 
   @include small-device {
     .thumbnail {
-      height:180px;
+      height: 180px;
     }
   }
 
@@ -49,4 +49,8 @@
     }
   }
 
+}
+
+.video-dialog-container{
+  max-height:650px !important;
 }
