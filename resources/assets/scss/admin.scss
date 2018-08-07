@@ -3,12 +3,12 @@
   mailer page scss
 ******************************************************
  */
-@import "~vuetify/dist/vuetify.min.css";
+@import "../../../node_modules/vuetify/dist/vuetify.min.css";
 
-@import "./modules/basic-reset";
-@import "./modules/variables";
-@import "./modules/typography";
-@import "./modules/mixin";
+@import "modules/basic-reset";
+@import "modules/variables";
+@import "modules/typography";
+@import "modules/mixin";
 
 
 /**
@@ -16,4 +16,4 @@
   Video dialog scss
 ******************************************************
  */
-@import './partials/asset-video-dialog-box';
+@import 'partials/asset-video-dialog-box';
