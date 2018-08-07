@@ -9,7 +9,8 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'watch') {
+
+if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'development') {
     mix.js(['resources/assets/admin/js/app.js',
             'resources/assets/admin/js/custom.js'],
         'public/assets/admin/js'
