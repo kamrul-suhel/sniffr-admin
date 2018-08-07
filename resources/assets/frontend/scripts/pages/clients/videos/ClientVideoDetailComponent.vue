@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import VideoPlayer from '../../../../../share/scripts/components/VideoPlayerComponent'
+    import VideoPlayer from '../../../../../scripts/components/VideoPlayerComponent'
     import BuyQuoteButtonComponent from "../../../includes/BuyQuoteButtonComponent";
 
     import {mapGetters } from 'vuex';

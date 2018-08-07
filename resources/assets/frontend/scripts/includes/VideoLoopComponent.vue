@@ -46,7 +46,7 @@
     export default {
         data() {
             return {
-                video_image: '/assets/frontend/images/placeholder.png',
+                video_image: '/assets/images/placeholder.png',
             }
         },
         props:{
@@ -80,13 +80,13 @@
             },
 
             defaultImage(){
-                this.video_image = '/assets/frontend/images/placeholder.png';
+                this.video_image = '/assets/images/placeholder.png';
             },
 
             onGetThumbnailImage(){
                 let thumb = '';
                 if(new RegExp('instagram', 'i').test(this.video.image)){
-                    thumb = '/assets/frontend/images/placeholder.png';
+                    thumb = '/assets/images/placeholder.png';
                 }else{
                     thumb = this.video.image;
                 }
@@ -156,7 +156,7 @@
                     };
 
                     image.onerror = function(){
-                        let default_img = '/assets/frontend/images/placeholder.png';
+                        let default_img = '/assets/images/placeholder.png';
 
                         let img_tag = document.createElement('img');
                         img_tag.src = default_img;

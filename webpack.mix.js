@@ -11,42 +11,15 @@ let mix = require('laravel-mix');
  */
 
 mix.js(['resources/assets/admin/js/app.js',
-        'resources/assets/admin/js/custom.js',
-        'resources/assets/admin/js/switch.js'],
+        'resources/assets/admin/js/custom.js'],
     'public/assets/admin/js'
 )
-    .sass('resources/assets/admin/sass/admin.scss',
+    .sass('resources/assets/admin/scss/admin.scss',
         'public/assets/admin/css/admin.css');
 
-mix.sass('resources/assets/share/scss/admin.scss',
+mix.sass('resources/assets/scss/admin.scss',
     'public/assets/admin/css/mailer-admin.css'
 );
-
-/*
-* *********************************************
-* Navigation styles
-* *********************************************
-*/
-mix.sass(
-    'resources/assets/frontend/scss/partials/nav-styles.scss',
-    'public/assets/frontend/css/nav-styles.css')
-    .options({
-        processCssUrls: false,
-    })
-    .sourceMaps();
-
-/*
-* *********************************************
-* Footer styles
-* *********************************************
-*/
-mix.sass(
-    'resources/assets/frontend/scss/partials/footer-styles.scss',
-    'public/assets/frontend/css/footer-styles.css')
-    .options({
-        processCssUrls: false,
-    })
-    .sourceMaps();
 
 /*
 * *********************************************
@@ -104,18 +77,9 @@ if (!mix.inProduction()) {
 * *********************************************
 */
 
-
 mix.copy(
-    'node_modules/tinymce/themes',
-    'public/assets/admin/js/themes'
-);
-mix.copy(
-    'node_modules/tinymce/skins',
-    'public/assets/admin/js/skins'
-);
-mix.copy(
-    'node_modules/tinymce/plugins',
-    'public/assets/admin/js/plugins'
+    'node_modules/tinymce/',
+    'public/assets/admin/js/'
 );
 
 // we are not using this utils.js anywhere
@@ -130,7 +94,7 @@ mix.copy(
 );
 
 mix.copy(
-    'resources/assets/share/scripts/vendor/',
+    'resources/assets/scripts/vendor/',
     'public/assets/scripts/'
 );
 
@@ -141,7 +105,7 @@ mix.copy(
 */
 mix.copy(
     [
-        'resources/assets/talvbansal/media-manager/fonts',
+        // 'resources/assets/talvbansal/media-manager/fonts',
         'node_modules/bootstrap/fonts',
         'node_modules/font-awesome/fonts',
         'resources/assets/fonts'

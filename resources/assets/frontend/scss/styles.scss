@@ -1,5 +1,5 @@
 @import "~vuetify/dist/vuetify.min.css";
-@import '../../share/scss/frontend';
+@import '../../scss/frontend';
 
 
 /* ************************* Header style ******************* */
@@ -7,8 +7,11 @@
 
 
 /* ************************* NAV style ******************* */
-//@import "./layout/nav";
+@import "./partials/nav";
 
+
+/* ************************* NAV style ******************* */
+@import "./partials/footer";
 
 
 /* ************************* Home Page style ******************* */
@@ -32,6 +35,15 @@
 @import "partials/pages/upload-form";
 
 
+/* ************************* Submission form page ******************* */
+@import "partials/pages/submission-form";
+
+/* ************************* More detail form page ******************* */
+@import "partials/pages/more-detail-form";
+
+/* ************************* Client page ******************* */
+@import "partials/pages/client";
+
 /* ************************* Search style ******************* */
 @import "partials/search";
 
@@ -39,12 +51,6 @@
 /* ************************* Pagination style ******************* */
 @import "partials/pagination";
 
-
-/* ************************* Submission form page ******************* */
-@import "partials/pages/submission-form";
-
-/* ************************* More detail form page ******************* */
-@import "partials/pages/more-detail-form";
 
 /* ************************* Quote buy dialog component ******************* */
 @import "partials/quote-buy-dialog";

@@ -3,7 +3,7 @@
         <v-flex xs12 sm12 md3 lg3 xl3>
             <v-card>
                 <v-card-media
-                        :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
+                        :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/images/placeholder.png')"
                         height="250px"
                         @click="onVideoDialog()"
                         class="client-video-thumbnail cdi-content">
@@ -210,7 +210,7 @@
 
             getImage(image) {
                 if (!image) {
-                    return '/assets/frontend/images/placeholder.png';
+                    return '/assets/images/placeholder.png';
                 }
                 return image;
             },

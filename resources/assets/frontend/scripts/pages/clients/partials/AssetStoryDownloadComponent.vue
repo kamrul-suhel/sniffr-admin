@@ -117,7 +117,7 @@
 
             getImage(image){
                 if (!image) {
-                    return '/assets/frontend/images/placeholder.png';
+                    return '/assets/images/placeholder.png';
                 }
                 return image;
             }
