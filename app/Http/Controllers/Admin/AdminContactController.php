@@ -47,10 +47,10 @@ class AdminContactController extends Controller
                 ->orWhere('email', 'LIKE', '%' . $search_value . '%');
         }
 
-        $contacts = $contacts->orderBy('created_at', 'DESC')->paginate(10);
+        $contacts = $contacts->orderBy('created_at', 'DESC');
 
         $data = [
-            'contacts' => $contacts,
+            'contacts' => $contacts->paginate(25),
             'user' => Auth::user()
         ];
 

@@ -100,6 +100,7 @@
                 valid: false,
                 login_progress: false,
                 loginDelay: false,
+                redirectUrl: false,
                 user: {
                     email: '',
                     password: ''
@@ -141,6 +142,8 @@
             onSubmit() {
                 if (this.$refs.login_form.validate()) {
 
+                    this.redirectUrl = this.$route.query.redirect ? this.$route.query.redirect : false;
+
                     // make spinner visible
                     this.login_progress = true;
                     this.loading = true;
@@ -149,6 +152,10 @@
                     let form_data = new FormData();
                     form_data.append('email', this.user.email);
                     form_data.append('password', this.user.password);
+                    if(this.redirectUrl) {
+                        form_data.append('redirect', this.redirectUrl);
+                    }
+
 
                     // submit data with ajax request
                     axios.post('/login', form_data)

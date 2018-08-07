@@ -263,7 +263,6 @@
             this.getCompanyData();
         },
 
-
         methods: {
             getCompanyData() {
                 axios.get('/client/profile').then((response) => {
@@ -271,6 +270,11 @@
                     this.companyData = response.data.company;
                     this.companyUsers = response.data.company_users;
                     this.companyOwner = this.companyData.account_owner_id;
+
+                    if(this.user.id !== this.companyOwner) {
+                        return this.editUser(this.user.id);
+                    }
+
                     let companyOwners = [];
                     let users = Object.entries(response.data.account_owner_users);
                     users.forEach(function (index, value) {
@@ -294,7 +298,7 @@
 
                     this.stateReady = true;
 
-                    if(this.user.id !== this.companyOwner || this.user.role !== 'client_admin') {
+                    if(this.user.id !== this.companyOwner) {
                         this.editUser(this.user.id);
                     }
                 });
