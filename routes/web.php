@@ -156,6 +156,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('stories/update_field', array('uses' => 'Admin\AdminStoryController@updateField'));
     Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
     Route::get('stories/reminder/{id}', array('uses' => 'Admin\AdminStoryController@sendReminder'));
+	Route::get('stories/contact_made/{id}', array('uses' => 'Admin\AdminStoryController@contactMade'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');
     Route::get('mailers/refresh', array('uses' => 'Admin\AdminClientMailerController@refresh'));

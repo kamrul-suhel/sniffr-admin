@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 sm6 md6 lg3 xl3>
+        <v-flex xs12 sm6 md3>
             <v-card flat hover>
                 <v-card-media
                         height="200px"
@@ -13,20 +13,24 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm6 md6 lg4 xl4>
-            <h4 v-html="story.title"></h4>
+        <v-flex xs12 sm6 md3>
+            <h4>{{ story.title }}</h4>
             <div v-html="story.excerpt"></div>
         </v-flex>
 
-        <v-flex xs6 sm6 md6 lg2 xl2>
+        <v-flex xs6 sm6 md1>
             {{ story.author }}
         </v-flex>
 
-        <v-flex xs12 sm6 md6 lg2 xl2>
+        <v-flex xs6 sm6 md1>
+            {{ story.state }}
+        </v-flex>
+
+        <v-flex xs12 sm6 md1>
             {{ story.created_at | convertDate }}
         </v-flex>
 
-        <v-flex xs6 sm6 md6 lg1 xl1 class="story-input">
+        <v-flex xs6 sm6 md1 class="story-input">
             <v-checkbox
                     color="black"
                     v-model="selected"

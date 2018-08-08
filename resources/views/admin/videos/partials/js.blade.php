@@ -133,18 +133,64 @@ function videoAnalysis(tempFile) {
         }
     });
 
-    tinymce.init({
-        relative_urls: false,
-        selector: '#details',
-        toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor | code",
-        plugins: [
-             "advlist autolink link image code lists charmap print preview hr anchor pagebreak spellchecker code fullscreen",
-             "save table contextmenu directionality emoticons template paste textcolor code"
-       ],
-       menubar:false,
-     });
+    $('.js-state').click(function(e){
+        e.preventDefault();
+        var state, alertType;
+        var videoId = $(this).attr("data-id");
+        var myClass = $(this).attr("class");
 
-     $('.js-state-accept').click(function(e){
+        switch (true) {
+            case /accepted/.test(myClass):
+                state = 'accepted';
+                alertType = 'success';
+                break;
+            case /licensed/.test(myClass):
+                state = 'licensed';
+                alertType = 'success';
+                break;
+            case /licensed/.test(myClass):
+                state = 'restricted';
+                alertType = 'warning';
+                break;
+            case /licensed/.test(myClass):
+                state = 'problem';
+                alertType = 'error';
+                break;
+            case /rejected/.test(myClass):
+                state = 'rejected';
+                alertType = 'error';
+                break;
+        }
+
+        $(this).removeClass('js-state');
+
+        swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+        $('.swal-button-container').css('display','none');
+
+        if(state&&videoId) {
+            // console.log(state);
+            $.ajax({
+                type: 'GET',
+                url: '/admin/videos/status/'+state+'/'+videoId,
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.status=='success') {
+                        if(data.remove=='yes'){
+                            $('#video-'+videoId).fadeOut();
+                            $('#video-'+videoId).remove();
+                        }
+                        swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
+                        $('.swal-button-container').css('display','inline-block');
+                    } else {
+                        $('.swal-button-container').css('display','inline-block');
+                    }
+                }
+            });
+        }
+    });
+
+    $('.js-state-accept').click(function(e){
         e.preventDefault();
         var dataUrl = $(this).attr('href');
         var parseUrl = dataUrl.split('/');
@@ -169,12 +215,13 @@ function videoAnalysis(tempFile) {
                             //location.reload();
                             window.location.href = '/admin/videos/edit/'+data.video_alpha_id+'/?previous_state='+data.previous_state;
                         });
+
                         $('.swal-button-container').css('display','inline-block');
                     }
                 }
             });
         }
-     });
+    });
 
      //js form validations >> Admin Create edit
     $('#video-form').validate({

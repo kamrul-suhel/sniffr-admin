@@ -155,7 +155,7 @@ class SearchController extends Controller
             }
 		}
 
-		$data['mailer_videos'] = $mailerVideos;
+		$data['mailerVideos'] = $mailerVideos;
 
 		return $this->successResponse($data);
 	}
@@ -180,7 +180,16 @@ class SearchController extends Controller
         //Remove any exclusive based collections that have been purchased and downloaded.
         $unsearchableStories = $this->collectionStory->getAssetByTypeStatus('exclusive', 'purchased')->pluck('story_id');
 
-        $stories = $this->story::where('state', 'published');
+		$stories = $this->story->where('state', 'published');
+
+		if($request->get('mailer')){
+			$stories = $stories->orWhere('state', 'licensed');
+			$stories = $stories->orWhere('state', 'writing-inprogress');
+			$stories = $stories->orWhere('state', 'writing-completed');
+			$stories = $stories->orWhere('state', 'subs-inprogress');
+			$stories = $stories->orWhere('state', 'subs-approved');
+			$stories = $stories->orWhere('state', 'published');
+		}
 
         if($searchValue){
 			$stories = $stories->where(function ($query) use ($searchValue) {
@@ -231,7 +240,7 @@ class SearchController extends Controller
                 ->get();
         }
 
-		$data['mailer_stories'] = $mailerStories;
+		$data['mailerStories'] = $mailerStories;
 		$data['stories'] = $stories;
 
         return $this->successResponse($data);
