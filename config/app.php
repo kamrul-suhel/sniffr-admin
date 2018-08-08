@@ -4,7 +4,7 @@ return [
 
     'name' => env('APP_NAME', 'Sniffr'),
     'logo' => env('APP_LOGO', ''),
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'prod'),
     'debug' => env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
     'timezone' => 'Europe/London',
