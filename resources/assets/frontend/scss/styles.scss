@@ -1,70 +1,66 @@
-@import "./basic-reset";
-@import "./variables";
-@import "./fonts";
-@import "./mixin";
-@import "./global";
-@import "./plugin";
-@import "../../../../node_modules/vuetify/dist/vuetify.min.css";
-
-
-/* ************************* Animation css ******************* */
-@import "./animation";
+@import "~vuetify/dist/vuetify.min.css";
+@import '../../scss/frontend';
 
 
 /* ************************* Header style ******************* */
-@import "layout/header";
+@import "partials/header";
 
 
 /* ************************* NAV style ******************* */
-//@import "./layout/nav";
+@import "./partials/nav";
 
+
+/* ************************* NAV style ******************* */
+@import "./partials/footer";
 
 
 /* ************************* Home Page style ******************* */
-@import "pages/home";
+@import "partials/pages/home";
 
 /* ************************* Login Page style ******************* */
-@import "includes/login";
-
-/* ************************* Quote Page style ******************* */
-@import "pages/quote";
+@import "partials/login";
 
 /* ************************* Videos Page style ******************* */
-@import "pages/videos";
+@import "partials/pages/videos";
 
 /* ************************* Video dialog box section style ******************* */
-@import "includes/video-dialog-box";
-
-/* ************************* Video dialog box section style ******************* */
-@import "pages/stories";
+@import "partials/pages/stories";
 
 
 /* ************************* Video detail style ******************* */
-@import "pages/video-detail";
+@import "partials/pages/video-detail";
 
 
 /* ************************* Video upload page style ******************* */
-@import "form/video-upload";
-
-
-/* ************************* Footer style ******************* */
-//@import "layout/footer";
-
-
-/* ************************* Pagination style ******************* */
-@import "includes/pagination";
+@import "partials/pages/upload-form";
 
 
 /* ************************* Submission form page ******************* */
-@import "form/submission-form";
+@import "partials/pages/submission-form";
 
 /* ************************* More detail form page ******************* */
-@import "form/more-detail";
+@import "partials/pages/more-detail-form";
+
+/* ************************* Client page ******************* */
+@import "partials/pages/client";
+
+/* ************************* Search style ******************* */
+@import "partials/search";
 
 
-@import "partials/buttons";
-@import "partials/modals";
-@import "partials/video-card";
+/* ************************* Pagination style ******************* */
+@import "partials/pagination";
+
+
+/* ************************* Quote buy dialog component ******************* */
+@import "partials/quote-buy-dialog";
+
+
+@import "partials/asset-video-card";
+
+
+@include extra-small-device{
+}
 
 @include small-device{
 }

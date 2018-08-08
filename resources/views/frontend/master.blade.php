@@ -4,12 +4,10 @@
     @include('frontend.layout.head.meta')
 
     <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
-    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . $favicon ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= Config::get('site.img_url') . $favicon ?>" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
-    <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/nav-styles.css') }}">
-    <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/footer-styles.css') }}">
     <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}" />
 
     <!-- If we need to add page specific style -->
@@ -34,8 +32,6 @@
 
     <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
     <script src="{{mix('assets/frontend/scripts/scripts.js')}}"></script>
-
-    @include('partials.ganalytics')
 
     @yield('page_script')
 </body>

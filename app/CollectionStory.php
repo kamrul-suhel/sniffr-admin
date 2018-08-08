@@ -54,6 +54,27 @@ class CollectionStory extends Model
                 ->count() > 0;
     }
 
+    /**
+     * @param $videoId
+     * @return mixed
+     */
+    public static function isOffered($videoId)
+    {
+        return CollectionStory::where('story_id', $videoId)
+            ->where('status', 'offered');
+    }
+
+    /**
+     * @param $videoId
+     * @return mixed
+     */
+    public static function isRequested($videoId)
+    {
+        return CollectionStory::where('story_id', $videoId)
+            ->where('status', 'requested');
+    }
+
+
 
     public function calculateLicenseEndTime()
 	{

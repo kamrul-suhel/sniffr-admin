@@ -9,16 +9,16 @@
                 <a href="{{ url('client/stories/'.$story['alpha_id']) }}"><img src="@if($story['thumb']){{ $story['thumb'] }}@else {{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 180px; width: auto; margin-top: 15px; margin-right: 15px;" /></a>
                 <br />
                 <div style="display:inline-block;">
-                    <img src="{{ url('assets/frontend/images/picture_as_pdf.png') }}" border="0" />
+                    <img src="{{ url('assets/images/picture_as_pdf.png') }}" border="0" />
                     <div style="display:inline-block;width:25px;height:25px;">1</div>
                 </div>
                 @if($story->assets()->count()>0)<div style="display:inline-block;">
-                    <img src="{{ url('assets/frontend/images/photo_library.png') }}" border="0" />
+                    <img src="{{ url('assets/images/photo_library.png') }}" border="0" />
                     <div style="display:inline-block;width:25px;height:25px;">{{ $story->assets()->count() }}</div>
                 </div>@endif
                 @if($story->assets()->where('jw_player_code', '!=', NULL)->count()>0)<div style="display:inline-block;">
                     <div style="display:inline-block;">
-                        <img src="{{ url('assets/frontend/images/video_library.png') }}" border="0" />
+                        <img src="{{ url('assets/images/video_library.png') }}" border="0" />
                         <div style="display:inline-block;width:25px;height:25px;">{{ $story->assets()->where('jw_player_code', '!=', NULL)->count() }}</div>
                     </div>@endif
             </td>

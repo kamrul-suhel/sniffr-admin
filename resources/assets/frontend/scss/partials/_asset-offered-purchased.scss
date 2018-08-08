@@ -1,0 +1,38 @@
+.final-price{
+  margin-top:15px;
+
+  h4{
+    color: #fff;
+    font-size: 12px;
+    background: #000;
+    padding: 10px;
+    display: inline-block;
+    font-weight: 100;
+    -webkit-font-smoothing: antialiased;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+    line-height: 18px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.5);
+
+    span{
+      font-size:18px;
+    }
+  }
+}
+
+.quote{
+  margin:10px 0;
+  span{
+    font-weight:bold;
+    text-transform: capitalize;
+  }
+}
+
+.client-video-thumbnail{
+    cursor:pointer;
+  transition:all ease-in-out .3s;
+  &:hover{
+    box-shadow:0px 0px 5px rgba(0,0,0,.9);
+    opacity:.9;
+  }
+}

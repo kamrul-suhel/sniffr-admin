@@ -8,7 +8,7 @@
                 <br />
                 <div style="display:inline-block;">
                     <div style="display:inline-block;">
-                        <img src="{{ url('assets/frontend/images/video_library.png') }}" border="0" />
+                        <img src="{{ url('assets/images/video_library.png') }}" border="0" />
                         <div style="display:inline-block;width:25px;height:25px;">1</div>
                     </div>
                 </div>

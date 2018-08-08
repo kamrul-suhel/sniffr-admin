@@ -43,10 +43,12 @@ class AdminClientController extends Controller
      */
     public function index()
     {
-        $clients = $this->client->orderBy('created_at', 'DESC')->paginate(10);
+        $clients = $this->client->orderBy('created_at', 'DESC')->where('active', 1);
+        $unmoderatedClients = $this->client->orderBy('created_at', 'DESC')->where('active', 0);
 
         $data = [
-            'clients' => $clients,
+            'clients' => $clients->paginate(25),
+            'unmoderatedClients' => $unmoderatedClients->paginate(25),
             'user' => auth()->user()
         ];
 

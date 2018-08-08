@@ -4,7 +4,7 @@ return [
 
     'name' => env('APP_NAME', 'Sniffr'),
     'logo' => env('APP_LOGO', ''),
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'prod'),
     'debug' => env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
     'timezone' => 'Europe/London',
@@ -97,7 +97,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
-        Chumper\Zipper\ZipperServiceProvider::class
+        Chumper\Zipper\ZipperServiceProvider::class,
+		Barryvdh\Debugbar\ServiceProvider::class
     ],
 
     /*
@@ -159,6 +160,7 @@ return [
         'Zipper' => Chumper\Zipper\Zipper::class,
         'Goutte' => Weidner\Goutte\GoutteFacade::class,
 		'RedditAPI' => CodeWizz\RedditAPI\RedditAPIFacade::class,
+		'Debugbar' => Barryvdh\Debugbar\Facade::class
     ],
 
 ];

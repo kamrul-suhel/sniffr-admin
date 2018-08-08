@@ -5,7 +5,7 @@
             <v-flex xs12 sm8 md8 lg8>
                 <div class="footer-left">
                     <div class="footer-logo">
-                        <img src="{{asset('assets/frontend/images/logo-sniffr-white.png')}}"/>
+                        <img src="{{asset('assets/images/logo-sniffr-white.png')}}"/>
                     </div>
                     <v-flex xs12 sm12 md9 lg9>
                         <div class="footer-text">
