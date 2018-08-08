@@ -57,7 +57,7 @@
 
         data() {
             return {
-                defaultImage: '/assets/frontend/images/placeholder.png',
+                defaultImage: '/assets/images/placeholder.png',
 
                 showVideo: false,
 

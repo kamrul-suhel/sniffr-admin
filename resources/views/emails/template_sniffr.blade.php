@@ -122,7 +122,7 @@
                                                             <table class="module" role="module" data-type="code" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
                                                                 <tr>
                                                                     <td height="100%" valign="top">
-                                                                        <img src="{{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/logo-sniffr-black.png" style="width:20%;height:auto;" border="0">
+                                                                        <img src="{{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/images/logo-sniffr-black.png" style="width:20%;height:auto;" border="0">
                                                                         <div><span style="margin-top:20px;font-style:italic;color:#999;">by UNILAD</span></div>
                                                                     </td>
                                                                 </tr>
