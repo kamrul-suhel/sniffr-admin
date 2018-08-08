@@ -5,7 +5,7 @@ const state = {
     videoLoading:false,
 
     videos: [],
-    mailer_videos: [],
+    mailerVideos: [],
     mailerVideoCurrentIndex: '',
     paginate: '',
 
@@ -50,7 +50,7 @@ const getters = {
     },
 
     getMailerVideoData(state) {
-        return state.mailer_videos;
+        return state.mailerVideos;
     },
 
     getMailerVideoCurrentIndex(state){
@@ -142,7 +142,7 @@ const mutations = {
     },
 
     setMailerVideoData(state, data) {
-        state.mailer_videos = data;
+        state.mailerVideos = data;
     },
 
     setMailerVideoCurrentIndex(state, value){
@@ -223,7 +223,7 @@ const mutations = {
         state.previewRouteObject = '';
         state.videoLoading =false;
         state.videos= []
-        state.mailer_videos = []
+        state.mailerVideos = []
         state.paginate = ''
         state.currentVideoTags= []
         state.nextVideoAlphaId = ''
@@ -272,7 +272,7 @@ const mutations = {
 
     setSuggestNextPrevious(state) {
         let currIndex = state.mailerVideoCurrentIndex;
-        let allVideos = state.mailer_videos;
+        let allVideos = state.mailerVideos;
         let currentAlphaId = '';
         let currentVideo = '';
         let previousAlphaId = '';
@@ -326,7 +326,7 @@ const actions = {
             .then((response) => {
                 let data = response.data;
                 commit('setVideoData', data.videos.data);
-                commit('setMailerVideoData', data.mailer_videos);
+                commit('setMailerVideoData', data.mailerVideos);
                 commit('setVideoPaginationObject', data.videos);
             })
             .catch((error) => {

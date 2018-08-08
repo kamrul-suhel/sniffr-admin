@@ -5,7 +5,7 @@
         <section class="videos-section section-space">
             <v-container grid-list-lg
                          class="pt-0 pb-5"
-                         v-if="client_logged_in && Object.keys(mailer_videos).length > 0">
+                         v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
                 <v-layout row wrap>
                     <v-flex xs12 class="text-center">
                         <h2 class="text-uppercase">Your Suggested Videos</h2>
@@ -15,7 +15,7 @@
                     <v-flex xs12>
                         <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
                             <video-loop-component
-                                    v-for="(mailer, index) in mailer_videos"
+                                    v-for="(mailer, index) in mailerVideos"
                                     :video="mailer"
                                     :key="mailer.alpha_id"
                                     :type="'suggest'"
@@ -83,7 +83,7 @@
                 client_logged_in: 'getClientLogin',
                 videos: 'getVideos',
                 paginate: 'getVideoPaginateObject',
-                mailer_videos: 'getMailerVideoData',
+                mailerVideos: 'getMailerVideoData',
             }),
 
         },
