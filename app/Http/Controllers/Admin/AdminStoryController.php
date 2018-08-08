@@ -79,7 +79,10 @@ class AdminStoryController extends Controller
 			$state = key(config('stories.decisions.'.$decision));
 		}
 
-		$stories = $stories->where('state', $state);
+		if($decision != 'all'){ // get everything
+			$stories = $stories->where('state', $state);
+		}
+
 
 //		// only display states within selected decision point
 //        if($decision) {
@@ -280,6 +283,11 @@ class AdminStoryController extends Controller
         $story->author = (Input::get('user_id') ? User::where('id', Input::get('user_id'))->pluck('full_name')->first() : NULL);
 		$story->contact_id = (Input::get('contact_id') ? Input::get('contact_id') : $story->contact_id);
 
+		if(Input::get('wp_id')){
+			$story->wp_id = Input::get('wp_id');
+		}
+
+
 		$story->save();
 
 		// Sync attached videos
@@ -379,6 +387,22 @@ class AdminStoryController extends Controller
                 ]);
         }
     }
+
+    public function wpSync(Request $request, $alpha_id){
+		$story = Story::where('alpha_id', $alpha_id)->first();
+		$message = 'Cannot find that story';
+
+		if($story->wp_id) {
+			QueueStory::dispatch($alpha_id, 'sync', (!empty(Auth::id()) ? Auth::id() : 0));
+			$message = 'Updating content from WP';
+		}
+
+		return Redirect::to('admin/stories/edit/' . $alpha_id)
+			->with([
+				'note' => $message,
+				'note_type' => 'success',
+			]);
+	}
 
     /**
      * @param Request $request
