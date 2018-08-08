@@ -30,8 +30,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $from = request()->has('from') ? request()->get('from') : Carbon::now()->subMonths(1)->startOfDay();
-        $to = request()->has('to') ? request()->get('to') : Carbon::now();
+        $from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay()  : Carbon::now()->subMonths(1)->startOfDay();
+        $to = request()->has('to') ? Carbon::parse(request()->get('to'))->startOfDay()  : Carbon::now();
 
         $allVideosStateTotal = $this->getAllVideoStatesByRights($from, $to, 'ex');
         $allVideosStateTotalDates = array_values(array_unique($allVideosStateTotal->pluck('created_at')->toArray()));
@@ -55,6 +55,8 @@ class DashboardController extends Controller
         $video_state_count = Video::get()->where('created_at', '>', $this->startDate)->groupBy('state');
 
         $data = [
+            'from' => $from,
+            'to' => $to,
             'user' => Auth::user(),
             'video_state_count' => $video_state_count,
             'total_videos' => $videos->count(),

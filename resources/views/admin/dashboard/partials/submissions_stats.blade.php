@@ -1,4 +1,12 @@
-
+<div class="row">
+    <form class="col-lg-12">
+        <div class="input-group">
+            <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker" autocomplete="off">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-lg btn-success input-group-addon" style="background-color: #00a65a; color: white;">Reset</a>
+        </div>
+        <hr>
+    </form>
+</div>
 <div class="row">
     <div class="col-sm-3 col-xs-6">
         <div class="tile-stats tile-default">

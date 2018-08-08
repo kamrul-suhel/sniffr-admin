@@ -1,5 +1,30 @@
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
+
 <script>
     (function ($) {
+
+        $('input[name="rangepicker"]').daterangepicker({
+            alwaysShowCalendars: true,
+            startDate: '{{ $from->format('d/m/Y') }}',
+            endDate: '{{ $to->format('d/m/Y') }}',
+            locale: {
+                format: 'DD/MM/YYYY',
+                firstDay: 1,
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last Week': [moment().subtract(1, 'weeks').startOf('isoWeek'), moment().subtract(1, 'weeks').endOf('isoWeek')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        });
+
+        $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
+            window.location.search += '&from=' + picker.startDate.format('YYYY-MM-DD') + '&to=' + picker.endDate.format('YYYY-MM-DD');
+        });
 
         var ctx = $('#sub-breakdown-graph');
         ctx.height(285);
