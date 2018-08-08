@@ -230,3 +230,8 @@
 	</div>
 	@endif
 @stop
+
+@section('javascript')
+	@include('admin.videos.partials.js')
+@stop
+
