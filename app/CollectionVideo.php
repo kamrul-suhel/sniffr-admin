@@ -81,6 +81,26 @@ class CollectionVideo extends Model
     }
 
     /**
+     * @param $videoId
+     * @return mixed
+     */
+    public static function isOffered($videoId)
+    {
+        return CollectionVideo::where('video_id', $videoId)
+            ->where('status', 'offered');
+    }
+
+    /**
+     * @param $videoId
+     * @return mixed
+     */
+    public static function isRequested($videoId)
+    {
+        return CollectionVideo::where('video_id', $videoId)
+            ->where('status', 'requested');
+    }
+
+    /**
      * Get a video of a specific type and status. (common occurrence throughout site)
      * @param $type
      * @param $status

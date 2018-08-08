@@ -1,10 +1,12 @@
-<div class="panel panel-{{ (key_exists($asset->state, config('videos.colors'))) ? config('videos.colors')[$asset->state] : $asset->state }}" data-collapsed="0">
+<div class="panel panel-{{ (key_exists($asset->state, config('videos.colors'))) ? config('videos.colors')[$asset->state] : $asset->state }}"
+     data-collapsed="0">
     <div class="panel-heading">
         <div class="panel-title">
             {{ ucfirst($asset->state) }}
             @if($asset->state=='licensed')
                 |
-                <i class="fa fa-{{ $asset->rights == 'nonexc' ? 'times' : 'check' }}-circle"></i> {{ $asset->rights == 'nonexc' ? 'Non-' : '' }}Ex{{ $asset->rights != 'ex' ? ' Chaser' : '' }}
+                <i class="fa fa-{{ $asset->rights == 'nonexc' ? 'times' : 'check' }}-circle"></i> {{ $asset->rights == 'nonexc' ? 'Non-' : '' }}
+                Ex{{ $asset->rights != 'ex' ? ' Chaser' : '' }}
                 Video
             @endif
             @if($asset->trashed())
@@ -31,6 +33,12 @@
                         <a href="{{ url('admin/videos/status/licensed/' . $asset->alpha_id ) }}"
                            class="btn btn-primary btn-success">
                             License
+                        </a>
+                    @endif
+                    @if($asset->state != 'licensed' && $asset->is_exclusive && !$asset->submitted_elsewhere)
+                        <a href="{{ url('admin/videos/status/licensed/' . $asset->alpha_id ) }}"
+                           class="btn btn-primary btn-success">
+                            Fast Track License
                         </a>
                     @endif
                     @if($asset->state != 'restricted')
@@ -84,7 +92,9 @@
             @endif
 
             @if($asset->file)
-                <a href="{{ url('/download/'.$asset->alpha_id) }}" class="btn btn-primary{{ $asset->file_watermark ? ' js-download' : '' }}" title="Download Video" download>
+                <a href="{{ url('/download/'.$asset->alpha_id) }}"
+                   class="btn btn-primary{{ $asset->file_watermark ? ' js-download' : '' }}" title="Download Video"
+                   download>
                     <i class="fa fa-cloud-download"></i>
                 </a>
             @endif
@@ -94,7 +104,8 @@
                     <i class="fa fa-arrow-circle-o-down"></i>
                 </a>
             @elseif($asset->hasContract())
-                <a href="{{ route('contract.download', ['id' => $asset->currentContract->reference_id]) }}" class="btn btn-primary" title="Download Contract">
+                <a href="{{ route('contract.download', ['id' => $asset->currentContract->reference_id]) }}"
+                   class="btn btn-primary" title="Download Contract">
                     <i class="fa fa-arrow-circle-down"></i>
                 </a>
             @endif

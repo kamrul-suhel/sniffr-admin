@@ -91,7 +91,7 @@ class ClientStoriesController extends Controller
 			$clientId = Auth::user()->client_id;
 			$userId = Auth::user()->id;
 
-			$offeredStories = Collection::with('collectionStories.story');
+			$offeredStories = Collection::with('collectionStories.story.assets');
 
 			// If search passed through
 			if ($request->search) {
@@ -134,7 +134,7 @@ class ClientStoriesController extends Controller
             $clientId = auth()->user()->client_id;
             $userId = auth()->user()->id;
 
-			$purchasedStories = Collection::with('collectionStories.story');
+			$purchasedStories = Collection::with('collectionStories.story.assets');
 			// If search passed through
             if ($request->search) {
 				$search = $request->search;

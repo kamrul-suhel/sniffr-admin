@@ -13,11 +13,11 @@
 
 <div>&nbsp;</div>
 
-<div>Thanks for sending through your video! It has now been sent over to our content team who will review it and decide if it’s something they’re looking for. They will email you with an update on this process ASAP.</div>
+<div>Thanks for submitting your video to us. If the video is shared on our main UNILAD Facebook page, we’ll be sure to notify you and you’ll receive £100!</div>
 
 <div>&nbsp;</div>
 
-<div>You may be asked to fill out some more details so be sure to keep an eye out for them getting in touch!</div>
+<div>Please keep sending videos in, we are always on the lookout for great content.</div>
 
 <div>&nbsp;</div>
 

@@ -16,8 +16,24 @@ class AdminCollectionController extends Controller
      */
     public function index()
     {
-        //TODO - Get all collections and split by company
-        $companies = Client::with('collections')->get();
+        $companies = Client::with('collections')
+            ->with('collections.collectionVideos')
+            ->with('collections.collectionStories')
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        foreach($companies as $company) {
+            $company['collectionVideosCount'] = $company->collections()
+                ->with('collectionVideos')
+                ->whereHas('collectionVideos', function($query) use ($company) {
+                    $query->where('client_id', $company->id); })
+                ->count();
+            $company['collectionStoriesCount'] = $company->collections()
+                ->with('collectionStories')
+                ->whereHas('collectionStories', function($query) use ($company) {
+                    $query->where('client_id', $company->id); })
+                ->count();
+        }
 
         return view('admin.collections.index')
             ->with('companies', $companies);

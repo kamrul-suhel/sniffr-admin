@@ -47,10 +47,10 @@ class AdminContactController extends Controller
                 ->orWhere('email', 'LIKE', '%' . $search_value . '%');
         }
 
-        $contacts = $contacts->orderBy('created_at', 'DESC')->paginate(10);
+        $contacts = $contacts->orderBy('created_at', 'DESC');
 
         $data = [
-            'contacts' => $contacts,
+            'contacts' => $contacts->paginate(25),
             'user' => Auth::user()
         ];
 
@@ -122,11 +122,13 @@ class AdminContactController extends Controller
      */
     public function edit($id)
     {
+        $decision = request()->get('decision', 'content-sourced');
         $contact = Contact::find($id);
 
          $data = [
              'headline' => '<i class="fa fa-edit"></i> Edit Contact',
              'contact' => $contact,
+             'decision' => $decision,
              'user' => Auth::user(),
              'videos' => $contact->videos,
              'comments' => $contact->comments()->orderBy('created_at', 'desc')->paginate(6)

@@ -1,0 +1,10 @@
+@import "../../../scss/modules/basic-reset";
+@import "../../../scss/modules/variables";
+@import "../../../scss/modules/typography";
+@import "../../../scss/modules/mixin";
+@import "../../../scss/modules/global";
+@import "../vendor/plugin";
+@import "~vuetify/dist/vuetify.min.css";
+
+/* ************************* NAV style ******************* */
+@import "footer";

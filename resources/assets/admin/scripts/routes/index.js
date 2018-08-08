@@ -1,4 +1,4 @@
-import MailerComponent from '../components/pages/mailer/MailerComponent';
+import MailerComponent from '../pages/mailer/MailerComponent';
 
 export const routes = [
     {

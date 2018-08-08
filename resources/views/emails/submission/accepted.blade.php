@@ -29,7 +29,7 @@
 
 <div>&nbsp;</div>
 
-<div>Once you have filled this in with the correct answers, our team will review the details and get in touch with what happens next!</div>
+<div>Once you have filled this in with the correct answers, our team will review the details and will contact you if they require anymore information!</div>
 
 <div>&nbsp;</div>
 
