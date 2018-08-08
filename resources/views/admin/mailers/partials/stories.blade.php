@@ -4,7 +4,7 @@
             <h4>{{ TextHelper::shorten($story['title'], 250) }}</h4>
             by {{ $story['author'] }}
             <br />
-            <img src="@if($story['thumb']){{ $story['thumb'] }}@else /assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
+            <img src="@if($story['thumb']){{ $story['thumb'] }}@else /assets/images/placeholder.png @endif" border="0" style="display: flex; height: 200px; width: auto; margin-top: 15px;" />
             <br />
             <div style="display:inline-block;">
                 <div style="display:inline-block;width:25px;height:25px;background-repeat:no-repeat;background-size: contain;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAQAAABIkb+zAAABj0lEQVR4Ae3agWZCcRTH8T8QZG9QYy5mNdbvINtz1TMkAAbFeoR6hPUI9RADIDEb1B3gYIj9bvfs8PseIP/iQ+794xT1l5RSSg17mGJrB6uvPAdsMR32SpMNurbB2er2BmfbDLqlmaoO9la3P9hXndJEWFodM1gWPlQ4hQFOqAqbzawOnFlhwy4SgH1hs69IgH3ygDp2BBBAAAGuOwJc+IIAAghw8cce7/CKb/6c1xrAGz3ggzgXB/CeXnAizsUBPLxR5+IBNqbOxQOqG+Jc+4DmP/MRQIAMgN8NugTg/z5GEwGwSg0YPeOcGGD3fkmLB/DX6QwA/9Qn/jEqAP++SACwcXIAVqkB/r5ICfD3RTqAvy8CAJEjgAACCBA6AggggADHUMCRBsSvnLGAeShgTgNGt5Frl9anAaVgEb/4SgGqDnZRq8cUwBt0sW57+RtrX/4mAJ71bdLO+r2928T/+yQgQQIIIIAAXAIck2/mYpcdME8O4O/7PIAMi1SA4Ps+Dwi+7/OAuPs+D1BKKaV+ALo6isIclyX1AAAAAElFTkSuQmCC);"></div>
