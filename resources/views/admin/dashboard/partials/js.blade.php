@@ -1,5 +1,159 @@
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
+
 <script>
     (function ($) {
+
+        $('input[name="rangepicker"]').daterangepicker({
+            alwaysShowCalendars: true,
+            startDate: '{{ $from->format('d/m/Y') }}',
+            endDate: '{{ $to->format('d/m/Y') }}',
+            locale: {
+                format: 'DD/MM/YYYY',
+                firstDay: 1,
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last Week': [moment().subtract(1, 'weeks').startOf('isoWeek'), moment().subtract(1, 'weeks').endOf('isoWeek')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        });
+
+        $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
+            window.location.search += '&from=' + picker.startDate.format('YYYY-MM-DD') + '&to=' + picker.endDate.format('YYYY-MM-DD');
+        });
+
+        var ctx = $('#sub-breakdown-graph');
+        ctx.height(285);
+        new Chart($("#sub-breakdown-graph"), {
+            "type": "bar",
+            "data": {
+                "labels": [
+                    @foreach($allVideosStateTotalTotals as $key => $date)
+                    <?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
+                    @endforeach
+                ],
+                "datasets": [
+
+                    {
+                        "label": 'New',
+                        "data": [
+                            @foreach($allVideosStateTotalTotals as $datesNew)
+                            @if(array_search('new' , array_column($datesNew, 'state')))
+                            <?php echo "'" . $datesNew[array_search('new', array_column($datesNew, 'state'))]->total . "',";?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                        "borderWidth": 1
+                    },
+
+                    {
+                        "label": 'Pending',
+                        "data": [
+                            @foreach($allVideosStateTotalTotals as $pendingDates)
+                            @if(array_search('pending' , array_column($pendingDates, 'state')) !== false)
+                            <?php echo "'" . $pendingDates[array_search('pending', array_column($pendingDates, 'state'))]->total . "',";?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(255, 205, 86, 0.2)",
+                        "borderWidth": 1
+                    },
+
+                    {
+                        "label": 'Rejected',
+                        "data": [
+                            @foreach($allVideosStateTotalTotals as $rejectedDates)
+                            @if(array_search('rejected' , array_column($rejectedDates, 'state')) !== false)
+                            <?php echo "'" . $rejectedDates[array_search('rejected', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(255, 100, 100, 0.2)",
+                        "borderWidth": 1
+                    },
+
+                    {
+                        "label": 'Restricted',
+                        "data": [
+                            @foreach($allVideosStateTotalTotals as $rejectedDates)
+                            @if(array_search('restricted' , array_column($rejectedDates, 'state')) !== false)
+                            <?php echo "'" . $rejectedDates[array_search('restricted', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(100, 100, 100, 0.3)",
+                        "borderWidth": 1
+                    },
+
+                    {
+                        "label": 'Accepted',
+                        "data": [
+                            @foreach($allVideosStateTotalTotals as $rejectedDates)
+                            @if(array_search('accepted' , array_column($rejectedDates, 'state')) !== false)
+                            <?php echo "'" . $rejectedDates[array_search('accepted', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(100, 255, 100, 0.2)",
+                        "borderWidth": 1
+                    },
+
+                    {
+                        "label": 'Licensed',
+                        "data": [
+                            @foreach($allVideosStateTotalTotals as $rejectedDates)
+                            @if(array_search('licensed' , array_column($rejectedDates, 'state')) !== false)
+                            <?php echo "'" . $rejectedDates[array_search('licensed', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(0, 160, 90, 0.2)",
+                        "borderWidth": 1
+                    },
+
+                ],
+            },
+            "options": {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                        beginAtZero: true,
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        beginAtZero: true
+                    }]
+                },
+            }
+        });
+
 
         var ctx = $('#video-sub-stacked-graph');
         ctx.height(285);
@@ -7,17 +161,21 @@
             "type": "bar",
             "data": {
                 "labels": [
-					<?php foreach ($videos as $video) {
-					echo '"' . $video[0]->created_at->format('jS M') . '",';
-                }?>
+                    @foreach($allVideosStateTotalTotalsExc as $key => $date)
+                    <?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
+                    @endforeach
                 ],
                 "datasets": [
                     {
                         "label": 'New',
                         "data": [
-							<?php foreach ($videos as $video) {
-							echo count($video->where('state', 'new')->where('rights','exc')) . ',';
-						    }?>
+                            @foreach($allVideosStateTotalTotalsExc as $newDate)
+                            @if(array_search('new' , array_column($newDate, 'state')) !== false)
+                            <?php echo "'" . $newDate[array_search('new', array_column($newDate, 'state'))]->total . "',"; ?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
                         ],
                         "fill": false,
                         "backgroundColor": "rgba(54, 162, 235, 0.2)",
@@ -26,9 +184,13 @@
                     {
                         "label": 'Pending',
                         "data": [
-							<?php foreach ($videos as $video) {
-							echo count($video->where('state', 'pending')->where('rights','exc')) . ',';
-						    }?>
+                            @foreach($allVideosStateTotalTotalsExc as $pendingDate)
+                            @if(array_search('pending' , array_column($pendingDate, 'state')) !== false)
+                            <?php echo "'" . $pendingDate[array_search('pending', array_column($pendingDate, 'state'))]->total . "',"; ?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
                         ],
                         "fill": false,
                         "backgroundColor": "rgba(255, 205, 86, 0.2)",
@@ -37,9 +199,13 @@
                     {
                         "label": 'Licensed',
                         "data": [
-							<?php foreach ($videos as $video) {
-							echo count($video->where('state','licensed')->where('rights','exc')) . ',';
-						    }?>
+                            @foreach($allVideosStateTotalTotalsExc as $licensedDate)
+                            @if(array_search('licensed' , array_column($licensedDate, 'state')) !== false)
+                            <?php echo "'" . $licensedDate[array_search('licensed', array_column($licensedDate, 'state'))]->total . "',"; ?>
+                            @else
+                            <?php echo "'0',";?>
+                            @endif
+                            @endforeach
                         ],
                         "fill": false,
                         "backgroundColor": "rgba(0, 160, 90, 0.2)",
@@ -66,93 +232,7 @@
             }
         });
 
-
-        var ctx = $('#sub-breakdown-graph');
-        ctx.height(285);
-        new Chart($("#sub-breakdown-graph"), {
-            "type": "bar",
-            "data": {
-                "labels": [
-                    <?php foreach ($videos as $video) {
-                    echo '"' . $video[0]->created_at->format('jS M') . '",';
-                }?>
-                ],
-                "datasets": [{
-                    "label": 'New',
-                    "data": [
-                        <?php foreach ($videos as $video) {
-                        echo count($video->where('state', 'new')->where('rights','ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
-                    "borderWidth": 1
-                },
-                {
-                    "label": 'Accepted',
-                    "data": [
-                        <?php foreach ($videos as $video) {
-                        echo count($video->where('state', 'accepted')->where('rights','ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(166, 255, 172, 0.2)",
-                    "borderWidth": 1
-                },
-                {
-                    "label": 'Licensed',
-                    "data": [
-                        <?php foreach ($videos as $video) {
-                        echo count($video->where('state', 'licensed')->where('rights','ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(0, 160, 90, 0.2)",
-                    "borderWidth": 1
-                },
-                {
-                    "label": 'Restricted',
-                    "data": [
-                        <?php foreach ($videos as $video) {
-                        echo count($video->where('state', 'restricted')->where('rights','ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(255, 205, 86, 0.2)",
-                    "borderWidth": 1
-                },
-                {
-                    "label": 'Rejected',
-                    "data": [
-                        <?php foreach ($videos as $video) {
-                        echo count($video->where('state', 'rejected')->where('rights','ex')) . ',';
-                    }?>
-                    ],
-                    "fill": false,
-                    "backgroundColor": "rgba(255, 20, 20, 0.2)",
-                    "borderWidth": 1
-                }]
-            },
-            "options": {
-                maintainAspectRatio: false,
-                legend: {
-                    display: true
-                },
-                "scales": {
-                    "xAxes": [{
-                        stacked: true
-                    }],
-                    "yAxes": [{
-                        stacked: true,
-                        "ticks": {
-                            "beginAtZero": true
-                        }
-                    }]
-                }
-            }
-        });
-
-        <?php if(\Auth::user()->isAdmin()): ?>
+            <?php if(\Auth::user()->isAdmin()): ?>
         var ctx = $('#exc-licensed-breakdown');
         ctx.height(285);
         new Chart($("#exc-licensed-breakdown"), {
