@@ -22,8 +22,8 @@
 			<form id="search-form" method="get" role="form" class="search-form-full">
 				<div class="col-md-2">
 					<div class="form-group">
-						<select id="category" name="category" class="selectpicker form-control" title="Vertical">
-							<option value="">--</option>
+						<select id="category" name="category" class="form-control">
+							<option value="">Vertical</option>
 							@foreach($video_categories as $category)
 								<option value="{{ $category->id }}"{{ isset($_GET['category']) && ($_GET['category'] == $category->id) ? ' selected="selected"' : '' }}>{{ $category->name }}</option>
 							@endforeach
@@ -33,8 +33,8 @@
 
 				<div class="col-md-2">
 					<div class="form-group">
-						<select id="collection" name="collection" class="selectpicker form-control" title="Collection">
-							<option value="">--</option>
+						<select id="collection" name="collection" class="form-control">
+							<option value="">Collection</option>
 							@foreach($video_collections as $collection)
 								<option value="{{ $collection->id }}"{{ isset($_GET['collection']) && ($_GET['collection'] == $collection->id) ? ' selected="selected"' : '' }}>{{ $collection->name }}</option>
 							@endforeach
@@ -44,8 +44,8 @@
 
 				<div class="col-md-2">
 					<div class="form-group">
-						<select id="shot_type" name="shot_type" class="selectpicker form-control" title="Shot Type">
-							<option value="">--</option>
+						<select id="shot_type" name="shot_type" class="form-control">
+							<option value="">ShotType</option>
 							@foreach($video_shottypes as $shottype)
 								<option value="{{ $shottype->id }}"{{ isset($_GET['shot_type']) && ($_GET['shot_type'] == $shottype->id) ? ' selected="selected"' : '' }}>{{ $shottype->name }}</option>
 							@endforeach
@@ -55,8 +55,8 @@
 
 				<div class="col-md-2">
 					<div class="form-group">
-						<select id="rights" name="rights" class="selectpicker form-control" title="License">
-							<option value="">--</option>
+						<select id="rights" name="rights" class="form-control">
+							<option value="">License</option>
 							<option value="ex"{{ (app('request')->get('rights') == 'ex') ? ' selected="selected"' : '' }}>Ex Submission</option>
 							<option value="exc"{{ (app('request')->get('rights') == 'exc') ? ' selected="selected"' : '' }}>Ex Chaser</option>
 							<option value="excc"{{ (app('request')->get('rights') == 'excc') ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>

@@ -30,7 +30,7 @@
             </v-flex>
 
             <v-flex xs12 sm6 md6 lg1 xl1>
-                <strong>Actions</strong>
+                <strong>Select</strong>
             </v-flex>
         </v-layout>
 

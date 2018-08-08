@@ -13,24 +13,28 @@
         </v-layout>
 
         <v-layout row wrap class="hidden-sm-and-down">
-            <v-flex xs12 sm3 md3 lg3 xl3>
+            <v-flex xs12 sm3 md3>
                 <strong>Thumbnail</strong>
             </v-flex>
 
-            <v-flex xs12 sm3 md3 lg4 xl4>
-                <strong>Title / Excerpt</strong>
+            <v-flex xs12 sm3 md3>
+                <strong>Details</strong>
             </v-flex>
 
-            <v-flex xs6 sm6 md6 lg2 xl2>
+            <v-flex xs6 sm6 md1>
                 <strong>Author</strong>
             </v-flex>
 
-            <v-flex xs12 sm6 md6 lg2 xl2>
+            <v-flex xs6 sm6 md1>
+                <strong>State</strong>
+            </v-flex>
+
+            <v-flex xs12 sm6 md1>
                 <strong>Updated At</strong>
             </v-flex>
 
-            <v-flex xs12 sm6 md6 lg1 xl1>
-                <strong>Actions</strong>
+            <v-flex xs12 sm6 md1>
+                <strong>Select</strong>
             </v-flex>
         </v-layout>
 
@@ -103,6 +107,8 @@
                 if(queryObject.searchTerm != ''){
                     url += '&search='+ queryObject.searchTerm;
                 }
+
+                url += '&mailer=true';
 
                 this.$store.dispatch('getMailerStories', url)
                     .then(() => {
