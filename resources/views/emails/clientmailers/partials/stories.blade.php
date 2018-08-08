@@ -6,7 +6,7 @@
                 <h4>{{ TextHelper::shorten($story['title'], 250) }}</h4>
                 by {{ $story['author'] }}
                 <br />
-                <a href="{{ url('client/stories/'.$story['alpha_id']) }}"><img src="@if($story['thumb']){{ $story['thumb'] }}@else {{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/frontend/images/placeholder.png @endif" border="0" style="display: flex; height: 180px; width: auto; margin-top: 15px; margin-right: 15px;" /></a>
+                <a href="{{ url('client/stories/'.$story['alpha_id']) }}"><img src="@if($story['thumb']){{ $story['thumb'] }}@else {{ env('APP_URL', 'https://sniffrmedia.co.uk') }}/assets/images/placeholder.png @endif" border="0" style="display: flex; height: 180px; width: auto; margin-top: 15px; margin-right: 15px;" /></a>
                 <br />
                 <div style="display:inline-block;">
                     <img src="{{ url('assets/images/picture_as_pdf.png') }}" border="0" />

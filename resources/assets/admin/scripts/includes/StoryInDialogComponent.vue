@@ -68,7 +68,7 @@
         data() {
             return {
                 story_detail: '',
-                defaultImage: '/assets/frontend/images/placeholder.png',
+                defaultImage: '/assets/images/placeholder.png',
                 assets: [],
 
                 ready_to_show: true,

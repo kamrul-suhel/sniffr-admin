@@ -56,8 +56,6 @@ class AdminStoryController extends Controller
             $stories = $stories->where(function ($query) use ($search_value) {
                 $query->where('title', 'LIKE', '%' . $search_value . '%')
                     ->orWhere('author', 'LIKE', '%' . $search_value . '%')
-                    ->orWhere('excerpt', 'LIKE', '%' . $search_value . '%')
-                    ->orWhere('description', 'LIKE', '%' . $search_value . '%')
                     ->orWhere('alpha_id', $search_value)
                     ->orWhereHas('contact', function ($q) use ($search_value) {
                         $q->where('full_name', 'LIKE', '%' . $search_value . '%');
