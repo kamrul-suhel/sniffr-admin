@@ -77,7 +77,9 @@
                                             </div>
                                             <div class="options-body">
                                                 <select id="statex" name="statex" class="btn btn-mini no-caret">
-                                                    <option>{{ \App\Http\Controllers\Admin\AdminStoryController::getStateValue($story->state)['dropdown'] }}</option>
+                                                    @foreach(config('stories.decisions.'.$decision) as $key => $state_values)
+                                                        <option value="{{ $key }}" @if($key == $story->state) selected @endif>{{ $state_values['dropdown'] }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <hr>
@@ -115,14 +117,12 @@
                                 </div>
 
                                 <div class="album-options no-border">
-
-                                    @php
-                                        $stateValues = \App\Http\Controllers\Admin\AdminStoryController::getStateValue($story->state);
-                                    @endphp
-
-                                    @if($stateValues['negative_label']) <a href="#" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['negative_class'] }} btn-mini btn-mini-border left" title="{{ $stateValues['negative_label'] }}"><i class="fa fa-times"></i></a> @endif
-                                    @if($stateValues['positive_label']) <a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $stateValues['positive_class'] }} btn-mini btn-mini-border" title="{{ $stateValues['positive_label'] }}"><i class="fa fa-check"></i> {{ $stateValues['positive_label'] }}</a> @endif
-
+                                    @foreach(config('stories.decisions.'.$decision) as $key => $state_values)
+                                        @if($story->state == $key)
+                                            @if($state_values['negative_label'])<a href="#" data-id="{{ $story->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a>@endif
+                                            @if($state_values['positive_label'])<a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
+                                        @endif
+                                    @endforeach
                                 </div>
                             </footer>
 

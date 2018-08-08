@@ -252,14 +252,15 @@ function videoAnalysis(tempFile) {
        }
    });
 
-   //execute video analysis onload
-   var dataFile = $('#temp_filename').val();
-   var dataState = $('#temp_state').val();
-   // console.log(dataFile);
-   // console.log(dataState);
-   if(dataFile!=null&&dataState!='new'){
-       videoAnalysis(dataFile);
-   }
+    //execute video analysis onload
+    // var dataFile = $('#temp_filename').val();
+    // var dataState = $('#temp_state').val();
+    // console.log(dataFile);
+    // console.log(dataState);
+    // if(dataFile!=null&&dataState!='new'){
+    //     videoAnalysis(dataFile);
+    // }
+
 
 })(jQuery);
 </script>

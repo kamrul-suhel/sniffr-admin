@@ -72,11 +72,6 @@
                 </v-flex>
 
                 <v-flex class="text-xs-right">
-                    <v-btn dark raised @click="onRefreshStories()">
-                        <v-icon>refresh</v-icon>
-                        Refresh Stories
-                    </v-btn>
-
                     <v-btn dark raised @click="onCreateMailer()">
                         <v-icon>add</v-icon>
                         Create Mailer
@@ -192,46 +187,6 @@
                             this.dialog = true;
                         }
                     });
-            },
-
-            onRefreshStories() {
-                this.dialog = true;
-
-                let refreshUrl = '/admin/mailers/refresh';
-
-                axios.get(refreshUrl).then((response) => {
-                        if (response.data.dispatched == false) {
-                            this.refreshTitle = 'Stories are already up-to-date.';
-                            this.indeterminate = false;
-                            this.disableButton = false
-                        } else {
-                            // jobs have been sent to queue so need to check the job queue
-                            this.checkJobs();
-                        }
-                    },
-                    (error) => {
-                        this.checkJobs();
-                    }
-                )
-            },
-
-            checkJobs() {
-                setTimeout(() => {
-                    let url = '/admin/mailers/checkjobs';
-                    axios.get(url)
-                        .then((response) => {
-                            if (response.data.jobs == 0) {
-                                this.refreshTitle = 'Stories are now up-to-date.';
-                                this.indeterminate = false;
-                                MailerEventBus.storiesUpdated();
-                                this.disableButton = false
-
-                            } else {
-                                // jobs are still in the queue, so run again
-                                this.checkJobs();
-                            }
-                        });
-                }, 5000);
             },
 
             onAddStories() {

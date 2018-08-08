@@ -26,6 +26,7 @@ trait FrontendResponse
             'alpha_id',
             'state',
 			'class',
+			'credit',
             'url',
             'user_id',
             'featured',
