@@ -21,12 +21,14 @@
 
 	<div class="row">
 		<div class="col-sm-12">
-			@if(\App\CollectionStory::isOffered($asset->id)->count() > 0
-                || \App\CollectionStory::isRequested($asset->id)->count() > 0)
-				<div class="col-lg-12 label label-warning">
-					{{ \App\CollectionStory::isOffered($asset->id)->count() > 0 ? "Offered: ".\App\CollectionStory::isOffered($asset->id)->count() : '' }}
-					{{ \App\CollectionStory::isRequested($asset->id)->count() > 0 ? "Requested: ".\App\CollectionStory::isRequested($asset->id)->count() : '' }}
-				</div>
+			@if(isset($asset))
+				@if(\App\CollectionStory::isOffered($asset->id)->count() > 0
+					|| \App\CollectionStory::isRequested($asset->id)->count() > 0)
+					<div class="col-lg-12 label label-warning">
+						{{ \App\CollectionStory::isOffered($asset->id)->count() > 0 ? "Offered: ".\App\CollectionStory::isOffered($asset->id)->count() : '' }}
+						{{ \App\CollectionStory::isRequested($asset->id)->count() > 0 ? "Requested: ".\App\CollectionStory::isRequested($asset->id)->count() : '' }}
+					</div>
+				@endif
 			@endif
 			<div class="form-group">
 				<div>

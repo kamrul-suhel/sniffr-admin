@@ -58,6 +58,7 @@ class QueueStory implements ShouldQueue
                     $story->wp_id = $result->id;
                     $story->status = $result->status;
                     $story->date_ingested = $story->created_at;
+					$story->url = 'https://'.(env('APP_ENV') == 'prod'? 'www' : 'testing').'.unilad.co.uk/?p='.$result->id.'&preview=true';
                     $story->save();
                 }
             }
