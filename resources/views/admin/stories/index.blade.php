@@ -21,10 +21,12 @@
 						<i class="fa fa-plus-circle"></i>
 						Add New Story
 					</a>
+					@if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
                     <a href="#" class="btn btn-primary js-story-refresh pull-right" style="margin-right:10px;">
 						<i class="fa fa-refresh"></i>
 						Refresh Stories
 					</a>
+					@endif
 				</h3>
 			</div>
 		</div>
