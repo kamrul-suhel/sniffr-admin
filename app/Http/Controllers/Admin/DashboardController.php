@@ -46,7 +46,7 @@ class DashboardController extends Controller
 
         $exc_contracts = Contract::orderBy('signed_at')
             ->where('video_id', '!=', null)->where('contract_model_id', '1')
-            ->where('signed_at', '>', (new Carbon)->now()->subDays(30))
+            ->whereBetween('signed_at', [$from, $to])
             ->groupBy(function ($date) {
                 return Carbon::parse($date->signed_at)->format('m-d');
             });
