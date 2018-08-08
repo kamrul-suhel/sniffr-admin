@@ -198,9 +198,13 @@
 
                                         <div class="options-body">
 											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
-													<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
-												@endforeach
+												@if($decision == 'all')
+													<option>{{ $story->state }}</option>
+												@else
+													@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
+														<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
+													@endforeach
+												@endif
 											</select>
                                         </div>
 
