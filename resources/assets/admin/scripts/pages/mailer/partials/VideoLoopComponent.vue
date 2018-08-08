@@ -4,7 +4,7 @@
             <v-card flat>
                 <v-card-media
                         height="200px"
-                        :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/frontend/images/placeholder.png')"
+                        :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/images/placeholder.png')"
                         @click="onOpenVideoDialog()"
                 ></v-card-media>
             </v-card>
