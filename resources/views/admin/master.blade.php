@@ -13,10 +13,10 @@
 
 	<title>{{ $settings['website_name'] . ' - ' . $settings['website_description'] }}</title>
 
-	<link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
+	<link rel="stylesheet" href="{{ mix('/assets/admin/css/admin.css') }}">
 
 	<?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
-    <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . $favicon ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= Config::get('site.img_url') . $favicon ?>" type="image/x-icon">
 
 	@yield('css')
 
@@ -31,7 +31,7 @@
 <body class="page-body skin-black">
 
 <a href="{{ url('/') }}" class="top-left-logo">
-	<img src="/assets/admin/images/logo-sniffr-white.png">
+	<img src="/assets/images/logo-sniffr-white.png">
 </a>
 
 <div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
@@ -93,8 +93,8 @@
 </div>
 
 <script src="{{ mix('/assets/admin/js/app.js') }}"></script>
-<script src="/assets/admin/js/video.js"></script>
-<script src="/assets/admin/js/videojs-vimeo.js"></script>
+<script src="/assets/scripts/video.js"></script>
+<script src="/assets/scripts/videojs-vimeo.js"></script>
 
 <!-- Notifications -->
 <script>

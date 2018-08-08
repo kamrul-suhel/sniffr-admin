@@ -124,11 +124,17 @@
                                 </a>
                             </p>
                         @else
+                            @if($asset->contact && !$asset->contact->email)
+                            <span class="text-danger">
+                               Contact must have email address!
+                            </span>
+                            @else
                             <p>
                                 <a href="{{ route('contract.send', ['type' => $asset_type, 'id' => $asset->id]) }}" class="btn btn-info" id="sendContract">
                                     Send Contract
                                 </a>
                             </p>
+                            @endif
                         @endif
                     @endif
                 </div>

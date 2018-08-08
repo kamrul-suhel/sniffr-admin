@@ -12,7 +12,6 @@ window.Vuetify = require('Vuetify');
 
 import Vuerouter from 'vue-router';
 
-
 /*
  ********************************************************
  * Vuex package (store)
@@ -37,7 +36,7 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
  * Root component
  ********************************************************
  */
-import MailerStoriesComponent from './components/pages/mailer/MailerComponent'
+import MailerStoriesComponent from './pages/mailer/MailerComponent'
 
 
 /*

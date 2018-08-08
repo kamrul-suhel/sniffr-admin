@@ -46,8 +46,8 @@ window.TwitterWidgetsLoader = require('twitter-widgets');
  ********************************************************
  */
 
-import NavigationComponent from './vue-component/layouts/NavigationComponent.vue';
-import FooterComonent from './vue-component/layouts/FooterComponent.vue';
+import NavigationComponent from './layouts/NavigationComponent.vue';
+import FooterComonent from './layouts/FooterComponent.vue';
 
 import {routes} from './routes.js';
 import {store} from './store/store';
@@ -94,6 +94,6 @@ new Vue({
                 this.sniffrStateReady = true
             })
     },
-    
+
     methods: {}
 });

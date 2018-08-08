@@ -104,10 +104,7 @@ class AuthController extends Controller
             return Redirect::to('login' . $redirect)->with($error);
         }
 
-        $redirect_route = '';
-        $client = '';
-        $user = '';
-        $offers = '';
+        $redirect_route = $client = $user = $offers = '';
 
         if (key_exists(Auth::user()->role, config('roles.admins'))) {
             $redirect_route = '/admin';

@@ -13,11 +13,7 @@
 
 <div>&nbsp;</div>
 
-<div>Thanks for sending through your video! It has now been sent over to our content team who will review it.</div>
-
-<div>&nbsp;</div>
-
-<div>They will email you with an update on this process ASAP.</div>
+<div>Thanks for sending through your video! It has now been sent over for our content team to review. You may be asked to fill out some more details so be sure to keep checking your inbox for updates on the video.</div>
 
 <div>&nbsp;</div>
 

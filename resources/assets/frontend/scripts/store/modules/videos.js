@@ -1,3 +1,4 @@
+import AssetVideoServices from '../../services/VideoServices'
 const state = {
     //Dialog box
     videoDialogBox: false,
@@ -5,6 +6,7 @@ const state = {
 
     videos: [],
     mailer_videos: [],
+    mailerVideoCurrentIndex: '',
     paginate: '',
 
     /**
@@ -26,6 +28,7 @@ const state = {
     video_detail: {},
     purchasedVideos: [],
     offeredVideos:[],
+    assetOfferedCurrentIndex: '',
     initVideo:false,
 };
 
@@ -50,6 +53,10 @@ const getters = {
         return state.mailer_videos;
     },
 
+    getMailerVideoCurrentIndex(state){
+        return state.mailerVideoCurrentIndex
+    },
+
     getVideoPaginateObject(state) {
         return state.paginate;
     },
@@ -70,8 +77,15 @@ const getters = {
         return state.videoLoading;
     },
 
+
+
+
     getCurrentVideo(state) {
         return state.currentVideo;
+    },
+
+    getAssetOfferedCurrentIndex(state) {
+        return state.assetOfferedCurrentIndex;
     },
 
     getCurrentVideoAlphaId() {
@@ -131,6 +145,10 @@ const mutations = {
         state.mailer_videos = data;
     },
 
+    setMailerVideoCurrentIndex(state, value){
+        state.mailerVideoCurrentIndex = value;
+    },
+
     setVideoPaginationObject(state, paginate) {
         state.paginate = paginate;
     },
@@ -158,6 +176,10 @@ const mutations = {
         state.currentVideoAlphaId = alphaId;
     },
 
+    setAssetOfferedCurrentIndex(state, value) {
+        state.assetOfferedCurrentIndex = value;
+    },
+
     setNextVideoAlphaId(state, alphaId){
         state.nextVideoAlphaId = alphaId;
     },
@@ -179,7 +201,7 @@ const mutations = {
         state.current_route_obj = route;
     },
 
-    setEntereRouteObject(state, route) {
+    setEnterRouteObject(state, route) {
         state.previewRouteObject = route;
     },
 
@@ -229,19 +251,7 @@ const mutations = {
      */
     setOfferedVideos(state, videos){
 
-        if (typeof videos.data == 'object') {
-            videos.data = Object.values(videos.data);
-        }
-        let allVideos = [];
-        videos.data.forEach((video) => {
-            video[0].video.final_price = video[0].final_price;
-            video[0].video.platform = video[0].platform;
-            video[0].video.type = video[0].type;
-            video[0].video.length = video[0].length;
-            video[0].video.collection_video_id = video[0].id;
-            video[0].video.collection_status = video[0].status;
-            allVideos.push(video[0].video);
-        });
+        let allVideos = AssetVideoServices.processVideoData(videos);
         state.offeredVideos = allVideos;
     },
 
@@ -252,25 +262,45 @@ const mutations = {
      * ***************************************
      */
     setPurchasedVideos(state, videos){
-        if (typeof videos.data == 'object') {
-            videos.data = Object.values(videos.data);
-        }
-        let allVideos = [];
-        videos.data.forEach((video) => {
-            video[0].video.final_price = video[0].final_price;
-            video[0].video.platform = video[0].platform;
-            video[0].video.type = video[0].type;
-            video[0].video.length = video[0].length;
-            video[0].video.collection_video_id = video[0].id;
-            video[0].video.collection_status = video[0].status;
-            allVideos.push(video[0].video);
-        });
-
-        state.purchasedVideos = allVideos;
+        let allVideos = AssetVideoServices.processVideoData(videos)
+        state.purchasedVideos = allVideos
     },
 
     setInitVideo(state, value){
         state.initVideo = value;
+    },
+
+    setSuggestNextPrevious(state) {
+        let currIndex = state.mailerVideoCurrentIndex;
+        let allVideos = state.mailer_videos;
+        let currentAlphaId = '';
+        let currentVideo = '';
+        let previousAlphaId = '';
+        let nextAlphaId = '';
+        let currentVideoPosition = currIndex;
+        let totalVideos = allVideos.length - 1;
+        let hasNextPage = state.paginate.last_page;
+
+        if (allVideos[Object.keys(allVideos)[currIndex]]) {
+            currentAlphaId = allVideos[Object.keys(allVideos)[currIndex]].alpha_id;
+            currentVideo = allVideos[Object.keys(allVideos)[currIndex]];
+        }
+
+        if (allVideos[Object.keys(allVideos)[currIndex - 1]]) {
+            previousAlphaId = allVideos[Object.keys(allVideos)[currIndex - 1]].alpha_id;
+        }
+
+        if (allVideos[Object.keys(allVideos)[currIndex + 1]]) {
+            nextAlphaId = allVideos[Object.keys(allVideos)[currIndex + 1]].alpha_id;
+        }
+
+        state.previousVideoAlphaId = previousAlphaId;
+        state.currentVideoAlphaId = currentAlphaId;
+        state.nextVideoAlphaId = nextAlphaId;
+
+        state.currentVideo = currentVideo;
+        state.videoLoading =  false;
+
     }
 
 
@@ -333,7 +363,12 @@ const actions = {
             data.value = state.current_route_obj.query.value
         }
 
-        axios.post('/search/videos', data)
+        if (state.current_route_obj.query.type != 'undefined' && state.current_route_obj.query.type === 'offered') {
+            data.offered = true;
+        }
+        let url = '/search/videos';
+
+        axios.post(url, data)
             .then((response) => {
                 commit('setCurrentVideo', response.data.current_video);
                 commit('setCurrentVideoTags', response.data);
@@ -398,6 +433,49 @@ const actions = {
                 },
                 (error) => {
                 });
+    },
+
+    fetchOfferedDialogNextPrevious({commit, state}) {
+        let currIndex = state.assetOfferedCurrentIndex;
+        let allVideos = state.offeredVideos;
+        let currentAlphaId = '';
+        let previousAlphaId = '';
+        let nextAlphaId = '';
+        let currentVideoPosition = currIndex;
+        let totalVideos = allVideos.length - 1;
+        let hasNextPage = state.paginate.last_page;
+
+        if (allVideos[Object.keys(allVideos)[currIndex]]) {
+            currentAlphaId = allVideos[Object.keys(allVideos)[currIndex]].alpha_id;
+        }
+
+        if (allVideos[Object.keys(allVideos)[currIndex - 1]]) {
+            previousAlphaId = allVideos[Object.keys(allVideos)[currIndex - 1]].alpha_id;
+        }
+
+        if (allVideos[Object.keys(allVideos)[currIndex + 1]]) {
+            nextAlphaId = allVideos[Object.keys(allVideos)[currIndex + 1]].alpha_id;
+        }
+
+        if (currentVideoPosition === totalVideos && hasNextPage) {
+            // if has next page, do next page fetch the data
+        }
+
+        state.previousVideoAlphaId = previousAlphaId;
+        state.currentVideoAlphaId = currentAlphaId;
+        state.nextVideoAlphaId = nextAlphaId;
+
+        // now fetch the data form server
+        let data = {alpha_id: currentAlphaId};
+        let url = '/search/videos';
+
+        axios.post(url, data)
+            .then((response) => {
+                let currVideo = response.data.current_video;
+                commit('setCurrentVideo', currVideo)
+                commit('setVideoLoading', false)
+            });
+
     }
 
 

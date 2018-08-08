@@ -12,11 +12,20 @@
         </li>
 
         @if($contact)
-            <li>
-                <a href="#stories" role="tab" data-toggle="tab">
-                    Stories
-                </a>
-            </li>
+            @if($contact->stories->count() > 0)
+                <li>
+                    <a href="#stories" role="tab" data-toggle="tab">
+                        Stories ({{ $contact->stories->count() }})
+                    </a>
+                </li>
+            @endif
+            @if($contact->videos->count() > 0)
+                <li>
+                    <a href="#videos" role="tab" data-toggle="tab">
+                        Videos ({{ $contact->videos->count() }})
+                    </a>
+                </li>
+            @endif
         @endif
     </ul>
 
@@ -32,6 +41,10 @@
         @if($contact)
             <div class="tab-pane" id="stories">
                 @include('admin.contacts.partials.stories')
+            </div>
+
+            <div class="tab-pane" id="videos">
+                @include('admin.contacts.partials.videos')
             </div>
         @endif
     </div>
