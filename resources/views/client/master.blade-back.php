@@ -3,18 +3,18 @@
 <head>
     @include('frontend.layout.head.meta')
 
-    <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : 'favicon.png'; ?>
+    <?php $favicon = (isset($settings['favicon']) && trim($settings['favicon']) != "") ? $settings['favicon'] : '/assets/images/favicon.png'; ?>
     <link rel="shortcut icon" href="<?= Config::get('site.uploads_dir') . $favicon ?>" type="image/x-icon">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 
-    {{--<link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}"/>--}}
+    {{--<link rel="stylesheet" href="{{asset('assets/admin/css/video-js.css')}}"/>--}}
     <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}"/>
 
     <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/nav-styles.css') }}">
     <link rel="stylesheet" href="{{ mix('/assets/frontend/css/client/footer-styles.css') }}">
 
-    <link rel="stylesheet" href="{{ mix('/assets/css/admin.css') }}">
+    <link rel="stylesheet" href="{{ mix('/assets/admin/css/admin.css') }}">
 
     <style>
         .container.grid-list-lg .layout .flex {
@@ -58,7 +58,7 @@
             <div class="layout row wrap">
                 <div class="flex xs12 sm6 md4 lg4">
                     <div class="logo"><a href="/" class="router-link-exact-active router-link-active"><img
-                                    src="/assets/frontend/images/logo-sniffr-white.png"></a></div>
+                                    src="/assets/images/logo-sniffr-white.png"></a></div>
                 </div>
                 <div class="flex xs12 sm6 md8 lg8">
                     <nav class="navigation">
@@ -94,7 +94,7 @@
             <div class="layout row wrap">
                 <div class="flex xs12 sm8 md8 lg8">
                     <div class="footer-left">
-                        <div class="footer-logo"><img src="/assets/frontend/images/logo-sniffr-white.png"></div>
+                        <div class="footer-logo"><img src="/assets/images/logo-sniffr-white.png"></div>
                         <div class="footer-text"><p>Sniffr is your Video Licensing Platform. Browse our huge catalogue
                                 of videos.</p></div>
                     </div>
@@ -141,8 +141,8 @@
 </section>
 
 <script src="{{ mix('/assets/admin/js/app.js') }}"></script>
-<script src="/assets/admin/js/video.js"></script>
-<script src="/assets/admin/js/videojs-vimeo.js"></script>
+<script src="/assets/scripts/video.js"></script>
+<script src="/assets/scripts/videojs-vimeo.js"></script>
 <script src="{{mix('assets/admin/scripts/scripts.js')}}"></script>
 <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
 

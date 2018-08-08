@@ -120,6 +120,7 @@ const mutations = {
             story[0].story.platform = story[0].platform;
             story[0].story.type = story[0].type;
             story[0].story.length = story[0].length;
+            story[0].story.license_ends_at = story[0].license_ends_at;
             story[0].story.collection_story_id = story[0].id;
             story[0].story.collection_status = story[0].status;
             allStories.push(story[0].story);

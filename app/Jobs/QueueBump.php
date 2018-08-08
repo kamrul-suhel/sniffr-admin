@@ -172,6 +172,6 @@ class QueueBump implements ShouldQueue
     {
         // Send user notification of failure, etc...
 		$user = new User();
-		$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed contacting someone in the QueueBump, please check job queue (Id: ' . $this->asset_id . ')'));
+		$user->slackChannel('alerts')->notify(new SubmissionAlert('Failed contacting someone in the QueueBump, please check job queue (Story Id: ' .$this->asset_id . ')'));
     }
 }

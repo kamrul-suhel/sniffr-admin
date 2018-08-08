@@ -114,6 +114,8 @@ class VideosTableSeeder extends Seeder
             //TODO: source should be renamed to referral and be an enum field
             $referral = $faker->randomElement(['facebook', 'website', NULL]);
 
+            $rights = ['ex', 'exc'];
+
             Video::create([
                 'alpha_id' => VideoHelper::quickRandom(),
                 'maybe' => NULL,
@@ -125,7 +127,7 @@ class VideosTableSeeder extends Seeder
                 'video_collection_id' => $faker->randomElement($videoCollectionIds),
                 'video_shottype_id' => $faker->randomElement($videoShotTypeIds),
                 'mime' => $social_video ? null : $video_data['mime'],
-                'rights' => 'ex',
+                'rights' => $rights[array_rand($rights)],
                 'youtube_id' => (key_exists($state, $youtubeStates) && (!$social_video)) ? $faker->randomElement($youtubeIds) : ($social_video ? $social_video_data['youtube_id'] : null),
                 'title' => $faker->sentence(4),
                 'access' => 'guest',

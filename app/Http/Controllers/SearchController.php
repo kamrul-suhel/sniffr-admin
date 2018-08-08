@@ -119,6 +119,15 @@ class SearchController extends Controller
 
 		// If we are not searching then return all video with paginate
         if(!$currentVideoId){
+            if(Auth::user()){
+                $client_id = Auth::user()->client_id;
+                $videos = $videos->with(['videoCollections' => function($query) use($client_id) {
+                    $query->select(['id','collection_id','video_id'])->where('status', 'purchased');
+                    $query->whereHas('collection', function($query) use($client_id){
+                        $query->where('client_id', $client_id);
+                    });
+                }]);
+            }
             $videos = $videos->paginate($settings['posts_per_page']);
             $data['videos'] = $videos;
         }
@@ -139,9 +148,14 @@ class SearchController extends Controller
                 ->orderBy('licensed_at', 'DESC')
                 ->limit(10)
                 ->get();
+
+			// Need iframe into every mailer video, so We do not need to call every time.
+			foreach($mailerVideos as $mailerVideo){
+               $mailerVideo->iframe = $this->getVideoHtml($mailerVideo, true);
+            }
 		}
 
-		$data['mailer_videos'] = $mailerVideos;
+		$data['mailerVideos'] = $mailerVideos;
 
 		return $this->successResponse($data);
 	}
@@ -166,7 +180,16 @@ class SearchController extends Controller
         //Remove any exclusive based collections that have been purchased and downloaded.
         $unsearchableStories = $this->collectionStory->getAssetByTypeStatus('exclusive', 'purchased')->pluck('story_id');
 
-        $stories = $this->story::where('state', 'published');
+		$stories = $this->story->where('state', 'published');
+
+		if($request->get('mailer')){
+			$stories = $stories->orWhere('state', 'licensed');
+			$stories = $stories->orWhere('state', 'writing-inprogress');
+			$stories = $stories->orWhere('state', 'writing-completed');
+			$stories = $stories->orWhere('state', 'subs-inprogress');
+			$stories = $stories->orWhere('state', 'subs-approved');
+			$stories = $stories->orWhere('state', 'published');
+		}
 
         if($searchValue){
 			$stories = $stories->where(function ($query) use ($searchValue) {
@@ -217,7 +240,7 @@ class SearchController extends Controller
                 ->get();
         }
 
-		$data['mailer_stories'] = $mailerStories;
+		$data['mailerStories'] = $mailerStories;
 		$data['stories'] = $stories;
 
         return $this->successResponse($data);
@@ -226,7 +249,8 @@ class SearchController extends Controller
 
     private function getCurrentVideo($alpha_id){
         $currentVideo = $this->video
-            ->where('alpha_id', '=', $alpha_id)
+            ->select($this->getVideoFieldsForFrontend())
+            ->where('alpha_id', $alpha_id)
             ->with('tags')
             ->first();
         $currentVideo->iframe = $this->getVideoHtml($currentVideo, true);
@@ -236,6 +260,7 @@ class SearchController extends Controller
 
     private function getCurrentStory($alpha_id){
         $currentStory = $this->story
+            ->select($this->getAssetStoryFieldsForFrontend())
             ->where('alpha_id', $alpha_id)
             ->with('assets')
             ->first();

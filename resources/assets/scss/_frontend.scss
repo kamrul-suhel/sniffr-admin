@@ -1,0 +1,16 @@
+@import "modules/basic-reset";
+@import "modules/variables";
+@import "modules/typography";
+@import "modules/mixin";
+@import "modules/global";
+
+/* ************************* Animation css ******************* */
+@import "modules/animation";
+
+@import "modules/buttons";
+
+/* ************************* Video dialog box section style ******************* */
+@import "partials/asset-video-dialog-box";
+
+/* ************************* Story dialog box section style ******************* */
+@import "partials/asset-story-in-dialog";

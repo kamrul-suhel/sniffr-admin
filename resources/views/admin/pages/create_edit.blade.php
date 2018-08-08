@@ -126,18 +126,6 @@
 		    }
 		    console.log('test ' + $(this).is( ':checked' ));
 		});
-
-		tinymce.init({
-			relative_urls: false,
-		    selector: '#body',
-		    toolbar: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor | code",
-		    plugins: [
-		         "advlist autolink link image code lists charmap print preview hr anchor pagebreak spellchecker code fullscreen",
-		         "save table contextmenu directionality emoticons template paste textcolor code"
-		   ],
-		   menubar:false,
-		 });
-
 	});
 
 

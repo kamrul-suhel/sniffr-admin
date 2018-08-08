@@ -1,0 +1,46 @@
+.login-dialog, .buy-dialog, .quote-dialog{
+  display:none;
+}
+
+.login-section{
+  margin:0 auto;
+  padding:20px;
+  background:#fff;
+  width:100%;
+
+
+  .login-title{
+    color: $title-color;
+    text-align:center;
+    margin-top:0;
+  }
+  
+  .login-title:after{
+    @include heading-border(50px, 2px, 0px);
+  }
+
+  .forgot-password{
+    display:block;
+    margin-top:10px;
+
+    a{
+      color:#000;
+      text-decoration:none;
+
+      &:hover{
+        text-decoration:underline;
+      }
+    }
+  }
+
+}
+.email {
+  .input-group__details:before {
+    height: 1px;
+  }
+
+  .application .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat),
+  .theme--dark .btn.btn--disabled:not(.btn--icon):not(.btn--flat){
+    background-color:rgba(0,0,0,.8) !important;
+  }
+}

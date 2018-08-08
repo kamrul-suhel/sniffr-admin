@@ -45,17 +45,28 @@ class AdminUsersController extends Controller
         $search_value = request()->get('s');
 
         if ((!empty($search_value)) && (auth()->user()->role != 'client')) {
-            $users = $this->user->where('username', 'LIKE', '%' . $search_value . '%')
-                ->orWhere('email', 'LIKE', '%' . $search_value . '%')
-                ->orderBy('created_at', 'desc')->get();
+
+            $clients = $this->user->whereIn('role', ['admin', 'manager', 'editorial'])->where('username', 'LIKE', '%' . $search_value . '%')->where('active', 1)->orWhere('email', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc');
+            $users = $this->user->whereNotIn('role', ['admin', 'manager', 'editorial'])->where('username', 'LIKE', '%' . $search_value . '%')->where('active', 1)->orWhere('email', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc');
+            $unmoderatedUsers = $this->user->whereNotIn('role', ['admin', 'manager', 'editorial'])->where('username', 'LIKE', '%' . $search_value . '%')->where('active', 0)->orWhere('email', 'LIKE', '%' . $search_value . '%')->orderBy('created_at', 'desc');
+
         } elseif ((auth()->user()->role == 'client') && (auth()->user()->client()->account_owner_id == auth()->user()->id)) {
-            $users = $this->user->where('client_id', auth()->user()->client_id)->get();
+
+            $clients = $this->user->whereIn('role', ['admin', 'manager', 'editorial'])->where('client_id', auth()->user()->client_id);
+            $users = $this->user->whereNotIn('role', ['admin', 'manager', 'editorial'])->where('client_id', auth()->user()->client_id)->where('active', 1);
+            $unmoderatedUsers = $this->user->whereNotIn('role', ['admin', 'manager', 'editorial'])->where('client_id', auth()->user()->client_id)->where('active', 0);
+
         } else {
-            $users = $this->user->all();
+
+            $clients = $this->user->whereIn('role', ['admin', 'manager', 'editorial']);
+            $users = $this->user->whereNotIn('role', ['admin', 'manager', 'editorial'])->where('active', 1);
+            $unmoderatedUsers = $this->user->whereNotIn('role', ['admin', 'manager', 'editorial'])->where('active', 0);
         }
 
         return view('admin.users.index', [
-            'users' => $users
+            'clients' => $clients->get(),
+            'users' => $users->get(),
+            'unmoderatedUsers' => $unmoderatedUsers->get()
         ]);
     }
 

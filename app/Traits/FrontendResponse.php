@@ -21,11 +21,12 @@ trait FrontendResponse
 
     protected function getVideoFieldsForFrontend()
     {
-        $fields = [
+        return [
             'id',
             'alpha_id',
             'state',
 			'class',
+			'credit',
             'url',
             'user_id',
             'featured',
@@ -59,7 +60,30 @@ trait FrontendResponse
 			'created_at'
         ];
 
-        return $fields;
+    }
+
+    protected function getAssetStoryFieldsForFrontend(){
+        return [
+            'id',
+            'alpha_id',
+            'state',
+            'user_id',
+            'contact_id',
+            'title',
+            'author',
+            'excerpt',
+            'description',
+            'thumb',
+            'date_ingested',
+            'url',
+            'status',
+            'active',
+            'flagged',
+            'source',
+            'licensed_at',
+            'created_at',
+            'updated_at'
+        ];
     }
 
 
