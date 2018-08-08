@@ -14,7 +14,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md3>
-            <h4>{{ story.title }}</h4>
+            <h4 v-html="story.title"></h4>
             <div v-html="story.excerpt"></div>
         </v-flex>
 
