@@ -33,7 +33,7 @@ class CreateQuote extends FormRequest
             $rules = [];
         }
 
-        if(request()->has('license_type')) {
+        if(request()->has('update-quote')) {
             $rules = [];
         }
 
