@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <?php if(\Auth::user()->isAdmin()): ?>
+    <?php if($user->isAdmin()): ?>
     <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
