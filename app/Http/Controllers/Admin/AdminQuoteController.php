@@ -82,8 +82,9 @@ class AdminQuoteController extends Controller
         $asset->status = request()->has('delete') ? 'closed' : request()->has('update-quote') ? 'requested' : 'offered';
         $asset->reason = request()->has('delete') ? 'Ignored By Admin (id: ' . auth()->user()->id . ')' : null;
         $asset->type = isset($data['license_type']) ? $data['license_type'] : $asset->type;
-        $asset->platform = isset($data['license_type']) ? $data['license_platform'] : $asset->platform;
+        $asset->platform = isset($data['license_platform']) ? implode(',', $data['license_platform']) : $asset->platform;
         $asset->length = isset($data['license_type']) ? $data['license_length'] : $asset->length;
+        $asset->notes = "Matrix Price: £".$asset->calculatePrice($asset->toArray());
         $asset->save();
 
         if (!request()->has('delete') && !request()->has('update-quote')) {
@@ -103,7 +104,7 @@ class AdminQuoteController extends Controller
 
         return redirect('admin/quotes')->with([
             'note' => request()->has('delete') ? 'Quote successfully Ignored' : request()->has('update-quote') ? "License Terms Updated" : "Quote successfully Sent",
-            'note_type' => 'success'
+            'note_type' => 'success',
         ]);
     }
 

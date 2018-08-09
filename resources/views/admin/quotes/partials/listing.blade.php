@@ -40,6 +40,7 @@
                         </a>
                     </h4>
                 </div>
+
                 {{-- Quote Input--}}
                 <div class="col-lg-5">
                     @if($asset->final_price)
@@ -62,7 +63,7 @@
                             <span class="input-group-addon" style="min-width: 80px;">Quote <b
                                         class="pull-right">£</b>
                             </span>
-                            <input placeholder="10000" value="{{ $asset->final_price }}" name="final_price" type="text"
+                            <input placeholder="{{ isset($matrixPrice) ? 'Matrix £:'. $matrixPrice : '1000' }}" value="{{ $asset->final_price }}" name="final_price" type="text"
                                    class="form-control">
                             <span class="input-group-btn">
                                 <button style="border-radius: 0px;"
@@ -122,12 +123,9 @@
                 @if($asset->platform)
                     <p>Platform: <b>{{ ucwords(str_replace(',',', ', $asset->platform)) }} </b></p>
                 @endif
-                <select name="license_platform" id="{{$asset->id}}_license_platform" disabled hidden>
+                <select multiple="multiple" name="license_platform[]" id="{{$asset->id}}_license_platform" disabled hidden>
                     @foreach(config('pricing.platform') as $key => $value)
-                        <option @if($asset->platform == $key) selected
-                                @endif value="{{$key}}">{{ ucwords($value['name']) }} -
-                            (x{{ $value['modifier'] }})
-                        </option>
+                        <option @if($asset->platform == $key) selected="selected" @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})</option>
                     @endforeach
                 </select>
                 @if($asset->length)

@@ -48,14 +48,14 @@ class CollectionVideo extends Model
     {
         $price = config('pricing.base');
 
-        $price = $price * (config('pricing.class.' . $data['class'] . '.modifier') ?: 1);
-        $price = $price * (config('pricing.locations.' . $data['location'] . '.modifier') ?: 1);
-        $price = $price * (config('pricing.tier.' . $data['tier'] . '.modifier') ?: 1);
-        $price = $price * (config('pricing.type.' . $data['license_type'] . '.modifier') ?: 1);
-        $price = $price * (config('pricing.length.' . $data['license_length'] . '.modifier') ?: 1);
+        $price = $price * (config('pricing.class.' . isset($data['class']) . '.modifier') ?: 1);
+        $price = $price * (config('pricing.locations.' . isset($data['company_location']) . '.modifier') ?: 1);
+        $price = $price * (config('pricing.tier.' . isset($data['company_tier']) . '.modifier') ?: 1);
+        $price = $price * (config('pricing.type.' . isset($data['type']) . '.modifier') ?: 1);
+        $price = $price * (config('pricing.length.' . isset($data['length']) . '.modifier') ?: 1);
 
         $modifier = 1;
-        $platforms = explode(',', $data['license_platform']);
+        $platforms = explode(',', $data['platform']);
 
         foreach($platforms as $platform) {
             $modifier += config('pricing.platform.' . $platform . '.modifier') ?: 1;
