@@ -187,7 +187,7 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="display: block;">
-                                <select name="tier" class="form-control" id="region">
+                                <select name="region" class="form-control" id="region">
                                     @foreach(config('pricing.region') as $key => $value)
                                         <option {{ $key === $company->region ? 'selected': '' }} value="{{ $key}}">{{ $value['name'] }}</option>
                                     @endforeach
@@ -306,32 +306,6 @@
                                 <input type="text" class="form-control" name="usable_domains" id="usable_domains"
                                        placeholder="bbc.co.uk, news.bbc.co.uk, etc" value="{{
                                        ($company->usable_domains) ? $company->usable_domains : '' }}"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">
-                                <div class="panel-title">Company Tier</div>
-                                <div class="panel-options">
-                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                </div>
-                            </div>
-                            <div class="panel-body" style="display: block;">
-                                <label for="tier">
-                                    Select the Company Tier
-                                </label>
-                                <select id="tier" name="tier">
-                                    @if(config('pricing.tier'))
-                                        <option value="">N/A</option>
-                                        @foreach(config('pricing.tier') as $key => $value)
-                                            <option value="{{ $value['slug'] }}" @if($value['slug']==$company->tier) selected @endif>
-                                               {{ $value['name'] }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
                             </div>
                         </div>
                     </div>
