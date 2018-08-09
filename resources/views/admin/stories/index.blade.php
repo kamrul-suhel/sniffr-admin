@@ -159,8 +159,8 @@
 										</a>
 										@endif
 
-										@if($story->url)
-										<a href="{{ $story->url }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
+										@if($story->wp_id)
+										<a href="{{ 'https://'.(env('APP_ENV') == 'prod' ? 'www' : 'testing').'.unilad.co.uk/?p='.$story->wp_id.'&preview=true' }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
 											<i class="fa fa-wordpress"></i> @if($story->author) {{ $story->author }} @endif
 										</a>
 										@endif
