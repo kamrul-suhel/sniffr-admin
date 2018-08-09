@@ -91,13 +91,13 @@
             </div>
         </div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-12">
             {{-- Image --}}
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <img src="{{ $asset->{$type}->thumb }}" width="70%">
             </div>
             {{-- Company Terms --}}
-            <div class="col-lg-4">
+            <div class="col-lg-2">
                 <h6><u>Company</u></h6>
                 @if($asset->collection->client)<p>Name: <b>{{ $asset->collection->user->client->name }} </b></p>@endif
                 @if($asset->collection->client)<p>
@@ -106,7 +106,7 @@
                     Tier:<b>{{ config('pricing.tier.'.$asset->collection->client->tier.'.name') }} </b></p>@endif
             </div>
             {{-- License Terms --}}
-            <div class="col-lg-4" id="neg-license-terms">
+            <div class="col-lg-2" id="neg-license-terms">
                 <h6><u>Quote</u></h6>
                 @if($asset->type)
                     <p>License: <b>{{ config('pricing.type.'.$asset->type.'.name') }} </b></p>
@@ -142,23 +142,25 @@
                     @endforeach
                 </select>
             </div>
+            {{-- Notes --}}
+            <div class="col-lg-3">
+                @if($asset->notes)
+                    <label for="notes"><small>Notes</small></label>
+                    <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
+                              disabled>{{ $asset->notes }}</textarea>
+                @endif
+            </div>
+            {{-- Rejection Notes --}}
+            <div class="col-lg-2">
+                @if($asset->quotes->count())
+                    <label for="notes"><small>Rejection Notes</small></label>
+                    <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
+                              disabled>{{ $asset->rejection_notes }}</textarea>
+                @endif
+            </div>
         </div>
 
-        {{-- Notes --}}
-        <div class="col-lg-2">
-            @if($asset->notes)
-                <label for="notes">Notes</label>
-                <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
-                          disabled>{{ $asset->notes }}</textarea>
-            @endif
-        </div>
-        <div class="col-lg-2">
-            @if($asset->quotes->count())
-                <label for="notes">Notes</label>
-                <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
-                          disabled>{{ $asset->rejection_notes }}</textarea>
-            @endif
-        </div>
+
     </div>
 </div>
 
