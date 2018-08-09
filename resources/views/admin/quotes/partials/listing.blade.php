@@ -14,7 +14,6 @@
             </h5>
         </div>
         <div class="col-lg-6">
-
             <b class="pull-right" title="{{ $asset->collection->user->email }}">
                 {{ $asset->collection->user->full_name
                 ?? $asset->collection->user->username }}
@@ -24,8 +23,6 @@
                 @endif
             </b>
         </div>
-
-
     </div>
 
     <div class="panel-body">
@@ -63,7 +60,8 @@
                             <span class="input-group-addon" style="min-width: 80px;">Quote <b
                                         class="pull-right">£</b>
                             </span>
-                            <input placeholder="{{ isset($matrixPrice) ? 'Matrix £:'. $matrixPrice : '1000' }}" value="{{ $asset->final_price }}" name="final_price" type="text"
+                            <input placeholder="{{ isset($matrixPrice) ? 'Matrix £:'. $matrixPrice : '1000' }}"
+                                   value="{{ $asset->final_price }}" name="final_price" type="text"
                                    class="form-control">
                             <span class="input-group-btn">
                                 <button style="border-radius: 0px;"
@@ -123,9 +121,12 @@
                 @if($asset->platform)
                     <p>Platform: <b>{{ ucwords(str_replace(',',', ', $asset->platform)) }} </b></p>
                 @endif
-                <select multiple="multiple" name="license_platform[]" id="{{$asset->id}}_license_platform" disabled hidden>
+                <select multiple="multiple" name="license_platform[]" id="{{$asset->id}}_license_platform" disabled
+                        hidden>
                     @foreach(config('pricing.platform') as $key => $value)
-                        <option @if($asset->platform == $key) selected="selected" @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})</option>
+                        <option @if($asset->platform == $key) selected="selected"
+                                @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})
+                        </option>
                     @endforeach
                 </select>
                 @if($asset->length)
@@ -143,7 +144,9 @@
             {{-- Notes --}}
             <div class="col-lg-3">
                 @if($asset->notes)
-                    <label for="notes"><small>Notes</small></label>
+                    <label for="notes">
+                        <small>Notes</small>
+                    </label>
                     <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
                               disabled>{{ $asset->notes }}</textarea>
                 @endif
@@ -151,7 +154,9 @@
             {{-- Rejection Notes --}}
             <div class="col-lg-2">
                 @if($asset->quotes->count())
-                    <label for="notes"><small>Rejection Notes</small></label>
+                    <label for="notes">
+                        <small>Rejection Notes</small>
+                    </label>
                     <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
                               disabled>{{ $asset->rejection_notes }}</textarea>
                 @endif
@@ -164,10 +169,10 @@
 
 <script>
     function toggleLicenseChanges(assetId) {
-        let update_button = $("#"+assetId+"_update-quote");
-        let license_length = $("#"+assetId+"_license_length");
-        let license_platform = $("#"+assetId+"_license_platform");
-        let license_type = $("#"+assetId+"_license_type");
+        let update_button = $("#" + assetId + "_update-quote");
+        let license_length = $("#" + assetId + "_license_length");
+        let license_platform = $("#" + assetId + "_license_platform");
+        let license_type = $("#" + assetId + "_license_type");
 
         if (update_button.prop('disabled') === true) {
             update_button.prop('disabled', false);
