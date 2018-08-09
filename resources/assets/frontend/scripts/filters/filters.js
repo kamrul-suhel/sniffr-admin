@@ -24,8 +24,9 @@ Vue.filter('readmore', function (text, length, suffix) {
 
 Vue.filter('convertHyphenToSpace', function (text) {
     if(text != null){
-        let value = text.replace('-', ' ');
-        value = value.replace('_', ' ');
+        let value = text.replace(/-/g, ' ');
+        value = value.replace(/_/g, ' ');
+        value = value.replace(/,/g, ', ');
         return value;
     }
 
@@ -91,4 +92,8 @@ Vue.filter('licenseExpired', function(endTime){
         'minutes': minutes,
         'seconds': seconds
     };
+});
+
+Vue.filter('numberFormat', function( value ){
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 })

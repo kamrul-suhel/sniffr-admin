@@ -180,7 +180,7 @@ return [
             'end_date' => \Carbon\Carbon::now()->addDay(1)
 		],
         'two-days' => [
-            'slug' => 'two-daya',
+            'slug' => 'two-days',
             'name' => '48 hours',
             'modifier' => 1,
             'end_date' => \Carbon\Carbon::now()->addDay(2)
@@ -215,8 +215,8 @@ return [
 			'modifier' => 1.4,
             'end_date' => \Carbon\Carbon::now()->addMonth(1)
 		],
-		'six_months' => [
-			'slug' => 'six_months',
+		'six-months' => [
+			'slug' => 'six-months',
 			'name' => '6 months',
 			'modifier' => 1.5,
             'end_date' => \Carbon\Carbon::now()->addMonths(6)
@@ -227,14 +227,14 @@ return [
 			'modifier' => 1.8,
             'end_date' => \Carbon\Carbon::now()->addYear(1)
 		],
-		'five_years' => [
-			'slug' => 'five_years',
+		'five-years' => [
+			'slug' => 'five-years',
 			'name' => '1 - 5 years',
 			'modifier' => 1.9,
             'end_date' => \Carbon\Carbon::now()->addYears(5)
 		],
-		'ten_years' => [
-			'slug' => 'ten_years',
+		'ten-years' => [
+			'slug' => 'ten-years',
 			'name' => '5 - 10 years',
 			'modifier' => 2.0,
             'end_date' => \Carbon\Carbon::now()->addYears(10)
