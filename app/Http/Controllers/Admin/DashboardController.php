@@ -18,9 +18,21 @@ class DashboardController extends Controller
      */
     private $startDate;
 
-    public function __construct()
+    protected $video, $contract;
+
+    /**
+     * DashboardController constructor.
+     * @param Video $video
+     * @param Contract $contract
+     */
+    public function __construct(Video $video, Contract $contract)
     {
         $this->middleware('admin');
+
+        $this->video = $video;
+
+        $this->contract = $contract;
+
         $this->startDate = (new Carbon)->create(self::START_DATE[0], self::START_DATE[1], self::START_DATE[2]);
     }
 
@@ -30,8 +42,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay()  : Carbon::now()->subMonths(1)->startOfDay();
-        $to = request()->has('to') ? Carbon::parse(request()->get('to'))->startOfDay()  : Carbon::now();
+        $from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay() : Carbon::now()->subMonths(1)->startOfDay();
+        $to = request()->has('to') ? Carbon::parse(request()->get('to'))->startOfDay() : Carbon::now()->endOfDay();
 
         $allVideosStateTotal = $this->getAllVideoStatesByRights($from, $to, 'ex');
         $allVideosStateTotalDates = array_values(array_unique($allVideosStateTotal->pluck('created_at')->toArray()));
@@ -41,32 +53,36 @@ class DashboardController extends Controller
         $allVideosStateTotalDatesExc = array_values(array_unique($allVideosStateTotalExc->pluck('created_at')->toArray()));
         $allVideosStateTotalTotalsExc = $this->formatVideoStateArray($allVideosStateTotalDatesExc, $allVideosStateTotalExc);
 
-        $videos = Video::get(['id']);
-        $videos_by_state = Video::get(['state'])->groupBy('state');
+        $total_videos = $this->video->count();
+        $new_videos = $this->video->select('id')->where('state', 'new')->whereBetween('updated_at', [$from, $to])->count();
+        $licensed_videos = $this->video->select('id')->where('state', 'licensed')->whereBetween('updated_at', [$from, $to])->count();
+        $pending_videos = $this->video->select('id')->where('state', 'pending')->whereBetween('updated_at', [$from, $to])->count();
 
-        $exc_contracts = Contract::orderBy('signed_at')
-            ->where('video_id', '!=', null)->where('contract_model_id', '1')
-            ->whereBetween('signed_at', [$from, $to])
-            ->groupBy(function ($date) {
-                return Carbon::parse($date->signed_at)->format('m-d');
+        $exc_contracts = $this->contract->get()
+            ->where('video_id', '!=', null)
+            ->where('contract_model_id', '1')
+            ->where('signed_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function ($date) {
+                return Carbon::parse($date->signed_at)->format('m-d'); // grouping by days
             });
 
-        $exc_contracts_users = Contract::get()->where('video_id', '!=', null)->where('contract_model_id', '1')->where('signed_at', '>', (new Carbon)->now()->subDays(30))->groupBy('user_id');
-        $video_state_count = Video::get()->where('created_at', '>', $this->startDate)->groupBy('state');
+        $exc_contracts_users = $this->contract->get()
+            ->where('video_id', '!=', null)
+            ->where('contract_model_id', '1')
+            ->where('signed_at', '>', (new Carbon)->now()->subDays(30))
+            ->groupBy('user_id');
 
         $data = [
             'from' => $from,
             'to' => $to,
-            'user' => Auth::user(),
-            'video_state_count' => $video_state_count,
-            'total_videos' => $videos->count(),
+            'user' => auth()->user(),
             'allVideosStateTotalTotals' => $allVideosStateTotalTotals,
             'allVideosStateTotalTotalsExc' => $allVideosStateTotalTotalsExc,
             'exc_contracts' => $exc_contracts,
             'exc_contracts_users' => $exc_contracts_users,
-            'new_videos' => (!$videos_by_state['new']) ? 0 : $videos_by_state['new']->count(),
-            'licensed_videos' => (!$videos_by_state['licensed']) ? 0 : $videos_by_state['licensed']->count(),
-            'pending_videos' => (!$videos_by_state['pending']) ? 0 : $videos_by_state['pending']->count(),
+            'total_videos' => $total_videos,
+            'new_videos' => $new_videos,
+            'licensed_videos' => $licensed_videos,
+            'pending_videos' => $pending_videos,
             'settings' => config('settings.site')
         ];
 
@@ -82,7 +98,7 @@ class DashboardController extends Controller
     public function getAllVideoStatesByRights($from, $to, $right)
     {
         return $allVideosStateTotal = \DB::table('videos')
-            ->select(DB::raw('count(id) as total'), 'state', DB::raw('GROUP_CONCAT(rights) as rights'), 'created_at')
+            ->select(DB::raw('count(id) as total'), 'state', 'created_at')
             ->whereBetween('created_at', [$from, $to])
             ->where('rights', $right)
             ->where('state', '!=', 'problem')
@@ -103,7 +119,7 @@ class DashboardController extends Controller
             $key = $formatDate;
             $allVideosStateTotalTotals[$key] = [];
             foreach ($allVideosStateTotal as $total) {
-                if ($total->created_at === $date) {
+                if (date('y-m-d', strtotime($total->created_at)) === $formatDate) {
                     $allVideosStateTotalTotals[$key][] = $total;
                 }
             }
