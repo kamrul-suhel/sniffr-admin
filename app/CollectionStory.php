@@ -29,6 +29,44 @@ class CollectionStory extends Model
         return $this->hasMany(CollectionQuote::class, 'collection_story_id', 'id');
     }
 
+	public function getPlatformString(){
+		$values = explode(',', $this->platform);
+		$response = '';
+
+		foreach($values as $value){
+			$response .= config('pricing.platform.' . $value . '.name') . ', ';
+		}
+
+		return rtrim($response, ', ');
+	}
+
+	/**
+	 * Run pricing through matrix calculations and return price
+	 * @param array $data
+	 * @return float
+	 */
+	public function calculatePrice(array $data)
+	{
+		$price = config('pricing.base');
+
+		$price = $price * (config('pricing.class.' . isset($data['class']) . '.modifier') ?: 1);
+		$price = $price * (config('pricing.locations.' . isset($data['company_location']) . '.modifier') ?: 1);
+		$price = $price * (config('pricing.tier.' . isset($data['company_tier']) . '.modifier') ?: 1);
+		$price = $price * (config('pricing.type.' . isset($data['type']) . '.modifier') ?: 1);
+		$price = $price * (config('pricing.length.' . isset($data['length']) . '.modifier') ?: 1);
+
+		$modifier = 1;
+		$platforms = explode(',', $data['platform']);
+
+		foreach($platforms as $platform) {
+			$modifier += config('pricing.platform.' . $platform . '.modifier') ?: 1;
+		}
+		$price = $price * $modifier;
+
+
+		return $price = round($price, 2);
+	}
+
     /**
      * Get a video of a specific type and status. (common occurrence throughout site)
      * @param $type
