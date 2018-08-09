@@ -93,7 +93,7 @@
         <div class="col-lg-12">
             {{-- Image --}}
             <div class="col-lg-3">
-                <img src="{{ $asset->{$type}->thumb }}" width="70%">
+                <img src="{{ $asset->{$type}->thumb ?? $asset->{$type}->image }}" width="100%">
             </div>
             {{-- Company Terms --}}
             <div class="col-lg-2">
