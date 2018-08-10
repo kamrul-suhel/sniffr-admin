@@ -283,7 +283,7 @@ class CollectionController extends Controller
 				'length' => $data['license_length'] ?? $collectionVideo->length,
 				'company_location' => isset($client->region) ? $client->region : null,
 				'company_tier' => isset($client->tier) ? $client->tier : null,
-				'notes' => $data['notes'] ?? '',
+				'notes' => $data['notes'] ? $data['notes'] == 'undefined' ? $data['notes'] : null : null,
 				'status' => 'requested',
 				'final_price' => null,
 			]);

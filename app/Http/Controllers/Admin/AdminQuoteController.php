@@ -17,6 +17,12 @@ class AdminQuoteController extends Controller
 
     protected $collection, $collectionStory, $collectionVideo;
 
+    /**
+     * AdminQuoteController constructor.
+     * @param Collection $collection
+     * @param CollectionVideo $collectionVideo
+     * @param CollectionStory $collectionStory
+     */
     public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory)
     {
         $this->collection = $collection;
@@ -107,6 +113,11 @@ class AdminQuoteController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Request $request, $id)
     {
         $asset_type = $request->get('asset_type');

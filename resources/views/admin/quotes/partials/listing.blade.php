@@ -15,12 +15,13 @@
         </div>
         <div class="col-lg-6">
             <b class="pull-right" title="{{ $asset->collection->user->email }}">
-                {{ $asset->collection->user->full_name
-                ?? $asset->collection->user->username }}
-                @ {{ $asset->collection->user->client ?  $asset->collection->user->client->name : 'No Company' }}
-                @if($asset->collection->user->tel) -
-                <b>{{ $asset->collection->user->tel }}</b>
-                @endif
+                <a target="_blank"
+                   href="{{ route('users.edit', ['id' => $asset->collection->user->id]) }}">{{ $asset->collection->user->full_name ?? $asset->collection->user->username }}
+                    <i class="fa fa-external-link"></i></a>
+                @ <a target="_blank"
+                     href="{{ route('clients.edit', ['id' => $asset->collection->client->id]) }}">{{ $asset->collection->user->client ?  $asset->collection->user->client->name : 'No Company' }}
+                    <i class="fa fa-external-link"></i></a>
+                @if($asset->collection->user->tel) - <b>{{ $asset->collection->user->tel }}</b> @endif
             </b>
         </div>
     </div>
@@ -108,36 +109,41 @@
             <div class="col-lg-2" id="neg-license-terms">
                 <h6><u>Quote</u></h6>
                 @if($asset->type)
-                    <p>License: <b>{{ config('pricing.type.' . $asset->type . '.name') }} </b></p>
-                @endif
-                <select name="license_type" id="{{$asset->id}}_license_type" disabled hidden>
-                    @foreach(config('pricing.type') as $key => $value)
-                        <option @if($asset->type == $key) selected
-                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
-                        </option>
-                    @endforeach
-                </select>
-                @if($asset->platform)
-                    <p>Platform: <b>{{ $asset->getPlatformString() }} </b></p>
-                @endif
-                <select multiple="multiple" name="license_platform[]" id="{{$asset->id}}_license_platform" disabled
-                        hidden>
-                    @foreach(config('pricing.platform') as $key => $value)
-                        <option @if($asset->platform == $key) selected="selected"
-                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
-                        </option>
-                    @endforeach
-                </select>
-                @if($asset->length)
-                    <p>License Length: <b>{{ config('pricing.length.' . $asset->length . '.name') }} </b></p>
-                @endif
-                <select name="license_length" id="{{$asset->id}}_license_length" disabled hidden>
-                    @foreach(config('pricing.length') as $key => $value)
-                        <option @if($asset->length == $key) selected
-                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
-                        </option>
-                    @endforeach
-                </select>
+                    <p>License: <b>{{ config('pricing.type.' . $asset->type . '.name') }} </b>
+                        @endif
+                        <select class="input-sm" name="license_type" id="{{$asset->id}}_license_type" disabled hidden>
+                            @foreach(config('pricing.type') as $key => $value)
+                                <option @if($asset->type == $key) selected
+                                        @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </p>
+                    @if($asset->platform)
+                        <p>Platform: <b>{{ $asset->getPlatformString() }} </b>
+                            @endif
+                            <select class="input-sm" multiple="multiple" name="license_platform[]"
+                                    id="{{$asset->id}}_license_platform" disabled
+                                    hidden>
+                                @foreach(config('pricing.platform') as $key => $value)
+                                    <option @if($asset->platform == $key) selected="selected"
+                                            @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </p>
+                        @if($asset->length)
+                            <p>License Length: <b>{{ config('pricing.length.' . $asset->length . '.name') }} </b>
+                                @endif
+                                <select class="input-sm" name="license_length" id="{{$asset->id}}_license_length"
+                                        disabled hidden>
+                                    @foreach(config('pricing.length') as $key => $value)
+                                        <option @if($asset->length == $key) selected
+                                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </p>
             </div>
             {{-- Notes --}}
             <div class="col-lg-3">
