@@ -20,7 +20,7 @@
                         <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $video->type)) }}</b></p></li><br>
                         <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $video->platform)) }}</b></p></li><br>
                         <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $video->length)) }}</b></p></li><br>
-                        @if(isset($video->notes))
+                        @if(($video->notes))
                             <li><p>Your Comments: </p></li>
                             <pre style="white-space: pre-wrap;">{{ $video->notes }}</pre>
                         @endif
@@ -33,10 +33,12 @@
                         <img style="width:50%;" src="{{ $story->story->thumb }}"/>
                     </div>
                     <ul>
-                        <li><p>Video Name: {{ ucwords(str_replace('-', ' ', $story->story->title)) }}</p></li><br>
-                        @if(isset($story->notes))
+                        <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $story->type)) }}</b></p></li><br>
+                        <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $story->platform)) }}</b></p></li><br>
+                        <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $story->length)) }}</b></p></li><br>
+                        @if(($video->notes))
                             <li><p>Your Comments: </p></li>
-                          <pre style="white-space: pre-wrap;">{{ $story->notes }}</pre>
+                            <pre style="white-space: pre-wrap;">{{ $video->notes }}</pre>
                         @endif
                     </ul>
                 @endforeach

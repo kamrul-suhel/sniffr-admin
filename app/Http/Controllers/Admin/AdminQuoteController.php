@@ -84,7 +84,6 @@ class AdminQuoteController extends Controller
         $asset->type = isset($data['license_type']) ? $data['license_type'] : $asset->type;
         $asset->platform = isset($data['license_platform']) ? implode(',', $data['license_platform']) : $asset->platform;
         $asset->length = isset($data['license_type']) ? $data['license_length'] : $asset->length;
-        $asset->notes = "Matrix Price: £".$asset->calculatePrice($asset->toArray());
         $asset->save();
 
         if (!request()->has('delete') && !request()->has('update-quote')) {

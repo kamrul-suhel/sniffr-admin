@@ -15,12 +15,13 @@
         </div>
         <div class="col-lg-6">
             <b class="pull-right" title="{{ $asset->collection->user->email }}">
-                {{ $asset->collection->user->full_name
-                ?? $asset->collection->user->username }}
-                @ {{ $asset->collection->user->client ?  $asset->collection->user->client->name : 'No Company' }}
-                @if($asset->collection->user->tel) -
-                <b>{{ $asset->collection->user->tel }}</b>
-                @endif
+                <a target="_blank"
+                   href="{{ route('users.edit', ['id' => $asset->collection->user->id]) }}">{{ $asset->collection->user->full_name ?? $asset->collection->user->username }}
+                    <i class="fa fa-external-link"></i></a>
+                @ <a target="_blank"
+                     href="{{ route('clients.edit', ['id' => $asset->collection->client->id]) }}">{{ $asset->collection->user->client ?  $asset->collection->user->client->name : 'No Company' }}
+                    <i class="fa fa-external-link"></i></a>
+                @if($asset->collection->user->tel) - <b>{{ $asset->collection->user->tel }}</b> @endif
             </b>
         </div>
     </div>
@@ -113,8 +114,7 @@
                 <select name="license_type" id="{{$asset->id}}_license_type" disabled hidden>
                     @foreach(config('pricing.type') as $key => $value)
                         <option @if($asset->type == $key) selected
-                                @endif value="{{$key}}">{{ ucwords($value['name']) }} -
-                            (x{{ $value['modifier'] }})
+                                @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})
                         </option>
                     @endforeach
                 </select>
@@ -135,8 +135,7 @@
                 <select name="license_length" id="{{$asset->id}}_license_length" disabled hidden>
                     @foreach(config('pricing.length') as $key => $value)
                         <option @if($asset->length == $key) selected
-                                @endif value="{{$key}}">{{ ucwords($value['name']) }} -
-                            (x{{ $value['modifier'] }})
+                                @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})
                         </option>
                     @endforeach
                 </select>
