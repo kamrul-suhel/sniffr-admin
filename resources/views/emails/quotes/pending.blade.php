@@ -31,8 +31,11 @@
                         <br>
 
                         @if(($video->notes))
-                            <li><p>Your Comments: </p></li>
-                            <pre style="white-space: pre-wrap;">{{ $video->notes }}</pre>
+                            <li>
+                                <p>Your Comments:
+                                    <b>{{ $video->notes }}</b>
+                                </p>
+                            </li>
                         @endif
                     </ul>
                 @endforeach
@@ -58,8 +61,11 @@
                         <br>
 
                         @if(($story->notes))
-                            <li><p>Your Comments: </p></li>
-                            <pre style="white-space: pre-wrap;">{{ $story->notes }}</pre>
+                            <li>
+                                <p>Your Comments:
+                                    <b>{{ $story->notes }}</b>
+                                </p>
+                            </li>
                         @endif
                     </ul>
                 @endforeach

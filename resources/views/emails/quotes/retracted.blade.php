@@ -55,8 +55,11 @@
                         <br>
 
                         @if(isset($story->notes))
-                            <li><p>Your Comments: </p></li>
-                            <pre style="white-space: pre-wrap;">{{ $story->notes }}</pre>
+                            <li>
+                                <p>Your Comments:
+                                    <b>{{ $story->notes }}</b>
+                                </p>
+                            </li>
                         @endif
                     </ul>
                 @endforeach

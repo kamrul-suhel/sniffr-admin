@@ -34,8 +34,11 @@
                     <br>
 
                     @if(($data['collectionAsset']->notes))
-                        <li><p>Additional Comments:
-                                <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->comments)) }}</b></p></li>
+                        <li>
+                            <p>Your Comments:
+                                <b>{{ $data['collectionAsset']->notes }}</b>
+                            </p>
+                        </li>
                         <br>
                     @endif
                 </ul>
