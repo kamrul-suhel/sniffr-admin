@@ -145,9 +145,10 @@
 
 						@include('admin.contracts.partials.form')
 
-						<!-- <div class="panel panel-primary" data-collapsed="0">
+						@if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
+						<div class="panel panel-primary" data-collapsed="0">
 							<div class="panel-heading">
-								<div class="panel-title">State</div>
+								<div class="panel-title">Admin</div>
 
 								<div class="panel-options">
 									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
@@ -155,18 +156,22 @@
 							</div>
 
 							<div class="panel-body" style="display: block;">
-								<select name="state" id="state" class="form-control">
-									@foreach(config('stories.states') as $state)
-									<option value="{{ $state }}" @if (isset($asset) && $asset->state == $state) {{ 'selected' }} @endif>{{ ucwords(str_replace('-', ' ', $state)) }}</option>
-									@endforeach
-								</select>
+								<span class="form-group input-group">
+									<span class="input-group-addon">
+										WordPress ID
+									</span>
+
+									<input type="text" class="form-control" name="wp_id" id="wp_id" value="{{ isset($asset) ? $asset->wp_id : '' }}" />
+								</span>
+
+								<a href="{{ url('admin/stories/wp_refresh/'.$asset->alpha_id) }}" class="btn btn-warning">WP Refresh</a>
 							</div>
-						</div> -->
+						</div>
+						@endif
 
 						<input type="hidden" id="id" name="id" value="{{ $asset->id }}" />
 						<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}" />
 						<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
-
 					@endif
 
 					<input type="hidden" name="_token" value="<?= csrf_token() ?>" />

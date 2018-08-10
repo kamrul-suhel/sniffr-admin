@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-8">
-                                        <div class="content-thumb" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/frontend/images/placeholder.png') }})">
+                                        <div class="content-thumb" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/images/placeholder.png') }})">
                                         </div>
                                     </div>
                                     <div class="col-sm-4 no-padding">

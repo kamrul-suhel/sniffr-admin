@@ -109,33 +109,33 @@
             <div class="col-lg-2" id="neg-license-terms">
                 <h6><u>Quote</u></h6>
                 @if($asset->type)
-                    <p>License: <b>{{ config('pricing.type.'.$asset->type.'.name') }} </b></p>
+                    <p>License: <b>{{ config('pricing.type.' . $asset->type . '.name') }} </b></p>
                 @endif
                 <select name="license_type" id="{{$asset->id}}_license_type" disabled hidden>
                     @foreach(config('pricing.type') as $key => $value)
                         <option @if($asset->type == $key) selected
-                                @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})
+                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
                         </option>
                     @endforeach
                 </select>
                 @if($asset->platform)
-                    <p>Platform: <b>{{ ucwords(str_replace(',',', ', $asset->platform)) }} </b></p>
+                    <p>Platform: <b>{{ $asset->getPlatformString() }} </b></p>
                 @endif
                 <select multiple="multiple" name="license_platform[]" id="{{$asset->id}}_license_platform" disabled
                         hidden>
                     @foreach(config('pricing.platform') as $key => $value)
                         <option @if($asset->platform == $key) selected="selected"
-                                @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})
+                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
                         </option>
                     @endforeach
                 </select>
                 @if($asset->length)
-                    <p>License Length: <b>{{ config('pricing.length.'.$asset->length.'.name') }} </b></p>
+                    <p>License Length: <b>{{ config('pricing.length.' . $asset->length . '.name') }} </b></p>
                 @endif
                 <select name="license_length" id="{{$asset->id}}_license_length" disabled hidden>
                     @foreach(config('pricing.length') as $key => $value)
                         <option @if($asset->length == $key) selected
-                                @endif value="{{$key}}">{{ ucwords($value['name']) }} - (x{{ $value['modifier'] }})
+                                @endif value="{{$key}}">{{ $value['name'] }} (x{{ $value['modifier'] }})
                         </option>
                     @endforeach
                 </select>

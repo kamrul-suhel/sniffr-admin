@@ -180,21 +180,14 @@ class SearchController extends Controller
         //Remove any exclusive based collections that have been purchased and downloaded.
         $unsearchableStories = $this->collectionStory->getAssetByTypeStatus('exclusive', 'purchased')->pluck('story_id');
 
-		$stories = $this->story->where('state', 'published');
-
 		if($request->get('mailer')){
-			$stories = $stories->orWhere('state', 'licensed');
-			$stories = $stories->orWhere('state', 'writing-inprogress');
-			$stories = $stories->orWhere('state', 'writing-completed');
-			$stories = $stories->orWhere('state', 'subs-inprogress');
-			$stories = $stories->orWhere('state', 'subs-approved');
-			$stories = $stories->orWhere('state', 'published');
+			$stories = $this->story->whereIn('state', ['licensed', 'writing-inprogress', 'writing-completed', 'subs-inprogress', 'subs-approved', 'published']);
+		}else{
+			$stories = $this->story->where('state', 'published');
 		}
 
-        if($searchValue){
-			$stories = $stories->where(function ($query) use ($searchValue) {
-				$query->where('title', 'LIKE', '%' . $searchValue . '%');
-			});
+		if($searchValue){
+			$stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
 		}
 
         $stories = $stories->whereNotIn('id', $unsearchableStories);

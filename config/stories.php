@@ -163,6 +163,16 @@ return [
                 'negative_class' => '',
             ],
 		],
+		'all' => [
+			'all' => [
+				'dropdown' => 'All',
+				'value' => 'all',
+				'positive_label' => 'All',
+				'negative_label' => '',
+				'positive_class' => '',
+				'negative_class' => '',
+			]
+		],
     ],
 
     'story_type' => [

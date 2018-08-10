@@ -136,6 +136,9 @@
                             </p>
                             @endif
                         @endif
+
+                    @elseif($asset->hasContract())
+                    <a class="btn btn-info" href="{{ route('contract.download', ['id' => $asset->currentContract->reference_id]) }}" title="Download Contract">Download Contract</a>
                     @endif
                 </div>
 

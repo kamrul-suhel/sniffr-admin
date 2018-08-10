@@ -314,7 +314,7 @@ class ContractController extends Controller
 
         $contract_text = $this->getContractText($contract, $asset_id, ($contract->video_id ? 'video' : 'story'));
 
-        $pdf = PDF::loadView('contracts.pdf', [
+        $pdf = PDF::loadView('pdf.contract', [
             'contract_text' => $contract_text
         ]);
 

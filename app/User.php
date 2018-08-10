@@ -115,7 +115,9 @@ class User extends Authenticatable
     public function userOffers()
     {
         $offeredVideos = Collection::with('collectionVideos.video');
-        $videoCount = $offeredVideos->where('client_id', $this->client_id)
+        $videoCount = $offeredVideos
+            ->where('user_id', $this->id)
+            ->where('client_id', $this->client_id)
             ->where('status', 'open')
             ->orderBy('created_at', 'DESC')
             ->whereHas('collectionVideos', function($query) {
@@ -124,7 +126,9 @@ class User extends Authenticatable
             })->count();
 
         $offeredStories = Collection::with('collectionStories.video');
-        $storyCount = $offeredStories->where('client_id', $this->client_id)
+        $storyCount = $offeredStories
+            ->where('user_id', $this->id)
+            ->where('client_id', $this->client_id)
             ->where('status', 'open')
             ->orderBy('created_at', 'DESC')
             ->whereHas('collectionStories', function($query) {

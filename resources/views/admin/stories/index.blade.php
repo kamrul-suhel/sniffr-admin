@@ -159,8 +159,8 @@
 										</a>
 										@endif
 
-										@if($story->url)
-										<a href="{{ $story->url }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
+										@if($story->wp_id)
+										<a href="{{ 'https://'.(env('APP_ENV') == 'prod' ? 'www' : 'testing').'.unilad.co.uk/?p='.$story->wp_id.'&preview=true' }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
 											<i class="fa fa-wordpress"></i> @if($story->author) {{ $story->author }} @endif
 										</a>
 										@endif
@@ -169,7 +169,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-8">
-                                    <div class="content-thumb" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/frontend/images/placeholder.png') }})">
+                                    <div class="content-thumb" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/images/placeholder.png') }})">
                                     </div>
                                 </div>
                                 <div class="col-sm-4 no-padding">
@@ -198,9 +198,13 @@
 
                                         <div class="options-body">
 											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
-													<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
-												@endforeach
+												@if($decision == 'all')
+													<option>{{ $story->state }}</option>
+												@else
+													@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
+														<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
+													@endforeach
+												@endif
 											</select>
                                         </div>
 

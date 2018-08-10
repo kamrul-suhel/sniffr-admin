@@ -4,7 +4,7 @@
             <v-card flat hover>
                 <v-card-media
                         height="200px"
-                        :src="story.thumb ? story.thumb : '/assets/frontend/images/placeholder.png'"
+                        :src="story.thumb ? story.thumb : '/assets/images/placeholder.png'"
                         @click="onOpenStoryDialog()">
                     <div class="hot-story" v-if="story.flagged === 1">
                         <div class="hot-story-content">HOT</div>
@@ -14,7 +14,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md3>
-            <h4>{{ story.title }}</h4>
+            <h4 v-html="story.title"></h4>
             <div v-html="story.excerpt"></div>
         </v-flex>
 

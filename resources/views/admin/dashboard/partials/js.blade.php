@@ -42,9 +42,9 @@
                     {
                         "label": 'New',
                         "data": [
-                            @foreach($allVideosStateTotalTotals as $datesNew)
-                            @if(array_search('new' , array_column($datesNew, 'state')))
-                            <?php echo "'" . $datesNew[array_search('new', array_column($datesNew, 'state'))]->total . "',";?>
+                            @foreach($allVideosStateTotalTotals as $newDates)
+                            @if(array_search('new' , array_column($newDates, 'state')))
+                            {{ $newDates[array_search('new', array_column($newDates, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -60,7 +60,7 @@
                         "data": [
                             @foreach($allVideosStateTotalTotals as $pendingDates)
                             @if(array_search('pending' , array_column($pendingDates, 'state')) !== false)
-                            <?php echo "'" . $pendingDates[array_search('pending', array_column($pendingDates, 'state'))]->total . "',";?>
+                            {{ $pendingDates[array_search('pending', array_column($pendingDates, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -76,7 +76,7 @@
                         "data": [
                             @foreach($allVideosStateTotalTotals as $rejectedDates)
                             @if(array_search('rejected' , array_column($rejectedDates, 'state')) !== false)
-                            <?php echo "'" . $rejectedDates[array_search('rejected', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            {{ $rejectedDates[array_search('rejected', array_column($rejectedDates, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -90,9 +90,9 @@
                     {
                         "label": 'Restricted',
                         "data": [
-                            @foreach($allVideosStateTotalTotals as $rejectedDates)
-                            @if(array_search('restricted' , array_column($rejectedDates, 'state')) !== false)
-                            <?php echo "'" . $rejectedDates[array_search('restricted', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @foreach($allVideosStateTotalTotals as $restrictedDates)
+                            @if(array_search('restricted' , array_column($restrictedDates, 'state')) !== false)
+                            {{ $restrictedDates[array_search('restricted', array_column($restrictedDates, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -106,9 +106,9 @@
                     {
                         "label": 'Accepted',
                         "data": [
-                            @foreach($allVideosStateTotalTotals as $rejectedDates)
-                            @if(array_search('accepted' , array_column($rejectedDates, 'state')) !== false)
-                            <?php echo "'" . $rejectedDates[array_search('accepted', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @foreach($allVideosStateTotalTotals as $acceptedDates)
+                            @if(array_search('accepted' , array_column($acceptedDates, 'state')) !== false)
+                            {{ $acceptedDates[array_search('accepted', array_column($acceptedDates, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -122,9 +122,9 @@
                     {
                         "label": 'Licensed',
                         "data": [
-                            @foreach($allVideosStateTotalTotals as $rejectedDates)
-                            @if(array_search('licensed' , array_column($rejectedDates, 'state')) !== false)
-                            <?php echo "'" . $rejectedDates[array_search('licensed', array_column($rejectedDates, 'state'))]->total . "',";?>
+                            @foreach($allVideosStateTotalTotals as $licensedDates)
+                            @if(array_search('licensed' , array_column($licensedDates, 'state')) !== false)
+                            {{ $licensedDates[array_search('licensed', array_column($licensedDates, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -172,7 +172,7 @@
                         "data": [
                             @foreach($allVideosStateTotalTotalsExc as $newDate)
                             @if(array_search('new' , array_column($newDate, 'state')) !== false)
-                            <?php echo "'" . $newDate[array_search('new', array_column($newDate, 'state'))]->total . "',"; ?>
+                            {{ $newDate[array_search('new', array_column($newDate, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -187,7 +187,7 @@
                         "data": [
                             @foreach($allVideosStateTotalTotalsExc as $pendingDate)
                             @if(array_search('pending' , array_column($pendingDate, 'state')) !== false)
-                            <?php echo "'" . $pendingDate[array_search('pending', array_column($pendingDate, 'state'))]->total . "',"; ?>
+                            {{ $pendingDate[array_search('pending', array_column($pendingDate, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -202,7 +202,7 @@
                         "data": [
                             @foreach($allVideosStateTotalTotalsExc as $licensedDate)
                             @if(array_search('licensed' , array_column($licensedDate, 'state')) !== false)
-                            <?php echo "'" . $licensedDate[array_search('licensed', array_column($licensedDate, 'state'))]->total . "',"; ?>
+                            {{ $licensedDate[array_search('licensed', array_column($licensedDate, 'state'))]->total }},
                             @else
                             <?php echo "'0',";?>
                             @endif
@@ -279,5 +279,7 @@
             }
         });
         <?php endif; ?>
+
+
     })(jQuery);
 </script>

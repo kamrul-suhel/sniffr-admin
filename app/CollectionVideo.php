@@ -39,6 +39,17 @@ class CollectionVideo extends Model
         return $this->hasMany(CollectionQuote::class, 'collection_video_id', 'id');
     }
 
+    public function getPlatformString(){
+    	$values = explode(',', $this->platform);
+    	$response = '';
+
+    	foreach($values as $value){
+    		$response .= config('pricing.platform.' . $value . '.name') . ', ';
+ 		}
+
+ 		return rtrim($response, ', ');
+	}
+
     /**
      * Run pricing through matrix calculations and return price
      * @param array $data
