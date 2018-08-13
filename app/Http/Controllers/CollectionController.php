@@ -314,8 +314,6 @@ class CollectionController extends Controller
             'collection' => $collection
         ];
 
-		dd($params);
-
 		$collectionQuote = new CollectionQuote;
 		$collectionQuote->emailPendingQuote($params);
 

@@ -282,8 +282,8 @@ class SearchController extends Controller
 
         if (Auth::user()) {
             $client_id = Auth::user()->client_id;
-            $currentStory = $currentStory->with(['videoCollections' => function ($query) use ($client_id) {
-                $query->select(['id', 'collection_id', 'video_id'])
+            $currentStory = $currentStory->with(['storyCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'story_id'])
                     ->where('status', 'purchased');
                 $query->whereHas('collection', function ($query) use ($client_id) {
                     $query->where('client_id', $client_id);
