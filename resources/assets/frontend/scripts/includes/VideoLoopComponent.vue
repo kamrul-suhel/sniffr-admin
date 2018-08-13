@@ -12,9 +12,7 @@
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
 
-                    <span class="label label-licensed" v-if="getVidePurchased()">
-                        Purchased
-                    </span>
+                    <span class="label label-licensed" v-if="getVidePurchased()">Purchased</span>
 
                     <span v-if="video.nsfw == '1'" class="label"
                           :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
