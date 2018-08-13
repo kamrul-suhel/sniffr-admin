@@ -51,7 +51,7 @@
 
                         <li>
                             Platform Usage:
-                            @foreach(explode(',',$data['collectionAsset']->platform) as $platform)
+                            @foreach($story->platform as $platform)
                                 <b>{{ config('pricing.platform.'.$platform.'.name') }},</b>
                             @endforeach
                         </li>

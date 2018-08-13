@@ -190,6 +190,16 @@ class SearchController extends Controller
             $stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
         }
 
+        if (Auth::user()) {
+            $client_id = Auth::user()->client_id;
+            $stories = $stories->with(['storyCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'story_id'])->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
         $stories = $stories->whereNotIn('id', $unsearchableStories);
         $stories = $stories->orderBy('id', 'DESC');
         $stories = $stories->paginate($settings['posts_per_page']);
