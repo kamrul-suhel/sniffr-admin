@@ -39,6 +39,14 @@ class Story extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function storyCollections()
+    {
+        return $this->hasMany(CollectionStory::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function contracts()

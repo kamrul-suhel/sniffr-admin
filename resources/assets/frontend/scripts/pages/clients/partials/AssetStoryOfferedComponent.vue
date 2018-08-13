@@ -167,6 +167,7 @@
 
         created() {
             this.assetType = this.type;
+            this.getIsPurchasedAsset();
         },
 
         watch: {
@@ -235,6 +236,16 @@
 
             onStoryClick(){
                 StoryDialogBoxEventBus.$emit('openStoryDialog', this.story);
+            },
+
+            getIsPurchasedAsset(){
+                if(this.type === "story"){
+                    if (this.story.story_collections && this.story.story_collections.length > 0) {
+                        this.purchased = true;
+                    }
+                }
+
+                return false;
             }
         }
     }

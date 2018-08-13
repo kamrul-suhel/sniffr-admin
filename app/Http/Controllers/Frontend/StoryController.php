@@ -14,6 +14,12 @@ class StoryController extends Controller
 
 	const PAGINATE_PERPAGE = 12;
 
+	protected $story;
+	public function __construct(Story $story)
+    {
+        $this->story = $story;
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -32,11 +38,28 @@ class StoryController extends Controller
      * @param string $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request, string $alpha_id)
     {
         $isJson = $request->ajax() || $request->isJson();
         if ($isJson) {
-            $story = Story::where('alpha_id', $id)->with('assets')->first();
+            $story = $this->story
+                ->select($this->getAssetStoryFieldsForFrontend())
+                ->where('alpha_id', $alpha_id)
+                ->with('assets');
+
+            if (auth()->user()) {
+                $client_id = auth()->user()->client_id;
+                $story = $story->with(['storyCollections' => function ($query) use ($client_id) {
+                    $query->select(['id', 'collection_id', 'story_id'])
+                        ->where('status', 'purchased');
+                    $query->whereHas('collection', function ($query) use ($client_id) {
+                        $query->where('client_id', $client_id);
+                    });
+                }]);
+            }
+            $story = $story
+                ->first();
+
             $data = [
                 'story' => $story,
             ];

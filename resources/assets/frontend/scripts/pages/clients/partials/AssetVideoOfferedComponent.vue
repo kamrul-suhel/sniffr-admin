@@ -152,12 +152,12 @@
 
                 loading: false,
                 acceptLoading: false,
-                declineLoading:false,
+                declineLoading: false,
                 assetDeclined: false,
 
-                expired:  false,
+                expired: false,
 
-                assetType:''
+                assetType: ''
             }
         },
 
@@ -186,7 +186,7 @@
 
         created() {
             this.assetType = this.type;
-            if(this.video.expired){
+            if (this.video.expired) {
                 this.expired = true;
             }
         },
@@ -262,24 +262,21 @@
 
             },
 
-            onVideoDialog(){
+            onVideoDialog() {
                 let url = this.$route.path;
 
-                url += '?type='+this.type;
-                url += '&id='+this.video.alpha_id;
+                url += '?type=' + this.type;
+                url += '&id=' + this.video.alpha_id;
 
-                if(this.$route.query.tag){
-                    url += '&tag='+this.$route.query.tag;
+                if (this.$route.query.tag) {
+                    url += '&tag=' + this.$route.query.tag;
                 }
                 this.$route.query.alpha_id = this.video.alpha_id;
-
 
                 this.$store.commit('setEnterRouteObject', this.$route);
 
                 window.history.pushState({}, null, url);
-
-
-                if(this.$route.name === 'client_offered_assets'){
+                if (this.$route.name === 'client_offered_assets') {
                     // client offered page
 
                     let index = this.index;
@@ -290,8 +287,6 @@
                     this.$store.commit('setVideoLoading', true);
                     return;
                 }
-
-
 
                 this.$store.commit('setCurrentVideoAlphaId', this.video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);
