@@ -12,7 +12,7 @@
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon">Description</span>
-                <textarea class="form-control" name="description" id="description" rows="9" title="description">{{
+                <textarea class="form-control" name="description" id="video-description" rows="9" title="description">{{
                           $asset->description or old('description')
               }}</textarea>
             </div>
