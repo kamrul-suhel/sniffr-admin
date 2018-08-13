@@ -1,6 +1,19 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12>
+        <v-flex xs12 v-if="getAssetPurchased()">
+            <v-btn
+                    block
+                    dark
+                    color="dark"
+                    class="mb-0"
+                    @click.native="onDownloadVideo()"
+                    :loading="loading"
+                    :disabled="loading"
+            >
+                Download Video
+            </v-btn>
+        </v-flex>
+        <v-flex xs12 v-else>
             <v-btn
                     dark
                     block
@@ -25,12 +38,27 @@
         data() {
             return {
                 canBuy: false,
+
+                loader: null,
+                loading: false,
             }
         },
 
         watch: {
             asset() {
                 this.checkLogin();
+            },
+
+            loader() {
+                const l = this.loader;
+                this[l] = !this[l];
+
+                setTimeout(() => {
+                    this[l] = false;
+                    this.newOrder = true;
+                }, 3000);
+
+                this.loader = null
             }
         },
 
@@ -86,6 +114,35 @@
 
             checkLogin() {
                 this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 0) ? false : true;
+            },
+
+            getAssetPurchased() {
+                if(this.type === "video"){
+                    if (this.asset.video_collections && this.asset.video_collections.length > 0) {
+                        return true;
+                    }
+                }
+
+                if(this.type === "story"){
+                    if (this.asset.story_collections && this.asset.story_collections.length > 0) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+
+            onDownloadVideo() {
+                if(this.type === "video"){
+                    this.loader = 'loading';
+                    var url = '/client/videos/' + this.asset.id + '/download';
+                    window.location = url;
+                }
+
+                if(this.type === "story"){
+                    var url = '/client/stories/' + this.asset.id + '/download';
+                    window.location = url;
+                }
             }
         }
     }
