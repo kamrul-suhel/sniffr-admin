@@ -2,6 +2,7 @@
 	<!-- Login form -->
     <div class="login-dialog">
         <v-dialog
+                transition="false"
                 v-model="open_login_dialog"
                 max-width="500px"
                 class="login-section"
