@@ -81,8 +81,6 @@
         created() {
             // Set button component
             this.checkLogin();
-            console.log(this.type);
-            console.log(this.asset);
         },
 
         methods: {
@@ -136,9 +134,9 @@
 
             onDownloadVideo() {
                 this.loader = 'loading';
-                var url = '/client/videos/' + this.video.id + '/download';
+                var url = '/client/videos/' + this.asset.id + '/download';
                 window.location = url;
-            },
+            }
         }
     }
 </script>

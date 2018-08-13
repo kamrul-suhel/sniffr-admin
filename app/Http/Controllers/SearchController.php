@@ -268,7 +268,20 @@ class SearchController extends Controller
         $currentStory = $this->story
             ->select($this->getAssetStoryFieldsForFrontend())
             ->where('alpha_id', $alpha_id)
-            ->with('assets')
+            ->with('assets');
+
+        if (Auth::user()) {
+            $client_id = Auth::user()->client_id;
+            $currentStory = $currentStory->with(['videoCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'video_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentStory = $currentStory
             ->first();
         return $currentStory;
     }
