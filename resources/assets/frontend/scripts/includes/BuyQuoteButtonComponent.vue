@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 v-if="getVidePurchased()">
+        <v-flex xs12 v-if="getVideoPurchased()">
             <v-btn
                     block
                     dark
@@ -115,7 +115,7 @@
                 this.canBuy = (!this.client_logged_in || this.asset.class === 'exceptional' || this.asset.class === '' || !this.asset.class || this.user.active === 0) ? false : true;
             },
 
-            getVidePurchased() {
+            getVideoPurchased() {
                 if (this.asset.video_collections && this.asset.video_collections.length > 0) {
                     return true;
                 }

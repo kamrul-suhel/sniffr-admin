@@ -38,6 +38,9 @@ class Story extends Model
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function storyCollections()
     {
         return $this->hasMany(CollectionStory::class);

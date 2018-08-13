@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Collection;
-use Auth;
 use App\ClientMailerUser;
 use App\ClientMailerVideo;
 use App\ClientMailerStory;
@@ -16,7 +15,6 @@ use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;
-use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
@@ -119,8 +117,8 @@ class SearchController extends Controller
 
         // If we are not searching then return all video with paginate
         if (!$currentVideoId) {
-            if (Auth::user()) {
-                $client_id = Auth::user()->client_id;
+            if (auth()->user()) {
+                $client_id = auth()->user()->client_id;
                 $videos = $videos->with(['videoCollections' => function ($query) use ($client_id) {
                     $query->select(['id', 'collection_id', 'video_id'])->where('status', 'purchased');
                     $query->whereHas('collection', function ($query) use ($client_id) {
@@ -190,8 +188,8 @@ class SearchController extends Controller
             $stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
         }
 
-        if (Auth::user()) {
-            $client_id = Auth::user()->client_id;
+        if (auth()->check()) {
+            $client_id = auth()->user()->client_id;
             $stories = $stories->with(['storyCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'story_id'])->where('status', 'purchased');
                 $query->whereHas('collection', function ($query) use ($client_id) {
@@ -256,8 +254,8 @@ class SearchController extends Controller
             ->select($this->getVideoFieldsForFrontend())
             ->where('alpha_id', $alpha_id);
 
-        if (Auth::user()) {
-            $client_id = Auth::user()->client_id;
+        if (auth()->check()) {
+            $client_id = auth()->user()->client_id;
             $currentVideo = $currentVideo->with(['videoCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'video_id'])
                     ->where('status', 'purchased');
@@ -280,8 +278,8 @@ class SearchController extends Controller
             ->where('alpha_id', $alpha_id)
             ->with('assets');
 
-        if (Auth::user()) {
-            $client_id = Auth::user()->client_id;
+        if (auth()->user()) {
+            $client_id = auth()->user()->client_id;
             $currentStory = $currentStory->with(['storyCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'story_id'])
                     ->where('status', 'purchased');

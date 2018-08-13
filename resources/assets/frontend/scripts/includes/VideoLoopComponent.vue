@@ -12,7 +12,7 @@
                         <v-icon color="white" size="60px">play_circle_outline</v-icon>
                     </span>
 
-                    <span class="label label-licensed" v-if="getVidePurchased()">Purchased</span>
+                    <span class="label label-licensed" v-if="getVideoPurchased()">Purchased</span>
 
                     <span v-if="video.nsfw == '1'" class="label"
                           :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
@@ -70,7 +70,7 @@
         },
 
         methods:{
-            getVidePurchased() {
+            getVideoPurchased() {
                 if (this.video.video_collections && this.video.video_collections.length > 0) {
                     return true;
                 }

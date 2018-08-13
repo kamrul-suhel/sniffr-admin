@@ -32,7 +32,7 @@
              xs12 sm12 md7 lg7 xl7>
 
             <v-card flat class="video-player-poster">
-                <span class="label label-licensed" v-if="getVidePurchased()">Purchased</span>
+                <span class="label label-licensed" v-if="getVideoPurchased()">Purchased</span>
 
                 <v-card-media :src="getThnumbnail()"></v-card-media>
                 <v-btn @click="change()" class="dark player-play" dark fab medium>
@@ -167,7 +167,7 @@
                 }
             },
 
-            getVidePurchased() {
+            getVideoPurchased() {
                 if (this.video.video_collections && this.video.video_collections.length > 0) {
                     return true;
                 }
