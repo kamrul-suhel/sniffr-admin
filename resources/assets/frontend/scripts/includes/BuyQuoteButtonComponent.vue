@@ -2,16 +2,6 @@
     <v-layout row wrap>
         <v-flex xs12>
             <v-btn
-                    v-if="canBuy"
-                    dark
-                    block
-                    class="mb-0"
-                    @click.stop="createCollection()"
-            >Buy now
-            </v-btn>
-
-            <v-btn
-                    v-else
                     dark
                     block
                     class="mb-0"
