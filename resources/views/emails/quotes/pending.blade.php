@@ -51,11 +51,12 @@
 
                         <li>
                             Platform Usage:
-                            @foreach(explode(',',$data['collectionAsset']->platform) as $platform)
+                            @foreach(explode(',', $story->platform) as $platform)
                                 <b>{{ config('pricing.platform.'.$platform.'.name') }},</b>
                             @endforeach
                         </li>
-                        </br>
+
+                        <br>
 
                         <li><p>License Length: <b>{{ config('pricing.length.'.$story->length.'.name') }}</b></p></li>
                         <br>

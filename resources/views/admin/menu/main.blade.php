@@ -17,41 +17,6 @@
                 <!-- <div class="mobile-menu">Videos</div> -->
             </a>
             <ul>
-                <li>
-                    <a href="{{ url('admin/videos/new') }}">
-                        <span class="title">New Videos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('admin/videos/accepted') }}">
-                        <span class="title">Accepted Videos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('admin/videos/pending') }}">
-                        <span class="title">Pending Videos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('admin/videos/rejected') }}">
-                        <span class="title">Rejected Videos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('admin/videos/problem') }}">
-                        <span class="title">Problem Videos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('admin/videos/licensed') }}">
-                        <span class="title">Licensed Videos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('admin/videos/restricted') }}">
-                        <span class="title">Restricted Videos</span>
-                    </a>
-                </li>
                 @if(Auth::user()->isAdmin())
                     <li>
                         <a href="{{ url('admin/videos/deleted') }}">

@@ -48,7 +48,7 @@ class AdminStoryController extends Controller
         $search_value = $request->input('search_value', null);
         $state = $request->input('state') ? $request->input('state') : Cookie::get('sniffr_admin_state');
         $decision = $request->input('decision', (Cookie::get('sniffr_admin_decision') ?? 'content-sourced'));
-        $assigned_to = $request->input('assigned_to', (Cookie::get('sniffr_admin_assigned') ?? null));
+        $assigned_to = $request->input('assignee', (Cookie::get('sniffr_admin_assigned') ?? null));
 
         $stories = new Story;
 
@@ -110,7 +110,7 @@ class AdminStoryController extends Controller
             'stories' => $stories,
             'state' => $state,
             'decision' => $decision,
-            'assigned_to' => $assigned_to,
+            'assignee' => $assigned_to,
             'users' => User::where([['client_id', NULL]])->get(),
             'user' => Auth::user(),
         ];

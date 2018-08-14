@@ -11,10 +11,10 @@
                     @if($decision)
                     <a href="{{ url('admin/stories/?decision='.lcfirst($decision)) }}">
 						Stories: {{ ucwords(str_replace('-', ' ', $decision)) }}
-					</a>
-                    @else
-                    <a href="{{ url('admin/stories/'.lcfirst($state)) }}">
-						Stories: {!! ($state ? ucfirst($state) : 'All') !!}
+
+						<a href="{{ url('admin/stories/'.lcfirst($chosenState)) }}">
+							- {!! ($chosenState ? ucwords(str_replace('-', ' ', $chosenState)) : 'All') !!} ({{$stories->count()}})
+						</a>
 					</a>
                     @endif
 					<a href="{{ url('admin/stories/create/?decision='.(isset($decision) ? $decision : '')) }}" class="btn btn-success pull-right">
@@ -35,30 +35,26 @@
 			<form id="search-form" method="get" role="form" class="search-form-full">
                 <div class="col-md-2">
 					<div class="form-group">
-						<select id="decision" name="decision" class="form-control" title="Steps">
+						<select id="state" name="state" class="form-control" title="Steps">
                             @foreach(config('stories.decisions') as $decision_state_key => $decision_state)
-							<option value="{{ $decision_state_key }}" @if($decision==@$decision_state_key) selected @endif>{{ ucwords(str_replace('-', ' ', $decision_state_key)) }}</option>
+							<optgroup label="{{ ucwords(str_replace('-', ' ', $decision_state_key)) }}">
+								@foreach(config('stories.decisions.'.$decision_state_key) as $current_state => $state_values)
+                                    <option value="{{ $decision_state_key.'--'.$state_values['value'] }}" @if($state==$decision_state_key.'--'.$state_values['value']) selected @endif>
+										{{ $state_values['dropdown'] }}
+									</option>
+                                @endforeach
+							</optgroup>
                             @endforeach
-						</select>
-					</div>
-				</div>
-
-                <div class="col-md-2">
-					<div class="form-group">
-						<select id="state" name="state" class="form-control" title="State">
-							@foreach(config('stories.decisions.'.$decision) as $current_state => $state_values)
-							<option value="{{ $state_values['value'] }}" @if($state==$state_values['value']) selected @endif>{{ $state_values['dropdown'] }}</option>
-							@endforeach
 						</select>
 					</div>
 				</div>
 
 				<div class="col-md-2">
 					<div class="form-group">
-						<select id="assigned_to" name="assigned_to" class="form-control" title="Assign To">
-							<option value="">Assigned To</option>
+						<select id="assignee" name="assignee" class="form-control" title="Assign To">
+							<option value="">Assignee</option>
 							@foreach($users as $user)
-							<option value="{{ $user->id }}" @if($assigned_to==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+							<option value="{{ $user->id }}" @if($assignee==$user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
 							@endforeach
 						</select>
 					</div>
@@ -70,7 +66,7 @@
 
 				<div class="col-md-6">
 					<div class="form-group">
-						<input type="text" class="form-control" name="search_value" id="search-input" placeholder="Search..." value="{{ Request::get('search_value') }}"> <i class="fa fa-search"></i>
+						<input type="text" class="form-control" name="term" id="search-input" placeholder="Search..." value="{{ Request::get('term') }}"> <i class="fa fa-search"></i>
 					</div>
 				</div>
 
@@ -202,7 +198,7 @@
 													<option>{{ $story->state }}</option>
 												@else
 													@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
-														<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
+														<option value="{{ $key }}" @if($key == $chosenState) selected @endif>{{ $state_values['dropdown'] }}</option>
 													@endforeach
 												@endif
 											</select>
@@ -216,7 +212,11 @@
                                                 <option value="">Select User</option>
 												<?php $storyUserId = $story->user()->first()->id; ?>
                                                 @foreach($users as $user)
-                    								<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+                    								<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>
+														@if($user->full_name) {{ $user->full_name }}
+														@else {{ $user->username }}
+														@endif
+													</option>
                                                 @endforeach
                     						</select>
 
@@ -259,7 +259,7 @@
 
                             <div class="album-options no-border">
 								@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
-									@if($state == $key)
+									@if($chosenState == $key)
 										@if($state_values['negative_label'])<a href="#" data-id="{{ $story->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a>@endif
 										@if($state_values['positive_label'])<a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
 									@endif
