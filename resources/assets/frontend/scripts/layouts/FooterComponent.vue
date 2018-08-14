@@ -72,6 +72,9 @@
             <!-- Story dialog box -->
             <story-dialog-component></story-dialog-component>
 
+            <!-- Story asset dialog box -->
+            <story-asset-dialog-component></story-asset-dialog-component>
+
             <!-- Buy dialog box -->
             <buy-dialog-component></buy-dialog-component>
 
@@ -90,6 +93,7 @@
     import QuoteComponent from '../component/QuoteComponent'
     import VideoDialogComponent from '../includes/VideoDialogComponent'
     import StoryDialogComponent from '../pages/clients/partials/StoryDialog'
+    import StoryAssetDialogComponent from '../includes/StoryAssetsDialogComponent'
     import SnackbarComponent from '../includes/SnackbarComponent'
     import BuyDialogComponent from '../component/BuyComponent'
     import ThankYouDialogBox from '../includes/ThankyouComponent'
@@ -116,7 +120,8 @@
             StoryDialogComponent,
             SnackbarComponent,
             BuyDialogComponent,
-            ThankYouDialogBox
+            ThankYouDialogBox,
+            StoryAssetDialogComponent
         }
     }
 </script>
