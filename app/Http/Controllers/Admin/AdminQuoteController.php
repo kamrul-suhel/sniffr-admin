@@ -12,10 +12,17 @@ use App\Jobs\Quotes\QueueEmailOfferedQuote;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Http\Request;
 
-class AdminQuoteController extends Controller {
+class AdminQuoteController extends Controller
+{
 
     protected $collection, $collectionStory, $collectionVideo;
 
+    /**
+     * AdminQuoteController constructor.
+     * @param Collection $collection
+     * @param CollectionVideo $collectionVideo
+     * @param CollectionStory $collectionStory
+     */
     public function __construct(Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory)
     {
         $this->collection = $collection;
@@ -28,27 +35,27 @@ class AdminQuoteController extends Controller {
      */
     public function index()
     {
-        $pendingVideoCollections = $this->collection->whereHas('collectionVideos', function($query) {
-           $query->where('status', 'requested');
+        $pendingVideoCollections = $this->collection->whereHas('collectionVideos', function ($query) {
+            $query->where('status', 'requested');
         })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'pending_video');
 
-        $offeredVideoCollections = $this->collection->whereHas('collectionVideos', function($query) {
+        $offeredVideoCollections = $this->collection->whereHas('collectionVideos', function ($query) {
             $query->where('status', 'offered');
         })->with('collectionVideos')->with('client')->with('user')->paginate(10, ['*'], 'offered_video');
 
-		$pendingStoryCollections = $this->collection->whereHas('collectionStories', function($query) {
-			$query->where('status', 'requested');
-		})->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'pending_story');
+        $pendingStoryCollections = $this->collection->whereHas('collectionStories', function ($query) {
+            $query->where('status', 'requested');
+        })->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'pending_story');
 
-		$offeredStoryCollections = $this->collection->whereHas('collectionStories', function($query) {
-			$query->where('status', 'offered');
-		})->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'offered_story');
+        $offeredStoryCollections = $this->collection->whereHas('collectionStories', function ($query) {
+            $query->where('status', 'offered');
+        })->with('collectionStories')->with('client')->with('user')->paginate(10, ['*'], 'offered_story');
 
         return view('admin.quotes.index')
             ->with('pendingVideoCollections', $pendingVideoCollections)
             ->with('offeredVideoCollections', $offeredVideoCollections)
-			->with('pendingStoryCollections', $pendingStoryCollections)
-			->with('offeredStoryCollections', $offeredStoryCollections);
+            ->with('pendingStoryCollections', $pendingStoryCollections)
+            ->with('offeredStoryCollections', $offeredStoryCollections);
     }
 
     /**
@@ -64,68 +71,61 @@ class AdminQuoteController extends Controller {
     }
 
     /**
-     * @param Request $request
+     * @param CreateQuote $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(CreateQuote $request, $id)
     {
-    	$asset_type = $request->get('asset_type');
+        $asset_type = $request->get('asset_type');
+        $data = request()->all();
 
-    	$collection_video_id = null;
-		$collection_story_id = null;
-		$type = '';
-    	if($asset_type == 'video'){
-			//update collection video status, final_price
-			$collectionVideo = $this->collectionVideo->find($id);
-			$collectionVideo->final_price = request()->has('delete') ? null : $request->input('final_price');
-			$collectionVideo->status = request()->has('delete') ? 'closed' : 'offered';
-			$collectionVideo->reason = request()->has('delete') ? 'Ignored By Admin (id: '.auth()->user()->id.')' : null;
-			$collectionVideo->save();
+        $collection_video_id = null;
+        $collection_story_id = null;
 
-			$collection_video_id = $collectionVideo->id;
-			$type = 'Video';
-		}else if($asset_type == 'story'){
-			//update collection video status, final_price
-			$collectionStory = $this->collectionStory->find($id);
-			$collectionStory->final_price = request()->has('delete') ? null : $request->input('final_price');
-			$collectionStory->status = request()->has('delete') ? 'closed' : 'offered';
-			$collectionStory->reason = request()->has('delete') ? 'Ignored By Admin (id: '.auth()->user()->id.')' : null;
-			$collectionStory->save();
+        $asset = $this->{'collection'.ucwords($asset_type)}->find($id);
+        $asset->final_price = request()->has('delete') ? null : $request->input('final_price');
+        $asset->status = request()->has('delete') ? 'closed' : request()->has('update-quote') ? 'requested' : 'offered';
+        $asset->reason = request()->has('delete') ? 'Ignored By Admin (id: ' . auth()->user()->id . ')' : null;
+        $asset->type = isset($data['license_type']) ? $data['license_type'] : $asset->type;
+        $asset->platform = isset($data['license_platform']) ? implode(',', $data['license_platform']) : $asset->platform;
+        $asset->length = isset($data['license_type']) ? $data['license_length'] : $asset->length;
+        $asset->save();
 
-			$collection_story_id = $collectionStory->id;
-			$type = 'Story';
-		}
-
-		if(!request()->has('delete')) {
+        if (!request()->has('delete') && !request()->has('update-quote')) {
             //create log of quoted amount for video
             $collectionQuote = new CollectionQuote();
-            $collectionQuote->collection_video_id = $collection_video_id;
-            $collectionQuote->collection_story_id = $collection_story_id;
+            $collectionQuote->collection_video_id = $asset_type == "video" ? $asset->id : null;
+            $collectionQuote->collection_story_id = $asset_type == "story" ? $asset->id : null;
             $collectionQuote->user_id = auth()->user()->id; //offered by the admin signed in
-            $collectionQuote->price = $request->input('final_price');
+            $collectionQuote->price = $request->input('final_price') ?? $collectionQuote->price;
             $collectionQuote->save();
 
             QueueEmailOfferedQuote::dispatch(
                 $collectionQuote,
-                $type
+                $asset_type
             );
         }
 
         return redirect('admin/quotes')->with([
-				'note' => request()->has('delete') ? 'Quote successfully Ignored' : ' Quote successfully Sent',
-				'note_type' => 'success'
-			]);
+            'note' => request()->has('delete') ? 'Quote successfully Ignored' : request()->has('update-quote') ? "License Terms Updated" : "Quote successfully Sent",
+            'note_type' => 'success',
+        ]);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Request $request, $id)
     {
-		$asset_type = $request->get('asset_type');
-		$collectionAsset = $this->{'collection'.ucwords($asset_type)}->find($id);
-		$retractedPrice = $collectionAsset->final_price;
+        $asset_type = $request->get('asset_type');
+        $collectionAsset = $this->{'collection' . ucwords($asset_type)}->find($id);
+        $retractedPrice = $collectionAsset->final_price;
         $collectionAsset->final_price = null;
         $collectionAsset->status = 'requested';
-        $collectionAsset->reason = auth()->user()->username . ' rectracted offer of £'. $retractedPrice;
+        $collectionAsset->reason = auth()->user()->username . ' revoked offer of £' . $retractedPrice;
         $collectionAsset->save();
 
         QueueEmailRetractQuote::dispatch(

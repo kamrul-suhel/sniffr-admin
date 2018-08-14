@@ -178,7 +178,9 @@ class Video extends Model
     }
 
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function videoCollections()
     {
         return $this->hasMany(CollectionVideo::class);

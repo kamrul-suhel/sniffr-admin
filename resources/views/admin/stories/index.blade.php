@@ -230,7 +230,7 @@
                         <footer>
 							<div class="album-images-count">
                                 <div class="album-info-extra">
-                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->updated_at)) }} <br>
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->created_at)) }} <br>
 
 									@if(isset($story->contact))
 										@if($story->contacted_at && $story->contact_made)

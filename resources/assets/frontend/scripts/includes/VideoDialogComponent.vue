@@ -2,7 +2,7 @@
     <!-- Dialog box -->
     <v-dialog
             v-model="video_dialog"
-            transition="dialog-bottom-transition"
+            transition="false"
             scrollable
             class="video-dialog-container"
             content-class="video-dialog-container"
