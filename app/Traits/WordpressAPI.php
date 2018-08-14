@@ -71,6 +71,9 @@ trait WordpressAPI
 		$err = curl_error($curl);
 		curl_close($curl);
 
+		$user = new User();
+		$user->slackChannel('alerts')->notify(new SubmissionAlert('Ian Test: '.$response));
+
 		return $response;
 	}
 
