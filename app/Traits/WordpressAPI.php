@@ -2,8 +2,6 @@
 
 namespace App\Traits;
 
-use App\User;
-
 trait WordpressAPI
 {
     public $api_path = 'wp-json/wp/v2/';
@@ -72,9 +70,6 @@ trait WordpressAPI
 		$response = json_decode(curl_exec($curl)); //or abort(502);
 		$err = curl_error($curl);
 		curl_close($curl);
-
-		$user = new User();
-		$user->slackChannel('alerts')->notify(new SubmissionAlert('Ian Test: '.$response));
 
 		return $response;
 	}
