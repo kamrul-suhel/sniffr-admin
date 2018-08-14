@@ -29,7 +29,7 @@ class ClientStoriesController extends Controller
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
-            'user' => Auth::user(),
+            'user' => auth()->user(),
         ];
     }
 
@@ -40,7 +40,7 @@ class ClientStoriesController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax() || $request->isJson()) {
-            $user_id = Auth::user()->id;
+            $user_id = auth()->user()->id;
             $client_mailer = ClientMailer::with('stories.orders')
                 ->whereHas('users', function ($query) use ($user_id) {
                     $query->where('users.id', '=', $user_id);
@@ -88,8 +88,8 @@ class ClientStoriesController extends Controller
     public function getOfferedStories(Request $request)
     {
         if ($request->ajax()) {
-            $clientId = Auth::user()->client_id;
-            $userId = Auth::user()->id;
+            $clientId = auth()->user()->client_id;
+            $userId = auth()->user()->id;
 
             $offeredStories = Collection::with('collectionStories.story.assets');
 

@@ -35,7 +35,7 @@ class ClientVideosController extends Controller
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
-            'user' => Auth::user(),
+            'user' => auth()->user(),
         ];
     }
 
@@ -45,12 +45,12 @@ class ClientVideosController extends Controller
      */
     public function index(Request $request)
     {
-        if (!Auth::check()) {
+        if (!auth()->check()) {
             return view('frontend.master');
         }
 
         if ($request->ajax() || $request->isJson()) {
-            $user_id = Auth::user()->id;
+            $user_id = auth()->user()->id;
             $client_videos_mailer = ClientMailer::with('videos.orders')
                 ->whereHas('users', function ($query) use ($user_id) {
                     $query->where('users.id', '=', $user_id);
@@ -67,7 +67,7 @@ class ClientVideosController extends Controller
 
             $data = [
                 'videos' => $client_videos_mailer,
-                'user' => Auth::user()
+                'user' => auth()->user()
             ];
 
             return $this->successResponse($data);
