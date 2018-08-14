@@ -29,7 +29,7 @@ class ClientStoriesController extends Controller
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
-            'user' => Auth::user(),
+            'user' => auth()->user(),
         ];
     }
 
@@ -40,7 +40,7 @@ class ClientStoriesController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax() || $request->isJson()) {
-            $user_id = Auth::user()->id;
+            $user_id = auth()->user()->id;
             $client_mailer = ClientMailer::with('stories.orders')
                 ->whereHas('users', function ($query) use ($user_id) {
                     $query->where('users.id', '=', $user_id);
@@ -85,44 +85,43 @@ class ClientStoriesController extends Controller
 
     }
 
-	public function getOfferedStories(Request $request)
-	{
-		if ($request->ajax()) {
-			$clientId = Auth::user()->client_id;
-			$userId = Auth::user()->id;
+    public function getOfferedStories(Request $request)
+    {
+        if ($request->ajax()) {
+            $clientId = auth()->user()->client_id;
+            $userId = auth()->user()->id;
 
-			$offeredStories = Collection::with('collectionStories.story.assets');
+            $offeredStories = Collection::with('collectionStories.story.assets');
 
-			// If search passed through
-			if ($request->search) {
-				$search = $request->search;
-				$offeredStories = $offeredStories->whereHas('collectionStories.story', function ($query) use ($search) {
-					$query->where('title', 'LIKE', '%' . $search . '%');
-				});
-			}
-			$offeredStories = $offeredStories
+            // If search passed through
+            if ($request->search) {
+                $search = $request->search;
+                $offeredStories = $offeredStories->whereHas('collectionStories.story', function ($query) use ($search) {
+                    $query->where('title', 'LIKE', '%' . $search . '%');
+                });
+            }
+            $offeredStories = $offeredStories
                 ->where('user_id', $userId)
                 ->where('client_id', $clientId)
                 ->where('status', 'open')
                 ->orderBy('created_at', 'DESC')
-                ->whereHas('collectionStories', function($query) {
-                    $query->where('status', 'offered');
-                    $query->orWhere('status', 'requested');
+                ->whereHas('collectionStories', function ($query) {
+                    $query->whereIn('status', ['offered', 'requested']);
                 })
                 ->get()
                 ->pluck('collectionStories');
 
-			//Paginate collection object
-			$stories = $this->paginate($offeredStories,self::PAGINATE_PER_PAGE, $request->page);
+            //Paginate collection object
+            $stories = $this->paginate($offeredStories, self::PAGINATE_PER_PAGE, $request->page);
 
-			$data = [
-				'stories' => $stories,
-			];
+            $data = [
+                'stories' => $stories,
+            ];
 
-			return $this->successResponse($data);
-		}
-		return view('frontend.master');
-	}
+            return $this->successResponse($data);
+        }
+        return view('frontend.master');
+    }
 
     /**
      * @param Request $request
@@ -134,31 +133,31 @@ class ClientStoriesController extends Controller
             $clientId = auth()->user()->client_id;
             $userId = auth()->user()->id;
 
-			$purchasedStories = Collection::with('collectionStories.story.assets');
-			// If search passed through
+            $purchasedStories = Collection::with('collectionStories.story.assets');
+            // If search passed through
             if ($request->search) {
-				$search = $request->search;
-				$purchasedStories = $purchasedStories->whereHas('collectionStories.story', function ($query) use ($search) {
-					$query->where('title', 'LIKE', '%' . $search . '%');
-				});
+                $search = $request->search;
+                $purchasedStories = $purchasedStories->whereHas('collectionStories.story', function ($query) use ($search) {
+                    $query->where('title', 'LIKE', '%' . $search . '%');
+                });
             }
-			$purchasedStories = $purchasedStories
+            $purchasedStories = $purchasedStories
                 ->where('client_id', $clientId)
                 ->where('user_id', $userId)
-				->where('status', 'closed')
-				->orderBy('created_at', 'DESC')
-				->whereHas('collectionStories', function($query) {
-					$query->where('status', 'purchased');
-				})
-				->get()
-				->pluck('collectionStories');
+                ->where('status', 'closed')
+                ->orderBy('created_at', 'DESC')
+                ->whereHas('collectionStories', function ($query) {
+                    $query->whereIn('status', ['purchased', 'expired']);
+                })
+                ->get()
+                ->pluck('collectionStories');
 
-			//Paginate collection object
-			$stories = $this->paginate($purchasedStories, self::PAGINATE_PER_PAGE, $request->page);
+            //Paginate collection object
+            $stories = $this->paginate($purchasedStories, self::PAGINATE_PER_PAGE, $request->page);
 
-			$data = [
-				'stories' => $stories,
-			];
+            $data = [
+                'stories' => $stories,
+            ];
             return $this->successResponse($data);
         }
         return view('frontend.master');
@@ -193,7 +192,7 @@ class ClientStoriesController extends Controller
             $files[] = $tempImage;
         }
 
-		$mailer_id = $story->mailers()->first() ? $story->mailers()->first()->id : 0; //get mailer_id for better logs (which downloads relate to which downloaded) - the story could be sent out in more that one email, but we just grab the first one
+        $mailer_id = $story->mailers()->first() ? $story->mailers()->first()->id : 0; //get mailer_id for better logs (which downloads relate to which downloaded) - the story could be sent out in more that one email, but we just grab the first one
 
         // save the order
         $this->downloadService->logDownload($storyId, $mailer_id, 'story');

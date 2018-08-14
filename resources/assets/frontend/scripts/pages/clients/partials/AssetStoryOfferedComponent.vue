@@ -1,52 +1,83 @@
 <template>
-    <v-layout row wrap class="cd-box">
-        <v-flex xs12 sm12 md3 lg3 xl3>
+    <v-layout row wrap
+              class="cd-box">
+        <v-flex xs12 sm12 md3>
             <div class="cdi-content"
                  :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }"
-                 @click="onStoryClick()"
-            >
-                <div class="cdi-label" v-if="purchased">
+                 @click="onStoryClick()">
+                <div class="cdi-label"
+                     v-if="purchased">
+
                     <v-tooltip top>
-                        <v-btn slot="activator" flat icon raised light color="white">
+                        <v-btn slot="activator"
+                               flat
+                               icon
+                               raised
+                               light
+                               color="white">
                             <v-icon size="25px">money</v-icon>
                         </v-btn>
                         <span>Purchased</span>
                     </v-tooltip>
                 </div>
 
-                <div class="cdi-label" v-if="decline">
+                <div class="cdi-label"
+                     v-if="decline">
+
                     <v-tooltip top>
-                        <v-btn slot="activator" flat icon raised light color="white">
+                        <v-btn slot="activator"
+                               flat
+                               icon
+                               raised
+                               light
+                               color="white">
                             <v-icon size="25px">error_outline</v-icon>
                         </v-btn>
+
                         <span>Declined</span>
                     </v-tooltip>
                 </div>
 
-                <div class="hot-story" v-if="story.flagged === 1">
+                <div class="hot-story"
+                     v-if="story.flagged === 1">
                     <div class="hot-story-content">HOT</div>
                 </div>
             </div>
         </v-flex>
 
-        <v-flex xs12 sm12 md6 lg6 xl6 pl-3>
+        <v-flex xs12 sm12 md6 pl-3>
+
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
+
                     <h2 v-html="story.title"></h2>
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
+
                     <div>{{ story.excerpt | readmore(200, '...') }}</div>
 
-                    <div class="quote" v-if="type === 'offered' || type === 'purchased'">
+                    <div class="quote"
+                         v-if="type === 'offered' || type === 'purchased'">
+
                         <v-layout column fill-height>
-                            <v-flex xs12 class="pb-0" v-if="story.platform">
+
+                            <v-flex xs12
+                                    class="pb-0"
+                                    v-if="story.platform">
+
                                 <span>Platform: {{ story.platform | convertHyphenToSpace }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="story.platform">
+                            <v-flex xs12
+                                    class="pb-0"
+                                    v-if="story.platform">
+
                                 <span>Length: {{ settings.pricing.length[story.length].name }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="story.type">
+                            <v-flex xs12
+                                    class="pb-0"
+                                    v-if="story.type">
+
                                 <span>Type: {{ settings.pricing.type[story.type].name }}</span>
                             </v-flex>
                         </v-layout>
@@ -55,7 +86,19 @@
             </v-layout>
         </v-flex>
 
-        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-if="expired" xs12 sm12 md3 pl-3>
+            <v-btn
+                    block
+                    dark
+                    large
+                    disabled
+                    color="dark"
+                    class="mb-3">
+                No Longer Available
+            </v-btn>
+        </v-flex>
+
+        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 pl-3>
             <v-btn
                     block
                     dark
@@ -83,11 +126,14 @@
             </div>
         </v-flex>
 
-        <v-flex v-else-if="story.collection_status === 'requested'" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex xs12 sm12 md3 pl-3
+                v-else-if="story.collection_status === 'requested'">
             <p>Waiting for quote</p>
         </v-flex>
 
-        <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex xs12 sm12 md3
+                pl-3
+                v-else>
             <v-btn
                     block
                     dark
@@ -124,7 +170,7 @@
     import StoryDialogBoxEventBus from '../../../event-bus/story-dialog-box-event-bus';
 
     export default {
-        data () {
+        data() {
             return {
                 button_text: 'Download Story',
                 purchased: false,
@@ -135,10 +181,12 @@
 
                 loading: false,
                 acceptLoading: false,
-                declineLoading:false,
+                declineLoading: false,
                 assetDeclined: false,
 
-                assetType:''
+                assetType: '',
+
+                expired: false
             }
         },
 
@@ -168,10 +216,14 @@
         created() {
             this.assetType = this.type;
             this.getIsPurchasedAsset();
+
+            if (this.story.collection_status === 'expired') {
+                this.expired = true;
+            }
         },
 
         watch: {
-            loader () {
+            loader() {
                 const l = this.loader
                 this[l] = !this[l]
 
@@ -185,22 +237,22 @@
         },
 
         methods: {
-            showDownloadButton(){
+            showDownloadButton() {
                 this.showButton = !this.showButton;
             },
 
-            goToDetail(){
+            goToDetail() {
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
 
-            getImage(image){
+            getImage(image) {
                 if (!image) {
                     return '/assets/images/placeholder.png';
                 }
                 return image;
             },
 
-            onDownloadStory(){
+            onDownloadStory() {
                 this.loader = 'loading';
                 var url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
@@ -234,12 +286,12 @@
 
             },
 
-            onStoryClick(){
+            onStoryClick() {
                 StoryDialogBoxEventBus.$emit('openStoryDialog', this.story);
             },
 
-            getIsPurchasedAsset(){
-                if(this.type === "story"){
+            getIsPurchasedAsset() {
+                if (this.type === "story") {
                     if (this.story.story_collections && this.story.story_collections.length > 0) {
                         this.purchased = true;
                     }
