@@ -35,7 +35,7 @@
                 <v-flex xs12 sm12 md5 lg4 xl4 class="client-assets">
                     <h2>Assets</h2>
 
-                    <v-divider style="margin-bottom:20px;"></v-divider>
+                    <v-divider class="header-divider"></v-divider>
 
                     <v-layout row wrap>
                         <asset-component v-for="asset in story.assets"
