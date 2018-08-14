@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\User;
+
 trait WordpressAPI
 {
     public $api_path = 'wp-json/wp/v2/';
