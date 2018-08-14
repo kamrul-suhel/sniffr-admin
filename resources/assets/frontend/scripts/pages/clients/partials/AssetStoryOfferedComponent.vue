@@ -1,12 +1,10 @@
 <template>
     <v-layout row wrap
               class="cd-box">
-
         <v-flex xs12 sm12 md3>
             <div class="cdi-content"
                  :style="{backgroundImage: 'url(' + getImage(story.thumb) + ')' }"
                  @click="onStoryClick()">
-
                 <div class="cdi-label"
                      v-if="purchased">
 
@@ -50,8 +48,8 @@
         <v-flex xs12 sm12 md6 pl-3>
 
             <v-layout row wrap>
-
                 <v-flex xs12 pb-0>
+
                     <h2 v-html="story.title"></h2>
                     <div class="cd-time">{{ story.date_ingested | convertDate }}</div>
 
@@ -172,7 +170,7 @@
     import StoryDialogBoxEventBus from '../../../event-bus/story-dialog-box-event-bus';
 
     export default {
-        data () {
+        data() {
             return {
                 button_text: 'Download Story',
                 purchased: false,
@@ -183,10 +181,10 @@
 
                 loading: false,
                 acceptLoading: false,
-                declineLoading:false,
+                declineLoading: false,
                 assetDeclined: false,
 
-                assetType:'',
+                assetType: '',
 
                 expired: false
             }
@@ -219,13 +217,13 @@
             this.assetType = this.type;
             this.getIsPurchasedAsset();
 
-            if(this.story.collection_status === 'expired'){
+            if (this.story.collection_status === 'expired') {
                 this.expired = true;
             }
         },
 
         watch: {
-            loader () {
+            loader() {
                 const l = this.loader
                 this[l] = !this[l]
 
@@ -239,22 +237,22 @@
         },
 
         methods: {
-            showDownloadButton(){
+            showDownloadButton() {
                 this.showButton = !this.showButton;
             },
 
-            goToDetail(){
+            goToDetail() {
                 this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
             },
 
-            getImage(image){
+            getImage(image) {
                 if (!image) {
                     return '/assets/images/placeholder.png';
                 }
                 return image;
             },
 
-            onDownloadStory(){
+            onDownloadStory() {
                 this.loader = 'loading';
                 var url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
@@ -288,12 +286,12 @@
 
             },
 
-            onStoryClick(){
+            onStoryClick() {
                 StoryDialogBoxEventBus.$emit('openStoryDialog', this.story);
             },
 
-            getIsPurchasedAsset(){
-                if(this.type === "story"){
+            getIsPurchasedAsset() {
+                if (this.type === "story") {
                     if (this.story.story_collections && this.story.story_collections.length > 0) {
                         this.purchased = true;
                     }
