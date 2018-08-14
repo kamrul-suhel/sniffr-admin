@@ -106,8 +106,7 @@ class ClientStoriesController extends Controller
                 ->where('status', 'open')
                 ->orderBy('created_at', 'DESC')
                 ->whereHas('collectionStories', function($query) {
-                    $query->where('status', 'offered');
-                    $query->orWhere('status', 'requested');
+                    $query->whereIn('status', ['offered', 'requested']);
                 })
                 ->get()
                 ->pluck('collectionStories');
@@ -148,7 +147,7 @@ class ClientStoriesController extends Controller
 				->where('status', 'closed')
 				->orderBy('created_at', 'DESC')
 				->whereHas('collectionStories', function($query) {
-					$query->where('status', 'purchased');
+					$query->whereIn('status', ['purchased', 'expired']);
 				})
 				->get()
 				->pluck('collectionStories');

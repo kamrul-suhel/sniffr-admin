@@ -1,15 +1,24 @@
 <template>
-    <v-layout row wrap class="cd-box">
-        <v-flex xs12 sm12 md3 lg3 xl3>
+    <v-layout
+            row wrap
+            class="cd-box">
+        <v-flex xs12 sm12 md3>
             <v-card>
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/images/placeholder.png')"
                         height="250px"
                         @click="onVideoDialog()"
                         class="client-video-thumbnail cdi-content">
-                    <div class="cdi-label" v-if="purchased">
+                    <div class="cdi-label"
+                         v-if="purchased">
                         <v-tooltip top>
-                            <v-btn slot="activator" flat icon raised light color="white">
+                            <v-btn
+                                    slot="activator"
+                                    flat
+                                    icon
+                                    raised
+                                    light
+                                    color="white">
                                 <v-icon size="25px">money</v-icon>
                             </v-btn>
                             <span>Purchased</span>
@@ -18,7 +27,13 @@
 
                     <div class="cdi-label" v-if="decline">
                         <v-tooltip top>
-                            <v-btn slot="activator" flat icon raised light color="white">
+                            <v-btn
+                                    slot="activator"
+                                    flat
+                                    icon
+                                    raised
+                                    light
+                                    color="white">
                                 <v-icon size="25px">error_outline</v-icon>
                             </v-btn>
                             <span>Declined</span>
@@ -28,28 +43,43 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md6>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
                     <h2 v-html="video.title"></h2>
                     <div class="cd-time">{{ video.updated_at | convertDate }}</div>
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
 
-                    <div class="quote" v-if="type === 'offered' || type === 'purchased'">
-                        <v-layout column fill-height>
-                            <v-flex xs12 class="pb-0" v-if="video.platform">
+                    <div class="quote"
+                         v-if="type === 'offered' || type === 'purchased'">
+                        <v-layout
+                                column
+                                fill-height>
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.platform">
                                 <span>Platform: {{ video.platform | convertHyphenToSpace }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="video.platform">
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.platform">
                                 <span>Length: {{ settings.pricing.length[video.length].name }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="video.type">
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.type">
                                 <span>Type: {{ settings.pricing.type[video.type].name }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="video.credit">
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.credit">
                                 <span>Please Credit: {{ video.credit }}</span>
                             </v-flex>
                         </v-layout>
@@ -58,7 +88,7 @@
             </v-layout>
         </v-flex>
 
-        <v-flex v-if="expired" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-if="expired" xs12 sm12 md3 pl-3>
             <v-btn
                     block
                     dark
@@ -72,12 +102,12 @@
 
         <v-flex
                 v-else-if="video.collection_status === 'requested'"
-                xs12 sm12 md3 lg3 xl3 pl-3
+                xs12 sm12 md3 pl-3
                 align-content-center justify-center>
             <p class="text-xs-center darken-4">Waiting for quote</p>
         </v-flex>
 
-        <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 pl-3>
             <v-btn
                     block
                     dark
@@ -105,7 +135,7 @@
             </div>
         </v-flex>
 
-        <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-else xs12 sm12 md3 pl-3>
             <v-btn
                     block
                     dark
@@ -186,7 +216,7 @@
 
         created() {
             this.assetType = this.type;
-            if (this.video.expired) {
+            if (this.video.collection_status === 'expired') {
                 this.expired = true;
             }
         },
