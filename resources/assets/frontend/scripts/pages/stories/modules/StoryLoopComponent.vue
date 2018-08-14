@@ -3,7 +3,10 @@
         <v-layout row wrap>
             <v-flex xs12 sm5 md5 lg5 xl5>
                 <v-card contain class="story-media-thumbnail">
-                    <v-card-media :src="story.thumb" height="100%"/>
+                    <v-card-media
+                            :src="story.thumb" height="100%">
+                        <span class="label label-licensed" v-if="purchased">Purchased</span>
+                    </v-card-media>
                 </v-card>
             </v-flex>
 
@@ -25,7 +28,8 @@
                                 raised
                                 block
                                 class="mb-0"
-                                @click="onStoryDetail">View</v-btn>
+                                @click="onStoryDetail">View
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -37,23 +41,24 @@
     import BuyQuoteButtonComponent from '../../../includes/BuyQuoteButtonComponent'
     import {mapGetters} from 'vuex'
 
-    export default  {
-        components :{
+    export default {
+        components: {
             BuyQuoteButtonComponent,
         },
 
-        computed:{
+        computed: {
             ...mapGetters({
                 client_login: 'getClientLogin'
             }),
         },
 
-        data(){
+        data() {
             return {
+                purchased: false
             }
         },
 
-        props:{
+        props: {
             story: {
                 type: Object,
                 required: true,
@@ -64,19 +69,29 @@
             }
         },
 
-        created(){
+        created() {
+            this.getIsPurchasedAsset();
         },
 
-        methods:{
-            getFilterText(text, length){
+        methods: {
+            getFilterText(text, length) {
                 if (text == null) return "";
                 var tmp = document.createElement("DIV");
                 tmp.innerHTML = text;
                 return tmp.textContent.substring(0, length) || tmp.innerText.substring(0, length) || "";
             },
 
-            onStoryDetail(){
+            onStoryDetail() {
                 this.$router.push({name: 'stories_detail', params: {'alpha_id': this.story.alpha_id}})
+            },
+
+            getIsPurchasedAsset() {
+                if (this.story.story_collections && this.story.story_collections.length > 0) {
+                    this.purchased = true;
+                    return;
+                }
+
+                this.purchased = false;
             }
         }
     }

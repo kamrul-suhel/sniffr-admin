@@ -33,6 +33,10 @@ class CreateQuote extends FormRequest
             $rules = [];
         }
 
+        if(request()->has('update-quote')) {
+            $rules = [];
+        }
+
         return $rules;
     }
 }

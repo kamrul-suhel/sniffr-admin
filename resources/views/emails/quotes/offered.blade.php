@@ -11,23 +11,41 @@
             <p>Your Reference number: <b>{{ ucwords($data['collectionAsset']->collection->name) }}</b></p>
             <div class="col-lg-6">
                 <h2>{{ $data['collectionAsset']->{$data['type']}->title }}</h2>
-                <img style="width:50%;" src="{{$data['collectionAsset']->{$data['type']}->image ?? $data['collectionAsset']->{$data['type']}->thumb }}"/>
+                <img style="width:50%;"
+                     src="{{$data['collectionAsset']->{$data['type']}->image ?? $data['collectionAsset']->{$data['type']}->thumb }}"/>
             </div>
-            @if($data['type'] == 'Video')
-                <div class="col-lg-6">
-                    <p>With the following terms:</p>
-                    <ul>
-                        <li><p>Video Name:<b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->{$data['type']}->title)) }}</b></p></li><br>
-                        <li><p>Type of License: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->type)) }}</b></p></li><br>
-                        <li><p>Platform Usage: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->platform)) }}</b></p></li><br>
-                        <li><p>License Length: <b>{{ ucwords(str_replace('-', ' ', $data['collectionAsset']->length)) }}</b></p></li><br>
-                    </ul>
-                </div>
-            @endif
+            <div class="col-lg-6">
+                <p>With the following terms:</p>
+                <ul>
+                    <li><p>Type of License: <b>{{ config('pricing.type.'.$data['collectionAsset']->type.'.name') }}</b>
+                        </p></li>
+                    <br>
+
+                    <li>
+                        Platform Usage:
+                        @foreach(explode(',',$data['collectionAsset']->platform) as $platform)
+                            <b>{{ config('pricing.platform.'.$platform.'.name') }},</b>
+                        @endforeach
+                    </li>
+                    <br>
+
+                    <li><p>License Length:
+                            <b>{{ config('pricing.length.'.$data['collectionAsset']->length.'.name') }}</b></p></li>
+                    <br>
+
+                    @if(($data['collectionAsset']->notes))
+                        <li>
+                            <p>Your Comments:
+                                <b>{{ $data['collectionAsset']->notes }}</b>
+                            </p>
+                        </li>
+                        <br>
+                    @endif
+                </ul>
+            </div>
         </div>
     </div>
-    <br>
-    <h1>Our quote price is: <strong>£{{ $data['quote'] }}</strong></h1>
+    <h1>Your quote price is: <strong>£{{ number_format($data['quote']) }}</strong></h1>
     <br>
 
     <a class="pull-right" href="{{ url('/client/offered') }}"

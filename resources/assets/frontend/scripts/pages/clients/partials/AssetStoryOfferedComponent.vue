@@ -37,23 +37,19 @@
                     <div>{{ story.excerpt | readmore(200, '...') }}</div>
 
                     <div class="quote" v-if="type === 'offered' || type === 'purchased'">
-                        <v-layout align-center justify-space-around row fill-height>
-                            <v-flex xs12 class="pb-0">
-                                <span>Platform: {{ story.platform.replace(',', ', ') | convertHyphenToSpace }}</span>
+                        <v-layout column fill-height>
+                            <v-flex xs12 class="pb-0" v-if="story.platform">
+                                <span>Platform: {{ story.platform | convertHyphenToSpace }}</span>
                             </v-flex>
 
-                            <v-flex xs6 class="pb-0">
-                                <span>Length: {{ story.length | convertHyphenToSpace }}</span>
+                            <v-flex xs12 class="pb-0" v-if="story.platform">
+                                <span>Length: {{ settings.pricing.length[story.length].name }}</span>
                             </v-flex>
 
-                            <v-flex xs6 class="pb-0">
-                                <span>Type: {{ story.type | convertHyphenToSpace }}</span>
+                            <v-flex xs12 class="pb-0" v-if="story.type">
+                                <span>Type: {{ settings.pricing.type[story.type].name }}</span>
                             </v-flex>
                         </v-layout>
-                    </div>
-
-                    <div class="final-price" v-if="story.collection_status != 'requested'">
-                        <h4>Final price: <span>£{{ story.final_price }}</span></h4>
                     </div>
                 </v-flex>
             </v-layout>
@@ -101,7 +97,7 @@
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
-                Buy Now
+                £{{ story.final_price | numberFormat }} - Buy Now
             </v-btn>
 
             <v-btn
@@ -124,7 +120,9 @@
 </template>
 
 <script>
-    import StoryDialogBoxEventBus from '../../../event-bus/story-dialog-box-event-bus'
+    import {mapGetters} from 'vuex';
+    import StoryDialogBoxEventBus from '../../../event-bus/story-dialog-box-event-bus';
+
     export default {
         data () {
             return {
@@ -161,8 +159,15 @@
             }
         },
 
+        computed: {
+            ...mapGetters({
+                settings: 'getSettingsObject'
+            })
+        },
+
         created() {
             this.assetType = this.type;
+            this.getIsPurchasedAsset();
         },
 
         watch: {
@@ -231,6 +236,16 @@
 
             onStoryClick(){
                 StoryDialogBoxEventBus.$emit('openStoryDialog', this.story);
+            },
+
+            getIsPurchasedAsset(){
+                if(this.type === "story"){
+                    if (this.story.story_collections && this.story.story_collections.length > 0) {
+                        this.purchased = true;
+                    }
+                }
+
+                return false;
             }
         }
     }

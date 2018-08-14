@@ -36,23 +36,23 @@
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
 
                     <div class="quote" v-if="type === 'offered' || type === 'purchased'">
-                        <v-layout align-center justify-space-around row fill-height>
-                            <v-flex xs12 class="pb-0">
-                                <span>Platform: {{ video.platform.replace(',', ', ') | convertHyphenToSpace}}</span>
+                        <v-layout column fill-height>
+                            <v-flex xs12 class="pb-0" v-if="video.platform">
+                                <span>Platform: {{ video.platform | convertHyphenToSpace }}</span>
                             </v-flex>
 
-                            <v-flex xs6 class="pb-0">
-                                <span>Length: {{ video.length | convertHyphenToSpace}}</span>
+                            <v-flex xs12 class="pb-0" v-if="video.platform">
+                                <span>Length: {{ settings.pricing.length[video.length].name }}</span>
                             </v-flex>
 
-                            <v-flex xs6 class="py-0">
-                                <span>Type: {{ video.type | convertHyphenToSpace }}</span>
+                            <v-flex xs12 class="pb-0" v-if="video.type">
+                                <span>Type: {{ settings.pricing.type[video.type].name }}</span>
+                            </v-flex>
+
+                            <v-flex xs12 class="pb-0" v-if="video.credit">
+                                <span>Please Credit: {{ video.credit }}</span>
                             </v-flex>
                         </v-layout>
-                    </div>
-
-                    <div class="final-price" v-if="video.collection_status != 'requested'">
-                        <h4>Final price: <span>£{{ video.final_price }}</span></h4>
                     </div>
                 </v-flex>
             </v-layout>
@@ -115,7 +115,7 @@
                     @click="onAccept()"
                     color="dark"
                     class="mb-3">
-                Buy Now
+                £{{ video.final_price | numberFormat }} - Buy Now
             </v-btn>
 
             <v-btn
@@ -138,6 +138,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
 
     export default {
         data() {
@@ -151,12 +152,12 @@
 
                 loading: false,
                 acceptLoading: false,
-                declineLoading:false,
+                declineLoading: false,
                 assetDeclined: false,
 
-                expired:  false,
+                expired: false,
 
-                assetType:''
+                assetType: ''
             }
         },
 
@@ -177,9 +178,15 @@
             }
         },
 
+        computed: {
+            ...mapGetters({
+                settings: 'getSettingsObject'
+            })
+        },
+
         created() {
             this.assetType = this.type;
-            if(this.video.expired){
+            if (this.video.expired) {
                 this.expired = true;
             }
         },
@@ -255,24 +262,21 @@
 
             },
 
-            onVideoDialog(){
+            onVideoDialog() {
                 let url = this.$route.path;
 
-                url += '?type='+this.type;
-                url += '&id='+this.video.alpha_id;
+                url += '?type=' + this.type;
+                url += '&id=' + this.video.alpha_id;
 
-                if(this.$route.query.tag){
-                    url += '&tag='+this.$route.query.tag;
+                if (this.$route.query.tag) {
+                    url += '&tag=' + this.$route.query.tag;
                 }
                 this.$route.query.alpha_id = this.video.alpha_id;
-
 
                 this.$store.commit('setEnterRouteObject', this.$route);
 
                 window.history.pushState({}, null, url);
-
-
-                if(this.$route.name === 'client_offered_assets'){
+                if (this.$route.name === 'client_offered_assets') {
                     // client offered page
 
                     let index = this.index;
@@ -283,8 +287,6 @@
                     this.$store.commit('setVideoLoading', true);
                     return;
                 }
-
-
 
                 this.$store.commit('setCurrentVideoAlphaId', this.video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);

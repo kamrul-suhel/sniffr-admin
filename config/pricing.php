@@ -2,6 +2,7 @@
 
 return [
 	'base' => 300,
+
     'type' => [
     	'exclusive' => [
 			'slug' => 'exclusive',
@@ -31,6 +32,7 @@ return [
 			'modifier' => 2
 		]
     ],
+
 	'tier' => [
 		'social-media-agency' => [
 			'slug' => 'social-media-agency',
@@ -63,6 +65,7 @@ return [
 			'modifier' => 2
 		]
 	],
+
 	'class' => [
 		'random' => [
 			'slug' => 'random',
@@ -90,6 +93,7 @@ return [
 			'modifier' => 0
 		]
 	],
+
 	'region' => [
 		'eastern-europe' => [
 			'slug' => 'eastern-europe',
@@ -167,6 +171,7 @@ return [
 			'modifier' => 2
 		]
 	],
+
 	'length' => [
 		'day' => [
 			'slug' => 'day',
@@ -174,48 +179,73 @@ return [
 			'modifier' => 1,
             'end_date' => \Carbon\Carbon::now()->addDay(1)
 		],
+        'two-days' => [
+            'slug' => 'two-days',
+            'name' => '48 hours',
+            'modifier' => 1,
+            'end_date' => \Carbon\Carbon::now()->addDay(2)
+        ],
+        'three-days' => [
+            'slug' => 'three-days',
+            'name' => '72 hours',
+            'modifier' => 1,
+            'end_date' => \Carbon\Carbon::now()->addDay(3)
+        ],
 		'week' => [
 			'slug' => 'week',
 			'name' => '1 week',
 			'modifier' => 1.1,
             'end_date' => \Carbon\Carbon::now()->addDays(7)
 		],
+        'ten-days' => [
+            'slug' => 'ten-days',
+            'name' => '10 Days',
+            'modifier' => 1.2,
+            'end_date' => \Carbon\Carbon::now()->addDay(10)
+        ],
+        'two-weeks' => [
+            'slug' => 'two-weeks',
+            'name' => '2 Weeks',
+            'modifier' => 1.3,
+            'end_date' => \Carbon\Carbon::now()->addDay(14)
+        ],
 		'month' => [
 			'slug' => 'month',
 			'name' => '1 month',
-			'modifier' => 1.2,
+			'modifier' => 1.4,
             'end_date' => \Carbon\Carbon::now()->addMonth(1)
 		],
-		'six_months' => [
-			'slug' => 'six_months',
+		'six-months' => [
+			'slug' => 'six-months',
 			'name' => '6 months',
-			'modifier' => 1.3,
+			'modifier' => 1.5,
             'end_date' => \Carbon\Carbon::now()->addMonths(6)
 		],
 		'year' => [
 			'slug' => 'year',
 			'name' => '1 year',
-			'modifier' => 1.4,
+			'modifier' => 1.8,
             'end_date' => \Carbon\Carbon::now()->addYear(1)
 		],
-		'five_years' => [
-			'slug' => 'five_years',
+		'five-years' => [
+			'slug' => 'five-years',
 			'name' => '1 - 5 years',
-			'modifier' => 1.6,
+			'modifier' => 1.9,
             'end_date' => \Carbon\Carbon::now()->addYears(5)
 		],
-		'ten_years' => [
-			'slug' => 'ten_years',
+		'ten-years' => [
+			'slug' => 'ten-years',
 			'name' => '5 - 10 years',
-			'modifier' => 1.7,
+			'modifier' => 2.0,
             'end_date' => \Carbon\Carbon::now()->addYears(10)
 		],
 		'perpetuity' => [
 			'slug' => 'perpetuity',
 			'name' => 'In Perpituity',
-			'modifier' => 1.75,
+			'modifier' => 2.1,
 		]
 	],
+
     'location' => [
         'eastern-europe' => [
             'slug' => 'eastern-europe',

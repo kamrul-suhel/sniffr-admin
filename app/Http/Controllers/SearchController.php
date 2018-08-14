@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Collection;
-use Auth;
 use App\ClientMailerUser;
 use App\ClientMailerVideo;
 use App\ClientMailerStory;
@@ -16,7 +15,6 @@ use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;
-use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
@@ -52,78 +50,78 @@ class SearchController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-	public function videos(Request $request)
-	{
-		$data = [];
-		$mailerVideos = [];
-		$tagValue = $request->tag;
-		$searchValue = $request->search;
-		$currentVideoId = $request->alpha_id;
-		$featured = $request->featured;
-		$settings = config('settings.site');
+    public function videos(Request $request)
+    {
+        $data = [];
+        $mailerVideos = [];
+        $tagValue = $request->tag;
+        $searchValue = $request->search;
+        $currentVideoId = $request->alpha_id;
+        $featured = $request->featured;
+        $settings = config('settings.site');
 
-		if($currentVideoId){
-			$currentVideo = $this->getCurrentVideo($currentVideoId);
-		}
+        if ($currentVideoId) {
+            $currentVideo = $this->getCurrentVideo($currentVideoId);
+        }
 
-		//Remove any exclusive based collections that have been purchased and downloaded.
-		$unsearchableVideos = $this->collectionVideo->getAssetByTypeStatus('exclusive', 'purchased')->pluck('video_id');
+        //Remove any exclusive based collections that have been purchased and downloaded.
+        $unsearchableVideos = $this->collectionVideo->getAssetByTypeStatus('exclusive', 'purchased')->pluck('video_id');
 
-		$videos = $this->video->select($this->getVideoFieldsForFrontend());
-		$videos = $videos->where('state', 'licensed');
+        $videos = $this->video->select($this->getVideoFieldsForFrontend());
+        $videos = $videos->where('state', 'licensed');
 
-		if($searchValue){
-			$videos = $videos->where(function ($query) use ($searchValue) {
-				$query->where('title', 'LIKE', '%' . $searchValue . '%')
-					->orWhereHas('tags', function ($q) use ($searchValue) {
-						$q->where('name', 'LIKE', '%' . $searchValue . '%');
-					});
-			});
-		}
+        if ($searchValue) {
+            $videos = $videos->where(function ($query) use ($searchValue) {
+                $query->where('title', 'LIKE', '%' . $searchValue . '%')
+                    ->orWhereHas('tags', function ($q) use ($searchValue) {
+                        $q->where('name', 'LIKE', '%' . $searchValue . '%');
+                    });
+            });
+        }
 
-		if($tagValue){
-			$videos = $videos->whereHas('tags', function ($query) use ($tagValue) {
-				$query->where('name', '=', $tagValue);
-			});
-		}
+        if ($tagValue) {
+            $videos = $videos->whereHas('tags', function ($query) use ($tagValue) {
+                $query->where('name', '=', $tagValue);
+            });
+        }
 
-		if($featured){
-			$videos = $videos->where('featured', 1);
-		}
+        if ($featured) {
+            $videos = $videos->where('featured', 1);
+        }
 
-		$videos = $videos->where('file', '!=', NULL);
-		$videos = $videos->whereNotIn('id', $unsearchableVideos);
-		$videos = $videos->orderBy('licensed_at', 'DESC');
+        $videos = $videos->where('file', '!=', NULL);
+        $videos = $videos->whereNotIn('id', $unsearchableVideos);
+        $videos = $videos->orderBy('licensed_at', 'DESC');
 
-		if($currentVideoId){
-		    $allVideo = $videos->get();
-			$nextAlphaId = '';
-			$previousAlphaId = '';
+        if ($currentVideoId) {
+            $allVideo = $videos->get();
+            $nextAlphaId = '';
+            $previousAlphaId = '';
 
-			$position = $allVideo->pluck('id')->search($currentVideo->id);
+            $position = $allVideo->pluck('id')->search($currentVideo->id);
 
-			$checkPreviousId = $position - 1;
-			if ($checkPreviousId >= 0) {
-				$previousAlphaId = $allVideo[$checkPreviousId]->alpha_id;
-			}
+            $checkPreviousId = $position - 1;
+            if ($checkPreviousId >= 0) {
+                $previousAlphaId = $allVideo[$checkPreviousId]->alpha_id;
+            }
 
-			$checkNextId = $position + 1;
-			if ($checkNextId < $allVideo->count()) {
-				$nextAlphaId = $allVideo[$checkNextId]->alpha_id;
-			}
+            $checkNextId = $position + 1;
+            if ($checkNextId < $allVideo->count()) {
+                $nextAlphaId = $allVideo[$checkNextId]->alpha_id;
+            }
 
-			$data['current_video'] = $currentVideo;
-			$data['next_video_alpha_id'] = $nextAlphaId;
-			$data['prev_video_alpha_id'] = $previousAlphaId;
-		}
+            $data['current_video'] = $currentVideo;
+            $data['next_video_alpha_id'] = $nextAlphaId;
+            $data['prev_video_alpha_id'] = $previousAlphaId;
+        }
 
-		// If we are not searching then return all video with paginate
-        if(!$currentVideoId){
-            if(Auth::user()){
-                $client_id = Auth::user()->client_id;
-                $videos = $videos->with(['videoCollections' => function($query) use($client_id) {
-                    $query->select(['id','collection_id','video_id'])->where('status', 'purchased');
-                    $query->whereHas('collection', function($query) use($client_id){
+        // If we are not searching then return all video with paginate
+        if (!$currentVideoId) {
+            if (auth()->user()) {
+                $client_id = auth()->user()->client_id;
+                $videos = $videos->with(['videoCollections' => function ($query) use ($client_id) {
+                    $query->select(['id', 'collection_id', 'video_id'])->where('status', 'purchased');
+                    $query->whereHas('collection', function ($query) use ($client_id) {
                         $query->where('client_id', $client_id);
                     });
                 }]);
@@ -133,32 +131,32 @@ class SearchController extends Controller
         }
 
         // Recommended Videos via the Mailer
-		if(auth()->check()){
-			$mailers = $this->clientMailerUser->where('user_id', auth()->user()->id)
-                ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
+        if (auth()->check()) {
+            $mailers = $this->clientMailerUser->where('user_id', auth()->user()->id)
+                ->where('sent_at', ">", Carbon::now()->subDay())// 24 hours
                 ->pluck('client_mailer_id');
 
-			$mailerVideoIds = $this->clientMailerVideo->whereIn('client_mailer_id', $mailers)
+            $mailerVideoIds = $this->clientMailerVideo->whereIn('client_mailer_id', $mailers)
                 ->pluck('video_id');
 
-			$mailerVideos = $this->video
+            $mailerVideos = $this->video
                 ->select($this->getVideoFieldsForFrontend())
-				->whereIn('id', $mailerVideoIds)
-				->whereNotIn('id', $unsearchableVideos)
+                ->whereIn('id', $mailerVideoIds)
+                ->whereNotIn('id', $unsearchableVideos)
                 ->orderBy('licensed_at', 'DESC')
                 ->limit(10)
                 ->get();
 
-			// Need iframe into every mailer video, so We do not need to call every time.
-			foreach($mailerVideos as $mailerVideo){
-               $mailerVideo->iframe = $this->getVideoHtml($mailerVideo, true);
+            // Need iframe into every mailer video, so We do not need to call every time.
+            foreach ($mailerVideos as $mailerVideo) {
+                $mailerVideo->iframe = $this->getVideoHtml($mailerVideo, true);
             }
-		}
+        }
 
-		$data['mailerVideos'] = $mailerVideos;
+        $data['mailerVideos'] = $mailerVideos;
 
-		return $this->successResponse($data);
-	}
+        return $this->successResponse($data);
+    }
 
 
     /**
@@ -167,65 +165,75 @@ class SearchController extends Controller
      */
     public function stories(Request $request)
     {
-		$data = [];
-		$mailerStories = [];
-		$searchValue = $request->search;
-		$currentStoryId = $request->alpha_id;
-		$settings = config('settings.site');
+        $data = [];
+        $mailerStories = [];
+        $searchValue = $request->search;
+        $currentStoryId = $request->alpha_id;
+        $settings = config('settings.site');
 
-		if($currentStoryId) {
-			$currentStory = $this->getCurrentstory($currentStoryId);
-		}
+        if ($currentStoryId) {
+            $currentStory = $this->getCurrentstory($currentStoryId);
+        }
 
         //Remove any exclusive based collections that have been purchased and downloaded.
         $unsearchableStories = $this->collectionStory->getAssetByTypeStatus('exclusive', 'purchased')->pluck('story_id');
 
-		if($request->get('mailer')){
-			$stories = $this->story->whereIn('state', ['licensed', 'writing-inprogress', 'writing-completed', 'subs-inprogress', 'subs-approved', 'published']);
-		}else{
-			$stories = $this->story->where('state', 'published');
-		}
+        if ($request->get('mailer')) {
+            $stories = $this->story->whereIn('state', ['licensed', 'writing-inprogress', 'writing-completed', 'subs-inprogress', 'subs-approved', 'published']);
+        } else {
+            $stories = $this->story->where('state', 'published');
+        }
 
-		if($searchValue){
-			$stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
-		}
+        if ($searchValue) {
+            $stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
+        }
+
+        if (auth()->check()) {
+            $client_id = auth()->user()->client_id;
+            $stories = $stories->with(['storyCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'story_id'])->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
 
         $stories = $stories->whereNotIn('id', $unsearchableStories);
-		$stories = $stories->orderBy('id', 'DESC');
-		$stories = $stories->paginate($settings['posts_per_page']);
+        $stories = $stories->orderBy('id', 'DESC');
+        $stories = $stories->paginate($settings['posts_per_page']);
 
-		if($currentStoryId){
-			$nextAlphaId = '';
-			$previousAlphaId = '';
+        if ($currentStoryId) {
+            $nextAlphaId = '';
+            $previousAlphaId = '';
 
-			$position = $stories->pluck('id')->search($currentStory->id);
+            $position = $stories->pluck('id')->search($currentStory->id);
 
-			$checkPreviousId = $position - 1;
-			if ($checkPreviousId >= 0) {
-				$previousAlphaId = $stories[$checkPreviousId]->alpha_id;
-			}
+            $checkPreviousId = $position - 1;
+            if ($checkPreviousId >= 0) {
+                $previousAlphaId = $stories[$checkPreviousId]->alpha_id;
+            }
 
-			$checkNextId = $position + 1;
-			if ($checkNextId < $stories->count()) {
-				$nextAlphaId = $stories[$checkNextId]->alpha_id;
-			}
+            $checkNextId = $position + 1;
+            if ($checkNextId < $stories->count()) {
+                $nextAlphaId = $stories[$checkNextId]->alpha_id;
+            }
 
-			$data['current_story'] = $currentStory;
-			$data['next_story_alpha_id'] = $nextAlphaId;
-			$data['prev_story_alpha_id'] = $previousAlphaId;
-		}
+            $data['current_story'] = $currentStory;
+            $data['next_story_alpha_id'] = $nextAlphaId;
+            $data['prev_story_alpha_id'] = $previousAlphaId;
+        }
 
-		if(auth()->check()){
-			$mailers = $this->clientMailerUser
+        if (auth()->check()) {
+            $mailers = $this->clientMailerUser
                 ->where('user_id', auth()->user()->id)
-                ->where('sent_at', ">", Carbon::now()->subDay()) // 24 hours
+                ->where('sent_at', ">", Carbon::now()->subDay())// 24 hours
                 ->pluck('client_mailer_id');
 
-			$mailerStoryIds = $this->clientMailerStory
+            $mailerStoryIds = $this->clientMailerStory
                 ->whereIn('client_mailer_id', $mailers)
                 ->pluck('story_id');
 
-			$mailerStories = $this->story
+            $mailerStories = $this->story
                 ->whereIn('id', $mailerStoryIds)
                 ->whereNotIn('id', $unsearchableStories)
                 ->orderBy('licensed_at', 'DESC')
@@ -233,29 +241,55 @@ class SearchController extends Controller
                 ->get();
         }
 
-		$data['mailerStories'] = $mailerStories;
-		$data['stories'] = $stories;
+        $data['mailerStories'] = $mailerStories;
+        $data['stories'] = $stories;
 
         return $this->successResponse($data);
     }
 
 
-    private function getCurrentVideo($alpha_id){
+    private function getCurrentVideo($alpha_id)
+    {
         $currentVideo = $this->video
             ->select($this->getVideoFieldsForFrontend())
-            ->where('alpha_id', $alpha_id)
-            ->with('tags')
+            ->where('alpha_id', $alpha_id);
+
+        if (auth()->check()) {
+            $client_id = auth()->user()->client_id;
+            $currentVideo = $currentVideo->with(['videoCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'video_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentVideo = $currentVideo->with('tags')
             ->first();
         $currentVideo->iframe = $this->getVideoHtml($currentVideo, true);
-
         return $currentVideo;
     }
 
-    private function getCurrentStory($alpha_id){
+    private function getCurrentStory($alpha_id)
+    {
         $currentStory = $this->story
             ->select($this->getAssetStoryFieldsForFrontend())
             ->where('alpha_id', $alpha_id)
-            ->with('assets')
+            ->with('assets');
+
+        if (auth()->user()) {
+            $client_id = auth()->user()->client_id;
+            $currentStory = $currentStory->with(['storyCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'story_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentStory = $currentStory
             ->first();
         return $currentStory;
     }
