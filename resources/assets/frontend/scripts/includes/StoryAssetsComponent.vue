@@ -44,10 +44,6 @@
 
             onOpenDialog(id) {
                 this.$store.commit('setStoryAssetDialogBox', {open: true, id: id});
-                return;
-
-
-                this.story_dialog = true;
             }
         }
     }

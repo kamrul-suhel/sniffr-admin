@@ -64,11 +64,6 @@
     export default {
         data() {
             return {
-                loading: false,
-                loader: null,
-                currentAsset_thumbnail: '',
-                thumbnailImg: '',
-
                 showVideo: false,
             }
         },
@@ -76,7 +71,9 @@
         computed: {
             ...mapGetters({
                 previousAssetExists: 'getStoryAssetHasPreviousAsset',
-                nextAssetExists: 'getStoryAssetHasNextAsset'
+                nextAssetExists: 'getStoryAssetHasNextAsset',
+                nextAssetId: 'getCurrentStoryNextAssetId',
+                previousAssetId: 'getCurrentStoryPreviousAssetId'
             }),
 
             storyAssetDialog: {
@@ -85,6 +82,7 @@
                 },
 
                 set(){
+                    this.showVideo = false;
                     this.$store.commit('closeStoryAssetDialogBox');
                 }
             },
@@ -95,106 +93,26 @@
                 },
 
                 set(val){
-
                 }
             },
         },
 
         watch: {
-            loader() {
-                const l = this.loader
-                this[l] = !this[l]
-
-                setTimeout(() => (this[l] = false), 3000)
-
-                this.loader = null
-            },
-
-            // story_dialog(val) {
-            //     if (!val) {
-            //         this.showVideo = false;
-            //         this.resetNextPrevious();
-            //     }
-            // }
         },
 
         created() {
         },
 
         methods: {
-            setImageUrl(asset) {
-                if (asset.mime_type === "video/mp4") {
-                    this.thumbnailImg = asset.thumbnail;
-                } else {
-                    this.thumbnailImg = asset.url;
-                }
-            },
-
-            downloadAsset() {
-                this.loader = 'loading';
-                this.loader = 'loading';
-                var url = '/client/stories/' + this.story_id + '/download';
-                window.location = url;
-            },
 
             onPreviousVideo() {
-                this.currentAsset = this.previousImgObj;
                 this.showVideo = false;
-
-                this.assets.forEach((item, index) => {
-                    if (item.id == this.currentAsset.id) {
-                        this.currentAsset = item;
-                        this.nextImgObj = this.assets[index + 1];
-                        this.previousImgObj = this.assets[index - 1];
-
-                        if (!this.nextImgObj) {
-                            this.nextImgExists = false;
-                            this.previousImgExists = true;
-                        }
-
-                        else if (!this.previousImgObj) {
-                            this.previousImgExists = false;
-                            this.nextImgExists = true;
-                        }
-
-                        else {
-                            this.previousImgExists = true;
-                            this.nextImgExists = true;
-                        }
-                    }
-                })
+                this.$store.commit('setStoryAssetDialogBox', {open: true, id: this.previousAssetId});
             },
 
             onNextVideo() {
-                this.currentAsset = this.nextImgObj;
                 this.showVideo = false;
-
-                this.assets.forEach((item, index) => {
-                    if (item.id == this.currentAsset.id) {
-                        this.currentAsset = item;
-                        this.nextImgObj = this.assets[index + 1];
-                        this.previousImgObj = this.assets[index - 1];
-
-                        if (!this.nextImgObj) {
-                            this.nextImgExists = false;
-                            this.previousImgExists = true;
-                        }
-
-                        else if (!this.previousImgObj) {
-                            this.previousImgExists = false;
-                            this.nextImgExists = true;
-                        }
-
-                        else {
-                            this.previousImgExists = true;
-                            this.nextImgExists = true;
-                        }
-                    }
-                })
-            },
-
-            onCloseDialogBox() {
-                this.story_dialog = false;
+                this.$store.commit('setStoryAssetDialogBox', {open: true, id: this.nextAssetId});
             },
 
             onPlayVideo() {
@@ -210,13 +128,6 @@
 
                 });
 
-            },
-
-            resetNextPrevious() {
-                this.nextImgExists = true;
-                this.nextImgObj = '';
-                this.previousImgExists = true;
-                this.previousImgObj = ''
             }
         }
     }

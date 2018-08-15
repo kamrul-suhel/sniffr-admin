@@ -3,7 +3,7 @@ const state = {
     mailerStories: [],
     paginate: '',
 
-    currentStories: '',
+    currentStory: '',
 
     offeredStories: [],
 
@@ -12,10 +12,12 @@ const state = {
 
     currentStoryAssets: [],
     currentSelectedStoryAsset: {},
-    currentStoryAssetHasNextAsset: false,
-    currentStoryAssetHasPreviousAsset: false,
-    storyAssetDialogBox : false,
-    assetSelectedId : null,
+    currentStoryHasNextAsset: false,
+    currentStoryNextAssetId: null,
+    currentStoryHasPreviousAsset: false,
+    currentStoryPreviousAssetId: null,
+    storyAssetDialogBox: false,
+    assetSelectedId: null,
 
 };
 
@@ -33,7 +35,7 @@ const getters = {
     },
 
     getCurrentStory(state) {
-        return state.currentStories;
+        return state.currentStory;
     },
 
     getCurrentStoryAssets(state) {
@@ -56,24 +58,32 @@ const getters = {
         return state.initStory;
     },
 
-    getStoryAssetDialogBox(state){
+    getStoryAssetDialogBox(state) {
         return state.storyAssetDialogBox;
     },
 
-    getAssetSelectedId(state){
+    getAssetSelectedId(state) {
         return state.assetSelectedId;
     },
 
-    getCurrentSelectedStoryAsset(state){
+    getCurrentSelectedStoryAsset(state) {
         return state.currentSelectedStoryAsset;
     },
 
-    getStoryAssetHasNextAsset(state){
-        return state.currentStoryAssetHasNextAsset;
+    getStoryAssetHasNextAsset(state) {
+        return state.currentStoryHasNextAsset;
     },
 
-    getStoryAssetHasPreviousAsset(state){
-        return state.currentStoryAssetHasPreviousAsset;
+    getCurrentStoryPreviousAssetId(state) {
+        return state.currentStoryPreviousAssetId;
+    },
+
+    getStoryAssetHasPreviousAsset(state) {
+        return state.currentStoryHasPreviousAsset;
+    },
+
+    getCurrentStoryNextAssetId(state) {
+        return state.currentStoryNextAssetId;
     }
 };
 
@@ -93,10 +103,10 @@ const mutations = {
     },
 
     setCurrentStory(state, story) {
-        state.currentStories = story.story;
+        state.currentStory = story.story;
     },
 
-    setcurrentStoryAssets(state, story) {
+    setCurrentStoryAssets(state, story) {
         state.currentStoryAssets = [];
         if (story.assets.length > 0) {
             state.currentStoryAssets = story.assets;
@@ -107,7 +117,7 @@ const mutations = {
         state.stories = [];
         state.mailerStories = [];
         state.paginate = '';
-        state.currentStories = '';
+        state.currentStory = '';
         state.currentStoryAssets = [];
         state.offeredStories = [];
         state.purchasedStories = [];
@@ -158,9 +168,9 @@ const mutations = {
         state.initStory = value;
     },
 
-    setStoryAssetDialogBox(state, payload){
-        state.currentStoryAssetHasNextAsset = false;
-        state.currentStoryAssetHasPreviousAsset = false;
+    setStoryAssetDialogBox(state, payload) {
+        state.currentStoryHasNextAsset = false;
+        state.currentStoryHasPreviousAsset = false;
 
         state.currentStoryAssets.forEach((asset, index) => {
             if (asset.id === payload.id) {
@@ -169,18 +179,27 @@ const mutations = {
                 let previousImgObj = state.currentStoryAssets[index - 1];
 
                 if (!nextImgObj) {
-                    state.currentStoryAssetHasNextAsset = false;
-                    state.currentStoryAssetHasPreviousAsset = true;
+                    state.currentStoryHasNextAsset = false;
+                    state.currentStoryHasPreviousAsset = true;
+
+                    state.currentStoryNextAssetId = null;
+                    state.currentStoryPreviousAssetId = previousImgObj.id;
                 }
 
                 else if (!previousImgObj) {
-                    state.currentStoryAssetHasNextAsset = true;
-                    state.currentStoryAssetHasPreviousAsset = false;
+                    state.currentStoryHasNextAsset = true;
+                    state.currentStoryHasPreviousAsset = false;
+
+                    state.currentStoryNextAssetId = nextImgObj.id;
+                    state.currentStoryPreviousAssetId = null;
                 }
 
                 else {
-                    state.currentStoryAssetHasNextAsset = true;
-                    state.currentStoryAssetHasPreviousAsset = true;
+                    state.currentStoryHasNextAsset = true;
+                    state.currentStoryHasPreviousAsset = true;
+
+                    state.currentStoryNextAssetId = nextImgObj.id;
+                    state.currentStoryPreviousAssetId = previousImgObj.id;
                 }
             }
         })
@@ -189,12 +208,20 @@ const mutations = {
         state.assetSelectedId = payload.id;
     },
 
-    closeStoryAssetDialogBox(state){
+    closeStoryAssetDialogBox(state) {
         state.storyAssetDialogBox = false;
     },
 
-    setAssetSelectedId(state, assetSelectedId){
+    setAssetSelectedId(state, assetSelectedId) {
         state.assetSelectedId = assetSelectedId;
+    },
+
+    setCurrentStoryPreviousAssetId(state, assetId) {
+        state.currentStoryPreviousAssetId = assetId;
+    },
+
+    setCurrentStoryNextAssetId(state, assetId) {
+        state.currentStoryNextAssetId = assetId;
     }
 };
 
@@ -228,7 +255,7 @@ const actions = {
         axios.get(url)
             .then((response) => {
                 commit('setCurrentStory', response.data);
-                commit('setcurrentStoryAssets', response.data.story);
+                commit('setCurrentStoryAssets', response.data.story);
             })
             .catch((error) => {
                 console.log(error);
