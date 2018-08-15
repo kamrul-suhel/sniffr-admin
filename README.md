@@ -78,6 +78,50 @@ The difference between Laravel Scheduler and Laravel Queues >> Scheduler is more
 - Then we have to create a schedule function to keep checking the queue.
 - Run `$ php artisan queue:listen`
 
+## DUSK TESTS
+
+Check out the branch "reviewDuskFromMaster" (I could use "testing" branch as it's broken).
+
+$ composer require --dev laravel/dusk:"^2.0"
+
+$ composer update
+
+Open and check app\Providers\AppServiceProvider.php has:
+
+use Laravel\Dusk\DuskServiceProvider;
+
+Check it has:
+public function register()
+{
+$this->app->singleton(Facebook::class, function ($app) {
+return new Facebook(config('facebook.config'));
+});
+if ($this->app->environment('local', 'testing')) {
+$this->app->register(DuskServiceProvider::class);
+}
+}
+
+$ php artisan dusk:install
+
+Review tests in tests/Browser
+
+Open tests/Browser/ExampleTest.php and check it has:
+
+->assertSee('Video Licensing Platform');
+
+Run the example test.
+$ php artisan dusk tests/Browser/ExampleTest.php
+
+If you get an error like "Facebook\WebDriver\Exception\WebDriverCurlException: Curl error thrown for http POST to /session with params" then you need to run Chromedriver in a separate terminal tab: $ vendor/laravel/dusk/bin/chromedriver-mac --port=9515
+
+Try again and then after try this test which tests login (make sure you remove dd($this);):
+
+$ php artisan dusk tests/Browser/RunTests.php
+
+You can edit the RunTest.php and change the search to 'Owner stops petting dog' or whatever video you want to find in Licensed Videos (in your test).
+
+Now you can review the code and try the other tests like VideoUploadTests.php or VideoAdvancedTests.php. Note that these reference functions within /Components and /Pages folders.
+
 ## Notes for GAE setup
 
 I have added Sessions, Cache and Queue + add a GAE specific packages and created app.yaml file. Then deployed to GAE Flex for testing.
