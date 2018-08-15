@@ -71,7 +71,8 @@
                 previousAssetExists: 'getStoryAssetHasPreviousAsset',
                 nextAssetExists: 'getStoryAssetHasNextAsset',
                 nextAssetId: 'getCurrentStoryNextAssetId',
-                previousAssetId: 'getCurrentStoryPreviousAssetId'
+                previousAssetId: 'getCurrentStoryPreviousAssetId',
+                currentAsset: 'getCurrentSelectedStoryAsset'
             }),
 
             storyAssetDialog: {
@@ -83,16 +84,7 @@
                     this.showVideo = false;
                     this.$store.commit('closeStoryAssetDialogBox');
                 }
-            },
-
-            currentAsset: {
-                get() {
-                    return this.$store.getters.getCurrentSelectedStoryAsset;
-                },
-
-                set(val) {
-                }
-            },
+            }
         },
 
         watch: {},

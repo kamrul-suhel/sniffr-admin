@@ -13,7 +13,7 @@
         </v-layout>
 
         <v-layout row wrap class="hidden-sm-and-down">
-            <v-flex xs12 sm3 md3>
+            <v-flex xs12 sm3 md4>
                 <strong>Thumbnail</strong>
             </v-flex>
 
@@ -29,7 +29,7 @@
                 <strong>State</strong>
             </v-flex>
 
-            <v-flex xs12 sm6 md2>
+            <v-flex xs12 sm6 md1>
                 <strong>Updated At</strong>
             </v-flex>
 

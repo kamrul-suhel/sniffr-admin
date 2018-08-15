@@ -1,9 +1,9 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 sm6 md3>
+        <v-flex xs12 sm6 md4>
             <v-card flat hover>
                 <v-card-media
-                        height="200px"
+                        height="250px"
                         :src="story.thumb ? story.thumb : '/assets/images/placeholder.png'"
                         @click="onOpenStoryDialog()">
                     <div class="hot-story" v-if="story.flagged === 1">
@@ -26,7 +26,7 @@
             {{ story.state }}
         </v-flex>
 
-        <v-flex xs12 sm6 md2    >
+        <v-flex xs12 sm6 md1>
             {{ story.created_at | convertDate }}
         </v-flex>
 
