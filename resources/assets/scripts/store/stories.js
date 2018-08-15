@@ -3,12 +3,12 @@ const state = {
     mailerStories: [],
     paginate: '',
 
-    currentStory: '',
-
     offeredStories: [],
 
     purchasedStories: [],
     initStory: false,
+
+    currentStory: {},
 
     currentStoryAssets: [],
     currentSelectedStoryAsset: {},
@@ -19,6 +19,9 @@ const state = {
     storyAssetDialogBox: false,
     assetSelectedId: null,
 
+
+    //admin
+    selectedStories: [],
 };
 
 const getters = {
@@ -84,6 +87,17 @@ const getters = {
 
     getCurrentStoryNextAssetId(state) {
         return state.currentStoryNextAssetId;
+    },
+
+
+    /*
+    ***********************************
+        Admin Getters
+    ***********************************
+     */
+
+    getAllSelectedStories(state) {
+        return state.selectedStories;
     }
 };
 
@@ -222,13 +236,45 @@ const mutations = {
 
     setCurrentStoryNextAssetId(state, assetId) {
         state.currentStoryNextAssetId = assetId;
+    },
+
+
+    /*
+    ***********************************
+        Admin Mutation
+    ***********************************
+     */
+
+    addStory(state, curStory) {
+        if (state.selectedStories.length <= 0) {
+            state.selectedStories.push(curStory);
+            return;
+        }
+
+        let foundStory = false;
+        state.selectedStories.forEach((story) => {
+            if (story.id === curStory.id) {
+                foundStory = true;
+            }
+        })
+
+        if (!foundStory) {
+            state.selectedStories.push(curStory);
+        }
+    },
+
+    removeStory(state, currStory) {
+        state.selectedStories.forEach((story, index) => {
+            if (currStory.id === story.id) {
+                state.selectedStories.splice(index, 1);
+            }
+        })
     }
 };
 
 const actions = {
     fetchStories({commit}, payload = {}) {
         let url = 'search/stories';
-
         if (payload.page && payload.page != 0) {
             url = url + '?page=' + payload.page;
         }
@@ -284,6 +330,25 @@ const actions = {
                 (error) => {
                     console.log(error);
                 });
+    },
+
+
+    /*
+    ***********************************
+        Admin Action
+    ***********************************
+     */
+    getMailerStories({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            axios.post(payload)
+                .then((stories) => {
+                        state.stories = stories.data.stories;
+                        resolve();
+                    },
+                    (error) => {
+                        return reject();
+                    });
+        })
     }
 };
 

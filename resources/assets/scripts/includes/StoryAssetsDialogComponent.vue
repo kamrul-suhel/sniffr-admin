@@ -2,8 +2,7 @@
     <v-dialog
             v-model="storyAssetDialog"
             content-class="story-dialog-container"
-            max-width="1200px"
-    >
+            max-width="1200px">
         <div class="dialog-box-switch prev">
             <v-btn color="dark ma-0"
                    fab
@@ -27,8 +26,6 @@
         </div>
 
         <v-card flat v-if="storyAssetDialog">
-
-
             <v-card-media v-if="showVideo">
                 <video width="100%"
                        height="100%"
@@ -61,6 +58,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
+
     export default {
         data() {
             return {
@@ -77,28 +75,27 @@
             }),
 
             storyAssetDialog: {
-                get(){
+                get() {
                     return this.$store.getters.getStoryAssetDialogBox;
                 },
 
-                set(){
+                set() {
                     this.showVideo = false;
                     this.$store.commit('closeStoryAssetDialogBox');
                 }
             },
 
-            currentAsset : {
-                get(){
+            currentAsset: {
+                get() {
                     return this.$store.getters.getCurrentSelectedStoryAsset;
                 },
 
-                set(val){
+                set(val) {
                 }
             },
         },
 
-        watch: {
-        },
+        watch: {},
 
         created() {
         },

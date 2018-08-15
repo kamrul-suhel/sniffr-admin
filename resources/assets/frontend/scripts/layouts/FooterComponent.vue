@@ -93,7 +93,7 @@
     import QuoteComponent from '../component/QuoteComponent'
     import VideoDialogComponent from '../includes/VideoDialogComponent'
     import StoryDialogComponent from '../pages/clients/partials/StoryDialog'
-    import StoryAssetDialogComponent from '../includes/StoryAssetsDialogComponent'
+    import StoryAssetDialogComponent from '../../../scripts/includes/StoryAssetsDialogComponent'
     import SnackbarComponent from '../includes/SnackbarComponent'
     import BuyDialogComponent from '../component/BuyComponent'
     import ThankYouDialogBox from '../includes/ThankyouComponent'

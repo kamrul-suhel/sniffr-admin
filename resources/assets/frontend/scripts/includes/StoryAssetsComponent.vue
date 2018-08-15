@@ -26,8 +26,7 @@
             }
         },
 
-        watch: {
-        },
+        watch: {},
 
         created() {
             this.setImageUrl(this.asset);
