@@ -1,16 +1,10 @@
 import HomeComponent from './pages/home/HomeComponent.vue';
-import VideoComponent from './pages/videos/VideosComponent.vue';
-import VideoDetailComponent from './pages/videos/VideoDetailComponent.vue';
-import UploadVideoComponent from './pages/upload/UploadVideoComponent.vue';
-import PasswordResetTokenComponent from './pages/login/PasswordResetTokenComponent.vue';
-import PasswordSetTokenComponent from './pages/login/PasswordSetTokenComponent.vue';
-import VideoMoreDetail from './pages/submission/VideomoredetailComponent.vue';
+
 import VideoSubmissionComponent from './component/forms/VideoSubmissionComponent.vue';
 import UnsubscribeComponent from './pages/unsubscribe/UnsubscribeComponent.vue';
 import TermsConditionsComponent from './pages/termscondition/TermsConditionComponent';
 import ContractComponent from './pages/contract/ContractComponent';
 import Notfound from './pages/404Component.vue';
-import StoriesComponent from './pages/stories/StoriesComponent';
 import StoryDetailComponent from './pages/stories/StoryDetailComponent.vue';
 import ClientComponent from './pages/clients/ClientComponent';
 import ClientStoryDetailComponent from './pages/clients/stories/ClientStoryDetailComponent';
@@ -24,13 +18,53 @@ import ClientCollectionComponent from './pages/collections/CollectionsComponent'
 
 import ClientPurchaseOfferedComponent from './pages/clients/PurchasedOfferedComponent'
 
+const VideoComponent = resolve => {
+    require.ensure('./pages/videos/VideosComponent.vue', () => {
+        resolve(require('./pages/videos/VideosComponent.vue'))
+    })
+}
+
+const VideoDetailComponent = resolve => {
+    require.ensure('./pages/videos/VideoDetailComponent.vue', () => {
+        resolve(require('./pages/videos/VideoDetailComponent.vue'))
+    })
+}
+
+const VideoMoreDetail = resolve => {
+    require.ensure(['./pages/submission/VideomoredetailComponent.vue'], () => {
+        resolve(require('./pages/submission/VideomoredetailComponent.vue'))
+    })
+}
+
+const UploadVideoComponent = resolve => {
+    require.ensure(['./pages/upload/UploadVideoComponent.vue'], () => {
+        resolve(require('./pages/upload/UploadVideoComponent.vue'))
+    })
+}
 
 const Login = resolve => {
     require.ensure(['./pages/login/LoginComponent.vue'], () => {
         resolve(require('./pages/login/LoginComponent.vue'));
     })
 };
-// import LoginComponent from './pages/login/LoginComponent.vue';
+
+const PasswordResetTokenComponent = resolve => {
+    require.ensure(['./pages/login/PasswordResetTokenComponent.vue'], () => {
+        resolve(require('./pages/login/PasswordResetTokenComponent.vue'))
+    })
+}
+
+const PasswordSetTokenComponent = resolve => {
+    require.ensure(['./pages/login/PasswordSetTokenComponent.vue'], () => {
+        resolve(require('./pages/login/PasswordSetTokenComponent.vue'))
+    })
+}
+
+const StoriesComponent = resolve => {
+    require.ensure(['./pages/stories/StoriesComponent.vue'], () => {
+        resolve(require('./pages/stories/StoriesComponent.vue'));
+    })
+}
 
 export const routes = [
     {
