@@ -81,7 +81,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
         Chumper\Zipper\ZipperServiceProvider::class,
-		Barryvdh\Debugbar\ServiceProvider::class
+		Barryvdh\Debugbar\ServiceProvider::class,
+		\Laravel\Dusk\DuskServiceProvider::class
     ],
 
     /*

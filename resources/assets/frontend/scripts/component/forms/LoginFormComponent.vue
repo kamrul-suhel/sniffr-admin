@@ -12,6 +12,7 @@
 
                             <v-flex xs12>
                                 <v-text-field
+                                        name="name"
                                         color="dark"
                                         label="Email:"
                                         v-model="user.email"
@@ -25,6 +26,7 @@
 
                             <v-flex xs12>
                                 <v-text-field
+                                        email="email"
                                         class="email"
                                         color="dark"
                                         label="Enter your password"

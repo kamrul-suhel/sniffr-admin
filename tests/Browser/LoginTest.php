@@ -15,12 +15,13 @@ class LoginTest extends DuskTestCase
      */
     public function testAdminCanLogin()
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/')
-				->type('email', 'ian@unilad.co.uk')
-				->type('password', 'twatface')
-				->press('Login')
-				->assertPathIs('/admin');
-        });
+		$this->browse(function (Browser $browser) {
+			$browser->visit('/');
+			$browser->dump();
+//			$browser->type('email', 'ian@unilad.co.uk');
+//			$browser->type('password', 'twatface');
+//			$browser->press('LOGIN');
+//			$browser->assertPathIs('/admin');
+		});
     }
 }
