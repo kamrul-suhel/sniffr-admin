@@ -146,17 +146,49 @@
                 £{{ story.final_price | numberFormat }} - Buy Now
             </v-btn>
 
-            <v-btn
-                    block
-                    dark
-                    large
-                    color="dark"
-                    @click.native="onDecline()"
-                    :loading="declineLoading"
-                    :disabled="declineLoading || assetDeclined"
-            >
-                Decline
-            </v-btn>
+            <small>Don't like this offer?</small>
+            <br>
+            <v-dialog v-model="dialog" persistent max-width="500px">
+                <v-btn
+                        slot="activator"
+                        persistent
+                        block
+                        dark
+                        large
+                        color="dark"
+                        :loading="declineLoading"
+                        :disabled="declineLoading || assetDeclined"
+                        class="mb-3"
+                >
+                    Contact Us
+                </v-btn>
+
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Contact Us</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container grid-list-md>
+                            <v-layout wrap>
+                                <v-flex xs12>
+                                    <v-textarea
+                                            label="Please tell us why this quote isn't good for you."
+                                            color="dark"
+                                            v-model="decline_note"
+                                            rows="10"
+                                            required
+                                    ></v-textarea>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel</v-btn>
+                        <v-btn dark @click="onDecline()">Save</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-flex>
 
         <v-flex xs12 class="my-4">
@@ -175,6 +207,8 @@
                 button_text: 'Download Story',
                 purchased: false,
                 decline: false,
+                decline_note: null,
+                dialog: false,
 
                 loader: null,
                 showButton: false,
@@ -259,12 +293,12 @@
             },
 
             onAccept() {
-                console.log('accept story');
                 let url = 'collections/accept_asset_price/' + this.story.collection_story_id + '/story';
                 this.acceptLoading = true;
-                axios.get(url).then((response) => {
+                axios.post(url).then((response) => {
                     console.log(response);
                     if (response.data.success === '1') {
+                        this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
                         this.assetType = "purchased";
                         this.purchased = true;
@@ -275,15 +309,18 @@
             onDecline() {
                 let url = 'collections/reject_asset_price/' + this.story.collection_story_id + '/story';
                 this.declineLoading = true;
-                axios.get(url).then((response) => {
+
+                let form_data =  new FormData();
+                form_data.append('rejection_notes', this.decline_note);
+                axios.post(url, form_data).then((response) => {
                     if (response.data.success === '1') {
-                        // Do some action when they accept
                         this.declineLoading = false;
                         this.assetDeclined = true;
                         this.decline = true;
+
+                        this.dialog = false;
                     }
                 });
-
             },
 
             onStoryClick() {
