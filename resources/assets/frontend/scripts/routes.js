@@ -1,5 +1,4 @@
 import HomeComponent from './pages/home/HomeComponent.vue';
-import LoginComponent from './pages/login/LoginComponent.vue';
 import VideoComponent from './pages/videos/VideosComponent.vue';
 import VideoDetailComponent from './pages/videos/VideoDetailComponent.vue';
 import UploadVideoComponent from './pages/upload/UploadVideoComponent.vue';
@@ -26,6 +25,12 @@ import ClientCollectionComponent from './pages/collections/CollectionsComponent'
 import ClientPurchaseOfferedComponent from './pages/clients/PurchasedOfferedComponent'
 
 
+const Login = resolve => {
+    require.ensure(['./pages/login/LoginComponent.vue'], () => {
+        resolve(require('./pages/login/LoginComponent.vue'));
+    })
+};
+// import LoginComponent from './pages/login/LoginComponent.vue';
 
 export const routes = [
     {
@@ -38,7 +43,7 @@ export const routes = [
     {
         path: '/login',
         name: 'login',
-        component: LoginComponent
+        component: Login
     },
 
     {
