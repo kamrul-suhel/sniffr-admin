@@ -13,7 +13,7 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm6 md3>
+        <v-flex xs12 sm6 md4>
             <h4 v-html="story.title"></h4>
             <div v-html="story.excerpt"></div>
         </v-flex>
@@ -26,7 +26,7 @@
             {{ story.state }}
         </v-flex>
 
-        <v-flex xs12 sm6 md1>
+        <v-flex xs12 sm6 md2    >
             {{ story.created_at | convertDate }}
         </v-flex>
 
@@ -89,13 +89,13 @@
 
         },
 
-
         methods: {
             onStorySelect() {
                 console.log(this.selected);
             },
 
             onOpenStoryDialog(){
+                this.$store.commit('setCurrentStoryAssets', this.story);
                 StoryDialogBoxEventBus.openStoryDialog(this.story.alpha_id);
             },
 
@@ -105,12 +105,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .story-input {
-        .v-input{
-            margin:0;
-            padding:0
-        }
-    }
-</style>
