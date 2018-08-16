@@ -14,6 +14,8 @@
                     <li><a href="/admin/mailers/create"> Create Mailer </a></li>
                 </ol>
                 <router-view></router-view>
+
+                <footer-component></footer-component>
             </v-content>
         </v-app>
     </div>
