@@ -78,6 +78,82 @@ The difference between Laravel Scheduler and Laravel Queues >> Scheduler is more
 - Then we have to create a schedule function to keep checking the queue.
 - Run `$ php artisan queue:listen`
 
+
+#TESTING
+## DUSK TESTS
+
+Check out the branch "reviewDuskFromMaster" (I could use "testing" branch as it's broken).
+
+$ composer require --dev laravel/dusk:"^2.0"
+
+$ composer update
+
+Open and check app\Providers\AppServiceProvider.php has:
+
+use Laravel\Dusk\DuskServiceProvider;
+
+Check it has:
+public function register()
+{
+$this->app->singleton(Facebook::class, function ($app) {
+return new Facebook(config('facebook.config'));
+});
+if ($this->app->environment('local', 'testing')) {
+$this->app->register(DuskServiceProvider::class);
+}
+}
+
+$ php artisan dusk:install
+
+Review tests in tests/Browser
+
+Open tests/Browser/ExampleTest.php and check it has:
+
+->assertSee('Video Licensing Platform');
+
+Run the example test.
+$ php artisan dusk tests/Browser/ExampleTest.php
+
+If you get an error like "Facebook\WebDriver\Exception\WebDriverCurlException: Curl error thrown for http POST to /session with params" then you need to run Chromedriver in a separate terminal tab: $ vendor/laravel/dusk/bin/chromedriver-mac --port=9515
+
+Try again and then after try this test which tests login (make sure you remove dd($this);):
+
+$ php artisan dusk tests/Browser/RunTests.php
+
+You can edit the RunTest.php and change the search to 'Owner stops petting dog' or whatever video you want to find in Licensed Videos (in your test).
+
+Now you can review the code and try the other tests like VideoUploadTests.php or VideoAdvancedTests.php. Note that these reference functions within /Components and /Pages folders.
+
+##Codeception Testing
+<a>https://codeception.com/docs/modules/Laravel5</a>
+
+- If you're a virgin to codeception:
+  - Run ```composer update```: this will install the codeception dependency
+ 
+- Codeception files are all contained in ```tests/```
+
+- We split tests by Acceptance, Unit, and Functional (We can have other types of tests here too. e.g. API tests)
+
+- A Selenium Driver, and Chrome driver are stored in the ```tests/_support/Driver/``` directory. 
+  - To run these easily you can run : ``` sh run_acceptance_tests.sh ``` from inside the ```tests/``` directory
+  - Once this is up and running you can start running tests.
+  
+- Types of Tests:
+    - Acceptance: Used only for visual testing. e.g. confirming that you see stuff on the page as expected.
+    - Functional: Running through a process, and checking things are visually working as well as saved to a DB
+    - Unit: Testing small functions that make up a feature. 
+  
+- Running Tests:
+    - All tests: ```./vendor/bin/codecept run -vvv``` (The -vvv gives a verbose result in the terminal for better understanding of there ya done gone wrong)
+    - Acceptance Tests: ```./vendor/bin/codecept run acceptance -vvv```
+    - Functional Tests: ```./vendor/bin/codecept run functional -vvv```
+    - Unit Tests: ```./vendor/bin/codecept run unit -vvv```
+    
+- Creating new tests <b>(<u>Always</u> create tests via a terminal as there are meta classes that rely on it working)</b>
+    - Acceptance Tests: ```./vendor/bin/codecept g:cest acceptance TEST_NAME```
+    - Functional Tests: ```./vendor/bin/codecept g:cest functional TEST_NAME```
+    - Unit Tests:       ```./vendor/bin/codecept g:cest unit TEST_NAME```
+
 ## Notes for GAE setup
 
 I have added Sessions, Cache and Queue + add a GAE specific packages and created app.yaml file. Then deployed to GAE Flex for testing.
@@ -112,3 +188,7 @@ if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
 $ok = ($memory_limit >= 640 * 1024 * 1024); // at least 64M?
 
 dd($memory_limit);```
+
+
+
+

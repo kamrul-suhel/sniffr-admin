@@ -20,6 +20,7 @@
                             <v-flex xs12 v-if="!client_logged_in">
                                 <v-flex xs12>
                                     <v-text-field
+                                            name="name"
                                             label="Name"
                                             v-model="request_quote.name"
                                             color="dark"
@@ -32,6 +33,7 @@
 
                                 <v-flex xs12>
                                     <v-text-field
+                                            name="email"
                                             label="Email"
                                             type="email"
                                             v-model="request_quote.email"
@@ -46,6 +48,7 @@
 
                                 <v-flex xs12>
                                     <v-text-field
+                                            name="phone"
                                             label="Phone"
                                             v-model="request_quote.phone"
                                             color="dark">
@@ -56,6 +59,7 @@
                                     <small class="red--text" v-if="errors.company_name">{{ errors.company_name[0] }}
                                     </small>
                                     <v-text-field
+                                            name="company"
                                             label="Company"
                                             v-model="request_quote.company"
                                             color="dark">
@@ -66,6 +70,7 @@
                             <v-flex v-if="type === 'video' || type === 'story'">
                                 <v-flex xs12>
                                     <v-select
+                                            name="license_type"
                                             label="License Type"
                                             color="light"
                                             :items="licenses"
@@ -80,6 +85,7 @@
 
                                 <v-flex xs12>
                                     <v-select
+                                            name="license_platform"
                                             content-class="s-platform"
                                             class="s-platform"
                                             label="Platform"
@@ -97,6 +103,7 @@
 
                                 <v-flex xs12>
                                     <v-select
+                                            name="license_length"
                                             label="License Length"
                                             color="dark"
                                             :items="lengths"

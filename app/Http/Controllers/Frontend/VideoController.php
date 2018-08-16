@@ -91,6 +91,7 @@ class VideoController extends Controller
     public function store(CreateVideoRequest $request)
     {
         ini_set('max_execution_time', 1800);
+        ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
 
