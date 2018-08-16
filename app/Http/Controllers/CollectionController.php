@@ -426,13 +426,15 @@ class CollectionController extends Controller
         $isJson = $request->ajax();
 
         $collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
+
+        $quoteId = $collectionAsset->quotes()->max('id');
+        $quote = $this->collectionQuote->find($quoteId);
+        $quote->rejection_notes = $request->get('rejection_notes') ?? null;
+        $quote->save();
+
         $collection = $collectionAsset->collection;
-
-        $collectionAsset->status = "closed";
+        $collectionAsset->status = "requested";
         $collectionAsset->save();
-
-        $collection->status = "closed";
-        $collection->save();
 
         if($isJson){
             return $this->successResponse([

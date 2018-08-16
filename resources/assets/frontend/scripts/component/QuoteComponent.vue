@@ -1,7 +1,7 @@
 <template>
     <!-- Login form -->
     <section class="quote-dialog">
-        <v-dialog
+        <v-dialog persistent
                 v-model="open_quote_dialog"
                 max-width="500px"
                 class="login-section"

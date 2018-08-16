@@ -1,6 +1,6 @@
-<div class="panel panel-primary">
+<div class="panel @if($asset->status == 'requested' && !is_null($asset->final_price)) panel-danger @else panel-primary @endif">
     <div class="panel-heading">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <h5>
                 <b>
                     @if(\Carbon\Carbon::parse($asset->created_at) < \Carbon\Carbon::now()->subDay())
@@ -13,7 +13,12 @@
                 </b>
             </h5>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
+            @if($asset->status == 'requested' && !is_null($asset->final_price))
+                <div class="label label-danger">Quote Rejected ({{ date('d/m/Y @ h:i', strtotime($asset->updated_at)) }})</div>
+            @endif
+        </div>
+        <div class="col-lg-4">
             <b class="pull-right" title="{{ $asset->collection->user->email }}">
                 <a target="_blank"
                    href="{{ route('users.edit', ['id' => $asset->collection->user->id]) }}">{{ $asset->collection->user->full_name ?? $asset->collection->user->username }}
@@ -41,7 +46,7 @@
 
                 {{-- Quote Input--}}
                 <div class="col-lg-5">
-                    @if($asset->final_price)
+                    @if($asset->final_price && $asset->status == 'offered')
                         <div class="form-group input-group">
                             <span class="input-group-addon">Quote <b class="pull-right">£</b></span>
                             <input value="{{ number_format($asset->final_price) }}" name="final_price" type="text"
@@ -151,18 +156,21 @@
                     <label for="notes">
                         <small>Notes</small>
                     </label>
-                    <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
-                              disabled>{{ $asset->notes }}</textarea>
+                    <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6" disabled>{{ $asset->notes }}</textarea>
                 @endif
             </div>
             {{-- Rejection Notes --}}
-            <div class="col-lg-2">
-                @if($asset->quotes->count())
+            <div class="col-lg-2 well rejection_well" style="overflow: auto; height:170px;">
+                @if($asset->quotes()->count())
                     <label for="notes">
                         <small>Rejection Notes</small>
                     </label>
-                    <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6"
-                              disabled>{{ $asset->rejection_notes }}</textarea>
+                    @foreach($asset->quotes()->get() as $quote)
+                        @if(isset($quote->rejection_notes))
+                            <small>[{{date('d-m-y@h:i', strtotime($quote->updated_at))}}] &pound;{{number_format($quote->price)}} - {{ !is_null($quote->rejection_notes) ? $quote->rejection_notes : 'No reason given' }}</small>
+                            <hr>
+                        @endif
+                    @endforeach
                 @endif
             </div>
         </div>
