@@ -2,9 +2,9 @@ const state = {
     toastActive: false,
     toastMessage: '',
     toastDuration: 2000,
-    toastColor: 'dark',
+    toastColor: '',
     verticalAlign: 'top', // options: top, bottom
-    horizontalAlign: 'right' // options : left, right
+    horizontalAlign: '' // options : left, right
 }
 
 const getters = {
@@ -26,7 +26,7 @@ const getters = {
 
 const mutations = {
     setToast(state, payload) {
-        state.toastActive = payload.active;
+        state.toastActive = true;
         state.toastMessage = payload.message;
 
         if (payload.duration) {
@@ -44,6 +44,15 @@ const mutations = {
         if (payload.horizontalAlign) {
             state.horizontalAlign = payload.horizontalAlign;
         }
+    },
+
+    resetToast(state, payload){
+        state.toastActive = false;
+        state.toastMessage = payload.message;
+        state.toastDuration = payload.duration;
+        state.toastColor = payload.color;
+        state.verticalAlign = payload.verticalAlign
+        state.horizontalAlign = payload.horizontalAlign;
     }
 }
 

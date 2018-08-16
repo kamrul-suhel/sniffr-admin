@@ -41,9 +41,9 @@
                         duration: 2000,
                         color: "dark",
                         verticalAlign: "top",
-                        horizontalAlign: "right"
+                        horizontalAlign: ""
                     };
-                    this.$store.commit('setToast', toast);
+                    this.$store.commit('resetToast', toast);
                 }
             }
         }

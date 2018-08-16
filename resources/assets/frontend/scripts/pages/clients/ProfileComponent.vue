@@ -1,16 +1,20 @@
 <template>
     <div class="client-profile">
-        <v-container grid-list-lg class="pt-0" v-if="iniState">
-            <v-layout row wrap>
+        <v-container grid-list-lg
+                     class="pt-0"
+                     v-if="iniState">
+            <v-layout row
+                      wrap>
                 <v-flex xs12>
                     <h2 class="text-center text-uppercase">Account Settings</h2>
                 </v-flex>
 
-                <v-form ref="form" v-model="valid" id="company-update-form" lazy-validation>
-
+                <v-form lazy-validation
+                        ref="form"
+                        v-model="valid"
+                        id="company-update-form">
                     <!--Company Name-->
                     <v-container grid-list-lg>
-
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <v-text-field
@@ -23,12 +27,10 @@
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
-
                     </v-container>
 
                     <!-- Billing Info-->
                     <v-container grid-list-lg>
-
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <h2 class="sub-heading text-xs-center text-uppercase">Company &amp; Billing
@@ -157,82 +159,75 @@
                                         item-value="id"
                                         item-text="name"
                                         color="dark"
-                                        return object
-                                ></v-select>
+                                        return object>
+                                </v-select>
                             </v-flex>
 
-                        </v-layout>
-
-                    </v-container>
-
-                    <!-- CTA -->
-                    <v-container grid-list-lg>
-                        <v-layout row wrap>
                             <v-flex xsl2 text-xs-right pa-0>
                                 <v-btn dark
                                        :loading="loading"
-
                                        class="sf-button"
                                        @click="onSubmit()">Update Settings
                                 </v-btn>
                             </v-flex>
                         </v-layout>
                     </v-container>
-
-                    <!-- Company User Accounts -->
-                    <v-container grid-list-lg v-if="isAccountOwner">
-                        <!--<v-container grid-list-lg>-->
-
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <h2 class="sub-heading text-xs-center text-uppercase pb-3">User Accounts</h2>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-data-table
-                                :headers="headers"
-                                :items="companyUsers"
-                                hide-actions item-key="id">
-                            <template slot="items" slot-scope="props">
-                                <tr @click="props.expanded = !props.expanded">
-                                    <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}
-                                    </td>
-                                    <td class="">{{ props.item.tel }}</td>
-                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}
-                                    </td>
-                                    <td class="">{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
-                                    <td class="text-xs-center">
-                                        <v-btn
-                                                @click="editUser(props.item.id)"
-                                                flat icon
-                                                color="dark">
-                                            <v-icon size="15px">edit</v-icon>
-                                        </v-btn>
-                                    </td>
-                                </tr>
-                            </template>
-                        </v-data-table>
-
-                    </v-container>
-
-                    <!-- Users CTA -->
-                    <br>
-                    <v-container grid-list-lg v-if="isAccountOwner">
-                        <!--<v-container grid-list-lg>-->
-                        <v-layout row wrap>
-                            <v-flex xsl2 text-xs-right pa-0>
-                                <v-btn
-                                        dark
-                                        raised
-                                        color="dark"
-                                        class="sf-button"
-                                        :to="{name: 'client_create_user', params:{slug : company.slug}}">New User
-                                </v-btn>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-
                 </v-form>
+
+                <!-- Company User Accounts -->
+                <v-container grid-list-lg
+                             v-if="isAccountOwner">
+                    <v-layout row wrap>
+                        <v-flex xs12>
+                            <h2 class="sub-heading text-xs-center text-uppercase pb-3">User Accounts</h2>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row wrap>
+                        <v-flex xs12>
+                            <v-data-table
+                                    :headers="headers"
+                                    :items="companyUsers"
+                                    hide-actions
+                                    item-key="id">
+                                <template slot="items"
+                                          slot-scope="props">
+                                    <tr>
+                                        <td>{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
+                                        <td>{{ props.item.tel }}</td>
+                                        <td  style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}</td>
+                                        <td>{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
+                                        <td class="text-xs-center">
+                                            <v-btn
+                                                    @click="editUser(props.item.id)"
+                                                    flat icon
+                                                    color="dark">
+                                                <v-icon size="15px">edit</v-icon>
+                                            </v-btn>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </v-data-table>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+
+                <!-- Users CTA -->
+                <v-container grid-list-lg v-if="isAccountOwner">
+                    <v-layout row wrap>
+                        <v-flex xsl2
+                                text-xs-right
+                                pa-0>
+                            <v-btn
+                                    dark
+                                    raised
+                                    color="dark"
+                                    class="sf-button"
+                                    :to="{name: 'client_create_user', params:{slug : company.slug}}">New User
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
 
             </v-layout>
         </v-container>
@@ -251,7 +246,6 @@
                 formState: false,
                 companyOwner: null,
                 countries: [],
-                successMessage: false,
 
                 loader: null,
                 loading: false,
@@ -312,17 +306,7 @@
             },
 
             onSubmit() {
-                let toastOption = {
-                    active: true,
-                    message: "User successfully updated",
-                    duration: 3000,
-                    color: "success",
-                };
-
-                this.$store.commit('setToast', toastOption);
-                return;
                 if (this.$refs.form.validate()) {
-
                     let companyUpdateForm = new FormData();
                     companyUpdateForm.append('company_name', this.company.name);
                     companyUpdateForm.append('address_line1', this.company.address_line1);
@@ -339,8 +323,13 @@
                     axios.post('/client/profile/' + this.company.id, companyUpdateForm)
                         .then(response => {
                             if (response.data.success) {
-                                this.success = true;
-                                this.successMessage = response.data.message;
+                                let toastOption = {
+                                    message: response.data.message,
+                                    duration: 3000,
+                                    color: "success",
+                                    horizontalAlign: "right"
+                                };
+                                this.$store.commit('setToast', toastOption);
                             }
 
                             // if(!this.isAccountOwner()) {
