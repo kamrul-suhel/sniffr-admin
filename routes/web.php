@@ -2,6 +2,13 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
+//Route::get('dm', function(){
+//	//$dmResponse = Twitter::postDm(array('screen_name' => 'ianlainchbury', 'text' => 'DM Test', 'format' => 'json'));
+//	$dmResponse = Twitter::postDm(array('screen_name' => 'ianlainchbury', 'text' => 'DM Test', 'format' => 'json'));
+//
+//	dd($dmResponse);
+//});
+
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
