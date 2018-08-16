@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8cdb644f689387e991f259f660a2d32",
+    "content-hash": "023eeac5d59894ed589eacd5bcebfb26",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5364,16 +5364,16 @@
         },
         {
             "name": "thujohn/twitter",
-            "version": "2.2.5",
+            "version": "dev-test",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thujohn/twitter.git",
-                "reference": "ff414bdadba3f1570ca211355e5359ec266552d8"
+                "url": "https://github.com/schooch/twitter.git",
+                "reference": "1c60180a274166ea416b5c8385f02ccfdec00b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thujohn/twitter/zipball/ff414bdadba3f1570ca211355e5359ec266552d8",
-                "reference": "ff414bdadba3f1570ca211355e5359ec266552d8",
+                "url": "https://api.github.com/repos/schooch/twitter/zipball/1c60180a274166ea416b5c8385f02ccfdec00b62",
+                "reference": "1c60180a274166ea416b5c8385f02ccfdec00b62",
                 "shasum": ""
             },
             "require": {
@@ -5387,7 +5387,6 @@
                     "Thujohn\\Twitter": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5404,7 +5403,10 @@
                 "laravel5",
                 "twitter"
             ],
-            "time": "2017-04-27T09:00:04+00:00"
+            "support": {
+                "source": "https://github.com/schooch/twitter/tree/test"
+            },
+            "time": "2018-08-16T14:33:47+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -7941,7 +7943,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "comocode/laravel-ab": 20
+        "comocode/laravel-ab": 20,
+        "thujohn/twitter": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

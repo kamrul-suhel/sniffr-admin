@@ -4,6 +4,12 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/schooch/twitter"
+        }
+    ],
     "require": {
         "php": ">=7.0.0",
         "aws/aws-sdk-php-laravel": "~3.0",
@@ -34,7 +40,7 @@
         "ramsey/uuid": "^3.7",
         "schooch/youtube": "^5.0.5",
         "talvbansal/media-manager": "^2.5",
-        "thujohn/twitter": "^2.2",
+        "thujohn/twitter": "dev-test",
         "true/punycode": "~2.0",
         "weidner/goutte": "^1.0"
     },

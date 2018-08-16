@@ -78,7 +78,6 @@ return [
 		Schooch\Youtube\YoutubeServiceProvider::class,
 		BaoPham\DynamoDb\DynamoDbServiceProvider::class,
 		Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
-		Intervention\Image\ImageServiceProvider::class,
 		Thujohn\Twitter\TwitterServiceProvider::class,
 		Kouz\Providers\AirbrakeServiceProvider::class,
 		Barryvdh\DomPDF\ServiceProvider::class,
@@ -93,7 +92,6 @@ return [
 		 */
 		App\Providers\AppServiceProvider::class,
 		App\Providers\AuthServiceProvider::class,
-		// App\Providers\BroadcastServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
 		App\Providers\GoogleDriveServiceProvider::class,
@@ -164,4 +162,3 @@ return [
 	],
 
 ];
-s
