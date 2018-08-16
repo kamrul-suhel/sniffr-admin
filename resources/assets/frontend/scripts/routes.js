@@ -1,31 +1,136 @@
 import HomeComponent from './pages/home/HomeComponent.vue';
-import LoginComponent from './pages/login/LoginComponent.vue';
-import VideoComponent from './pages/videos/VideosComponent.vue';
-import VideoDetailComponent from './pages/videos/VideoDetailComponent.vue';
-import UploadVideoComponent from './pages/upload/UploadVideoComponent.vue';
-import PasswordResetTokenComponent from './pages/login/PasswordResetTokenComponent.vue';
-import PasswordSetTokenComponent from './pages/login/PasswordSetTokenComponent.vue';
-import VideoMoreDetail from './pages/submission/VideomoredetailComponent.vue';
-import VideoSubmissionComponent from './component/forms/VideoSubmissionComponent.vue';
-import UnsubscribeComponent from './pages/unsubscribe/UnsubscribeComponent.vue';
-import TermsConditionsComponent from './pages/termscondition/TermsConditionComponent';
-import ContractComponent from './pages/contract/ContractComponent';
-import Notfound from './pages/404Component.vue';
-import StoriesComponent from './pages/stories/StoriesComponent';
-import StoryDetailComponent from './pages/stories/StoryDetailComponent.vue';
-import ClientComponent from './pages/clients/ClientComponent';
-import ClientStoryDetailComponent from './pages/clients/stories/ClientStoryDetailComponent';
-import ClientVideoDetailComponent from './pages/clients/videos/ClientVideoDetailComponent';
 
-import ClientProfileComponent from './pages/clients/ProfileComponent';
-import ClientUserComponent from './pages/clients/CreateUserComponent';
-import ClientEditUserComponent from './pages/clients/EditUserComponent';
+const VideoComponent = resolve => {
+    require.ensure('./pages/videos/VideosComponent.vue', () => {
+        resolve(require('./pages/videos/VideosComponent.vue'))
+    })
+}
 
-import ClientCollectionComponent from './pages/collections/CollectionsComponent'
+const VideoDetailComponent = resolve => {
+    require.ensure('./pages/videos/VideoDetailComponent.vue', () => {
+        resolve(require('./pages/videos/VideoDetailComponent.vue'))
+    })
+}
 
-import ClientPurchaseOfferedComponent from './pages/clients/PurchasedOfferedComponent'
+const VideoMoreDetail = resolve => {
+    require.ensure(['./pages/submission/VideomoredetailComponent.vue'], () => {
+        resolve(require('./pages/submission/VideomoredetailComponent.vue'))
+    })
+}
+
+const VideoSubmissionComponent = resolve => {
+    require.ensure(['./component/forms/VideoSubmissionComponent.vue'], () => {
+        resolve(require('./component/forms/VideoSubmissionComponent.vue'))
+    })
+}
+
+const UnsubscribeComponent = resolve => {
+    require.ensure(['./pages/unsubscribe/UnsubscribeComponent.vue'], () => {
+        resolve(require('./pages/unsubscribe/UnsubscribeComponent.vue'))
+    })
+}
+
+const TermsConditionsComponent = resolve => {
+    require.ensure(['./pages/termscondition/TermsConditionComponent'], () => {
+        resolve(require('./pages/termscondition/TermsConditionComponent'))
+    })
+}
+
+const ContractComponent = resolve => {
+    require.ensure(['./pages/contract/ContractComponent'], () => {
+        resolve(require('./pages/contract/ContractComponent'))
+    })
+}
+const NotFound = resolve => {
+    require.ensure(['./pages/404Component.vue'], () => {
+        resolve(require('./pages/404Component.vue'))
+    })
+}
+
+const StoryDetailComponent = resolve => {
+    require.ensure(['./pages/stories/StoryDetailComponent.vue'], () => {
+        resolve(require('./pages/stories/StoryDetailComponent.vue'))
+    })
+}
+
+const ClientComponent = resolve => {
+    require.ensure(['./pages/clients/ClientComponent'], () => {
+        resolve(require('./pages/clients/ClientComponent'))
+    })
+}
+
+const ClientStoryDetailComponent = resolve => {
+    require.ensure(['./pages/clients/stories/ClientStoryDetailComponent'], () => {
+        resolve(require('./pages/clients/stories/ClientStoryDetailComponent'))
+    })
+}
+
+const ClientVideoDetailComponent = resolve => {
+    require.ensure(['./pages/clients/videos/ClientVideoDetailComponent'], () => {
+        resolve(require('./pages/clients/videos/ClientVideoDetailComponent'))
+    })
+}
+
+const ClientProfileComponent = resolve => {
+    require.ensure(['./pages/clients/ProfileComponent'], () => {
+        resolve(require('./pages/clients/ProfileComponent'))
+    })
+}
+
+const ClientEditUserComponent = resolve => {
+    require.ensure(['./pages/clients/EditUserComponent'], () => {
+        resolve(require('./pages/clients/EditUserComponent'))
+    })
+}
+
+const ClientCollectionComponent = resolve => {
+    require.ensure(['./pages/collections/CollectionsComponent'], () => {
+        resolve(require('./pages/collections/CollectionsComponent'))
+    })
+}
+
+const ClientPurchaseOfferedComponent = resolve => {
+    require.ensure(['./pages/clients/PurchasedOfferedComponent'], () => {
+        resolve(require('./pages/clients/PurchasedOfferedComponent'))
+    })
+}
 
 
+const UploadVideoComponent = resolve => {
+    require.ensure(['./pages/upload/UploadVideoComponent.vue'], () => {
+        resolve(require('./pages/upload/UploadVideoComponent.vue'))
+    })
+}
+
+const Login = resolve => {
+    require.ensure(['./pages/login/LoginComponent.vue'], () => {
+        resolve(require('./pages/login/LoginComponent.vue'));
+    })
+};
+
+const PasswordResetTokenComponent = resolve => {
+    require.ensure(['./pages/login/PasswordResetTokenComponent.vue'], () => {
+        resolve(require('./pages/login/PasswordResetTokenComponent.vue'))
+    })
+}
+
+const PasswordSetTokenComponent = resolve => {
+    require.ensure(['./pages/login/PasswordSetTokenComponent.vue'], () => {
+        resolve(require('./pages/login/PasswordSetTokenComponent.vue'))
+    })
+}
+
+const ClientUserComponent = resolve => {
+    require.ensure(['./pages/clients/CreateUserComponent'], () => {
+        resolve(require('./pages/clients/CreateUserComponent'))
+    })
+}
+
+const StoriesComponent = resolve => {
+    require.ensure(['./pages/stories/StoriesComponent.vue'], () => {
+        resolve(require('./pages/stories/StoriesComponent.vue'));
+    })
+}
 
 export const routes = [
     {
@@ -38,7 +143,7 @@ export const routes = [
     {
         path: '/login',
         name: 'login',
-        component: LoginComponent
+        component: Login
     },
 
     {
@@ -189,6 +294,6 @@ export const routes = [
     {
         path: '*',
         name: 'notfound',
-        component: Notfound
+        component: NotFound
     },
 ];
