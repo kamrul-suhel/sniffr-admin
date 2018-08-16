@@ -13,6 +13,7 @@
                             <v-flex xs12>
                                 <v-text-field
                                         color="dark"
+                                        name="email"
                                         label="Email:"
                                         v-model="user.email"
                                         :rules="emailRules"
@@ -27,6 +28,7 @@
                                 <v-text-field
                                         class="email"
                                         color="dark"
+                                        name="password"
                                         label="Enter your password"
                                         v-model="user.password"
                                         :append-icon="showpassword ? 'visibility' : 'visibility_off'"
@@ -60,7 +62,7 @@
                                 </v-btn>
                             </v-flex>
 
-                            <v-flex xs12>
+                            <v-flex xs12 class="pt-0">
                                 <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
                             </v-flex>
                         </v-layout>
