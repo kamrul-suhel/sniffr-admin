@@ -1,9 +1,9 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 sm6 md3>
+        <v-flex xs12 sm6 md4>
             <v-card flat hover>
                 <v-card-media
-                        height="200px"
+                        height="250px"
                         :src="story.thumb ? story.thumb : '/assets/images/placeholder.png'"
                         @click="onOpenStoryDialog()">
                     <div class="hot-story" v-if="story.flagged === 1">
@@ -13,7 +13,7 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm6 md3>
+        <v-flex xs12 sm6 md4>
             <h4 v-html="story.title"></h4>
             <div v-html="story.excerpt"></div>
         </v-flex>
@@ -89,13 +89,13 @@
 
         },
 
-
         methods: {
             onStorySelect() {
                 console.log(this.selected);
             },
 
             onOpenStoryDialog(){
+                this.$store.commit('setCurrentStoryAssets', this.story);
                 StoryDialogBoxEventBus.openStoryDialog(this.story.alpha_id);
             },
 
@@ -105,12 +105,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .story-input {
-        .v-input{
-            margin:0;
-            padding:0
-        }
-    }
-</style>

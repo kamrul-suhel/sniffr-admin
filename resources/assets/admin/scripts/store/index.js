@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import stories from './modules/stories'
+import stories from '../../../scripts/store/stories'
 import videos from './modules/videos'
 import videoDialog from './modules/video-dialog-box'
 import storyDialog from './modules/story-dialog-box'
