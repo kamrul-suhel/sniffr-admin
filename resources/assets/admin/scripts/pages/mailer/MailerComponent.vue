@@ -17,17 +17,21 @@
                 content-class="mailer-dialog-error">
             <!-- Mail empty card -->
             <v-card v-if="notSelectedError">
-
                 <v-card-text>
                     <div class="text-xs-center">
-                        <v-icon size="80px" color="black">error_outline</v-icon>
+                        <v-icon size="80px"
+                                color="black">error_outline
+                        </v-icon>
                     </div>
                     <div class="text-xs-center"><h4 class="text-uppercase">{{errorMessage}}</h4></div>
                 </v-card-text>
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false">Ok</v-btn>
+                    <v-btn color="black darken-1"
+                           flat="flat"
+                           @click.native="dialog = false">Ok
+                    </v-btn>
                 </v-card-actions>
             </v-card>
             <!-- End mail empty card -->
@@ -41,8 +45,7 @@
                                 :width="4"
                                 color="black"
                                 :indeterminate="indeterminate"
-                                :value="!indeterminate ? 100 : 0"
-                        >
+                                :value="!indeterminate ? 100 : 0">
                             <v-icon color="black" v-if="!indeterminate">done</v-icon>
                         </v-progress-circular>
                     </div>
@@ -54,8 +57,10 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="black darken-1" flat="flat" @click.native="dialog = false" :disabled="disableButton">
-                        Ok
+                    <v-btn color="black darken-1"
+                           flat="flat"
+                           @click.native="dialog = false"
+                           :disabled="disableButton">Ok
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -73,8 +78,7 @@
 
                 <v-flex class="text-xs-right">
                     <v-btn dark raised @click="onCreateMailer()">
-                        <v-icon>add</v-icon>
-                        Create Mailer
+                        <v-icon>add</v-icon>Create Mailer
                     </v-btn>
                 </v-flex>
             </v-layout>

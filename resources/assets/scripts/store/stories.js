@@ -3,15 +3,25 @@ const state = {
     mailerStories: [],
     paginate: '',
 
-    currentStories: '',
-    currentStoriesAssets: [],
-
     offeredStories: [],
 
     purchasedStories: [],
     initStory: false,
 
+    currentStory: {},
 
+    currentStoryAssets: [],
+    currentSelectedStoryAsset: {},
+    currentStoryHasNextAsset: false,
+    currentStoryNextAssetId: null,
+    currentStoryHasPreviousAsset: false,
+    currentStoryPreviousAssetId: null,
+    storyAssetDialogBox: false,
+    assetSelectedId: null,
+
+
+    //admin
+    selectedStories: [],
 };
 
 const getters = {
@@ -28,11 +38,11 @@ const getters = {
     },
 
     getCurrentStory(state) {
-        return state.currentStories;
+        return state.currentStory;
     },
 
     getCurrentStoryAssets(state) {
-        return state.currentStoriesAssets;
+        return state.currentStoryAssets;
     },
 
     getOfferedStories(state) {
@@ -49,6 +59,45 @@ const getters = {
 
     getInitStory(state) {
         return state.initStory;
+    },
+
+    getStoryAssetDialogBox(state) {
+        return state.storyAssetDialogBox;
+    },
+
+    getAssetSelectedId(state) {
+        return state.assetSelectedId;
+    },
+
+    getCurrentSelectedStoryAsset(state) {
+        return state.currentSelectedStoryAsset;
+    },
+
+    getStoryAssetHasNextAsset(state) {
+        return state.currentStoryHasNextAsset;
+    },
+
+    getCurrentStoryPreviousAssetId(state) {
+        return state.currentStoryPreviousAssetId;
+    },
+
+    getStoryAssetHasPreviousAsset(state) {
+        return state.currentStoryHasPreviousAsset;
+    },
+
+    getCurrentStoryNextAssetId(state) {
+        return state.currentStoryNextAssetId;
+    },
+
+
+    /*
+    ***********************************
+        Admin Getters
+    ***********************************
+     */
+
+    getAllSelectedStories(state) {
+        return state.selectedStories;
     }
 };
 
@@ -68,13 +117,13 @@ const mutations = {
     },
 
     setCurrentStory(state, story) {
-        state.currentStories = story.story;
+        state.currentStory = story.story;
     },
 
-    setCurrentStoriesAssets(state, story) {
-        state.currentStoriesAssets = [];
+    setCurrentStoryAssets(state, story) {
+        state.currentStoryAssets = [];
         if (story.assets.length > 0) {
-            state.currentStoriesAssets = story.assets;
+            state.currentStoryAssets = story.assets;
         }
     },
 
@@ -82,8 +131,8 @@ const mutations = {
         state.stories = [];
         state.mailerStories = [];
         state.paginate = '';
-        state.currentStories = '';
-        state.currentStoriesAssets = [];
+        state.currentStory = '';
+        state.currentStoryAssets = [];
         state.offeredStories = [];
         state.purchasedStories = [];
         state.initStory = false
@@ -131,13 +180,101 @@ const mutations = {
 
     setInitStory(state, value) {
         state.initStory = value;
+    },
+
+    setStoryAssetDialogBox(state, payload) {
+        state.currentStoryHasNextAsset = false;
+        state.currentStoryHasPreviousAsset = false;
+
+        state.currentStoryAssets.forEach((asset, index) => {
+            if (asset.id === payload.id) {
+                state.currentSelectedStoryAsset = asset;
+                let nextImgObj = state.currentStoryAssets[index + 1];
+                let previousImgObj = state.currentStoryAssets[index - 1];
+
+                if (!nextImgObj) {
+                    state.currentStoryHasNextAsset = false;
+                    state.currentStoryHasPreviousAsset = true;
+
+                    state.currentStoryNextAssetId = null;
+                    state.currentStoryPreviousAssetId = previousImgObj.id;
+                }
+
+                else if (!previousImgObj) {
+                    state.currentStoryHasNextAsset = true;
+                    state.currentStoryHasPreviousAsset = false;
+
+                    state.currentStoryNextAssetId = nextImgObj.id;
+                    state.currentStoryPreviousAssetId = null;
+                }
+
+                else {
+                    state.currentStoryHasNextAsset = true;
+                    state.currentStoryHasPreviousAsset = true;
+
+                    state.currentStoryNextAssetId = nextImgObj.id;
+                    state.currentStoryPreviousAssetId = previousImgObj.id;
+                }
+            }
+        })
+
+        state.storyAssetDialogBox = payload.open;
+        state.assetSelectedId = payload.id;
+    },
+
+    closeStoryAssetDialogBox(state) {
+        state.storyAssetDialogBox = false;
+    },
+
+    setAssetSelectedId(state, assetSelectedId) {
+        state.assetSelectedId = assetSelectedId;
+    },
+
+    setCurrentStoryPreviousAssetId(state, assetId) {
+        state.currentStoryPreviousAssetId = assetId;
+    },
+
+    setCurrentStoryNextAssetId(state, assetId) {
+        state.currentStoryNextAssetId = assetId;
+    },
+
+
+    /*
+    ***********************************
+        Admin Mutation
+    ***********************************
+     */
+
+    addStory(state, curStory) {
+        if (state.selectedStories.length <= 0) {
+            state.selectedStories.push(curStory);
+            return;
+        }
+
+        let foundStory = false;
+        state.selectedStories.forEach((story) => {
+            if (story.id === curStory.id) {
+                foundStory = true;
+            }
+        })
+
+        if (!foundStory) {
+            state.selectedStories.push(curStory);
+        }
+    },
+
+    removeStory(state, currStory) {
+        state.selectedStories.forEach((story, index) => {
+            if (currStory.id === story.id) {
+                state.selectedStories.splice(index, 1);
+            }
+        })
     }
 };
 
 const actions = {
     fetchStories({commit}, payload = {}) {
         let url = 'search/stories';
-
         if (payload.page && payload.page != 0) {
             url = url + '?page=' + payload.page;
         }
@@ -164,7 +301,7 @@ const actions = {
         axios.get(url)
             .then((response) => {
                 commit('setCurrentStory', response.data);
-                commit('setCurrentStoriesAssets', response.data.story);
+                commit('setCurrentStoryAssets', response.data.story);
             })
             .catch((error) => {
                 console.log(error);
@@ -193,6 +330,25 @@ const actions = {
                 (error) => {
                     console.log(error);
                 });
+    },
+
+
+    /*
+    ***********************************
+        Admin Action
+    ***********************************
+     */
+    getMailerStories({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            axios.post(payload)
+                .then((stories) => {
+                        state.stories = stories.data.stories;
+                        resolve();
+                    },
+                    (error) => {
+                        return reject();
+                    });
+        })
     }
 };
 

@@ -1,36 +1,28 @@
 <template>
-    <div class="video-dialog-content">
+    <div class="story-dialog-content">
         <v-layout row wrap>
-            <v-flex xs12 sm12 md7 lg7 xl7>
-                <v-container grid-list-sm fluid>
-                    <v-layout row wrap>
-                        <v-flex xs12 sm12 md6 lg6 xl6 v-for="asset in assets" :key="asset.id">
-                            <v-card :hover="onIsMovie(asset)">
-                                <v-card-media :src="getThumbImage(asset)" height="200px"
-                                              @click="onOpenVideoPlayerDialog(asset)">
-                                    <div class="video-icon" v-if="asset.mime_type === 'video/mp4'">
-                                        <v-icon color="light" dark>videocam</v-icon>
-                                    </div>
-                                </v-card-media>
-                            </v-card>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-            </v-flex>
-
-            <v-flex xs12 sm12 md5 lg5 xl5>
-                <v-layout row wrap class="video-detail-content">
+            <v-flex xs12 sm12 md7>
+                <v-layout row wrap
+                          class="video-detail-content">
                     <v-flex xs12>
                         <div clas="video-title">
-                            <v-badge left color="dark story-in-dialog-badge" dark v-if="story_detail.flagged == 1">
-                                <v-icon color="red" slot="badge" dark small>whatshot</v-icon>
+                            <v-badge left
+                                     dark
+                                     color="dark story-in-dialog-badge"
+                                     v-if="story_detail.flagged == 1">
+                                <v-icon dark
+                                        small
+                                        color="red"
+                                        slot="badge">whatshot
+                                </v-icon>
                                 <h2 v-html="story_detail.title"></h2>
                             </v-badge>
 
                             <h2 v-html="story_detail.title" v-else></h2>
 
                             <div class="video-title-caption">
-                                <v-layout row wrap justify-center>
+                                <v-layout row wrap
+                                          justify-center>
                                     <v-flex xs6>
                                         <v-icon small>alarm</v-icon>
                                         {{ story_detail.date_ingested }}
@@ -48,9 +40,32 @@
                         <div class="content-description">
                             <div v-html="story_detail.description"></div>
                         </div>
-
                     </v-flex>
                 </v-layout>
+            </v-flex>
+
+            <v-flex xs12 sm12 md5>
+                <v-container grid-list-sm fluid>
+                    <v-layout row wrap>
+                        <v-flex xs12 sm12 md6
+                                v-for="asset in assets"
+                                :key="asset.id">
+                            <v-card hover>
+                                <v-card-media :src="getThumbImage(asset)"
+                                              class="asset-thumbnail"
+                                              height="200px"
+                                              @click="onAssetDialog(asset)">
+                                    <div class="video-icon"
+                                         v-if="asset.mime_type === 'video/mp4'">
+                                        <v-icon color="light"
+                                                dark>videocam
+                                        </v-icon>
+                                    </div>
+                                </v-card-media>
+                            </v-card>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
             </v-flex>
         </v-layout>
     </div>
@@ -114,21 +129,21 @@
                 this.$store.dispatch('getStoryNextAndPrevLink', {alpha_id: alpha_id}).then(() => {
                     this.story_detail = this.$store.getters.getCurrentStoryForDialog;
                     if (this.story_detail.assets.length > 0) {
+
                         this.assets = [];
                         this.assets.push(...this.story_detail.assets);
                     } else {
                         this.assets = [];
                     }
 
+                    this.$store.commit('setCurrentStoryAssets', this.story_detail);
                     StoryDialogBoxEventBus.$emit('setNextPrevButton');
 
                 });
             },
 
-            onOpenVideoPlayerDialog(asset) {
-                if (asset.mime_type === "video/mp4") {
-                    VideoPlayerDialogBoxEventBus.openPlayerDialogBox(asset);
-                }
+            onAssetDialog(asset) {
+               this.$store.commit('setStoryAssetDialogBox', {open: true, id: asset.id});
             },
 
             getThumbImage(asset) {
@@ -153,9 +168,6 @@
                 }
                 return false;
             }
-        },
-
-        destroyed() {
         }
     }
 </script>

@@ -17,3 +17,20 @@
 ******************************************************
  */
 @import 'partials/asset-video-dialog-box';
+@import 'partials/asset-story-in-dialog';
+
+
+
+
+/**
+******************************************************
+  Global admin style
+******************************************************
+ */
+
+.story-input {
+  .v-input{
+    margin:0;
+    padding:0
+  }
+}

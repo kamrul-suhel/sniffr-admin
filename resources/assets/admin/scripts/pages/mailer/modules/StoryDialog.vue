@@ -1,25 +1,38 @@
 <template>
-    <!-- Dialog box -->
     <v-dialog
             v-model="story_dialog"
             scrollable
             content-class="video-dialog-container"
     >
         <div class="dialog-box-switch prev">
-            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onPreviousStory()" :disabled="!previousPageExists" >
+            <v-btn fab
+                   small
+                   dark
+                   color="dark ma-0 hidden-xs-only"
+                   @click="onPreviousStory()"
+                   :disabled="!previousPageExists" >
                 <v-icon>chevron_left</v-icon>
             </v-btn>
         </div>
 
         <div class="dialog-box-switch next">
-            <v-btn color="dark ma-0 hidden-xs-only" fab small  dark @click="onNextStory()" :disabled="!nextPageExists" >
+            <v-btn fab
+                   small
+                   dark
+                   @click="onNextStory()"
+                   color="dark ma-0 hidden-xs-only"
+                   :disabled="!nextPageExists" >
                 <v-icon>chevron_right</v-icon>
             </v-btn>
         </div>
 
         <v-card>
-            <v-toolbar card dark color="dark">
-                <v-btn icon dark @click.native="onCloseDialogBox()">
+            <v-toolbar card
+                       dark
+                       color="dark">
+                <v-btn icon
+                       dark
+                       @click.native="onCloseDialogBox()">
                     <v-icon>close</v-icon>
                 </v-btn>
 
@@ -44,8 +57,7 @@
                                  v-touch="{
                                       left: () => swipe('Left'),
                                       right: () => swipe('Right')
-                                }"
-                    >
+                                }">
                         <story-dialog-component></story-dialog-component>
                     </v-container>
 

@@ -277,7 +277,7 @@
                     this.loading = true;
 
                     // submit data with ajax request
-                    axios.get('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
+                    axios.post('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
                         .then(response => {
                             this.loading = false;
                             this.open_buy_dialog = false;

@@ -22,7 +22,7 @@
 
                         <div class="caption">
                             <span>Author: {{ story.author }} | </span>
-                            <span>Created at: {{ dateFormater(story.date_ingested) }}</span><br/>
+                            <span>Created at: {{ story.date_ingested | convertDate }}</span><br/>
                             <!--<span>State: <strong>{{ story.state }}</strong> |</span>-->
                             <!--<span>Status : {{ story.status }}</span>-->
                         </div>
@@ -121,12 +121,6 @@
             getStoryDetail(){
                 let alpha_id = this.$route.params.alpha_id;
                 this.$store.dispatch('fetchCurrentStory', alpha_id);
-            },
-
-
-            dateFormater(date){
-                var current_date = new Date(Date.parse(date.replace('-', '/', 'g')));
-                return current_date.toDateString();
             }
         }
     }
