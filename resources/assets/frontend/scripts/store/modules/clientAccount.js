@@ -4,8 +4,7 @@ const state = {
     companyUsers: [],
     companyOwnerId: null,
     companyOwners: [],
-    isAccountOwner: false,
-    iniState: false,
+    clientIniState: false,
 }
 
 const getters = {
@@ -21,20 +20,13 @@ const getters = {
         return state.companyUsers;
     },
 
-    getCompanyOwnerId(state) {
-        return state.companyOwnerId;
-    },
-
     getCompanyOwners(state) {
         return state.companyOwners;
     },
 
-    getAccountOwner(state){
-        return state.isAccountOwner;
-    },
 
-    getIniState(state){
-        return state.iniState;
+    getClientIniState(state){
+        return state.clientIniState;
     }
 }
 
@@ -51,10 +43,6 @@ const mutations = {
         state.companyUsers = users;
     },
 
-    setCompanyOwnerId(state, ownerId) {
-        state.companyOwnerId = ownerId;
-    },
-
     setCompanyOwners(state, value) {
         let users = [];
         let owners = Object.entries(value);
@@ -64,22 +52,16 @@ const mutations = {
         state.companyOwners = users;
     },
 
-    setAccountOwner(state){
-        state.isAccountOwner = state.user.id === state.company.account_owner_id;
-    },
-
-    setInitState(state, value){
-        state.iniState = value;
+    setClientInitState(state, value){
+        state.clientIniState = value;
     },
 
     resetClientAccount(state) {
         state.user = {};
         state.company = {};
         state.companyUsers = [];
-        state.companyOwnerId = null;
         state.companyOwners = [];
-        state.isAccountOwner = false;
-        state.iniState = false;
+        state.clientIniState = false;
     }
 }
 
@@ -89,17 +71,15 @@ const actions = {
             commit('setCompanyUser', response.data.user);
             commit('setCompany', response.data.company);
             commit('setCompanyUsers', response.data.company_users);
-            commit('setCompanyOwnerId', response.data.company.account_owner_id);
             commit('setCompanyOwners', response.data.account_owner_users);
-            commit('setAccountOwner');
-            commit('setInitState', true);
+            commit('setClientInitState', true);
         })
     },
 
     fetchClientUser({commit}, payLoad) {
         axios.get(payLoad.url).then((response) => {
             commit('setCompanyUser', response.data.user);
-            commit('setInitState', true);
+            commit('setClientInitState', true);
         })
     }
 }

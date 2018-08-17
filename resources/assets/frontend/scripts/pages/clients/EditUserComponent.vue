@@ -2,7 +2,7 @@
     <div class="client-user-create">
         <v-container grid-list-lg class="pt-0" v-if="iniState">
             <v-layout row wrap>
-                <v-flex xs12 pt-0 v-if="user.role !== 'client'">
+                <v-flex xs12 pt-0 v-if="$store.getters.getIsCompanyOwner">
                     <v-btn outline @click="onGoback()" class="ml-0">
                         <v-icon>chevron_left</v-icon>
                         Go back
@@ -17,7 +17,6 @@
                     <v-form ref="form" v-model="valid" id="user-create-form">
 
                         <!--User Details -->
-
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <v-text-field
@@ -85,9 +84,7 @@
                             </v-flex>
                         </v-layout>
 
-
                         <!-- CTA -->
-
                         <v-layout row wrap>
                             <v-flex xsl2 text-xs-right pa-0>
                                 <v-btn dark
@@ -95,7 +92,6 @@
                                 </v-btn>
                             </v-flex>
                         </v-layout>
-
                     </v-form>
                 </v-flex>
             </v-layout>
@@ -104,7 +100,8 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         data() {
             return {
@@ -123,10 +120,10 @@
             }
         },
 
-        computed : {
+        computed: {
             ...mapGetters({
                 user: 'getCompanyCurrentUser',
-                iniState: 'getIniState'
+                iniState: 'getClientIniState'
             })
         },
 
@@ -163,16 +160,14 @@
 
                     axios.post('/client/profile/' + slug + '/users/' + this.user.id, updateUserForm)
                         .then(response => {
-
                             if (response.data.success) {
-                                // this.$router.push({name: 'client_profile'});
                                 let toast = {
-                                    active : true,
+                                    active: true,
                                     message: 'User successfully updated',
                                     duration: 5000,
                                     color: 'success',
+                                    horizontalAlign: "right"
                                 }
-
                                 this.$store.commit('setToast', toast)
                             }
                         })

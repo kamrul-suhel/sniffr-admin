@@ -14,7 +14,8 @@
                         v-model="valid"
                         id="company-update-form">
                     <!--Company Name-->
-                    <v-container grid-list-lg>
+                    <v-container grid-list-lg
+                                 pa-0>
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <v-text-field
@@ -30,7 +31,8 @@
                     </v-container>
 
                     <!-- Billing Info-->
-                    <v-container grid-list-lg>
+                    <v-container grid-list-lg
+                                 pa-0>
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <h2 class="sub-heading text-xs-center text-uppercase">Company &amp; Billing
@@ -39,7 +41,7 @@
                         </v-layout>
 
                         <v-layout row wrap>
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Address Line 1"
                                         v-model="company.address_line1"
@@ -51,7 +53,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="VAT Number"
                                         v-model="company.vat_number"
@@ -63,7 +65,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Address Line 2"
                                         v-model="company.address_line2"
@@ -75,7 +77,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Billing Name"
                                         v-model="company.billing_name"
@@ -87,7 +89,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Billing Email Address"
                                         v-model="company.billing_email"
@@ -100,7 +102,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Postcode"
                                         v-model="company.postcode"
@@ -112,7 +114,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Billing Phone Number"
                                         v-model="company.billing_tel"
@@ -124,7 +126,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-autocomplete
                                         :items="countries"
                                         label="Country"
@@ -138,7 +140,7 @@
                                 </v-autocomplete>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md6 lg6 xl6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="City"
                                         v-model="company.city"
@@ -176,10 +178,10 @@
 
                 <!-- Company User Accounts -->
                 <v-container grid-list-lg
-                             v-if="isAccountOwner">
+                             pa-0>
                     <v-layout row wrap>
-                        <v-flex xs12>
-                            <h2 class="sub-heading text-xs-center text-uppercase pb-3">User Accounts</h2>
+                        <v-flex xs12 text-xs-center pb-3>
+                            <h2 class="sub-heading text-uppercase">User Accounts</h2>
                         </v-flex>
                     </v-layout>
 
@@ -195,7 +197,8 @@
                                     <tr>
                                         <td>{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
                                         <td>{{ props.item.tel }}</td>
-                                        <td  style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}</td>
+                                        <td style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}
+                                        </td>
                                         <td>{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
                                         <td class="text-xs-center">
                                             <v-btn
@@ -210,25 +213,22 @@
                             </v-data-table>
                         </v-flex>
                     </v-layout>
-                </v-container>
 
-                <!-- Users CTA -->
-                <v-container grid-list-lg v-if="isAccountOwner">
                     <v-layout row wrap>
                         <v-flex xsl2
                                 text-xs-right
-                                pa-0>
+                                pt-2
+                        >
                             <v-btn
                                     dark
                                     raised
                                     color="dark"
-                                    class="sf-button"
+                                    class="sf-button mr-0"
                                     :to="{name: 'client_create_user', params:{slug : company.slug}}">New User
                             </v-btn>
                         </v-flex>
                     </v-layout>
                 </v-container>
-
             </v-layout>
         </v-container>
     </div>
@@ -266,29 +266,36 @@
             }
         },
 
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                let isCompanyOwner = vm.$store.getters.getIsCompanyOwner;
+                if (!isCompanyOwner) {
+                    vm.$router.push({
+                        name: 'client_edit_create_user',
+                        params: {
+                            slug: vm.$store.getters.getCompanySlug,
+                            userid: vm.$store.getters.getUserId
+                        }
+                    })
+                }
+            });
+        },
+
         computed: {
             ...mapGetters({
                 company: 'getCompany',
                 user: 'getCompanyCurrentUser',
                 companyOwners: 'getCompanyOwners',
-                isAccountOwner: 'getAccountOwner',
                 companyUsers: 'getCompanyUsers',
-                iniState: 'getIniState',
+                iniState: 'getClientIniState',
             })
         },
 
         watch: {
-            isAccountOwner(value) {
-                if (!value) {
-                    this.$router.push({
-                        name: 'client_edit_create_user',
-                        params: {slug: this.company.slug, userid: this.user.id}
-                    });
-                }
-            }
         },
 
         created() {
+            this.$store.commit('setClientInitState', false);
             this.countries = ClientAccountServices.getAllCountries();
             this.getCompanyData();
         },
@@ -331,10 +338,6 @@
                                 };
                                 this.$store.commit('setToast', toastOption);
                             }
-
-                            // if(!this.isAccountOwner()) {
-                            //     this.editUser(this.user.id);
-                            // }
 
                             this.loading = false;
                             this.loader = null;

@@ -20,16 +20,16 @@
                             dark
                             color="white"
                             slider-color="black">
-                        <v-tab
-                                key="videos">
+                        <v-tab v-if="totalVideos > 0 || searchVideoTerm"
+                               key="videos">
                             <v-badge right color="black">
                                 <span slot="badge">{{ totalVideos }}</span>
                                 Videos
                             </v-badge>
                         </v-tab>
 
-                        <v-tab
-                                key="stories">
+                        <v-tab v-if="totalStories > 0 || searchStoryTerm"
+                               key="stories">
                             <v-badge right color="black">
                                 <span slot="badge">{{totalStories}}</span>
                                 Stories
@@ -38,7 +38,7 @@
 
                         <v-tab-item
                                 v-if="totalVideos > 0 || searchVideoTerm"
-                                :key="'videos'">
+                                key="videos">
                             <v-layout row wrap>
                                 <v-flex xs12 class="text-xs-right">
                                     <v-text-field
