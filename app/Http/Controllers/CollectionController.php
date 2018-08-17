@@ -340,6 +340,14 @@ class CollectionController extends Controller
 		$collectionAsset = $this->{'collection'.ucfirst($type)}->find($collection_asset_id);
 		$collection = $collectionAsset->collection;
 
+		if($collection->user_id !== auth()->user()->id) {
+			if($isJson){
+				return $this->errorResponse([
+					'message' => 'You do not have permission to do this',
+				]);
+			}
+		}
+
         if($collectionAsset->status === 'expired') {
             if($isJson){
                 return $this->errorResponse([
@@ -359,13 +367,9 @@ class CollectionController extends Controller
             }
         }
 
-		$collection->status = "closed";
-		$collection->save();
+		$collectionAsset->acceptAssetQuote();
 
-		$collectionAsset->status = "purchased";
-		$collectionAsset->license_ends_at = $collectionAsset->calculateLicenseEndTime();
-		$collectionAsset->licensed_at = Carbon::now();
-		$collectionAsset->save();
+		$collection->updateCollection(['status' => 'closed']);
 
 		// If exclusive type of asset is purchased,
         // Expire all other collections with same asset. Close collection too

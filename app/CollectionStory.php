@@ -113,9 +113,19 @@ class CollectionStory extends Model
     }
 
 
-
     public function calculateLicenseEndTime()
 	{
 		return config('pricing.length.'. $this->length .'.end_date');
+	}
+
+	public function acceptAssetQuote()
+	{
+		$this->update([
+			'status' => 'purchased',
+			'license_ends_at' => $this->calculateLicenseEndTime(),
+			'licensed_at' => Carbon::now(),
+		]);
+
+		return $this;
 	}
 }
