@@ -1,16 +1,18 @@
 <template>
-    <!-- Login form -->
     <section class="quote-dialog">
         <v-dialog persistent
-                v-model="open_quote_dialog"
-                max-width="500px"
-                class="login-section"
-                @keydown.esc="onQuoteDialogClose()">
+                  v-model="open_quote_dialog"
+                  max-width="500px"
+                  class="login-section"
+                  @keydown.esc="onQuoteDialogClose()">
             <v-card raised>
-
                 <v-card-text class="buy-section">
-                    <v-form method="post" v-model="valid" lazy-validation ref="quote_form">
-                        <v-layout row wrap id="buy-section">
+                    <v-form method="post"
+                            v-model="valid"
+                            lazy-validation
+                            ref="quote_form">
+                        <v-layout row wrap
+                                  id="buy-section">
 
                             <v-flex xs12>
                                 <h2 class="text-center text-uppercase">Quote</h2>
@@ -43,7 +45,8 @@
                                             :error-messages="emailError"
                                             required>
                                     </v-text-field>
-                                    <small class="red--text" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
+                                    <small class="red--text"
+                                           v-if="errors.user_email">{{ errors.user_email[0] }}</small>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -56,7 +59,8 @@
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <small class="red--text" v-if="errors.company_name">{{ errors.company_name[0] }}
+                                    <small class="red--text"
+                                           v-if="errors.company_name">{{ errors.company_name[0] }}
                                     </small>
                                     <v-text-field
                                             name="company"
@@ -125,12 +129,12 @@
                                         label="Additional information"
                                 ></v-textarea>
                             </v-flex>
-
                         </v-layout>
 
                         <v-layout row justify-center>
                             <v-flex>
-                                <div v-if="validation.error" class="red--text text-xs-center">{{validation.message}}
+                                <div class="red--text text-xs-center"
+                                     v-if="validation.error">{{validation.message}}
                                 </div>
                             </v-flex>
                         </v-layout>
@@ -139,6 +143,14 @@
                             <v-flex xs12>
                                 <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
+
+                                    <v-btn flat
+                                           dark
+                                           color="black"
+                                           @click.native="open_quote_dialog = false;
+                                           loading = false;">Cancel
+                                    </v-btn>
+
                                     <v-btn
                                             raised
                                             dark

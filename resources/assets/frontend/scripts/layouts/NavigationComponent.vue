@@ -1,8 +1,10 @@
 <template>
-    <section id="nav" class="section-space" :class="{ 'nav-background' : nav_background}">
+    <section id="nav"
+             class="section-space"
+             :class="{ 'nav-background' : nav_background}">
         <v-container grid-list-lg>
             <v-layout row wrap>
-                <v-flex xs12 sm4 md4 lg4>
+                <v-flex xs12 sm4>
                     <div class="logo">
                         <router-link to="/">
                             <img src="/assets/images/logo-sniffr-white.png"/>
@@ -10,45 +12,69 @@
                     </div>
                 </v-flex>
 
-                <v-flex xs12 sm8 md8 lg8>
+                <v-flex xs12 sm8>
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
                                 <router-link :to="{name: 'upload_video'}">
-                                    <v-icon color="white" left>file_upload</v-icon> Upload
+                                    <v-icon left
+                                            color="white">file_upload
+                                    </v-icon>
+                                    Upload
                                 </router-link>
                             </li>
 
                             <li v-if="client_login && user.offers >= 1">
                                 <router-link :to="{name: 'client_offered_assets', query:{type: 'offered'}}">
-                                    <v-icon color="white" left>gavel</v-icon> My Offers ({{ user.offers }})
+                                    <v-icon left
+                                            color="white">gavel
+                                    </v-icon>
+                                    My Offers ({{ user.offers }})
                                 </router-link>
                             </li>
 
                             <li>
                                 <router-link :to="{name: 'videos'}">
-                                    <v-icon color="white" left>videocam</v-icon> Videos
+                                    <v-icon left
+                                            color="white">videocam
+                                    </v-icon>
+                                    Videos
                                 </router-link>
                             </li>
-
 
                             <li>
                                 <router-link :to="{name: 'stories'}">
-                                    <v-icon color="white" left>art_track</v-icon> Stories
+                                    <v-icon color="white" left>art_track</v-icon>
+                                    Stories
                                 </router-link>
                             </li>
 
                             <li>
-                                <a  @click.stop.prevent="onLoginClick()" v-if="!user.user_login">
-                                    <v-icon color="white" left>lock_open</v-icon> Login
+                                <a @click.stop.prevent="onLoginClick()"
+                                   v-if="!user.user_login">
+                                    <v-icon left
+                                            color="white">lock_open
+                                    </v-icon>
+                                    Login
                                 </a>
-                                <v-menu bottom open-on-hover offset-y v-else min-width="140px">
-                                    <a slot="activator"><v-icon color="white">face</v-icon> {{ user.name }}</a>
+                                <v-menu bottom
+                                        open-on-hover
+                                        offset-y
+                                        v-else
+                                        min-width="140px">
+                                    <a slot="activator">
+                                        <v-icon color="white">face</v-icon>
+                                        {{ user.name }}
+                                    </a>
+
                                     <v-list>
                                         <v-list-tile v-if="!client_login">
                                             <v-list-tile-title>
                                                 <a href="/admin">
-                                                    <v-icon color="white" left size="20px">settings</v-icon> Admin
+                                                    <v-icon color="white"
+                                                            left size="20px">settings
+                                                    </v-icon>
+                                                    Admin
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -56,15 +82,24 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <router-link :to="{name: 'client_profile'}">
-                                                    <v-icon color="white" left size="20px">settings</v-icon> Account Settings
+                                                    <v-icon left
+                                                            size="20px"
+                                                            color="white">settings
+                                                    </v-icon>
+                                                    Account Settings
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link :to="{name: 'client_purchased_assets', query:{type: 'purchased'}}">
-                                                    <v-icon color="white" left size="20px">history</v-icon> Order History
+                                                <router-link
+                                                        :to="{name: 'client_purchased_assets', query:{type: 'purchased'}}">
+                                                    <v-icon left
+                                                            size="20px"
+                                                            color="white">history
+                                                    </v-icon>
+                                                    Order History
                                                 </router-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -72,7 +107,11 @@
                                         <v-list-tile>
                                             <v-list-tile-title>
                                                 <a @click.prevent.stop="onLogout()">
-                                                    <v-icon color="white" left size="20px">lock_out</v-icon> Logout
+                                                    <v-icon left
+                                                            size="20px"
+                                                            color="white">lock_out
+                                                    </v-icon>
+                                                    Logout
                                                 </a>
                                             </v-list-tile-title>
                                         </v-list-tile>
@@ -97,16 +136,6 @@
         <!-- Quote Component -->
         <quote-component></quote-component>
         <!-- End request quote component -->
-
-        <!-- Logout snackbars -->
-        <v-snackbar
-                top="top"
-                :timeout="logoutTime"
-                v-model="logout">
-            {{ logout_text }}
-            <v-btn flat color="light" @click.native="logout = false">Close</v-btn>
-        </v-snackbar>
-        <!-- End logout -->
     </section>
 </template>
 <script>
@@ -114,7 +143,8 @@
     import ForgotPasswordComponent from '../component/ForgotPasswordComponent'
     import QuoteComponent from '../component/QuoteComponent'
 
-    import { mapGetters } from 'vuex';
+    import {mapGetters} from 'vuex';
+
     export default {
         components: {
             LoginComponent,
@@ -123,11 +153,7 @@
         },
         data() {
             return {
-                nav_background: false,
-                //logout
-                logout: false,
-                logoutTime: 3000,
-                logout_text: 'You have successfully logged out',
+                nav_background: false
             }
         },
 
@@ -139,13 +165,11 @@
         },
 
         watch: {
-            // Detach which page and set navigation background
-            $route(to, from, next){
+            $route(to, from, next) {
                 this.onResetPrevRoute();
-
-                if(to.name != 'home'){
+                if (to.name != 'home') {
                     this.nav_background = true;
-                }else{
+                } else {
                     setTimeout(() => {
                         this.nav_background = false;
                     }, 800);
@@ -155,13 +179,13 @@
                 this.$route.name === 'client_offered_assets' ? this.$store.commit('setIsOfferedPage', true) : this.$store.commit('setIsOfferedPage', false);
             }
         },
-        created(){
+        created() {
             this.setPrevRoute();
             this.settings = this.$store.getters.getSettingsObject;
 
-            if(this.$route.name !== 'home'){
+            if (this.$route.name !== 'home') {
                 this.nav_background = true;
-            }else{
+            } else {
                 this.nav_background = false;
             }
 
@@ -169,31 +193,34 @@
             this.$route.name === 'client_offered_assets' ? this.$store.commit('setIsOfferedPage', true) : this.$store.commit('setIsOfferedPage', false);
         },
         methods: {
-            setPrevRoute(){
+            setPrevRoute() {
                 let routeUrl = this.$store.getters.getRouteUrl;
-                if(routeUrl === '' ){
-                    if(this.$route.name === 'client_story_detail'){
+                if (routeUrl === '') {
+                    if (this.$route.name === 'client_story_detail') {
                         this.$store.commit('setRouteUrl', 'client_stories')
-                    }else if(this.$route.name === 'client_video_detail'){
+                    } else if (this.$route.name === 'client_video_detail') {
                         this.$store.commit('setRouteUrl', 'client_videos')
                     }
-                }else{
+                } else {
                     this.$store.commit('setRouteUrl', '')
                 }
             },
 
-            onResetPrevRoute(){
+            onResetPrevRoute() {
                 this.$store.commit('setRouteUrl', '');
             },
 
-            onLogout(){
-                this.logout = true;
+            onLogout() {
+                let toast = {
+                    message: 'You have successfully logged out'
+                };
+                this.$store.commit('setToast', toast);
                 this.$store.dispatch('userLogout');
                 return this.$router.push({name: 'home'});
             },
 
             // Login component trigger this methods when change any value
-            onLoginClick(){
+            onLoginClick() {
                 this.$store.commit('setLoginDialog', true);
             }
         }

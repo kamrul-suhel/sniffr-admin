@@ -111,7 +111,8 @@ class AuthController extends Controller
         } elseif (key_exists(Auth::user()->role, config('roles.clients'))) {
 
             $user = Auth::user();
-            $client = Auth::user()->client();
+            $user['client'] = $user->client;
+            $client = Auth::user()->client;
             $offers = $user->userOffers();
         }
 

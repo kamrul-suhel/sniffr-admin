@@ -14,14 +14,13 @@
     text-align:center;
     margin-top:0;
   }
-  
+
   .login-title:after{
     @include heading-border(50px, 2px, 0px);
   }
 
   .forgot-password{
     display:block;
-    margin-top:10px;
 
     a{
       color:#000;
