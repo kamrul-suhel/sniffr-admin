@@ -162,9 +162,8 @@
                         .then(response => {
                             if (response.data.success) {
                                 let toast = {
-                                    active: true,
                                     message: 'User successfully updated',
-                                    duration: 5000,
+                                    duration: 3000,
                                     color: 'success',
                                     horizontalAlign: "right"
                                 }

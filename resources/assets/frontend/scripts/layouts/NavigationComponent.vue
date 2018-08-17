@@ -212,7 +212,6 @@
 
             onLogout() {
                 let toast = {
-                    active: true,
                     message: 'You have successfully logged out'
                 };
                 this.$store.commit('setToast', toast);

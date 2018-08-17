@@ -162,7 +162,7 @@
                         .then(response => {
                             if (response.data.success) {
                                 let toast = {
-                                    message: 'User hasb been successfully created.',
+                                    message: 'User has been successfully created.',
                                     duration: 3000,
                                     color: "success",
                                     horizontalAlign: "right"
