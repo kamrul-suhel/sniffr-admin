@@ -1,0 +1,44 @@
+<template>
+    <section id="sniffr">
+        <v-app v-if="sniffrStateReady">
+            <!--<navigation-component/>-->
+
+            <v-content>
+                <div id="scroll_to"></div>
+                <transition name="slide-fade" mode="out-in">
+                    <router-view></router-view>
+                </transition>
+            </v-content>
+
+            <!--<footer-component/>-->
+        </v-app>
+    </section>
+</template>
+<script>
+    import NavigationComponent from '../components/Navigation'
+    import FooterComponent from "../components/FooterComponent"
+    export default {
+
+        components: {
+          NavigationComponent,
+            FooterComponent
+        },
+
+        created(){
+            console.log(axios);
+            return;
+            this.$store.dispatch('setSettingObjectFromServer')
+                .then((data) => {
+                    this.$store.commit('setUserStatus', data.sniffr_app);
+                    this.sniffrStateReady = true
+                })
+        },
+
+        data: () => ({
+            sniffrStateReady : false
+        }),
+
+        methods:{
+        }
+    }
+</script>

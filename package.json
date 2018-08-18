@@ -8,7 +8,9 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "copy": "cross-env NODE_ENV=copy node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "build": "laravel-nuxt build",
+        "start": "laravel-nuxt dev"
     },
     "dependencies": {
         "autoprefixer": "^8.3.0",
@@ -23,6 +25,9 @@
         "font-awesome": "^4.7.0",
         "global": "^4.3.2",
         "glyphicons-halflings": "^1.9.1",
+        "laravel-nuxt": "^1.4.7",
+        "material-design-icons-iconfont": "^3.0.3",
+        "nuxt-sass-resources-loader": "^2.0.4",
         "select2": "^4.0.6-rc.1",
         "twitter-widgets": "^1.0.0",
         "video.js": "^6.9.0",

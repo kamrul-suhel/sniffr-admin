@@ -12,7 +12,12 @@
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
-    Route::get('/', 'HomeController@index')->name('home');
+//    Route::get('/', 'HomeController@index')->name('home');
+
+	Route::get(
+		'/',
+		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
+	)->where('/', '/');
 
     Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
