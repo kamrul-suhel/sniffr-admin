@@ -12,6 +12,8 @@ class CollectionQuote extends Model
 
     protected $table = 'collection_quotes';
 
+    protected $fillable = ['rejection_notes', 'price', 'user_id', 'collection_video_id', 'collection_story_id'];
+
     /**
      * Must me admin user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -8,13 +8,9 @@ class QuoteNegotiationTest extends \Codeception\Test\Unit
      */
     protected $tester;
     
-    protected function _before()
-    {
-    }
+    protected function _before(){}
 
-    protected function _after()
-    {
-    }
+    protected function _after(){}
 
     // tests
     public function testSomeFeature()

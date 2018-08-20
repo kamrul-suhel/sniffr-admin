@@ -4,6 +4,14 @@
 
 actor: UnitTester
 modules:
+  config:
+    Db:
+      dsn: 'mysql:host=localhost;dbname=sniffer-test'
+      user: 'root'
+      password:
+      dump: tests/_data/sniffr-test-dump.sql
+      cleanup: false # reload dump between tests
+      populate: true # load dump before all tests
   enabled:
   - Asserts
   - \Helper\Unit
