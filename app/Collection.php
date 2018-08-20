@@ -59,9 +59,10 @@ class Collection extends Model
 	 * @param array $data
 	 * @return bool
 	 */
-	public function updateCollection(array $data): bool
+	public function updateCollection(array $data)
 	{
-		return $this->update($data);
+		$this->update($data);
+		return $this->save();
 	}
 
     //Functions

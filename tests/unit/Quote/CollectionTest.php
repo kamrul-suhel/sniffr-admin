@@ -96,27 +96,4 @@ class CollectionTest extends \Codeception\Test\Unit
 
 	}
 
-	public function testUpdateIncorrectValueInCollection()
-	{
-		//prepare
-		$testCollection = $this->collection->create([
-			'id' => 1,
-			'user_id' => 1,
-			'client_id' => 1,
-			'discount' => null,
-			'status' => 'FAIL'
-		]);
-
-		//execute
-		//execute
-		try {
-			$testCollection->update(['user_id' => '', 'status' => 'TITS']);
-		} catch (QueryException $e) {
-			$error = $e;
-		}
-
-		//result
-		$this->assertEquals('closed', $testCollection->status);
-	}
-
 }

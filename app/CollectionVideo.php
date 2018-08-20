@@ -133,15 +133,35 @@ class CollectionVideo extends Model
 		if ($this->collection->user_id !== auth()->user()->id) {
 			return false;
 		}
+
 		$this->update([
 			'status' => 'purchased',
 			'license_ends_at' => $this->calculateLicenseEndTime(),
 			'licensed_at' => Carbon::now(),
 		]);
 
-		$this->save();
+		return $this;
+	}
 
+	public function rejectAssetQuote()
+	{
+		if($this->collection->user_id !== auth()->user()->id) {
+			return false;
+		}
+
+		$this->update([
+			'status' => 'requested',
+		]);
 
 		return $this;
+	}
+
+	public function updateCollectionQuote($data)
+	{
+		$quoteId = $this->quotes()->max('id');
+		$quote = CollectionQuote::find($quoteId);
+		$quote->update($data);
+
+		return $quote;
 	}
 }
