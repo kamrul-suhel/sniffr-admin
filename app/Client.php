@@ -108,9 +108,6 @@ class Client extends Model
 
     }
 
-    /**
-     * @return int
-     */
     public function activeLicences()
     {
         $collections = $this->collections()
@@ -127,8 +124,7 @@ class Client extends Model
                 $query->where('status', 'purchased');
                 $query->whereNotNull('licensed_at');
                 $query->whereNotNull('license_ends_at');
-            })
-            ->count();
+            });
 
         return $collections;
     }
