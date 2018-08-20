@@ -123,11 +123,17 @@ class CollectionVideo extends Model
 		return $this->where([['type', $type], ['status', $status]])->get();
 	}
 
+	/**
+	 * @return \Illuminate\Config\Repository|mixed
+	 */
 	public function calculateLicenseEndTime()
 	{
 		return config('pricing.length.' . $this->length . '.end_date');
 	}
 
+	/**
+	 * @return $this|bool
+	 */
 	public function acceptAssetQuote()
 	{
 		if ($this->collection->user_id !== auth()->user()->id) {
@@ -143,6 +149,9 @@ class CollectionVideo extends Model
 		return $this;
 	}
 
+	/**
+	 * @return $this|bool
+	 */
 	public function rejectAssetQuote()
 	{
 		if($this->collection->user_id !== auth()->user()->id) {
@@ -156,6 +165,10 @@ class CollectionVideo extends Model
 		return $this;
 	}
 
+	/**
+	 * @param $data
+	 * @return mixed
+	 */
 	public function updateCollectionQuote($data)
 	{
 		$quoteId = $this->quotes()->max('id');
