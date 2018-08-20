@@ -1,21 +1,26 @@
 <template>
     <div class="client-profile">
-        <v-container grid-list-lg class="pt-0">
-            <v-layout row wrap v-if="stateReady">
+        <v-container grid-list-lg
+                     class="pt-0"
+                     v-if="iniState">
+            <v-layout row
+                      wrap>
                 <v-flex xs12>
                     <h2 class="text-center text-uppercase">Account Settings</h2>
                 </v-flex>
 
-                <v-form ref="form" v-model="valid" id="company-update-form" >
-
+                <v-form lazy-validation
+                        ref="form"
+                        v-model="valid"
+                        id="company-update-form">
                     <!--Company Name-->
-                    <v-container grid-list-lg>
-
+                    <v-container grid-list-lg
+                                 pa-0>
                         <v-layout row wrap>
                             <v-flex xs12>
                                 <v-text-field
                                         label="Company Name:"
-                                        v-model="company.company_name"
+                                        v-model="company.name"
                                         name="company_name"
                                         color="dark"
                                         :rules="[v => !!v || 'Field is required']"
@@ -23,20 +28,20 @@
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
-
                     </v-container>
 
                     <!-- Billing Info-->
-                    <v-container grid-list-lg>
-
+                    <v-container grid-list-lg
+                                 pa-0>
                         <v-layout row wrap>
                             <v-flex xs12>
-                                <h4 class="text-xs-center text-uppercase">Company &amp; Billing Information</h4>
+                                <h2 class="sub-heading text-xs-center text-uppercase">Company &amp; Billing
+                                    Information</h2>
                             </v-flex>
                         </v-layout>
 
                         <v-layout row wrap>
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Address Line 1"
                                         v-model="company.address_line1"
@@ -48,7 +53,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="VAT Number"
                                         v-model="company.vat_number"
@@ -60,7 +65,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Address Line 2"
                                         v-model="company.address_line2"
@@ -72,7 +77,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Billing Name"
                                         v-model="company.billing_name"
@@ -84,19 +89,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
-                                <v-text-field
-                                        label="City"
-                                        v-model="company.city"
-                                        name="city"
-                                        type="text"
-                                        color="dark"
-                                        :rules="[v => !!v || 'Field is required']"
-                                        required>
-                                </v-text-field>
-                            </v-flex>
-
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Billing Email Address"
                                         v-model="company.billing_email"
@@ -109,7 +102,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Postcode"
                                         v-model="company.postcode"
@@ -121,7 +114,7 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
+                            <v-flex xs12 sm12 md6>
                                 <v-text-field
                                         label="Billing Phone Number"
                                         v-model="company.billing_tel"
@@ -133,11 +126,25 @@
                                 </v-text-field>
                             </v-flex>
 
-                            <v-flex xs6>
-                                <v-text-field
+                            <v-flex xs12 sm12 md6>
+                                <v-autocomplete
+                                        :items="countries"
                                         label="Country"
+                                        return-object
                                         v-model="company.country"
                                         name="country"
+                                        type="text"
+                                        color="dark"
+                                        :rules="[v => !!v || 'Field is required']"
+                                        required>
+                                </v-autocomplete>
+                            </v-flex>
+
+                            <v-flex xs12 sm12 md6>
+                                <v-text-field
+                                        label="City"
+                                        v-model="company.city"
+                                        name="city"
                                         type="text"
                                         color="dark"
                                         :rules="[v => !!v || 'Field is required']"
@@ -151,104 +158,104 @@
                                         v-model="companyOwner"
                                         label="Change Owner - Note: Once the account owner is changed, you will lose access to these settings."
                                         name="client_owner_id"
-                                        color="dark"
-                                        item-text="name"
                                         item-value="id"
-                                        return object
-                                ></v-select>
+                                        item-text="name"
+                                        color="dark"
+                                        return object>
+                                </v-select>
                             </v-flex>
 
-                        </v-layout>
-
-                    </v-container>
-
-                    <!-- CTA -->
-                    <v-container grid-list-lg>
-                        <v-layout row wrap>
                             <v-flex xsl2 text-xs-right pa-0>
                                 <v-btn dark
+                                       :loading="loading"
+                                       class="sf-button"
                                        @click="onSubmit()">Update Settings
                                 </v-btn>
                             </v-flex>
                         </v-layout>
                     </v-container>
-
-                    <!-- Company User Accounts -->
-                    <v-container grid-list-lg v-if="isAccountOwner()">
-
-                        <v-layout row wrap>
-                            <v-flex xs12>
-                                <h4 class="text-xs-center text-uppercase">User Accounts</h4>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-data-table :headers="headers" :items="companyUsers" hide-actions item-key="id">
-                            <template slot="items" slot-scope="props">
-                                <tr @click="props.expanded = !props.expanded">
-                                    <td class="">{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
-                                    <td class="">{{ props.item.tel }}</td>
-                                    <td class="" style="text-transform: capitalize;">{{ props.item.role.replace('_', ' ')}}</td>
-                                    <td class="">{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
-                                    <td class="right">
-                                        <v-btn dark @click="editUser(props.item.id)">
-                                            <v-icon color="white" size="20px">edit</v-icon>
-                                        </v-btn>
-                                    </td>
-                                </tr>
-                            </template>
-                        </v-data-table>
-
-                    </v-container>
-
-                    <!-- Users CTA -->
-                    <br>
-                    <v-container grid-list-lg v-if="isAccountOwner()">
-                        <v-layout row wrap>
-                            <v-flex xsl2 text-xs-right pa-0>
-                                <router-link :to="{name: 'client_create_user', params:{slug : companyData.slug}}">
-                                    <v-btn dark>New User</v-btn>
-                                </router-link>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-
                 </v-form>
 
+                <!-- Company User Accounts -->
+                <v-container grid-list-lg
+                             pa-0>
+                    <v-layout row wrap>
+                        <v-flex xs12 text-xs-center pb-3>
+                            <h2 class="sub-heading text-uppercase">User Accounts</h2>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row wrap>
+                        <v-flex xs12>
+                            <v-data-table
+                                    :headers="headers"
+                                    :items="companyUsers"
+                                    hide-actions
+                                    item-key="id">
+                                <template slot="items"
+                                          slot-scope="props">
+                                    <tr>
+                                        <td>{{ props.item.full_name ? props.item.full_name : props.item.username }}</td>
+                                        <td>{{ props.item.tel }}</td>
+                                        <td style="text-transform: capitalize;">{{ props.item.role.replace('_', '')}}
+                                        </td>
+                                        <td>{{ props.item.active === 1 ? 'Active' : 'Deactivated' }}</td>
+                                        <td class="text-xs-center">
+                                            <v-btn
+                                                    @click="editUser(props.item.id)"
+                                                    flat icon
+                                                    color="dark">
+                                                <v-icon size="15px">edit</v-icon>
+                                            </v-btn>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </v-data-table>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row wrap>
+                        <v-flex xsl2
+                                text-xs-right
+                                pt-2
+                        >
+                            <v-btn
+                                    dark
+                                    raised
+                                    color="dark"
+                                    class="sf-button mr-0"
+                                    :to="{name: 'client_create_user', params:{slug : company.slug}}">New User
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
             </v-layout>
         </v-container>
-
-        <!-- Success Message -->
-        <v-snackbar
-                top="top"
-                :timeout="3000"
-                v-model="success">{{ successMessage }}
-            <v-btn flat color="light" @click.native="success = false">Close</v-btn>
-        </v-snackbar>
     </div>
 
 </template>
 
 <script>
+    import ClientAccountServices from '../../services/ClientAccountServices'
+    import {mapGetters} from 'vuex';
+
     export default {
         data() {
             return {
-                stateReady: false,
                 valid: false,
-                companyData: null,
-                company: null,
-                user: null,
-                companyUsers: null,
-                companyOwners: null,
+                formState: false,
                 companyOwner: null,
-                success: false,
-                successMessage: false,
+                countries: [],
+
+                loader: null,
+                loading: false,
 
                 headers: [
                     {text: 'Name', align: 'left', sortable: true, value: 'name'},
                     {text: 'Tel', align: 'left', sortable: true, value: 'tel'},
                     {text: 'Role', align: 'left', sortable: true, value: 'role'},
                     {text: 'Status', align: 'left', sortable: true, value: 'status'},
-                    {text: '', align: 'left', sortable: true, value: ''},
+                    {text: 'Action', align: 'center', sortable: true, value: ''},
                 ],
 
                 emailRules: [
@@ -259,63 +266,56 @@
             }
         },
 
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                let isCompanyOwner = vm.$store.getters.getIsCompanyOwner;
+                if (!isCompanyOwner) {
+                    vm.$router.push({
+                        name: 'client_edit_create_user',
+                        params: {
+                            slug: vm.$store.getters.getCompanySlug,
+                            userid: vm.$store.getters.getUserId
+                        }
+                    })
+                }
+            });
+        },
+
+        computed: {
+            ...mapGetters({
+                company: 'getCompany',
+                user: 'getCompanyCurrentUser',
+                companyOwners: 'getCompanyOwners',
+                companyUsers: 'getCompanyUsers',
+                iniState: 'getClientIniState',
+            })
+        },
+
+        watch: {
+        },
+
         created() {
+            this.$store.commit('setClientInitState', false);
+            this.countries = ClientAccountServices.getAllCountries();
             this.getCompanyData();
         },
 
         methods: {
             getCompanyData() {
-                axios.get('/client/profile').then((response) => {
-                    this.user = response.data.user;
-                    this.companyData = response.data.company;
-                    this.companyUsers = response.data.company_users;
-                    this.companyOwner = this.companyData.account_owner_id;
-
-                    if(this.user.id !== this.companyOwner) {
-                        return this.editUser(this.user.id);
-                    }
-
-                    let companyOwners = [];
-                    let users = Object.entries(response.data.account_owner_users);
-                    users.forEach(function (index, value) {
-                        companyOwners.push({id: index[0], name: index[1]});
-                    });
-                    this.companyOwners = companyOwners;
-
-                    this.company = {
-                        company_name: this.companyData.name,
-                        address_line1: this.companyData.address_line1,
-                        address_line2: this.companyData.address_line2,
-                        city: this.companyData.city,
-                        postcode: this.companyData.postcode,
-                        country: this.companyData.country,
-                        vat_number: this.companyData.vat_number,
-                        billing_name: this.companyData.billing_name,
-                        billing_email: this.companyData.billing_email,
-                        billing_tel: this.companyData.billing_tel,
-                        account_owner_id: this.companyData.account_owner_id,
-                    };
-
-                    this.stateReady = true;
-
-                    if(this.user.id !== this.companyOwner) {
-                        this.editUser(this.user.id);
-                    }
-                });
+                this.$store.dispatch('fetchClientAccount');
             },
 
             editUser(userId) {
                 this.$router.push({
                     name: 'client_edit_create_user',
-                    params: {slug: this.companyData.slug, userid: userId}
+                    params: {slug: this.company.slug, userid: userId}
                 });
             },
 
             onSubmit() {
                 if (this.$refs.form.validate()) {
-
                     let companyUpdateForm = new FormData();
-                    companyUpdateForm.append('company_name', this.company.company_name);
+                    companyUpdateForm.append('company_name', this.company.name);
                     companyUpdateForm.append('address_line1', this.company.address_line1);
                     companyUpdateForm.append('address_line2', this.company.address_line2);
                     companyUpdateForm.append('city', this.company.city);
@@ -325,30 +325,33 @@
                     companyUpdateForm.append('billing_name', this.company.billing_name);
                     companyUpdateForm.append('billing_email', this.company.billing_email);
                     companyUpdateForm.append('billing_tel', this.company.billing_tel);
-                    companyUpdateForm.append('account_owner_id', this.companyOwner);
+                    companyUpdateForm.append('account_owner_id', this.company.account_owner_id);
 
-                    axios.post('/client/profile/' + this.companyData.id, companyUpdateForm)
+                    axios.post('/client/profile/' + this.company.id, companyUpdateForm)
                         .then(response => {
-
                             if (response.data.success) {
-                                this.success = true;
-                                this.successMessage = response.data.message;
+                                let toastOption = {
+                                    message: response.data.message,
+                                    duration: 3000,
+                                    color: "success",
+                                    horizontalAlign: "right"
+                                };
+                                this.$store.commit('setToast', toastOption);
                             }
 
-                            if(!this.isAccountOwner()) {
-                                this.editUser(this.user.id);
-                            }
+                            this.loading = false;
+                            this.loader = null;
 
                         }).catch(error => {
 
                     });
 
                 }
-            },
-
-            isAccountOwner() {
-                return this.user.id === this.companyData.account_owner_id
             }
         },
+
+        destroyed() {
+            this.$store.commit('resetClientAccount');
+        }
     }
 </script>

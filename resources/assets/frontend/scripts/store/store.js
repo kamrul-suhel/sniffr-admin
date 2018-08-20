@@ -7,6 +7,8 @@ import Stories from '../../../scripts/store/stories'
 import BuyQuote from './modules/buyquote'
 import Dialog from './modules/dialog'
 import Page from './modules/page'
+import ClientAccount from './modules/clientAccount'
+import Toast from './modules/toast'
 
 Vue.use(Vuex);
 
@@ -24,12 +26,14 @@ export const store = new Vuex.Store({
 	},
 
 	modules: {
+		Toast,
 		Settings,
 		User,
 		Videos,
 		Stories,
 		BuyQuote,
 		Dialog,
-        Page
+        Page,
+		ClientAccount
 	}
 });
