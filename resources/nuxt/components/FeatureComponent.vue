@@ -18,7 +18,7 @@
 </template>
 <script>
     import VideoLoopComponent from './includes/VideoLoopComponent.vue';
-
+    import axios from 'axios'
     export default{
         data(){
             return {

@@ -12,17 +12,20 @@
                         </v-flex>
 
                         <v-flex xs12>
-                            <small style="color:red" v-if="error && errors.email !== undefined">{{ errors.email[0] }}</small>
+                            <small style="color:red" v-if="error && errors.email !== undefined">{{ errors.email[0] }}
+                            </small>
                             <v-text-field
-                                name="email"
-                                color="dark"
-                                label="Email"
-                                v-model="email"
-                                ></v-text-field>
+                                    name="email"
+                                    color="dark"
+                                    label="Email"
+                                    v-model="email"
+                            ></v-text-field>
                         </v-flex>
 
                         <v-flex xs12>
-                            <small style="color:red" v-if="error && errors.password !== undefined">{{ errors.password[0] }}</small>
+                            <small style="color:red" v-if="error && errors.password !== undefined">{{ errors.password[0]
+                                }}
+                            </small>
                             <v-text-field
                                     name="password"
                                     color="dark"
@@ -61,7 +64,8 @@
                                     :loading="loading"
                                     :disabled="loading || buttonDisable"
                                     @click="onPasswordResetSubmit()"
-                            >Reset password</v-btn>
+                            >Reset password
+                            </v-btn>
                         </v-flex>
 
                         <v-flex xs12 text-xs-center v-if="showMessage">
@@ -79,23 +83,23 @@
         data() {
             return {
                 // validation & data
-                token:'',
-                email:'',
-                password:'',
-                confirm_password:'',
+                token: '',
+                email: '',
+                password: '',
+                confirm_password: '',
 
                 passwordType: true,
                 passwordTypeConfirm: true,
 
-                counter:30,
-                valid:false,
+                counter: 30,
+                valid: false,
 
                 passwordRules: [
                     (v) => !!v || 'Password is required',
                 ],
                 passwordConfirmationRules: [
                     (v) => !!v || 'Confirmation password is required',
-                   (v) => v == this.password || 'Password is not match'
+                    (v) => v == this.password || 'Password is not match'
                 ],
 
                 //Loading button
@@ -117,8 +121,8 @@
         },
 
         methods: {
-            onPasswordResetSubmit(){
-                if(this.$refs.password_reset_form.validate()){
+            onPasswordResetSubmit() {
+                if (this.$refs.password_reset_form.validate()) {
                     //collect form data
                     let passworchangeform = new FormData();
                     passworchangeform.append('email', this.email);
@@ -127,13 +131,13 @@
                     passworchangeform.append('token', this.token);
 
                     //send request
-                    let requestUrl = '/password/reset/'+this.token;
+                    let requestUrl = '/password/reset/' + this.token;
                     axios.post(requestUrl, passworchangeform)
                         .then(response => {
                             this.showMessage = true;
                             this.error = false;
                             this.buttonDisable = true;
-                            if(!response.data.error){
+                            if (!response.data.error) {
                                 this.message = response.data.success_message;
 
                                 // Set the user store
@@ -146,7 +150,7 @@
                             this.error = false;
                             this.showMessage = false;
 
-                            if(error.response.data.error_message === undefined) {
+                            if (error.response.data.error_message === undefined) {
                                 this.error = true;
                                 this.errors = error.response.data.errors;
                             } else {

@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 
-import '../resources/nuxt/assets/scss/styles.css'
-
 import '../resources/nuxt/assets/scss/styles.scss'
 
 

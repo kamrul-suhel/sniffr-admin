@@ -1,19 +1,2 @@
-html{
-    background:#777;
-}
-h1{
-    color:#fff;
-}
-
-ul{
-    list-style:none;
-    display:flex;
-    align-items:baseline;
-    li{
-        a{
-            font-size:18px;
-            text-decoration:none;
-            color:#fff;
-        }
-    }
-}
+@import '../../../assets/scss/frontend';
+//@import '../../../assets/frontend/scss/styles';

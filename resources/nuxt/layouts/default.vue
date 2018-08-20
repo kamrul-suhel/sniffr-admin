@@ -9,7 +9,6 @@
                     <router-view></router-view>
                 </transition>
             </v-content>
-
             <!--<footer-component/>-->
         </v-app>
     </section>
@@ -17,6 +16,7 @@
 <script>
     import NavigationComponent from '../components/Navigation'
     import FooterComponent from "../components/FooterComponent"
+    import axios from 'axios';
     export default {
 
         components: {
@@ -25,12 +25,11 @@
         },
 
         created(){
-            console.log(axios);
-            return;
             this.$store.dispatch('setSettingObjectFromServer')
                 .then((data) => {
                     this.$store.commit('setUserStatus', data.sniffr_app);
                     this.sniffrStateReady = true
+                    console.log(this.$store.getters.getSettingsObject);
                 })
         },
 

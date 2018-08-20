@@ -2,8 +2,8 @@ const laravelNuxt = require("laravel-nuxt");
 
 module.exports = laravelNuxt({
     // Options such as mode, srcDir and generate.dir are already handled for you.
-    modules: [
-    ],
+    modules: {
+    },
     plugins: ['~/plugins/main.js'],
 
     head: {
@@ -19,7 +19,7 @@ module.exports = laravelNuxt({
     css: [
         // Load a Node.js module directly (here it's a Sass file)
         // CSS file in the project
-        '@/assets/scss/styles.css',
+        // '@/assets/scss/styles.css',
         // SCSS file in the project
         '@/assets/scss/styles.scss'
     ]
