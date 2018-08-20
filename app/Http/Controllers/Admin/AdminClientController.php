@@ -299,7 +299,7 @@ class AdminClientController extends Controller
     {
         $client = $this->client->find($id);
 
-        if($client->activeLicences() > 0) {
+        if($client->activeLicences->count() > 0) {
             return redirect()->back()->with([
                 'note' => 'Cannot delete client that is currently licensing assets',
                 'note_type' => 'error'

@@ -180,6 +180,21 @@ class ClientVideosController extends Controller
             abort(404, 'Asset Not Found');
         }
 
+        $client = App\Client::find(auth()->user()->client_id);
+        $purchases = $client->activeLicences()->get();
+
+        $belongsToClient = false;
+        foreach($purchases as $purchase)
+		{
+			if(in_array($video->id, $purchase->collectionVideos->pluck('video_id')->toArray())) {
+				$belongsToClient = true;
+			}
+		}
+
+		if(!$belongsToClient) {
+			abort(404, 'You do not have permission to download this asset');
+		}
+
         $mailer_id = $video->mailers()->first() ? $video->mailers()->first()->id : 0;
 
         $files[] = $this->getVideoPdf($videoId, false);
