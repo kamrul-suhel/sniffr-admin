@@ -6,9 +6,9 @@
             <v-layout row wrap>
                 <v-flex xs12 sm4>
                     <div class="logo">
-                        <router-link to="/">
-                            <img src="/assets/images/logo-sniffr-white.png"/>
-                        </router-link>
+                        <nuxt-link to="/">
+                            <img src="~/assets/images/logo-sniffr-white.png"/>
+                        </nuxt-link>
                     </div>
                 </v-flex>
 
@@ -16,37 +16,37 @@
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
-                                <router-link :to="{name: 'upload_video'}">
+                                <nuxt-link to="upload_video">
                                     <v-icon left
                                             color="white">file_upload
                                     </v-icon>
                                     Upload
-                                </router-link>
+                                </nuxt-link>
                             </li>
 
                             <li v-if="client_login && user.offers >= 1">
-                                <router-link :to="{name: 'client_offered_assets', query:{type: 'offered'}}">
+                                <nuxt-link :to="{name: 'client_offered_assets', query:{type: 'offered'}}">
                                     <v-icon left
                                             color="white">gavel
                                     </v-icon>
                                     My Offers ({{ user.offers }})
-                                </router-link>
+                                </nuxt-link>
                             </li>
 
                             <li>
-                                <router-link :to="{name: 'videos'}">
+                                <nuxt-link :to="{name: 'videos'}">
                                     <v-icon left
                                             color="white">videocam
                                     </v-icon>
                                     Videos
-                                </router-link>
+                                </nuxt-link>
                             </li>
 
                             <li>
-                                <router-link :to="{name: 'stories'}">
+                                <nuxt-link :to="{name: 'stories'}">
                                     <v-icon color="white" left>art_track</v-icon>
                                     Stories
-                                </router-link>
+                                </nuxt-link>
                             </li>
 
                             <li>
@@ -81,26 +81,26 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link :to="{name: 'client_profile'}">
+                                                <nuxt-link :to="{name: 'client_profile'}">
                                                     <v-icon left
                                                             size="20px"
                                                             color="white">settings
                                                     </v-icon>
                                                     Account Settings
-                                                </router-link>
+                                                </nuxt-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <router-link
+                                                <nuxt-link
                                                         :to="{name: 'client_purchased_assets', query:{type: 'purchased'}}">
                                                     <v-icon left
                                                             size="20px"
                                                             color="white">history
                                                     </v-icon>
                                                     Order History
-                                                </router-link>
+                                                </nuxt-link>
                                             </v-list-tile-title>
                                         </v-list-tile>
 
@@ -167,7 +167,7 @@
         watch: {
             $route(to, from, next) {
                 this.onResetPrevRoute();
-                if (to.name != 'home') {
+                if (to.name != 'index') {
                     this.nav_background = true;
                 } else {
                     setTimeout(() => {

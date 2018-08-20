@@ -18,12 +18,18 @@
 </template>
 <script>
     import VideoLoopComponent from './includes/VideoLoopComponent.vue';
-    import axios from 'axios'
     export default{
+
         data(){
             return {
-                videos:''
             }
+        },
+
+        props:{
+          videos: {
+              type: Array,
+              require: true
+          }
         },
 
         components: {
@@ -35,12 +41,7 @@
         },
 
         created(){
-            axios.post('/search/videos', {
-                'featured':'true'
-            })
-            .then((response) => {
-                this.videos = response.data.videos.data;
-            });
+
         }
     }
 </script>

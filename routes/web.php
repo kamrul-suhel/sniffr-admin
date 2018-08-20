@@ -12,14 +12,12 @@
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
-//    Route::get('/', 'HomeController@index')->name('home');
 
 	Route::get(
 		'/',
 		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
 	)->where('/', '/');
 
-    Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
     Route::post('upload', 'Frontend\VideoController@store')->name('videos_store');
@@ -298,7 +296,12 @@ Route::post('client/collections', 'CollectionController@store')->name('client.st
 |--------------------------------------------------------------------------
 */
 
-Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+//Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+Route::get('videos',
+	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
+	->where('videos', 'videos')
+	->name('videos_index');
+
 Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
 
 

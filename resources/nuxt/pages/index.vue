@@ -9,13 +9,28 @@
         </section>
 
         <!-- Feature Component -->
-        <feature-component></feature-component>
+        <feature-component :videos="videos"></feature-component>
     </div>
 </template>
 <script>
     import FeatureComponent from '@/components/FeatureComponent';
+    import axios from 'axios'
 
     export default{
+        asyncData({params}, callback){
+            axios.post('/search/videos', {
+                'featured':'true'
+            })
+                .then((response) => {
+                    console.log(response);
+                    callback(null, {videos : response.data.videos.data});
+                });
+        },
+
+        head: {
+            title: 'Sniffr media'
+        },
+
         components:{
             featureComponent: FeatureComponent
         },

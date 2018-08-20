@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 
+import '../resources/assets/scss/vendor/video-plyr.css'
+
 import '../resources/nuxt/assets/scss/styles.scss'
 
 

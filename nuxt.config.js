@@ -1,10 +1,18 @@
 const laravelNuxt = require("laravel-nuxt");
 
 module.exports = laravelNuxt({
+    mode:'universal',
     // Options such as mode, srcDir and generate.dir are already handled for you.
+    build: {
+        vendor: ['axios']
+    },
+
     modules: {
     },
+
     plugins: ['~/plugins/main.js'],
+
+    loading: { color: '#3B8070' },
 
     head: {
         meta: [
@@ -19,7 +27,7 @@ module.exports = laravelNuxt({
     css: [
         // Load a Node.js module directly (here it's a Sass file)
         // CSS file in the project
-        // '@/assets/scss/styles.css',
+        './resources/assets/scss/vendor/video-plyr.css',
         // SCSS file in the project
         '@/assets/scss/styles.scss'
     ]

@@ -3,6 +3,11 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const _6d1b3b28 = () => import('../resources/nuxt/pages/videos/index.vue' /* webpackChunkName: "pages/videos/index" */).then(m => m.default || m)
+const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */).then(m => m.default || m)
+const _21d1dc20 = () => import('../resources/nuxt/pages/stories/StoryDetailComponent.vue' /* webpackChunkName: "pages/stories/StoryDetailComponent" */).then(m => m.default || m)
+const _7c254635 = () => import('../resources/nuxt/pages/stories/modules/StoryLoopComponent.vue' /* webpackChunkName: "pages/stories/modules/StoryLoopComponent" */).then(m => m.default || m)
+const _412442c8 = () => import('../resources/nuxt/pages/upload_videos/index.vue' /* webpackChunkName: "pages/upload_videos/index" */).then(m => m.default || m)
 const _7ee9ed55 = () => import('../resources/nuxt/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
@@ -63,6 +68,31 @@ export function createRouter () {
     linkExactActiveClass: 'nuxt-link-exact-active',
     scrollBehavior,
     routes: [
+		{
+			path: "/videos",
+			component: _6d1b3b28,
+			name: "videos"
+		},
+		{
+			path: "/stories",
+			component: _53abeb99,
+			name: "stories"
+		},
+		{
+			path: "/stories/StoryDetailComponent",
+			component: _21d1dc20,
+			name: "stories-StoryDetailComponent"
+		},
+		{
+			path: "/stories/modules/StoryLoopComponent",
+			component: _7c254635,
+			name: "stories-modules-StoryLoopComponent"
+		},
+		{
+			path: "/upload:videos",
+			component: _412442c8,
+			name: "uploadvideos"
+		},
 		{
 			path: "/",
 			component: _7ee9ed55,

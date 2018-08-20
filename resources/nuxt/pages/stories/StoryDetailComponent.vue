@@ -63,9 +63,9 @@
 </template>
 
 <script>
-    import AssetComponent from '../../includes/StoryAssetsComponent';
-    import VideoReloadServices from '../../services/VideoReloadServices';
-    import BuyQuoteButtonComponent from "../../includes/BuyQuoteButtonComponent";
+    import AssetComponent from '@/components/includes/StoryAssetsComponent';
+    import VideoReloadServices from '@/plugins/services/VideoReloadServices';
+    import BuyQuoteButtonComponent from "@/components/includes/BuyQuoteButtonComponent";
 
     import {mapGetters} from 'vuex';
 

@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import BuyQuoteButtonComponent from '../../../includes/BuyQuoteButtonComponent'
+    import BuyQuoteButtonComponent from '@/components/includes/BuyQuoteButtonComponent'
     import {mapGetters} from 'vuex'
 
     export default {

@@ -1,22 +1,22 @@
 <template>
     <section id="sniffr">
         <v-app v-if="sniffrStateReady">
-            <!--<navigation-component/>-->
+            <navigation-component/>
 
             <v-content>
                 <div id="scroll_to"></div>
                 <transition name="slide-fade" mode="out-in">
-                    <router-view></router-view>
+                    <nuxt/>
                 </transition>
             </v-content>
-            <!--<footer-component/>-->
+
+            <footer-component/>
         </v-app>
     </section>
 </template>
 <script>
-    import NavigationComponent from '../components/Navigation'
-    import FooterComponent from "../components/FooterComponent"
-    import axios from 'axios';
+    import NavigationComponent from '@/components/Navigation'
+    import FooterComponent from "@/components/FooterComponent"
     export default {
 
         components: {
@@ -29,7 +29,6 @@
                 .then((data) => {
                     this.$store.commit('setUserStatus', data.sniffr_app);
                     this.sniffrStateReady = true
-                    console.log(this.$store.getters.getSettingsObject);
                 })
         },
 

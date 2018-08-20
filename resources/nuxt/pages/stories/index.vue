@@ -59,9 +59,9 @@
 </template>
 
 <script>
-    import SearchComponent from '../../includes/SearchComponent';
+    import SearchComponent from '@/components/includes/SearchComponent';
     import StoryLoopComponent from './modules/StoryLoopComponent';
-    import PaginationComponent from '../../includes/PaginationComponent';
+    import PaginationComponent from '@/components/includes/PaginationComponent';
     import {mapGetters} from 'vuex';
 
     export default {

@@ -6,7 +6,7 @@
                 <v-flex xs12 sm8 md8 lg8>
                     <div class="footer-left">
                         <div class="footer-logo">
-                            <img src="/assets/images/logo-sniffr-white.png"/>
+                            <img src="~/assets/images/logo-sniffr-white.png"/>
                         </div>
 
                         <div class="footer-text">
