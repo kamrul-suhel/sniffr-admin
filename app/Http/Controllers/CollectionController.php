@@ -530,6 +530,36 @@ class CollectionController extends Controller
 	}
 
 	/**
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+	 */
+	public function cancelCollection(Request $request)
+	{
+		$isJson = $request->ajax();
+
+		$collection = $this->collection->find($request->get('collection_id'));
+
+		if(isset($collection->user_id)) {
+			if (auth()->user()->id !== $collection->user_id) {
+				if ($isJson) {
+					return response([
+						'message' => 'permission denied',
+					], 403);
+				}
+			}
+		}
+
+		$collection->delete();
+
+		if ($isJson) {
+			return response([
+				'message' => 'collection was deleted',
+			], 200);
+		}
+
+	}
+
+	/**
 	 * Get alpha id of all assets that have ongoing exclusive license agreements
 	 * @param $type
 	 * @return \Illuminate\Support\Collection

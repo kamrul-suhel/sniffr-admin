@@ -285,6 +285,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 */
 Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
 Route::post('client/collections', 'CollectionController@store')->name('client.store');
+Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
 
 
 /*

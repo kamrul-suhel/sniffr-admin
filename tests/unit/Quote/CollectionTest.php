@@ -95,5 +95,4 @@ class CollectionTest extends \Codeception\Test\Unit
 		$this->assertEquals($collection->user_id, 1);
 
 	}
-
 }
