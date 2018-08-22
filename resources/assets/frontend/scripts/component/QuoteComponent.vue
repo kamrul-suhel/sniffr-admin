@@ -1,16 +1,18 @@
 <template>
-    <!-- Login form -->
     <section class="quote-dialog">
-        <v-dialog
-                v-model="open_quote_dialog"
-                max-width="500px"
-                class="login-section"
-                @keydown.esc="onQuoteDialogClose()">
+        <v-dialog persistent
+                  v-model="open_quote_dialog"
+                  max-width="500px"
+                  class="login-section"
+                  @keydown.esc="onQuoteDialogClose()">
             <v-card raised>
-
                 <v-card-text class="buy-section">
-                    <v-form method="post" v-model="valid" lazy-validation ref="quote_form">
-                        <v-layout row wrap id="buy-section">
+                    <v-form method="post"
+                            v-model="valid"
+                            lazy-validation
+                            ref="quote_form">
+                        <v-layout row wrap
+                                  id="buy-section">
 
                             <v-flex xs12>
                                 <h2 class="text-center text-uppercase">Quote</h2>
@@ -20,6 +22,7 @@
                             <v-flex xs12 v-if="!client_logged_in">
                                 <v-flex xs12>
                                     <v-text-field
+                                            name="name"
                                             label="Name"
                                             v-model="request_quote.name"
                                             color="dark"
@@ -32,6 +35,7 @@
 
                                 <v-flex xs12>
                                     <v-text-field
+                                            name="email"
                                             label="Email"
                                             type="email"
                                             v-model="request_quote.email"
@@ -41,11 +45,13 @@
                                             :error-messages="emailError"
                                             required>
                                     </v-text-field>
-                                    <small class="red--text" v-if="errors.user_email">{{ errors.user_email[0] }}</small>
+                                    <small class="red--text"
+                                           v-if="errors.user_email">{{ errors.user_email[0] }}</small>
                                 </v-flex>
 
                                 <v-flex xs12>
                                     <v-text-field
+                                            name="phone"
                                             label="Phone"
                                             v-model="request_quote.phone"
                                             color="dark">
@@ -53,9 +59,11 @@
                                 </v-flex>
 
                                 <v-flex xs12>
-                                    <small class="red--text" v-if="errors.company_name">{{ errors.company_name[0] }}
+                                    <small class="red--text"
+                                           v-if="errors.company_name">{{ errors.company_name[0] }}
                                     </small>
                                     <v-text-field
+                                            name="company"
                                             label="Company"
                                             v-model="request_quote.company"
                                             color="dark">
@@ -66,6 +74,7 @@
                             <v-flex v-if="type === 'video' || type === 'story'">
                                 <v-flex xs12>
                                     <v-select
+                                            name="license_type"
                                             label="License Type"
                                             color="light"
                                             :items="licenses"
@@ -80,6 +89,7 @@
 
                                 <v-flex xs12>
                                     <v-select
+                                            name="license_platform"
                                             content-class="s-platform"
                                             class="s-platform"
                                             label="Platform"
@@ -97,6 +107,7 @@
 
                                 <v-flex xs12>
                                     <v-select
+                                            name="license_length"
                                             label="License Length"
                                             color="dark"
                                             :items="lengths"
@@ -118,12 +129,12 @@
                                         label="Additional information"
                                 ></v-textarea>
                             </v-flex>
-
                         </v-layout>
 
                         <v-layout row justify-center>
                             <v-flex>
-                                <div v-if="validation.error" class="red--text text-xs-center">{{validation.message}}
+                                <div class="red--text text-xs-center"
+                                     v-if="validation.error">{{validation.message}}
                                 </div>
                             </v-flex>
                         </v-layout>
@@ -132,6 +143,13 @@
                             <v-flex xs12>
                                 <div class="buy-button right">
                                     <input type="hidden" name="_token"/>
+
+                                    <v-btn flat
+                                           dark
+                                           color="black"
+                                           @click.native="cancelCollection()">Cancel
+                                    </v-btn>
+
                                     <v-btn
                                             raised
                                             dark
@@ -381,6 +399,23 @@
                             this.errors = error.response.data.errors;
                         });
                 }
+            },
+
+            cancelCollection() {
+                this.loading = true;
+                let form_data = new FormData();
+                form_data.append('collection_id', this.collection.collection_id);
+                // submit data with ajax request
+                axios.post('/client/collections/cancel_collection', form_data)
+                    .then(response => {
+                        console.log('deleted collection id: ' + this.collection.collection_id);
+                        console.log(response.data.message);
+                        this.open_quote_dialog = false;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        this.errors = error.response.data.message;
+                    });
             },
 
         }

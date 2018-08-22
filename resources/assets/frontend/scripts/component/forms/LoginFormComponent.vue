@@ -12,6 +12,7 @@
 
                             <v-flex xs12>
                                 <v-text-field
+                                        name="email"
                                         color="dark"
                                         label="Email:"
                                         v-model="user.email"
@@ -27,6 +28,7 @@
                                 <v-text-field
                                         class="email"
                                         color="dark"
+                                        name="password"
                                         label="Enter your password"
                                         v-model="user.password"
                                         :append-icon="showpassword ? 'visibility' : 'visibility_off'"
@@ -60,8 +62,8 @@
                                 </v-btn>
                             </v-flex>
 
-                            <v-flex xs12>
-                                <a @click.stop="onForgotforgotDialog()" class="forgot-password">Forgot password</a>
+                            <v-flex xs12 pt-0>
+                                <a @click.stop="onForgotforgotDialog()" class="forgot-password" id="btn-forgot-password">Forgot password</a>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -179,13 +181,11 @@
                             let request_url = this.$route.query.request_url;
                             if(request_url && request_url != ''){
                                 request_url = '/'+ request_url;
-                                this.$router.push({path: request_url});
+                                return this.$router.push({path: request_url});
                             }
-
-                            if (data.redirect_url != '') {
-                                this.loginDelay = true;
-                                window.location.href = data.redirect_url;
-                            }
+                            this.loginDelay = true;
+                            this.$router.push('videos');
+                            this.loginDelay = false;
                         })
                         .catch(error => {
                             console.log(error);

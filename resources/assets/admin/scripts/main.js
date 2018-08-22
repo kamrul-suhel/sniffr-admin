@@ -46,6 +46,12 @@ import MailerStoriesComponent from './pages/mailer/MailerComponent'
  */
 require('../../frontend/scripts/filters/filters');
 
+/*
+ ********************************************************
+ * Layout Components
+ ********************************************************
+ */
+import FooterComponent from './layouts/FooterComponent'
 
 /*
  ********************************************************
@@ -64,6 +70,10 @@ const router = new Vuerouter({
 
 new Vue({
     el: '#admin-mailer',
+    components : {
+        FooterComponent
+    },
+
     store,
     router,
 

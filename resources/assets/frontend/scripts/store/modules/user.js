@@ -14,6 +14,10 @@ const state = {
     offers: '',
     active: '',
 
+    companyOwnerId: null,
+    companySlug: '',
+    isCompanyOwner: false,
+
     // Login dialog box variable: boolean
     loginDialog: false,
     forgotPasswordDialog: false,
@@ -32,6 +36,9 @@ const mutations = {
         state.route_url = '';
         state.offers = '';
         state.active = '';
+        state.companyOwnerId = null;
+        state.companySlug = '';
+        state.CompanyOwner = false;
     },
 
     setLoginDialog(state, value) {
@@ -44,7 +51,7 @@ const mutations = {
 
     setUserStatus(state, data) {
         let user = data.user;
-        if(user.id){
+        if (user.id) {
             state.username = user.username;
             state.name = user.full_name ? user.full_name : user.username;
             state.email = user.email;
@@ -57,6 +64,11 @@ const mutations = {
             state.active = user.active;
         }
 
+        if (user.client && typeof user.client === "object") {
+            state.companyOwnerId = user.client.account_owner_id;
+            state.companySlug = user.client.slug;
+        }
+
     },
 
     setRouteUrl(state, currUrl) {
@@ -67,8 +79,16 @@ const mutations = {
         state.offers = data;
     },
 
-    setForgotPasswordDialog(state, value){
+    setForgotPasswordDialog(state, value) {
         state.forgotPasswordDialog = value;
+    },
+
+    setCompanyOwnerId(state, client) {
+        state.companyOwnerId = client.account_owner_id;
+    },
+
+    setCompanySlug(state, client) {
+        state.companySlug = client.slug;
     }
 };
 
@@ -102,12 +122,28 @@ const getters = {
         }
     },
 
+    getUserId(state) {
+        return state.user_id;
+    },
+
     getRouteUrl(state) {
         return state.route_url;
     },
 
-    getForgotPasswordDialog(state){
+    getForgotPasswordDialog(state) {
         return state.forgotPasswordDialog;
+    },
+
+    getCompanyOwnerId(state) {
+        return state.companyOwnerId;
+    },
+
+    getIsCompanyOwner(state) {
+        return state.user_id === state.companyOwnerId ? true : false;
+    },
+
+    getCompanySlug(state) {
+        return state.companySlug;
     }
 };
 

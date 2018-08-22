@@ -69,10 +69,16 @@ class AdminStoryController extends Controller
 
         // Need to check if state exists in current decision tree
 		$stateExists = false;
-		foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-			if($state == $state_values['value']) {
-				$stateExists = true;
+
+
+        if(config('stories.decisions.'.$decision)){
+			foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
+				if($state == $state_values['value']) {
+					$stateExists = true;
+				}
 			}
+		}else{
+        	$decision = 'content-sourced';
 		}
 
 		if (!$stateExists) { // Get the first (default) state in the array
