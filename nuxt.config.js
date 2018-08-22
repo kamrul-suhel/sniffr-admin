@@ -14,6 +14,7 @@ module.exports = laravelNuxt({
     loading: { color: '#3B8070' },
 
     head: {
+        title: 'Sniffr media',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' }

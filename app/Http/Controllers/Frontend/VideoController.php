@@ -21,6 +21,7 @@ use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
+use Pallares\LaravelNuxt\Controllers\NuxtController;
 
 class VideoController extends Controller
 {
@@ -69,9 +70,9 @@ class VideoController extends Controller
 	/**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function upload()
+    public function upload(Request $request)
     {
-        return view('frontend.master', $this->data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
@@ -203,7 +204,8 @@ class VideoController extends Controller
 
             return $this->successResponse($data);
         }
-        return view('frontend.master');
+
+        return $this->getFrontendServerResponse($request);
     }
 
 

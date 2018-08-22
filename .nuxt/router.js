@@ -8,6 +8,7 @@ const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* we
 const _21d1dc20 = () => import('../resources/nuxt/pages/stories/StoryDetailComponent.vue' /* webpackChunkName: "pages/stories/StoryDetailComponent" */).then(m => m.default || m)
 const _7c254635 = () => import('../resources/nuxt/pages/stories/modules/StoryLoopComponent.vue' /* webpackChunkName: "pages/stories/modules/StoryLoopComponent" */).then(m => m.default || m)
 const _dd1baff4 = () => import('../resources/nuxt/pages/stories/_alphaid/index.vue' /* webpackChunkName: "pages/stories/_alphaid/index" */).then(m => m.default || m)
+const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
 const _412442c8 = () => import('../resources/nuxt/pages/upload_videos/index.vue' /* webpackChunkName: "pages/upload_videos/index" */).then(m => m.default || m)
 const _7ee9ed55 = () => import('../resources/nuxt/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
@@ -93,6 +94,11 @@ export function createRouter () {
 			path: "/stories/:alphaid",
 			component: _dd1baff4,
 			name: "stories-alphaid"
+		},
+		{
+			path: "/videos/:alpha_id",
+			component: _42e00cd8,
+			name: "videos-alpha_id"
 		},
 		{
 			path: "/upload:videos",

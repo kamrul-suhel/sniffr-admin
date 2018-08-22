@@ -104,7 +104,6 @@
         },
 
         created() {
-            console.log('sldkfj');
             this.setAllVideoData(this.getQueryObject());
         },
 
