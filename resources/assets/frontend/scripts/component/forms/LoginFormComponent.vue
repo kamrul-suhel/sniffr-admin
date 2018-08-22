@@ -183,6 +183,12 @@
                                 request_url = '/'+ request_url;
                                 return this.$router.push({path: request_url});
                             }
+
+                            if (data.redirect_url != '') {
+                                this.loginDelay = true;
+                                window.location.href = data.redirect_url;
+                            }
+
                             this.loginDelay = true;
                             this.$router.push('videos');
                             this.loginDelay = false;
