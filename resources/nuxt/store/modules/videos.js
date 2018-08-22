@@ -475,7 +475,10 @@ const actions = {
                 let currVideo = response.data.current_video;
                 commit('setCurrentVideo', currVideo)
                 commit('setVideoLoading', false)
-            });
+            })
+            .catch(error => {
+                console.log(error);
+        });
 
     }
 

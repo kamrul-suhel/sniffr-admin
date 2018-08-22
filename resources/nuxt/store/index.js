@@ -11,16 +11,11 @@ import Toast from './modules/toast'
 
 const createStore = () => {
     return new Vuex.Store({
-        state: {
-        },
+        state: {},
 
-        getters: {
+        getters: {},
 
-        },
-
-        mutations: {
-
-        },
+        mutations: {},
 
         modules: {
             Toast,
