@@ -13,9 +13,14 @@ class SettingController extends Controller
     public function index(){
         $settings['public'] = config('settings.public');
         $settings['pricing'] = config('pricing');
+
+        $user = auth()->user();
+        if($user){
+        	$user['client'] = $user->client;
+		}
         $settings['sniffr_app']  = [
-            "user" => (Auth::user() ? Auth::user() : "''"),
-            "user_offers" => (Auth::user() ? Auth::user()->userOffers() : "")
+            "user" => ($user ? $user : "''"),
+            "user_offers" => (auth()->user() ? auth()->user()->userOffers() : "")
         ];
 
         return $this->successResponse($settings);

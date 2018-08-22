@@ -14,21 +14,33 @@ class CollectionStory extends Model
 
 	protected $fillable = ['collection_id', 'story_id', 'type', 'platform', 'length', 'class', 'final_price', 'company_location', 'company_tier', 'notes', 'status', 'licensed_at', 'license_ends_at'];
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
     public function collection()
     {
         return $this->belongsTo(Collection::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
     public function story()
     {
         return $this->belongsTo(Story::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
     public function quotes()
     {
         return $this->hasMany(CollectionQuote::class, 'collection_story_id', 'id');
     }
 
+	/**
+	 * @return string
+	 */
 	public function getPlatformString(){
 		$values = explode(',', $this->platform);
 		$response = '';
@@ -112,10 +124,59 @@ class CollectionStory extends Model
             ->where('status', 'requested');
     }
 
-
-
+	/**
+	 * @return \Illuminate\Config\Repository|mixed
+	 */
     public function calculateLicenseEndTime()
 	{
 		return config('pricing.length.'. $this->length .'.end_date');
 	}
+
+	/**
+	 * @return $this|bool
+	 */
+	public function acceptAssetQuote()
+	{
+		if ($this->collection->user_id !== auth()->user()->id) {
+			return false;
+		}
+
+		$this->update([
+			'status' => 'purchased',
+			'license_ends_at' => $this->calculateLicenseEndTime(),
+			'licensed_at' => Carbon::now(),
+		]);
+
+		return $this;
+	}
+
+	/**
+	 * @return $this|bool
+	 */
+	public function rejectAssetQuote()
+	{
+		if($this->collection->user_id !== auth()->user()->id) {
+			return false;
+		}
+
+		$this->update([
+			'status' => 'requested',
+		]);
+
+		return $this;
+	}
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 */
+	public function updateCollectionQuote($data)
+	{
+		$quoteId = $this->quotes()->max('id');
+		$quote = CollectionQuote::find($quoteId);
+		$quote->update($data);
+
+		return $quote;
+	}
+
 }

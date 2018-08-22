@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Laravel\Dusk\DuskServiceProvider;
 use App\Observers\VideoObserver;
 use App\Video;
 use Illuminate\Support\ServiceProvider;
@@ -38,5 +39,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Facebook::class, function ($app) {
             return new Facebook(config('facebook.config'));
         });
+
+		if ($this->app->environment('local', 'testing')) {
+			$this->app->register(DuskServiceProvider::class);
+		}
     }
 }

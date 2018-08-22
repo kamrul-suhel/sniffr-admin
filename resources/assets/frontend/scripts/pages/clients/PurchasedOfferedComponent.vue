@@ -20,21 +20,25 @@
                             dark
                             color="white"
                             slider-color="black">
-                        <v-tab v-if="totalVideos > 0 || searchVideoTerm">
+                        <v-tab v-if="totalVideos > 0 || searchVideoTerm"
+                               key="videos">
                             <v-badge right color="black">
                                 <span slot="badge">{{ totalVideos }}</span>
                                 Videos
                             </v-badge>
                         </v-tab>
 
-                        <v-tab v-if="totalStories > 0 || searchStoryTerm">
+                        <v-tab v-if="totalStories > 0 || searchStoryTerm"
+                               key="stories">
                             <v-badge right color="black">
                                 <span slot="badge">{{totalStories}}</span>
                                 Stories
                             </v-badge>
                         </v-tab>
 
-                        <v-tab-item v-if="totalVideos > 0 || searchVideoTerm">
+                        <v-tab-item
+                                v-if="totalVideos > 0 || searchVideoTerm"
+                                key="videos">
                             <v-layout row wrap>
                                 <v-flex xs12 class="text-xs-right">
                                     <v-text-field
@@ -69,7 +73,9 @@
                             </div>
                         </v-tab-item>
 
-                        <v-tab-item v-if="totalStories > 0 || searchStoryTerm">
+                        <v-tab-item
+                                v-if="totalStories > 0 || searchStoryTerm"
+                                key="stories">
                             <v-layout row wrap>
                                 <v-flex xs12 class="text-xs-right">
                                     <v-text-field
@@ -207,6 +213,7 @@
                     this.type = this.$route.query.type;
                     this.searchVideoTerm = '';
                     this.searchStoryTerm = '';
+                    this.active = 'videos';
                     this.setData();
                 }
             },

@@ -179,7 +179,9 @@ class SearchController extends Controller
         $unsearchableStories = $this->collectionStory->getAssetByTypeStatus('exclusive', 'purchased')->pluck('story_id');
 
         if ($request->get('mailer')) {
-            $stories = $this->story->whereIn('state', ['licensed', 'writing-inprogress', 'writing-completed', 'subs-inprogress', 'subs-approved', 'published']);
+            $stories = $this->story
+				->with('assets')
+				->whereIn('state', ['licensed', 'writing-inprogress', 'writing-completed', 'subs-inprogress', 'subs-approved', 'published']);
         } else {
             $stories = $this->story->where('state', 'published');
         }
