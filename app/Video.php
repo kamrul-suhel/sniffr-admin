@@ -54,9 +54,8 @@ class Video extends Model
     use SoftDeletes, Notifiable;
 
     const CACHE_EXPIRATION = 720;
-    protected $guarded = [];
+    protected $guarded = ['deleted_at'];
     protected $table = 'videos';
-    protected $hidden = ["deleted_at"];
     protected $fillable = [
         'user_id',
         'video_category_id',

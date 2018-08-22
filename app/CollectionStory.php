@@ -27,7 +27,7 @@ class CollectionStory extends Model
 	 */
     public function story()
     {
-        return $this->belongsTo(Story::class);
+        return $this->belongsTo(Story::class)->withTrashed();
     }
 
 	/**

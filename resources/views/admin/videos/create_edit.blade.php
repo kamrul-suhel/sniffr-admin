@@ -88,6 +88,10 @@
                         <li>
                             <a href="#analytics" role="tab" data-toggle="tab">Analytics</a>
                         </li>
+
+                        <li>
+                            <a href="#licenses" role="tab" data-toggle="tab">Active Licenses</a>
+                        </li>
                     @endif
                 </ul>
                 @if($asset)
@@ -141,6 +145,10 @@
 
                         <div class="tab-pane" id="analytics">
                             @include('admin.videos.partials.analytics')
+                        </div>
+
+                        <div class="tab-pane" id="licenses">
+                            @include('admin.videos.partials.licenses')
                         </div>
                     </div>
 

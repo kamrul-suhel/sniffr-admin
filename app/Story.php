@@ -10,7 +10,7 @@ class Story extends Model
 {
     use SoftDeletes, Notifiable;
 
-    protected $guarded = [];
+    protected $guarded = ['deleted_at'];
     public static $rules = [];
     protected $table = 'stories';
 

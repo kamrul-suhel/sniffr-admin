@@ -15,6 +15,14 @@
 		</li>
 	</ol>
 
+	@if($asset->trashed())
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="col-lg-12 label label-danger">Deleted ({{ date('dS F Y @ h:s', strtotime($asset->deleted_at)) }})</div>
+			</div>
+		</div>
+	@endif
+
 	<div class="clear"></div>
 
 	<form method="POST" action="{{ $post_route }}" id="js-story-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
@@ -76,7 +84,7 @@
 				</div>
 			</div>
 		</div>
-
+		
 		<div class="col-sm-4"> <!-- second column -->
 			<div class="row">
 				<div class="col-sm-12">
@@ -191,7 +199,7 @@
 
 	<hr>
 
-	@if(isset($asset->id))
+	@if(isset($asset->id) && !$asset->trashed())
 		<a href="{{ url('admin/stories/delete/'.$asset->alpha_id) }}" class="btn btn-danger">Delete Story</a>
 	@endif
 

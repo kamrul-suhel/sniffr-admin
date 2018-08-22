@@ -18,13 +18,17 @@
             {{ $collectionAsset->collection->user->email }}
         </small>
     </td>
-    <td class="">
+    <td class="" @if($collectionAsset->{$type}->deleted_at) style="background: lightpink;" @endif>
         <small>
             <a target="_blank"
                href="{{ url('admin/'.str_plural($type).'/edit', $collectionAsset->{$type}->alpha_id) }}">{{ $collectionAsset->{$type}->alpha_id }}
                 <i class="fa fa-external-link"></i>
                 <br>
                 <small>{{ str_limit($collectionAsset->{$type}->title, 30) }}</small>
+                <br>
+                @if($collectionAsset->{$type}->deleted_at)
+                    <small><b>Deleted ({{ date('dS m Y @ h:i', strtotime($collectionAsset->{$type}->deleted_at))}})</b></small>
+                @endif
             </a>
         </small>
     </td>

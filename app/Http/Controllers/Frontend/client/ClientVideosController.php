@@ -174,7 +174,7 @@ class ClientVideosController extends Controller
 
     public function downloadVideo($videoId)
     {
-        $video = Video::find($videoId);
+        $video = Video::withTrashed()->find($videoId);
 
         if (!$video) {
             abort(404, 'Asset Not Found');
@@ -226,7 +226,7 @@ class ClientVideosController extends Controller
      */
     public function getVideoPdf(int $videoId, bool $download = true)
     {
-        $video = Video::find($videoId);
+        $video = Video::withTrashed()->find($videoId);
 
         if (!$video) {
             abort(404, 'Video Not Found');

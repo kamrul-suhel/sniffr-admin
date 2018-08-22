@@ -28,7 +28,7 @@ class CollectionVideo extends Model
 	 */
 	public function video()
 	{
-		return $this->belongsTo(Video::class);
+		return $this->belongsTo(Video::class)->withTrashed();
 	}
 
 	/**
