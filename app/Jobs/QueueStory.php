@@ -8,6 +8,7 @@ use App\User;
 use App\Story;
 use App\Asset;
 use App\Libraries\VideoHelper;
+use App\Notifications\SubmissionAlert;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
