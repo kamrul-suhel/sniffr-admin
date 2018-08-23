@@ -39,8 +39,7 @@ class ClientUserController extends Controller
                 ->with('user', null)
                 ->with('slug', $request->slug);
         }
-
-        return view('frontend.master');
+		return $this->getFrontendServerResponse($request);
     }
 
     /**

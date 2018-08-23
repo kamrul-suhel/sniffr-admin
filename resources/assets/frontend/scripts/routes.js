@@ -248,17 +248,18 @@ export const routes = [
                 component: ClientProfileComponent,
             },
 
-
-
-
-
-
-
             {
                 path: 'profile/:slug/users/create',
                 name: 'client_create_user',
                 component: ClientUserComponent
             },
+
+
+
+
+
+
+
 
             {
                 path: '/client/profile/:slug/users/:userid/edit',
