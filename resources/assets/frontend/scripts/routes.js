@@ -234,20 +234,25 @@ export const routes = [
         component: TermsConditionsComponent
     },
 
-
-
-
-
-
     {
         path: '/client',
         component: ClientComponent,
+
+
+
+
         children: [
             {
                 path: 'profile',
                 name: 'client_profile',
                 component: ClientProfileComponent,
             },
+
+
+
+
+
+
 
             {
                 path: 'profile/:slug/users/create',
