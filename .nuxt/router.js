@@ -12,12 +12,14 @@ const _63f02318 = () => import('../resources/nuxt/pages/upload/form/index.vue' /
 const _6225ae26 = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
 const _7cd1e416 = () => import('../resources/nuxt/pages/client/profile/index.vue' /* webpackChunkName: "pages/client/profile/index" */).then(m => m.default || m)
 const _c0037a18 = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
+const _6d7e4dcb = () => import('../resources/nuxt/pages/client/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/client/stories/_alpha_id/index" */).then(m => m.default || m)
 const _3f4640f8 = () => import('../resources/nuxt/pages/client/profile/_slug/users/create/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/create/index" */).then(m => m.default || m)
+const _25e8b060 = () => import('../resources/nuxt/pages/client/profile/_slug/users/_userid/edit/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/_userid/edit/index" */).then(m => m.default || m)
 const _849f6ffe = () => import('../resources/nuxt/pages/password/set/_token/_email/index.vue' /* webpackChunkName: "pages/password/set/_token/_email/index" */).then(m => m.default || m)
-const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
-const _7610de76 = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
-const _f6be2faa = () => import('../resources/nuxt/pages/unsubscribe/_email/index.vue' /* webpackChunkName: "pages/unsubscribe/_email/index" */).then(m => m.default || m)
 const _b0e20676 = () => import('../resources/nuxt/pages/details/_code/index.vue' /* webpackChunkName: "pages/details/_code/index" */).then(m => m.default || m)
+const _f6be2faa = () => import('../resources/nuxt/pages/unsubscribe/_email/index.vue' /* webpackChunkName: "pages/unsubscribe/_email/index" */).then(m => m.default || m)
+const _7610de76 = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
+const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
 const _e6548560 = () => import('../resources/nuxt/pages/contract/_token/accept/index.vue' /* webpackChunkName: "pages/contract/_token/accept/index" */).then(m => m.default || m)
 const _412442c8 = () => import('../resources/nuxt/pages/upload_videos/index.vue' /* webpackChunkName: "pages/upload_videos/index" */).then(m => m.default || m)
 const _7ee9ed55 = () => import('../resources/nuxt/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
@@ -126,9 +128,19 @@ export function createRouter () {
 			name: "password-reset-token"
 		},
 		{
+			path: "/client/stories/:alpha_id?",
+			component: _6d7e4dcb,
+			name: "client-stories-alpha_id"
+		},
+		{
 			path: "/client/profile/:slug/users/create",
 			component: _3f4640f8,
 			name: "client-profile-slug-users-create"
+		},
+		{
+			path: "/client/profile/:slug/users/:userid?/edit",
+			component: _25e8b060,
+			name: "client-profile-slug-users-userid-edit"
 		},
 		{
 			path: "/password/set/:token?/:email?",
@@ -136,14 +148,9 @@ export function createRouter () {
 			name: "password-set-token-email"
 		},
 		{
-			path: "/videos/:alpha_id",
-			component: _42e00cd8,
-			name: "videos-alpha_id"
-		},
-		{
-			path: "/stories/:alpha_id",
-			component: _7610de76,
-			name: "stories-alpha_id"
+			path: "/details/:code?",
+			component: _b0e20676,
+			name: "details-code"
 		},
 		{
 			path: "/unsubscribe/:email?",
@@ -151,9 +158,14 @@ export function createRouter () {
 			name: "unsubscribe-email"
 		},
 		{
-			path: "/details/:code?",
-			component: _b0e20676,
-			name: "details-code"
+			path: "/stories/:alpha_id",
+			component: _7610de76,
+			name: "stories-alpha_id"
+		},
+		{
+			path: "/videos/:alpha_id",
+			component: _42e00cd8,
+			name: "videos-alpha_id"
 		},
 		{
 			path: "/contract/:token?/accept",

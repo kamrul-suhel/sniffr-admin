@@ -127,8 +127,7 @@ class ClientUserController extends Controller
                 'slug' => $slug,
             ]);
         }
-
-        return view('frontend.master');
+		return $this->getFrontendServerResponse($request);
     }
 
     /**

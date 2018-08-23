@@ -237,10 +237,6 @@ export const routes = [
     {
         path: '/client',
         component: ClientComponent,
-
-
-
-
         children: [
             {
                 path: 'profile',
@@ -254,18 +250,14 @@ export const routes = [
                 component: ClientUserComponent
             },
 
-
-
-
-
-
-
-
             {
                 path: '/client/profile/:slug/users/:userid/edit',
                 name: 'client_edit_create_user',
                 component: ClientEditUserComponent
             },
+
+
+
 
             {
                 path: 'stories/:alpha_id',
