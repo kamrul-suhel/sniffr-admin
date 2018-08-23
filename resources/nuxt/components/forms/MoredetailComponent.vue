@@ -350,9 +350,9 @@
 
             // check if this code is exists in our database
             let url = '/details/' + this.code;
-            axios.get(url)
+            this.$axios.$get(url)
                 .then((response) => {
-                    let data = response.data;
+                    let data = response;
                     if (!data.error) {
                         // process data
                         this.video = data;
@@ -414,10 +414,10 @@
 
                 //url
                 let url = '/details/' + this.code;
-                axios.post(url, form)
+                this.$axios.$post(url, form)
                     .then(response => {
                         //data uploaded succes
-                        let data = response.data;
+                        let data = response;
                         if (!data.error) {
                             setTimeout(() => {
                                 this.loading = false;
