@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -99,4 +100,26 @@ class Story extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    //Functions
+
+	public function deleteStory()
+	{
+		$offeredAndPendingStories = CollectionStory::where('story_id', $this->id)
+			->orWhere('status', 'purchased')
+			->where('status', 'offered');
+
+		if ($offeredAndPendingStories->count() > 0) {
+			foreach ($offeredAndPendingStories->get() as $emailForDeletion) {
+				QueueEmailRetractQuote::dispatch(
+					$emailForDeletion,
+					'story'
+				);
+			}
+			$offeredAndPendingStories->update(['reason' => 'asset was deleted by admin: ' . auth()->user()->id]);
+		}
+
+		return $this->delete();
+	}
+
 }

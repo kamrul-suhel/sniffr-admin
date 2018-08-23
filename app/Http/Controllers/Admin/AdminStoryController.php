@@ -399,6 +399,11 @@ class AdminStoryController extends Controller
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $alpha_id
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
 	public function wpSync(Request $request, $alpha_id)
 	{
 		$story = Story::where('alpha_id', $alpha_id)->first();
@@ -608,24 +613,9 @@ class AdminStoryController extends Controller
 			abort(404);
 		}
 
-		$offeredAndPendingStories = CollectionStory::where('story_id', $story->id)
-			->orWhere('status', 'purchased')
-			->where('status', 'offered');
+		$story->deleteStory();
 
-		if ($offeredAndPendingStories->count() > 0) {
-			foreach ($offeredAndPendingStories->get() as $emailForDeletion) {
-				QueueEmailRetractQuote::dispatch(
-					$emailForDeletion,
-					'story'
-				);
-			}
-			$offeredAndPendingStories->update(['reason' => 'asset was deleted by admin: ' . auth()->user()->id]);
-		}
-
-//		CollectionStory::where('story_id', $story->id)->delete();
-		$story->destroy($story->id);
-
-		return Redirect::to('admin/stories')->with([
+		return redirect()->to('admin/stories')->with([
 			'note' => 'Successfully Deleted Story',
 			'note_type' => 'success'
 		]);
