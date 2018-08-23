@@ -313,7 +313,7 @@
                 //show the uploading dialog box
                 this.uplod_progress = true;
 
-                axios.post('/submission', form, {
+                this.$axios.$post('/submission', form, {
                         onUploadProgress: function( progressEvent ) {
                             this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
                         }.bind(this)
@@ -321,7 +321,7 @@
                 )
                     .then(response => {
                         //data uploaded succes
-                        let data = response.data;
+                        let data = response;
                         if(data.status == 'success'){
                             // set all default
                             this.progressbar = 0;
