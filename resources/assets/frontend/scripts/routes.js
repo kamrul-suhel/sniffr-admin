@@ -257,13 +257,18 @@ export const routes = [
             },
 
 
-
-
             {
                 path: 'stories/:alpha_id',
                 name: 'client_story_detail',
                 component: ClientStoryDetailComponent
             },
+
+
+
+
+
+
+
 
             {
                 path: 'videos/:alpha_id',
