@@ -81,9 +81,9 @@
                     'asset_alpha_id': this.asset.alpha_id
                 };
 
-                axios.post('/client/collections', form_data)
+                this.$axios.$post('/client/collections', form_data)
                     .then(response => {
-                        this.$store.commit('setBuyQuoteCollection', response.data);
+                        this.$store.commit('setBuyQuoteCollection', response);
                         this.$store.commit('setBuyQuoteAsset', this.asset);
                         this.$store.commit('setBuyQuoteType', this.type);
                         this.$store.commit('setQuoteDialog', true);
@@ -100,9 +100,9 @@
                     'asset_alpha_id': this.asset.alpha_id
                 };
 
-                axios.post('/client/collections', form_data)
+                this.$axios.$post('/client/collections', form_data)
                     .then(response => {
-                        this.$store.commit('setBuyQuoteCollection', response.data);
+                        this.$store.commit('setBuyQuoteCollection', response);
                         this.$store.commit('setBuyQuoteAsset', this.asset);
                         this.$store.commit('setBuyQuoteType', this.type);
                         this.$store.commit('setBuyDialog', true);
