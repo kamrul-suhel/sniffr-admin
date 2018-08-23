@@ -60,7 +60,7 @@
         data() {
             return {
                 story: '',
-                defaultImage: '/assets/images/placeholder.png',
+                defaultImage: '~/assets/images/placeholder.png',
                 assets: [],
                 ready_to_show: true,
                 content_padding: true,

@@ -45,10 +45,6 @@
 		},
 
 		methods: {
-            // openLoginDialog(event){
-            //     this.open_login_dialog = event;
-            // },
-            //
 			onLoginDialogClose() {
               this.login_dialog = false;
               this.loading = false;

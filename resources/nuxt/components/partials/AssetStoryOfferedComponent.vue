@@ -295,9 +295,8 @@
             onAccept() {
                 let url = 'collections/accept_asset_price/' + this.story.collection_story_id + '/story';
                 this.acceptLoading = true;
-                axios.post(url).then((response) => {
-                    console.log(response);
-                    if (response.data.success === '1') {
+                this.$axios.$post(url).then((response) => {
+                    if (response.success === '1') {
                         this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
                         this.assetType = "purchased";
@@ -312,8 +311,8 @@
 
                 let form_data =  new FormData();
                 form_data.append('rejection_notes', this.decline_note);
-                axios.post(url, form_data).then((response) => {
-                    if (response.data.success === '1') {
+                this.$axios.$post(url, form_data).then((response) => {
+                    if (response.success === '1') {
                         this.declineLoading = false;
                         this.assetDeclined = true;
                         this.decline = true;

@@ -58,7 +58,7 @@
 </template>
 
 <script>
-    import ComponentServices from '../../../services/ComponentServices';
+    import ComponentServices from '@/plugins/services/ComponentServices';
 
     export default {
         data() {

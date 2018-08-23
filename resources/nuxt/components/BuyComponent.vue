@@ -259,9 +259,9 @@
                 form_data.append('license_platform', this.license_platform);
                 form_data.append('license_length', this.license_length);
 
-                axios.post('/client/collections/get_video_price/'+this.collection_asset_id, form_data)
+                this.$axios.$post('/client/collections/get_video_price/'+this.collection_asset_id, form_data)
                     .then(response => {
-                        this.price = response.data.price ? response.data.price : false;
+                        this.price = response.price ? response.price : false;
                     })
                     .catch(error => {
                         console.log(error);
@@ -277,7 +277,7 @@
                     this.loading = true;
 
                     // submit data with ajax request
-                    axios.post('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
+                    this.$axios.$post('/client/collections/accept_asset_price/'+this.collection_asset_id+'/video')
                         .then(response => {
                             this.loading = false;
                             this.open_buy_dialog = false;

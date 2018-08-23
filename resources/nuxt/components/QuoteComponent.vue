@@ -353,20 +353,20 @@
                     form_data.append('type', this.assetType);
                     form_data.append('notes', this.notes);
 
-                    axios.post('/client/collections/register_user/' + this.collection.collection_id, form_data)
+                    this.$axios.$post('/client/collections/register_user/' + this.collection.collection_id, form_data)
                         .then(response => {
                             this.loading = false;
                             this.open_quote_dialog = false;
 
                             setTimeout(() => {
                                 this.$refs.quote_form.reset();
-                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly. ' + response.data.message;
+                                let message = 'Thanks for your request, someone from our licensing team will be in touch shortly. ' + response.message;
                                 this.$store.commit('setThankYouMessage', message);
                                 this.$store.commit('setThankYouDialog', true);
                             }, 500)
                         })
                         .catch(error => {
-                            this.errors = error.response.data.errors;
+                            this.errors = error.response.errors;
                             this.loading = false;
                         });
                 }
@@ -383,7 +383,7 @@
                     form_data.append('notes', this.notes);
 
                     // submit data with ajax request
-                    axios.post('/client/collections/request_quote/' + this.type + '/' + this.collection_asset_id, form_data)
+                    this.$axios.$post('/client/collections/request_quote/' + this.type + '/' + this.collection_asset_id, form_data)
                         .then(response => {
                             this.loading = false;
                             this.open_quote_dialog = false;
@@ -397,7 +397,7 @@
                             }, 500)
                         })
                         .catch(error => {
-                            this.errors = error.response.data.errors;
+                            this.errors = error.response.errors;
                         });
                 }
             },

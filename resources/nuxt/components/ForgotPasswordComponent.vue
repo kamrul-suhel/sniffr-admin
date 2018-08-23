@@ -68,7 +68,7 @@
                     v => !!v || 'E-mail is required',
                     v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
                 ],
-                
+
                 validation:{
                     error: false,
                     message:''
@@ -118,15 +118,15 @@
                 if(this.$refs.forgot_password_form.validate()){
                     this.loading = true;
                     this.password_reset_success = false;
-                    this.password_reset_error = false;   
+                    this.password_reset_error = false;
                     this.active_password_reset = false;
-                    
+
                     let password_reset_form = new FormData();
                     password_reset_form.append('email', this.user.email);
 
-                    axios.post('/password/reset', password_reset_form)
+                    this.$axios.$post('/password/reset', password_reset_form)
                         .then(response => {
-                            let result = response.data;
+                            let result = response;
 
                             if(!result.error){
                                 // success to send email
@@ -140,7 +140,7 @@
 
                                     setTimeout( ()=>{
                                         this.password_reset_dialog = false;
-                                        
+
                                         //Clear all for next time use
                                         setTimeout(() => {
                                             this.password_reset_dialog= false,
@@ -158,11 +158,11 @@
                                     this.password_reset_error = true;
                                     this.password_reset_text = result.error_message;
                                     this.active_password_reset = true;
-                                }, 1000);        
+                                }, 1000);
                             }
                         })
                         .catch(error => {
-                        
+
                         });
                 }
 
