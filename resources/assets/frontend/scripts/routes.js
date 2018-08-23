@@ -176,11 +176,6 @@ export const routes = [
         component: ContractComponent
     },
 
-
-
-
-
-
     {
         path: '/upload',
         name: 'upload_video',
@@ -192,6 +187,8 @@ export const routes = [
         name: 'video_more_details_code',
         component: VideoMoreDetail
     },
+
+
 
     {
         path: '/submission/form',

@@ -4,8 +4,9 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _6d1b3b28 = () => import('../resources/nuxt/pages/videos/index.vue' /* webpackChunkName: "pages/videos/index" */).then(m => m.default || m)
-const _83d9d422 = () => import('../resources/nuxt/pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
 const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */).then(m => m.default || m)
+const _83d9d422 = () => import('../resources/nuxt/pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
+const _6225ae26 = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
 const _7610de76 = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
 const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
 const _e6548560 = () => import('../resources/nuxt/pages/contract/_token/accept/index.vue' /* webpackChunkName: "pages/contract/_token/accept/index" */).then(m => m.default || m)
@@ -76,14 +77,19 @@ export function createRouter () {
 			name: "videos"
 		},
 		{
+			path: "/stories",
+			component: _53abeb99,
+			name: "stories"
+		},
+		{
 			path: "/login",
 			component: _83d9d422,
 			name: "login"
 		},
 		{
-			path: "/stories",
-			component: _53abeb99,
-			name: "stories"
+			path: "/submission/form",
+			component: _6225ae26,
+			name: "submission-form"
 		},
 		{
 			path: "/stories/:alpha_id",
