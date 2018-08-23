@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
 /**
  * App\Comment
@@ -30,9 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereVideoId($value)
  * @mixin \Eloquent
  */
-class Comment extends Model
+class Comment extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
     protected $guarded = [];
     public static $rules = [];
     protected $table = 'comments';
