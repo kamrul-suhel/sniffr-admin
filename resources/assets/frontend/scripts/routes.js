@@ -269,14 +269,6 @@ export const routes = [
                 component: ClientVideoDetailComponent
             },
 
-
-
-
-
-
-
-
-
             {
                 path: 'purchased',
                 name: 'client_purchased_assets',
@@ -289,6 +281,9 @@ export const routes = [
                 component: ClientPurchaseOfferedComponent,
                 // component: ClientOfferedAssetsComponent,
             },
+
+
+
 
             {
                 path: 'collections',
