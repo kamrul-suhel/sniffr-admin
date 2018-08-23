@@ -13,15 +13,14 @@
 </template>
 <script>
     import FeatureComponent from '@/components/FeatureComponent';
-    import axios from 'axios'
 
     export default{
-        asyncData({params}, callback){
-            axios.post('/search/videos', {
+        asyncData(params, callback){
+            params.app.$axios.$post('/search/videos', {
                 'featured':'true'
             })
                 .then((response) => {
-                    callback(null, {videos : response.data.videos.data});
+                    callback(null, {videos : response.videos.data});
                 });
         },
 

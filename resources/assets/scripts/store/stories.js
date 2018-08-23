@@ -310,10 +310,11 @@ const actions = {
     },
 
     fetchOfferedStories({commit}, payload) {
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
         this.$axios.$get(payload)
             .then((response) => {
                     commit('setOfferedStories', response.stories);
-                    commit('setStoriesPaginateObject', response.data.stories);
+                    commit('setStoriesPaginateObject', response.stories);
                     commit('setInitStory', true);
                 },
                 (error) => {
@@ -344,7 +345,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             this.$axios.$post(payload)
                 .then((stories) => {
-                        state.stories = stories.data.stories;
+                        state.stories = stories.stories;
                         resolve();
                     },
                     (error) => {

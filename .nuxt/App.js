@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 
-import '../resources/assets/scss/vendor/video-plyr.css'
-
 import '../resources/nuxt/assets/scss/styles.scss'
 
 
@@ -17,7 +15,7 @@ let layouts = {
 let resolvedLayouts = {}
 
 export default {
-  head: {"title":"Sniffr media","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"}],"link":[{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto"}],"script":[],"style":[]},
+  head: {"title":"Sniffr media","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"}],"link":[],"script":[],"style":[]},
   render(h, props) {
     const loadingEl = h('nuxt-loading', { ref: 'loading' })
     const layoutEl = h(this.layout || 'nuxt')

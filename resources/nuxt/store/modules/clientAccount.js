@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 const state = {
     user: {},
     company: {},
@@ -68,6 +68,7 @@ const mutations = {
 
 const actions = {
     fetchClientAccount({commit}) {
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
         this.$axios.$get('/client/profile').then((response) => {
             commit('setCompanyUser', response.user);
             commit('setCompany', response.company);
@@ -78,6 +79,7 @@ const actions = {
     },
 
     fetchClientUser({commit}, payLoad) {
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
         this.$axios.$get(payLoad.url).then((response) => {
             commit('setCompanyUser', response.user);
             commit('setClientInitState', true);

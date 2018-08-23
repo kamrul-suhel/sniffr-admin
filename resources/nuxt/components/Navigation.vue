@@ -25,7 +25,7 @@
                             </li>
 
                             <li v-if="client_login && user.offers >= 1">
-                                <nuxt-link :to="{name: 'client_offered_assets', query:{type: 'offered'}}">
+                                <nuxt-link :to="{name: 'client-offered', query:{type: 'offered'}}">
                                     <v-icon left
                                             color="white">gavel
                                     </v-icon>
@@ -81,7 +81,7 @@
 
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
-                                                <nuxt-link :to="{name: 'client_profile'}">
+                                                <nuxt-link :to="{name: 'client-profile'}">
                                                     <v-icon left
                                                             size="20px"
                                                             color="white">settings
@@ -94,7 +94,7 @@
                                         <v-list-tile v-if="client_login">
                                             <v-list-tile-title>
                                                 <nuxt-link
-                                                        :to="{name: 'client_purchased_assets', query:{type: 'purchased'}}">
+                                                        :to="{name: 'client-purchased', query:{type: 'purchased'}}">
                                                     <v-icon left
                                                             size="20px"
                                                             color="white">history

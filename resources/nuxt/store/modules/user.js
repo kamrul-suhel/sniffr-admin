@@ -2,7 +2,6 @@
  * Created by kamrulahmed on 13/04/2018.
  */
 
-import axios from 'axios';
 const state = {
     username: '',
     name: '',

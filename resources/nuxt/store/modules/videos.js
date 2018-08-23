@@ -1,5 +1,4 @@
 import AssetVideoServices from '@/plugins/services/VideoServices'
-import axios from 'axios';
 const state = {
     //Dialog box
     videoDialogBox: false,
@@ -407,6 +406,7 @@ const actions = {
      * ***************************************
      */
     fetchOfferedVideos({commit}, payload){
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
         this.$axios.$get(payload)
             .then((response) => {
                 commit('setOfferedVideos', response.videos);
@@ -426,7 +426,7 @@ const actions = {
      */
 
     fetchPurchasedVideos({commit}, payload){
-
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
         this.$axios.$get(payload)
             .then((response) => {
                     commit('setPurchasedVideos', response.videos);

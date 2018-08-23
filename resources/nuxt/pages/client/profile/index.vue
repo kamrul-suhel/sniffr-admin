@@ -224,7 +224,7 @@
                                     raised
                                     color="dark"
                                     class="sf-button mr-0"
-                                    :to="{name: 'client_create_user', params:{slug : company.slug}}">New User
+                                    :to="{name: 'client-profile-slug-users-create', params:{slug : company.slug}}">New User
                             </v-btn>
                         </v-flex>
                     </v-layout>
@@ -307,7 +307,7 @@
 
             editUser(userId) {
                 this.$router.push({
-                    name: 'client_edit_create_user',
+                    name: 'client-profile-slug-users-userid-edit',
                     params: {slug: this.company.slug, userid: userId}
                 });
             },
