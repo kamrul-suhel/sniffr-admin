@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-    import MoredetailComponent from '../../component/forms/MoredetailComponent.vue';
+    import MoredetailComponent from '@/components/forms/MoredetailComponent.vue';
     export default {
         components: {
             MoredetailComponent

@@ -345,11 +345,12 @@
         mounted() {
             this.code = this.$route.params.code;
             if (!this.code) {
-                this.$router.push({name: 'home'});
+                this.$router.push({path: '/'});
             }
 
             // check if this code is exists in our database
             let url = '/details/' + this.code;
+            this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
             this.$axios.$get(url)
                 .then((response) => {
                     let data = response;

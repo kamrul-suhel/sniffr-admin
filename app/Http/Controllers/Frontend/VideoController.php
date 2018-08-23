@@ -78,11 +78,11 @@ class VideoController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function form()
+    public function form(Request $request)
     {
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'upload';
-        return view('frontend.iframe', $this->data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**

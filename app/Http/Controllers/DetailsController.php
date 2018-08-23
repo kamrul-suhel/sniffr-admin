@@ -66,7 +66,7 @@ class DetailsController extends Controller
 
         }
 
-        return view('frontend.master');
+        return $this->getFrontendServerResponse($request);
     }
 
     /**

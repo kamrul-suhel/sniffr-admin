@@ -8,7 +8,9 @@ import '../resources/nuxt/assets/scss/styles.scss'
 
 let layouts = {
 
-  "_default": () => import('../resources/nuxt/layouts/default.vue'  /* webpackChunkName: "layouts/default" */).then(m => m.default || m)
+  "_default": () => import('../resources/nuxt/layouts/default.vue'  /* webpackChunkName: "layouts/default" */).then(m => m.default || m),
+
+  "_iframeForm": () => import('../resources/nuxt/layouts/iframeForm.vue'  /* webpackChunkName: "layouts/iframeForm" */).then(m => m.default || m)
 
 }
 

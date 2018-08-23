@@ -196,17 +196,13 @@ export const routes = [
         component: VideoSubmissionComponent
     },
 
+
     {
         path: '/upload/form',
         name: 'iframe_video_upload',
         component: UploadVideoComponent
     },
 
-    {
-        path: '/details',
-        name: 'video_more_details',
-        component: VideoMoreDetail
-    },
 
     {
         path: '/password/reset',

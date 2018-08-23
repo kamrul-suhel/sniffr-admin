@@ -16,7 +16,7 @@
                     <nav class="navigation">
                         <ul>
                             <li v-if="!client_login">
-                                <nuxt-link to="upload_video">
+                                <nuxt-link to="/upload_video">
                                     <v-icon left
                                             color="white">file_upload
                                     </v-icon>
