@@ -282,14 +282,16 @@ export const routes = [
                 // component: ClientOfferedAssetsComponent,
             },
 
-
-
-
             {
                 path: 'collections',
                 name: 'client_collections',
                 component: ClientCollectionComponent,
             },
+
+
+
+
+
 
         ],
     },
