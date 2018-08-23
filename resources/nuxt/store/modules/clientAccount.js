@@ -68,18 +68,18 @@ const mutations = {
 
 const actions = {
     fetchClientAccount({commit}) {
-        axios.get('/client/profile').then((response) => {
-            commit('setCompanyUser', response.data.user);
-            commit('setCompany', response.data.company);
-            commit('setCompanyUsers', response.data.company_users);
-            commit('setCompanyOwners', response.data.account_owner_users);
+        this.$axios.$get('/client/profile').then((response) => {
+            commit('setCompanyUser', response.user);
+            commit('setCompany', response.company);
+            commit('setCompanyUsers', response.company_users);
+            commit('setCompanyOwners', response.account_owner_users);
             commit('setClientInitState', true);
         })
     },
 
     fetchClientUser({commit}, payLoad) {
-        axios.get(payLoad.url).then((response) => {
-            commit('setCompanyUser', response.data.user);
+        this.$axios.$get(payLoad.url).then((response) => {
+            commit('setCompanyUser', response.user);
             commit('setClientInitState', true);
         })
     }

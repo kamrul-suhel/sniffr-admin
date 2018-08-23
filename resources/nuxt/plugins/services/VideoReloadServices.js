@@ -1,3 +1,4 @@
+import jQuery from 'jquery';
 export default class VideoReloadServices {
     reloadAll(){
         this.reloadFacebook();
@@ -27,14 +28,14 @@ export default class VideoReloadServices {
 
     reloadTwitter(){
         TwitterWidgetsLoader.load(function (twttr) {
-            var tweets = jQuery(".tweet");
-
-            $(tweets).each(function (t, tweet) {
-                var id = jQuery(this).attr('id');
-                twttr.widgets.createVideo(id, tweet).then(function (el) {
-                    widget_type = video
-                });
-            });
+            // var tweets = jQuery(".tweet");
+            //
+            // jQuery(tweets).each(function (t, tweet) {
+            //     var id = jQuery(this).attr('id');
+            //     twttr.widgets.createVideo(id, tweet).then(function (el) {
+            //         widget_type = video
+            //     });
+            // });
         });
     }
 
@@ -47,8 +48,8 @@ export default class VideoReloadServices {
         let vimeo = document.createElement('script');
         vimeo.type = "text/javascript";
         vimeo.src = "/assets/scripts/videojs-vimeo.js";
-        $('body').append(videojs1);
-        $('body').append(vimeo);
+        // jQuery('body').append(videojs1);
+        // jQuery('body').append(vimeo);
 
     }
 
@@ -60,12 +61,12 @@ export default class VideoReloadServices {
         s.async = true;
 
         setTimeout(function () {
-            if (typeof window.instgrm !== 'undefined') {
-                $('body').append(s);
-                window.instgrm.Embeds.process();
-            }else{
-                $('body').append(s);
-            }
+            // if (typeof window.instgrm !== 'undefined') {
+            //     jQuery('body').append(s);
+            //     window.instgrm.Embeds.process();
+            // }else{
+            //     jQuery('body').append(s);
+            // }
         }, 500);
     }
 }

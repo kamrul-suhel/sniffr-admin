@@ -17,6 +17,7 @@
 <script>
     import NavigationComponent from '@/components/Navigation'
     import FooterComponent from "@/components/FooterComponent"
+    import mapGetters from 'vuex';
     export default {
 
         components: {

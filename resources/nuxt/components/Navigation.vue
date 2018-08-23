@@ -214,9 +214,9 @@
                 let toast = {
                     message: 'You have successfully logged out'
                 };
-                this.$store.commit('setToast', toast);
                 this.$store.dispatch('userLogout');
-                return this.$router.push({name: 'home'});
+                this.$store.commit('setToast', toast);
+                return this.$router.push({path: '/'});
             },
 
             // Login component trigger this methods when change any value

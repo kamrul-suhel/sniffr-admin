@@ -151,9 +151,10 @@ const getters = {
 
 const actions = {
     getLoginStatus({commit}) {
-        axios.get('/settings_object')
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+        this.$axios.$get('/settings_object')
             .then((response) => {
-                let data = response.data;
+                let data = response;
                 if (!data.error) {
                     commit('setUserStatus', data.sniffr_app);
                 }
@@ -164,9 +165,10 @@ const actions = {
     },
 
     userLogout({commit}) {
-        axios.get('/logout')
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+        this.$axios.$get('/logout')
             .then((response) => {
-                let data = response.data;
+                let data = response;
                 if (!data.error) {
                     commit('clearUserState');
                 }

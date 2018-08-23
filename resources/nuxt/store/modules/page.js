@@ -1,6 +1,5 @@
 const state = {
     isOfferedPage: false,
-
 }
 
 const mutations = {

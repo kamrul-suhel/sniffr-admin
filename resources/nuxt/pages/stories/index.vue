@@ -60,7 +60,7 @@
 
 <script>
     import SearchComponent from '@/components/includes/SearchComponent';
-    import StoryLoopComponent from './modules/StoryLoopComponent';
+    import StoryLoopComponent from '@/components/StoryLoopComponent';
     import PaginationComponent from '@/components/includes/PaginationComponent';
     import {mapGetters} from 'vuex';
 

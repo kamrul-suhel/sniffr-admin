@@ -4,22 +4,22 @@ const state = {
 }
 
 const mutations = {
-    setSettingsObject(state, settings){
+    setSettingsObject(state, settings) {
         state.settings = settings;
     }
 }
 
 const getters = {
-    getSettingsObject(state){
+    getSettingsObject(state) {
         return state.settings;
     }
 }
 
 const actions = {
-    setSettingObjectFromServer({ commit, state }){
+    setSettingObjectFromServer({commit, state}) {
         // check if settings data is load or not
-        if(typeof state.settings != 'object'){
-            return new Promise(function(resolve, reject){
+        if (typeof state.settings != 'object') {
+            return new Promise(function (resolve, reject) {
                 let url = '/settings_object';
                 axios.get(url)
                     .then((response) => {
@@ -28,6 +28,7 @@ const actions = {
                         resolve(data);
                     })
                     .catch((error) => {
+                        console.log(error);
                         reject();
                     });
             });

@@ -1,4 +1,4 @@
-import AssetVideoServices from '../../services/VideoServices'
+import AssetVideoServices from '@/plugins/services/VideoServices'
 import axios from 'axios';
 const state = {
     //Dialog box
@@ -323,9 +323,9 @@ const actions = {
             url = url + '&tag=' + payload.tag;
         }
 
-        axios.post(url)
+        this.$axios.$post(url)
             .then((response) => {
-                let data = response.data;
+                let data = response;
                 commit('setVideoData', data.videos.data);
                 commit('setMailerVideoData', data.mailerVideos);
                 commit('setVideoPaginationObject', data.videos);
@@ -369,12 +369,12 @@ const actions = {
         }
         let url = '/search/videos';
 
-        axios.post(url, data)
+        this.$axios.$post(url, data)
             .then((response) => {
-                commit('setCurrentVideo', response.data.current_video);
-                commit('setCurrentVideoTags', response.data);
-                commit('setNextVideoAlphaId', response.data.next_video_alpha_id);
-                commit('setPreviousVideoAlphaId', response.data.prev_video_alpha_id);
+                commit('setCurrentVideo', response.current_video);
+                commit('setCurrentVideoTags', response);
+                commit('setNextVideoAlphaId', response.next_video_alpha_id);
+                commit('setPreviousVideoAlphaId', response.prev_video_alpha_id);
                 commit('setVideoLoading', false);
             })
             .catch((error) => {
@@ -391,9 +391,9 @@ const actions = {
         if (payload.alpha_id && payload.alpha_id != 0) {
             url = url + '/' + payload.alpha_id;
         }
-        axios.get(url)
+        this.$axios.$get(url)
             .then((response) => {
-                commit('setVideoDetailData', response.data);
+                commit('setVideoDetailData', response);
             })
             .catch((error) => {
                 console.log(error);
@@ -407,10 +407,10 @@ const actions = {
      * ***************************************
      */
     fetchOfferedVideos({commit}, payload){
-        axios.get(payload)
+        this.$axios.$get(payload)
             .then((response) => {
-                commit('setOfferedVideos', response.data.videos);
-                commit('setVideoPaginationObject', response.data.videos);
+                commit('setOfferedVideos', response.videos);
+                commit('setVideoPaginationObject', response.videos);
                 commit('setInitVideo', true);
             },
             (error) => {
@@ -427,10 +427,10 @@ const actions = {
 
     fetchPurchasedVideos({commit}, payload){
 
-        axios.get(payload)
+        this.$axios.$get(payload)
             .then((response) => {
-                    commit('setPurchasedVideos', response.data.videos);
-                    commit('setVideoPaginationObject', response.data.videos);
+                    commit('setPurchasedVideos', response.videos);
+                    commit('setVideoPaginationObject', response.videos);
                 },
                 (error) => {
                 });
@@ -470,9 +470,9 @@ const actions = {
         let data = {alpha_id: currentAlphaId};
         let url = '/search/videos';
 
-        axios.post(url, data)
+        this.$axios.$post(url, data)
             .then((response) => {
-                let currVideo = response.data.current_video;
+                let currVideo = response.current_video;
                 commit('setCurrentVideo', currVideo)
                 commit('setVideoLoading', false)
             })

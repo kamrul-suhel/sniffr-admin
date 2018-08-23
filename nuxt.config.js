@@ -6,8 +6,8 @@ module.exports = laravelNuxt({
         vendor: ['axios']
     },
 
-    modules: {
-    },
+    modules: [
+    ],
 
     plugins: ['~/plugins/main.js'],
 
@@ -21,6 +21,9 @@ module.exports = laravelNuxt({
         ],
         link: [
             { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' }
+        ],
+
+        script:[
         ]
     },
 

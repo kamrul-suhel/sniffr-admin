@@ -1,3 +1,4 @@
+
 const state = {
     stories: [],
     mailerStories: [],
@@ -274,7 +275,7 @@ const mutations = {
 
 const actions = {
     fetchStories({commit}, payload = {}) {
-        let url = 'search/stories';
+        let url = '/search/stories';
         if (payload.page && payload.page != 0) {
             url = url + '?page=' + payload.page;
         }
@@ -283,9 +284,9 @@ const actions = {
             url = url + '&search=' + payload.search;
         }
 
-        axios.post(url)
+        this.$axios.$post(url)
             .then((response) => {
-                let data = response.data;
+                let data = response;
                 commit('setStories', data.stories.data);
                 commit('setMailerStories', data.mailerStories);
                 commit('setStoriesPaginateObject', data.stories);
@@ -297,11 +298,11 @@ const actions = {
 
     fetchCurrentStory({commit}, alpha_id) {
         let url = '/stories/' + alpha_id;
-
-        axios.get(url)
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+        this.$axios.$get(url)
             .then((response) => {
-                commit('setCurrentStory', response.data);
-                commit('setCurrentStoryAssets', response.data.story);
+                commit('setCurrentStory', response);
+                commit('setCurrentStoryAssets', response.story);
             })
             .catch((error) => {
                 console.log(error);
@@ -309,9 +310,9 @@ const actions = {
     },
 
     fetchOfferedStories({commit}, payload) {
-        axios.get(payload)
+        this.$axios.$get(payload)
             .then((response) => {
-                    commit('setOfferedStories', response.data.stories);
+                    commit('setOfferedStories', response.stories);
                     commit('setStoriesPaginateObject', response.data.stories);
                     commit('setInitStory', true);
                 },
@@ -321,10 +322,11 @@ const actions = {
     },
 
     fetchPurchasedStories({commit}, payload) {
-        axios.get(payload)
+        this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+        this.$axios.$get(payload)
             .then((response) => {
-                    commit('setPurchasedStories', response.data.stories);
-                    commit('setStoriesPaginateObject', response.data.stories);
+                    commit('setPurchasedStories', response.stories);
+                    commit('setStoriesPaginateObject', response.stories);
                     commit('setInitStory', true);
                 },
                 (error) => {
@@ -340,7 +342,7 @@ const actions = {
      */
     getMailerStories({commit, state}, payload) {
         return new Promise((resolve, reject) => {
-            axios.post(payload)
+            this.$axios.$post(payload)
                 .then((stories) => {
                         state.stories = stories.data.stories;
                         resolve();

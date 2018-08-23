@@ -93,7 +93,7 @@
     </div>
 </template>
 <script>
-
+    import axios from 'axios';
     export default {
         data() {
             return {
@@ -158,14 +158,15 @@
                         form_data.append('redirect', this.redirectUrl);
                     }
 
-
                     // submit data with ajax request
-                    axios.post('/login', form_data)
+                    this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+                    this.$axios.$post('/login', form_data)
                         .then(response => {
+                            console.log('lsdk');
                             this.login_progress = true;
                             this.loading = false;
 
-                            let data = response.data;
+                            let data = response;
                             if (data.error) {
                                 this.login_prosgress = false;
                                 this.loading = false;

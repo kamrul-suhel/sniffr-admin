@@ -82,7 +82,7 @@
             },
 
             onStoryDetail() {
-                this.$router.push({name: 'stories_detail', params: {'alpha_id': this.story.alpha_id}})
+                this.$router.push({path: 'stories/'+ this.story.alpha_id})
             },
 
             getIsPurchasedAsset() {
