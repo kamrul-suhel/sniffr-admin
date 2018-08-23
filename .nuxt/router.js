@@ -4,12 +4,13 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _6d1b3b28 = () => import('../resources/nuxt/pages/videos/index.vue' /* webpackChunkName: "pages/videos/index" */).then(m => m.default || m)
-const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */).then(m => m.default || m)
 const _83d9d422 = () => import('../resources/nuxt/pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
+const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */).then(m => m.default || m)
 const _63f02318 = () => import('../resources/nuxt/pages/upload/form/index.vue' /* webpackChunkName: "pages/upload/form/index" */).then(m => m.default || m)
 const _6225ae26 = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
 const _c0037a18 = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
 const _849f6ffe = () => import('../resources/nuxt/pages/password/set/_token/_email/index.vue' /* webpackChunkName: "pages/password/set/_token/_email/index" */).then(m => m.default || m)
+const _f6be2faa = () => import('../resources/nuxt/pages/unsubscribe/_email/index.vue' /* webpackChunkName: "pages/unsubscribe/_email/index" */).then(m => m.default || m)
 const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
 const _b0e20676 = () => import('../resources/nuxt/pages/details/_code/index.vue' /* webpackChunkName: "pages/details/_code/index" */).then(m => m.default || m)
 const _7610de76 = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
@@ -81,14 +82,14 @@ export function createRouter () {
 			name: "videos"
 		},
 		{
-			path: "/stories",
-			component: _53abeb99,
-			name: "stories"
-		},
-		{
 			path: "/login",
 			component: _83d9d422,
 			name: "login"
+		},
+		{
+			path: "/stories",
+			component: _53abeb99,
+			name: "stories"
 		},
 		{
 			path: "/upload/form",
@@ -109,6 +110,11 @@ export function createRouter () {
 			path: "/password/set/:token?/:email?",
 			component: _849f6ffe,
 			name: "password-set-token-email"
+		},
+		{
+			path: "/unsubscribe/:email?",
+			component: _f6be2faa,
+			name: "unsubscribe-email"
 		},
 		{
 			path: "/videos/:alpha_id",
