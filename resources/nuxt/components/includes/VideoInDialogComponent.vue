@@ -97,7 +97,6 @@
         },
 
         created() {
-
             let breakpoint = this.$vuetify.breakpoint.name;
             if (breakpoint === 'sm' || breakpoint === 'xs') {
                 this.content_padding = false;
@@ -119,7 +118,7 @@
             goToDetail() {
                 this.$store.commit('setVideoDialogBox', false);
                 setTimeout(()=> {
-                    this.$router.push({name: 'videos_detail', params:{'alpha_id': this.video_detail.alpha_id}});
+                    this.$router.push({name: 'videos-alpha_id', params:{'alpha_id': this.video_detail.alpha_id}});
                 }, 500)
             }
         }
