@@ -152,9 +152,9 @@ class AuthController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function password_reset()
+    public function password_reset(Request $request)
     {
-        return view('frontend.pages.login.reset_password');
+        return $this->getFrontendServerResponse($request);
     }
 
     /**

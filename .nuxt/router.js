@@ -8,9 +8,11 @@ const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* we
 const _83d9d422 = () => import('../resources/nuxt/pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
 const _63f02318 = () => import('../resources/nuxt/pages/upload/form/index.vue' /* webpackChunkName: "pages/upload/form/index" */).then(m => m.default || m)
 const _6225ae26 = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
+const _c0037a18 = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
+const _849f6ffe = () => import('../resources/nuxt/pages/password/set/_token/_email/index.vue' /* webpackChunkName: "pages/password/set/_token/_email/index" */).then(m => m.default || m)
+const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
 const _b0e20676 = () => import('../resources/nuxt/pages/details/_code/index.vue' /* webpackChunkName: "pages/details/_code/index" */).then(m => m.default || m)
 const _7610de76 = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
-const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
 const _e6548560 = () => import('../resources/nuxt/pages/contract/_token/accept/index.vue' /* webpackChunkName: "pages/contract/_token/accept/index" */).then(m => m.default || m)
 const _412442c8 = () => import('../resources/nuxt/pages/upload_videos/index.vue' /* webpackChunkName: "pages/upload_videos/index" */).then(m => m.default || m)
 const _7ee9ed55 = () => import('../resources/nuxt/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
@@ -99,6 +101,21 @@ export function createRouter () {
 			name: "submission-form"
 		},
 		{
+			path: "/password/reset/:token?",
+			component: _c0037a18,
+			name: "password-reset-token"
+		},
+		{
+			path: "/password/set/:token?/:email?",
+			component: _849f6ffe,
+			name: "password-set-token-email"
+		},
+		{
+			path: "/videos/:alpha_id",
+			component: _42e00cd8,
+			name: "videos-alpha_id"
+		},
+		{
 			path: "/details/:code?",
 			component: _b0e20676,
 			name: "details-code"
@@ -107,11 +124,6 @@ export function createRouter () {
 			path: "/stories/:alpha_id",
 			component: _7610de76,
 			name: "stories-alpha_id"
-		},
-		{
-			path: "/videos/:alpha_id",
-			component: _42e00cd8,
-			name: "videos-alpha_id"
 		},
 		{
 			path: "/contract/:token?/accept",
