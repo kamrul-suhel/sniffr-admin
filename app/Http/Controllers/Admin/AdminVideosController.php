@@ -650,23 +650,7 @@ class AdminVideosController extends Controller
 			abort(404);
 		}
 
-		$offeredAndPendingVideos = CollectionVideo::where('video_id', $video->id)
-			->where('status', 'requested')
-			->orWhere('status', 'offered');
-
-		if ($offeredAndPendingVideos->count() > 0) {
-			foreach ($offeredAndPendingVideos->get() as $emailForDeletion) {
-				QueueEmailRetractQuote::dispatch(
-					$emailForDeletion,
-					'video'
-				);
-			}
-			$offeredAndPendingVideos->update(['reason' => 'asset was deleted by admin: ' . auth()->user()->id]);
-		}
-
-
-//        CollectionVideo::where('video_id', $video->id)->delete();
-		$video->destroy($video->id);
+		$video->deleteVideo();
 
 		if ($isJson) {
 			return response()->json([
