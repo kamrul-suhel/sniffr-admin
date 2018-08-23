@@ -55,7 +55,7 @@ class AuthController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function login_form()
+    public function login_form(Request $request)
     {
         if (!Auth::guest()) {
             return Redirect::to('/');
@@ -70,7 +70,7 @@ class AuthController extends Controller
             'settings' => $settings
         ];
 
-        return view('frontend.master', $data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**

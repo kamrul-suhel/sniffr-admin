@@ -161,7 +161,6 @@
                     this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
                     this.$axios.$post('/login', form_data)
                         .then(response => {
-                            console.log('lsdk');
                             this.login_progress = true;
                             this.loading = false;
 
