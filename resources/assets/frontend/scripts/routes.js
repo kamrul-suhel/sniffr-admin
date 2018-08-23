@@ -176,6 +176,11 @@ export const routes = [
         component: ContractComponent
     },
 
+
+
+
+
+
     {
         path: '/upload',
         name: 'upload_video',
