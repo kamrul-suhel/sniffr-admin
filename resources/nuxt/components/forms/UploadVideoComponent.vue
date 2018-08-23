@@ -356,7 +356,7 @@
 
                 //show the uploading dialog box
                 this.uplod_progress = true;
-                axios.post('/upload', form, {
+                this.$axios.$post('/upload', form, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-Requested-With': 'XMLHttpRequest',
@@ -366,7 +366,7 @@
                 )
                     .then(response => {
                         //data uploaded succes
-                        let data = response.data;
+                        let data = response;
                         if (data.status == 'success') {
                             // set all default
                             this.progressbar = 0;
