@@ -92,8 +92,7 @@ class ClientVideosController extends Controller
             return $this->successResponse($data);
         }
 
-        return view('frontend.master');
-
+		return $this->getFrontendServerResponse($request);
     }
 
     public function getOfferedVideos(Request $request)

@@ -263,18 +263,20 @@ export const routes = [
                 component: ClientStoryDetailComponent
             },
 
-
-
-
-
-
-
-
             {
                 path: 'videos/:alpha_id',
                 name: 'client_video_detail',
                 component: ClientVideoDetailComponent
             },
+
+
+
+
+
+
+
+
+
             {
                 path: 'purchased',
                 name: 'client_purchased_assets',

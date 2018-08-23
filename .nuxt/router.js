@@ -11,8 +11,9 @@ const _83d9d422 = () => import('../resources/nuxt/pages/login/index.vue' /* webp
 const _63f02318 = () => import('../resources/nuxt/pages/upload/form/index.vue' /* webpackChunkName: "pages/upload/form/index" */).then(m => m.default || m)
 const _6225ae26 = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
 const _7cd1e416 = () => import('../resources/nuxt/pages/client/profile/index.vue' /* webpackChunkName: "pages/client/profile/index" */).then(m => m.default || m)
-const _c0037a18 = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
+const _4f5a83ce = () => import('../resources/nuxt/pages/client/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/client/videos/_alpha_id/index" */).then(m => m.default || m)
 const _6d7e4dcb = () => import('../resources/nuxt/pages/client/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/client/stories/_alpha_id/index" */).then(m => m.default || m)
+const _c0037a18 = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
 const _3f4640f8 = () => import('../resources/nuxt/pages/client/profile/_slug/users/create/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/create/index" */).then(m => m.default || m)
 const _25e8b060 = () => import('../resources/nuxt/pages/client/profile/_slug/users/_userid/edit/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/_userid/edit/index" */).then(m => m.default || m)
 const _849f6ffe = () => import('../resources/nuxt/pages/password/set/_token/_email/index.vue' /* webpackChunkName: "pages/password/set/_token/_email/index" */).then(m => m.default || m)
@@ -123,14 +124,19 @@ export function createRouter () {
 			name: "client-profile"
 		},
 		{
-			path: "/password/reset/:token?",
-			component: _c0037a18,
-			name: "password-reset-token"
+			path: "/client/videos/:alpha_id?",
+			component: _4f5a83ce,
+			name: "client-videos-alpha_id"
 		},
 		{
 			path: "/client/stories/:alpha_id?",
 			component: _6d7e4dcb,
 			name: "client-stories-alpha_id"
+		},
+		{
+			path: "/password/reset/:token?",
+			component: _c0037a18,
+			name: "password-reset-token"
 		},
 		{
 			path: "/client/profile/:slug/users/create",
