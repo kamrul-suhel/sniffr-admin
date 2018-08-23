@@ -115,8 +115,8 @@
     </div>
 </template>
 <script>
-    import AssetStoryOfferedComponent from './partials/AssetStoryOfferedComponent'
-    import AssetVideoOfferedComponent from './partials/AssetVideoOfferedComponent'
+    import AssetStoryOfferedComponent from '@/components/partials/AssetStoryOfferedComponent'
+    import AssetVideoOfferedComponent from '@/components/partials/AssetVideoOfferedComponent'
 
     export default {
         components: {

@@ -199,7 +199,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import StoryDialogBoxEventBus from '../../../event-bus/story-dialog-box-event-bus';
+    import StoryDialogBoxEventBus from '@/events/story-dialog-box-event-bus';
 
     export default {
         data() {

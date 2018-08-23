@@ -286,12 +286,7 @@ export const routes = [
                 path: 'collections',
                 name: 'client_collections',
                 component: ClientCollectionComponent,
-            },
-
-
-
-
-
+            }
 
         ],
     },

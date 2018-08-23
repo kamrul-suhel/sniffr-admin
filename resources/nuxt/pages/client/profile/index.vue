@@ -236,7 +236,7 @@
 </template>
 
 <script>
-    import ClientAccountServices from '../../services/ClientAccountServices'
+    import ClientAccountServices from '@/plugins/services/ClientAccountServices'
     import {mapGetters} from 'vuex';
 
     export default {

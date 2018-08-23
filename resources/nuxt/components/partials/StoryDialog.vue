@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import StoryDialogBoxEventBus from '../../events/story-dialog-box-event-bus';
+    import StoryDialogBoxEventBus from '@/events/story-dialog-box-event-bus';
     import StoryDialogComponent from '../StoryInDialogComponent';
 
     export default {
