@@ -228,17 +228,16 @@ export const routes = [
         component: UnsubscribeComponent
     },
 
-
-
-
-
-
-
     {
         path: '/terms',
         name: 'termsconditions',
         component: TermsConditionsComponent
     },
+
+
+
+
+
 
     {
         path: '/client',
