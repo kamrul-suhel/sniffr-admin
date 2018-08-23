@@ -1,13 +1,14 @@
 <template>
     <div class="video-more-detail-component fill-height">
-        <moredetail-component></moredetail-component>
+        <video-submission/>
     </div>
 </template>
 <script>
-    import MoredetailComponent from '@/components/forms/MoredetailComponent.vue';
+    import VideoSubmission from '@/components/forms/VideoSubmissionComponent';
     export default {
+        layout:['iframeForm'],
         components: {
-            MoredetailComponent
+            VideoSubmission
         }
     }
 </script>

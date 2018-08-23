@@ -183,7 +183,7 @@
                     <v-container grid-list-xl>
                         <v-layout>
                             <v-flex>
-                                <img src="/assets/images/frontend/hamster_wheel.gif"/>
+                                <img src="~/assets/images/frontend/hamster_wheel.gif"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
