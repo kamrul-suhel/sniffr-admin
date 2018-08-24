@@ -293,7 +293,7 @@
             },
 
             onAccept() {
-                let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
+                let url = '/client/collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
                 this.$axios.$post(url).then((response) => {
                     if (response.success === '1') {

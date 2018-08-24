@@ -1,26 +1,16 @@
 <template>
     <!-- VIDEOS ITEM SECTION -->
     <section class="videos-section">
-        <!--<div id="header" class="page-videos">-->
-            <!--<div class="header-content">-->
-                <!--<div class="position-center">-->
-                    <!--<v-container grid-list-lg>-->
-                        <!--<v-layout row wrap>-->
-                            <!--<v-flex xs12>-->
-                                <!--<h1 class="heading">{{video.title ? video.title : ''}}</h1>-->
-                            <!--</v-flex>-->
-                        <!--</v-layout>-->
-                    <!--</v-container>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-
         <!-- VIDEOS DETAIL SECTION -->
         <div class="videos-detail-section section-space">
             <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-btn outline @click="onGoback()" class="ml-0"><v-icon>chevron_left</v-icon>Go back</v-btn>
+                        <v-btn outline
+                               @click="onGoback()"
+                               class="ml-0">
+                            <v-icon>chevron_left</v-icon>Go back
+                        </v-btn>
                     </v-flex>
                 </v-layout>
 
