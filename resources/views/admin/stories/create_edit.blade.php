@@ -143,6 +143,10 @@
 
 						@include('admin.stories.partials.rights_status')
 
+						<div class="col-lg-12">
+							@include('admin.videos.partials.log')
+						</div>
+
 						@include('admin.contracts.partials.form')
 
 						@if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')

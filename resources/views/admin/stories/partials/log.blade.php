@@ -35,10 +35,7 @@
                             @if($decodedNew !== null)
                                 <td>
                                     @foreach($decodedNew as $key2 => $value2)
-                                        @if($key2 !== 'sourced_at')
                                         - {{$key2}}: <b>{{$value2}}</b>
-                                        @endif
-
                                     @endforeach
                                 </td>
                             @else
