@@ -10,7 +10,8 @@
         "copy": "cross-env NODE_ENV=copy node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "build": "laravel-nuxt build",
-        "start": "laravel-nuxt dev"
+        "start": "laravel-nuxt dev",
+        "server": "laravel-nuxt start"
     },
     "dependencies": {
         "@nuxtjs/axios": "^5.3.1",

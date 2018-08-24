@@ -147,22 +147,22 @@
             </v-btn>
 
             <small>Don't like this offer?</small>
-            <br>
-            <v-dialog v-model="dialog" persistent max-width="500px">
-                <v-btn
-                        slot="activator"
-                        persistent
-                        block
-                        dark
-                        large
-                        color="dark"
-                        :loading="declineLoading"
-                        :disabled="declineLoading || assetDeclined"
-                        class="mb-3"
-                >
-                    Contact Us
-                </v-btn>
 
+            <v-btn
+                    @click="dialog = true"
+                    persistent
+                    block
+                    dark
+                    large
+                    color="dark"
+                    :loading="declineLoading"
+                    :disabled="declineLoading || assetDeclined"
+                    class="mb-3"
+            >
+                Contact Us
+            </v-btn>
+
+            <v-dialog v-model="dialog" persistent max-width="500px">
                 <v-card>
                     <v-card-title>
                         <span class="headline">Contact Us</span>
@@ -276,7 +276,7 @@
             },
 
             goToDetail() {
-                this.$router.push({name: 'client_story_detail', params: {'alpha_id': this.story.alpha_id}})
+                this.$router.push({name: 'client-stories-alpha_id', params: {'alpha_id': this.story.alpha_id}})
             },
 
             getImage(image) {
@@ -293,7 +293,7 @@
             },
 
             onAccept() {
-                let url = 'collections/accept_asset_price/' + this.story.collection_story_id + '/story';
+                let url = '/client/collections/accept_asset_price/' + this.story.collection_story_id + '/story';
                 this.acceptLoading = true;
                 this.$axios.$post(url).then((response) => {
                     if (response.success === '1') {
@@ -312,6 +312,8 @@
                 let form_data =  new FormData();
                 form_data.append('rejection_notes', this.decline_note);
                 this.$axios.$post(url, form_data).then((response) => {
+                    console.log(response);
+                    return;
                     if (response.success === '1') {
                         this.declineLoading = false;
                         this.assetDeclined = true;

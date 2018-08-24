@@ -128,7 +128,7 @@
 
                             <v-flex xs12 sm12 md6>
                                 <v-autocomplete
-                                        :items="countries"
+                                        :items="allCountries"
                                         label="Country"
                                         return-object
                                         v-model="company.country"
@@ -245,7 +245,6 @@
                 valid: false,
                 formState: false,
                 companyOwner: null,
-                countries: [],
 
                 loader: null,
                 loading: false,
@@ -288,15 +287,20 @@
                 companyOwners: 'getCompanyOwners',
                 companyUsers: 'getCompanyUsers',
                 iniState: 'getClientIniState',
-            })
+            }),
+
+            allCountries(){
+                return ClientAccountServices.getAllCountries();
+            }
         },
 
         watch: {
+            iniState(){
+            }
         },
 
         created() {
             this.$store.commit('setClientInitState', false);
-            this.countries = ClientAccountServices.getAllCountries();
             this.getCompanyData();
         },
 

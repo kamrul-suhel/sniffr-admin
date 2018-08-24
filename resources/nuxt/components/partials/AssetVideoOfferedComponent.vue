@@ -149,22 +149,22 @@
             </v-btn>
 
             <small>Don't like this offer?</small>
-            <br>
-            <v-dialog v-model="dialog" persistent max-width="500px">
-                <v-btn
-                        slot="activator"
-                        persistent
-                        block
-                        dark
-                        large
-                        color="dark"
-                        :loading="declineLoading"
-                        :disabled="declineLoading || assetDeclined"
-                        class="mb-3"
-                >
-                    Contact Us
-                </v-btn>
 
+            <v-btn
+                    @click="dialog = true"
+                    persistent
+                    block
+                    dark
+                    large
+                    color="dark"
+                    :loading="declineLoading"
+                    :disabled="declineLoading || assetDeclined"
+                    class="mb-3"
+            >
+                Contact Us
+            </v-btn>
+
+            <v-dialog v-model="dialog" persistent max-width="500px">
                 <v-card>
                     <v-card-title>
                         <span class="headline">Contact Us</span>
@@ -276,7 +276,7 @@
             },
 
             goToDetail() {
-                this.$router.push({name: 'client_video_detail', params: {'alpha_id': this.video.alpha_id}})
+                this.$router.push({name: 'client-video-alpha_id', params: {'alpha_id': this.video.alpha_id}})
             },
 
             getImage(image) {

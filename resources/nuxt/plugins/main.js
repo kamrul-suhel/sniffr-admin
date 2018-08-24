@@ -5,6 +5,7 @@ Vue.use(Vuetify);
 
 window.$ = require('jquery');
 
+
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 /*
