@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Audit;
 use App\CollectionVideo;
 use App\Jobs\Quotes\QueueEmailExpiredQuote;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
@@ -40,17 +41,18 @@ class AdminVideosController extends Controller
     /**
      * @var VideoService
      */
-    private $videoService;
+    private $videoService, $audit;
 
     /**
      * AdminVideosController constructor.
      * @param Request $request
      * @param VideoService $videoService
      */
-    public function __construct(Request $request, VideoService $videoService)
+    public function __construct(Request $request, VideoService $videoService, Audit $audit)
     {
         $this->middleware('admin');
         $this->videoService = $videoService;
+        $this->audit = $audit;
     }
 
     /**
@@ -272,7 +274,6 @@ class AdminVideosController extends Controller
 		]);
 	}
 
-
 	/**
 	 * @param Request $request
 	 * @param string $id
@@ -336,8 +337,8 @@ class AdminVideosController extends Controller
 		}
 
 		$tags = $request->input('tags');
-
 		if ($tags) {
+			$this->audit->videoTagUpdate($video, $tags);
 			$this->addUpdateVideoTags($video, $tags);
 		}
 
@@ -429,7 +430,6 @@ class AdminVideosController extends Controller
 
 		return response()->json($results);
 	}
-
 
     /**
      * @param Request $request
@@ -762,6 +762,10 @@ class AdminVideosController extends Controller
         $video->tags()->detach($tag_id);
     }
 
+	/**
+	 * @param $tag_name
+	 * @return bool
+	 */
     public function isTagContainedInAnyVideos($tag_name)
     {
         // Check if a tag is associated with any videos
@@ -769,6 +773,9 @@ class AdminVideosController extends Controller
         return (!empty($tag) && $tag->videos->count() > 0) ? true : false;
     }
 
+	/**
+	 * @param $video
+	 */
     private function deleteVideoImages($video)
     {
         $ext = pathinfo($video->image, PATHINFO_EXTENSION);
@@ -816,6 +823,10 @@ class AdminVideosController extends Controller
         return $pdf->download($alpha_id . '.pdf');
     }
 
+	/**
+	 * @param null $alpha_id
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
     public function nsfw($alpha_id = null)
     {
         $status = 'error';

@@ -109,6 +109,9 @@ class Client extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
     }
 
+	/**
+	 * @return Builder|\Illuminate\Database\Eloquent\Relations\HasMany
+	 */
     public function activeLicences()
     {
         $collections = $this->collections()
