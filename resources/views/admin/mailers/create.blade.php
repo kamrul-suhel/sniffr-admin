@@ -6,7 +6,7 @@
 @stop
 
 @section('content')
-    <div id="admin-mailer">
+    <div id="sniffr-app">
         <v-app>
             <v-content>
                 <ol class="breadcrumb">

@@ -2,7 +2,6 @@
 
 
 @section('content')
-
 	<div class="admin-section-title bottom-padding">
 		<div class="row">
 			<div class="col-xs-12">
@@ -90,11 +89,11 @@
 				$currentDay = '';
 			@endphp
 
-			@foreach($stories as $story)
+			@foreach($stories as $asset)
 
 				@php
-					$date = \Carbon\Carbon::parse($story->updated_at)->isToday() ? 'Today' : date('jS M',strtotime($story->updated_at));
-					$panelColour = ($story->priority=='high' ? 'danger' : ($story->priority=='medium' ? 'warning' : '')); //config('stories.colors'); $panelColour[$story->state]
+					$date = \Carbon\Carbon::parse($asset->updated_at)->isToday() ? 'Today' : date('jS M',strtotime($asset->updated_at));
+					$panelColour = ($asset->priority=='high' ? 'danger' : ($asset->priority=='medium' ? 'warning' : '')); //config('stories.colors'); $panelColour[$asset->state]
 				@endphp
 
 				@if($currentDay != $date)
@@ -108,60 +107,61 @@
 					</div>
 				@endif
 
-				<div class="col-sm-6 col-md-4" id="story-{{ $story->alpha_id }}">
+				<div class="col-sm-6 col-md-4" id="story-{{ $asset->alpha_id }}">
 
 					<article class="album {{ $panelColour }}">
-                        <div class="album-story-update" id="story-update-{{ $story->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
-                        <div class="album-story-update-error" id="story-update-error-{{ $story->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
+                        <div class="album-story-update" id="story-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
+                        <div class="album-story-update-error" id="story-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
 						<section class="album-info album-grey">
                             <div class="row padded-bottom">
                                 <div class="col-sm-12">
-                                    <h3><a href="{{ url('admin/stories/edit/'.$story->alpha_id.'/?decision='.$decision) }}" title="Edit Story on Sniffr">{{ $story->title }}</a></h3>
+                                    <h3><a href="{{ url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.$decision) }}" title="Edit Story on Sniffr">{{ $asset->title }}</a></h3>
                                     <p>
-										@if($story->contact)
-											@if($story->contact->email)
-												<a href="{{ url('admin/contacts/'.$story->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-													<i class="fa fa-envelope"></i> {{ $story->contact->email }}
+										@if($asset->contact)
+											@if($asset->contact->email)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-envelope"></i> {{ $asset->contact->email }}
 												</a>
-											@elseif($story->contact->twitter)
-												<a href="https://twitter.com/{{ $story->contact->twitter }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-													<i class="fa fa-twitter"></i> {{ $story->contact->twitter }}
+											@elseif($asset->contact->twitter)
+												<a href="https://twitter.com/{{ $asset->contact->twitter }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-twitter"></i> {{ $asset->contact->twitter }}
 												</a>
-											@elseif($story->contact->reddit)
-												<a href="https://www.reddit.com/user/{{ $story->contact->reddit }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-													<i class="fa fa-reddit"></i> {{ $story->contact->reddit }}
+											@elseif($asset->contact->reddit)
+												<a href="https://www.reddit.com/user/{{ $asset->contact->reddit }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-reddit"></i> {{ $asset->contact->reddit }}
 												</a>
-											@elseif($story->contact->imgur)
-												<a href="https://imgur.com/user/{{ $story->contact->imgur }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-													<i class="fa fa-italic"></i> {{ $story->contact->imgur }}
+											@elseif($asset->contact->imgur)
+												<a href="https://imgur.com/user/{{ $asset->contact->imgur }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-italic"></i> {{ $asset->contact->imgur }}
 												</a>
-											@elseif($story->contact->instagram)
-												<a href="{{ url('admin/contacts/'.$story->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
-													<i class="fa fa-instagram"></i> {{ $story->contact->instagram }}
+											@elseif($asset->contact->instagram)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
+													<i class="fa fa-instagram"></i> {{ $asset->contact->instagram }}
 												</a>
-											@elseif($story->contact->youtube)
-												<a href="{{ url('admin/contacts/'.$story->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
-													<i class="fa fa-youtube"></i> {{ $story->contact->youtube }}
+											@elseif($asset->contact->youtube)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
+													<i class="fa fa-youtube"></i> {{ $asset->contact->youtube }}
 												</a>
-											@elseif($story->contact->facebook)
-												<a href="{{ url('admin/contacts/'.$story->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact">
-													<i class="fa fa-facebook"></i> {{ $story->contact->facebook }}
+											@elseif($asset->contact->facebook)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact">
+													<i class="fa fa-facebook"></i> {{ $asset->contact->facebook }}
 												</a>
 											@endif
 										@else
 											<span class="btn btn-mini-info"><i class="fa fa-address-book"></i> No Contact</span>
 										@endif
 
+										<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i></button>
 
-										@if($story->source)
-										<a href="{{ $story->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">
+										@if($asset->source)
+										<a href="{{ $asset->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">
 											<i class="fa fa-info"></i>
 										</a>
 										@endif
 
-										@if($story->wp_id)
-										<a href="{{ 'https://'.(env('APP_ENV') == 'prod' ? 'www' : 'testing').'.unilad.co.uk/?p='.$story->wp_id.'&preview=true' }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
-											<i class="fa fa-wordpress"></i> @if($story->author) {{ $story->author }} @endif
+										@if($asset->wp_id)
+										<a href="{{ 'https://'.(env('APP_ENV') == 'prod' ? 'www' : 'testing').'.unilad.co.uk/?p='.$asset->wp_id.'&preview=true' }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
+											<i class="fa fa-wordpress"></i> @if($asset->author) {{ $asset->author }} @endif
 										</a>
 										@endif
 									</span>
@@ -169,59 +169,30 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-8">
-                                    <div class="content-thumb" style="background-image:url({{ ($story->thumb ? $story->thumb : '/assets/images/placeholder.png') }})">
+                                    <div class="content-thumb" style="background-image:url({{ ($asset->thumb ? $asset->thumb : '/assets/images/placeholder.png') }})">
                                     </div>
                                 </div>
-                                <div class="col-sm-4 no-padding">
+                                <div class="col-sm-4">
                                     <div class="options">
-                                        <div class="options-body">
-                                            <select id="priority" name="priority" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Priority">
-                                                <option value="">Priority</option>
-                                                @foreach(config('stories.priorities') as $priority)
-                    								<option value="{{ $priority }}" @if($story->priority==$priority) selected @endif>{{ ucwords(str_replace('-', ' ', $priority)) }}</option>
-                                                @endforeach
-                    						</select>
-
-                                            <span class="caret"></span>
-                                        </div>
-
-                                        <div class="options-body">
-                                            <select id="destination" name="destination" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Destination">
-                                                <option value="">Destination</option>
-                                                @foreach(config('stories.destinations') as $destination)
-                    								<option value="{{ $destination }}" @if($story->destination==$destination) selected @endif>{{ ucwords(str_replace('-', ' ', $destination)) }}</option>
-                                                @endforeach
-                    						</select>
-
-                                            <span class="caret"></span>
-                                        </div>
-
-                                        <div class="options-body">
-											<select id="statex" name="statex" class="btn btn-mini no-caret">
-												@if($decision == 'all')
-													<option>{{ $story->state }}</option>
-												@else
-													@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
-														<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
-													@endforeach
-												@endif
+										<div class="form-group">
+											<select id="priority" name="priority" data-id="{{ $asset->alpha_id }}" class="js-story-update" title="Priority">
+												<option value="">Priority</option>
+												@foreach(config('stories.priorities') as $priority)
+													<option value="{{ $priority }}" @if($asset->priority==$priority) selected @endif>{{ ucwords(str_replace('-', ' ', $priority)) }}</option>
+												@endforeach
 											</select>
-                                        </div>
+										</div>
 
-                                        <hr>
-
-                                        <div class="options-body">
+										<div class="form-group">
 											<!-- <strong>Assigned in Sniffr:</strong> -->
-                                            <select id="assign_to" name="assign_to" data-id="{{ $story->alpha_id }}" class="btn btn-mini js-story-update" title="Assign To">
-                                                <option value="">Select User</option>
-												<?php $storyUserId = $story->user()->first()->id; ?>
-                                                @foreach($users as $user)
-                    								<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
-                                                @endforeach
-                    						</select>
-
-                                            <span class="caret"></span>
-                                        </div>
+											<select id="assign_to" name="assign_to" data-id="{{ $asset->alpha_id }}" class="js-story-update" title="Assign To">
+												<option value="">Select User</option>
+												<?php $storyUserId = $asset->user()->first()->id; ?>
+												@foreach($users as $user)
+													<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+												@endforeach
+											</select>
+										</div>
                                     </div>
                                 </div>
                             </div>
@@ -230,24 +201,24 @@
                         <footer>
 							<div class="album-images-count">
                                 <div class="album-info-extra">
-                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($story->created_at)) }} <br>
+                                    <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($asset->created_at)) }} <br>
 
-									@if(isset($story->contact))
-										@if($story->contacted_at && $story->contact_made)
+									@if(isset($asset->contact))
+										@if($asset->contacted_at && $asset->contact_made)
 											<i class="fa fa-check-circle-o" title="Made Contact"></i>
 											<strong>Made Contact:</strong>
-											<a href="#" class="btn-mini">{{ date('jS M H:i:s',strtotime($story->contacted_at)) }}</a>
-										@elseif($story->contacted_at && !$story->contact_made)
+											<a href="#" class="btn-mini">{{ date('jS M H:i:s',strtotime($asset->contacted_at)) }}</a>
+										@elseif($asset->contacted_at && !$asset->contact_made)
 											<i class="fa fa-clock-o" title="Contacted"></i>
-											<strong>@if($story->reminders) {{ $story->reminders }} Reminder{{ ($story->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong>{{ $story->contacted_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$story->contacted_at)->diffForHumans() : 'Not yet' }}
-											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger btn-mini">{{ $story->contact->canAutoBump() ? ' Re-send' : ' Manually' }}</a>
-											<a href="{{ url('admin/stories/contact_made/'.$story->alpha_id) }}" data-id="{{ $story->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
+											<strong>@if($asset->reminders) {{ $asset->reminders }} Reminder{{ ($asset->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong>{{ $asset->contacted_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$asset->contacted_at)->diffForHumans() : 'Not yet' }}
+											<a href="{{ url('admin/stories/reminder/'.$asset->alpha_id.'/?decision='.$decision) }}" class="text-danger btn-mini">{{ $asset->contact->canAutoBump() ? ' Re-send' : ' Manually' }}</a>
+											<a href="{{ url('admin/stories/contact_made/'.$asset->alpha_id) }}" data-id="{{ $asset->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
 										@else
 											<i class="fa fa-question-circle-o" title="Not Contacted"></i>
 											<strong>Not Contacted</strong>
-											@if($story->state != 'unapproved' && $story->state != 'rejected')
-											<a href="{{ url('admin/stories/reminder/'.$story->alpha_id.'/?decision='.$decision) }}" class="text-danger btn-mini">{{ $story->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
-											<a href="{{ url('admin/stories/contact_made/'.$story->alpha_id) }}" data-id="{{ $story->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
+											@if($asset->state != 'unapproved' && $asset->state != 'rejected')
+											<a href="{{ url('admin/stories/reminder/'.$asset->alpha_id.'/?decision='.$decision) }}" class="text-danger btn-mini">{{ $asset->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
+											<a href="{{ url('admin/stories/contact_made/'.$asset->alpha_id) }}" data-id="{{ $asset->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
 											@endif
 										@endif
 									@else
@@ -260,8 +231,8 @@
                             <div class="album-options no-border">
 								@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
 									@if($state == $key)
-										@if($state_values['negative_label'])<a href="#" data-id="{{ $story->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a>@endif
-										@if($state_values['positive_label'])<a href="{{ ($story->state=='licensing' ? url('admin/stories/edit/'.$story->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $story->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
+										@if($state_values['negative_label'])<a href="#" data-id="{{ $asset->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a>@endif
+										@if($state_values['positive_label'])<a href="{{ ($asset->state=='licensing' ? url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.lcfirst($decision)) : '#') }}" data-id="{{ $asset->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
 									@endif
 								@endforeach
 							</div>
@@ -275,6 +246,8 @@
 
 			<div class="text-center"><?= $stories->appends(request()->except('page'))->render(); ?></div>
 		</div>
+
+		<modal v-if="modalVisible" @close="closeModal"></modal>
 	</div>
 	@endif
 

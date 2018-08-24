@@ -8,8 +8,6 @@ use App\User;
 use App\Story;
 use App\Asset;
 use App\Libraries\VideoHelper;
-use App\Notifications\SubmissionAlert;
-
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -56,9 +54,6 @@ class QueueStory implements ShouldQueue
             if(isset($story)&&!$story->wp_id) {
                 $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description).'&tags='.env('UNILAD_WP_TAG_ID');
                 $result = $this->apiPost('posts', $parameters, true);
-
-				$user = new User();
-				$user->slackChannel('alerts')->notify(new SubmissionAlert('WP Update (Result: ' . json_encode($result). ')'));
 
 				// update stories record with WP response from post
                 if($result->id){
