@@ -190,6 +190,8 @@
                     @include('admin.videos.partials.contact')
 
                     @include('admin.comments.partials.form')
+
+                    @include('admin.videos.partials.log')
                 @endif
             </div>
         </div>
