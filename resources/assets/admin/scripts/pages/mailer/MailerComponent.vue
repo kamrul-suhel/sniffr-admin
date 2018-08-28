@@ -182,7 +182,7 @@
                 // send the data to downloaded
                 let url = '/admin/mailers/create?videos=' + videosString + '&stories=' + storiesString;
 
-                this.$axios.$get(url)
+                axios.get(url)
                     .then((response) => {
                         if (response.data.status === 'success') {
                             window.location = '/admin/mailers/edit/' + response.data.mailer_id;
@@ -190,6 +190,9 @@
                             this.errorMessage = "Something went wrong";
                             this.dialog = true;
                         }
+                    })
+                    .catch(error => {
+
                     });
             },
 
