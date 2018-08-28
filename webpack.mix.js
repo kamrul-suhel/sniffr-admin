@@ -75,6 +75,12 @@ if (process.env.NODE_ENV == 'copy') {
         'public/assets/scripts/'
     );
 
+    // Placeholder image
+    mix.copy(
+        'resources/nuxt/assets/images/placeholder.png',
+        'public/placeholder.gif'
+    );
+
     /*
     * *********************************************
     * All fonts
