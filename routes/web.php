@@ -137,7 +137,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
 
 
-    Route::resource('comment', 'CommentController');
+    Route::resource('comment', 'Admin\AdminCommentController');
+	Route::get('comments/{type}/{asset_id}', 'Admin\AdminCommentController@getComments');
 
     Route::get('contract/{contract}/delete', 'Contract\ContractController@delete')->name('contract.delete');
     Route::resource('contract', 'Contract\ContractController');

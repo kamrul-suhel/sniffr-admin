@@ -197,7 +197,18 @@
 
                     @include('admin.videos.partials.contact')
 
-                    @include('admin.comments.partials.form')
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Comments</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="panel-body" style="display: block; background: #fcfcfc;">
+                            <comments-component :asset="{{ json_encode($asset) }}" asset-type="video"></comments-component>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>

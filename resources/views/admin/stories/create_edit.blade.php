@@ -1,9 +1,7 @@
 @extends('admin.master')
 
 @section('content')
-<div id="admin-container">
 <!-- This is where -->
-
 	<ol class="breadcrumb">
 		<li> <a href="{{ (isset($decision) ? '/admin/stories/?decision='.$decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a> </li>
 		<li class="active">
@@ -148,10 +146,18 @@
 					</div>
 
 					@if(isset($asset->id))
+						<div class="panel panel-primary" data-collapsed="0">
+							<div class="panel-heading">
+								<div class="panel-title">Comments</div>
+								<div class="panel-options">
+									<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+								</div>
+							</div>
 
-						@include('admin.stories.partials.rights_status')
-
-						@include('admin.contracts.partials.form')
+							<div class="panel-body" style="display: block; background: #fcfcfc;">
+								<comments-component :asset="{{ json_encode($asset) }}" asset-type="story"></comments-component>
+							</div>
+						</div>
 
 						@if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
 						<div class="panel panel-primary" data-collapsed="0">
@@ -177,6 +183,8 @@
 						</div>
 						@endif
 
+						@include('admin.contracts.partials.form')
+
 						<input type="hidden" id="id" name="id" value="{{ $asset->id }}" />
 						<input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}" />
 						<input type="hidden" name="decision" value="{{ (isset($decision) ? $decision : '') }}" />
@@ -192,10 +200,6 @@
 	</div>
 
 	</form>
-
-	@if(isset($asset->id))
-		@include('admin.comments.partials.form')
-	@endif
 
 	<hr>
 
@@ -218,9 +222,6 @@
 	<a href="{{ url('admin/stories/?decision='.(isset($decision) ? $decision : '').'&state='.(isset($asset->state) ? $asset->state : '')) }}" class="btn btn-grey pull-right" style="margin-right:10px;">Close</a>
 
 	<div class="clear"></div>
-
-</div>
-
 @if(isset($asset))
 	@include('admin.contracts.partials.contract_modal')
 @endif
