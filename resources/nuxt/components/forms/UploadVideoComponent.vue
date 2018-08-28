@@ -181,39 +181,38 @@
                 v-model="uplod_progress"
                 max-width="500px"
                 persistent>
-            <v-card class="upload-loading-modal" dark
+            <v-card class="upload-loading-modal"
+                    dark
                     color="dark">
                 <v-card-title>
-                    <v-container>
-                        <v-layout row justify-center>
-                            <v-flex>
-                                <h2 class="text-xs-center sub-heading">Your file is uploading</h2>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
+                    <v-layout row justify-center>
+                        <v-flex>
+                            <h2 class="text-xs-center sub-heading">Your file is uploading</h2>
+                        </v-flex>
+                    </v-layout>
                 </v-card-title>
 
                 <v-card-text>
-                    <v-container grid-list-xl>
-                        <v-layout>
-                            <v-flex>
-                                <img src="~/assets/images/frontend/hamster_wheel.gif"/>
-                            </v-flex>
-                        </v-layout>
+                    <v-layout>
+                        <v-flex>
+                            <img src="~/assets/images/frontend/hamster_wheel.gif"/>
+                        </v-flex>
+                    </v-layout>
 
-                        <v-layout>
-                            <v-flex xs10>
-                                <div v-if="upload_error_msg">{{ upload_error_msg }}</div>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
+                    <v-layout>
+                        <v-flex xs10>
+                            <div v-if="upload_error_msg">{{ upload_error_msg }}</div>
+                        </v-flex>
+                    </v-layout>
                 </v-card-text>
             </v-card>
         </v-dialog>
 
 
         <!-- Thank you dialog box -->
-        <v-dialog v-model="thank_you_dialog" max-width="500px" persistent>
+        <v-dialog v-model="thank_you_dialog"
+                  persistent
+                  max-width="500px">
             <v-card
                     dark
                     color="dark">

@@ -1,4 +1,3 @@
-import axios from 'axios'
 const state = {
     settings: ''
 }
@@ -16,14 +15,19 @@ const getters = {
 }
 
 const actions = {
+    nuxtServerInit(){
+        console.log(context);
+    },
+
     setSettingObjectFromServer({commit, state}) {
         // check if settings data is load or not
         if (typeof state.settings != 'object') {
-            return new Promise(function (resolve, reject) {
+            return new Promise((resolve, reject) => {
                 let url = '/settings_object';
-                axios.get(url)
+                this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+                this.$axios.$get(url)
                     .then((response) => {
-                        let data = response.data;
+                        let data = response;
                         commit('setSettingsObject', data);
                         resolve(data);
                     })

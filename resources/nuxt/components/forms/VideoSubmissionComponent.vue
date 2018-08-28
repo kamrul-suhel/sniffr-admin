@@ -170,23 +170,19 @@
         <v-dialog v-model="uplod_progress" max-width="500px" persistent>
             <v-card class="upload-dialog">
                 <v-card-title>
-                    <v-container >
-                        <v-layout row justify-center>
-                            <v-flex>
-                                <h2 class="text-xs-center sub-heading">Your file is uploading</h2>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
+                    <v-layout row justify-center>
+                        <v-flex>
+                            <h2 class="text-xs-center sub-heading">Your file is uploading</h2>
+                        </v-flex>
+                    </v-layout>
                 </v-card-title>
 
                 <v-card-text>
-                    <v-container grid-list-xl>
-                        <v-layout>
-                            <v-flex>
-                                <img src="~/assets/images/frontend/hamster_wheel.gif"/>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
+                    <v-layout row justify-center>
+                        <v-flex>
+                            <img src="~/assets/images/frontend/hamster_wheel.gif"/>
+                        </v-flex>
+                    </v-layout>
                 </v-card-text>
             </v-card>
         </v-dialog>

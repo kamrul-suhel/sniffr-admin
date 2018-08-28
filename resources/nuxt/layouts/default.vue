@@ -5,9 +5,7 @@
 
             <v-content>
                 <div id="scroll_to"></div>
-                <transition name="slide-fade" mode="out-in">
-                    <nuxt/>
-                </transition>
+                <nuxt/>
             </v-content>
 
             <footer-component/>
@@ -18,11 +16,14 @@
     import NavigationComponent from '@/components/Navigation'
     import FooterComponent from "@/components/FooterComponent"
     export default {
-
         components: {
           NavigationComponent,
             FooterComponent
         },
+
+        data: () => ({
+            sniffrStateReady : false
+        }),
 
         created(){
             this.$store.dispatch('setSettingObjectFromServer')
@@ -31,10 +32,6 @@
                     this.sniffrStateReady = true
                 })
         },
-
-        data: () => ({
-            sniffrStateReady : false
-        }),
 
         methods:{
         }

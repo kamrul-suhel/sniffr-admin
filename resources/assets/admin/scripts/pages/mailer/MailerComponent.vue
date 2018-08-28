@@ -120,7 +120,6 @@
 <script>
     import MailerVideosComponent from './modules/VideosComponents';
     import MailerStoriesComponent from './modules/StoriesComponents';
-    import MailerEventBus from '../../event-bus/mailer-event-bus';
     import VideoInDialog from './modules/VideoInDialog';
     import StoryInDialog from './modules/StoryDialog';
     import VideoPlayerInDialog from './modules/VideoPlayerInDialog'
