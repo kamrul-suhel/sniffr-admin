@@ -1,19 +1,33 @@
-<div class="row">
-    <div class="col-sm-6">
-        <div class="panel panel-primary" data-collapsed="0">
-            <div class="panel-heading">
-                <div class="panel-title">Video Class</div>
-                <div class="panel-options">
-                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                </div>
-            </div>
-            <div class="panel-body" style="display: block;">
-                <select name="class" class="form-control" id="class">
-                    @foreach(config('pricing.class') as $key => $value)
-                        <option {{ $key === $asset->class ? 'selected': '' }} value="{{ $key }}">{{ $value['modifier'] }}:{{ $value['name'] }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
+<div class="col-lg-12">
+    <table class="table">
+        <thead>
+        <th>Sale Price</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>License Terms</th>
+        <th>License End</th>
+        </thead>
+        <tbody>
+        @foreach($activeLicenses as $license)
+            <tr>
+                <td>£{{ $license->final_price }}</td>
+                <td>{{ $license->collection->user->full_name }}</td>
+                <td>{{ $license->collection->user->client->name }}</td>
+                <td>
+                    <small>Type: <b>{{ config('pricing.type.'.$license->type.'.name') }}</b></small><br>
+                    <small>Platform: <b>{{ config('pricing.platform.'.$license->platform.'.name') }}</b></small><br>
+                    <small>Length: <b>{{  config('pricing.length.'.$license->length.'.name') }}</b></small><br>
+                </td>
+                <td>
+                    {{ date('dS M Y @ H:i', strtotime($license->license_ends_at)) }}<br>
+                    <small>
+                        {{ $license->licensed_at
+                         ? Carbon\Carbon::parse($license->license_ends_at)->diffForHumans()
+                         : '' }}
+                    </small>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 </div>

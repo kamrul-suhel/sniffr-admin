@@ -116,57 +116,61 @@
         </span-->
         @endif
     </div>
+</div>
 
-    <div class="panel panel-primary" data-collapsed="0">
-        <div class="panel-heading">
-            <div class="panel-title">License Notes</div>
+<div class="panel panel-primary" data-collapsed="0">
+    <div class="panel-heading">
+        <div class="panel-title">License Notes</div>
 
-            <div class="panel-options">
-                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-            </div>
-        </div>
-        <div class="panel-body" style="display: block;">
-            <textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($asset)&&$asset->notes) {{ $asset->notes }} @endif</textarea>
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
         </div>
     </div>
-    <div class="panel panel-primary" data-collapsed="0">
-        <div class="panel-heading">
-            <div class="panel-title">Active Licenses</div>
-
-            <div class="panel-options">
-                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-            </div>
-        </div>
-        <div class="panel-body" style="display: block;">
-            <table class="table">
-                <thead>
-                <th>Name</th>
-                <th>Company</th>
-                <th>License Terms</th>
-                <th>License End</th>
-                </thead>
-                <tbody>
-                @foreach($activeLicenses as $license)
-                    <tr>
-                        <td>{{ $license->collection->user->full_name }}</td>
-                        <td>{{ $license->collection->user->client->name }}</td>
-                        <td>
-                            <small>Type: <b>{{ $license->type }}</b></small><br>
-                            <small>Platform: <b>{{ $license->platform }}</b></small><br>
-                            <small>Length: <b>{{ $license->length }}</b></small><br>
-                        </td>
-                        <td>
-                            {{ date('dS M Y @ h:i', strtotime($license->license_ends_at)) }}<br>
-                            <small>
-                                {{ $license->licensed_at
-                                 ? Carbon\Carbon::parse($license->license_ends_at)->diffForHumans()
-                                 : '' }}
-                            </small>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+    <div class="panel-body" style="display: block;">
+        <textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($asset)&&$asset->notes) {{ $asset->notes }} @endif</textarea>
     </div>
 </div>
+
+@if(count($activeLicenses))
+<div class="panel panel-primary" data-collapsed="0">
+    <div class="panel-heading">
+        <div class="panel-title">Active Licenses</div>
+
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+        </div>
+    </div>
+
+    <div class="panel-body" style="display: block;">
+        <table class="table">
+            <thead>
+            <th>Name</th>
+            <th>Company</th>
+            <th>License Terms</th>
+            <th>License End</th>
+            </thead>
+            <tbody>
+            @foreach($activeLicenses as $license)
+                <tr>
+                    <td>{{ $license->collection->user->full_name }}</td>
+                    <td>{{ $license->collection->user->client->name }}</td>
+                    <td>
+                        <small>Type: <b>{{ $license->type }}</b></small><br>
+                        <small>Platform: <b>{{ $license->platform }}</b></small><br>
+                        <small>Length: <b>{{ $license->length }}</b></small><br>
+                    </td>
+                    <td>
+                        {{ date('dS M Y @ h:i', strtotime($license->license_ends_at)) }}<br>
+                        <small>
+                            {{ $license->licensed_at
+                             ? Carbon\Carbon::parse($license->license_ends_at)->diffForHumans()
+                             : '' }}
+                        </small>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endif

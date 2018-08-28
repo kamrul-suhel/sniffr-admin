@@ -43,10 +43,6 @@
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
                         </li>
 
-                        <li>
-                            <a href="#credits" role="tab" data-toggle="tab">Credits</a>
-                        </li>
-
                         @if($asset->more_details)
                             <li>
                                 <a href="#moredetails" role="tab" data-toggle="tab">More Details</a>
@@ -59,10 +55,6 @@
 
                         <li>
                             <a href="#video_files" role="tab" data-toggle="tab">Video Files</a>
-                        </li>
-
-                        <li>
-                            <a href="#sales" role="tab" data-toggle="tab">Sales</a>
                         </li>
 
                         <li>
@@ -82,15 +74,17 @@
                         @endif
 
                         <li>
-                            <a href="#admin" role="tab" data-toggle="tab">Admin</a>
-                        </li>
-
-                        <li>
                             <a href="#analytics" role="tab" data-toggle="tab">Analytics</a>
                         </li>
 
+                        @if(count($activeLicenses))
                         <li>
-                            <a href="#licenses" role="tab" data-toggle="tab">Active Licenses</a>
+                            <a href="#sales" role="tab" data-toggle="tab">Sales</a>
+                        </li>
+                        @endif
+
+                        <li>
+                            <a href="#admin" role="tab" data-toggle="tab">Admin</a>
                         </li>
                     @endif
                 </ul>
@@ -105,10 +99,6 @@
                             @include('admin.videos.partials.metadata')
                         </div>
 
-                        <div class="tab-pane" id="credits">
-                            @include('admin.videos.partials.credits')
-                        </div>
-
                         <div class="tab-pane" id="moredetails">
                             @include('admin.videos.partials.moredetails')
                         </div>
@@ -119,10 +109,6 @@
 
                         <div class="tab-pane" id="video_files">
                             @include('admin.videos.partials.video_files')
-                        </div>
-
-                        <div class="tab-pane" id="sales">
-                            @include('admin.videos.partials.sales')
                         </div>
 
                         <div class="tab-pane" id="rights">
@@ -139,16 +125,18 @@
                             @include('admin.contracts.partials.form')
                         </div>
 
-                        <div class="tab-pane" id="admin">
-                            @include('admin.videos.partials.admin')
-                        </div>
-
                         <div class="tab-pane" id="analytics">
                             @include('admin.videos.partials.analytics')
                         </div>
 
-                        <div class="tab-pane" id="licenses">
-                            @include('admin.videos.partials.licenses')
+                        @if(count($activeLicenses))
+                        <div class="tab-pane" id="sales">
+                            @include('admin.videos.partials.sales')
+                        </div>
+                        @endif
+
+                        <div class="tab-pane" id="admin">
+                            @include('admin.videos.partials.admin')
                         </div>
                     </div>
 

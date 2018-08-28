@@ -192,7 +192,7 @@
                         <v-spacer></v-spacer>
                         <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel
                         </v-btn>
-                        <v-btn dark @click="onDecline()">Save</v-btn>
+                        <v-btn dark @click="onDecline()">Send</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
