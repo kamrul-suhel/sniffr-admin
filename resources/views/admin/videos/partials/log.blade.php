@@ -14,12 +14,14 @@
                     <th><i class="fa fa-user"></i></th>
                     <th><i class="fa fa-history"></i></th>
                     <th><i class="fa fa-recycle"></i></th>
-                    <th><i class="fa fa-clock-o"></i></th>
                     </thead>
                     <tbody>
                     @foreach($logs as $log)
                         <tr style="font-size: 10px;">
-                            <td>{{ \App\User::find($log->user_id)->full_name }}</td>
+                            <td>
+                                {{ \App\User::find($log->user_id)->full_name }} <br>
+                                ({{ date('d m y @ h:i', strtotime($log->created_at)) }})
+                            </td>
 							<?php $decodedOld = json_decode($log->old_values); ?>
                             @if($decodedOld !== null)
                                 <td>
@@ -33,19 +35,19 @@
 
 							<?php $decodedNew = json_decode($log->new_values); ?>
                             @if($decodedNew !== null)
+
                                 <td>
                                     @foreach($decodedNew as $key2 => $value2)
-                                        @if($key2 !== 'sourced_at')
-                                        - {{$key2}}: <b>{{$value2}}</b>
+                                        @if(!is_object($value2))
+                                            @if($key2 !== 'sourced_at')
+                                            - {{$key2}}: <b>{{$value2}}</b>
+                                            @endif
                                         @endif
-
                                     @endforeach
                                 </td>
                             @else
                                 <td>{{ $log->new_values }}</td>
                             @endif
-
-                            <td>{{ $log->created_at }}</td>
                         </tr>
                     @endforeach
                     </tbody>
