@@ -92,7 +92,9 @@ new Vue({
         })
     },
 
-    created() {
+    created(){
+        // initialize code go here before load any of component. like user, settings
+        this.$store.dispatch('getLoginStatus');
     },
 
     methods: {

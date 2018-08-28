@@ -8,7 +8,12 @@
                 <div class="text-right">
                     {{ comment.user.full_name }} |
                     {{ comment.created_at | moment('from', 'now') }}
-                    <button class="fa fa-trash-o" @click="deleteComment(comment.id, index)"></button>
+
+                    <span v-if="user.id == comment.user_id || user.role == 'admin'">
+                        <v-btn
+                            class="fa fa-trash-o"
+                            @click="deleteComment(comment.id, index)"></v-btn>
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -27,6 +32,8 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
+
     export default {
         data() {
             return {
@@ -36,10 +43,17 @@
         },
 
         props: {
+            assetType: '',
             asset: {
                 type: Object,
                 required: false
             }
+        },
+
+        computed: {
+            ...mapGetters({
+                user: 'getUserStatus'
+            })
         },
 
         created() {
@@ -48,14 +62,13 @@
 
         methods: {
             getCommentData() {
-                let url = '/admin/comments/story/'+this.asset.id;
+                let url = '/admin/comments/'+this.assetType+'/'+this.asset.id;
 
                 axios.get(url)
                     .then((response) => {
                         this.comments = response.data.comments;
                     })
                     .catch((error) => {
-                        console.log(error);
                         reject();
                     });
             },
@@ -64,13 +77,15 @@
                 let form_data = new FormData();
 
                 form_data.append('comment', this.new_comment);
-                form_data.append('asset_id', 1)
-                form_data.append('asset_type', 'story');
+                form_data.append('asset_id', this.asset.id)
+                form_data.append('asset_type', this.assetType);
 
                 axios.post('/admin/comment', form_data)
                     .then(response => {
-                        this.comments.push(response.data.comment);
-                        this.new_comment = '';
+                        if(response.data.status == 'success') {
+                            this.comments.push(response.data.comment);
+                            this.new_comment = '';
+                        }
                     })
                     .catch(error => {
                         console.log(error);
@@ -78,11 +93,11 @@
             },
 
             deleteComment(id, index){
-                console.log(id);
-                console.log(index);
                 axios.delete('/admin/comment/' + id, {id: id})
                     .then(response => {
-                        this.comments.splice(index, 1);
+                        if(response.data.status == 'success'){
+                            this.comments.splice(index, 1);
+                        }
                     })
                     .catch(error => {
                         console.log(error);

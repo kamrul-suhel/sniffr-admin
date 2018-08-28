@@ -9,7 +9,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <comments-component :asset="asset"></comments-component>
+                        <comments-component :asset="asset" :asset-type="assetType"></comments-component>
                     </div>
                 </div>
             </div>
@@ -19,40 +19,26 @@
 
 <script>
     import CommentsComponent from './CommentsComponent';
+    import {mapGetters} from 'vuex'
 
     export default {
         components: {
             CommentsComponent
         },
 
-        computed: {
-            // ...mapGetters({
-            //     asset: 'getAsset'
-            // }),
-
-            asset(){
-                let asset = this.$store.getters.getAsset;
-                return asset;
-            }
+        props: {
+            assetType: ''
         },
 
         data() {
             return {
-                comments: [],
-                content_padding: true,
             }
         },
 
-        watch: {},
-
-        created() {
-        },
-
-        mounted() {
-        },
-
-        methods: {
-
+        computed: {
+            ...mapGetters({
+                asset: 'getAsset'
+            }),
         }
     }
 </script>

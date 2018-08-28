@@ -147,7 +147,7 @@
 							</div>
 
 							<div class="panel-body" style="display: block; background: #fcfcfc;">
-								<comments-component :asset="{{ json_encode($asset) }}"></comments-component>
+								<comments-component :asset="{{ json_encode($asset) }}" asset-type="story"></comments-component>
 							</div>
 						</div>
 

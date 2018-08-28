@@ -247,7 +247,7 @@
 			<div class="text-center"><?= $stories->appends(request()->except('page'))->render(); ?></div>
 		</div>
 
-		<modal v-if="modalVisible" @close="closeModal"></modal>
+		<modal v-if="modalVisible" @close="closeModal" asset-type="story"></modal>
 	</div>
 	@endif
 
