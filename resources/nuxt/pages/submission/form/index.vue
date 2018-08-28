@@ -6,7 +6,7 @@
 <script>
     import VideoSubmission from '@/components/forms/VideoSubmissionComponent';
     export default {
-        layout:['iframeForm'],
+        layout: 'iframeForm',
         components: {
             VideoSubmission
         }
