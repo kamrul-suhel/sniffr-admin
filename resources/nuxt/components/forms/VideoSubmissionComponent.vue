@@ -45,7 +45,7 @@
                                             v-model="title"
                                             name="title"
                                             color="dark"
-                                            :rules="[(v) => v.length <= 140 || 'Max 140 characters']"
+                                            :rules="[(v) => (v && v.length <= 140) || 'Max 140 characters']"
                                             :counter="140"
                                     ></v-text-field>
                                 </v-flex>
@@ -167,8 +167,11 @@
             </v-layout>
         </v-container>
 
-        <v-dialog v-model="uplod_progress" max-width="500px" persistent>
-            <v-card class="upload-dialog">
+        <v-dialog persistent
+                  v-model="uplod_progress"
+                  max-width="500px">
+            <v-card class="upload-loading-modal"
+                    dark>
                 <v-card-title>
                     <v-layout row justify-center>
                         <v-flex>
@@ -309,12 +312,7 @@
                 //show the uploading dialog box
                 this.uplod_progress = true;
 
-                this.$axios.$post('/submission', form, {
-                        onUploadProgress: function( progressEvent ) {
-                            this.progressbar = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-                        }.bind(this)
-                    }
-                )
+                this.$axios.$post('/submission', form)
                     .then(response => {
                         //data uploaded succes
                         let data = response;
@@ -325,12 +323,13 @@
                             //Email progress
                             this.uplod_progress = false;
 
+                            setTimeout(()=>{
+                                this.thank_you_dialog = true;
+                            }, 1000);
+
                             // clear form data
                             this.$refs.form.reset();
                             this.file_name = '';
-                            setTimeout(()=>{
-                               this.thank_you_dialog = true;
-                            }, 1000)
                         }
                     })
                     .catch(function(error){

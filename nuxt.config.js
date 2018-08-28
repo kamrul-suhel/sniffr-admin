@@ -32,7 +32,6 @@ module.exports = laravelNuxt({
     },
 
     css: [
-        // SCSS file in the project
         '@/assets/scss/styles.scss'
     ]
 });
