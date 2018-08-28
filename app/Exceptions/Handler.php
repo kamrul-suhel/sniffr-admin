@@ -39,7 +39,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-    	if(app()->environment() === 'production') {
+    	if(app()->environment() === 'prod') {
 			if ($this->shouldReport($exception)) {
 				$airbrakeNotifier = new Notifier(['projectId' => config('airbrake.projectId'), 'projectKey' => config('airbrake.projectKey')]);
 				Instance::set($airbrakeNotifier);
