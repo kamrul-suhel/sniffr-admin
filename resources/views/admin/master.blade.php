@@ -29,67 +29,64 @@
 	<![endif]-->
 </head>
 <body class="page-body skin-black">
+<a href="{{ url('/') }}" class="top-left-logo">
+	<img src="/assets/images/logo-sniffr-white.png">
+</a>
 
-<div id="sniffr-app">
-	<a href="{{ url('/') }}" class="top-left-logo">
-		<img src="/assets/images/logo-sniffr-white.png">
-	</a>
+<div id="sniffr-app" class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+	<div class="sidebar-menu page-right-in">
+		<div class="sidebar-menu-inner">
+			<header class="logo-env">
+				<!-- logo collapse icon -->
+				<div class="sidebar-collapse">
+					<a href="#" class="sidebar-collapse-icon"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+						<i class="fa fa-bars"></i>
+					</a>
+				</div>
 
-	<div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
-		<div class="sidebar-menu page-right-in">
-			<div class="sidebar-menu-inner">
-				<header class="logo-env">
-					<!-- logo collapse icon -->
-					<div class="sidebar-collapse">
-						<a href="#" class="sidebar-collapse-icon"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-							<i class="fa fa-bars"></i>
-						</a>
-					</div>
+				<!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
+				<div class="sidebar-mobile-menu visible-xs">
+					<a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
+						<i class="fa fa-bars"></i>
+					</a>
+				</div>
+			</header>
 
-					<!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
-					<div class="sidebar-mobile-menu visible-xs">
-						<a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
-							<i class="fa fa-bars"></i>
-						</a>
-					</div>
-				</header>
+			@include('admin.menu.main')
+		</div>
+	</div>
 
-				@include('admin.menu.main')
+	<div class="main-content">
+		<div class="row">
+			<!-- Profile Info and Notifications -->
+			<div class="col-md-6 col-sm-8 clearfix">
+				<ul class="user-info pull-left pull-none-xsm">
+					<!-- Profile Info -->
+					<li class="profile">
+						<span>Howdy, {{ ucfirst(Auth::user()->full_name) }}</span>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Raw Links -->
+			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
+				<ul class="list-inline links-list pull-right">
+					<li class="sep"></li>
+					<li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
+				</ul>
 			</div>
 		</div>
 
-		<div class="main-content">
-			<div class="row">
-				<!-- Profile Info and Notifications -->
-				<div class="col-md-6 col-sm-8 clearfix">
-					<ul class="user-info pull-left pull-none-xsm">
-						<!-- Profile Info -->
-						<li class="profile">
-							<span>Howdy, {{ ucfirst(Auth::user()->full_name) }}</span>
-						</li>
-					</ul>
-				</div>
+		<hr />
 
-				<!-- Raw Links -->
-				<div class="col-md-6 col-sm-4 clearfix hidden-xs">
-					<ul class="list-inline links-list pull-right">
-						<li class="sep"></li>
-						<li><a href="{{ url('logout') }}">Log Out <i class="fa fa-sign-out right"></i></a></li>
-					</ul>
-				</div>
-			</div>
-
-			<hr />
-
-			<div id="main-admin-content">
-				@yield('content')
-			</div>
-
-			<!-- Footer -->
-			<footer class="main">
-				&copy; {{ date('Y') }} <strong>{{ $settings['website_name'] }}</strong> Video Licensing Platform
-			</footer>
+		<div id="main-admin-content">
+			@yield('content')
 		</div>
+
+		<!-- Footer -->
+		<footer class="main">
+			&copy; {{ date('Y') }} <strong>{{ $settings['website_name'] }}</strong> Video Licensing Platform
+		</footer>
 	</div>
 </div>
 
