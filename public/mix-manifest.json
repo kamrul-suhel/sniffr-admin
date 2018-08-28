@@ -1,6 +1,10 @@
 {
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css",
-    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css"
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=5641e00778872ea67456",
+    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=baa3efe0ebbced7ead92",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=ceb8d23cde4f97584d33",
+    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css?id=8cbeab843fc291c93abf",
+    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css?id=4164620db9a5325e672d",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=e4802235f5abc151cf78",
+    "/assets/admin/css/admin.css.map": "/assets/admin/css/admin.css.map?id=5026205e32e330547822",
+    "/assets/admin/css/mailer-admin.css.map": "/assets/admin/css/mailer-admin.css.map?id=c610ad9ee002636aa84d"
 }

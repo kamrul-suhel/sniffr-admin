@@ -53,7 +53,6 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'development
     */
 }
 
-if (process.env.NODE_ENV == 'copy') {
     //Copying file from resource folder to public
     mix.copy(
         'resources/nuxt/assets/images',
@@ -95,4 +94,3 @@ if (process.env.NODE_ENV == 'copy') {
         ],
         'public/assets/fonts/'
     );
-}
