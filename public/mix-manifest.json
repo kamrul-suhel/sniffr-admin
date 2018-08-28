@@ -1,3 +1,6 @@
 {
-    "/placeholder.gif": "/placeholder.gif"
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
+    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css",
+    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css"
 }
