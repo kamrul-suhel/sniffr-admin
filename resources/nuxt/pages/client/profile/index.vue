@@ -268,9 +268,11 @@
         beforeRouteEnter(to, from, next) {
             next(vm => {
                 let isCompanyOwner = vm.$store.getters.getIsCompanyOwner;
+                console.log(isCompanyOwner);
+                console.log(vm.$router);
                 if (!isCompanyOwner) {
                     vm.$router.push({
-                        name: 'client_edit_create_user',
+                        name: 'client-profile-slug-users-userid-edit',
                         params: {
                             slug: vm.$store.getters.getCompanySlug,
                             userid: vm.$store.getters.getUserId
