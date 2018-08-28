@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
-class Story extends Model
+class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes, Notifiable;
+    use SoftDeletes, Notifiable, Auditable;
 
     protected $guarded = [];
     public static $rules = [];

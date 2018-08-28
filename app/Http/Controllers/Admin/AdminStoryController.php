@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Audit;
 use App\CollectionStory;
 use App\Jobs\Quotes\QueueEmailExpiredQuote;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
@@ -35,9 +36,13 @@ class AdminStoryController extends Controller
         'title' => 'required'
     ];
 
-    public function __construct(Request $request)
+    protected $audit;
+
+    public function __construct(Request $request, Audit $audit)
     {
         $this->middleware(['admin:admin,manager,editorial']);
+
+        $this->audit = $audit;
     }
 
     /**
@@ -222,6 +227,11 @@ class AdminStoryController extends Controller
         $decision = Input::get('decision');
         //array_key_exists($story->state,config('stories.decisions.'.$decision)) looks for state within specific decision step
 
+		$logs = $this->audit->where('auditable_id', $asset->id)
+			->where('auditable_type', 'App\Story')
+			->orderBy('created_at', 'desc')
+			->paginate(10);
+
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',
             'asset' => $asset,
@@ -233,7 +243,8 @@ class AdminStoryController extends Controller
             'users' => User::all(),
 			'contact' => $asset->contact,
             'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all()
+            'video_collections' => VideoCollection::all(),
+			'logs' => $logs
         ];
 
         return view('admin.stories.create_edit', $data);
@@ -300,23 +311,7 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-        $data = [
-            'headline' => '<i class="fa fa-edit"></i> Edit Story',
-			'asset' => $story,
-			'asset_type' => 'story',
-            'post_route' => url('admin/stories/update'),
-            'button_text' => 'Save Draft',
-            'decision' => $decision,
-            'user' => Auth::user(),
-            'users' => User::all(),
-			'contact' => $story->contact,
-            'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
-            'note' => 'Successfully Saved Story!',
-            'note_type' => 'success'
-        ];
-
-        return view('admin.stories.create_edit', $data);
+		return redirect()->back();
     }
 
     /**

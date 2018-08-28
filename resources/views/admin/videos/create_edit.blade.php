@@ -190,6 +190,10 @@
                     @include('admin.videos.partials.contact')
 
                     @include('admin.comments.partials.form')
+
+                    @if(auth()->user()->role === 'admin')
+                        @include('admin.videos.partials.log')
+                    @endif
                 @endif
             </div>
         </div>

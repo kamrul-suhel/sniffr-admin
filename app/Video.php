@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use OwenIt\Auditing\Auditable;
 
 /**
  * @property int $id
@@ -49,9 +50,9 @@ use Illuminate\Support\Facades\Cache;
  * @property int $creator_id
  * @mixin \Eloquent
  */
-class Video extends Model
+class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes, Notifiable;
+    use SoftDeletes, Notifiable, Auditable;
 
     const CACHE_EXPIRATION = 720;
     protected $guarded = [];

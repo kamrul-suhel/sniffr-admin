@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Audit;
 use App\CollectionVideo;
 use App\Jobs\Quotes\QueueEmailExpiredQuote;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
@@ -40,17 +41,18 @@ class AdminVideosController extends Controller
     /**
      * @var VideoService
      */
-    private $videoService;
+    private $videoService, $audit;
 
     /**
      * AdminVideosController constructor.
      * @param Request $request
      * @param VideoService $videoService
      */
-    public function __construct(Request $request, VideoService $videoService)
+    public function __construct(Request $request, VideoService $videoService, Audit $audit)
     {
         $this->middleware('admin');
         $this->videoService = $videoService;
+        $this->audit = $audit;
     }
 
     /**
@@ -272,7 +274,6 @@ class AdminVideosController extends Controller
 		]);
 	}
 
-
 	/**
 	 * @param Request $request
 	 * @param string $id
@@ -301,6 +302,11 @@ class AdminVideosController extends Controller
 			->where('state', '=', $asset_state)
 			->orderBy('id', 'asc')->first();
 
+		$logs = $this->audit->where('auditable_id', $asset->id)
+			->where('auditable_type', 'App\Video')
+			->orderBy('created_at', 'desc')
+			->paginate(10);
+
 		$data = [
 			'headline' => '<i class="fa fa-edit"></i> Edit Video',
 			'asset' => $asset,
@@ -318,6 +324,7 @@ class AdminVideosController extends Controller
 			'video_shottypes' => VideoShotType::all(),
 			'users' => User::all(),
 			'creators' => Contact::orderBy('created_at', 'desc')->get(),
+			'logs' => $logs
 		];
 
 		return view('admin.videos.create_edit', $data);
@@ -336,7 +343,6 @@ class AdminVideosController extends Controller
 		}
 
 		$tags = $request->input('tags');
-
 		if ($tags) {
 			$this->addUpdateVideoTags($video, $tags);
 		}
@@ -391,6 +397,7 @@ class AdminVideosController extends Controller
 		$video->video_category_id = ($request->input('video_category_id') ? $request->input('video_category_id') : $video->video_category_id);
 		$video->contact_id = ($request->input('contact_id') ? $request->input('contact_id') : $video->contact_id);
 		$video->title = $title;
+		$video->rights = ($request->input('rights') ? $request->input('rights') : $video->rights);
 		$video->location = $request->input('location');
 		$video->details = $request->input('details');
 		$video->notes = $request->input('notes');
@@ -429,7 +436,6 @@ class AdminVideosController extends Controller
 
 		return response()->json($results);
 	}
-
 
     /**
      * @param Request $request
@@ -713,11 +719,15 @@ class AdminVideosController extends Controller
      */
     private function addUpdateVideoTags(Video $video, string $tags)
     {
+    	$originalTags = $tags;
         $tags = array_map('trim', explode(',', $tags));
 
         foreach ($tags as $tag) {
             $tag_id = $this->addTag($tag);
-            $this->attachTagToVideo($video, $tag_id);
+            if(!$video->tags->contains($tag_id)) {
+				$this->attachTagToVideo($video, $tag_id);
+				$this->audit->videoTagUpdate($video, $originalTags);
+			}
         }
 
         // Remove any tags that were removed from video
@@ -725,6 +735,7 @@ class AdminVideosController extends Controller
             if (!in_array($tag->name, $tags)) {
                 $this->detachTagFromVideo($video, $tag->id);
                 if (!$this->isTagContainedInAnyVideos($tag->name)) {
+					$this->audit->videoTagUpdate($video, $originalTags);
                     $tag->delete();
                 }
             }
@@ -762,6 +773,10 @@ class AdminVideosController extends Controller
         $video->tags()->detach($tag_id);
     }
 
+	/**
+	 * @param $tag_name
+	 * @return bool
+	 */
     public function isTagContainedInAnyVideos($tag_name)
     {
         // Check if a tag is associated with any videos
@@ -769,6 +784,9 @@ class AdminVideosController extends Controller
         return (!empty($tag) && $tag->videos->count() > 0) ? true : false;
     }
 
+	/**
+	 * @param $video
+	 */
     private function deleteVideoImages($video)
     {
         $ext = pathinfo($video->image, PATHINFO_EXTENSION);
@@ -816,6 +834,10 @@ class AdminVideosController extends Controller
         return $pdf->download($alpha_id . '.pdf');
     }
 
+	/**
+	 * @param null $alpha_id
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
     public function nsfw($alpha_id = null)
     {
         $status = 'error';
