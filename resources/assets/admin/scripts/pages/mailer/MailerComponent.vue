@@ -182,7 +182,7 @@
                 // send the data to downloaded
                 let url = '/admin/mailers/create?videos=' + videosString + '&stories=' + storiesString;
 
-                axios.get(url)
+                this.$axios.$get(url)
                     .then((response) => {
                         if (response.data.status === 'success') {
                             window.location = '/admin/mailers/edit/' + response.data.mailer_id;

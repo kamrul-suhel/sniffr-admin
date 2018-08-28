@@ -22,8 +22,8 @@ module.exports = laravelNuxt({
         link: [
             {
                 rel: 'icon',
-                type: 'image/png',
-                href: '/assets/images/favicon.png'
+                type: 'image/x-icon',
+                href: '/favicon.ico'
             }
         ],
 

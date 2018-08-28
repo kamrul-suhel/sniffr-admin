@@ -16,35 +16,16 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'development
         'public/assets/admin/js'
     )
         .sass('resources/assets/admin/scss/admin.scss',
-            'public/assets/admin/css/admin.css');
+            'public/assets/admin/css/admin.css')
+        .options({
+            processCssUrls: false
+        });
 
     mix.sass('resources/assets/scss/admin.scss',
         'public/assets/admin/css/mailer-admin.css'
-    );
-
-    /*
-    * *********************************************
-    * Frontend script and scss
-    * *********************************************
-    */
-    mix.sass(
-        'resources/assets/frontend/scss/styles.scss',
-        'public/assets/frontend/css/styles.css')
-        .options({
-            processCssUrls: false,
-        })
-        .sourceMaps();
-
-    mix.js([
-        'resources/assets/frontend/scripts/main.js',
-    ], 'public/assets/frontend/scripts/scripts.js')
-        .sourceMaps();
-
-    /*
-    * ******************************************
-        End frontend script and scss
-      ******************************************
-    */
+    ).options({
+        processCssUrls: false
+    });
 
 
     /*
@@ -75,7 +56,7 @@ if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'development
 if (process.env.NODE_ENV == 'copy') {
     //Copying file from resource folder to public
     mix.copy(
-        'resources/assets/images',
+        'resources/nuxt/assets/images',
         'public/assets/images'
     );
 
@@ -104,7 +85,7 @@ if (process.env.NODE_ENV == 'copy') {
             // 'resources/assets/talvbansal/media-manager/fonts',
             'node_modules/bootstrap/fonts',
             'node_modules/font-awesome/fonts',
-            'resources/assets/fonts'
+            'resources/nuxt/assets/fonts'
         ],
         'public/assets/fonts/'
     );
