@@ -108,15 +108,21 @@
         </v-flex>
 
         <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 pl-3>
-            <v-btn
-                    block
-                    dark
-                    large
-                    @click="goToDetail()"
-                    color="dark"
-                    class="mb-3">
-                View
-            </v-btn>
+            <div v-if="video.deleted_at != null">
+                This video has been removed from Sniffr.
+                As you already have a license you have a right to still download this video.
+            </div>
+            <div v-else>
+                <v-btn
+                        block
+                        dark
+                        large
+                        @click="goToDetail()"
+                        color="dark"
+                        class="mb-3">
+                    View
+                </v-btn>
+            </div>
 
             <v-btn
                     block
@@ -129,6 +135,7 @@
             >
                 {{ button_text }}
             </v-btn>
+
 
             <div class="caption text-xs-center pt-2"
                  v-if="assetType === 'purchased'">{{ video.license_ends_at | licenseExpired }}
