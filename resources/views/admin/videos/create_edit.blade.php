@@ -191,7 +191,9 @@
 
                     @include('admin.comments.partials.form')
 
-                    @include('admin.videos.partials.log')
+                    @if(auth()->user()->role === 'admin')
+                        @include('admin.videos.partials.log')
+                    @endif
                 @endif
             </div>
         </div>

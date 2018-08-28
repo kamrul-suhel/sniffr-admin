@@ -143,9 +143,11 @@
 
 						@include('admin.stories.partials.rights_status')
 
-						<div class="col-lg-12">
-							@include('admin.videos.partials.log')
-						</div>
+						@if(auth()->user()->role === 'admin')
+							<div class="col-lg-12">
+								@include('admin.videos.partials.log')
+							</div>
+						@endif
 
 						@include('admin.contracts.partials.form')
 
