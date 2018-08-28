@@ -346,3 +346,5 @@ Route::group(array('prefix' => 'api/v1'), function () {
     Route::get('video_categories', 'Api\v1\VideoController@video_categories');
     Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
 });
+
+Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);
