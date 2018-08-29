@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Traits\WordpressAPI;
 
+use App\User;
 use App\Story;
 use App\Asset;
 use App\Libraries\VideoHelper;
@@ -53,7 +54,8 @@ class QueueStory implements ShouldQueue
             if(isset($story)&&!$story->wp_id) {
                 $parameters = 'title='.urlencode($story->title).'&content='.urlencode($story->description).'&tags='.env('UNILAD_WP_TAG_ID');
                 $result = $this->apiPost('posts', $parameters, true);
-                // update stories record with WP response from post
+
+				// update stories record with WP response from post
                 if($result->id){
                     $story->wp_id = $result->id;
                     $story->status = $result->status;

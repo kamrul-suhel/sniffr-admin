@@ -140,7 +140,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('videos/remind/{id}', array('uses' => 'Admin\AdminVideosController@remind'));
 
 
-    Route::resource('comment', 'CommentController');
+    Route::resource('comment', 'Admin\AdminCommentController');
+	Route::get('comments/{type}/{asset_id}', 'Admin\AdminCommentController@getComments');
 
     Route::get('contract/{contract}/delete', 'Contract\ContractController@delete')->name('contract.delete');
     Route::resource('contract', 'Contract\ContractController');
@@ -288,6 +289,7 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 */
 Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
 Route::post('client/collections', 'CollectionController@store')->name('client.store');
+Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
 
 
 /*

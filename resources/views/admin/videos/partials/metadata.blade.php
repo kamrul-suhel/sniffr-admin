@@ -119,6 +119,31 @@
 </div>
 
 <div class="row">
+    <div class="col-sm-6">
+        <span class="form-group input-group">
+            <span class="input-group-addon">Video Class</span>
+
+            <select name="class" class="form-control" id="class">
+                    @foreach(config('pricing.class') as $key => $value)
+                    <option {{ $key === $asset->class ? 'selected': '' }} value="{{ $key }}">{{ $value['modifier'] }}:{{ $value['name'] }}</option>
+                @endforeach
+            </select>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group input-group">
+            <span class="input-group-addon">Credit</span>
+            <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
+                $asset->credist or old('credit')
+                }}</textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-6">
         <div class="form-group input-group">
             <span class="input-group-addon">Notes</span>

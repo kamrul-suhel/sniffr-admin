@@ -59,7 +59,8 @@ trait FrontendResponse
             'terms',
             'views',
             'licensed_at',
-			'created_at'
+			'created_at',
+			'deleted_at'
         ];
 
     }
@@ -84,7 +85,8 @@ trait FrontendResponse
             'source',
             'licensed_at',
             'created_at',
-            'updated_at'
+            'updated_at',
+			'deleted_at'
         ];
     }
 

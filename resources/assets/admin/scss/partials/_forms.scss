@@ -36,6 +36,12 @@ label{
     font-weight: 400;
 }
 
+.options{
+  select{
+    width: 100%;
+  }
+}
+
 #selectpicker-contact{
   .inner.open{
     margin-top: 40px;

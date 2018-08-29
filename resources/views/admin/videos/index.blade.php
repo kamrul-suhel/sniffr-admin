@@ -183,6 +183,8 @@
 							</div>
 
 							<div class="album-options">
+								<a id="comments" @click="showModal({{ json_encode($video) }})"><i class="fa fa-comments"></i></a>
+
 								@if($video->trashed())
 								<a href="{{ url('admin/videos/restore/'.$video->alpha_id) }}" title="Remove from trash" class="undelete">
 									<i class="fa fa-upload"></i>
@@ -226,6 +228,8 @@
 			<div class="clear"></div>
 
 			<div class="text-center"><?= $videos->appends(request()->except('page'))->render(); ?></div>
+
+			<modal v-if="modalVisible" @close="closeModal" asset-type="video"></modal>
 		</div>
 	</div>
 	@endif

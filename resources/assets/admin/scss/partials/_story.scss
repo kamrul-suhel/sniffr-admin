@@ -63,27 +63,6 @@
 .btn-mini {
     font-size: 10px !important;
 }
-select.btn-mini {
-    width: 120px;
-    height: auto;
-    font-size: 12px;
-    line-height: 14px;
-    border:#f0f0f0 solid 1px;
-}
-select.btn {
-    -webkit-appearance: button;
-       -moz-appearance: button;
-            appearance: button;
-    padding-right: 0px;
-}
-select.btn-mini + .caret {
-    margin-left: -20px;
-    margin-top: 9px;
-}
-.no-caret {
-    margin-left: 10px !important;
-    padding-right: 10px !important;
-}
 .btn-grey {
     background: #f5f5f7;
 }
@@ -114,16 +93,6 @@ select.btn-mini + .caret {
 .panel-options .panel-options-grey {
     margin: 0px !important;
     padding: 5px;
-}
-.options {
-    margin-left:3px;
-    border-left:2px solid #f0f0f0;
-    height:180px;
-}
-.options-body {
-    padding: 0px;
-    text-align: center;
-    margin-bottom: 10px;
 }
 .no-padding {
     padding-left: 0px;

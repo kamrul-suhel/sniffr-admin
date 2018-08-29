@@ -29,12 +29,11 @@
 	<![endif]-->
 </head>
 <body class="page-body skin-black">
-
 <a href="{{ url('/') }}" class="top-left-logo">
 	<img src="/assets/images/logo-sniffr-white.png">
 </a>
 
-<div class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+<div id="sniffr-app" class="page-container sidebar-collapsed"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 	<div class="sidebar-menu page-right-in">
 		<div class="sidebar-menu-inner">
 			<header class="logo-env">
@@ -151,6 +150,7 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 <!-- End Notifications -->
 
+<script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 
 @yield('javascript')
 

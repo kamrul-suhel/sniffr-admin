@@ -169,10 +169,26 @@ class ClientStoriesController extends Controller
      */
     public function downloadStory($storyId)
     {
-        $story = Story::find($storyId);
-        if (!$story || !$story->assets()->count()) {
-            abort(404, 'No Story or Assets Found');
+        $story = Story::withTrashed()->find($storyId);
+
+        if (!$story) {
+            abort(500, 'No Story Found');
         }
+
+		$client = App\Client::find(auth()->user()->client_id);
+		$purchases = $client->activeLicences()->get();
+
+		$belongsToClient = false;
+		foreach($purchases as $purchase)
+		{
+			if(in_array($story->id, $purchase->collectionStories->pluck('story_id')->toArray())) {
+				$belongsToClient = true;
+			}
+		}
+
+		if(!$belongsToClient) {
+			abort(404, 'You do not have permission to download this asset');
+		}
 
         $newZipFileName = $story->alpha_id . time() . '.zip';
         $newZipFilePath = '../storage/' . $newZipFileName;
@@ -211,7 +227,7 @@ class ClientStoriesController extends Controller
      */
     public function getStoryPdf(int $storyId, bool $download = true)
     {
-        $story = Story::find($storyId);
+        $story = Story::withTrashed()->find($storyId);
 
         if (!$story) {
             abort(404, 'Story Not Found');

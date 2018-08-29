@@ -15,7 +15,7 @@
         </div>
         <div class="col-lg-4">
             @if($asset->status == 'requested' && !is_null($asset->final_price))
-                <div class="label label-danger">Quote Rejected ({{ date('d/m/Y @ h:i', strtotime($asset->updated_at)) }})</div>
+                <div class="label label-danger">Quote Rejected ({{ date('d/m/Y @ H:i', strtotime($asset->updated_at)) }})</div>
             @endif
         </div>
         <div class="col-lg-4">
@@ -152,18 +152,28 @@
             </div>
             {{-- Notes --}}
             <div class="col-lg-3">
+                @if(count($asset->quotes()->get()))
+                    <label for="rejection-notes">
+                        <small>Client Rejection Notes</small>
+                    </label>
+                    <textarea style="font-size:9pt;" class="form-control" id="rejection-notes" rows="6" disabled>@foreach($asset->quotes()->get() as $quote)@if(isset($quote->rejection_notes))[{{date('d-m-y@H:i', strtotime($quote->updated_at))}}] &pound;{{number_format($quote->price)}} - {{ !is_null($quote->rejection_notes) ? $quote->rejection_notes : 'No reason given' }}@endif
+                        @endforeach
+                </textarea>
+                @endif
+
                 @if($asset->notes)
                     <label for="notes">
-                        <small>Notes</small>
+                        <small>Client Notes</small>
                     </label>
                     <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6" disabled>{{ $asset->notes }}</textarea>
                 @endif
             </div>
+
             {{-- Rejection Notes --}}
-            <div class="col-lg-2 well rejection_well" style="overflow: auto; height:170px;">
+            <!--div class="col-lg-2 well rejection_well" style="overflow: auto; height:170px;">
                 @if($asset->quotes()->count())
-                    <label for="notes">
-                        <small>Rejection Notes</small>
+                    <label for="rejection-notes">
+                        <small>Client Rejection Notes</small>
                     </label>
                     @foreach($asset->quotes()->get() as $quote)
                         @if(isset($quote->rejection_notes))
@@ -172,7 +182,7 @@
                         @endif
                     @endforeach
                 @endif
-            </div>
+            </div-->
         </div>
 
 
