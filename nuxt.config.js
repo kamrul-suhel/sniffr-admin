@@ -20,8 +20,17 @@ module.exports = laravelNuxt({
     head: {
         title: 'Sniffr media',
         meta: [
-            { charset: 'utf-8' },
-            { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+            {
+                charset: 'utf-8'
+            },
+            {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1'
+            },
+            {
+                name: 'description',
+                content: 'License viral videos viewed by millions around the world from Sniffr Media'
+            }
         ],
         link: [
             {
