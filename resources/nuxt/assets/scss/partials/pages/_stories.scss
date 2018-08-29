@@ -29,6 +29,11 @@
   .stories {
     .story-content{
       padding-bottom:20px;
+      font-family: JosefinSansregular;
+
+      .v-btn__content{
+        margin-top:4px;
+      }
     }
     .story-content:nth-child(even){
       padding-left:8px;
