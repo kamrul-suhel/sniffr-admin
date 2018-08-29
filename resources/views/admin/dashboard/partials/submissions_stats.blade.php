@@ -59,7 +59,13 @@
     <div class="col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Ex Submissions</div>
+                <div class="panel-title">
+                    <select name="rights" onchange="location = this.value;">
+                        <option value="{{request()->fullUrlWithQuery(['rights' => 'ex'])}}" {{ request()->get('rights') == 'ex' ? ' selected="selected"' : '' }}>Ex Submission</option>
+                        <option value="{{request()->fullUrlWithQuery(['rights' => 'exc'])}}" {{ request()->get('rights') == 'exc' ? ' selected="selected"' : '' }}>Ex Chaser</option>
+                        <option value="{{request()->fullUrlWithQuery(['rights' => 'nonexc'])}}" {{ request()->get('rights') == 'nonexc' ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
+                    </select>
+                </div>
             </div>
 
             <div class="panel-body">
