@@ -278,6 +278,52 @@
                 }
             }
         });
+
+
+        var ctx = $('#exc-licensed-breakdown-stories');
+        ctx.height(285);
+        new Chart($("#exc-licensed-breakdown-stories"), {
+            "type": "bar",
+            "data": {
+                "labels": [
+					<?php foreach ($exc_contracts_stories as $contract) {
+					echo '"' . Carbon\Carbon::parse($contract[0]->signed_at)->format('jS M') . '",';
+				}?>
+                ],
+                "datasets": [
+						<?php foreach ($exc_contracts_stories_users as $user): $userId = $user[0]->user_id; ?>
+                    {
+                        "label": '<?php echo \App\User::find($userId)->full_name; ?>',
+                        "data": [
+							<?php foreach ($exc_contracts_stories as $contract) {
+							echo count($contract->where('user_id', $userId)) . ',';
+						}?>
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(<?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, 0.2)",
+                        "borderWidth": 1
+                    },
+					<?php endforeach; ?>
+                ]
+            },
+            "options": {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true
+                },
+                "scales": {
+                    "xAxes": [{
+                        stacked: true
+                    }],
+                    "yAxes": [{
+                        stacked: true,
+                        "ticks": {
+                            "beginAtZero": true
+                        }
+                    }]
+                }
+            }
+        });
         <?php endif; ?>
 
 

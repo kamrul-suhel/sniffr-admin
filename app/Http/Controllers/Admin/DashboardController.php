@@ -75,6 +75,23 @@ class DashboardController extends Controller
             ->where('signed_at', '>', (new Carbon)->now()->subDays(30))
             ->groupBy('user_id');
 
+		$exc_contracts_stories = $this->contract
+			->orderBy('signed_at')
+			->get()
+			->where('story_id', '!=', null)
+			->where('contract_model_id', '5')
+			->where('signed_at', '>', $from)
+			->where('signed_at', '<', $to)
+			->groupBy(function ($date) {
+				return Carbon::parse($date->signed_at)->format('m-d'); // grouping by days
+			});
+
+		$exc_contracts_stories_users = $this->contract->get()
+			->where('story_id', '!=', null)
+			->where('contract_model_id', '5')
+			->where('signed_at', '>', (new Carbon)->now()->subDays(30))
+			->groupBy('user_id');
+
         $data = [
             'from' => $from,
             'to' => $to,
@@ -83,6 +100,8 @@ class DashboardController extends Controller
             'allVideosStateTotalTotalsExc' => $allVideosStateTotalTotalsExc,
             'exc_contracts' => $exc_contracts,
             'exc_contracts_users' => $exc_contracts_users,
+            'exc_contracts_stories' => $exc_contracts_stories,
+            'exc_contracts_stories_users' => $exc_contracts_stories_users,
             'total_videos' => $total_videos,
             'new_videos' => $new_videos,
             'licensed_videos' => $licensed_videos,
