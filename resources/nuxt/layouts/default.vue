@@ -2,6 +2,7 @@
     <section id="sniffr">
         <v-app v-if="sniffrStateReady">
             <navigation-component/>
+            <Breadcrumbs/>
 
             <v-content>
                 <div id="scroll_to"></div>
@@ -15,10 +16,12 @@
 <script>
     import NavigationComponent from '@/components/Navigation'
     import FooterComponent from "@/components/FooterComponent"
+    import Breadcrumbs from "@/components/Breadcrumbs"
     export default {
         components: {
           NavigationComponent,
-            FooterComponent
+            FooterComponent,
+            Breadcrumbs
         },
 
         data: () => ({
