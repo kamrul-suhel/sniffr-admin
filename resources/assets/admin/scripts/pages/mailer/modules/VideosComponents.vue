@@ -102,14 +102,9 @@
 
                 axios.post(url)
                     .then((videos) => {
-                        console.log(response);
-                        return;
                     this.$store.commit('setVideoData', videos.data.videos);
-                    this.videos = this.$store.getters.getVideos;
+                    this.videos = videos.data.videos;
                     this.totalPage = this.videos.last_page;
-
-                    console.log(this.videos);
-                    console.log(this.totalPage);
                 },
                 (error) => {
                     return reject();

@@ -263,4 +263,5 @@
 
 @section('javascript')
 	@include('admin.stories.partials.js')
+	<script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import stories from '../../../scripts/store/stories'
-import videos from '../../../scripts/store/videos'
+import videos from './modules/videos'
 import user from '../../../scripts/store/user'
 import modal from './modules/modal'
 import videoDialog from './modules/video-dialog-box'
