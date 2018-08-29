@@ -20,6 +20,7 @@ import Vuerouter from 'vue-router';
 
 Vue.use(Vuetify);
 Vue.use(Vuerouter);
+Vue.use(require('vue-moment'));
 
 
 /*
@@ -51,7 +52,9 @@ require('../../frontend/scripts/filters/filters');
  * Layout Components
  ********************************************************
  */
-import FooterComponent from './layouts/FooterComponent'
+import FooterComponent from './layouts/FooterComponent';
+import CommentsComponent from './includes/CommentsComponent';
+import Modal from './includes/Modal';
 
 /*
  ********************************************************
@@ -59,7 +62,7 @@ import FooterComponent from './layouts/FooterComponent'
  ********************************************************
  */
 import {store} from './store/index';
-
+import {mapGetters} from 'vuex';
 import {routes} from './routes';
 
 const router = new Vuerouter({
@@ -69,20 +72,39 @@ const router = new Vuerouter({
 
 
 new Vue({
-    el: '#admin-mailer',
+    el: '#sniffr-app',
     components : {
-        FooterComponent
+        FooterComponent,
+        CommentsComponent,
+        Modal,
     },
 
     store,
     router,
 
-    data() {
-        return {}
+    data: {
+
     },
 
-    created() {
+    computed: {
+        ...mapGetters({
+            modalVisible: 'getModalVisibility',
+        })
     },
 
-    methods: {}
-})
+    created(){
+        // initialize code go here before load any of component. like user, settings
+        this.$store.dispatch('getLoginStatus');
+    },
+
+    methods: {
+        showModal(asset){
+            this.$store.commit('setAsset', asset);
+            this.$store.commit('setModalVisibility', true);
+        },
+
+        closeModal(){
+            this.$store.commit('setModalVisibility', false);
+        }
+    }
+});

@@ -99,15 +99,21 @@
         </v-flex>
 
         <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 pl-3>
-            <v-btn
-                    block
-                    dark
-                    large
-                    @click="goToDetail()"
-                    color="dark"
-                    class="mb-3">
-                View
-            </v-btn>
+            <div v-if="story.deleted_at != null">
+                This story has been removed from Sniffr.
+                As you already have a license you have a right to still download this story.
+            </div>
+            <div v-else>
+                <v-btn
+                        block
+                        dark
+                        large
+                        @click="goToDetail()"
+                        color="dark"
+                        class="mb-3">
+                    View
+                </v-btn>
+            </div>
 
             <v-btn
                     block
@@ -184,8 +190,9 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel</v-btn>
-                        <v-btn dark @click="onDecline()">Save</v-btn>
+                        <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel
+                        </v-btn>
+                        <v-btn dark @click="onDecline()">Send</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -310,7 +317,7 @@
                 let url = 'collections/reject_asset_price/' + this.story.collection_story_id + '/story';
                 this.declineLoading = true;
 
-                let form_data =  new FormData();
+                let form_data = new FormData();
                 form_data.append('rejection_notes', this.decline_note);
                 axios.post(url, form_data).then((response) => {
                     if (response.data.success === '1') {

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Audit;
-use App\CollectionStory;
-use App\Jobs\Quotes\QueueEmailExpiredQuote;
-use App\Jobs\Quotes\QueueEmailRetractQuote;
 use RedditAPI;
 use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
@@ -21,7 +18,6 @@ use App\Libraries\VideoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon as Carbon;
 use App\Jobs\QueueBump;
@@ -161,9 +157,9 @@ class AdminStoryController extends Controller
     {
         $validator = Validator::make($data = Input::all(), $this->rules);
 
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
+		if ($validator->fails()) {
+			return Redirect::back()->withErrors($validator)->withInput();
+		}
 
         $story = new Story();
         $story->alpha_id = VideoHelper::quickRandom();
@@ -215,17 +211,21 @@ class AdminStoryController extends Controller
         ]);
     }
 
-    /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $asset = Story::with('currentContract')->where('alpha_id', $id)
-            ->first();
+	/**
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function edit($id)
+	{
+		$asset = Story::with('currentContract')
+			->where('alpha_id', $id)
+			->withTrashed()
+			->first();
 
-        $decision = Input::get('decision');
-        //array_key_exists($story->state,config('stories.decisions.'.$decision)) looks for state within specific decision step
+		$activeLicenses = $asset->storyCollections()->with('collection')->where('status', 'purchased')->get();
+
+		$decision = Input::get('decision');
+		//array_key_exists($story->state,config('stories.decisions.'.$decision)) looks for state within specific decision step
 
 		$logs = $this->audit->where('auditable_id', $asset->id)
 			->where('auditable_type', 'App\Story')
@@ -242,10 +242,11 @@ class AdminStoryController extends Controller
             'user' => Auth::user(),
             'users' => User::all(),
 			'contact' => $asset->contact,
-            'video_categories' => VideoCategory::all(),
-            'video_collections' => VideoCollection::all(),
+			'video_categories' => VideoCategory::all(),
+			'video_collections' => VideoCollection::all(),
+			'activeLicenses' => $activeLicenses,
 			'logs' => $logs
-        ];
+		];
 
         return view('admin.stories.create_edit', $data);
     }
@@ -596,32 +597,11 @@ class AdminStoryController extends Controller
             abort(404);
         }
 
-        if(CollectionStory::isStoryLicensed($story->id)) {
-            return Redirect::back()->with([
-                'note' => 'Cannot delete story that is currently being licensed',
-                'note_type' => 'error'
-            ]);
-        }
+		$story->deleteStory();
 
-        $offeredAndPendingStories = CollectionStory::where('story_id', $story->id)
-            ->orWhere('status', 'purchased')
-            ->where('status', 'offered');
-
-        if($offeredAndPendingStories->count() > 0) {
-            foreach($offeredAndPendingStories->get() as $emailForDeletion) {
-                QueueEmailRetractQuote::dispatch(
-                    $emailForDeletion,
-                    'story'
-                );
-            }
-        }
-
-        CollectionStory::where('story_id', $story->id)->delete();
-        $story->destroy($story->id);
-
-        return Redirect::to('admin/stories')->with([
-            'note' => 'Successfully Deleted Story',
-            'note_type' => 'success'
-        ]);
+		return redirect()->to('admin/stories')->with([
+			'note' => 'Successfully Deleted Story',
+			'note_type' => 'success'
+		]);
     }
 }

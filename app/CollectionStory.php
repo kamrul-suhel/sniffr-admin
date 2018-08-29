@@ -28,7 +28,7 @@ class CollectionStory extends Model implements \OwenIt\Auditing\Contracts\Audita
 	 */
     public function story()
     {
-        return $this->belongsTo(Story::class);
+        return $this->belongsTo(Story::class)->withTrashed();
     }
 
 	/**

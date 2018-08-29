@@ -274,6 +274,7 @@ class AdminVideosController extends Controller
 		]);
 	}
 
+
 	/**
 	 * @param Request $request
 	 * @param string $id
@@ -285,6 +286,8 @@ class AdminVideosController extends Controller
 			->where('alpha_id', $id)
 			->withTrashed()
 			->first();
+
+		$activeLicenses = $asset->videoCollections()->with('collection')->where('status', 'purchased')->get();
 
 		if (!$asset) {
 			return Redirect::to('admin/videos/')->with([
@@ -324,6 +327,7 @@ class AdminVideosController extends Controller
 			'video_shottypes' => VideoShotType::all(),
 			'users' => User::all(),
 			'creators' => Contact::orderBy('created_at', 'desc')->get(),
+			'activeLicenses' => $activeLicenses,
 			'logs' => $logs
 		];
 
@@ -343,6 +347,7 @@ class AdminVideosController extends Controller
 		}
 
 		$tags = $request->input('tags');
+
 		if ($tags) {
 			$this->addUpdateVideoTags($video, $tags);
 		}
@@ -397,7 +402,6 @@ class AdminVideosController extends Controller
 		$video->video_category_id = ($request->input('video_category_id') ? $request->input('video_category_id') : $video->video_category_id);
 		$video->contact_id = ($request->input('contact_id') ? $request->input('contact_id') : $video->contact_id);
 		$video->title = $title;
-		$video->rights = ($request->input('rights') ? $request->input('rights') : $video->rights);
 		$video->location = $request->input('location');
 		$video->details = $request->input('details');
 		$video->notes = $request->input('notes');
@@ -437,17 +441,18 @@ class AdminVideosController extends Controller
 		return response()->json($results);
 	}
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \League\Csv\Exception
-     */
-    public function ingest(Request $request)
-    {
-        //increase memory limits and upload post size
-        ini_set('max_execution_time', 1800);
-        ini_set('upload_max_filesize', '512M');
-        ini_set('post_max_size', '512M');
+
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 * @throws \League\Csv\Exception
+	 */
+	public function ingest(Request $request)
+	{
+		//increase memory limits and upload post size
+		ini_set('max_execution_time', 1800);
+		ini_set('upload_max_filesize', '512M');
+		ini_set('post_max_size', '512M');
 
         $brokenLinks = $problemLinks = $note = [];
 
@@ -549,24 +554,24 @@ class AdminVideosController extends Controller
         return view('admin.videos.ingest', $data);
     }
 
-    /**
-     * TODO: where are we using this method
-     */
-    public function checkYoutube()
-    {
-        $videos = Video::where([
-            ['state', 'licensed'],
-            ['file_watermark_dirty', '!=', NULL],
-            ['youtube_id', NULL],
-            ['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()],
-        ])->limit(300)->get();
-        echo 'Total Count: ' . count($videos) . '<br /><br />';
-        foreach ($videos as $video) {
-            echo $video->id . ' : ' . $video->title . '<br />';
-            QueueVideoYoutubeUpload::dispatch($video->id)
-                ->delay(now()->addSeconds(5));
-        }
-    }
+	/**
+	 * TODO: where are we using this method
+	 */
+	public function checkYoutube()
+	{
+		$videos = Video::where([
+			['state', 'licensed'],
+			['file_watermark_dirty', '!=', NULL],
+			['youtube_id', NULL],
+			['created_at', '>', Carbon::now()->subDays(30)->toDateTimeString()],
+		])->limit(300)->get();
+		echo 'Total Count: ' . count($videos) . '<br /><br />';
+		foreach ($videos as $video) {
+			echo $video->id . ' : ' . $video->title . '<br />';
+			QueueVideoYoutubeUpload::dispatch($video->id)
+				->delay(now()->addSeconds(5));
+		}
+	}
 
     /**
      * TODO: where are we using this method
@@ -773,10 +778,6 @@ class AdminVideosController extends Controller
         $video->tags()->detach($tag_id);
     }
 
-	/**
-	 * @param $tag_name
-	 * @return bool
-	 */
     public function isTagContainedInAnyVideos($tag_name)
     {
         // Check if a tag is associated with any videos

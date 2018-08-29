@@ -29,7 +29,7 @@ class CollectionVideo extends Model implements \OwenIt\Auditing\Contracts\Audita
 	 */
 	public function video()
 	{
-		return $this->belongsTo(Video::class);
+		return $this->belongsTo(Video::class)->withTrashed();
 	}
 
 	/**
