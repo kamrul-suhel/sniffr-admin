@@ -97,13 +97,29 @@
 
                 if(queryObject.searchTerm != ''){
                     url += '&search='+ queryObject.searchTerm;
+
                 }
 
-                this.$store.dispatch('getMailerVideos', url)
-                    .then(() => {
-                        this.videos = this.$store.getters.getVideos;
-                        this.totalPage = this.videos.last_page;
-                    });
+                axios.post(url)
+                    .then((videos) => {
+                        console.log(response);
+                        return;
+                    this.$store.commit('setVideoData', videos.data.videos);
+                    this.videos = this.$store.getters.getVideos;
+                    this.totalPage = this.videos.last_page;
+
+                    console.log(this.videos);
+                    console.log(this.totalPage);
+                },
+                (error) => {
+                    return reject();
+                });
+
+                // this.$store.dispatch('getMailerVideos', url)
+                //     .then(() => {
+                //         this.videos = this.$store.getters.getVideos;
+                //         this.totalPage = this.videos.last_page;
+                //     });
             },
 
             getQueryObject(){

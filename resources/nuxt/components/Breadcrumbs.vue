@@ -36,7 +36,6 @@
         }),
 
         created(){
-            console.log(this.$router)
         },
 
         methods: {

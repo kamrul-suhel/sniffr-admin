@@ -3,7 +3,6 @@
  * Glabal package
  ********************************************************
  */
-
 import 'babel-polyfill';
 
 window.axios = require('axios');
@@ -73,7 +72,7 @@ const router = new Vuerouter({
 
 new Vue({
     el: '#sniffr-app',
-    components : {
+    components: {
         FooterComponent,
         CommentsComponent,
         Modal,
@@ -82,9 +81,7 @@ new Vue({
     store,
     router,
 
-    data: {
-
-    },
+    data: {},
 
     computed: {
         ...mapGetters({
@@ -92,18 +89,24 @@ new Vue({
         })
     },
 
-    created(){
+    created() {
         // initialize code go here before load any of component. like user, settings
-        this.$store.dispatch('getLoginStatus');
+        axios.get('/settings_object')
+            .then(response => {
+                this.$store.commit('setUserStatus', response.data.sniffr_app);
+            })
+            .catch(error => {
+                console.log(error)
+            })
     },
 
     methods: {
-        showModal(asset){
+        showModal(asset) {
             this.$store.commit('setAsset', asset);
             this.$store.commit('setModalVisibility', true);
         },
 
-        closeModal(){
+        closeModal() {
             this.$store.commit('setModalVisibility', false);
         }
     }
