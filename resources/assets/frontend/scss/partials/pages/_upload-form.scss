@@ -1,0 +1,127 @@
+.video-upload-page{
+  label {
+    a{
+      color:#000;
+    }
+  }
+
+  .video-upload-separator{
+    text-transform:uppercase;
+
+    &:after{
+      content: '';
+      position: relative;
+      width: 200px;
+      height: 2px;
+      background-color: #000;
+      display: block;
+      margin: 0 auto;
+      margin-top: -21px;
+      z-index: 1;
+    }
+
+    h2{
+      width: 50px;
+      margin: 0 auto;
+      background: #fafafa;
+      z-index: 2;
+      position: relative;
+      top:-5px;
+    }
+
+    @include small-device {
+      h2{
+        top: -5px;
+      }
+    }
+
+    @include medium-device {
+      h2{
+        top: -5px;
+      }
+    }
+
+    @include large-device {
+      h2{
+        top: 0;
+      }
+    }
+
+    @include extra-large-device {
+      h2{
+        top: 0;
+      }
+    }
+
+  }
+}
+
+.email-validation {
+  font-size: 14px;
+  margin-top: -21px;
+}
+
+.upload-video-section {
+
+  .upload-video-title {
+    margin-bottom: $section-title-after-space;
+
+    h1 {
+      margin: 0 0 $featured-title-space 0;
+      color: $upload-video-title-color;
+    }
+  }
+
+  .terms{
+    .input-group {
+      height:auto;
+
+      label {
+        position:static;
+        height:auto;
+        line-height:18px;
+        overflow:inherit;
+        white-space:nowrap;
+        margin-left:30px;
+      }
+
+      .input-group__input{
+        position:relative;
+        top:-26px;
+      }
+
+      .input-group__details{
+        top:-26px;
+      }
+    }
+  }
+
+  .upload-video-title::after {
+    content: '';
+    width: 200px;
+    background: #000;
+    margin: 0px auto;
+    height: 5px;
+    display: block;
+  }
+
+  .video-upload-box {
+    width: 100%;
+  }
+
+  .input-group--details:before {
+    background: #000;
+  }
+
+  .term-condition {
+  }
+
+  .term-condition-content {
+  }
+}
+
+.upload-loading-modal{
+  img{
+    width:100%;
+  }
+}

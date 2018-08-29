@@ -1,0 +1,93 @@
+.stories-component{
+  .story-media-thumbnail {
+    height:200px !important;
+  }
+  @include small-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  @include medium-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  @include large-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  @include extra-large-device {
+    .story-media-thumbnail {
+      height:100% !important;
+    }
+  }
+
+  .stories {
+    .story-content{
+      padding-bottom:20px;
+    }
+    .story-content:nth-child(even){
+      padding-left:8px;
+    }
+
+    .story-content:nth-child(odd){
+      padding-right:8px;
+    }
+
+    @include small-device {
+      .story-content:nth-child(even){
+        padding-left:8px;
+      }
+
+      .story-content:nth-child(odd){
+        padding-right:8px;
+      }
+    }
+
+    @include medium-device {
+      .story-content:nth-child(even){
+        padding-left:8px;
+      }
+
+      .story-content:nth-child(odd){
+        padding-right:8px;
+      }
+    }
+
+    @include large-device {
+      .story-content:nth-child(even){
+        padding-left:20px;
+      }
+
+      .story-content:nth-child(odd){
+        padding-right:20px;
+      }
+    }
+
+    @include extra-large-device {
+      .story-content:nth-child(even){
+        padding-left:20px;
+      }
+
+      .story-content:nth-child(odd){
+        padding-right:20px;
+      }
+    }
+
+    h2{
+      height: 36px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .description{
+      height: 120px;
+      overflow: hidden;
+      white-space: initial;
+    }
+  }
+}
