@@ -53,7 +53,6 @@
                 this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
                 this.$axios.$get(url)
                     .then((response) => {
-                        console.log(response);
                         if(response.error){
                             this.contactNotFound = true;
                         }

@@ -109,12 +109,6 @@
                 (error) => {
                     return reject();
                 });
-
-                // this.$store.dispatch('getMailerVideos', url)
-                //     .then(() => {
-                //         this.videos = this.$store.getters.getVideos;
-                //         this.totalPage = this.videos.last_page;
-                //     });
             },
 
             getQueryObject(){

@@ -52,7 +52,10 @@ module.exports = laravelNuxt({
     },
 
     css: [
-        '@/assets/scss/styles.scss'
+        {
+            src: '@/assets/scss/styles.scss',
+            lang: 'scss'
+        }
     ]
 });
 

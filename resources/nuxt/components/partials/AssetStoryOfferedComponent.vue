@@ -312,8 +312,6 @@
                 let form_data =  new FormData();
                 form_data.append('rejection_notes', this.decline_note);
                 this.$axios.$post(url, form_data).then((response) => {
-                    console.log(response);
-                    return;
                     if (response.success === '1') {
                         this.declineLoading = false;
                         this.assetDeclined = true;
