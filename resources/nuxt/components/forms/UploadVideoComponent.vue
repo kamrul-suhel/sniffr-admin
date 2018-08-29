@@ -352,7 +352,6 @@
                 form.append('source', this.source);
                 //set request
 
-
                 //show the uploading dialog box
                 this.uplod_progress = true;
                 this.$axios.$post('/upload', form, {
