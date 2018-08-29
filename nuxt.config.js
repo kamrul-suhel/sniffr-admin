@@ -53,6 +53,10 @@ module.exports = laravelNuxt({
 
     css: [
         {
+          lang: 'css',
+          src: './node_modules/vuetify/dist/vuetify.css'
+        },
+        {
             src: '@/assets/scss/styles.scss',
             lang: 'scss'
         }
