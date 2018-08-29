@@ -10,87 +10,92 @@ let mix = require('laravel-mix');
  |
  */
 
-if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'development') {
-    mix.js(['resources/assets/admin/js/app.js',
-            'resources/assets/admin/js/custom.js'],
-        'public/assets/admin/js'
-    )
-        .sass('resources/assets/admin/scss/admin.scss',
-            'public/assets/admin/css/admin.css')
-        .options({
-            processCssUrls: false
-        });
 
-    mix.sass('resources/assets/scss/admin.scss',
-        'public/assets/admin/css/mailer-admin.css'
-    ).options({
+mix.js(['resources/assets/admin/js/app.js',
+        'resources/assets/admin/js/custom.js'],
+    'public/assets/admin/js'
+)
+    .sass('resources/assets/admin/scss/admin.scss',
+        'public/assets/admin/css/admin.css')
+    .options({
         processCssUrls: false
     });
 
+mix.sass('resources/assets/scss/admin.scss',
+    'public/assets/admin/css/mailer-admin.css'
+).options({
+    processCssUrls: false
+});
 
-    /*
-    * *********************************************
-    * Admin script and scss
-    * *********************************************
-    */
-    mix.js([
-        'resources/assets/admin/scripts/main.js',
-    ], 'public/assets/admin/scripts/scripts.js')
-        .sourceMaps();
 
-    if (mix.inProduction()) {
-        mix.version();
-    }
+/*
+* *********************************************
+* Admin script and scss
+* *********************************************
+*/
+mix.js([
+    'resources/assets/admin/scripts/main.js',
+], 'public/assets/admin/scripts/scripts.js')
+    .sourceMaps();
 
-    if (!mix.inProduction()) {
-        mix.webpackConfig({devtool: 'inline-source-map'})
-    }
-
-    /*
-    * *********************************************
-    * End admin script and scss for vue
-    * *********************************************
-    */
+if (mix.inProduction()) {
+    mix.version();
 }
 
-    //Copying file from resource folder to public
-    mix.copy(
-        'resources/nuxt/assets/images',
-        'public/assets/images'
-    );
+if (!mix.inProduction()) {
+    mix.webpackConfig({devtool: 'inline-source-map'})
+}
 
-    mix.copy(
-        'node_modules/tinymce/',
-        'public/assets/admin/js/'
-    );
+/*
+* *********************************************
+* End admin script and scss for vue
+* *********************************************
+*/
 
-    mix.copy(
-        'node_modules/intl-tel-input/build',
-        'public/assets/admin/css/intl-tel-input'
-    );
+//Copying file from resource folder to public
+mix.copy(
+    'resources/nuxt/assets/images',
+    'public/assets/images'
+);
 
-    mix.copy(
-        'resources/assets/scripts/vendor/',
-        'public/assets/scripts/'
-    );
+mix.copy(
+    'node_modules/tinymce/',
+    'public/assets/admin/js/'
+);
 
-    // Placeholder image
-    mix.copy(
-        'resources/nuxt/assets/images/placeholder.png',
-        'public/placeholder.gif'
-    );
+mix.copy(
+    'node_modules/intl-tel-input/build',
+    'public/assets/admin/css/intl-tel-input'
+);
 
-    /*
-    * *********************************************
-    * All fonts
-    * *********************************************
-    */
-    mix.copy(
-        [
-            // 'resources/assets/talvbansal/media-manager/fonts',
-            'node_modules/bootstrap/fonts',
-            'node_modules/font-awesome/fonts',
-            'resources/nuxt/assets/fonts'
-        ],
-        'public/assets/fonts/'
-    );
+mix.copy(
+    'resources/assets/scripts/vendor/',
+    'public/assets/scripts/'
+);
+
+// Placeholder image
+mix.copy(
+    'resources/nuxt/assets/images/placeholder.png',
+    'public/placeholder.gif'
+);
+
+// Favicon icon
+mix.copy(
+    'resources/nuxt/static/favicon.ico',
+    'public/favicon.ico'
+);
+
+/*
+* *********************************************
+* All fonts
+* *********************************************
+*/
+mix.copy(
+    [
+        // 'resources/assets/talvbansal/media-manager/fonts',
+        'node_modules/bootstrap/fonts',
+        'node_modules/font-awesome/fonts',
+        'resources/nuxt/assets/fonts'
+    ],
+    'public/assets/fonts/'
+);
