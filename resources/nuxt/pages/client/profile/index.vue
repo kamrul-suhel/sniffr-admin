@@ -188,6 +188,7 @@
                     <v-layout row wrap>
                         <v-flex xs12>
                             <v-data-table
+                                    class="data-table"
                                     :headers="headers"
                                     :items="companyUsers"
                                     hide-actions
