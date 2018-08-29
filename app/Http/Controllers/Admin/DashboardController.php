@@ -58,10 +58,14 @@ class DashboardController extends Controller
         $licensed_videos = $this->video->select('id')->where('state', 'licensed')->whereBetween('updated_at', [$from, $to])->count();
         $pending_videos = $this->video->select('id')->where('state', 'pending')->whereBetween('updated_at', [$from, $to])->count();
 
-        $exc_contracts = $this->contract->get()
+        $exc_contracts = $this->contract
+			->orderBy('signed_at')
+			->get()
             ->where('video_id', '!=', null)
             ->where('contract_model_id', '1')
-            ->where('signed_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function ($date) {
+            ->where('signed_at', '>', $from)
+            ->where('signed_at', '<', $to)
+			->groupBy(function ($date) {
                 return Carbon::parse($date->signed_at)->format('m-d'); // grouping by days
             });
 
