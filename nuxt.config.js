@@ -9,9 +9,13 @@ module.exports = laravelNuxt({
     modules: [
     ],
 
-    plugins: ['~/plugins/main.js'],
+    plugins: [
+        '~/plugins/main.js',
+        '~/plugins/hotjar/index.js',
+        '~/plugins/airbreak/index.js'
+    ],
 
-    loading: { color: '#3B8070' },
+    loading: { color: '#ffffff' },
 
     head: {
         title: 'Sniffr media',
@@ -33,6 +37,9 @@ module.exports = laravelNuxt({
         ],
 
         script:[
+            {
+                src: 'https://cdnjs.cloudflare.com/ajax/libs/airbrake-js/1.0.4/client.min.js'
+            }
         ]
     },
 
