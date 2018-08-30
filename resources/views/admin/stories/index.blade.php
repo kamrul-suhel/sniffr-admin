@@ -151,7 +151,7 @@
 											<span class="btn btn-mini-info"><i class="fa fa-address-book"></i> No Contact</span>
 										@endif
 
-										<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i></button>
+										<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i> ({{$asset->comments->count()}})</button>
 
 										@if($asset->source)
 										<a href="{{ $asset->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">
