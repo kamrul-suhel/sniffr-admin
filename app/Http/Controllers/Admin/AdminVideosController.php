@@ -102,7 +102,11 @@ class AdminVideosController extends Controller
 			session(['state' => $state]);
 		}
 
-		$videos = $videos->orderByRaw('CASE WHEN licensed_at IS NULL THEN created_at ELSE licensed_at END DESC')->paginate(24);
+		if($state == 'all') {
+			$videos = $videos->orderByRaw('CASE WHEN licensed_at IS NULL THEN created_at ELSE licensed_at END DESC')->paginate(24);
+		} else {
+			$videos = $videos->orderByRaw('created_at DESC')->paginate(24);
+		}
 
 		//override all for deleted videos
 		if ($state == 'deleted') {

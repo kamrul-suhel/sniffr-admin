@@ -89,28 +89,7 @@ class AdminStoryController extends Controller
 			$stories = $stories->where('state', $state);
 		}
 
-
-//		// only display states within selected decision point
-//        if($decision) {
-//            $found=0;
-//            foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-//                if($state==$state_values['value']) {
-//                    $found=1;
-//                }
-//            }
-//
-//            // ^ ABOVE: need a better way to search state values to see if state exists within a decision array
-//            if($found==1) {
-//                $stories = $stories->where('state', $state);
-//            } else {
-//                $state = ''; //$current_state[0]; //set current state to first state within decision
-//                foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-//                    $stories = $stories->orWhere('state', $state_values['value']);
-//                }
-//            }
-//        }
-
-		$stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
+		$stories = $stories->orderBy('created_at', 'DESC')->paginate(12);
 
 		$data = [
 			'stories' => $stories,
