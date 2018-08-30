@@ -408,8 +408,6 @@
                 // submit data with ajax request
                 this.$axios.$post('/client/collections/cancel_collection', form_data)
                     .then(response => {
-                        console.log('deleted collection id: ' + this.collection.collection_id);
-                        console.log(response.message);
                         this.open_quote_dialog = false;
                         this.loading = false;
                     })

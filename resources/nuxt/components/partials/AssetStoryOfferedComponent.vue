@@ -98,7 +98,12 @@
             </v-btn>
         </v-flex>
 
-        <v-flex v-if="assetType === 'purchased'" xs12 sm12 md3 pl-3>
+        <v-flex xs12 sm12 md3 pl-3
+                v-else-if="story.collection_status === 'requested'">
+            <p>Waiting for quote</p>
+        </v-flex>
+
+        <v-flex v-else-if="assetType === 'purchased' || story.purchased" xs12 sm12 md3 pl-3>
             <div v-if="story.deleted_at != null">
                 This story has been removed from Sniffr.
                 As you already have a license you have a right to still download this story.
@@ -130,11 +135,6 @@
             <div class="caption text-xs-center pt-2"
                  v-if="assetType === 'purchased'">{{ story.license_ends_at | licenseExpired }}
             </div>
-        </v-flex>
-
-        <v-flex xs12 sm12 md3 pl-3
-                v-else-if="story.collection_status === 'requested'">
-            <p>Waiting for quote</p>
         </v-flex>
 
         <v-flex xs12 sm12 md3

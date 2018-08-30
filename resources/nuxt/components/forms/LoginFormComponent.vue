@@ -12,14 +12,15 @@
 
                             <v-flex xs12>
                                 <v-text-field
-                                        name="email"
-                                        color="dark"
                                         label="Email:"
-                                        v-model="user.email"
+                                        name="email"
+                                        type="email"
+                                        color="dark"
+                                        v-model="email"
                                         :rules="emailRules"
-                                        required
                                         validate-on-blur
                                         :error="validation.error"
+                                        required
                                 >
                                 </v-text-field>
                             </v-flex>
@@ -30,7 +31,7 @@
                                         color="dark"
                                         name="password"
                                         label="Enter your password"
-                                        v-model="user.password"
+                                        v-model="password"
                                         :append-icon="showpassword ? 'visibility' : 'visibility_off'"
                                         @click:append="showpassword = !showpassword"
                                         :type="showpassword ? 'password' : 'text'"
@@ -102,10 +103,9 @@
                 login_progress: false,
                 loginDelay: false,
                 redirectUrl: false,
-                user: {
-                    email: '',
-                    password: ''
-                },
+
+                email: '',
+                password: '',
                 emailRules: [
                     v => !!v || 'Email is required',
                     v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email must be valid'
@@ -137,7 +137,7 @@
                 return this.$store.getters.getLoginDialog;
             }
         },
-        
+
 
         methods: {
 
@@ -152,8 +152,8 @@
 
                     // prepare submitting data
                     let form_data = new FormData();
-                    form_data.append('email', this.user.email);
-                    form_data.append('password', this.user.password);
+                    form_data.append('email', this.email);
+                    form_data.append('password', this.password);
                     if(this.redirectUrl) {
                         form_data.append('redirect', this.redirectUrl);
                     }
