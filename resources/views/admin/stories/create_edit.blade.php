@@ -234,7 +234,7 @@
             Story in Wordpress</a>
     @endif
 
-    <a href="{{ url('admin/stories/?decision='.(isset($decision) ? $decision : '').'&state='.(isset($asset->state) ? $asset->state : '')) }}"
+    <a href="{{ url('admin/stories/?decision='.(isset($decision) ? $decision : '').'&state='.(isset($asset->state) ? $asset->state : '').'&page='.request()->get('page')) }}"
        class="btn btn-grey pull-right" style="margin-right:10px;">Close</a>
 
     <div class="clear"></div>

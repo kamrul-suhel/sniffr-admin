@@ -115,7 +115,7 @@
 						<section class="album-info album-grey">
                             <div class="row padded-bottom">
                                 <div class="col-sm-12">
-                                    <h3><a href="{{ url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.$decision) }}" title="Edit Story on Sniffr">{{ $asset->title }}</a></h3>
+                                    <h3><a href="{{ url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.$decision.'&page='.request()->get('page')) }}" title="Edit Story on Sniffr">{{ $asset->title }}</a></h3>
                                     <p>
 										@if($asset->contact)
 											@if($asset->contact->email)
