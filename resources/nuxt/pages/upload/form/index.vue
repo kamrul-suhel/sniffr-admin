@@ -6,7 +6,7 @@
 <script>
     import UploadVideoComponent from '@/components/forms/UploadVideoComponent.vue';
     export default {
-        layout:['iframeForm'],
+        layout:'iframeForm',
         components: {
             uploadVideoComponent: UploadVideoComponent
         },
