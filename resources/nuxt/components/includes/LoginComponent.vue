@@ -7,7 +7,7 @@
                 max-width="500px"
                 class="login-section"
                 @keydown.esc="onLoginDialogClose()">
-                <login-form></login-form>
+                <login-form v-if="open_login_dialog"></login-form>
         </v-dialog>
 	</div>
 </template>

@@ -44,7 +44,9 @@
 
                         </v-layout>
 
-                        <v-layout row justify-center v-if="validation.error">
+                        <v-layout row
+                                  justify-center
+                                  v-if="validation.error">
                             <v-flex>
                                 <div class="red--text text-xs-center">{{validation.message}}</div>
                             </v-flex>
