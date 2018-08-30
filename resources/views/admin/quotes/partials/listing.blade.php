@@ -151,41 +151,31 @@
                             </p>
             </div>
             {{-- Notes --}}
-            <div class="col-lg-3">
-                @if(count($asset->quotes()->get()))
-                    <label for="rejection-notes">
-                        <small>Client Rejection Notes</small>
-                    </label>
-                    <textarea style="font-size:9pt;" class="form-control" id="rejection-notes" rows="6" disabled>@foreach($asset->quotes()->get() as $quote)@if(isset($quote->rejection_notes))[{{date('d-m-y@H:i', strtotime($quote->updated_at))}}] &pound;{{number_format($quote->price)}} - {{ !is_null($quote->rejection_notes) ? $quote->rejection_notes : 'No reason given' }}@endif
-                        @endforeach
-                </textarea>
-                @endif
+            <div class="col-lg-5">
+                <div class="col-lg-6">
+                    @if(count($asset->quotes()->get()))
+                        <label for="rejection-notes">
+                            <small>Client Rejection Notes</small>
+                        </label>
+                        <textarea style="font-size:9pt;" class="form-control" id="rejection-notes" rows="6" disabled>@foreach($asset->quotes()->get() as $quote)
+                                @if(isset($quote->rejection_notes))
+                                    [{{date('d-m-y@H:i', strtotime($quote->updated_at))}}] &pound;{{number_format($quote->price)}} - {{ !is_null($quote->rejection_notes) ? $quote->rejection_notes : 'No reason given' }}
+                                @endif
+                            @endforeach
+                        </textarea>
+                    @endif
+                </div>
 
-                @if($asset->notes)
-                    <label for="notes">
-                        <small>Client Notes</small>
-                    </label>
-                    <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6" disabled>{{ $asset->notes }}</textarea>
-                @endif
+                <div class="col-lg-6">
+                    @if($asset->notes)
+                        <label for="notes">
+                            <small>Client Notes</small>
+                        </label>
+                        <textarea style="font-size:9pt;" class="form-control" id="notes" rows="6" disabled>{{ $asset->notes }}</textarea>
+                    @endif
+                </div>
             </div>
-
-            {{-- Rejection Notes --}}
-            <!--div class="col-lg-2 well rejection_well" style="overflow: auto; height:170px;">
-                @if($asset->quotes()->count())
-                    <label for="rejection-notes">
-                        <small>Client Rejection Notes</small>
-                    </label>
-                    @foreach($asset->quotes()->get() as $quote)
-                        @if(isset($quote->rejection_notes))
-                            <small>[{{date('d-m-y@h:i', strtotime($quote->updated_at))}}] &pound;{{number_format($quote->price)}} - {{ !is_null($quote->rejection_notes) ? $quote->rejection_notes : 'No reason given' }}</small>
-                            <hr>
-                        @endif
-                    @endforeach
-                @endif
-            </div-->
         </div>
-
-
     </div>
 </div>
 

@@ -92,7 +92,7 @@
 			@foreach($stories as $asset)
 
 				@php
-					$date = \Carbon\Carbon::parse($asset->updated_at)->isToday() ? 'Today' : date('jS M',strtotime($asset->updated_at));
+					$date = \Carbon\Carbon::parse($asset->created_at)->isToday() ? 'Today' : date('jS M',strtotime($asset->created_at));
 					$panelColour = ($asset->priority=='high' ? 'danger' : ($asset->priority=='medium' ? 'warning' : '')); //config('stories.colors'); $panelColour[$asset->state]
 				@endphp
 

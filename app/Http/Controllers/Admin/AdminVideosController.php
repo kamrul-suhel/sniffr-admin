@@ -106,7 +106,7 @@ class AdminVideosController extends Controller
 
 		//override all for deleted videos
 		if ($state == 'deleted') {
-			$videos = Video::onlyTrashed()->orderBy('updated_at', 'desc')->paginate(24);
+			$videos = Video::onlyTrashed()->orderBy('created_at', 'desc')->paginate(24);
 		}
 
 		$data = [
@@ -272,7 +272,6 @@ class AdminVideosController extends Controller
 		]);
 	}
 
-
 	/**
 	 * @param Request $request
 	 * @param string $id
@@ -432,7 +431,6 @@ class AdminVideosController extends Controller
 
 		return response()->json($results);
 	}
-
 
 	/**
 	 * @param Request $request
