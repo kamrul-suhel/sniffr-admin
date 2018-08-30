@@ -305,23 +305,10 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-		$data = [
-			'headline' => '<i class="fa fa-edit"></i> Edit Story',
-			'asset' => $story,
-			'asset_type' => 'story',
-			'post_route' => url('admin/stories/update'),
-			'button_text' => 'Save Draft',
-			'decision' => $decision,
-			'user' => Auth::user(),
-			'users' => User::all(),
-			'contact' => $story->contact,
-			'video_categories' => VideoCategory::all(),
-			'video_collections' => VideoCollection::all(),
-			'note' => 'Successfully Saved Story!',
-			'note_type' => 'success'
-		];
-
-		return view('admin.stories.create_edit', $data);
+		return redirect()
+			->back()
+			->with('note', 'Successfully updated story')
+			->with('note_type', 'success');
 	}
 
 	/**

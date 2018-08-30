@@ -46,18 +46,6 @@
             <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
         </span>
 
-        <span class="form-group input-group">
-            <span class="input-group-addon">
-                Location
-            </span>
-
-            <input type="text" class="form-control placepicker" data-map-container-id="locationCollapse" name="location" id="location" value="@if(!empty($asset->location)){{ $asset->location }}@endif" />
-
-            <div id="locationCollapse" class="collapse">
-                <div class="placepicker-map thumbnail"></div>
-            </div>
-        </span>
-
         <!--span class="form-group input-group">
             <span class="input-group-addon">
                 Removed from Social for
