@@ -147,8 +147,7 @@
                                     <v-btn flat
                                            dark
                                            color="black"
-                                           @click.native="open_quote_dialog = false;
-                                           loading = false;">Cancel
+                                           @click.native="cancelCollection()">Cancel
                                     </v-btn>
 
                                     <v-btn
@@ -400,6 +399,23 @@
                             this.errors = error.response.errors;
                         });
                 }
+            },
+
+            cancelCollection() {
+                this.loading = true;
+                let form_data = new FormData();
+                form_data.append('collection_id', this.collection.collection_id);
+                // submit data with ajax request
+                this.$axios.$post('/client/collections/cancel_collection', form_data)
+                    .then(response => {
+                        console.log('deleted collection id: ' + this.collection.collection_id);
+                        console.log(response.message);
+                        this.open_quote_dialog = false;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        this.errors = error.response.message;
+                    });
             },
 
         }

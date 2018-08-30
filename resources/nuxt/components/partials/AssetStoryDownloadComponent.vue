@@ -107,7 +107,7 @@
 
             onDownloadAllAssets(){
                 this.loader = 'loading';
-                var url = '/client/stories/' + this.story.id + '/download';
+                let url = '/client/stories/' + this.story.id + '/download';
                 window.location = url;
             },
 

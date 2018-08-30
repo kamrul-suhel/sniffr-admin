@@ -149,10 +149,10 @@
                         .catch(error => {
                             this.error = false;
                             this.showMessage = false;
-
-                            if (error.response.data.error_message === undefined) {
+                            if(error.response.data.error === undefined) {
                                 this.error = true;
-                                this.errors = error.response.data.errors;
+                                this.showMessage = true;
+                                this.message = error.response.data.message;
                             } else {
                                 this.error = true;
                                 this.showMessage = true;

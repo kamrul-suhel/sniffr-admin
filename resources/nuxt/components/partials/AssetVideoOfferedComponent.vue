@@ -108,15 +108,21 @@
         </v-flex>
 
         <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 pl-3>
-            <v-btn
-                    block
-                    dark
-                    large
-                    @click="goToDetail()"
-                    color="dark"
-                    class="mb-3">
-                View
-            </v-btn>
+            <div v-if="video.deleted_at != null">
+                This video has been removed from Sniffr.
+                As you already have a license you have a right to still download this video.
+            </div>
+            <div v-else>
+                <v-btn
+                        block
+                        dark
+                        large
+                        @click="goToDetail()"
+                        color="dark"
+                        class="mb-3">
+                    View
+                </v-btn>
+            </div>
 
             <v-btn
                     block
@@ -129,6 +135,7 @@
             >
                 {{ button_text }}
             </v-btn>
+
 
             <div class="caption text-xs-center pt-2"
                  v-if="assetType === 'purchased'">{{ video.license_ends_at | licenseExpired }}
@@ -187,7 +194,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel</v-btn>
-                        <v-btn dark @click="onDecline()">Save</v-btn>
+                        <v-btn dark @click="onDecline()">Send</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -306,13 +313,13 @@
             },
 
             onDecline() {
-                let url = 'collections/reject_asset_price/' + this.video.collection_video_id + '/video';
+                let url = 'client/collections/reject_asset_price/' + this.video.collection_video_id + '/video';
                 this.declineLoading = true;
 
                 let form_data =  new FormData();
                 form_data.append('rejection_notes', this.decline_note);
                 this.$axios.$post(url, form_data).then((response) => {
-                    if (response.data.success === '1') {
+                    if (response.success === '1') {
                         this.declineLoading = false;
                         this.assetDeclined = true;
                         this.decline = true;

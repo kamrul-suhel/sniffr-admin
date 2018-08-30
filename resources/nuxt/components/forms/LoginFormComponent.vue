@@ -78,7 +78,7 @@
                 persistent
                 flat
                 style="background:none;box-shadow:none;"
-                content-class="loin-delay-dialog"
+                content-class="login-delay-dialog"
         >
             <div class="loading-delay-box text-xs-center">
                 <v-progress-circular
@@ -137,6 +137,7 @@
                 return this.$store.getters.getLoginDialog;
             }
         },
+        
 
         methods: {
 

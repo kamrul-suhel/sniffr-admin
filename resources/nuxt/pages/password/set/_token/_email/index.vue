@@ -140,21 +140,21 @@
 
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
-                                    this.$router.push({name: 'client_profile'});
+                                    this.$router.push({name: 'client-profile'});
                                 });
                             }
                         })
                         .catch(error => {
                             this.error = false;
                             this.showMessage = false;
-
-                            if(error.response.error_message === undefined) {
+                            if(error.response.data.error === undefined) {
                                 this.error = true;
-                                this.errors = error.response.errors;
+                                this.showMessage = true;
+                                this.message = error.response.data.message;
                             } else {
                                 this.error = true;
                                 this.showMessage = true;
-                                this.message = error.response.error_message;
+                                this.message = error.response.data.error_message;
                             }
                         });
                 }
