@@ -160,6 +160,12 @@ class AdminContactController extends Controller
         $contact->reddit = $request->input('reddit');
         $contact->imgur = $request->input('imgur');
         $contact->other = $request->input('other');
+		$contact->blacklist = $request->input('blacklist') == 'on' ? 1 : 0;
+		if(request()->has('blacklist')) {
+			$contact->blacklist_created_at = now();
+		} else {
+			$contact->blacklist_created_at = null;
+		}
         $contact->save();
 
 		if ($isJson) {
