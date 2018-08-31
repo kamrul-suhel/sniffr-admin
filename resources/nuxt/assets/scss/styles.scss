@@ -1,0 +1,72 @@
+@import './vendor/video-plyr';
+@import '../../../assets/scss/frontend';
+
+/* ************************* Header style ******************* */
+@import "./partials/header";
+
+
+/* ************************* NAV style ******************* */
+@import "./partials/nav";
+
+
+/* ************************* NAV style ******************* */
+@import "./partials/footer";
+
+
+/* ************************* Home Page style ******************* */
+@import "./partials/pages/home";
+
+/* ************************* Login Page style ******************* */
+@import "./partials/login";
+
+/* ************************* Videos Page style ******************* */
+@import "./partials/pages/videos";
+
+/* ************************* Video dialog box section style ******************* */
+@import "./partials/pages/stories";
+
+
+/* ************************* Video detail style ******************* */
+@import "./partials/pages/video-detail";
+
+
+/* ************************* Video upload page style ******************* */
+@import "./partials/pages/upload-form";
+
+
+/* ************************* Submission form page ******************* */
+@import "./partials/pages/submission-form";
+
+/* ************************* More detail form page ******************* */
+@import "./partials/pages/more-detail-form";
+
+/* ************************* Client page ******************* */
+@import "./partials/pages/client";
+
+/* ************************* Search style ******************* */
+@import "./partials/search";
+
+
+/* ************************* Pagination style ******************* */
+@import "./partials/pagination";
+
+
+/* ************************* Quote buy dialog component ******************* */
+@import "./partials/quote-buy-dialog";
+@import "./partials/asset-video-card";
+
+
+@include extra-small-device{
+}
+
+@include small-device{
+}
+
+@include medium-device{
+
+}
+@include large-device{
+
+}
+@include extra-large-device{
+}

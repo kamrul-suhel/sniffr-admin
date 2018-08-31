@@ -150,8 +150,6 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 <!-- End Notifications -->
 
-<script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
-
 @yield('javascript')
 
 </body>

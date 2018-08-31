@@ -125,8 +125,7 @@ class ClientAccountController extends Controller
 				'account_owner_users' => $companyUsers->pluck('full_name', 'id'),
 			]);
 		}
-
-		return view('frontend.master');
+		return $this->getFrontendServerResponse($request);
 	}
 
 	/**

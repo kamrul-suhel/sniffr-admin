@@ -1,0 +1,52 @@
+.videos-filter-section{
+  background:#fafafa;
+  padding:0;
+  z-index:10;
+  .logo img{
+    width:110px;
+  }
+}
+
+.videos-filter-form {
+  .form-group{
+    margin:0;
+  }
+
+  .input-group input{
+    margin-bottom:0;
+    color:#fff;
+  }
+  .input-group:not(.input-group--error) label,
+  .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled) .input-group__input .input-group__append-icon:not(:hover)
+  {
+    color:rgba(255,255,255,0.54);
+  }
+  .input-group:not(.input-group--error) .input-group__details:before,
+  .application .theme--light.input-group:not(.input-group--error) .input-group__details:before,
+  .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled):not(.input-group--disabled):not(.input-group--overflow):not(.input-group--segmented):not(.input-group--editable):hover .input-group__details:before,
+  .input-group:not(.input-group--error):not(.input-group--focused):not(.input-group--disabled):not(.input-group--disabled):not(.input-group--overflow):not(.input-group--segmented):not(.input-group--editable):hover .input-group__details:before{
+    background-color:rgba(255,255,255,0.54);
+  }
+
+  @include small-device{
+    input{
+      margin-bottom:10px;
+    }
+  }
+
+  @include medium-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+  @include large-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+  @include extra-large-device{
+    input{
+      margin-bottom:0;
+    }
+  }
+}

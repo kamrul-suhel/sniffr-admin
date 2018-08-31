@@ -28,7 +28,12 @@ const mutations = {
                 state.selectedVideos.splice(index, 1);
             }
         })
+    },
+
+    setVideoData(state, videos){
+        state.videos = videos;
     }
+
 }
 
 const actions = {

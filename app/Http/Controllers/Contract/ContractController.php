@@ -203,7 +203,7 @@ class ContractController extends Controller
             if($request->ajax() || $request->isJson()){
                 return $this->errorResponse("This contract is no longer available");
             }
-            return view('frontend.master');
+			return $this->getFrontendServerResponse($request);
         }
 
         if($contract->video_id) {
@@ -229,7 +229,7 @@ class ContractController extends Controller
             ]);
         }
 
-        return view('frontend.master');
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
