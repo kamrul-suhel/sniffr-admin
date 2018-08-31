@@ -7315,13 +7315,13 @@ var mobile = (function () {
       });
     };
     var reposition = function (dialog, message) {
-      $_cbcewd11bjkmcwtzq.descendant(dialog.element(), '.' + $_dpmvs510tjkmcwtwz.resolve('serialised-dialog-chain')).each(function (parent) {
+      $_cbcewd11bjkmcwtzq.descendant(dialog.element(), '.' + $_dpmvs510tjkmcwtwz.resolve('serialised-dialogs-chain')).each(function (parent) {
         $_ezdyn3116jkmcwtyw.set(parent, 'left', -spec$$1.state.currentScreen.get() * message.width + 'px');
       });
     };
     var navigate = function (dialog, direction) {
-      var screens = $_bpsi2e119jkmcwtzh.descendants(dialog.element(), '.' + $_dpmvs510tjkmcwtwz.resolve('serialised-dialog-screen'));
-      $_cbcewd11bjkmcwtzq.descendant(dialog.element(), '.' + $_dpmvs510tjkmcwtwz.resolve('serialised-dialog-chain')).each(function (parent) {
+      var screens = $_bpsi2e119jkmcwtzh.descendants(dialog.element(), '.' + $_dpmvs510tjkmcwtwz.resolve('serialised-dialogs-screen'));
+      $_cbcewd11bjkmcwtzq.descendant(dialog.element(), '.' + $_dpmvs510tjkmcwtwz.resolve('serialised-dialogs-chain')).each(function (parent) {
         if (spec$$1.state.currentScreen.get() + direction >= 0 && spec$$1.state.currentScreen.get() + direction < screens.length) {
           $_ezdyn3116jkmcwtyw.getRaw(parent, 'left').each(function (left) {
             var currentLeft = parseInt(left, 10);
@@ -7349,12 +7349,12 @@ var mobile = (function () {
     };
     var memForm = record(Form.sketch(function (parts) {
       return {
-        dom: dom$1('<div class="${prefix}-serialised-dialog"></div>'),
+        dom: dom$1('<div class="${prefix}-serialised-dialogs"></div>'),
         components: [Container.sketch({
-            dom: dom$1('<div class="${prefix}-serialised-dialog-chain" style="left: 0px; position: absolute;"></div>'),
+            dom: dom$1('<div class="${prefix}-serialised-dialogs-chain" style="left: 0px; position: absolute;"></div>'),
             components: map$1(spec$$1.fields, function (field$$1, i) {
               return i <= spec$$1.maxFieldIndex ? Container.sketch({
-                dom: dom$1('<div class="${prefix}-serialised-dialog-screen"></div>'),
+                dom: dom$1('<div class="${prefix}-serialised-dialogs-screen"></div>'),
                 components: flatten([
                   [navigationButton(-1, 'previous', i > 0)],
                   [parts.field(field$$1.name, field$$1.spec)],

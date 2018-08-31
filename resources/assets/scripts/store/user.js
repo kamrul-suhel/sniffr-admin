@@ -19,7 +19,7 @@ const state = {
     companySlug: '',
     isCompanyOwner: false,
 
-    // Login dialog box variable: boolean
+    // Login dialogs box variable: boolean
     loginDialog: false,
     forgotPasswordDialog: false,
 };

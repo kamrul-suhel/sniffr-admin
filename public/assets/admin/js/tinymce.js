@@ -5200,7 +5200,7 @@
     phrasingContent = 'a abbr b bdo br button cite code del dfn em embed i iframe img input ins kbd ' + 'label map noscript object q s samp script select small span strong sub sup ' + 'textarea u var #text #comment';
     if (type !== 'html4') {
       globalAttributes += ' contenteditable contextmenu draggable dropzone ' + 'hidden spellcheck translate';
-      blockContent += ' article aside details dialog figure header footer hgroup section nav';
+      blockContent += ' article aside details dialogs figure header footer hgroup section nav';
       phrasingContent += ' audio canvas command datalist mark meter output picture ' + 'progress time wbr video ruby bdi keygen';
     }
     if (type !== 'html5-strict') {

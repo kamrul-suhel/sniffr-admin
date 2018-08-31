@@ -55,31 +55,31 @@
             </v-layout>
         </v-container>
 
-        <!-- This element css display property none. so only put if you have any dialog box -->
+        <!-- This element css display property none. so only put if you have any dialogs box -->
         <div class="all-dialog-box">
             <!-- Login component -->
             <login-component></login-component>
 
-            <!-- Password reset dialog box -->
+            <!-- Password reset dialogs box -->
             <forgot-password-component></forgot-password-component>
             <!-- End password reset -->
 
             <!-- Quote Component -->
             <quote-component></quote-component>
 
-            <!-- Video dialog box -->
+            <!-- Video dialogs box -->
             <video-dialog-component></video-dialog-component>
 
-            <!-- Story dialog box -->
+            <!-- Story dialogs box -->
             <story-dialog-component></story-dialog-component>
 
-            <!-- Story asset dialog box -->
+            <!-- Story asset dialogs box -->
             <story-asset-dialog-component></story-asset-dialog-component>
 
-            <!-- Buy dialog box -->
+            <!-- Buy dialogs box -->
             <buy-dialog-component></buy-dialog-component>
 
-            <!-- Thank you dialog box -->
+            <!-- Thank you dialogs box -->
             <thank-you-dialog-box></thank-you-dialog-box>
 
         </div>

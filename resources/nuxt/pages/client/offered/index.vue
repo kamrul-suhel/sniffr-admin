@@ -1,6 +1,6 @@
 <template>
     <div class="client-offer-section">
-        <!-- End refresh stories dialog box -->
+        <!-- End refresh stories dialogs box -->
         <v-container grid-list-lg class="pt-0">
             <v-layout row wrap>
                 <v-flex xs12>

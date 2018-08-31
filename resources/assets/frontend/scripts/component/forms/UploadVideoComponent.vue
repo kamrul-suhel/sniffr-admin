@@ -212,7 +212,7 @@
         </v-dialog>
 
 
-        <!-- Thank you dialog box -->
+        <!-- Thank you dialogs box -->
         <v-dialog v-model="thank_you_dialog" max-width="500px" persistent>
             <v-card
                     dark
@@ -354,7 +354,7 @@
                 //set request
 
 
-                //show the uploading dialog box
+                //show the uploading dialogs box
                 this.uplod_progress = true;
                 axios.post('/upload', form, {
                         headers: {
