@@ -3,25 +3,19 @@
               v-model="dialog"
               max-width="500px">
         <v-card>
-            <v-card-title>
+            <v-card-title class="pb-0">
                 <span class="headline">Contact Us</span>
             </v-card-title>
-
-            <v-card-text>
-                <v-container grid-list-md>
-                    <v-layout wrap>
-                        <v-flex xs12>
+                        <v-card-text class="pb-0">
                             <v-textarea
+                                    class="mt-0"
                                     label="Please tell us why this quote isn't good for you."
                                     color="dark"
                                     v-model="decline_note"
                                     rows="10"
                                     required
                             ></v-textarea>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-            </v-card-text>
+                        </v-card-text>
 
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -42,8 +36,9 @@
 
 <script>
     import {mapGetters} from 'vuex'
+
     export default {
-        data(){
+        data() {
             return {
                 decline_note: null,
                 declineLoading: false
@@ -51,46 +46,41 @@
         },
 
         computed: {
-            ...mapGetters({
-
-            }),
+            ...mapGetters({}),
 
             dialog: {
-                get(){
+                get() {
                     return this.$store.getters.getDeclineDialog;
                 },
 
-                set(value){
-                    if(!value) this.$store.commit('setDeclineDialogBox', false);
+                set(value) {
+                    this.$store.commit('setDeclineDialogBox', value);
                 }
             }
         },
 
-        created(){
+        created() {
 
         },
 
         methods: {
             onDecline() {
                 let assetStoryId = '';
-                if(this.$store.getters.getDeclineType === 'story'){
+                if (this.$store.getters.getDeclineType === 'story') {
                     assetStoryId = this.$store.getters.getDeclineAsset.collection_story_id
-                }else{
+                } else {
                     assetStoryId = this.$store.getters.getDeclineAsset.collection_video_id
                 }
-                let url = 'client/collections/reject_asset_price/' + assetStoryId + '/'+ this.$store.getters.getDeclineType;
+                let url = 'client/collections/reject_asset_price/' + assetStoryId + '/' + this.$store.getters.getDeclineType;
                 this.declineLoading = true;
-                console.log(url)
-                return;
 
-                let form_data =  new FormData();
+                let form_data = new FormData();
                 form_data.append('rejection_notes', this.decline_note);
                 this.$axios.$post(url, form_data).then((response) => {
                     if (response.success === '1') {
                         this.declineLoading = false;
-                        this.assetDeclined = true;
-                        this.decline = true;
-
+                        this.decline_note = null;
+                        this.$store.commit('setConfirmDecline', true);
                         this.dialog = false;
                     }
                 });

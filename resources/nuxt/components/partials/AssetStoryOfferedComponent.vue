@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="cdi-label"
-                     v-if="decline">
+                     v-if="assetDeclined">
 
                     <v-tooltip top>
                         <v-btn slot="activator"
@@ -160,6 +160,7 @@
                     block
                     dark
                     large
+                    :disabled="acceptLoading || assetDeclined"
                     color="dark"
                     class="mb-3"
             >
@@ -190,9 +191,9 @@
 
                 loading: false,
                 acceptLoading: false,
-                assetDeclined: false,
                 assetType: '',
-                expired: false
+                expired: false,
+                previouslyDecline: false,
             }
         },
 
@@ -216,7 +217,20 @@
         computed: {
             ...mapGetters({
                 settings: 'getSettingsObject'
-            })
+            }),
+
+            assetDeclined: {
+                get(){
+                    if(this.$store.getters.getConfirmDecline){
+                        if(this.$store.getters.getDeclineAsset.collection_story_id === this.story.collection_story_id
+                            && this.$store.getters.getDeclineType === 'story'){
+                            this.previouslyDecline = true;
+                            return true;
+                        }
+                    }
+                    return this.previouslyDecline;
+                }
+            }
         },
 
         created() {

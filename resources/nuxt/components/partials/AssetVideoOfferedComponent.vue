@@ -25,7 +25,7 @@
                         </v-tooltip>
                     </div>
 
-                    <div class="cdi-label" v-if="decline">
+                    <div class="cdi-label" v-if="assetDeclined">
                         <v-tooltip top>
                             <v-btn
                                     slot="activator"
@@ -194,7 +194,7 @@
                 loading: false,
                 acceptLoading: false,
                 declineLoading: false,
-                assetDeclined: false,
+                previouslyDecline: false,
 
                 expired: false,
 
@@ -221,8 +221,21 @@
 
         computed: {
             ...mapGetters({
-                settings: 'getSettingsObject'
-            })
+                settings: 'getSettingsObject',
+            }),
+
+            assetDeclined: {
+                get(){
+                    if(this.$store.getters.getConfirmDecline){
+                        if(this.$store.getters.getDeclineAsset.collection_video_id === this.video.collection_video_id
+                            && this.$store.getters.getDeclineType === 'video'){
+                            this.previouslyDecline = true;
+                            return true;
+                        }
+                    }
+                    return this.previouslyDecline;
+                }
+            }
         },
 
         created() {
@@ -278,23 +291,6 @@
                         this.acceptLoading = false;
                         this.assetType = "purchased";
                         this.purchased = true;
-                    }
-                });
-            },
-
-            onDecline() {
-                let url = 'client/collections/reject_asset_price/' + this.video.collection_video_id + '/video';
-                this.declineLoading = true;
-
-                let form_data =  new FormData();
-                form_data.append('rejection_notes', this.decline_note);
-                this.$axios.$post(url, form_data).then((response) => {
-                    if (response.success === '1') {
-                        this.declineLoading = false;
-                        this.assetDeclined = true;
-                        this.decline = true;
-
-                        this.dialog = false;
                     }
                 });
             },

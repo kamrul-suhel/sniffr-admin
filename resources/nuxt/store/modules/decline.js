@@ -1,17 +1,13 @@
 const state = {
-    declineDialog: false,
+    declineDialogBox: false,
     declineAsset: {},
-    declineType: ''
+    declineType: '',
+    confirmDecline: null
 }
 
 const mutations = {
     setDeclineDialogBox(state, value) {
-        state.declineDialog = value;
-        if(!value){
-            state.declineDialog = false;
-            state.declineAsset = {},
-            state.declineType = ''
-        }
+        state.declineDialogBox = value;
     },
 
     setDeclineAsset(state, asset) {
@@ -23,15 +19,19 @@ const mutations = {
     },
 
     setResetDeclineData(state) {
-        state.declineDialog = false;
+        state.declineDialogBox = false;
         state.declineAsset = {},
         state.declineType = ''
+    },
+
+    setConfirmDecline(state, value){
+        state.confirmDecline = value;
     }
 }
 
 const getters = {
     getDeclineDialog(state) {
-        return state.declineDialog;
+        return state.declineDialogBox;
     },
 
     getDeclineAsset(state) {
@@ -40,6 +40,10 @@ const getters = {
 
     getDeclineType(state) {
         return state.declineType;
+    },
+
+    getConfirmDecline(state){
+        return state.confirmDecline;
     }
 }
 
