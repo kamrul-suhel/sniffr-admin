@@ -267,7 +267,7 @@
         </v-form>
 
 
-        <!-- submit Success dialog box -->
+        <!-- submit Success dialogs box -->
         <v-dialog
                 v-model="submit_success_dialog"
                 max-width="500px"
