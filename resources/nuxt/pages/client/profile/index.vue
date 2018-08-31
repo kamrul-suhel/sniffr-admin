@@ -319,6 +319,9 @@
 
             onSubmit() {
                 if (this.$refs.form.validate()) {
+                    this.loading = true;
+                    this.loader = "loading";
+
                     let companyUpdateForm = new FormData();
                     companyUpdateForm.append('company_name', this.company.name);
                     companyUpdateForm.append('address_line1', this.company.address_line1);
@@ -335,17 +338,16 @@
                     this.$axios.$post('/client/profile/' + this.company.id, companyUpdateForm)
                         .then(response => {
                             if (response.success) {
-                                let toastOption = {
-                                    message: response.data.message,
+                                this.loading = false;
+                                this.loader = null;
+                                const toastOption = {
+                                    message: response.message,
                                     duration: 3000,
                                     color: "success",
                                     horizontalAlign: "right"
                                 };
                                 this.$store.commit('setToast', toastOption);
                             }
-
-                            this.loading = false;
-                            this.loader = null;
 
                         }).catch(error => {
 
