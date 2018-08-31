@@ -716,7 +716,7 @@ var help = (function () {
   global.add('help', function (editor, pluginUrl) {
     $_aex9i7bwjkmcwogq.register(editor, pluginUrl);
     $_rfsc8bejkmcwoeq.register(editor, pluginUrl);
-    editor.shortcuts.add('Alt+0', 'Open help dialogs', 'mceHelp');
+    editor.shortcuts.add('Alt+0', 'Open help dialog', 'mceHelp');
   });
   function Plugin () {
   }
