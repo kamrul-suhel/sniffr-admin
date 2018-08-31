@@ -211,7 +211,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Admin story in dialog box
+    | Admin story in dialogs box
     |--------------------------------------------------------------------------
     */
     Route::resource('quotes', 'Admin\AdminQuoteController');
@@ -318,7 +318,7 @@ Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('fronten
 
 /*
 |--------------------------------------------------------------------------
-| Frontend Search video/story dialog box, getting current video, next & previous link
+| Frontend Search video/story dialogs box, getting current video, next & previous link
 |--------------------------------------------------------------------------
 */
 

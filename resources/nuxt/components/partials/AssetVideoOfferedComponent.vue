@@ -25,7 +25,7 @@
                         </v-tooltip>
                     </div>
 
-                    <div class="cdi-label" v-if="decline">
+                    <div class="cdi-label" v-if="assetDeclined">
                         <v-tooltip top>
                             <v-btn
                                     slot="activator"
@@ -158,7 +158,7 @@
             <small>Don't like this offer?</small>
 
             <v-btn
-                    @click="dialog = true"
+                    @click="onContactUs()"
                     persistent
                     block
                     dark
@@ -170,34 +170,6 @@
             >
                 Contact Us
             </v-btn>
-
-            <v-dialog v-model="dialog" persistent max-width="500px">
-                <v-card>
-                    <v-card-title>
-                        <span class="headline">Contact Us</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container grid-list-md>
-                            <v-layout wrap>
-                                <v-flex xs12>
-                                    <v-textarea
-                                            label="Please tell us why this quote isn't good for you."
-                                            color="dark"
-                                            v-model="decline_note"
-                                            rows="10"
-                                            required
-                                    ></v-textarea>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel</v-btn>
-                        <v-btn dark @click="onDecline()">Send</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
         </v-flex>
 
         <v-flex xs12 class="my-2">
@@ -215,8 +187,6 @@
                 button_text: 'Download Video',
                 purchased: false,
                 decline: false,
-                decline_note: null,
-                dialog: false,
 
                 loader: null,
                 showButton: false,
@@ -224,7 +194,7 @@
                 loading: false,
                 acceptLoading: false,
                 declineLoading: false,
-                assetDeclined: false,
+                previouslyDecline: false,
 
                 expired: false,
 
@@ -251,8 +221,21 @@
 
         computed: {
             ...mapGetters({
-                settings: 'getSettingsObject'
-            })
+                settings: 'getSettingsObject',
+            }),
+
+            assetDeclined: {
+                get(){
+                    if(this.$store.getters.getConfirmDecline){
+                        if(this.$store.getters.getDeclineAsset.collection_video_id === this.video.collection_video_id
+                            && this.$store.getters.getDeclineType === 'video'){
+                            this.previouslyDecline = true;
+                            return true;
+                        }
+                    }
+                    return this.previouslyDecline;
+                }
+            }
         },
 
         created() {
@@ -312,21 +295,10 @@
                 });
             },
 
-            onDecline() {
-                let url = 'client/collections/reject_asset_price/' + this.video.collection_video_id + '/video';
-                this.declineLoading = true;
-
-                let form_data =  new FormData();
-                form_data.append('rejection_notes', this.decline_note);
-                this.$axios.$post(url, form_data).then((response) => {
-                    if (response.success === '1') {
-                        this.declineLoading = false;
-                        this.assetDeclined = true;
-                        this.decline = true;
-
-                        this.dialog = false;
-                    }
-                });
+            onContactUs(){
+                this.$store.commit('setDeclineType', 'video');
+                this.$store.commit('setDeclineAsset', this.video);
+                this.$store.commit('setDeclineDialogBox', true);
             },
 
             onVideoDialog() {

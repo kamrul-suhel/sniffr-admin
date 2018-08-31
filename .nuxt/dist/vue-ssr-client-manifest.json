@@ -1,24 +1,24 @@
 {
   "publicPath": "/_nuxt/",
   "all": [
-    "pages/upload/form/index.411be2eb6fbf6ff556d7.js",
+    "pages/upload/form/index.ddcdd9f3ad7c1cad602f.js",
     "fonts/JosefinSans-Bold.9880fc0.ttf",
     "img/sample_bg.a6258d5.jpg",
     "img/default.3124909.jpg",
     "fonts/JosefinSans-Regular.aff001b.ttf",
     "img/logo-sniffr-white.c9a789e.png",
-    "layouts/default.f359ba3531b8325804d5.js",
+    "layouts/default.463d2e205e2b9bcfc435.js",
     "pages/stories/index.cf33eb26db4a8f331acb.js",
     "pages/videos/_alpha_id/index.0daef5b46e75f73a115e.js",
     "pages/client/video/_alpha_id/index.451925214b4fa22767f4.js",
     "pages/videos/index.b3d60d181a0cb4573e24.js",
     "pages/stories/_alpha_id/index.f47b59f2271e2a4a683a.js",
-    "pages/client/purchased/index.b8c57c4b3e8df00e2876.js",
-    "pages/client/offered/index.a53cdc93915f5b57a6c2.js",
+    "pages/client/purchased/index.65f8d19fd8298f7c6253.js",
+    "pages/client/offered/index.1b7a58c59b7df4258d0e.js",
     "pages/client/stories/_alpha_id/index.ae5ba06805c6ebe76311.js",
     "pages/index.8fc1ea1ee8f9eae998da.js",
-    "pages/submission/form/index.75e8c36bf07f4f61cef2.js",
-    "pages/upload/index.b6b5cea0d6b324c0a202.js",
+    "pages/submission/form/index.e6414c09ec525568d080.js",
+    "pages/upload/index.06e98adb0a439b30f3a4.js",
     "img/hamster_wheel.6a8569e.gif",
     "pages/details/_code/index.dab680c101223677e8bc.js",
     "pages/login/index.ff6240575f0d887a5351.js",
@@ -33,30 +33,30 @@
     "pages/client.f9b7d19a89818e3ae923.js",
     "layouts/iframeForm.b032c09458d54c00738e.js",
     "vendor.4bcb2d336d2b53f1c283.js",
-    "app.4ac82dc83e4d5c2bc07e.js",
-    "manifest.fcffe44a2b5264ebf3e2.js",
+    "app.e8bd6a1573753c564c13.js",
+    "manifest.14889a0c3cd3f63139ad.js",
     "LICENSES",
     "index.spa.html"
   ],
   "initial": [
-    "manifest.fcffe44a2b5264ebf3e2.js",
+    "manifest.14889a0c3cd3f63139ad.js",
     "vendor.4bcb2d336d2b53f1c283.js",
-    "app.4ac82dc83e4d5c2bc07e.js"
+    "app.e8bd6a1573753c564c13.js"
   ],
   "async": [
-    "pages/upload/form/index.411be2eb6fbf6ff556d7.js",
-    "layouts/default.f359ba3531b8325804d5.js",
+    "pages/upload/form/index.ddcdd9f3ad7c1cad602f.js",
+    "layouts/default.463d2e205e2b9bcfc435.js",
     "pages/stories/index.cf33eb26db4a8f331acb.js",
     "pages/videos/_alpha_id/index.0daef5b46e75f73a115e.js",
     "pages/client/video/_alpha_id/index.451925214b4fa22767f4.js",
     "pages/videos/index.b3d60d181a0cb4573e24.js",
     "pages/stories/_alpha_id/index.f47b59f2271e2a4a683a.js",
-    "pages/client/purchased/index.b8c57c4b3e8df00e2876.js",
-    "pages/client/offered/index.a53cdc93915f5b57a6c2.js",
+    "pages/client/purchased/index.65f8d19fd8298f7c6253.js",
+    "pages/client/offered/index.1b7a58c59b7df4258d0e.js",
     "pages/client/stories/_alpha_id/index.ae5ba06805c6ebe76311.js",
     "pages/index.8fc1ea1ee8f9eae998da.js",
-    "pages/submission/form/index.75e8c36bf07f4f61cef2.js",
-    "pages/upload/index.b6b5cea0d6b324c0a202.js",
+    "pages/submission/form/index.e6414c09ec525568d080.js",
+    "pages/upload/index.06e98adb0a439b30f3a4.js",
     "pages/details/_code/index.dab680c101223677e8bc.js",
     "pages/login/index.ff6240575f0d887a5351.js",
     "pages/contract/_token/accept/index.b6e16ccfcdd428fbcd4f.js",
@@ -91,6 +91,10 @@
     ],
     "36161696": [
       31
+    ],
+    "37365078": [
+      6,
+      5
     ],
     "49476600": [
       6,
@@ -207,6 +211,10 @@
     ],
     "307d6a62": [
       31
+    ],
+    "1edb9db8": [
+      6,
+      5
     ],
     "09cf2d15": [
       31
@@ -434,6 +442,10 @@
     ],
     "0ef5fc69": [
       28
+    ],
+    "fa0b878c": [
+      6,
+      5
     ],
     "6ee03584": [
       31
@@ -1219,6 +1231,13 @@
     ],
     "b14797d6": [
       31
+    ],
+    "842bd1e2": [
+      32,
+      1,
+      2,
+      3,
+      4
     ],
     "01378bd0": [
       7
@@ -2310,9 +2329,6 @@
     "7a65e40a": [
       31
     ],
-    "629e580d": [
-      31
-    ],
     "ee90ef7e": [
       22
     ],
@@ -2326,6 +2342,9 @@
     "04e9aaad": [
       6,
       5
+    ],
+    "629e580d": [
+      31
     ],
     "2f9f4ac6": [
       6,

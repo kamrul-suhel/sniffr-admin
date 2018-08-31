@@ -188,8 +188,8 @@ $(document).ready(function(){
             $('.modal .modal-content').css('background-repeat', 'no-repeat');
             $('.modal .modal-content').css('background-position', '50% 50%');
             $('.modal .modal-content').css('background-image', 'url('+url+')');
-            $('.modal .modal-dialog').css('margin-top', '5%');
-            $('.modal .modal-dialog').css('width', '50%');
+            $('.modal .modal-dialogs').css('margin-top', '5%');
+            $('.modal .modal-dialogs').css('width', '50%');
             $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
             $('#story_asset_modal_set_featured').val(url);
         }
@@ -231,7 +231,7 @@ $(document).ready(function(){
             $('#sourceModal').modal('show')
             $("#sourceFrame").attr('src', $(this).attr("href"));
             $('.modal .modal-content').css('overflow-y', 'auto');
-            $('.modal .modal-dialog').css('width', '70%');
+            $('.modal .modal-dialogs').css('width', '70%');
             $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
             $('#sourceFrame').css('height', $(window).height() * 0.7+'px');
         }

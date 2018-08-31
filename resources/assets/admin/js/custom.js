@@ -1470,7 +1470,7 @@ var public_vars = public_vars || {};
 		{
 			if( $(ev.target).is('.modal') )
 			{
-				var $modal_dialog = $(this).find('.modal-dialog .modal-content'),
+				var $modal_dialog = $(this).find('.modal-dialogs .modal-content'),
 					tt = new TimelineMax({paused: true});
 
 				tt.append( TweenMax.to($modal_dialog, .1, {css: {scale: 1.1}, ease: Expo.easeInOut}) );
