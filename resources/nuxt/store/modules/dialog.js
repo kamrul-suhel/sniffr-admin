@@ -21,6 +21,9 @@ const mutations = {
     setThankYouMessage(state, value){
         state.thankYouMessage = value;
     },
+
+
+
 }
 
 const getters = {
@@ -38,7 +41,9 @@ const getters = {
 
     getThankYouMessage(state){
         return state.thankYouMessage;
-    }
+    },
+
+
 }
 
 const actions = {

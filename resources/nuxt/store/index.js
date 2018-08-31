@@ -7,6 +7,7 @@ import BuyQuote from './modules/buyquote'
 import Dialog from './modules/dialog'
 import Page from './modules/page'
 import ClientAccount from './modules/clientAccount'
+import Decline from './modules/decline'
 import Toast from './modules/toast'
 
 const createStore = () => {
@@ -26,7 +27,8 @@ const createStore = () => {
             BuyQuote,
             Dialog,
             Page,
-            ClientAccount
+            ClientAccount,
+            Decline
         }
     })
 }

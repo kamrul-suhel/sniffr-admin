@@ -69,7 +69,7 @@ const getters = {
 
 
     /**
-     * Video dialog box property
+     * Video dialogs box property
       */
     getEnterStateUrl(state) {
         return state.previewRouteObject.fullPath;
@@ -171,7 +171,7 @@ const mutations = {
     },
 
     /**
-     * Video dialog box setter
+     * Video dialogs box setter
      */
 
     setVideoDialogBox(state, value){
@@ -382,7 +382,7 @@ const actions = {
     },
 
     /**
-     * Video dialog box action
+     * Video dialogs box action
      */
 
     getVideoNextAndPrevLink({commit, state}, payload) {

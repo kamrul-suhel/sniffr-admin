@@ -129,7 +129,7 @@
         <login-component></login-component>
         <!-- End login component -->
 
-        <!-- Password reset dialog box -->
+        <!-- Password reset dialogs box -->
         <forgot-password-component></forgot-password-component>
         <!-- End password reset -->
 
