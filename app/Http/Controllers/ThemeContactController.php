@@ -24,7 +24,7 @@ class ThemeContactController extends Controller
             }
             return $this->errorResponse("Sorry, we cannot find the email associated with your account. Please contact <u>licensing@unilad.co.uk</u>");
         }
-        return view('frontend.master');
+        return $this->getFrontendServerResponse($request);
     }
 
     public function edit(Request $request)

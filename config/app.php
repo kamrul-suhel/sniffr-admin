@@ -96,7 +96,7 @@ return [
 		App\Providers\RouteServiceProvider::class,
 		App\Providers\GoogleDriveServiceProvider::class,
 		Chumper\Zipper\ZipperServiceProvider::class,
-		Barryvdh\Debugbar\ServiceProvider::class
+//		Barryvdh\Debugbar\ServiceProvider::class
 	],
 
 	/*
@@ -158,7 +158,7 @@ return [
 		'Zipper' => Chumper\Zipper\Zipper::class,
 		'Goutte' => Weidner\Goutte\GoutteFacade::class,
 		'RedditAPI' => CodeWizz\RedditAPI\RedditAPIFacade::class,
-		'Debugbar' => Barryvdh\Debugbar\Facade::class
+//		'Debugbar' => Barryvdh\Debugbar\Facade::class
 	],
 
 ];

@@ -12,13 +12,16 @@
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
-    Route::get('/', 'HomeController@index')->name('home');
 
-    Route::get('videos', 'Frontend\VideoController@index')->name('videos_index');
+	Route::get(
+		'/',
+		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
+	)->where('/', '/');
+
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
     Route::post('upload', 'Frontend\VideoController@store')->name('videos_store');
-    Route::get('upload', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
+    Route::get('upload_video', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
     // TODO: remove this form route
     Route::get('upload/form', 'Frontend\VideoController@form')->name('videos_upload_form');
     Route::post('issue', 'Frontend\VideoController@issueAlert');
@@ -295,7 +298,11 @@ Route::post('client/collections/cancel_collection', 'CollectionController@cancel
 |--------------------------------------------------------------------------
 */
 
-Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+//Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+Route::get('videos',
+	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
+	->where('videos', 'videos')
+	->name('videos_index');
 Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
 
 
@@ -341,3 +348,5 @@ Route::group(array('prefix' => 'api/v1'), function () {
     Route::get('video_categories', 'Api\v1\VideoController@video_categories');
     Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
 });
+
+Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);

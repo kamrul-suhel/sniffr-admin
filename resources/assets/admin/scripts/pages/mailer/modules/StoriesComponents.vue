@@ -110,11 +110,15 @@
 
                 url += '&mailer=true';
 
-                this.$store.dispatch('getMailerStories', url)
-                    .then(() => {
-                        this.stories = this.$store.getters.getStories;
-                        this.totalPage = this.stories.last_page;
-                    });
+                axios.post(url)
+                    .then(response => {
+                        this.$store.commit('setStories', response.data.stories);
+                        this.totalPage = response.data.stories.last_page;
+                        this.stories = response.data.stories;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             },
 
             getQueryObject(){

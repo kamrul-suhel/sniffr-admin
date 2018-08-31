@@ -26,7 +26,7 @@ class StoryController extends Controller
      */
     public function index(Request $request)
     {
-        return view('frontend.master');
+        return $this->getFrontendServerResponse($request);
     }
 
     public function requestQuote(Request $request){
@@ -40,6 +40,7 @@ class StoryController extends Controller
      */
     public function show(Request $request, string $alpha_id)
     {
+
         $isJson = $request->ajax() || $request->isJson();
         if ($isJson) {
             $story = $this->story
@@ -66,6 +67,7 @@ class StoryController extends Controller
 
             return $this->successResponse($data);
         }
-        return view('frontend.master');
+
+        return $this->getFrontendServerResponse($request);
     }
 }

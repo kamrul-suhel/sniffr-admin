@@ -47,9 +47,6 @@
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
     import {PlyrVideo} from './player/videoPlayer'
-    import '../../scss/vendor/video-plyr.css';
-
-    import { mapGetters } from 'vuex';
 
     export default {
         components: {
@@ -59,7 +56,7 @@
 
         data() {
             return {
-                defaultImage: '/assets/images/placeholder.png',
+                defaultImage: '~/assets/images/placeholder.png',
 
                 showVideo: false,
 
