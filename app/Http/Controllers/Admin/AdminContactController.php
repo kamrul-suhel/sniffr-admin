@@ -166,6 +166,12 @@ class AdminContactController extends Controller
 		} else {
 			$contact->blacklist_created_at = null;
 		}
+		$contact->whitelist = $request->input('whitelist') == 'on' ? 1 : 0;
+		if(request()->has('whitelist')) {
+			$contact->whitelist_created_at = now();
+		} else {
+			$contact->whitelist_created_at = null;
+		}
         $contact->save();
 
 		if ($isJson) {

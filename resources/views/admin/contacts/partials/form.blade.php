@@ -169,6 +169,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-sm-6">
+                <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel-heading">
+                        <div class="panel-title">Whitelist</div>
+                        <div class="panel-options"></div>
+                    </div>
+                    <div class="panel-body" style="display: block;">
+                        <label>Whitelist</label>
+                        <input type="checkbox" id="whitelist"
+                               name="whitelist"
+                                {{ ((($contact) && ($contact->whitelist)) || (!$contact))
+                                ? 'checked="checked" value=1'
+                                : '' }} />
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row">

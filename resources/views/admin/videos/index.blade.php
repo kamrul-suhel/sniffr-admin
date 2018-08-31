@@ -142,9 +142,13 @@
 							<p>
 								{{ $video->description }}
 								<a target="_blank" href="{{ route('contacts.edit', ['id' => $video->contact->id]) }}">Contact: {{ $video->contact->full_name }} ({{ $video->contact->email }}) <i class="fa fa-external-link"></i>
-								<br>
 									@if($video->contact->blacklist)
+										<br>
 										<small style="color: red;"><i class="fa fa-flag"></i> {{ Carbon\carbon::parse($video->contact->blacklist_created_at)->diffForHumans() }}</small>
+									@endif
+									@if($video->contact->whitelist)
+										<br>
+										<small style="color: green;"><i class="fa fa-flag"></i> {{ Carbon\carbon::parse($video->contact->whitelist_created_at)->diffForHumans() }}</small>
 									@endif
 								</a>
 							</p>

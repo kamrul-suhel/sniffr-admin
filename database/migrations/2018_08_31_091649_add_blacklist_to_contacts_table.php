@@ -16,7 +16,11 @@ class AddBlacklistToContactsTable extends Migration
         Schema::table('contacts', function (Blueprint $table) {
             $table->tinyInteger('blacklist')->after('other')->default(0);
             $table->timestamp('blacklist_created_at')->after('blacklist')->nullable();
-        });
+
+			$table->tinyInteger('whitelist')->after('other')->default(0);
+			$table->timestamp('whitelist_created_at')->after('whitelist')->nullable();
+
+		});
     }
 
     /**
@@ -29,6 +33,9 @@ class AddBlacklistToContactsTable extends Migration
         Schema::table('contacts', function (Blueprint $table) {
             $table->dropColumn('blacklist');
             $table->dropColumn('blacklist_created_at');
+
+			$table->dropColumn('whitelist');
+			$table->dropColumn('whitelist_created_at');
         });
     }
 }
