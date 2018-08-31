@@ -435,7 +435,7 @@
             onRedirectHome() {
                 this.submit_success_dialog = false;
                 setTimeout(() => {
-                    this.$router.push({name: 'home'});
+                    this.$router.push({path: '/'});
                 }, 700);
 
             }

@@ -7,7 +7,7 @@
     "img/default.3124909.jpg",
     "fonts/JosefinSans-Regular.aff001b.ttf",
     "img/logo-sniffr-white.c9a789e.png",
-    "layouts/default.0ab8329785a3c51a4b18.js",
+    "layouts/default.f359ba3531b8325804d5.js",
     "pages/stories/index.cf33eb26db4a8f331acb.js",
     "pages/videos/_alpha_id/index.0daef5b46e75f73a115e.js",
     "pages/client/video/_alpha_id/index.451925214b4fa22767f4.js",
@@ -16,14 +16,14 @@
     "pages/client/purchased/index.b8c57c4b3e8df00e2876.js",
     "pages/client/offered/index.a53cdc93915f5b57a6c2.js",
     "pages/client/stories/_alpha_id/index.ae5ba06805c6ebe76311.js",
-    "pages/index.d0d579e7b0644b4328db.js",
+    "pages/index.8fc1ea1ee8f9eae998da.js",
     "pages/submission/form/index.75e8c36bf07f4f61cef2.js",
-    "pages/upload_videos/index.06785d5af04c51f782d6.js",
+    "pages/upload/index.b6b5cea0d6b324c0a202.js",
     "img/hamster_wheel.6a8569e.gif",
-    "pages/details/_code/index.e232a590943feb9320e6.js",
+    "pages/details/_code/index.dab680c101223677e8bc.js",
     "pages/login/index.ff6240575f0d887a5351.js",
     "pages/contract/_token/accept/index.b6e16ccfcdd428fbcd4f.js",
-    "pages/client/profile/index.75dadb1ce5c6f5d1312a.js",
+    "pages/client/profile/index.6b454f0c01ed5614043b.js",
     "pages/unsubscribe/_email/index.bfb2797c3032146542e7.js",
     "pages/terms/index.c7aad3cb7b576f53381a.js",
     "pages/password/set/_token/_email/index.11bc20bf1f06bd02b765.js",
@@ -33,19 +33,19 @@
     "pages/client.f9b7d19a89818e3ae923.js",
     "layouts/iframeForm.b032c09458d54c00738e.js",
     "vendor.4bcb2d336d2b53f1c283.js",
-    "app.fa8f203d47e793f00a18.js",
-    "manifest.9426c285ddbe289c9221.js",
+    "app.4ac82dc83e4d5c2bc07e.js",
+    "manifest.fcffe44a2b5264ebf3e2.js",
     "LICENSES",
     "index.spa.html"
   ],
   "initial": [
-    "manifest.9426c285ddbe289c9221.js",
+    "manifest.fcffe44a2b5264ebf3e2.js",
     "vendor.4bcb2d336d2b53f1c283.js",
-    "app.fa8f203d47e793f00a18.js"
+    "app.4ac82dc83e4d5c2bc07e.js"
   ],
   "async": [
     "pages/upload/form/index.411be2eb6fbf6ff556d7.js",
-    "layouts/default.0ab8329785a3c51a4b18.js",
+    "layouts/default.f359ba3531b8325804d5.js",
     "pages/stories/index.cf33eb26db4a8f331acb.js",
     "pages/videos/_alpha_id/index.0daef5b46e75f73a115e.js",
     "pages/client/video/_alpha_id/index.451925214b4fa22767f4.js",
@@ -54,13 +54,13 @@
     "pages/client/purchased/index.b8c57c4b3e8df00e2876.js",
     "pages/client/offered/index.a53cdc93915f5b57a6c2.js",
     "pages/client/stories/_alpha_id/index.ae5ba06805c6ebe76311.js",
-    "pages/index.d0d579e7b0644b4328db.js",
+    "pages/index.8fc1ea1ee8f9eae998da.js",
     "pages/submission/form/index.75e8c36bf07f4f61cef2.js",
-    "pages/upload_videos/index.06785d5af04c51f782d6.js",
-    "pages/details/_code/index.e232a590943feb9320e6.js",
+    "pages/upload/index.b6b5cea0d6b324c0a202.js",
+    "pages/details/_code/index.dab680c101223677e8bc.js",
     "pages/login/index.ff6240575f0d887a5351.js",
     "pages/contract/_token/accept/index.b6e16ccfcdd428fbcd4f.js",
-    "pages/client/profile/index.75dadb1ce5c6f5d1312a.js",
+    "pages/client/profile/index.6b454f0c01ed5614043b.js",
     "pages/unsubscribe/_email/index.bfb2797c3032146542e7.js",
     "pages/terms/index.c7aad3cb7b576f53381a.js",
     "pages/password/set/_token/_email/index.11bc20bf1f06bd02b765.js",
@@ -132,6 +132,10 @@
     ],
     "c99f8224": [
       31
+    ],
+    "025c70de": [
+      17,
+      18
     ],
     "22fdabde": [
       31
@@ -386,10 +390,6 @@
     ],
     "ec560e82": [
       31
-    ],
-    "0ec96e5d": [
-      17,
-      18
     ],
     "4d9a1226": [
       31
@@ -651,10 +651,6 @@
     ],
     "134ba1aa": [
       31
-    ],
-    "3b383993": [
-      17,
-      18
     ],
     "0b940680": [
       31
@@ -1292,6 +1288,10 @@
     "266888cc": [
       31
     ],
+    "a727690c": [
+      17,
+      18
+    ],
     "1e2d2ea2": [
       31
     ],
@@ -1648,10 +1648,6 @@
     ],
     "6ff71544": [
       31
-    ],
-    "436174a1": [
-      17,
-      18
     ],
     "58ecc839": [
       21
@@ -2022,6 +2018,10 @@
     "a6b438f8": [
       31
     ],
+    "d35ef420": [
+      17,
+      18
+    ],
     "13f49bee": [
       31
     ],
@@ -2310,6 +2310,9 @@
     "7a65e40a": [
       31
     ],
+    "629e580d": [
+      31
+    ],
     "ee90ef7e": [
       22
     ],
@@ -2327,9 +2330,6 @@
     "2f9f4ac6": [
       6,
       5
-    ],
-    "629e580d": [
-      31
     ]
   }
 }
