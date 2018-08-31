@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
 /**
  * @property int $id
@@ -12,8 +13,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed $videos
  * @mixin \Eloquent
  */
-class Tag extends Model
+class Tag extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
+
+	use Auditable;
+
     protected $guarded = [];
     public static $rules = [];
 

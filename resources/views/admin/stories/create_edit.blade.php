@@ -82,7 +82,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-4"> <!-- second column -->
 			<div class="row">
 				<div class="col-sm-12">
@@ -158,6 +158,12 @@
 								<comments-component :asset="{{ json_encode($asset) }}" asset-type="story"></comments-component>
 							</div>
 						</div>
+
+                        @if(auth()->user()->role === 'admin')
+                            <div class="col-lg-12">
+                                @include('admin.videos.partials.log')
+                            </div>
+                        @endif
 
 						@if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
 						<div class="panel panel-primary" data-collapsed="0">

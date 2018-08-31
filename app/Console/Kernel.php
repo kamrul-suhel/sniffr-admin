@@ -17,8 +17,8 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\AutomateEmailReminders',
         '\App\Console\Commands\AutomateBumps',
         '\App\Console\Commands\AutomateArchive',
-        '\App\Console\Commands\AutomateDeleteRejected'
-    ];
+        '\App\Console\Commands\AutomateDeleteRejected',
+	];
 
     /**
      * Define the application's command schedule.

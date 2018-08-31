@@ -5,10 +5,11 @@ namespace App;
 use App\Jobs\Quotes\QueueEmailPendingQuote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
-class CollectionQuote extends Model
+class CollectionQuote extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     protected $table = 'collection_quotes';
 

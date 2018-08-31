@@ -85,6 +85,7 @@ return [
 		ComoCode\LaravelAb\LaravelAbServiceProvider::class,
 		Weidner\Goutte\GoutteServiceProvider::class,
 		CodeWizz\RedditAPI\RedditAPIServiceProvider::class,
+		OwenIt\Auditing\AuditingServiceProvider::class,
 
 		/*
 		 * Application Service Providers...

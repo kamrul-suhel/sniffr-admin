@@ -197,6 +197,10 @@
                             <comments-component :asset="{{ json_encode($asset) }}" asset-type="video"></comments-component>
                         </div>
                     </div>
+
+                    @if(auth()->user()->role === 'admin')
+                        @include('admin.videos.partials.log')
+                    @endif
                 @endif
             </div>
         </div>

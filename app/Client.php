@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Auditable;
 
 /**
  * App\Client
@@ -28,9 +29,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static Builder|Client whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Client extends Model
+class Client extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use Notifiable, SoftDeletes, Slug;
+    use Notifiable, SoftDeletes, Slug, Auditable;
 
     protected $guarded = [];
     public static $rules = [];
@@ -108,6 +109,9 @@ class Client extends Model
 
     }
 
+	/**
+	 * @return Builder|\Illuminate\Database\Eloquent\Relations\HasMany
+	 */
     public function activeLicences()
     {
         $collections = $this->collections()
