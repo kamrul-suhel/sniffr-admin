@@ -61,6 +61,7 @@
                                         open-on-hover
                                         offset-y
                                         v-else
+                                        content-class="navigation-dropdown"
                                         min-width="140px">
                                     <a slot="activator">
                                         <v-icon color="white">face</v-icon>

@@ -10,7 +10,7 @@
                         name="value"
                         v-model="value"
                         color="dark"
-                        label="Search"
+                        label="Search by title"
                         append-icon="search"
                         aria-describedby="filterhelp"
                         @change="onSearchActive"

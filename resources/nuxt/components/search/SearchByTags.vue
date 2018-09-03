@@ -4,20 +4,6 @@
             <h3>Search by tags</h3>
         </v-card-title>
         <v-card-text class="search-content">
-            <div class="form-group">
-                <v-text-field
-                        type="text"
-                        name="value"
-                        v-model="value"
-                        color="dark"
-                        label="Search"
-                        append-icon="search"
-                        aria-describedby="filterhelp"
-                        @change="onSearchActive"
-                        @keyup.enter="onSearchActive"
-                        autocomplete="off">
-                </v-text-field>
-            </div>
         </v-card-text>
     </v-card>
 </template>
