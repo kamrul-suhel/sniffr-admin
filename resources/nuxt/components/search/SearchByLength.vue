@@ -1,10 +1,10 @@
 <template>
     <div class="videos-filter-form mt-4">
         <v-card>
-            <v-card-title class="pb-0">
-                <h3>Search</h3>
+            <v-card-title class="search-title">
+                <h3>Search by video length</h3>
             </v-card-title>
-            <v-card-text class="pt-0">
+            <v-card-text class="search-content">
                 <div class="form-group">
                     <v-text-field
                             type="text"

@@ -1,9 +1,9 @@
 <template>
     <v-card>
-        <v-card-title class="pb-0">
+        <v-card-title class="pb-0 search-title">
             <h3>Search</h3>
         </v-card-title>
-        <v-card-text class="pt-0">
+        <v-card-text class="pt-0 search-content">
             <div class="form-group">
                 <v-text-field
                         type="text"

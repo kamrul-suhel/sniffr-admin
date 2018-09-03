@@ -1,17 +1,26 @@
 <template>
-    <section class="search-filter-section">
+    <section class="search-filter-section mr-2">
         <search-by-title-description @searchOption="searchOption($event)"/>
         <search-by-length/>
+        <search-by-tags/>
+        <search-by-location/>
+        <sort-by/>
     </section>
 </template>
 <script>
     import SearchByTitleDescription from './SearchByTItleDescription'
     import SearchByLength from './SearchByLength'
+    import SearchByTags from './SearchByTags'
+    import SearchByLocation from './SearchByLocation'
+    import SortBy from './SortBy'
     export default {
 
         components: {
             SearchByLength,
-            SearchByTitleDescription
+            SearchByTitleDescription,
+            SearchByTags,
+            SearchByLocation,
+            SortBy
         },
 
         data() {

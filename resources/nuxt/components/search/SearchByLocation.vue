@@ -1,7 +1,7 @@
 <template>
     <v-card class="mt-4">
         <v-card-title class="search-title">
-            <h3>Search by tags</h3>
+            <h3>Sort by location</h3>
         </v-card-title>
         <v-card-text class="search-content">
             <div class="form-group">
