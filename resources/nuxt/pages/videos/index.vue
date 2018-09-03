@@ -3,30 +3,6 @@
     <div class="videos-section s-pagination-goto">
         <!-- VIDEOS ITEM SECTION -->
         <section class="videos-section section-space">
-            <v-container grid-list-lg
-                         class="pt-0 pb-5"
-                         v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
-                <v-layout row wrap>
-                    <v-flex xs12 class="text-center">
-                        <h2 class="text-uppercase">Your Suggested Videos</h2>
-                        <p class="mb-0 ">We've gone ahead and procured a list of videos we think you will love!</p>
-                    </v-flex>
-
-                    <v-flex xs12>
-                        <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
-                            <video-loop-component
-                                    v-for="(mailer, index) in mailerVideos"
-                                    :video="mailer"
-                                    :key="mailer.alpha_id"
-                                    :type="'suggest'"
-                                    :index="index"
-                                    :width="'350px'"
-                            ></video-loop-component>
-                        </v-layout>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-
             <v-container grid-list-lg class="py-0">
                 <v-layout row wrap>
                     <v-flex xs12 class="mb-0 pt-0">
@@ -35,17 +11,46 @@
                 </v-layout>
             </v-container>
 
-            <search-component @searchOption="searchOption($event)"></search-component>
-
-            <v-container grid-list-lg class="py-0">
+            <v-container grid-list-lg>
                 <v-layout row wrap>
-                    <video-loop-component
-                            v-for="(video, index) in videos"
-                            :video="video"
-                            :key="video.id"
-                    ></video-loop-component>
-                </v-layout>
+                    <v-flex xs12 md3>
+                        <search-component/>
+                    </v-flex>
 
+                    <v-flex xs12 md9>
+                            <v-layout row wrap v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
+                                <v-flex xs12 class="text-center">
+                                    <h2 class="text-uppercase">Your Suggested Videos</h2>
+                                    <p class="mb-0 ">We've gone ahead and procured a list of videos we think you will love!</p>
+                                </v-flex>
+
+                                <v-flex xs12>
+                                    <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
+                                        <video-loop-component
+                                                v-for="(mailer, index) in mailerVideos"
+                                                :video="mailer"
+                                                :key="mailer.alpha_id"
+                                                :type="'suggest'"
+                                                :index="index"
+                                                :width="'350px'"
+                                        ></video-loop-component>
+                                    </v-layout>
+                                </v-flex>
+                            </v-layout>
+
+
+
+                            <v-layout row wrap>
+                                <video-loop-component
+                                        v-for="(video, index) in videos"
+                                        :video="video"
+                                        :key="video.id"
+                                ></video-loop-component>
+                            </v-layout>
+
+
+                    </v-flex>
+                </v-layout>
             </v-container>
         </section>
 
@@ -59,7 +64,7 @@
 </template>
 
 <script>
-    import SearchComponent from '@/components/includes/SearchComponent';
+    import SearchComponent from '@/components/search/index';
     import VideoLoopComponent from '@/components/includes/VideoLoopComponent';
     import PaginationComponent from '@/components/includes/PaginationComponent';
 
