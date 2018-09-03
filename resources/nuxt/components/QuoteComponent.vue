@@ -402,7 +402,6 @@
             },
 
             cancelCollection() {
-                this.loading = true;
                 let form_data = new FormData();
                 form_data.append('collection_id', this.collection.collection_id);
                 // submit data with ajax request
