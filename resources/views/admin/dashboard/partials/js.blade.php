@@ -34,7 +34,7 @@
             "data": {
                 "labels": [
                     @foreach($allVideosStateTotalTotals as $key => $date)
-                    <?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
+					<?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
                     @endforeach
                 ],
                 "datasets": [
@@ -46,7 +46,7 @@
                             @if(array_search('new' , array_column($newDates, 'state')))
                             {{ $newDates[array_search('new', array_column($newDates, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -62,7 +62,7 @@
                             @if(array_search('pending' , array_column($pendingDates, 'state')) !== false)
                             {{ $pendingDates[array_search('pending', array_column($pendingDates, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -78,7 +78,7 @@
                             @if(array_search('rejected' , array_column($rejectedDates, 'state')) !== false)
                             {{ $rejectedDates[array_search('rejected', array_column($rejectedDates, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -94,7 +94,7 @@
                             @if(array_search('restricted' , array_column($restrictedDates, 'state')) !== false)
                             {{ $restrictedDates[array_search('restricted', array_column($restrictedDates, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -110,7 +110,7 @@
                             @if(array_search('accepted' , array_column($acceptedDates, 'state')) !== false)
                             {{ $acceptedDates[array_search('accepted', array_column($acceptedDates, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -126,7 +126,7 @@
                             @if(array_search('licensed' , array_column($licensedDates, 'state')) !== false)
                             {{ $licensedDates[array_search('licensed', array_column($licensedDates, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -163,7 +163,7 @@
             "data": {
                 "labels": [
                     @foreach($allVideosStateTotalTotalsExc as $key => $date)
-                    <?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
+					<?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
                     @endforeach
                 ],
                 "datasets": [
@@ -174,7 +174,7 @@
                             @if(array_search('new' , array_column($newDate, 'state')) !== false)
                             {{ $newDate[array_search('new', array_column($newDate, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -189,7 +189,7 @@
                             @if(array_search('pending' , array_column($pendingDate, 'state')) !== false)
                             {{ $pendingDate[array_search('pending', array_column($pendingDate, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -204,7 +204,7 @@
                             @if(array_search('licensed' , array_column($licensedDate, 'state')) !== false)
                             {{ $licensedDate[array_search('licensed', array_column($licensedDate, 'state'))]->total }},
                             @else
-                            <?php echo "'0',";?>
+							<?php echo "'0',";?>
                             @endif
                             @endforeach
                         ],
@@ -233,31 +233,31 @@
             }
         });
 
-            <?php if(\Auth::user()->isAdmin()): ?>
+			<?php if(\Auth::user()->isAdmin()): ?>
         var ctx = $('#exc-licensed-breakdown');
         ctx.height(285);
         new Chart($("#exc-licensed-breakdown"), {
             "type": "bar",
             "data": {
                 "labels": [
-                    <?php foreach ($exc_contracts as $contract) {
-                    echo '"' . Carbon\Carbon::parse($contract[0]->signed_at)->format('jS M') . '",';
-                }?>
+					<?php foreach ($exc_contracts as $contract) {
+					echo '"' . Carbon\Carbon::parse($contract[0]->signed_at)->format('jS M') . '",';
+				}?>
                 ],
                 "datasets": [
-                        <?php foreach ($exc_contracts_users as $user): $userId = $user[0]->user_id; ?>
+						<?php foreach ($exc_contracts_users as $user): $userId = $user[0]->user_id; ?>
                     {
                         "label": '<?php echo \App\User::find($userId)->full_name; ?>',
                         "data": [
-                            <?php foreach ($exc_contracts as $contract) {
-                            echo count($contract->where('user_id', $userId)) . ',';
-                        }?>
+							<?php foreach ($exc_contracts as $contract) {
+							echo count($contract->where('user_id', $userId)) . ',';
+						}?>
                         ],
                         "fill": false,
                         "backgroundColor": "rgba(<?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, 0.2)",
                         "borderWidth": 1
                     },
-                    <?php endforeach; ?>
+					<?php endforeach; ?>
                 ]
             },
             "options": {
@@ -278,8 +278,52 @@
                 }
             }
         });
-        <?php endif; ?>
 
+        var ctx = $('#exc-licensed-breakdown-stories');
+        ctx.height(285);
+        new Chart($("#exc-licensed-breakdown-stories"), {
+            "type": "bar",
+            "data": {
+                "labels": [
+					<?php foreach ($exc_contracts_stories as $contract) {
+					echo '"' . Carbon\Carbon::parse($contract[0]->signed_at)->format('jS M') . '",';
+				}?>
+                ],
+                "datasets": [
+						<?php foreach ($exc_contracts_stories_users as $user): $userId = $user[0]->user_id; ?>
+                    {
+                        "label": '<?php echo \App\User::find($userId)->full_name; ?>',
+                        "data": [
+							<?php foreach ($exc_contracts_stories as $contract) {
+							echo count($contract->where('user_id', $userId)) . ',';
+						}?>
+                        ],
+                        "fill": false,
+                        "backgroundColor": "rgba(<?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, <?php echo mt_rand(0, 255); ?>, 0.2)",
+                        "borderWidth": 1
+                    },
+					<?php endforeach; ?>
+                ]
+            },
+            "options": {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true
+                },
+                "scales": {
+                    "xAxes": [{
+                        stacked: true
+                    }],
+                    "yAxes": [{
+                        stacked: true,
+                        "ticks": {
+                            "beginAtZero": true
+                        }
+                    }]
+                }
+            }
+        });
+		<?php endif; ?>
 
     })(jQuery);
 </script>

@@ -55,7 +55,7 @@ class AuthController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function login_form()
+    public function login_form(Request $request)
     {
         if (!Auth::guest()) {
             return Redirect::to('/');
@@ -70,7 +70,7 @@ class AuthController extends Controller
             'settings' => $settings
         ];
 
-        return view('frontend.master', $data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
@@ -152,9 +152,9 @@ class AuthController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function password_reset()
+    public function password_reset(Request $request)
     {
-        return view('frontend.pages.login.reset_password');
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
@@ -207,14 +207,12 @@ class AuthController extends Controller
      * @param $email
      * @return mixed
      */
-    public function setPassword($token, $email)
+    public function setPassword(Request $request)
     {
         Auth::logout();
         Session::flush();
 
-        return view('frontend.master')
-            ->with('token', $token)
-            ->with('email', $email);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
@@ -288,18 +286,12 @@ class AuthController extends Controller
      * @param $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function password_reset_token(Request $request, $token)
+    public function password_reset_token(Request $request)
     {
 
         Auth::logout();
         Session::flush();
-
-        $data = [
-            'token' => $token,
-            'theme_settings' => config('settings.theme'),
-        ];
-
-        return view('frontend.master', $data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Audit;
 use App\CollectionVideo;
 use App\Jobs\Quotes\QueueEmailExpiredQuote;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
@@ -37,21 +38,22 @@ use Carbon\Carbon as Carbon;
 
 class AdminVideosController extends Controller
 {
-	/**
-	 * @var VideoService
-	 */
-	private $videoService;
+    /**
+     * @var VideoService
+     */
+    private $videoService, $audit;
 
-	/**
-	 * AdminVideosController constructor.
-	 * @param Request $request
-	 * @param VideoService $videoService
-	 */
-	public function __construct(Request $request, VideoService $videoService)
-	{
-		$this->middleware('admin');
-		$this->videoService = $videoService;
-	}
+    /**
+     * AdminVideosController constructor.
+     * @param Request $request
+     * @param VideoService $videoService
+     */
+    public function __construct(Request $request, VideoService $videoService, Audit $audit)
+    {
+        $this->middleware('admin');
+        $this->videoService = $videoService;
+        $this->audit = $audit;
+    }
 
 	/**
 	 * @param Request $request
@@ -276,6 +278,7 @@ class AdminVideosController extends Controller
 		]);
 	}
 
+
 	/**
 	 * @param Request $request
 	 * @param string $id
@@ -306,6 +309,11 @@ class AdminVideosController extends Controller
 			->where('state', '=', $asset_state)
 			->orderBy('id', 'asc')->first();
 
+		$logs = $this->audit->where('auditable_id', $asset->id)
+			->where('auditable_type', 'App\Video')
+			->orderBy('created_at', 'desc')
+			->paginate(10);
+
 		$data = [
 			'headline' => '<i class="fa fa-edit"></i> Edit Video',
 			'asset' => $asset,
@@ -323,7 +331,8 @@ class AdminVideosController extends Controller
 			'video_shottypes' => VideoShotType::all(),
 			'users' => User::all(),
 			'creators' => Contact::orderBy('created_at', 'desc')->get(),
-			'activeLicenses' => $activeLicenses
+			'activeLicenses' => $activeLicenses,
+			'logs' => $logs
 		];
 
 		return view('admin.videos.create_edit', $data);
@@ -389,8 +398,8 @@ class AdminVideosController extends Controller
 		$video->duration = $this->getDuration($video, $duration);
 
 		$video->user_id = Auth::id();
-		$video->active = $request->input('active') ?: 0;
-		$video->featured = $request->input('featured') ?: 0;
+		$video->active = $request->input('active') ?: $video->active;
+		$video->featured = $request->input('featured') ?: $video->featured;
 		$video->class = $request->input('class') ?: null;
 		$video->video_collection_id = ($request->input('video_collection_id') ? $request->input('video_collection_id') : $video->video_collection_id);
 		$video->video_shottype_id = ($request->input('video_shottype_id') ? $request->input('video_shottype_id') : $video->video_shottype_id);
@@ -435,6 +444,7 @@ class AdminVideosController extends Controller
 
 		return response()->json($results);
 	}
+
 
 	/**
 	 * @param Request $request

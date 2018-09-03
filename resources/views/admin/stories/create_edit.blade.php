@@ -64,7 +64,7 @@
 						<div class="panel-body" style="display: block;">
 							<select name="type" id="type" class="form-control">
 								@foreach(config('stories.story_type') as $type)
-                                    <option value="{{ $type }}" {{ (isset($asset)  &&  $asset->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
+                        <option value="{{ $type }}" {{ (isset($asset)  &&  $asset->type==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
 								@endforeach
                             </select>
                         </div>
@@ -117,7 +117,6 @@
                                 <button class="btn btn-default add-video-button pull-right">Add Video Asset</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -169,6 +168,12 @@
                                                         asset-type="story"></comments-component>
                                 </div>
                             </div>
+
+                            @if(auth()->user()->role === 'admin')
+                                <div class="col-lg-12">
+                                    @include('admin.videos.partials.log')
+                                </div>
+                            @endif
 
                             @if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
                                 <div class="panel panel-primary" data-collapsed="0">

@@ -233,7 +233,7 @@ p {
   width:100%;
 }
 
-/* ************************* Thank you dialog box style ******************* */
+/* ************************* Thank you dialogs box style ******************* */
 
 .thank-you-dialog{
   display:none;
@@ -255,4 +255,11 @@ p {
 
 .application .client-story-detail-section .theme--dark.btn.btn--disabled:not(.btn--icon):not(.btn--flat)  {
   background-color: hsla(0,0%,0%,1)!important;
+}
+
+
+/* ************************* Client profile page style ******************* */
+
+.data-table{
+  font-family: JosefinSansregular;
 }
