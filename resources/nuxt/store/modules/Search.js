@@ -1,4 +1,6 @@
 const state = {
+    allTags: [],
+
     searchType: '',
     searchByTitle: '',
     searchByMiniLength: 0,
@@ -9,8 +11,13 @@ const state = {
 }
 
 const mutations = {
-    setSearchType() {
+    setAllTags(state, tags){
+        state.allTags = [];
+        state.allTags.push(...tags);
+    },
 
+    setSearchType(state, type) {
+        state.searchType = type;
     },
 
     setSearchByTitle(state, value) {
@@ -58,6 +65,8 @@ const mutations = {
     },
 
     resetSearchStoreObject(state) {
+        state.allTags = [];
+        state.searchType = '';
         state.searchByTitle = '';
         state.searchByMiniLength = 0;
         state.searchByMaxLength = 0;
@@ -68,6 +77,10 @@ const mutations = {
 }
 
 const getters = {
+    getSearchType(state){
+        return state.searchType;
+    },
+
     getSearchByTitle(state) {
         return state.searchByTitle;
     },

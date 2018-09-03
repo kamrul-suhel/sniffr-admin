@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
+use App\Traits\FrontendResponse;
 
 class ThemeTagController extends Controller
 {
+    use FrontendResponse;
     /**
      * @return mixed
      */
     public function index()
     {
-        $tags = Tag::latest()->get()->pluck('name')->toJson();
-
-        return response($tags, 200)
-            ->header('Access-Control-Allow-Origin', '*')
-            ->header('Content-Type', 'application/json');
+        $data = [
+            'tags' => Tag::latest()->get()->pluck('name','id')
+        ];
+        return $this->successResponse($data);
     }
 }
