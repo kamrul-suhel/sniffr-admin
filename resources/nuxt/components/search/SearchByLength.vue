@@ -1,19 +1,29 @@
 <template>
-    <div class="videos-filter-form mt-4">
+    <div class="videos-filter-form mt-4 length-search">
         <v-card>
             <v-card-title class="search-title">
                 <h3>Search by video length</h3>
             </v-card-title>
             <v-card-text class="search-content">
-                <v-select
-                        :items="minOptions"
-                        label="Min"
-                    ></v-select>
+                <v-layout row wrap>
+                    <v-flex d-flex>
+                        <v-select
+                                v-model="selectedMinSecond"
+                                color="dark"
+                                :items="minSeconds"
+                                label="Min"
+                        ></v-select>
+                    </v-flex>
 
-                <v-select
-                    :items="maxOptions"
-                    label="Max"
-                ></v-select>
+                    <v-flex d-flex>
+                        <v-select
+                                color="dark"
+                                v-model="selectedMaxSecond"
+                                :items="maxSeconds"
+                                label="Max"
+                        ></v-select>
+                    </v-flex>
+                </v-layout>
             </v-card-text>
         </v-card>
     </div>
@@ -23,7 +33,8 @@
     export default {
         data(){
             return {
-                minOptions: [
+                selectedMinSecond: {},
+                minSeconds: [
                     {
                         text: '10s',
                         value: 10
@@ -70,15 +81,13 @@
                     }
                 ],
 
-                maxOptions: this.minOptions,
-
-                defaultOption: []
+                maxSeconds: [],
+                selectedMaxSecond: {},
             }
         },
 
         created(){
-            this.defaultOption = this.options;
-            console.log(this.defaultOption)
+            this.maxSeconds = this.minSeconds;
         },
 
         methods: {

@@ -48,18 +48,16 @@
                                 ></video-loop-component>
                             </v-layout>
 
-
+                        <!-- Pagination -->
+                        <pagination-component
+                                v-if="paginate.last_page > 1"
+                                :pagination="paginate"
+                                :page="'video'"
+                        ></pagination-component>
                     </v-flex>
                 </v-layout>
             </v-container>
         </section>
-
-        <!-- Pagination -->
-        <pagination-component
-                v-if="paginate.last_page > 1"
-                :pagination="paginate"
-                :page="'video'"
-        ></pagination-component>
     </div>
 </template>
 
@@ -84,6 +82,7 @@
             return {
                 data: '',
                 logged_in: false,
+                lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`
             }
         },
 

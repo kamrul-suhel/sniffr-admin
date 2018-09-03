@@ -7,10 +7,11 @@
   }
 
   .v-card{
-    padding:24px;
+    padding:20px;
 
     .search-title{
       padding:0;
+      margin-bottom:20px;
     }
 
     .search-content{
@@ -60,5 +61,30 @@
     input{
       margin-bottom:0;
     }
+  }
+}
+
+.tag-search{
+
+}
+
+.search-content{
+  .v-input{
+    margin:0;
+  }
+
+  .v-input__slot{
+    margin:0;
+  }
+
+  .checkbox{
+    margin:0;
+
+    .v-input__slot{
+      margin:0;
+    }
+  }
+
+  .flex{
   }
 }

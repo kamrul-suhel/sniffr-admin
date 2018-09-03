@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card class="title-search">
         <v-card-title class="pb-0 search-title">
             <h3>Search</h3>
         </v-card-title>
@@ -26,7 +26,7 @@
     export default {
         data(){
             return {
-
+                value: ''
             }
         },
 
