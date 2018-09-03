@@ -8,9 +8,10 @@
                 <v-layout row wrap>
                     <v-flex d-flex>
                         <v-select
-                                v-model="selectedMinSecond"
+                                v-model="selectedMiniSecond"
                                 color="dark"
-                                :items="minSeconds"
+                                @change="onMiniSecondChange"
+                                :items="miniSeconds"
                                 label="Min"
                         ></v-select>
                     </v-flex>
@@ -20,6 +21,7 @@
                                 color="dark"
                                 v-model="selectedMaxSecond"
                                 :items="maxSeconds"
+                                @change="onMaxSecondChange"
                                 label="Max"
                         ></v-select>
                     </v-flex>
@@ -33,8 +35,8 @@
     export default {
         data(){
             return {
-                selectedMinSecond: {},
-                minSeconds: [
+                selectedMiniSecond: {},
+                miniSeconds: [
                     {
                         text: '10s',
                         value: 10
@@ -87,12 +89,18 @@
         },
 
         created(){
-            this.maxSeconds = this.minSeconds;
+            this.maxSeconds = this.miniSeconds;
         },
 
         methods: {
+            onMiniSecondChange(){
+                this.$store.commit('setSearchByMiniLength', this.selectedMiniSecond);
+            },
 
-        },
+            onMaxSecondChange(){
+                this.$store.commit('setSearchByMaxLength', this.selectedMaxSecond);
+            }
+        }
 
     }
 </script>

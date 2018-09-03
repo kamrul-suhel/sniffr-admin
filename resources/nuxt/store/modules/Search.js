@@ -1,7 +1,7 @@
 const state = {
     searchType: '',
     searchByTitle: '',
-    searchByMinLength: 0,
+    searchByMiniLength: 0,
     searchByMaxLength: 0,
     searchByTags: [],
     searchSortBy: '',
@@ -10,15 +10,15 @@ const state = {
 
 const mutations = {
     setSearchType() {
-            
+
     },
 
     setSearchByTitle(state, value) {
         state.searchByTitle = value;
     },
 
-    setSearchByMinLength(state, minValue) {
-        state.searchByMinLength = minValue;
+    setSearchByMiniLength(state, minValue) {
+        state.searchByMiniLength = minValue;
     },
 
     setSearchByMaxLength(state, maxValue) {
@@ -59,7 +59,7 @@ const mutations = {
 
     resetSearchStoreObject(state) {
         state.searchByTitle = '';
-        state.searchByMinLength = 0;
+        state.searchByMiniLength = 0;
         state.searchByMaxLength = 0;
         state.searchByTags = [];
         state.sortBy = '';
@@ -72,8 +72,8 @@ const getters = {
         return state.searchByTitle;
     },
 
-    getSearchByMinLength(state) {
-        return state.searchByMinLength;
+    getSearchByMiniLength(state) {
+        return state.searchByMiniLength;
     },
 
     getSearchByMaxLength(state) {
@@ -93,7 +93,19 @@ const getters = {
     }
 }
 
-const actions = {}
+const actions = {
+    fetchAllTags({commit, state}){
+        let url = '/tags';
+
+        this.$axios.$get(url)
+            .then( response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+}
 
 export default {
     state,
