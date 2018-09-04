@@ -90,7 +90,7 @@
 			@foreach($videos as $video)
 				@php
 					$order_column = $video->state == 'licensed' ? 'licensed_at' : 'created_at';
-					$date = \Carbon\Carbon::parse($video->{$order_column})->isToday() ? 'Today' : date('jS M',strtotime($video->{$order_column}))
+					$date = \Carbon\Carbon::parse($video->{$order_column})->isToday() ? 'Today' : date('D jS F Y',strtotime($video->{$order_column}))
 				@endphp
 				@if($currentDay != $date)
 					@php
@@ -139,8 +139,19 @@
 
 						<section class="album-info">
 							<h3><a href="{{ url('admin/videos/edit/'.$video->alpha_id) }}">{{ $video->title }}</a></h3>
-
-							<p>{{ $video->description }}</p>
+							<p>
+								{{ $video->description }}
+								<a target="_blank" href="{{ route('contacts.edit', ['id' => $video->contact->id]) }}">Contact: {{ $video->contact->full_name }} ({{ $video->contact->email }}) <i class="fa fa-external-link"></i>
+									@if($video->contact->blacklist)
+										<br>
+										<small style="color: red;"><i class="fa fa-flag"></i> {{ Carbon\carbon::parse($video->contact->blacklist_created_at)->diffForHumans() }}</small>
+									@endif
+									@if($video->contact->whitelist)
+										<br>
+										<small style="color: green;"><i class="fa fa-flag"></i> {{ Carbon\carbon::parse($video->contact->whitelist_created_at)->diffForHumans() }}</small>
+									@endif
+								</a>
+							</p>
 						</section>
 
 						<footer>

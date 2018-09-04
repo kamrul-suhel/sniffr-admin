@@ -92,7 +92,7 @@
 			@foreach($stories as $asset)
 
 				@php
-					$date = \Carbon\Carbon::parse($asset->updated_at)->isToday() ? 'Today' : date('jS M',strtotime($asset->updated_at));
+					$date = \Carbon\Carbon::parse($asset->created_at)->isToday() ? 'Today' : date('jS M',strtotime($asset->created_at));
 					$panelColour = ($asset->priority=='high' ? 'danger' : ($asset->priority=='medium' ? 'warning' : '')); //config('stories.colors'); $panelColour[$asset->state]
 				@endphp
 
@@ -115,7 +115,7 @@
 						<section class="album-info album-grey">
                             <div class="row padded-bottom">
                                 <div class="col-sm-12">
-                                    <h3><a href="{{ url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.$decision) }}" title="Edit Story on Sniffr">{{ $asset->title }}</a></h3>
+                                    <h3><a href="{{ url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.$decision.'&page='.request()->get('page')) }}" title="Edit Story on Sniffr">{{ $asset->title }}</a></h3>
                                     <p>
 										@if($asset->contact)
 											@if($asset->contact->email)
@@ -151,7 +151,7 @@
 											<span class="btn btn-mini-info"><i class="fa fa-address-book"></i> No Contact</span>
 										@endif
 
-										<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i></button>
+										<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i> ({{$asset->comments->count()}})</button>
 
 										@if($asset->source)
 										<a href="{{ $asset->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">

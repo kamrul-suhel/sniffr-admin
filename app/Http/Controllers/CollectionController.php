@@ -144,7 +144,6 @@ class CollectionController extends Controller
 
 	/**
 	 * Register new user, and email then set password email. Also create a new collection and link to that user
-	 * @param Request $request
 	 * @param $collection_id
 	 * @return mixed
 	 */

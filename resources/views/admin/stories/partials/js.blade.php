@@ -96,6 +96,10 @@ $(document).ready(function(){
                 state = 'approved';
                 alertType = 'success';
                 break;
+            case /purgatory/.test(myClass):
+                state = 'purgatory';
+                alertType = 'error';
+                break;
             case /rejected/.test(myClass):
                 state = 'rejected';
                 alertType = 'error';

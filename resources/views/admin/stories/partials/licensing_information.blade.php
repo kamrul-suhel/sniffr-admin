@@ -46,18 +46,6 @@
             <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
         </span>
 
-        <span class="form-group input-group">
-            <span class="input-group-addon">
-                Location
-            </span>
-
-            <input type="text" class="form-control placepicker" data-map-container-id="locationCollapse" name="location" id="location" value="@if(!empty($asset->location)){{ $asset->location }}@endif" />
-
-            <div id="locationCollapse" class="collapse">
-                <div class="placepicker-map thumbnail"></div>
-            </div>
-        </span>
-
         <!--span class="form-group input-group">
             <span class="input-group-addon">
                 Removed from Social for
@@ -83,25 +71,6 @@
             </select>
         </span>
 
-        <span class="form-group input-group">
-            <span class="input-group-addon">
-                Categorisation
-            </span>
-
-            <select name="category" id="category" class="form-control drop-5050">
-                <option value="">Select vertical</option>
-                @foreach($video_categories as $category)
-                <option value="{{ $category->id }}" {{ (isset($asset)  &&  $asset->story_category_id==$category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
-                @endforeach
-            </select>
-
-            <select name="collection" id="collection" class="form-control drop-5050">
-                <option value="">Select collection</option>
-                @foreach($video_collections as $collection)
-                <option value="{{ $collection->id }}" {{ (isset($asset)  &&  $asset->story_collection_id==$collection->id) ? 'selected' : '' }}>{{ $collection->name }}</option>
-                @endforeach
-            </select>
-        </span>
 
         <!--span class="form-group input-group">
             <span class="input-group-addon">
