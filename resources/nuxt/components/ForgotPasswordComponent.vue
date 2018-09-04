@@ -22,15 +22,9 @@
                                         autofucus
                                 >
                                 </v-text-field>
+                                <small class="red--text" v-if="errors">{{ errors.error_message }}</small>
+                                <small class="green--text" v-if="password_reset_text">{{ password_reset_text }}</small>
                             </v-flex>
-
-                            <v-flex xs12 v-if="active_password_reset">
-                                <p
-                                        :class="{'red--text': password_reset_error, 'green--text': password_reset_success}">
-                                    {{ password_reset_text }}
-                                </p>
-                            </v-flex>
-
                         </v-layout>
 
                         <v-layout row wrap>
@@ -69,6 +63,7 @@
                     v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
                 ],
 
+                errors : null,
                 validation:{
                     error: false,
                     message:''
@@ -126,8 +121,8 @@
 
                     this.$axios.$post('/password/reset', password_reset_form)
                         .then(response => {
+                            this.errors = null;
                             let result = response;
-
                             if(!result.error){
                                 // success to send email
                                 setTimeout(() => {
@@ -152,17 +147,11 @@
 
                                     }, 3000);
                                 }, 1000)
-                            }else{
-                                setTimeout(() => {
-                                    this.loading = false;
-                                    this.password_reset_error = true;
-                                    this.password_reset_text = result.error_message;
-                                    this.active_password_reset = true;
-                                }, 1000);
                             }
                         })
                         .catch(error => {
-
+                            this.loading = false;
+                            this.errors = error.response.data;
                         });
                 }
 

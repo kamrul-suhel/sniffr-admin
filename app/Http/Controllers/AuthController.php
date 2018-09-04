@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\ForgotPasswordRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClientPasswordUpdated;
-use App\Jobs\QueueEmail;
 use App\User;
 use App\Traits\FrontendResponse;
 use Auth;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Password;
 use Session;
@@ -182,7 +181,7 @@ class AuthController extends Controller
 
             case PasswordBroker::INVALID_USER:
                 if ($request->ajax()) {
-                    return $this->errorResponse('That email does not exist.');
+                    return $this->errorResponse('That email does not exist.', 422);
                 }
                 return redirect()->back()->with([
                     'note' => trans($response),
@@ -279,7 +278,6 @@ class AuthController extends Controller
                 ]);
         }
     }
-
 
     /**
      * @param Request $request
