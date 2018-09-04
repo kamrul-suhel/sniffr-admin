@@ -124,7 +124,8 @@ class AdminStoryController extends Controller
 			'post_route' => url('admin/stories/store'),
 			'button_text' => 'Add New Story',
 			'video_categories' => VideoCategory::all(),
-			'video_collections' => VideoCollection::all()
+			'video_collections' => VideoCollection::all(),
+			'activeLicenses' => null
 		];
 
 		return view('admin.stories.create_edit', $data);

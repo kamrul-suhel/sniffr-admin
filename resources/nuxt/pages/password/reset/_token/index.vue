@@ -2,20 +2,27 @@
     <!-- Password reset section-->
 
     <!-- Password reset form -->
-    <v-container fluid fill-height class="section-space">
-        <v-layout align-center justify-center>
-            <v-form v-model="valid" ref="password_reset_form" @submit.prevent="onPasswordResetSubmit()">
+    <v-container fluid
+                 fill-height
+                 class="section-space">
+        <v-layout align-center
+                  justify-center>
+            <v-form v-model="valid"
+                    ref="password_reset_form"
+                    @submit.prevent="onPasswordResetSubmit()">
                 <v-card width="400">
                     <v-card-text>
-                        <v-flex xs12 align-center>
+                        <v-flex xs12
+                                align-center>
                             <h2 class="text-xs-center">RESET PASSWORD</h2>
                         </v-flex>
 
                         <v-flex xs12>
-                            <small style="color:red" v-if="error && errors.email !== undefined">{{ errors.email[0] }}
+                            <small style="color:red"
+                                   v-if="error && errors.email !== undefined">{{ errors.email[0] }}
                             </small>
+
                             <v-text-field
-                                    name="email"
                                     color="dark"
                                     label="Email"
                                     v-model="email"
@@ -23,11 +30,12 @@
                         </v-flex>
 
                         <v-flex xs12>
-                            <small style="color:red" v-if="error && errors.password !== undefined">{{ errors.password[0]
-                                }}
+                            <small style="color:red"
+                                   v-if="error && errors.password !== undefined">
+                                {{ errors.password[0] }}
                             </small>
+
                             <v-text-field
-                                    name="password"
                                     color="dark"
                                     label="Enter your password"
                                     hint="At least 8 characters"
@@ -43,7 +51,6 @@
 
                         <v-flex xs12>
                             <v-text-field
-                                    name="password"
                                     color="dark"
                                     label="Confirm your password"
                                     v-model="confirm_password"
@@ -68,8 +75,12 @@
                             </v-btn>
                         </v-flex>
 
-                        <v-flex xs12 text-xs-center v-if="showMessage">
-                            <span :class="[error ? 'red--text' : 'green--text']">{{message}}</span>
+                        <v-flex xs12
+                                text-xs-center
+                                v-if="showMessage">
+                            <span :class="[error ? 'red--text' : 'green--text']">
+                                {{message}}
+                            </span>
                         </v-flex>
 
                     </v-card-text>
@@ -149,7 +160,7 @@
                         .catch(error => {
                             this.error = false;
                             this.showMessage = false;
-                            if(error.response.data.error === undefined) {
+                            if (error.response.data.error === undefined) {
                                 this.error = true;
                                 this.showMessage = true;
                                 this.message = error.response.data.message;
@@ -159,7 +170,6 @@
                                 this.message = error.response.data.error_message;
                             }
                         });
-
                 }
             }
         }
