@@ -14,7 +14,7 @@
         </li>
     </ol>
 
-    @if($asset->trashed())
+    @if($asset && $asset->trashed())
         <div class="row">
             <div class="col-lg-12">
                 <div class="col-lg-12 label label-danger">Deleted
