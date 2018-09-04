@@ -19,9 +19,11 @@
                 </li>
                 @foreach($logs as $log)
                     <li>
-                        <a>
-                            <small>{{ \App\User::find($log->user_id)->full_name }}</small>
-                        </a>
+                        @if($log->user_id)
+                            <td><small>{{ \App\User::find($log->user_id)->full_name }}</small></td>
+                        @else
+                            <td><small>System</small></td>
+                        @endif
                         <small><a href="#"
                                   class="pull-right badge">{{ date('dS F Y @ h:i', strtotime($log->created_at)) }}</a>
                         </small>
