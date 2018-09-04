@@ -218,4 +218,5 @@
 @section('javascript')
     @include('admin.videos.partials.js')
     @include('admin.contacts.partials.js')
+    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop
