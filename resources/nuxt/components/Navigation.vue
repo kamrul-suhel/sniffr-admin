@@ -170,9 +170,7 @@
                 if (to.name != 'index') {
                     this.nav_background = true;
                 } else {
-                    setTimeout(() => {
-                        this.nav_background = false;
-                    }, 800);
+                    this.nav_background = false;
                 }
 
                 //set offered page or not
@@ -183,7 +181,7 @@
             this.setPrevRoute();
             this.settings = this.$store.getters.getSettingsObject;
 
-            if (this.$route.name !== 'home') {
+            if (this.$route.name !== 'index') {
                 this.nav_background = true;
             } else {
                 this.nav_background = false;

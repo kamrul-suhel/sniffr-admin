@@ -48,9 +48,7 @@
         methods: {
             onUploadVideo(){
                 this.$vuetify.goTo('#header', { duration: 500, easing:'easeInCubic'});
-                setTimeout(() => {
-                    this.$router.push({path: 'upload'});
-                }, 500);
+                this.$router.push({path: 'upload'});
             }
 
         }
