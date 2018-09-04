@@ -15,7 +15,6 @@
                             <small style="color:red" v-if="error && errors.email !== undefined">{{ errors.email[0] }}
                             </small>
                             <v-text-field
-                                    name="email"
                                     color="dark"
                                     label="Email"
                                     v-model="email"
@@ -23,11 +22,9 @@
                         </v-flex>
 
                         <v-flex xs12>
-                            <small style="color:red" v-if="error && errors.password !== undefined">{{ errors.password[0]
-                                }}
+                            <small style="color:red" v-if="error && errors.password !== undefined">{{ errors.password[0] }}
                             </small>
                             <v-text-field
-                                    name="password"
                                     color="dark"
                                     label="Enter your password"
                                     hint="At least 8 characters"
@@ -43,7 +40,6 @@
 
                         <v-flex xs12>
                             <v-text-field
-                                    name="password"
                                     color="dark"
                                     label="Confirm your password"
                                     v-model="confirm_password"
