@@ -19,7 +19,12 @@
                     <tbody>
                     @foreach($logs as $log)
                         <tr style="font-size: 10px;">
-                            <td>{{ \App\User::find($log->user_id)->full_name }}</td>
+                            @if($log->user_id)
+                                <td><small>{{ \App\User::find($log->user_id)->full_name }}</small></td>
+                            @else
+                                <td><small>System</small></td>
+                            @endif
+
 							<?php $decodedOld = json_decode($log->old_values); ?>
                             @if($decodedOld !== null)
                                 <td>
