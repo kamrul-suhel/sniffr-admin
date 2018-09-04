@@ -31,7 +31,9 @@
         created(){
             this.$store.dispatch('setSettingObjectFromServer')
                 .then((data) => {
+                    console.log(data);
                     this.$store.commit('setUserStatus', data.sniffr_app);
+
                     this.sniffrStateReady = true
                 })
         },

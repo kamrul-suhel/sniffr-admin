@@ -38,48 +38,48 @@
                 selectedMiniSecond: {},
                 miniSeconds: [
                     {
-                        text: '10s',
-                        value: 10
+                        text: '10 Seconds',
+                        value: 10 * 1000
                     },
                     {
-                        text: '15s',
-                        value: 15
+                        text: '15 Seconds',
+                        value: 15 * 1000
                     },
                     {
-                        text: '30s',
-                        value: 30
+                        text: '30 Seconds',
+                        value: 30 * 1000
                     },
                     {
                         text: '1 Minute',
-                        value: 1000
+                        value: 60 * 1000
                     },
                     {
                         text: '1.5 Minute',
-                        value: 1500
+                        value: 90 * 1000
                     },
                     {
                         text: '2 Minutes',
-                        value: 2000
+                        value: 120 * 1000
                     },
                     {
                         text: '3 Minutes',
-                        value: 3000
+                        value: 180 * 1000
                     },
                     {
                         text: '4 Minutes',
-                        value: 4000
+                        value: 240 * 1000
                     },
                     {
                         text: '5 Minutes',
-                        value: 5000
+                        value: 300 * 1000
                     },
                     {
                         text: '6 Minutes',
-                        value: 6000
+                        value: 360 * 1000
                     },
                     {
                         text: '7 Minutes',
-                        value: 7000
+                        value: 420 * 1000
                     }
                 ],
 
