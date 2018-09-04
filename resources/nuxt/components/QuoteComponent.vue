@@ -47,6 +47,7 @@
                                     </v-text-field>
                                     <small class="red--text"
                                            v-if="errors.user_email">{{ errors.user_email[0] }}</small>
+
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -365,7 +366,7 @@
                             }, 500)
                         })
                         .catch(error => {
-                            this.errors = error.response.errors;
+                            this.errors = error.response.data.errors;
                             this.loading = false;
                         });
                 }
