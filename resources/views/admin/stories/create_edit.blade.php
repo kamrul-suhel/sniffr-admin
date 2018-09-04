@@ -254,4 +254,5 @@
 @section('javascript')
     @include('admin.stories.partials.js')
     @include('admin.contacts.partials.js')
+    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop
