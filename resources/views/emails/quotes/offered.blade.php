@@ -48,7 +48,7 @@
     <h1>Your quote price is: <strong>£{{ number_format($data['quote']) }}</strong></h1>
     <br>
 
-    <a class="pull-right" href="{{ url('/client/offered') }}"
+    <a class="pull-right" href="{{ url('/client/offered?type=offered') }}"
        style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;font-weight:bold;">
         Review Quotes
     </a>

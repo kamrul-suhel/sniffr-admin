@@ -1,14 +1,12 @@
 {
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=e3aabb075d1e84cfe979",
-    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=72e4454aeab2bf3746b8",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=2f8cd6309a34e31754d1",
-    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=eeff845fd73f65973325",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=c60edd6ebd8b5377d82e",
-    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css?id=8cbeab843fc291c93abf",
-    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css?id=5a4e212da39eaec45423",
-    "/assets/frontend/css/styles.css": "/assets/frontend/css/styles.css?id=75d2e997272d14d0f322",
-    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=623acfe16359f3aa7d88",
-    "/assets/admin/css/admin.css.map": "/assets/admin/css/admin.css.map?id=5026205e32e330547822",
-    "/assets/admin/css/mailer-admin.css.map": "/assets/admin/css/mailer-admin.css.map?id=f46a90dbe7c72a1e8920",
-    "/assets/frontend/css/styles.css.map": "/assets/frontend/css/styles.css.map?id=ecae123fda3d71e920d1"
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=2b29832e7332cb9aab19",
+    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=d7548368dda02b43f7ce",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=dacfdb9069badf28e695",
+    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css?id=caf05f37b2826a7e7e0e",
+    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css?id=4164620db9a5325e672d",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=719f4b7adbe5236d975e",
+    "/assets/admin/css/admin.css.map": "/assets/admin/css/admin.css.map?id=ee6c50a342ff8a20e0b5",
+    "/assets/admin/css/mailer-admin.css.map": "/assets/admin/css/mailer-admin.css.map?id=79976cf6f92c926e0d4f",
+    "/placeholder.gif": "/placeholder.gif?id=e74a06310d4b99f90eb6",
+    "/favicon.ico": "/favicon.ico?id=a5b9a59dd01c0a656bed"
 }

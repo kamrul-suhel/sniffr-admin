@@ -3,8 +3,10 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Pallares\LaravelNuxt\Controllers\NuxtController;
 
 trait FrontendResponse
 {
@@ -57,7 +59,8 @@ trait FrontendResponse
             'terms',
             'views',
             'licensed_at',
-			'created_at'
+			'created_at',
+			'deleted_at'
         ];
 
     }
@@ -82,7 +85,8 @@ trait FrontendResponse
             'source',
             'licensed_at',
             'created_at',
-            'updated_at'
+            'updated_at',
+			'deleted_at'
         ];
     }
 
@@ -93,4 +97,10 @@ trait FrontendResponse
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
+
+    public function getFrontendServerResponse(Request $request){
+    	$nuxtController = new NuxtController();
+    	return $nuxtController($request);
+	}
+
 }

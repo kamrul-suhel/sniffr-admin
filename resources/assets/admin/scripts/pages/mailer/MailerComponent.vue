@@ -1,12 +1,12 @@
 <template>
     <div class="admin-mailer-section">
-        <!-- Video dialog -->
+        <!-- Video dialogs -->
         <video-in-dialog></video-in-dialog>
 
-        <!-- Story dialog -->
+        <!-- Story dialogs -->
         <story-in-dialog></story-in-dialog>
 
-        <!-- VideoPlayer dialogbox dialog -->
+        <!-- VideoPlayer dialogbox dialogs -->
         <video-player-in-dialog></video-player-in-dialog>
 
 
@@ -65,7 +65,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <!-- End refresh stories dialog box -->
+        <!-- End refresh stories dialogs box -->
 
         <v-container grid-list-lg fluid>
             <v-layout row wrap>
@@ -120,7 +120,6 @@
 <script>
     import MailerVideosComponent from './modules/VideosComponents';
     import MailerStoriesComponent from './modules/StoriesComponents';
-    import MailerEventBus from '../../event-bus/mailer-event-bus';
     import VideoInDialog from './modules/VideoInDialog';
     import StoryInDialog from './modules/StoryDialog';
     import VideoPlayerInDialog from './modules/VideoPlayerInDialog'
@@ -190,6 +189,9 @@
                             this.errorMessage = "Something went wrong";
                             this.dialog = true;
                         }
+                    })
+                    .catch(error => {
+
                     });
             },
 

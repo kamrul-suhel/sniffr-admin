@@ -85,8 +85,20 @@ class AdminQuoteController extends Controller
 
         $asset = $this->{'collection'.ucwords($asset_type)}->find($id);
         $asset->final_price = request()->has('delete') ? null : $request->input('final_price');
-        $asset->status = request()->has('delete') ? 'closed' : request()->has('update-quote') ? 'requested' : 'offered';
-        $asset->reason = request()->has('delete') ? 'Ignored By Admin (id: ' . auth()->user()->id . ')' : null;
+
+		$status = 'offered';
+		if(request()->has('delete')) {
+			$status = 'closed';
+		} elseif(request()->has('update-quote')) {
+			$status = 'requested';
+		}
+		$asset->status = $status;
+
+		$reason = null;
+        if(request()->has('delete')) {
+			$reason = 'Ignored By Admin (id: ' . auth()->user()->id . ')';
+		}
+		$asset->reason = $reason;
         $asset->type = isset($data['license_type']) ? $data['license_type'] : $asset->type;
         $asset->platform = isset($data['license_platform']) ? implode(',', $data['license_platform']) : $asset->platform;
         $asset->length = isset($data['license_type']) ? $data['license_length'] : $asset->length;
@@ -107,8 +119,17 @@ class AdminQuoteController extends Controller
             );
         }
 
+        if(request()->get('delete')) {
+			$note = 'Quote successfully Ignored';
+		} else if (request()->has('update-quote')) {
+			$note = "License Terms Updated";
+		} else {
+			$note = "Quote successfully Sent";
+		}
+
+
         return redirect('admin/quotes')->with([
-            'note' => request()->has('delete') ? 'Quote successfully Ignored' : request()->has('update-quote') ? "License Terms Updated" : "Quote successfully Sent",
+            'note' => $note,
             'note_type' => 'success',
         ]);
     }

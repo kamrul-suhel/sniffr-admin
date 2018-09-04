@@ -191,7 +191,7 @@
             </v-card>
         </v-dialog>
 
-        <!-- Thank you dialog box -->
+        <!-- Thank you dialogs box -->
         <v-dialog v-model="thank_you_dialog" max-width="500px" persistent>
             <v-card
                     dark
@@ -310,7 +310,7 @@
                 form.append('referrer', this.referrer);
                 form.append('source', this.source);
 
-                //show the uploading dialog box
+                //show the uploading dialogs box
                 this.uplod_progress = true;
 
                 axios.post('/submission', form, {

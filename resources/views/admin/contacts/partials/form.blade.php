@@ -1,5 +1,7 @@
 <div class="col-lg-12">
-    <form id="sniffr-create-contact" method="POST" action="{{ (isset($contact)) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}" accept-charset="UTF-8">
+    <form id="sniffr-create-contact" method="POST"
+          action="{{ (isset($contact)) ? route('contacts.update', ['id' => $contact->id]) : route('contacts.store') }}"
+          accept-charset="UTF-8">
         <div class="row">
             <div class="col-md-12">
                 <h2>Contact Information</h2>
@@ -24,7 +26,8 @@
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">Email</span>
-                        <input type="text" class="form-control" id="email" name="email" value="{{ $contact->email or old('email') }}">
+                        <input type="text" class="form-control" id="email" name="email"
+                               value="{{ $contact->email or old('email') }}">
                     </div>
                 </div>
             </div>
@@ -34,7 +37,8 @@
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Phone</span>
-                    <input type="text" class="form-control" id="tel" name="tel" value="{{ $contact->tel or old('tel') }}">
+                    <input type="text" class="form-control" id="tel" name="tel"
+                           value="{{ $contact->tel or old('tel') }}">
                 </div>
             </div>
 
@@ -55,7 +59,8 @@
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Language</span>
-                    <select type="text" class="form-control" id="language_code" name="language_code" title="language_code">
+                    <select type="text" class="form-control" id="language_code" name="language_code"
+                            title="language_code">
                         <option value="">--</option>
                         @foreach(config('languages') as $language)
                             <option value="{{ $language['code'] }}" {{ ((($contact) && ($language['code'] == $contact->language)) || (old('language_code') == $language['code'])) ? 'selected="selected"' : '' }}>
@@ -147,6 +152,40 @@
                     }}">
                 </div>
             </div>
+
+            <div class="col-sm-6">
+                <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel-heading">
+                        <div class="panel-title">Blacklist</div>
+                        <div class="panel-options"></div>
+                    </div>
+                    <div class="panel-body" style="display: block;">
+                        <label>Blacklist</label>
+                        <input type="checkbox" id="blacklist"
+                               name="blacklist"
+                                {{ ((($contact) && ($contact->blacklist)) || (!$contact))
+                                ? 'checked="checked" value=1'
+                                : '' }} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel-heading">
+                        <div class="panel-title">Whitelist</div>
+                        <div class="panel-options"></div>
+                    </div>
+                    <div class="panel-body" style="display: block;">
+                        <label>Whitelist</label>
+                        <input type="checkbox" id="whitelist"
+                               name="whitelist"
+                                {{ ((($contact) && ($contact->whitelist)) || (!$contact))
+                                ? 'checked="checked" value=1'
+                                : '' }} />
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row">
@@ -167,7 +206,9 @@
 
         @if(\Request::route()->getName() != "contact.create")
             <input type="hidden" value="{{ \Request::route()->getName() }}" name="referral">
-            <input type="hidden" value="{{ isset(\Request::route()->parameters['id']) ? \Request::route()->parameters['id'] : ''  }}" name="referral_id">
+            <input type="hidden"
+                   value="{{ isset(\Request::route()->parameters['id']) ? \Request::route()->parameters['id'] : ''  }}"
+                   name="referral_id">
         @endif
 
         {{ ($contact) ? method_field('PUT') : method_field('POST') }}
@@ -177,5 +218,6 @@
 
     @if($contact)
         @include('admin.contacts.partials.delete')
+        <br>
     @endif
 </div>

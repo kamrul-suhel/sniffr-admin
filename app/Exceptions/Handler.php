@@ -2,6 +2,9 @@
 
 namespace App\Exceptions;
 
+use Airbrake\ErrorHandler;
+use Airbrake\Instance;
+use Airbrake\Notifier;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -38,8 +41,15 @@ class Handler extends ExceptionHandler
     {
     	if(app()->environment() === 'prod') {
 			if ($this->shouldReport($exception)) {
-				$airbrakeNotifier = \App::make('Airbrake\Notifier');
-				$airbrakeNotifier->notify($exception);
+				$airbrakeNotifier = new Notifier(['projectId' => config('airbrake.projectId'), 'projectKey' => config('airbrake.projectKey')]);
+				Instance::set($airbrakeNotifier);
+				$handler = new ErrorHandler($airbrakeNotifier);
+				$handler->register();
+				try {
+					$airbrakeNotifier->notify($exception);
+				} catch (Exception $e) {
+					\Log::error($e->getMessage());
+				}
 			}
 		}
 

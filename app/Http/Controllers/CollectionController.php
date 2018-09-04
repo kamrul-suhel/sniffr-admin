@@ -144,7 +144,6 @@ class CollectionController extends Controller
 
 	/**
 	 * Register new user, and email then set password email. Also create a new collection and link to that user
-	 * @param Request $request
 	 * @param $collection_id
 	 * @return mixed
 	 */
@@ -283,7 +282,7 @@ class CollectionController extends Controller
 				'length' => $data['license_length'] ?? $collectionVideo->length,
 				'company_location' => isset($client->region) ? $client->region : null,
 				'company_tier' => isset($client->tier) ? $client->tier : null,
-				'notes' => $data['notes'] ? $data['notes'] == 'undefined' ? $data['notes'] : null : null,
+				'notes' => $data['notes'] ?? '',
 				'status' => 'requested',
 				'final_price' => null,
 			]);

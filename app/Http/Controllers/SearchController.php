@@ -153,6 +153,7 @@ class SearchController extends Controller
             }
         }
 
+
         $data['mailerVideos'] = $mailerVideos;
 
         return $this->successResponse($data);
