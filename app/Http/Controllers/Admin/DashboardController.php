@@ -44,8 +44,9 @@ class DashboardController extends Controller
     {
         $from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay() : Carbon::now()->subMonths(1)->startOfDay();
         $to = request()->has('to') ? Carbon::parse(request()->get('to'))->startOfDay() : Carbon::now()->endOfDay();
+        $rights = request()->get('rights') ?? 'ex';
 
-        $allVideosStateTotal = $this->getAllVideoStatesByRights($from, $to, 'ex');
+        $allVideosStateTotal = $this->getAllVideoStatesByRights($from, $to, $rights);
         $allVideosStateTotalDates = array_values(array_unique($allVideosStateTotal->pluck('created_at')->toArray()));
         $allVideosStateTotalTotals = $this->formatVideoStateArray($allVideosStateTotalDates, $allVideosStateTotal);
 
@@ -58,10 +59,14 @@ class DashboardController extends Controller
         $licensed_videos = $this->video->select('id')->where('state', 'licensed')->whereBetween('updated_at', [$from, $to])->count();
         $pending_videos = $this->video->select('id')->where('state', 'pending')->whereBetween('updated_at', [$from, $to])->count();
 
-        $exc_contracts = $this->contract->get()
+        $exc_contracts = $this->contract
+			->orderBy('signed_at')
+			->get()
             ->where('video_id', '!=', null)
             ->where('contract_model_id', '1')
-            ->where('signed_at', '>', (new Carbon)->now()->subDays(30))->groupBy(function ($date) {
+            ->where('signed_at', '>', $from)
+            ->where('signed_at', '<', $to)
+			->groupBy(function ($date) {
                 return Carbon::parse($date->signed_at)->format('m-d'); // grouping by days
             });
 
@@ -71,6 +76,23 @@ class DashboardController extends Controller
             ->where('signed_at', '>', (new Carbon)->now()->subDays(30))
             ->groupBy('user_id');
 
+		$exc_contracts_stories = $this->contract
+			->orderBy('signed_at')
+			->get()
+			->where('story_id', '!=', null)
+			->where('contract_model_id', '5')
+			->where('signed_at', '>', $from)
+			->where('signed_at', '<', $to)
+			->groupBy(function ($date) {
+				return Carbon::parse($date->signed_at)->format('m-d'); // grouping by days
+			});
+
+		$exc_contracts_stories_users = $this->contract->get()
+			->where('story_id', '!=', null)
+			->where('contract_model_id', '5')
+			->where('signed_at', '>', (new Carbon)->now()->subDays(30))
+			->groupBy('user_id');
+
         $data = [
             'from' => $from,
             'to' => $to,
@@ -79,6 +101,8 @@ class DashboardController extends Controller
             'allVideosStateTotalTotalsExc' => $allVideosStateTotalTotalsExc,
             'exc_contracts' => $exc_contracts,
             'exc_contracts_users' => $exc_contracts_users,
+            'exc_contracts_stories' => $exc_contracts_stories,
+            'exc_contracts_stories_users' => $exc_contracts_stories_users,
             'total_videos' => $total_videos,
             'new_videos' => $new_videos,
             'licensed_videos' => $licensed_videos,

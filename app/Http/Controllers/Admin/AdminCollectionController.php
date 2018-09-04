@@ -23,17 +23,16 @@ class AdminCollectionController extends Controller
             ->get();
 
         foreach($companies as $company) {
-            $company['collectionVideosCount'] = $company->collections()
-                ->with('collectionVideos')
-                ->whereHas('collectionVideos', function($query) use ($company) {
-                    $query->where('client_id', $company->id); })
-                ->count();
-            $company['collectionStoriesCount'] = $company->collections()
-                ->with('collectionStories')
-                ->whereHas('collectionStories', function($query) use ($company) {
-                    $query->where('client_id', $company->id); })
-                ->count();
-        }
+			$company['collectionVideosCount'] = $company->collections()
+				->with('collectionVideos')
+				->whereHas('collectionVideos', function ($query) use ($company) {
+					$query->where('client_id', $company->id);
+				})->count();
+			$company['collectionStoriesCount'] = $company->collections()
+				->whereHas('collectionStories', function ($query) use ($company) {
+					$query->where('client_id', $company->id);
+				})->count();
+		}
 
         return view('admin.collections.index')
             ->with('companies', $companies);

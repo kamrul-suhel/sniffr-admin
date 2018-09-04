@@ -2,15 +2,17 @@
 
 namespace App;
 
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
-class Story extends Model
+class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes, Notifiable;
+    use SoftDeletes, Notifiable, Auditable;
 
-    protected $guarded = [];
+    protected $guarded = ['deleted_at'];
     public static $rules = [];
     protected $table = 'stories';
 
@@ -99,4 +101,26 @@ class Story extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    //Functions
+
+	public function deleteStory()
+	{
+		$offeredAndPendingStories = CollectionStory::where('story_id', $this->id)
+			->orWhere('status', 'purchased')
+			->where('status', 'offered');
+
+		if ($offeredAndPendingStories->count() > 0) {
+			foreach ($offeredAndPendingStories->get() as $emailForDeletion) {
+				QueueEmailRetractQuote::dispatch(
+					$emailForDeletion,
+					'story'
+				);
+			}
+			$offeredAndPendingStories->update(['reason' => 'asset was deleted by admin: ' . auth()->user()->id]);
+		}
+
+		return $this->delete();
+	}
+
 }

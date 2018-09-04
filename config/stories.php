@@ -38,7 +38,7 @@ return [
                 'dropdown' => 'Approved',
 				'value' => 'approved', // dropdown value
                 'positive_label' => 'Approved',
-                'negative_label' => 'Unapprove',
+                'negative_label' => 'Unapproved',
                 'positive_class' => '',
                 'negative_class' => 'text-danger js-story-state unapproved',
             ],
@@ -64,9 +64,9 @@ return [
                 'dropdown' => 'Ready for Pickup',
                 'value' => 'approved',
                 'positive_label' => 'License Story',
-                'negative_label' => 'Unapprove',
+                'negative_label' => 'Purgatory',
                 'positive_class' => 'text-success js-story-state licensing',
-                'negative_class' => 'text-danger js-story-state unapproved',
+                'negative_class' => 'text-danger js-story-state purgatory',
             ],
             'licensing' => [
                 'dropdown' => 'In Progress',
@@ -76,14 +76,14 @@ return [
                 'positive_class' => 'text-success',
                 'negative_class' => 'text-danger js-story-state approved',
             ],
-            // 'licensed' => [
-            //     'dropdown' => 'Licensed',
-            //     'value' => 'licensed',
-            //     'positive_label' => 'Licensed',
-            //     'negative_label' => 'Unlicensed',
-            //     'positive_class' => '',
-            //     'negative_class' => 'text-danger js-story-state unlicensed',
-            // ],
+             'purgatory' => [
+                 'dropdown' => 'Purgatory',
+                 'value' => 'purgatory',
+                 'positive_label' => 'Back to Pickup',
+                 'negative_label' => 'Rejected',
+				 'positive_class' => 'text-success js-story-state approved',
+                 'negative_class' => 'js-story-state unapproved',
+             ],
 		],
         'writing' => [
             'licensed' => [

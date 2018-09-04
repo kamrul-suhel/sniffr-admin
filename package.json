@@ -8,9 +8,13 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "copy": "cross-env NODE_ENV=copy node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "build": "laravel-nuxt build",
+        "start": "laravel-nuxt dev",
+        "server": "laravel-nuxt start"
     },
     "dependencies": {
+        "@nuxtjs/axios": "^5.3.1",
         "autoprefixer": "^8.3.0",
         "babel-polyfill": "^6.26.0",
         "bootstrap-datepicker": "^1.8.0",
@@ -23,17 +27,22 @@
         "font-awesome": "^4.7.0",
         "global": "^4.3.2",
         "glyphicons-halflings": "^1.9.1",
+        "laravel-nuxt": "^1.4.7",
+        "material-design-icons-iconfont": "^3.0.3",
+        "nuxt-sass-resources-loader": "^2.0.4",
         "select2": "^4.0.6-rc.1",
         "twitter-widgets": "^1.0.0",
         "video.js": "^6.9.0",
-        "vue-plyr": "^3.0.0"
+        "vue-moment": "^4.0.0",
+        "vue-plyr": "^3.0.0",
+        "vue-template-compiler": "^2.5.16"
     },
     "devDependencies": {
         "axios": "^0.18.0",
         "blueimp-file-upload": "^9.21.0",
         "bootstrap-colorpicker": "^2.5.2",
         "bootstrap-tagsinput": "^0.7.1",
-        "browser-sync": "^2.23.7",
+        "browser-sync": "^2.24.6",
         "browser-sync-webpack-plugin": "^2.2.2",
         "corejs-typeahead": "^1.2.1",
         "cross-env": "^5.1.4",
@@ -47,7 +56,7 @@
         "jquery-validation": "^1.17.0",
         "jquery.iframe-transport": "^1.0.0",
         "jvectormap-next": "^3.0.0",
-        "laravel-mix": "^2.0",
+        "laravel-mix": "^2.1.14",
         "lodash": "^4.17.4",
         "moment": "^2.22.1",
         "nestable2": "^1.6.0",

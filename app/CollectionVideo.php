@@ -5,11 +5,12 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
-class CollectionVideo extends Model
+class CollectionVideo extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
 
-	use SoftDeletes;
+	use SoftDeletes, Auditable;
 
 	protected $table = 'collection_videos';
 
@@ -28,7 +29,7 @@ class CollectionVideo extends Model
 	 */
 	public function video()
 	{
-		return $this->belongsTo(Video::class);
+		return $this->belongsTo(Video::class)->withTrashed();
 	}
 
 	/**

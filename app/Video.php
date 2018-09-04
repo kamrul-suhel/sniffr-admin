@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use OwenIt\Auditing\Auditable;
 
 /**
  * @property int $id
@@ -49,30 +51,29 @@ use Illuminate\Support\Facades\Cache;
  * @property int $creator_id
  * @mixin \Eloquent
  */
-class Video extends Model
+class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes, Notifiable;
+    use SoftDeletes, Notifiable, Auditable;
 
-    const CACHE_EXPIRATION = 720;
-    protected $guarded = [];
-    protected $table = 'videos';
-    protected $hidden = ["deleted_at"];
-    protected $fillable = [
-        'user_id',
-        'video_category_id',
-        'video_collection_id',
-        'video_shottype_id',
-        'title',
-        'rights',
-        'access',
-        'details',
-        'description',
-        'date_filmed',
-        'vertical',
-        'notes',
-        'referrer',
-        'credit',
-        'terms',
+	const CACHE_EXPIRATION = 720;
+	protected $guarded = ['deleted_at'];
+	protected $table = 'videos';
+	protected $fillable = [
+		'user_id',
+		'video_category_id',
+		'video_collection_id',
+		'video_shottype_id',
+		'title',
+		'rights',
+		'access',
+		'details',
+		'description',
+		'date_filmed',
+		'vertical',
+		'notes',
+		'referrer',
+		'credit',
+		'terms',
 		'active',
         'featured',
         'duration',
@@ -164,41 +165,71 @@ class Video extends Model
 		return $this->belongsToMany(ClientMailer::class);
 	}
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function socialLinks()
-    {
-        return $this->hasMany(VideoSocialLink::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function createdUser()
+	{
+		return $this->belongsTo(User::class, 'user_id');
+	}
 
-    public function routeNotificationForSlack()
-    {
-        return 'https://hooks.slack.com/services/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';
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function socialLinks()
+	{
+		return $this->hasMany(VideoSocialLink::class);
+	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function videoCollections()
+	{
+		return $this->hasMany(CollectionVideo::class);
+	}
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function videoCollections()
-    {
-        return $this->hasMany(CollectionVideo::class);
-    }
+	/**
+	 * @return string
+	 */
+	public function routeNotificationForSlack()
+	{
+		return 'https://hooks.slack.com/services/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';
+	}
 
-    /**
-     * @param int $page
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function cacheKey(int $page = 0)
-    {
-        return sprintf(
-            "%s-%s",
-            $this->getTable(),
-            $page
-        );
-    }
+	//Functions
+	public function deleteVideo()
+	{
+		$offeredAndPendingVideos = CollectionVideo::where('video_id', $this->id)
+			->where('status', 'requested')
+			->orWhere('status', 'offered');
+
+		if ($offeredAndPendingVideos->count() > 0) {
+			foreach ($offeredAndPendingVideos->get() as $emailForDeletion) {
+				QueueEmailRetractQuote::dispatch(
+					$emailForDeletion,
+					'video'
+				);
+			}
+			$offeredAndPendingVideos->update(['reason' => 'asset was deleted by admin: ' . auth()->user()->id]);
+		}
+
+		return $this->delete();
+	}
+
+	/**
+	 * @param int $page
+	 * @return string
+	 * @codeCoverageIgnore
+	 */
+	public function cacheKey(int $page = 0)
+	{
+		return sprintf(
+			"%s-%s",
+			$this->getTable(),
+			$page
+		);
+	}
 
     /**
      * @param int $videos_per_page
@@ -262,10 +293,4 @@ class Video extends Model
         });
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function createdUser(){
-        return $this->belongsTo(User::class, 'user_id');
-    }
 }

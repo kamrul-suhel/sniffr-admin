@@ -3,12 +3,11 @@
  * Glabal package
  ********************************************************
  */
-
 import 'babel-polyfill';
 
 window.axios = require('axios');
 window.Vue = require('vue');
-window.Vuetify = require('Vuetify');
+window.Vuetify = require('vuetify');
 
 import Vuerouter from 'vue-router';
 
@@ -20,6 +19,7 @@ import Vuerouter from 'vue-router';
 
 Vue.use(Vuetify);
 Vue.use(Vuerouter);
+Vue.use(require('vue-moment'));
 
 
 /*
@@ -44,14 +44,16 @@ import MailerStoriesComponent from './pages/mailer/MailerComponent'
  * Filter library
  ********************************************************
  */
-require('../../frontend/scripts/filters/filters');
+require('../../../nuxt/plugins/filters/filters');
 
 /*
  ********************************************************
  * Layout Components
  ********************************************************
  */
-import FooterComponent from './layouts/FooterComponent'
+import FooterComponent from './layouts/FooterComponent';
+import CommentsComponent from './includes/CommentsComponent';
+import Modal from './includes/Modal';
 
 /*
  ********************************************************
@@ -59,7 +61,7 @@ import FooterComponent from './layouts/FooterComponent'
  ********************************************************
  */
 import {store} from './store/index';
-
+import {mapGetters} from 'vuex';
 import {routes} from './routes';
 
 const router = new Vuerouter({
@@ -69,20 +71,43 @@ const router = new Vuerouter({
 
 
 new Vue({
-    el: '#admin-mailer',
-    components : {
-        FooterComponent
+    el: '#sniffr-app',
+    components: {
+        FooterComponent,
+        CommentsComponent,
+        Modal,
     },
 
     store,
     router,
 
-    data() {
-        return {}
+    data: {},
+
+    computed: {
+        ...mapGetters({
+            modalVisible: 'getModalVisibility',
+        })
     },
 
     created() {
+        // initialize code go here before load any of component. like user, settings
+        axios.get('/settings_object')
+            .then(response => {
+                this.$store.commit('setUserStatus', response.data.sniffr_app);
+            })
+            .catch(error => {
+                console.log(error)
+            })
     },
 
-    methods: {}
-})
+    methods: {
+        showModal(asset) {
+            this.$store.commit('setAsset', asset);
+            this.$store.commit('setModalVisibility', true);
+        },
+
+        closeModal() {
+            this.$store.commit('setModalVisibility', false);
+        }
+    }
+});

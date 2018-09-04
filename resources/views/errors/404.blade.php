@@ -2,7 +2,6 @@
 @section('content')
 
     <section id="videos" class="page_videos">
-        <video></video>
         <div class="heading">
             <div class="position-center">
                 <h1 style="margin-top:15px;">404 </h1>

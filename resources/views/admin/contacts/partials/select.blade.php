@@ -1,4 +1,4 @@
-<span class="form-group">
+<div class="form-group">
     <?php
         if(Session::get('contact_id')){
         	$contact_id = Session::get('contact_id');
@@ -16,4 +16,4 @@
     </div>
 
     <input type="hidden" id="js-contact-id" name="contact_id" value="{{ isset($contact) ? $contact->id : ''  }}" />
-</span>
+</div>
