@@ -14,11 +14,12 @@ class SubmissionNew extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
+    protected $video;
+
+	/**
+	 * SubmissionNew constructor.
+	 * @param Video $video
+	 */
     public function __construct(Video $video)
     {
         $this->video = $video;
@@ -39,11 +40,18 @@ class SubmissionNew extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return mixed
      */
     public function toSlack($notifiable)
     {
-       return (new SlackMessage)
-           ->content('A new video has been submitted: ' . $notifiable->title .': '. url('admin/videos/edit/' . $this->video->alpha_id));
+    	$content = 'A new video has been submitted: ' . $notifiable->title .': '. url('admin/videos/edit/' . $this->video->alpha_id);
+
+    	$content .= ' by '. $this->video->contact->full_name . ' (' .$this->video->contact->email. ')';
+
+    	if($this->video->contact->blacklist) {
+    		$content .= ' who is blacklisted :skull:';
+	    }
+
+    	return (new SlackMessage)->content($content);
     }
 }
