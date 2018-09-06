@@ -10,8 +10,9 @@
                     <v-checkbox color="dark"
                                 class="checkbox"
                                 v-model="tags"
-                                :label="tag.text"
-                                :value="tag.value"
+                                :label="tag | capitalize"
+                                :value="tag"
+                                @change="onTagChange()"
                     ></v-checkbox>
                 </v-flex>
             </v-layout>
@@ -21,39 +22,27 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     export default {
         data(){
             return {
-                tags: [],
-                tagItems:[
-                    {
-                        text: 'Poll',
-                        value: 'poll'
-                    },
-                    {
-                        text: 'Misses',
-                        value: 'misses'
-                    },
-                    {
-                        text: 'Slips',
-                        value: 'slips'
-                    },
-                    {
-                        text: 'Water',
-                        value: 'water'
-                    },
-                    {
-                        text: 'Girl',
-                        value: 'girl'
-                    }
-                ]
+                tags: []
             }
+        },
+
+        computed: {
+            ...mapGetters({
+                tagItems : 'getAllTags'
+            })
         },
 
         created() {
 
         },
         methods: {
+            onTagChange(){
+                this.$store.commit('setSearchByTags', this.tags);
+            }
         }
     }
 </script>

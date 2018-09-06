@@ -32,20 +32,9 @@ const mutations = {
         state.searchByMaxLength = maxValue;
     },
 
-    setSearchByTags(state, tagObject) {
-        state.searchByTags.forEach((tag) => {
-            if (tag.value !== tagObject.value) {
-                state.searchByTags.push(tag);
-            }
-        })
-    },
-
-    removeSearchByTags(state, tagObject) {
-        state.searchByTags.forEach((tag, index) => {
-            if (tag.value === tagObject.value) {
-                state.searchByTags.splice(index, 1);
-            }
-        })
+    setSearchByTags(state, tagArray) {
+        state.searchByTags = [];
+        state.searchByTags.push(...tagArray);
     },
 
     setSortBy(state, sortBy) {
@@ -79,6 +68,10 @@ const mutations = {
 const getters = {
     getSearchType(state){
         return state.searchType;
+    },
+
+    getAllTags(state){
+        return state.allTags;
     },
 
     getSearchByTitle(state) {
