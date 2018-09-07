@@ -290,7 +290,7 @@
                         let thankYouMessage = 'You’ve story has been added to your order history';
                         this.$store.commit('setThankYouMessage', thankYouMessage);
                         this.$store.commit('setThankYouDialog', true);
-                        
+
                         this.purchased = true;
                     }
                 });
