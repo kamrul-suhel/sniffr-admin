@@ -20,10 +20,7 @@ const mutations = {
 
     setThankYouMessage(state, value){
         state.thankYouMessage = value;
-    },
-
-
-
+    }
 }
 
 const getters = {
