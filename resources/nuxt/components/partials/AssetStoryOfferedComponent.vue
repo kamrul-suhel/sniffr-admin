@@ -286,6 +286,11 @@
                         this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
                         this.assetType = "purchased";
+
+                        let thankYouMessage = 'You’ve story has been added to your order history';
+                        this.$store.commit('setThankYouMessage', thankYouMessage);
+                        this.$store.commit('setThankYouDialog', true);
+
                         this.purchased = true;
                     }
                 });
