@@ -1,5 +1,17 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-9">
+        <span class="form-group input-group">
+            <span class="input-group-addon">
+                Video Image Cover (16:9)
+            </span>
+
+            <input type="file" multiple="true" class="form-control" name="image" id="image"/>
+        </span>
+
+        @if($asset->image != 'placeholder.gif')
+            <img src="{{ $asset->image }}" class="video-img" width="200"/>
+        @endif
+
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Video Source
@@ -37,9 +49,7 @@
             <input type="text" multiple="true" class="form-control" name="file" id="file" value="{{ $asset->file_watermark_dirty }}" disabled/>
         </span>
         @endif
-    </div>
 
-    <div class="col-md-12">
         <span class="form-group input-group">
             <span class="input-group-addon">
                 URL
@@ -48,9 +58,7 @@
             <input type="text" class="form-control" name="url" id="url"
                    @if(is_null($asset->url)) placeholder="Current video is an uploaded file" @endif value="{{ $asset->url or null }}" title="URL"/>
         </span>
-    </div>
 
-    <div class="col-md-12">
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Embed Code
