@@ -3,11 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
+use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use OwenIt\Auditing\Auditable;
 
 /**
  * @property int $id
@@ -51,27 +53,13 @@ use Illuminate\Support\Facades\Cookie;
  * @property int $creator_id
  * @mixin \Eloquent
  */
-class Video extends Model
+class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-	use SoftDeletes, Notifiable;
+    use SoftDeletes, Notifiable, Auditable;
 
 	const CACHE_EXPIRATION = 720;
-
-	/**
-	 * @var array
-	 */
-	protected $guarded = [];
-	/**
-	 * @var string
-	 */
+	protected $guarded = ['deleted_at'];
 	protected $table = 'videos';
-	/**
-	 * @var array
-	 */
-	protected $hidden = ["deleted_at"];
-	/**
-	 * @var array
-	 */
 	protected $fillable = [
 		'user_id',
 		'video_category_id',
@@ -89,30 +77,30 @@ class Video extends Model
 		'credit',
 		'terms',
 		'active',
-		'featured',
-		'duration',
-		'image',
-		'embed_code',
-		'url',
-		'created_at',
-		'source'
-	];
+        'featured',
+        'duration',
+        'image',
+        'embed_code',
+        'url',
+        'created_at',
+        'source'
+    ];
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function tags()
-	{
-		return $this->belongsToMany(Tag::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function contact()
-	{
-		return $this->belongsTo(Contact::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class);
+    }
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -122,29 +110,29 @@ class Video extends Model
 		return $this->belongsTo(CollectionVideo::class);
 	}
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
-	 */
-	public function comments()
-	{
-		return $this->hasMany(Comment::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
-	 */
-	public function contracts()
-	{
-		return $this->hasMany(Contract::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
 	 */
-	public function currentContract()
-	{
-		return $this->hasOne('\App\Contract')->latest();
-	}
+    public function currentContract()
+    {
+        return $this->hasOne('\App\Contract')->latest();
+    }
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
@@ -162,20 +150,29 @@ class Video extends Model
 		return $this->belongsToMany(Story::class);
 	}
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
-	 */
-	public function downloads()
-	{
-		return $this->hasMany(Download::class);
-	}
 
-	/**
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function downloads()
+    {
+        return $this->hasMany(Download::class);
+    }
+
+    /**
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
 	 */
 	public function mailers()
 	{
 		return $this->belongsToMany(ClientMailer::class);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function createdUser()
+	{
+		return $this->belongsTo(User::class, 'user_id');
 	}
 
 	/**
@@ -216,75 +213,88 @@ class Video extends Model
 		);
 	}
 
-	/**
-	 * @param int $videos_per_page
-	 * @param $page
-	 * @return mixed
-	 * TODO: Not being used
-	 * @codeCoverageIgnore
-	 */
-	public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
+	//Functions
+	public function deleteVideo()
 	{
-		if (config('settings.cache.cache_enabled')) {
-			return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
-				return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
-			});
+		$offeredAndPendingVideos = CollectionVideo::where('video_id', $this->id)
+			->where('status', 'requested')
+			->orWhere('status', 'offered');
+
+		if ($offeredAndPendingVideos->count() > 0) {
+			foreach ($offeredAndPendingVideos->get() as $emailForDeletion) {
+				QueueEmailRetractQuote::dispatch(
+					$emailForDeletion,
+					'video'
+				);
+			}
+			$offeredAndPendingVideos->update(['reason' => 'asset was deleted by admin: ' . auth()->user()->id]);
 		}
 
-		return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
+		return $this->delete();
 	}
 
-	/**
-	 * @return Comment[]
-	 * @codeCoverageIgnore
-	 */
-	public function getCachedComments()
-	{
-		return Cache::remember($this->cacheKey() . ':comments', self::CACHE_EXPIRATION, function () {
-			return $this->comments->toArray();
-		});
-	}
+    /**
+     * @param int $videos_per_page
+     * @param $page
+     * @return mixed
+     * TODO: Not being used
+     * @codeCoverageIgnore
+     */
+    public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
+    {
+        if (config('settings.cache.cache_enabled')) {
+            return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
+                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
+            });
+        }
 
-	/**
-	 * @return Download[]
-	 * @codeCoverageIgnore
-	 */
-	public function getCachedDownloads()
-	{
-		return Cache::remember($this->cacheKey() . ':downloads', self::CACHE_EXPIRATION, function () {
-			return $this->downloads->toArray();
-		});
-	}
+        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
+    }
 
-	/**
-	 * @return Contact[]
-	 * @codeCoverageIgnore
-	 */
-	public function getCachedContact()
-	{
-		return Cache::remember($this->cacheKey() . ':contact', self::CACHE_EXPIRATION, function () {
-			return $this->contact->toArray();
-		});
-	}
+    /**
+     * @return Comment[]
+     * @codeCoverageIgnore
+     */
+    public function getCachedComments()
+    {
+        return Cache::remember($this->cacheKey() . ':comments', self::CACHE_EXPIRATION, function () {
+            return $this->comments->toArray();
+        });
+    }
 
-	/**
-	 * @return Tag[]
-	 * @codeCoverageIgnore
-	 */
-	public function getCachedTags()
-	{
-		return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
-			return $this->tags->toArray();
-		});
-	}
+    /**
+     * @return Download[]
+     * @codeCoverageIgnore
+     */
+    public function getCachedDownloads()
+    {
+        return Cache::remember($this->cacheKey() . ':downloads', self::CACHE_EXPIRATION, function () {
+            return $this->downloads->toArray();
+        });
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function createdUser()
-	{
-		return $this->belongsTo(User::class, 'user_id');
-	}
+    /**
+     * @return Contact[]
+     * @codeCoverageIgnore
+     */
+    public function getCachedContact()
+    {
+        return Cache::remember($this->cacheKey() . ':contact', self::CACHE_EXPIRATION, function () {
+            return $this->contact->toArray();
+        });
+    }
+
+    /**
+     * @return Tag[]
+     * @codeCoverageIgnore
+     */
+    public function getCachedTags()
+    {
+        return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
+            return $this->tags->toArray();
+        });
+    }
+
 
 	//**********************
 	// Search Functions   **

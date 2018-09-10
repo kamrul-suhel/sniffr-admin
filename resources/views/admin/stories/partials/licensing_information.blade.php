@@ -20,7 +20,7 @@
 
         @if(!empty($asset))
 
-        <div class="form-group input-group">
+        <!--div class="form-group input-group">
             <label class="checkbox-inline" for="contact_is_owner">
                 <input type="checkbox" name="contact_is_owner" id="contact_is_owner" class="js-contact-is-owner" value="1" {{ (isset($asset)  &&  $asset->contact_is_owner==1) ? 'checked' : '' }}>
                 Contact is owner
@@ -35,7 +35,7 @@
                 <input type="checkbox" name="permission" id="permission" class="js-permission" value="1" {{ (isset($asset)  &&  $asset->permission==1) ? 'checked' : '' }}>
                 Has permission
             </label>
-        </div>
+        </div-->
 
         <span class="form-group input-group has-feedback">
             <span class="input-group-addon">
@@ -46,19 +46,7 @@
             <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
         </span>
 
-        <span class="form-group input-group">
-            <span class="input-group-addon">
-                Location
-            </span>
-
-            <input type="text" class="form-control placepicker" data-map-container-id="locationCollapse" name="location" id="location" value="@if(!empty($asset->location)){{ $asset->location }}@endif" />
-
-            <div id="locationCollapse" class="collapse">
-                <div class="placepicker-map thumbnail"></div>
-            </div>
-        </span>
-
-        <span class="form-group input-group">
+        <!--span class="form-group input-group">
             <span class="input-group-addon">
                 Removed from Social for
             </span>
@@ -68,7 +56,7 @@
                 <option value="{{ $from }}" {{ (isset($asset)  &&  $asset->removed_from_social==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $from)) }}</option>
                 @endforeach
             </select>
-        </span>
+        </span-->
 
         <span class="form-group input-group">
             <span class="input-group-addon">
@@ -83,27 +71,8 @@
             </select>
         </span>
 
-        <span class="form-group input-group">
-            <span class="input-group-addon">
-                Categorisation
-            </span>
 
-            <select name="category" id="category" class="form-control drop-5050">
-                <option value="">Select vertical</option>
-                @foreach($video_categories as $category)
-                <option value="{{ $category->id }}" {{ (isset($asset)  &&  $asset->story_category_id==$category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
-                @endforeach
-            </select>
-
-            <select name="collection" id="collection" class="form-control drop-5050">
-                <option value="">Select collection</option>
-                @foreach($video_collections as $collection)
-                <option value="{{ $collection->id }}" {{ (isset($asset)  &&  $asset->story_collection_id==$collection->id) ? 'selected' : '' }}>{{ $collection->name }}</option>
-                @endforeach
-            </select>
-        </span>
-
-        <span class="form-group input-group">
+        <!--span class="form-group input-group">
             <span class="input-group-addon">
                 Submitted to
             </span>
@@ -113,20 +82,64 @@
                 <option value="{{ $site }}" {{ (isset($asset) && (in_array($site, explode(',', $asset->submitted_to)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
                 @endforeach
             </select>
-        </span>
+        </span-->
         @endif
     </div>
+</div>
 
-    <div class="panel panel-primary" data-collapsed="0">
-        <div class="panel-heading">
-            <div class="panel-title">License Notes</div>
+<div class="panel panel-primary" data-collapsed="0">
+    <div class="panel-heading">
+        <div class="panel-title">License Notes</div>
 
-            <div class="panel-options">
-                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-            </div>
-        </div>
-        <div class="panel-body" style="display: block;">
-            <textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($asset)&&$asset->notes) {{ $asset->notes }} @endif</textarea>
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
         </div>
     </div>
+    <div class="panel-body" style="display: block;">
+        <textarea class="form-control" name="notes" id="notes" rows="7">@if(isset($asset)&&$asset->notes) {{ $asset->notes }} @endif</textarea>
+    </div>
 </div>
+
+@if($activeLicenses && count($activeLicenses))
+<div class="panel panel-primary" data-collapsed="0">
+    <div class="panel-heading">
+        <div class="panel-title">Active Licenses</div>
+
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+        </div>
+    </div>
+
+    <div class="panel-body" style="display: block;">
+        <table class="table">
+            <thead>
+            <th>Name</th>
+            <th>Company</th>
+            <th>License Terms</th>
+            <th>License End</th>
+            </thead>
+            <tbody>
+            @foreach($activeLicenses as $license)
+                <tr>
+                    <td>{{ $license->collection->user->full_name }}</td>
+                    <td>{{ $license->collection->user->client->name }}</td>
+                    <td>
+                        <small>Type: <b>{{ $license->type }}</b></small><br>
+                        <small>Platform: <b>{{ $license->platform }}</b></small><br>
+                        <small>Length: <b>{{ $license->length }}</b></small><br>
+                    </td>
+                    <td>
+                        {{ date('dS M Y @ h:i', strtotime($license->license_ends_at)) }}<br>
+                        <small>
+                            {{ $license->licensed_at
+                             ? Carbon\Carbon::parse($license->license_ends_at)->diffForHumans()
+                             : '' }}
+                        </small>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endif

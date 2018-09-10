@@ -97,13 +97,18 @@
 
                 if(queryObject.searchTerm != ''){
                     url += '&search='+ queryObject.searchTerm;
+
                 }
 
-                this.$store.dispatch('getMailerVideos', url)
-                    .then(() => {
-                        this.videos = this.$store.getters.getVideos;
-                        this.totalPage = this.videos.last_page;
-                    });
+                axios.post(url)
+                    .then((videos) => {
+                    this.$store.commit('setVideoData', videos.data.videos);
+                    this.videos = videos.data.videos;
+                    this.totalPage = this.videos.last_page;
+                },
+                (error) => {
+                    return reject();
+                });
             },
 
             getQueryObject(){

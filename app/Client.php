@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Auditable;
 
 /**
  * App\Client
@@ -28,9 +29,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static Builder|Client whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Client extends Model
+class Client extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use Notifiable, SoftDeletes, Slug;
+    use Notifiable, SoftDeletes, Slug, Auditable;
 
     protected $guarded = [];
     public static $rules = [];
@@ -108,9 +109,9 @@ class Client extends Model
 
     }
 
-    /**
-     * @return int
-     */
+	/**
+	 * @return Builder|\Illuminate\Database\Eloquent\Relations\HasMany
+	 */
     public function activeLicences()
     {
         $collections = $this->collections()
@@ -127,8 +128,7 @@ class Client extends Model
                 $query->where('status', 'purchased');
                 $query->whereNotNull('licensed_at');
                 $query->whereNotNull('license_ends_at');
-            })
-            ->count();
+            });
 
         return $collections;
     }

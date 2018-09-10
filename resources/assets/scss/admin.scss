@@ -13,7 +13,28 @@
 
 /**
 ******************************************************
-  Video dialog scss
+  Video dialogs scss
 ******************************************************
  */
 @import 'partials/asset-video-dialog-box';
+@import 'partials/asset-story-in-dialog';
+
+
+
+
+/**
+******************************************************
+  Global admin style
+******************************************************
+ */
+
+.story-input {
+  .v-input{
+    margin:0;
+    padding:0
+  }
+}
+
+.title{
+  font-size:12px !important;
+}

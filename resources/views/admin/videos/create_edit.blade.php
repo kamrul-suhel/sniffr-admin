@@ -43,10 +43,6 @@
                             <a href="#metadata" role="tab" data-toggle="tab">Metadata</a>
                         </li>
 
-                        <li>
-                            <a href="#credits" role="tab" data-toggle="tab">Credits</a>
-                        </li>
-
                         @if($asset->more_details)
                             <li>
                                 <a href="#moredetails" role="tab" data-toggle="tab">More Details</a>
@@ -54,26 +50,8 @@
                         @endif
 
                         <li>
-                            <a href="#image_files" role="tab" data-toggle="tab">Image Files</a>
+                            <a href="#media" role="tab" data-toggle="tab">Media</a>
                         </li>
-
-                        <li>
-                            <a href="#video_files" role="tab" data-toggle="tab">Video Files</a>
-                        </li>
-
-                        <li>
-                            <a href="#sales" role="tab" data-toggle="tab">Sales</a>
-                        </li>
-
-                        <li>
-                            <a href="#rights" role="tab" data-toggle="tab">Rights</a>
-                        </li>
-
-                        @if(!isset($asset->currentContract->signed_at) || !isset($asset->contact))
-                        <li>
-                            <a href="#contact" role="tab" data-toggle="tab">Contact</a>
-                        </li>
-                        @endif
 
                         @if($asset->rights != 'ex' || $asset->rights != 'nonex')
                         <li class="{{ (session('active_tab') == 'contract') ? 'active' : '' }}">
@@ -82,11 +60,23 @@
                         @endif
 
                         <li>
-                            <a href="#admin" role="tab" data-toggle="tab">Admin</a>
+                            <a href="#analytics" role="tab" data-toggle="tab">Page URL</a>
                         </li>
 
+                        @if(count($activeLicenses))
                         <li>
-                            <a href="#analytics" role="tab" data-toggle="tab">Analytics</a>
+                            <a href="#sales" role="tab" data-toggle="tab">Sales</a>
+                        </li>
+                        @endif
+
+                        @if(auth()->user()->role === 'admin')
+                        <li>
+                            <a href="#logs" role="logs" data-toggle="tab">Logs</a>
+                        </li>
+                        @endif
+
+                        <li>
+                            <a href="#admin" role="tab" data-toggle="tab">Admin</a>
                         </li>
                     @endif
                 </ul>
@@ -101,46 +91,36 @@
                             @include('admin.videos.partials.metadata')
                         </div>
 
-                        <div class="tab-pane" id="credits">
-                            @include('admin.videos.partials.credits')
-                        </div>
-
                         <div class="tab-pane" id="moredetails">
                             @include('admin.videos.partials.moredetails')
                         </div>
 
-                        <div class="tab-pane" id="image_files">
-                            @include('admin.videos.partials.image_files')
+                        <div class="tab-pane" id="media">
+                            @include('admin.videos.partials.media')
                         </div>
-
-                        <div class="tab-pane" id="video_files">
-                            @include('admin.videos.partials.video_files')
-                        </div>
-
-                        <div class="tab-pane" id="sales">
-                            @include('admin.videos.partials.sales')
-                        </div>
-
-                        <div class="tab-pane" id="rights">
-                            @include('admin.videos.partials.rights')
-                        </div>
-
-                        @if(!isset($asset->currentContract->signed_at) || !isset($asset->contact))
-                        <div class="tab-pane" id="contact">
-                            @include('admin.videos.partials.contact')
-                        </div>
-                        @endif
 
                         <div class="tab-pane {{ (session('active_tab') == 'contract') ? 'active' : '' }}" id="contract">
                             @include('admin.contracts.partials.form')
                         </div>
 
-                        <div class="tab-pane" id="admin">
-                            @include('admin.videos.partials.admin')
-                        </div>
-
                         <div class="tab-pane" id="analytics">
                             @include('admin.videos.partials.analytics')
+                        </div>
+
+                        @if(count($activeLicenses))
+                        <div class="tab-pane" id="sales">
+                            @include('admin.videos.partials.sales')
+                        </div>
+                        @endif
+
+                        @if(auth()->user()->role === 'admin')
+                        <div class="tab-pane" id="logs">
+                            @include('admin.videos.partials.log')
+                        </div>
+                        @endif
+
+                        <div class="tab-pane" id="admin">
+                            @include('admin.videos.partials.admin')
                         </div>
                     </div>
 
@@ -189,7 +169,18 @@
 
                     @include('admin.videos.partials.contact')
 
-                    @include('admin.comments.partials.form')
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Comments</div>
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="panel-body" style="display: block; background: #fcfcfc;">
+                            <comments-component :asset="{{ json_encode($asset) }}" asset-type="video"></comments-component>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>
@@ -207,4 +198,5 @@
 @section('javascript')
     @include('admin.videos.partials.js')
     @include('admin.contacts.partials.js')
+    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop

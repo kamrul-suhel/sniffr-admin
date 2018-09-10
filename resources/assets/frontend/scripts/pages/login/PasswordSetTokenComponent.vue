@@ -4,7 +4,7 @@
     <!-- Password set form -->
     <v-container fluid fill-height class="section-space">
         <v-layout align-center justify-center>
-            <v-form v-model="valid" ref="password_set_form" @submit.prevent="onPasswordsetSubmit()">
+            <v-form v-model="valid" ref="password_set_form" @submit.prevent="onPasswordSetSubmit()">
                 <v-card width="400">
                     <v-card-text>
                         <v-flex xs12 align-center>
@@ -140,7 +140,7 @@
 
                                 // Set the user store
                                 this.$store.dispatch('getLoginStatus').then((response) => {
-                                    this.$router.push({name: 'videos'});
+                                    this.$router.push({name: 'client_profile'});
                                 });
                             }
                         })

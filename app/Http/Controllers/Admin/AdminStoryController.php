@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Audit;
 use App\CollectionStory;
-use App\Jobs\Quotes\QueueEmailExpiredQuote;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
 use RedditAPI;
 use App\Traits\FrontendResponse;
@@ -35,9 +35,13 @@ class AdminStoryController extends Controller
         'title' => 'required'
     ];
 
-    public function __construct(Request $request)
+    protected $audit;
+
+    public function __construct(Request $request, Audit $audit)
     {
         $this->middleware(['admin:admin,manager,editorial']);
+
+        $this->audit = $audit;
     }
 
     /**
@@ -49,60 +53,44 @@ class AdminStoryController extends Controller
         $state = $request->input('state') ? $request->input('state') : Cookie::get('sniffr_admin_state');
         $decision = $request->input('decision', (Cookie::get('sniffr_admin_decision') ?? 'content-sourced'));
         $assigned_to = $request->input('assignee', (Cookie::get('sniffr_admin_assigned') ?? null));
+		$stories = new Story;
 
-        $stories = new Story;
+		if ($search_value) {
+			$stories = $stories->where(function ($query) use ($search_value) {
+				$query->where('title', 'LIKE', '%' . $search_value . '%')
+					->orWhere('author', 'LIKE', '%' . $search_value . '%')
+					->orWhere('alpha_id', $search_value)
+					->orWhereHas('contact', function ($q) use ($search_value) {
+						$q->where('full_name', 'LIKE', '%' . $search_value . '%');
+					});
+			});
+		}
 
-        if ($search_value) {
-            $stories = $stories->where(function ($query) use ($search_value) {
-                $query->where('title', 'LIKE', '%' . $search_value . '%')
-                    ->orWhere('author', 'LIKE', '%' . $search_value . '%')
-                    ->orWhere('alpha_id', $search_value)
-                    ->orWhereHas('contact', function ($q) use ($search_value) {
-                        $q->where('full_name', 'LIKE', '%' . $search_value . '%');
-                    });
-            });
-        }
+		if ($assigned_to) {
+			$stories = $stories->where('user_id', $assigned_to);
+		}
 
-        if ($assigned_to) {
-            $stories = $stories->where('user_id', $assigned_to);
-        }
-
-        // Need to check if state exists in current decision tree
+		// Need to check if state exists in current decision tree
 		$stateExists = false;
-		foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-			if($state == $state_values['value']) {
-				$stateExists = true;
+
+
+		if (config('stories.decisions.' . $decision)) {
+			foreach (config('stories.decisions.' . $decision) as $current_state => $state_values) {
+				if ($state == $state_values['value']) {
+					$stateExists = true;
+				}
 			}
+		} else {
+			$decision = 'content-sourced';
 		}
 
 		if (!$stateExists) { // Get the first (default) state in the array
-			$state = key(config('stories.decisions.'.$decision));
+			$state = key(config('stories.decisions.' . $decision));
 		}
 
-		if($decision != 'all'){ // get everything
+		if ($decision != 'all') { // get everything
 			$stories = $stories->where('state', $state);
 		}
-
-
-//		// only display states within selected decision point
-//        if($decision) {
-//            $found=0;
-//            foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-//                if($state==$state_values['value']) {
-//                    $found=1;
-//                }
-//            }
-//
-//            // ^ ABOVE: need a better way to search state values to see if state exists within a decision array
-//            if($found==1) {
-//                $stories = $stories->where('state', $state);
-//            } else {
-//                $state = ''; //$current_state[0]; //set current state to first state within decision
-//                foreach(config('stories.decisions.'.$decision) as $current_state => $state_values) {
-//                    $stories = $stories->orWhere('state', $state_values['value']);
-//                }
-//            }
-//        }
 
         $stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
 
@@ -215,6 +203,11 @@ class AdminStoryController extends Controller
 
         $decision = Input::get('decision');
         //array_key_exists($story->state,config('stories.decisions.'.$decision)) looks for state within specific decision step
+
+		$logs = $this->audit->where('auditable_id', $asset->id)
+			->where('auditable_type', 'App\Story')
+			->orderBy('created_at', 'desc')
+			->paginate(10);
 
         $data = [
             'headline' => '<i class="fa fa-edit"></i> Edit Story',

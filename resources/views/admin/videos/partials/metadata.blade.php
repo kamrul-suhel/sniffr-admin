@@ -119,6 +119,48 @@
 </div>
 
 <div class="row">
+    <div class="col-sm-6">
+        <span class="form-group input-group">
+            <span class="input-group-addon">Video Class</span>
+
+            <select name="class" class="form-control" id="class">
+                    @foreach(config('pricing.class') as $key => $value)
+                    <option {{ $key === $asset->class ? 'selected': '' }} value="{{ $key }}">{{ $value['modifier'] }}:{{ $value['name'] }}</option>
+                @endforeach
+            </select>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group col-sm-6">
+        <span class="input-group">
+            <span class="input-group-addon">Rights</span>
+
+            <select name="rights" class="form-control">
+                <option value="">License</option>
+                <option value="ex"{{ $asset->rights == 'ex' ? ' selected="selected"' : '' }}>Ex Submission</option>
+                <option value="exc"{{ $asset->rights == 'exc' ? ' selected="selected"' : '' }}>Ex Chaser</option>
+                <option value="excc"{{ $asset->rights == 'excc' ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>
+                <option value="nonex"{{ $asset->rights == 'nonex' ? ' selected="selected"' : '' }}>Non Ex Submission</option>
+                <option value="nonexc"{{ $asset->rights == 'nonexc' ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
+            </select>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group input-group">
+            <span class="input-group-addon">Credit</span>
+            <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
+                $asset->credist or old('credit')
+                }}</textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-6">
         <div class="form-group input-group">
             <span class="input-group-addon">Notes</span>
@@ -141,11 +183,10 @@
     </span>
 </div>
 
-@if($asset->state == 'licensed' && (Auth::user()->role == 'admin' || Auth::user()->role == 'manager'))
+@if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
     <div class="form-group">
         <div class="input-group">
-            <span class="input-group">Make Featured</span>
-            <input type="checkbox" @if(isset($asset->featured) && $asset->featured==1)checked="checked"@endif value="1" name="featured" id="featured" />
+            <input class="form-inline" type="checkbox" @if(isset($asset->featured) && $asset->featured==1)checked="checked"@endif value="1" name="featured" id="featured" @if($asset->state != 'licensed' || !$asset->file) disabled @endif /><label for="feature">Make Featured @if($asset->state != 'licensed' || !$asset->file) (must be licensed and a file)@endif</label>
         </div>
     </div>
 @endif

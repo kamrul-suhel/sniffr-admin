@@ -1,15 +1,24 @@
 <template>
-    <v-layout row wrap class="cd-box">
-        <v-flex xs12 sm12 md3 lg3 xl3>
+    <v-layout
+            row wrap
+            class="cd-box">
+        <v-flex xs12 sm12 md3>
             <v-card>
                 <v-card-media
                         :src="video.thumb ? video.thumb :  (video.image ? video.image : '/assets/images/placeholder.png')"
                         height="250px"
                         @click="onVideoDialog()"
                         class="client-video-thumbnail cdi-content">
-                    <div class="cdi-label" v-if="purchased">
+                    <div class="cdi-label"
+                         v-if="purchased">
                         <v-tooltip top>
-                            <v-btn slot="activator" flat icon raised light color="white">
+                            <v-btn
+                                    slot="activator"
+                                    flat
+                                    icon
+                                    raised
+                                    light
+                                    color="white">
                                 <v-icon size="25px">money</v-icon>
                             </v-btn>
                             <span>Purchased</span>
@@ -18,7 +27,13 @@
 
                     <div class="cdi-label" v-if="decline">
                         <v-tooltip top>
-                            <v-btn slot="activator" flat icon raised light color="white">
+                            <v-btn
+                                    slot="activator"
+                                    flat
+                                    icon
+                                    raised
+                                    light
+                                    color="white">
                                 <v-icon size="25px">error_outline</v-icon>
                             </v-btn>
                             <span>Declined</span>
@@ -28,28 +43,43 @@
             </v-card>
         </v-flex>
 
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md6>
             <v-layout row wrap>
                 <v-flex xs12 pb-0>
                     <h2 v-html="video.title"></h2>
                     <div class="cd-time">{{ video.updated_at | convertDate }}</div>
                     <div>{{ video.description | readmore(300, ' ...')}}</div>
 
-                    <div class="quote" v-if="type === 'offered' || type === 'purchased'">
-                        <v-layout column fill-height>
-                            <v-flex xs12 class="pb-0" v-if="video.platform">
+                    <div class="quote"
+                         v-if="type === 'offered' || type === 'purchased'">
+                        <v-layout
+                                column
+                                fill-height>
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.platform">
                                 <span>Platform: {{ video.platform | convertHyphenToSpace }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="video.platform">
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.platform">
                                 <span>Length: {{ settings.pricing.length[video.length].name }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="video.type">
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.type">
                                 <span>Type: {{ settings.pricing.type[video.type].name }}</span>
                             </v-flex>
 
-                            <v-flex xs12 class="pb-0" v-if="video.credit">
+                            <v-flex
+                                    xs12
+                                    class="pb-0"
+                                    v-if="video.credit">
                                 <span>Please Credit: {{ video.credit }}</span>
                             </v-flex>
                         </v-layout>
@@ -58,7 +88,7 @@
             </v-layout>
         </v-flex>
 
-        <v-flex v-if="expired" xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-if="expired" xs12 sm12 md3 pl-3>
             <v-btn
                     block
                     dark
@@ -72,21 +102,27 @@
 
         <v-flex
                 v-else-if="video.collection_status === 'requested'"
-                xs12 sm12 md3 lg3 xl3 pl-3
+                xs12 sm12 md3 pl-3
                 align-content-center justify-center>
             <p class="text-xs-center darken-4">Waiting for quote</p>
         </v-flex>
 
-        <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 lg3 xl3 pl-3>
-            <v-btn
-                    block
-                    dark
-                    large
-                    @click="goToDetail()"
-                    color="dark"
-                    class="mb-3">
-                View
-            </v-btn>
+        <v-flex v-else-if="assetType === 'purchased' || video.purchased" xs12 sm12 md3 pl-3>
+            <div v-if="video.deleted_at != null">
+                This video has been removed from Sniffr.
+                As you already have a license you have a right to still download this video.
+            </div>
+            <div v-else>
+                <v-btn
+                        block
+                        dark
+                        large
+                        @click="goToDetail()"
+                        color="dark"
+                        class="mb-3">
+                    View
+                </v-btn>
+            </div>
 
             <v-btn
                     block
@@ -100,12 +136,13 @@
                 {{ button_text }}
             </v-btn>
 
+
             <div class="caption text-xs-center pt-2"
                  v-if="assetType === 'purchased'">{{ video.license_ends_at | licenseExpired }}
             </div>
         </v-flex>
 
-        <v-flex v-else xs12 sm12 md3 lg3 xl3 pl-3>
+        <v-flex v-else xs12 sm12 md3 pl-3>
             <v-btn
                     block
                     dark
@@ -118,17 +155,49 @@
                 £{{ video.final_price | numberFormat }} - Buy Now
             </v-btn>
 
-            <v-btn
-                    block
-                    dark
-                    large
-                    color="dark"
-                    @click.native="onDecline()"
-                    :loading="declineLoading"
-                    :disabled="declineLoading || assetDeclined"
-            >
-                Decline
-            </v-btn>
+            <small>Don't like this offer?</small>
+            <br>
+            <v-dialog v-model="dialog" persistent max-width="500px">
+                <v-btn
+                        slot="activator"
+                        persistent
+                        block
+                        dark
+                        large
+                        color="dark"
+                        :loading="declineLoading"
+                        :disabled="declineLoading || assetDeclined"
+                        class="mb-3"
+                >
+                    Contact Us
+                </v-btn>
+
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Contact Us</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container grid-list-md>
+                            <v-layout wrap>
+                                <v-flex xs12>
+                                    <v-textarea
+                                            label="Please tell us why this quote isn't good for you."
+                                            color="dark"
+                                            v-model="decline_note"
+                                            rows="10"
+                                            required
+                                    ></v-textarea>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="black" dark flat @click.native="dialog = false; declineLoading = false;">Cancel</v-btn>
+                        <v-btn dark @click="onDecline()">Send</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-flex>
 
         <v-flex xs12 class="my-2">
@@ -146,18 +215,20 @@
                 button_text: 'Download Video',
                 purchased: false,
                 decline: false,
+                decline_note: null,
+                dialog: false,
 
                 loader: null,
                 showButton: false,
 
                 loading: false,
                 acceptLoading: false,
-                declineLoading:false,
+                declineLoading: false,
                 assetDeclined: false,
 
-                expired:  false,
+                expired: false,
 
-                assetType:''
+                assetType: ''
             }
         },
 
@@ -186,7 +257,7 @@
 
         created() {
             this.assetType = this.type;
-            if(this.video.expired){
+            if (this.video.collection_status === 'expired') {
                 this.expired = true;
             }
         },
@@ -231,17 +302,12 @@
             onAccept() {
                 let url = 'collections/accept_asset_price/' + this.video.collection_video_id + '/video';
                 this.acceptLoading = true;
-
-                axios.get(url).then((response) => {
+                axios.post(url).then((response) => {
                     if (response.data.success === '1') {
                         this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
                         this.assetType = "purchased";
                         this.purchased = true;
-                        // SnackbarEventBus.displayMessage(5000, 'Video has successfully purchased');
-
-                        // After purchased, if we need to to change another component data this event need to enable
-                        // ClientVideoOfferPurchasedEventBus.clientRemoveVideo(this.index);
                     }
                 });
             },
@@ -249,37 +315,35 @@
             onDecline() {
                 let url = 'collections/reject_asset_price/' + this.video.collection_video_id + '/video';
                 this.declineLoading = true;
-                axios.get(url).then((response) => {
-                    if (response.data.success === '1') {
-                        // Do some action when they accept
-                        this.declineLoading = false;
 
+                let form_data =  new FormData();
+                form_data.append('rejection_notes', this.decline_note);
+                axios.post(url, form_data).then((response) => {
+                    if (response.data.success === '1') {
+                        this.declineLoading = false;
                         this.assetDeclined = true;
                         this.decline = true;
-                        // SnackbarEventBus.displayMessage(5000, 'Video has declined');
+
+                        this.dialog = false;
                     }
                 });
-
             },
 
-            onVideoDialog(){
+            onVideoDialog() {
                 let url = this.$route.path;
 
-                url += '?type='+this.type;
-                url += '&id='+this.video.alpha_id;
+                url += '?type=' + this.type;
+                url += '&id=' + this.video.alpha_id;
 
-                if(this.$route.query.tag){
-                    url += '&tag='+this.$route.query.tag;
+                if (this.$route.query.tag) {
+                    url += '&tag=' + this.$route.query.tag;
                 }
                 this.$route.query.alpha_id = this.video.alpha_id;
-
 
                 this.$store.commit('setEnterRouteObject', this.$route);
 
                 window.history.pushState({}, null, url);
-
-
-                if(this.$route.name === 'client_offered_assets'){
+                if (this.$route.name === 'client_offered_assets') {
                     // client offered page
 
                     let index = this.index;
@@ -290,8 +354,6 @@
                     this.$store.commit('setVideoLoading', true);
                     return;
                 }
-
-
 
                 this.$store.commit('setCurrentVideoAlphaId', this.video.alpha_id);
                 this.$store.commit('setCurrentRouteObject', this.$route);

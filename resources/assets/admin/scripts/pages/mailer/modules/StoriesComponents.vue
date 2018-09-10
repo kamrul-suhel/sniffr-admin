@@ -13,11 +13,11 @@
         </v-layout>
 
         <v-layout row wrap class="hidden-sm-and-down">
-            <v-flex xs12 sm3 md3>
+            <v-flex xs12 sm3 md4>
                 <strong>Thumbnail</strong>
             </v-flex>
 
-            <v-flex xs12 sm3 md3>
+            <v-flex xs12 sm3 md4>
                 <strong>Details</strong>
             </v-flex>
 
@@ -110,11 +110,15 @@
 
                 url += '&mailer=true';
 
-                this.$store.dispatch('getMailerStories', url)
-                    .then(() => {
-                        this.stories = this.$store.getters.getStories;
-                        this.totalPage = this.stories.last_page;
-                    });
+                axios.post(url)
+                    .then(response => {
+                        this.$store.commit('setStories', response.data.stories);
+                        this.totalPage = response.data.stories.last_page;
+                        this.stories = response.data.stories;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             },
 
             getQueryObject(){

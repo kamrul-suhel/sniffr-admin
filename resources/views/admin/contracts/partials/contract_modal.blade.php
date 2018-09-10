@@ -89,13 +89,14 @@
                             <input type="hidden" id="asset_alpha_id" name="asset_alpha_id" value="{{ $asset->alpha_id }}"/>
                         </div>
                     </div>
-                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
                 </div>
             </form>
+
+            </div>
         </div>
     </div>
 </div>

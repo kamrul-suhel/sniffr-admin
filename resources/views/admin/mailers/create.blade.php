@@ -6,7 +6,7 @@
 @stop
 
 @section('content')
-    <div id="admin-mailer">
+    <div id="sniffr-app">
         <v-app>
             <v-content>
                 <ol class="breadcrumb">
@@ -14,6 +14,8 @@
                     <li><a href="/admin/mailers/create"> Create Mailer </a></li>
                 </ol>
                 <router-view></router-view>
+
+                <footer-component></footer-component>
             </v-content>
         </v-app>
     </div>

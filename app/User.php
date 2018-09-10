@@ -3,11 +3,11 @@
 namespace App;
 
 use App\Libraries\ImageHandler;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use OwenIt\Auditing\Auditable;
 
 /**
  * @property int $id
@@ -28,9 +28,9 @@ use Illuminate\Support\Facades\Hash;
  * @property string avatar
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable, SoftDeletes, Auditable;
 
     public $webhook;
 

@@ -198,7 +198,7 @@
 													<option>{{ $story->state }}</option>
 												@else
 													@foreach(config('stories.decisions.'.$decision) as $key => $state_values)
-														<option value="{{ $key }}" @if($key == $chosenState) selected @endif>{{ $state_values['dropdown'] }}</option>
+														<option value="{{ $key }}" @if($key == $state) selected @endif>{{ $state_values['dropdown'] }}</option>
 													@endforeach
 												@endif
 											</select>
@@ -212,11 +212,7 @@
                                                 <option value="">Select User</option>
 												<?php $storyUserId = $story->user()->first()->id; ?>
                                                 @foreach($users as $user)
-                    								<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>
-														@if($user->full_name) {{ $user->full_name }}
-														@else {{ $user->username }}
-														@endif
-													</option>
+                    								<option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
                                                 @endforeach
                     						</select>
 
@@ -275,6 +271,8 @@
 
 			<div class="text-center"><?= $stories->appends(request()->except('page'))->render(); ?></div>
 		</div>
+
+		<modal v-if="modalVisible" @close="closeModal" asset-type="story"></modal>
 	</div>
 	@endif
 
@@ -290,4 +288,5 @@
 
 @section('javascript')
 	@include('admin.stories.partials.js')
+	<script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop

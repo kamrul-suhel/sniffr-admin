@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import stories from './modules/stories'
+import stories from '../../../scripts/store/stories'
 import videos from './modules/videos'
+import user from '../../../scripts/store/user'
+import modal from './modules/modal'
 import videoDialog from './modules/video-dialog-box'
 import storyDialog from './modules/story-dialog-box'
 
@@ -22,8 +24,10 @@ export const store = new Vuex.Store({
     },
 
     modules: {
+        user,
         stories,
         videos,
+        modal,
         videoDialog,
         storyDialog
     }

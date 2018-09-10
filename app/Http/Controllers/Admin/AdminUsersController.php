@@ -204,7 +204,7 @@ class AdminUsersController extends Controller
 
         $user->delete();
 
-        return Redirect::to('admin/users')->with([
+        return redirect()->to('admin/users')->with([
             'note' => 'Successfully Deleted User',
             'note_type' => 'success'
         ]);

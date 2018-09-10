@@ -32,6 +32,8 @@
              xs12 sm12 md7 lg7 xl7>
 
             <v-card flat class="video-player-poster">
+                <span class="label label-licensed" v-if="getVideoPurchased()">Purchased</span>
+
                 <v-card-media :src="getThnumbnail()"></v-card-media>
                 <v-btn @click="change()" class="dark player-play" dark fab medium>
                     <v-icon large>play_arrow</v-icon>
@@ -45,9 +47,6 @@
 <script>
     import {PlyrYoutube} from './player/youtubeVideoPlayer'
     import {PlyrVideo} from './player/videoPlayer'
-    import '../../scss/vendor/video-plyr.css';
-
-    import { mapGetters } from 'vuex';
 
     export default {
         components: {
@@ -57,7 +56,7 @@
 
         data() {
             return {
-                defaultImage: '/assets/images/placeholder.png',
+                defaultImage: '~/assets/images/placeholder.png',
 
                 showVideo: false,
 
@@ -163,6 +162,13 @@
                     }, 100)
 
                 }
+            },
+
+            getVideoPurchased() {
+                if (this.video.video_collections && this.video.video_collections.length > 0) {
+                    return true;
+                }
+                return false;
             },
 
             includes(value, url) {

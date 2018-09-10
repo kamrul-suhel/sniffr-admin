@@ -49,7 +49,7 @@
 
         <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
             <a href="{{ url('admin/stories') }}" class="tlink">
-                <i class="fa fa-tasks"></i>
+                <i class="fa fa-book"></i>
                 <span class="title">Stories</span>
             </a>
         </li>

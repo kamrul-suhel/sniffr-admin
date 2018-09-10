@@ -21,6 +21,7 @@ use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
+use Pallares\LaravelNuxt\Controllers\NuxtController;
 
 class VideoController extends Controller
 {
@@ -69,19 +70,19 @@ class VideoController extends Controller
 	/**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function upload()
+    public function upload(Request $request)
     {
-        return view('frontend.master', $this->data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function form()
+    public function form(Request $request)
     {
         $this->data['iframe'] = 'true';
         $this->data['form'] = 'upload';
-        return view('frontend.iframe', $this->data);
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
@@ -90,6 +91,7 @@ class VideoController extends Controller
      */
     public function store(CreateVideoRequest $request)
     {
+        ini_set('max_execution_time', 1800);
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
@@ -202,7 +204,8 @@ class VideoController extends Controller
 
             return $this->successResponse($data);
         }
-        return view('frontend.master');
+
+        return $this->getFrontendServerResponse($request);
     }
 
 
