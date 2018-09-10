@@ -12,6 +12,7 @@
                                 v-model="sortBy"
                                 :label="sort.text"
                                 :value="sort.value"
+                                @change="onSortOrderChange()"
                     ></v-checkbox>
                 </v-flex>
             </v-layout>
@@ -36,11 +37,11 @@
                     },
                     {
                         text: 'Video length max first',
-                        value: 'videoMax'
+                        value: 'videoMaxLength'
                     },
                     {
                         text: 'Video length min first',
-                        value: 'videoMin'
+                        value: 'videoMinLength'
                     }
                 ]
             }
@@ -50,6 +51,9 @@
 
         },
         methods: {
+            onSortOrderChange(){
+                this.$store.commit('setSortBy', this.sortBy);
+            }
         }
     }
 </script>
