@@ -143,6 +143,10 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
 			if ($decision[1] !== 'all') {
 				return $model->where('state', $decision[1]);
+			} else {
+				$model->decision = 'all';
+				$model->chosenState = 'all';
+				return $model;
 			}
 		}
 
