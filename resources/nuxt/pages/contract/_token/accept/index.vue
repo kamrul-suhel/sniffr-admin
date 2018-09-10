@@ -99,10 +99,10 @@
                     .then(response => {
                         this.showMessage = true;
                         this.buttonDisable = true;
-                        if (!response.error) {
+                        if (!response.data.error) {
                             this.message = response.success_message;
-                            this.signed = response.signed;
-                            this.display_thank_you = true;
+                            this.signed = response.signed
+                            this.display_thank_you = true
                         } else {
                             this.error = true;
                             this.message = response.error_message;
