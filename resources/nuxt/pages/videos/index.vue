@@ -113,8 +113,7 @@
 
         methods: {
             setAllVideoData() {
-                console.log(this.$store.getters.getQueryObject);
-                this.$store.dispatch('getVideoData', this.$store.getters.getQueryObject);
+                this.$store.dispatch('getVideoData', {queryUrl: this.$store.getters.getSearchQueryUrl, queryObject: this.$store.getters.getQueryObject});
             }
         }
     }
