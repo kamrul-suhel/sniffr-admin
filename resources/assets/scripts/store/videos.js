@@ -155,7 +155,8 @@ const getters = {
 const mutations = {
 
     setVideoData(state, data) {
-        state.videos = data;
+        state.videos = [];
+        state.videos = [...data];
     },
 
     setMailerVideoData(state, data) {
