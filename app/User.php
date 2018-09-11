@@ -58,6 +58,15 @@ class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditab
         return $this->belongsTo(Client::class);
     }
 
+    public function assignedVideos(){
+    	return $this->hasMany(Video::class);
+    }
+
+    public function assignedStories()
+    {
+    	return $this->hasMany(Story::class);
+    }
+
     /**
      * @return bool
      */

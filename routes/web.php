@@ -194,11 +194,12 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
     Route::resource('collections', 'Admin\AdminCollectionController', ['as' => 'admin']);
-
     Route::get('contacts/autocomplete', 'Admin\AdminContactController@autocomplete')->name('contact.autocomplete');
     Route::resource('contacts', 'Admin\AdminContactController');
 
     Route::resource('users', 'Admin\AdminUsersController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
+
+    Route::resource('staff', 'Admin\AdminStaffController');
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');

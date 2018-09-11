@@ -56,19 +56,21 @@
     @endif
 
     @if(Auth::user()->isAdmin())
+        <li class="{{ Request::segment(2) == 'staff' ? 'active' : '' }}">
+            <a href="{{ url('admin/staff') }}" class="tlink">
+                <i class="fa fa-group"></i>
+                <span class="title">Staff Management</span>
+            </a>
+        </li>
+    @endif
+
+    @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
             <a href="{{ url('admin/mailers') }}" class="tlink">
                 <i class="fa fa-envelope-open"></i>
                 <span class="title">Mailers</span>
             </a>
         </li>
-
-    <!-- <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
-        <a href="{{ url('admin/media') }}">
-            <i class="fa fa-picture-o"></i>
-            <span class="title">Media</span>
-        </a>
-    </li> -->
     @endif
 
     @if(auth()->user()->isAdmin())
