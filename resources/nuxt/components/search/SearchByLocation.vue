@@ -53,7 +53,7 @@
             onSearchLocationChange() {
                 this.$store.commit('setSearchByLocation', this.selectedLocations);
                 this.$store.commit('setSearchQuery');
-                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
             }
         }
     }

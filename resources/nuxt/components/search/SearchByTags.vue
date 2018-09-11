@@ -39,16 +39,15 @@
                     return this.$store.getters.getSearchByTags
                 },
 
-                set(value){
-                    this.$store.commit('setSearchByTags', value);
+                set(tags){
+                    this.$store.commit('setSearchByTags', tags);
                     this.$store.commit('setSearchQuery');
-                    SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                    SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
                 }
             }
         },
 
         created() {
-
         },
         methods: {
         }

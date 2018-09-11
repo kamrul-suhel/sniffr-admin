@@ -33,7 +33,7 @@
               set(title){
                   this.$store.commit('setSearchByTitle', title);
                   this.$store.commit('setSearchQuery');
-                  SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                  SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
               }
           }
         },
