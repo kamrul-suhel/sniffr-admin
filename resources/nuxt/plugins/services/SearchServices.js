@@ -3,7 +3,7 @@ class SearchServices {
     constructor(){
     }
 
-    changeSearchRoute(route, router, query){
+    updateSearchRoute(route, router, query){
         if (route.name === 'stories') {
             router.push({path: '/stories?'+query});
         } else {
