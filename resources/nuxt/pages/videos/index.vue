@@ -18,7 +18,7 @@
                                 <h2 class="text-center text-uppercase">All Videos</h2>
                             </v-flex>
                         </v-layout>
-                        
+
                         <v-layout row wrap v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
                             <v-flex xs12 class="text-center">
                                 <h2 class="text-uppercase">Your Suggested Videos</h2>
@@ -48,9 +48,9 @@
                             ></video-loop-component>
                         </v-layout>
 
-                        <v-layout row wrap v-else>
+                        <v-layout align-center justify-center row fill-height v-else>
                             <v-flex>
-                                <h2>No video found please search again.</h2>
+                                <h2 class="text-xs-center">No video found please search again.</h2>
                             </v-flex>
                         </v-layout>
 
