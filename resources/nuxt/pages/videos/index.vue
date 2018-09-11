@@ -63,6 +63,7 @@
     import SearchComponent from '@/components/search/index';
     import VideoLoopComponent from '@/components/includes/VideoLoopComponent';
     import PaginationComponent from '@/components/includes/PaginationComponent';
+    import SearchServices from '@/plugins/services/SearchServices';
 
     import {mapGetters} from 'vuex';
 
@@ -78,9 +79,6 @@
         },
         data() {
             return {
-                data: '',
-                logged_in: false,
-                lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`
             }
         },
 
@@ -98,36 +96,25 @@
           title: 'Sniffr videos'
         },
 
+        beforeCreate(){
+            SearchServices.populateSearchStore(this.$store, this.$route, this.$router);
+        },
+
 
         watch: {
             '$route'(to, from, next) {
-                this.setAllVideoData(this.getQueryObject());
+                this.setAllVideoData();
             }
         },
 
         created() {
-            this.setAllVideoData(this.getQueryObject());
+            this.setAllVideoData();
         },
 
         methods: {
-            setAllVideoData(query) {
-                this.$store.dispatch('getVideoData', query);
-            },
-
-            getQueryObject() {
-                let query = {
-                    page: this.$route.query.page ? this.$route.query.page : '',
-                };
-
-                if (this.$route.query.search && this.$route.query.search !== '') {
-                    query.search = this.$route.query.search;
-                }
-
-                if (this.$route.query.tag && this.$route.query.tag !== '') {
-                    query.tag = this.$route.query.tag;
-                }
-
-                return query;
+            setAllVideoData() {
+                console.log(this.$store.getters.getQueryObject);
+                this.$store.dispatch('getVideoData', this.$store.getters.getQueryObject);
             }
         }
     }

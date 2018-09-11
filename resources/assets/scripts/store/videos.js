@@ -355,10 +355,10 @@ const mutations = {
 
 const actions = {
     getVideoData({commit}, payload = {}) {
-        let url = '/search/videos';
+        let url = '/search/videos?';
 
         if (payload.page && payload.page != 0) {
-            url = url + '?page=' + payload.page;
+            url = url + 'page=' + payload.page;
         }
 
         if (payload.search && payload.search != '') {

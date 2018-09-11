@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import SearchServices from '@/plugins/services/SearchServices';
     export default {
         data(){
             return {
@@ -33,16 +34,16 @@
         props: [
             'searchOption'
         ],
+
         created() {
 
         },
+
         methods: {
             onSearchActive() {
-                if (this.$route.name === 'stories') {
-                    this.$router.push({name: 'stories', query: {search: this.value, page: 1}});
-                } else {
-                    this.$router.push({name: 'videos', query: {search: this.value, page: 1}});
-                }
+                this.$store.commit('setSearchByTitle', this.value);
+                this.$store.commit('setSearchQuery');
+                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
             }
         }
     }

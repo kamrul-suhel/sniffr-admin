@@ -4,10 +4,11 @@
         <search-by-length/>
         <search-by-tags/>
         <sort-by/>
-        <search-by-location/>
+        <!--<search-by-location/>-->
     </section>
 </template>
 <script>
+
     import SearchByTitleDescription from './SearchByTItleDescription'
     import SearchByLength from './SearchByLength'
     import SearchByTags from './SearchByTags'
@@ -28,12 +29,14 @@
 
             }
         },
+
         props: [
             'searchOption'
         ],
-        created() {
 
+        created() {
         },
+
         methods: {
         }
     }

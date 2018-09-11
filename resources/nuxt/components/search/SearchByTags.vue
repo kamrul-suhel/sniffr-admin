@@ -12,7 +12,6 @@
                                 v-model="tags"
                                 :label="tag | capitalize"
                                 :value="tag"
-                                @change="onTagChange()"
                     ></v-checkbox>
                 </v-flex>
             </v-layout>
@@ -23,26 +22,35 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import SearchServices from '@/plugins/services/SearchServices';
     export default {
         data(){
             return {
-                tags: []
             }
         },
 
         computed: {
             ...mapGetters({
                 tagItems : 'getAllTags'
-            })
+            }),
+
+            tags: {
+                get(){
+                    return this.$store.getters.getSearchByTags
+                },
+
+                set(value){
+                    this.$store.commit('setSearchByTags', value);
+                    this.$store.commit('setSearchQuery');
+                    SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                }
+            }
         },
 
         created() {
 
         },
         methods: {
-            onTagChange(){
-                this.$store.commit('setSearchByTags', this.tags);
-            }
         }
     }
 </script>

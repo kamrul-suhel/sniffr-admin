@@ -22,6 +22,7 @@
 </template>
 
 <script>
+    import SearchServices from '@/plugins/services/SearchServices';
     export default {
         data(){
             return {
@@ -50,9 +51,12 @@
         created() {
 
         },
+
         methods: {
             onSortOrderChange(){
                 this.$store.commit('setSortBy', this.sortBy);
+                this.$store.commit('setSearchQuery')
+                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
             }
         }
     }

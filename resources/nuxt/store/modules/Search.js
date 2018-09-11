@@ -7,11 +7,15 @@ const state = {
     searchByMaxLength: 0,
     searchByTags: [],
     searchSortBy: '',
-    searchByLocations: []
+    searchAllLocations:[],
+    searchByLocations: [],
+    searchPage: 1,
+
+    searchQuery:''
 }
 
 const mutations = {
-    setAllTags(state, tags){
+    setAllTags(state, tags) {
         state.allTags = [];
         state.allTags.push(...tags);
     },
@@ -38,20 +42,32 @@ const mutations = {
     },
 
     setSortBy(state, sortBy) {
+        if(sortBy === null){
+            state.searchSortBy = [];
+            return;
+        }
+
         state.searchSortBy = sortBy;
     },
 
     setSearchByLocation(state, locationObject) {
-        state.searchByLocations.push(locationObject);
+        state.searchByLocations = [];
+        state.searchByLocations.push(...locationObject);
     },
 
-    removeSearchByLocations(state, locationObject) {
-        state.searchByLocation.forEach((location, index) => {
-            if (location.value === locationObject.value) {
-                state.searchByLocations.splice(index, 1);
-            }
-        })
+    setSearchAllLocations(state, locations) {
+        state.searchAllLocations = [];
+        state.searchAllLocations.push(...locations);
     },
+
+    setSearchQuery(state, query = null){
+
+    },
+
+    setSearchPage(state, page){
+        state.searchPage = page;
+    },
+
 
     resetSearchStoreObject(state) {
         state.allTags = [];
@@ -62,15 +78,16 @@ const mutations = {
         state.searchByTags = [];
         state.sortBy = '';
         state.searchByLocations = []
+        state.searchPage = 1;
     }
 }
 
 const getters = {
-    getSearchType(state){
+    getSearchType(state) {
         return state.searchType;
     },
 
-    getAllTags(state){
+    getAllTags(state) {
         return state.allTags;
     },
 
@@ -95,16 +112,71 @@ const getters = {
     },
 
     getSearchByLocation(state) {
+        console.log(state.searchByLocations)
         return state.searchByLocations;
+    },
+
+    getSearchAllLocations(state){
+        return state.searchAllLocations;
+    },
+
+    getSearchQuery(state){
+        return state.searchQuery;
+    },
+
+    getSearchPage(state){
+        return state.searchPage;
+    },
+
+    getSearchQueryUrl(state){
+        let queryUrl = '';
+        if(state.searchPage > 1){
+            queryUrl = 'page='+state.searchPage;
+        }
+
+        if(state.searchByTitle !== ''){
+            queryUrl += 'search='+state.searchByTitle;
+        }
+
+        if(state.searchByMiniLength > 0){
+            queryUrl += '&minLength='+state.searchByMiniLength;
+        }
+
+        if(state.searchByMaxLength > 0){
+            queryUrl += '&maxLength='+ state.searchByMaxLength;
+        }
+
+        if(state.searchByTags.length > 0){
+            let tagsString = state.searchByTags.toString();
+            queryUrl += '&tags='+tagsString;
+        }
+
+        if(state.searchSortBy.length > 0){
+            queryUrl += '&sortBy='+ state.searchSortBy;
+        }
+
+        state.searchQuery = queryUrl;
+        return state.searchQuery;
+    },
+
+    getQueryObject(state){
+        return {
+            page: state.searchPage,
+            search: state.searchByTitle,
+            tags: state.searchByTags,
+            maxLength: state.searchByMaxLength,
+            minLength: state.searchByMiniLength,
+            sortBy: state.searchSortBy
+        }
     }
 }
 
 const actions = {
-    fetchAllTags({commit, state}){
+    fetchAllTags({commit, state}) {
         let url = '/tags';
 
         this.$axios.$get(url)
-            .then( response => {
+            .then(response => {
                 console.log(response);
             })
             .catch(error => {
