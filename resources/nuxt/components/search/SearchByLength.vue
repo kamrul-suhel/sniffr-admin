@@ -85,7 +85,7 @@
                     }
                 ],
 
-                maxSeconds: [],
+                maxSeconds: []
             }
         },
 
@@ -98,7 +98,7 @@
                 set(miniLength){
                     this.$store.commit('setSearchByMiniLength', miniLength);
                     this.$store.commit('setSearchQuery');
-                    SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                    SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
                 }
             },
 
@@ -110,7 +110,7 @@
                 set(maxLength){
                     this.$store.commit('setSearchByMaxLength', maxLength);
                     this.$store.commit('setSearchQuery');
-                    SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                    SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
                 }
             }
 
