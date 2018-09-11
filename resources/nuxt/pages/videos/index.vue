@@ -7,7 +7,7 @@
             </v-container>
 
             <v-navigation-drawer
-                    v-model="drawer"
+                    v-model="searchDrawer"
                     absolute
                     temporary
                     disable-route-watcher
@@ -28,7 +28,7 @@
                                         flat
                                         fab
                                         small
-                                        @click.stop="drawer = !drawer"
+                                        @click.stop="searchDrawer = !searchDrawer"
                                         color="dark">
                                     <v-icon color="dark">filter_list</v-icon>
                                 </v-btn>
@@ -103,7 +103,7 @@
         },
         data() {
             return {
-                drawer: null
+                searchDrawer: null
             }
         },
 
