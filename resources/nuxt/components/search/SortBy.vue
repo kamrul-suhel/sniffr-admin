@@ -58,13 +58,6 @@
                     SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
                 }
             }
-        },
-
-        created() {
-
-        },
-
-        methods: {
         }
     }
 </script>

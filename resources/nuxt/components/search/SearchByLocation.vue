@@ -44,12 +44,7 @@
             })
         },
 
-        created() {
-
-        },
-
         methods: {
-
             onSearchLocationChange() {
                 this.$store.commit('setSearchByLocation', this.selectedLocations);
                 this.$store.commit('setSearchQuery');
