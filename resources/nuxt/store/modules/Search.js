@@ -17,6 +17,7 @@ const state = {
 const mutations = {
     setAllTags(state, tags) {
         state.allTags = [];
+        state.searchPage = 1;
         state.allTags.push(...tags);
     },
 
@@ -24,26 +25,31 @@ const mutations = {
         state.searchType = type;
     },
 
-    setSearchByTitle(state, value) {
-        state.searchByTitle = value;
+    setSearchByTitle(state, title) {
+        state.searchPage = 1;
+        state.searchByTitle = title;
     },
 
     setSearchByMiniLength(state, minValue) {
+        state.searchPage = 1;
         state.searchByMiniLength = minValue;
     },
 
     setSearchByMaxLength(state, maxValue) {
+        state.searchPage = 1;
         state.searchByMaxLength = maxValue;
     },
 
     setSearchByTags(state, tagArray) {
+        state.searchPage = 1;
         state.searchByTags = [];
         state.searchByTags.push(...tagArray);
     },
 
     setSortBy(state, sortBy) {
+        state.searchPage = 1;
         if(sortBy === null){
-            state.searchSortBy = [];
+            state.searchSortBy = '';
             return;
         }
 
@@ -51,6 +57,7 @@ const mutations = {
     },
 
     setSearchByLocation(state, locationObject) {
+        state.searchPage = 1;
         state.searchByLocations = [];
         state.searchByLocations.push(...locationObject);
     },
