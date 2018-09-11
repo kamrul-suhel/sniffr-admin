@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import SearchService from '@/plugins/services/SearchServices'
     export default {
         data() {
             return {
@@ -28,7 +29,6 @@
             'page'
         ],
 
-
         watch: {
             pagination() {
                 this.current_page = this.pagination.current_page;
@@ -37,28 +37,13 @@
 
             current_page() {
                 this.$vuetify.goTo('.s-pagination-goto', {duration: 1, easing: 'easeInCubic'});
-
-                if (this.page === 'video') {
-                    this.$router.push({
-                        path: '/videos',
-                        query: {page: this.current_page, search: this.$route.query.search}
-                    });
-                }
-
-                if (this.page === 'stories') {
-                    let value = this.$route.query.search;
-                    let page = this.current_page;
-                    this.$router.push({name: 'stories', query: {search: value, page: page}});
-                }
-
+                this.$store.commit('setSearchPage', this.current_page);
+                SearchService.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
             }
         },
 
         created() {
-            //this.current_page = Number(this.$route.query.page);
-            let device = this.$vuetify.breakpoint.name;
-
-            if (device === 'xs') {
+            if (this.$vuetify.breakpoint.name === 'xs') {
                 this.total_visible = 5;
             }
         },
