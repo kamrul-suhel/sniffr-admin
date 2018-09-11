@@ -275,15 +275,7 @@ const mutations = {
 
 const actions = {
     fetchStories({commit}, payload = {}) {
-        let url = '/search/stories';
-        if (payload.page && payload.page != 0) {
-            url = url + '?page=' + payload.page;
-        }
-
-        if (payload.search && payload.search != '') {
-            url = url + '&search=' + payload.search;
-        }
-
+        let url = '/search/stories?'+payload.queryUrl;
         this.$axios.$post(url)
             .then((response) => {
                 let data = response;

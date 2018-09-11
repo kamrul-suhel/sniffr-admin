@@ -47,7 +47,7 @@
                 </v-layout>
             </v-container>
 
-            <v-containegrid-list-lg class="stories pt-0" v-if="stories.length > 0">
+            <v-container grid-list-lg class="stories pt-0" v-if="stories.length > 0">
                 <v-layout row wrap>
                     <story-loop-component
                             v-for="story in stories"
@@ -79,6 +79,7 @@
     import SearchComponent from '@/components/search/index';
     import StoryLoopComponent from '@/components/StoryLoopComponent';
     import PaginationComponent from '@/components/includes/PaginationComponent';
+    import SearchServices from '@/plugins/services/SearchServices';
     import {mapGetters} from 'vuex';
 
     export default {
@@ -106,24 +107,24 @@
 
         watch: {
             '$route'(to, from, next) {
-                this.fetchStories(this.getQueryObject());
+                this.fetchStories();
             }
         },
 
+        beforeCreate() {
+            SearchServices.populateSearchStore(this.$store, this.$route, this.$router);
+        },
+
         created() {
-            this.fetchStories(this.getQueryObject());
+            this.fetchStories();
         },
 
         methods: {
             fetchStories(query) {
-                this.$store.dispatch('fetchStories', query);
-            },
-
-            getQueryObject() {
-                return {
-                    page: this.$route.query.page,
-                    search: this.$route.query.search
-                };
+                this.$store.dispatch('fetchStories',  {
+                    queryUrl: this.$store.getters.getSearchQueryUrl,
+                    queryObject: this.$store.getters.getQueryObject
+                });
             }
         },
 
