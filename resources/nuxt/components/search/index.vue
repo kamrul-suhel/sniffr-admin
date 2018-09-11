@@ -1,5 +1,5 @@
 <template>
-    <section class="search-filter-section mr-2">
+    <section class="search-filter-section mr-2 pa-3">
         <search-by-title-description @searchOption="searchOption($event)"/>
         <search-by-length/>
         <search-by-tags/>

@@ -6,16 +6,32 @@
             <v-container grid-list-lg class="py-0">
             </v-container>
 
-            <v-container grid-list-lg>
-                <v-layout row wrap>
-                    <v-flex xs12 md3 xl2>
-                        <search-component/>
-                    </v-flex>
+            <v-navigation-drawer
+                    v-model="drawer"
+                    absolute
+                    temporary
+                    disable-route-watcher
+            >
+                <search-component/>
+            </v-navigation-drawer>
 
-                    <v-flex xs12 md9 xl10>
+            <v-container grid-list-lg py-0>
+                <v-layout row wrap>
+                    <v-flex xs12>
                         <v-layout row wrap>
-                            <v-flex xs12 class="mb-0 pt-0">
+                            <v-flex xs12 class="mb-0 pt-0" style="position:relative">
                                 <h2 class="text-center text-uppercase">All Videos</h2>
+                                <v-btn
+                                        absolute
+                                        top
+                                        right
+                                        flat
+                                        fab
+                                        small
+                                        @click.stop="drawer = !drawer"
+                                        color="dark">
+                                    <v-icon color="dark">filter_list</v-icon>
+                                </v-btn>
                             </v-flex>
                         </v-layout>
 
@@ -86,7 +102,9 @@
             PaginationComponent,
         },
         data() {
-            return {}
+            return {
+                drawer: null
+            }
         },
 
         computed: {
