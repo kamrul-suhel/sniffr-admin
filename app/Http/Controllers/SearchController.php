@@ -345,8 +345,8 @@ class SearchController extends Controller
             return $videos;
         }
 
-        if($request->has('minLength')){
-            $videos = $videos->whereBetween('duration', [0, $request->minLength]);
+        if($request->has('maxLength')){
+            $videos = $videos->whereBetween('duration', [0, $request->maxLength]);
             return $videos;
         }
         return $videos;
