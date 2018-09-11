@@ -2,11 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
 use OwenIt\Auditing\Auditable;
 
 /**
@@ -182,6 +184,14 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	}
 
 	/**
+	 * @return string
+	 */
+	public function routeNotificationForSlack()
+	{
+		return 'https://hooks.slack.com/services/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';
+	}
+
+	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function videoCollections()
@@ -190,11 +200,17 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	}
 
 	/**
+	 * @param int $page
 	 * @return string
+	 * @codeCoverageIgnore
 	 */
-	public function routeNotificationForSlack()
+	public function cacheKey(int $page = 0)
 	{
-		return 'https://hooks.slack.com/services/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';
+		return sprintf(
+			"%s-%s",
+			$this->getTable(),
+			$page
+		);
 	}
 
 	//Functions
@@ -215,20 +231,6 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		}
 
 		return $this->delete();
-	}
-
-	/**
-	 * @param int $page
-	 * @return string
-	 * @codeCoverageIgnore
-	 */
-	public function cacheKey(int $page = 0)
-	{
-		return sprintf(
-			"%s-%s",
-			$this->getTable(),
-			$page
-		);
 	}
 
     /**
@@ -292,5 +294,137 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
             return $this->tags->toArray();
         });
     }
+
+
+	//**********************
+	// Search Functions   **
+	//**********************
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchCategory($model, $data)
+	{
+		if ($data) {
+			return $model->where('video_category_id', $data);
+		}
+
+		return $model;
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchCollection($model, $data)
+	{
+		if ($data) {
+			return $model->where('video_collection_id', $data);
+		}
+
+		return $model;
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchShottype($model, $data)
+	{
+		if ($data) {
+			return $model->where('video_shottype_id', $data);
+		}
+
+		return $model;
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchRights($model, $data)
+	{
+		if ($data) {
+			return $model->where('rights', $data);
+		}
+
+		return $model;
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchState($model, $data)
+	{
+		$data = $data ? $data : "all";
+
+		//override all for deleted videos
+		if ($data == 'deleted') {
+			return $model->onlyTrashed()->orderBy('updated_at', 'desc');
+		}
+
+		if ($data == 'all') {
+			return $model;
+		}
+
+		session(['state' => $data]);
+		return $model->where('state', $data);
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchTerm($model, $data)
+	{
+		if ($data) {
+			return $model->where(function ($query) use ($data) {
+				$query->where('title', 'LIKE', '%' . $data . '%')
+					->orWhereHas('tags', function ($q) use ($data) {
+						$q->where('name', 'LIKE', '%' . $data . '%');
+					})
+					->orWhereHas('contact', function ($q) use ($data) {
+						$q->where('email', 'LIKE', '%' . $data . '%');
+					})
+					->orWhere('alpha_id', $data);
+			});
+		}
+
+		return $model;
+	}
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 */
+	public function paginateResults($data)
+	{
+		return $data->orderByRaw('CASE WHEN licensed_at IS NULL THEN created_at ELSE licensed_at END DESC')->paginate(24);
+	}
+
+	/**
+	 * @param $result
+	 * @param $state
+	 * @return array
+	 */
+	public function generateData($result, $state, $data = null)
+	{
+		return [
+			'state' => $state ? $state : "all",
+			'videos' => $result,
+			'user' => auth()->user(),
+			'video_categories' => VideoCategory::all(),
+			'video_collections' => VideoCollection::all(),
+			'video_shottypes' => VideoShotType::all(),
+		];
+	}
 
 }

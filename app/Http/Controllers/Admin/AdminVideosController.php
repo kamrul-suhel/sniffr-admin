@@ -43,11 +43,12 @@ class AdminVideosController extends Controller
      */
     private $videoService, $audit;
 
-    /**
-     * AdminVideosController constructor.
-     * @param Request $request
-     * @param VideoService $videoService
-     */
+	/**
+	 * AdminVideosController constructor.
+	 * @param Request $request
+	 * @param VideoService $videoService
+	 * @param Audit $audit
+	 */
     public function __construct(Request $request, VideoService $videoService, Audit $audit)
     {
         $this->middleware('admin');

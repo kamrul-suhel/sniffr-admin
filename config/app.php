@@ -1,5 +1,7 @@
 <?php
 
+//ini_set('memory_limit', -1);
+
 return [
 
 	'name' => env('APP_NAME', 'Sniffr'),

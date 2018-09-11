@@ -20,7 +20,18 @@
 
 		<div class="row">
 			<form id="search-form" method="get" role="form" class="search-form-full">
-				<div class="col-md-2">
+				<div class="col-md-1">
+					<div class="form-group">
+						<select id="state" name="state" class="form-control">
+							<option value="">State</option>
+							@foreach(config('videos.states') as $state)
+								<option value="{{ $state }}"{{ isset($_GET['state']) && ($_GET['state'] == $state) ? ' selected="selected"' : '' }}>{{ ucwords($state) }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-1">
 					<div class="form-group">
 						<select id="category" name="category" class="form-control">
 							<option value="">Vertical</option>
@@ -31,7 +42,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-2">
+				<div class="col-md-1">
 					<div class="form-group">
 						<select id="collection" name="collection" class="form-control">
 							<option value="">Collection</option>
@@ -42,18 +53,18 @@
 					</div>
 				</div>
 
-				<div class="col-md-2">
+				<div class="col-md-1">
 					<div class="form-group">
-						<select id="shot_type" name="shot_type" class="form-control">
+						<select id="shot_type" name="shottype" class="form-control">
 							<option value="">ShotType</option>
 							@foreach($video_shottypes as $shottype)
-								<option value="{{ $shottype->id }}"{{ isset($_GET['shot_type']) && ($_GET['shot_type'] == $shottype->id) ? ' selected="selected"' : '' }}>{{ $shottype->name }}</option>
+								<option value="{{ $shottype->id }}"{{ isset($_GET['shottype']) && ($_GET['shottype'] == $shottype->id) ? ' selected="selected"' : '' }}>{{ $shottype->name }}</option>
 							@endforeach
 						</select>
 					</div>
 				</div>
 
-				<div class="col-md-2">
+				<div class="col-md-1">
 					<div class="form-group">
 						<select id="rights" name="rights" class="form-control">
 							<option value="">License</option>
@@ -66,9 +77,9 @@
 					</div>
 				</div>
 
-				<div class="col-md-4">
+				<div class="col-md-7">
 					<div class="form-group">
-						<input type="text" class="form-control" name="search_value" id="search-input" placeholder="Search..." value="{{ Request::get('s') }}"> <i class="fa fa-search"></i>
+						<input type="text" class="form-control" name="term" id="search-input" placeholder="Search..." value="{{ Request::get('term') }}"> <i class="fa fa-search"></i>
 					</div>
 				</div>
 			</form>
@@ -250,7 +261,7 @@
 @stop
 
 @section('javascript')
-	<script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
-	@include('admin.videos.partials.js')
+    @include('admin.videos.partials.js')
+    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop
 
