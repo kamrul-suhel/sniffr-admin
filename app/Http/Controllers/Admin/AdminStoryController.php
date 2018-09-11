@@ -216,6 +216,7 @@ class AdminStoryController extends Controller
             'post_route' => url('admin/stories/update'),
             'button_text' => 'Save Draft',
             'decision' => $decision,
+	        'logs' => $logs,
             'user' => Auth::user(),
             'users' => User::all(),
 			'contact' => $asset->contact,
