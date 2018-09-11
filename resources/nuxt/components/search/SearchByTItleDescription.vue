@@ -6,16 +6,10 @@
         <v-card-text class="pt-0 search-content">
             <div class="form-group">
                 <v-text-field
-                        type="text"
-                        name="value"
-                        v-model="value"
+                        v-model="title"
                         color="dark"
                         label="Search by title"
-                        append-icon="search"
-                        aria-describedby="filterhelp"
-                        @change="onSearchActive"
-                        @keyup.enter="onSearchActive"
-                        autocomplete="off">
+                        append-icon="search">
                 </v-text-field>
             </div>
         </v-card-text>
@@ -27,24 +21,29 @@
     export default {
         data(){
             return {
-                value: ''
             }
         },
 
-        props: [
-            'searchOption'
-        ],
+        computed: {
+          title: {
+              get(){
+                  return this.$store.getters.getSearchByTitle;
+              },
+
+              set(title){
+                  this.$store.commit('setSearchByTitle', title);
+                  this.$store.commit('setSearchQuery');
+                  SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+              }
+          }
+        },
 
         created() {
 
         },
 
         methods: {
-            onSearchActive() {
-                this.$store.commit('setSearchByTitle', this.value);
-                this.$store.commit('setSearchQuery');
-                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
-            }
+
         }
     }
 </script>

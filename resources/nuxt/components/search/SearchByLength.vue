@@ -10,7 +10,6 @@
                         <v-select
                                 v-model="selectedMiniSecond"
                                 color="dark"
-                                @change="onMiniSecondChange"
                                 :items="miniSeconds"
                                 label="Min"
                         ></v-select>
@@ -21,7 +20,6 @@
                                 color="dark"
                                 v-model="selectedMaxSecond"
                                 :items="maxSeconds"
-                                @change="onMaxSecondChange"
                                 label="Max"
                         ></v-select>
                     </v-flex>
@@ -36,7 +34,6 @@
     export default {
         data(){
             return {
-                selectedMiniSecond: {},
                 miniSeconds: [
                     {
                         text: 'None',
@@ -89,8 +86,34 @@
                 ],
 
                 maxSeconds: [],
-                selectedMaxSecond: {},
             }
+        },
+
+        computed: {
+            selectedMiniSecond: {
+                get(){
+                    return this.getSelectedObject(this.$store.getters.getSearchByMiniLength);
+                },
+
+                set(miniLength){
+                    this.$store.commit('setSearchByMiniLength', miniLength);
+                    this.$store.commit('setSearchQuery');
+                    SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                }
+            },
+
+            selectedMaxSecond: {
+                get(){
+                    return this.getSelectedObject(this.$store.getters.getSearchByMaxLength);
+                },
+
+                set(maxLength){
+                    this.$store.commit('setSearchByMaxLength', maxLength);
+                    this.$store.commit('setSearchQuery');
+                    SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                }
+            }
+
         },
 
         created(){
@@ -98,16 +121,15 @@
         },
 
         methods: {
-            onMiniSecondChange(){
-                this.$store.commit('setSearchByMiniLength', this.selectedMiniSecond);
-                this.$store.commit('setSearchQuery');
-                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
-            },
+            getSelectedObject(value){
+                let selectedLength = null;
+                this.miniSeconds.forEach((item) => {
+                    if(item.value == value){
+                        selectedLength = item;
+                    }
+                });
 
-            onMaxSecondChange(){
-                this.$store.commit('setSearchByMaxLength', this.selectedMaxSecond);
-                this.$store.commit('setSearchQuery');
-                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                return selectedLength;
             }
         }
 
