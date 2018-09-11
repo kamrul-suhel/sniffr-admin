@@ -12,7 +12,6 @@
                                 v-model="sortBy"
                                 :label="sort.text"
                                 :value="sort.value"
-                                @change="onSortOrderChange()"
                     ></v-checkbox>
                 </v-flex>
             </v-layout>
@@ -26,7 +25,6 @@
     export default {
         data(){
             return {
-                sortBy: '',
                 sortItems:[
                     {
                         text: 'New video first',
@@ -48,16 +46,25 @@
             }
         },
 
+        computed: {
+            sortBy: {
+                get(){
+                    return this.$store.getters.getSearchSortBy;
+                },
+
+                set(sortBy){
+                    this.$store.commit('setSortBy', sortBy);
+                    this.$store.commit('setSearchQuery')
+                    SearchServices.updateSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
+                }
+            }
+        },
+
         created() {
 
         },
 
         methods: {
-            onSortOrderChange(){
-                this.$store.commit('setSortBy', this.sortBy);
-                this.$store.commit('setSearchQuery')
-                SearchServices.changeSearchRoute(this.$route, this.$router, this.$store.getters.getSearchQueryUrl);
-            }
         }
     }
 </script>
