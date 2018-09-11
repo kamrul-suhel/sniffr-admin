@@ -103,7 +103,7 @@
 					</div>
 				@endif
 
-				<div class="col-sm-6 col-md-4" id="video-{{ $video->alpha_id }}">
+				<div class="col-sm-4 col-md-4 col-lg-3" id="video-{{ $video->alpha_id }}">
 					@switch($video->state)
 						@case('rejected')
 						@case('problem')
@@ -155,6 +155,16 @@
 								</a>
 								@endif
 							</p>
+                            <br>
+                            <form action="{{ route('videos.update', ['id' => $video->alpha_id]) }}" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="index" value="true">
+                                <select class="form-control-sm" name="priority" onchange="this.form.submit()">
+                                    <option value="low" {{ $video->priority == "low" ? 'selected' : '' }}>Low</option>
+                                    <option value="medium" {{ $video->priority == "medium" ? 'selected' : '' }}>Medium</option>
+                                    <option value="high" {{ $video->priority == "high" ? 'selected' : '' }}>High</option>
+                                </select>
+                            </form>
 						</section>
 
 						<footer>

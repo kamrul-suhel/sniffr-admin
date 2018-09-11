@@ -14,7 +14,16 @@
             @endif
         </div>
         <div class="panel-options">
-            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+            <form action="{{ route('videos.update', ['id' => $asset->alpha_id]) }}" method="post">
+                {{ csrf_field() }}
+                <input type="hidden" name="index" value="true">
+
+                <select class="form-control" name="priority" onchange="this.form.submit()">
+                    <option value="low" {{ $asset->priority == "low" ? 'selected' : '' }}>Low Priority</option>
+                    <option value="medium" {{ $asset->priority == "medium" ? 'selected' : '' }}>Medium Priority</option>
+                    <option value="high" {{ $asset->priority == "high" ? 'selected' : '' }}>High Priority</option>
+                </select>
+            </form>
         </div>
     </div>
 
