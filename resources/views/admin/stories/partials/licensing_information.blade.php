@@ -100,7 +100,7 @@
     </div>
 </div>
 
-@if($activeLicenses && count($activeLicenses))
+@if(isset($activeLicenses) && count($activeLicenses) > 0)
 <div class="panel panel-primary" data-collapsed="0">
     <div class="panel-heading">
         <div class="panel-title">Active Licenses</div>
