@@ -113,7 +113,8 @@ class VideoController extends Controller
 		$video->contact_id = $contact->id;
         $video->title = $request->input('title') ?: ('Untitled ' . $video->alpha_id);
         $video->state = 'new';
-        $video->rights = 'ex';
+        $video->rights = $contact->blacklist ? 'problem' : 'ex';
+        $video->notes = $contact->blacklist ? "Video was automatically moved to Problem as the contact: '. $contact->full_name .' is Blacklisted" : null;
         $video->terms = Input::get('terms') ? 1 : 0;
         $video->source = Input::get('source');
         $video->ip = $request->ip();

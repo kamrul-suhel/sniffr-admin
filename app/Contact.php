@@ -73,7 +73,7 @@ class Contact extends Model
 
 
 	/**
-	 * @return Beumping happens automatically
+	 * @return Bumping happens automatically
 	 */
 	public function canAutoBump()
 	{
@@ -106,5 +106,15 @@ class Contact extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+	/**
+	 * Move All videos of a contact to a specified state
+	 * @param $state
+	 * @return bool
+	 */
+    public function moveVideosToState($state) {
+    	$videos = Video::where('contact_id', $this->id);
+    	return $videos->update(['state' => $state]);
     }
 }

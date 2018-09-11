@@ -9,6 +9,14 @@
                 Ex{{ $asset->rights != 'ex' ? ' Chaser' : '' }}
                 Video
             @endif
+            @if($asset->contact->blacklist)
+                |
+                <span><i class="fa fa-flag" style="color:red"></i> {{ $asset->contact->full_name }} is Blacklisted</span>
+            @endif
+            @if($asset->contact->whitelist)
+                |
+                <span style="color:green;"><i class="fa fa-flag" style="color:green"></i> {{ $asset->contact->full_name }} is Verified</span>
+            @endif
             @if($asset->trashed())
                 - Deleted
             @endif

@@ -185,7 +185,7 @@ class AdminVideosController extends Controller
 				// Set to process for youtube and analysis (if video not already on youtube)
 				if (!$video->youtube_id && $video->file) {
 					$user = new User();
-					$user->slackChannel('submissions')->notify(new SubmissionAlert('MIKE ALERT for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
+					$user->slackChannel('submissions')->notify(new SubmissionAlert(' for license video without youtubeid (Id: ' . $video->alpha_id . ')'));
 					QueueVideoYoutubeUpload::dispatch($video->id)
 						->delay(now()->addSeconds(5));
 				}
