@@ -38,9 +38,15 @@
                     @if($asset->state != 'licensed' && $asset->is_exclusive && !$asset->submitted_elsewhere)
                         <a href="{{ url('admin/videos/status/licensed/' . $asset->alpha_id ) }}"
                            class="btn btn-primary btn-success">
-                            Fast Track License
+                            Fast Track License (Video is Ex to Unilad)
                         </a>
                     @endif
+                    @if($asset->state != 'licensed')
+                        <a href="{{ url('admin/videos/status/licensed/' . $asset->alpha_id ) }}"
+                           class="btn btn-primary btn-success">
+                            Fast Track License (No conditions)
+                        </a>
+                        @endif
                     @if($asset->state != 'restricted')
                         <a href="{{ url('admin/videos/status/restricted/' . $asset->alpha_id ) }}"
                            class="btn btn-primary btn-warning">
