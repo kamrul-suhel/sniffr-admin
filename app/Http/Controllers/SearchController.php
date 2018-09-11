@@ -93,9 +93,7 @@ class SearchController extends Controller
         $videos = $videos->where('file', '!=', NULL);
         $videos = $videos->whereNotIn('id', $unsearchableVideos);
 
-        if($request->has('maxLength')){
-            
-        }
+        $videos = $this->filterByMaxMinLength($videos, $request);
 
         $sortArray = $this->sortVideoBy($request->sortBy);
         $videos = $videos->orderBy($sortArray[0], $sortArray[1]);
@@ -334,5 +332,23 @@ class SearchController extends Controller
         }
 
         return $sortArray;
+    }
+
+    private function filterByMaxMinLength($videos, $request){
+        if($request->has('maxLength') && $request->has('minLength')){
+            $videos = $videos->whereBetween('duration', [$request->minLength, $request->maxLength]);
+            return $videos;
+        }
+
+        if($request->has('minLength')){
+            $videos = $videos->whereBetween('duration', [$request->minLength, 60*120]);
+            return $videos;
+        }
+
+        if($request->has('minLength')){
+            $videos = $videos->whereBetween('duration', [0, $request->minLength]);
+            return $videos;
+        }
+        return $videos;
     }
 }
