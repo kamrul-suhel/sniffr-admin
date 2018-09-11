@@ -268,6 +268,7 @@ class AdminVideosController extends Controller
 		$video->title = $request->input('title');
 		$video->description = $request->input('description');
 		$video->contact_id = $request->input('contact_id');
+		$video->precedent_link = $request->input('precedent_link');
 		$video->user_id = Auth::user()->id;
 		$video->state = 'new';
 		$video->save();
@@ -411,6 +412,7 @@ class AdminVideosController extends Controller
 		$video->notes = $request->input('notes');
 		$video->credit = $request->input('credit');
 		$video->description = $request->input('description');
+		$video->precedent_link = $request->input('precedent_link');
 
 		$video->save();
 
