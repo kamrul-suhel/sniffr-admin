@@ -2,19 +2,16 @@
     <!-- VIDEOS ITEM SECTION -->
     <div class="videos-section s-pagination-goto">
         <!-- VIDEOS ITEM SECTION -->
+        <v-navigation-drawer
+                v-model="searchDrawer"
+                absolute
+                temporary
+                disable-route-watcher
+        >
+            <search-component/>
+
+        </v-navigation-drawer>
         <section class="videos-section section-space">
-            <v-container grid-list-lg class="py-0">
-            </v-container>
-
-            <v-navigation-drawer
-                    v-model="searchDrawer"
-                    absolute
-                    temporary
-                    disable-route-watcher
-            >
-                <search-component/>
-            </v-navigation-drawer>
-
             <v-container grid-list-lg py-0>
                 <v-layout row wrap>
                     <v-flex xs12>
