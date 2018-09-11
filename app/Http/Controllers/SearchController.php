@@ -93,13 +93,12 @@ class SearchController extends Controller
         $videos = $videos->where('file', '!=', NULL);
         $videos = $videos->whereNotIn('id', $unsearchableVideos);
 
-        if($request->has('sortBy')){
-            $sortArray = $this->sortVideoBy($request->sortBy);
-            $videos = $videos->orderBy($sortArray[0], $sortArray[1]);
-        }else{
-            $videos = $videos->orderBy('licensed_at', 'DESC');
+        if($request->has('maxLength')){
+            
         }
 
+        $sortArray = $this->sortVideoBy($request->sortBy);
+        $videos = $videos->orderBy($sortArray[0], $sortArray[1]);
 
         if ($currentVideoId) {
             $allVideo = $videos->get();
@@ -307,6 +306,7 @@ class SearchController extends Controller
 
     private function sortVideoBy($sortBy){
         $sortArray = [];
+
         switch($sortBy){
             case 'newVideoLast':
                 $sortArray[] = 'licensed_at';
@@ -327,7 +327,12 @@ class SearchController extends Controller
                 $sortArray[] = 'duration';
                 $sortArray[] = 'ASC';
                 break;
+
+            default:
+                $sortArray[] = 'licensed_at';
+                $sortArray[] = 'DESC';
         }
+
         return $sortArray;
     }
 }
