@@ -160,19 +160,21 @@ class AdminContactController extends Controller
         $contact->reddit = $request->input('reddit');
         $contact->imgur = $request->input('imgur');
         $contact->other = $request->input('other');
-		$contact->blacklist = $request->input('blacklist') == 'on' ? 1 : 0;
-		if(request()->has('blacklist')) {
-			$contact->moveVideosToState('problem');
-			$contact->blacklist_created_at = now();
-		} else {
-			$contact->blacklist_created_at = null;
-		}
-		$contact->whitelist = $request->input('whitelist') == 'on' ? 1 : 0;
-		if(request()->has('whitelist')) {
+
+        if(request()->get('verification') == 'blacklist') {
+        	$contact->blacklist = 1;
+        	$contact->whitelist = 0;
+	        $contact->moveVideosToState('problem');
+	        $contact->blacklist_created_at = now();
+        } else if(request()->get('verification') == 'whitelist') {
+	        $contact->whitelist = 1;
+	        $contact->blacklist = 0;
 			$contact->whitelist_created_at = now();
-		} else {
-			$contact->whitelist_created_at = null;
-		}
+        } else {
+        	$contact->whitelist = 0;
+        	$contact->blacklist = 0;
+        }
+
         $contact->save();
 
 		if ($isJson) {
