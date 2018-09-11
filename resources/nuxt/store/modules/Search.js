@@ -77,13 +77,12 @@ const mutations = {
 
 
     resetSearchStoreObject(state) {
-        state.allTags = [];
         state.searchType = '';
         state.searchByTitle = '';
         state.searchByMiniLength = 0;
         state.searchByMaxLength = 0;
         state.searchByTags = [];
-        state.sortBy = '';
+        state.searchSortBy = '';
         state.searchByLocations = []
         state.searchPage = 1;
     }
