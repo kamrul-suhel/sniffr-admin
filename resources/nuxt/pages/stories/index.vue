@@ -1,6 +1,14 @@
 <template>
     <div class="stories-component">
         <section class="stories-section section-space">
+            <v-navigation-drawer
+                    v-model="searchDrawer"
+                    absolute
+                    temporary
+                    disable-route-watcher
+            >
+                <search-component/>
+            </v-navigation-drawer>
 
             <v-container grid-list-lg class="stories pt-0 pb-5"
                          v-if="client_logged_in && Object.keys(mailerStories).length > 0">
@@ -22,15 +30,24 @@
 
             <v-container grid-lig-lg class="py-0">
                 <v-layout row wrap class="s-pagination-goto">
-                    <v-flex xs12 class="pt-0 mb-0">
+                    <v-flex xs12 class="pt-0 mb-0" style="position:relative">
                         <h2 class="text-center text-uppercase">All Stories</h2>
+                        <v-btn
+                                absolute
+                                top
+                                right
+                                flat
+                                fab
+                                small
+                                @click.stop="searchDrawer = !searchDrawer"
+                                color="dark">
+                            <v-icon color="dark">filter_list</v-icon>
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-container>
 
-            <search-component></search-component>
-
-            <v-container grid-list-lg class="stories pt-0" v-if="stories.length > 0">
+            <v-containegrid-list-lg class="stories pt-0" v-if="stories.length > 0">
                 <v-layout row wrap>
                     <story-loop-component
                             v-for="story in stories"
@@ -38,6 +55,12 @@
                             :key="story.id"
                     ></story-loop-component>
                 </v-layout>
+
+                <pagination-component
+                        :pagination="paginate"
+                        :page="'stories'"
+                        v-if="paginate.last_page > 1"
+                ></pagination-component>
             </v-container>
 
             <v-container grid-list-lg class="stories pt-0" v-else>
@@ -48,12 +71,6 @@
                 </v-layout>
             </v-container>
         </section>
-
-        <pagination-component
-                :pagination="paginate"
-                :page="'stories'"
-                v-if="paginate.last_page > 1"
-        ></pagination-component>
 
     </div>
 </template>
@@ -82,7 +99,9 @@
         },
 
         data() {
-            return {}
+            return {
+                searchDrawer: null
+            }
         },
 
         watch: {
