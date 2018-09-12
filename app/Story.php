@@ -138,43 +138,37 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		if ($data) {
 			//explode key=>value
 			$decision = explode('--', $data);
-			$model->decision = $decision[0];
-			$model->chosenState = $decision[1];
-
-			Cookie::queue('sniffr_admin_decision', $model->decision);
-			Cookie::queue('sniffr_admin_state', $model->chosenState);
+			$this->chosenDecision = $decision[0];
+			$this->chosenState = $decision[1];
 
 			if ($decision[1] !== 'all') {
 				return $model->where('state', $decision[1]);
 			} else {
-				$model->decision = 'all';
-				$model->chosenState = 'all';
+				$this->chosenDecision = 'all';
+				$this->chosenState = 'all';
 				return $model;
 			}
 		}
 
-		$model->decision = Cookie::get('sniffr_admin_decision') ?? 'content-sourced';
-		$model->chosenState = Cookie::get('sniffr_admin_state') ?? 'unapproved';
+		$this->chosenDecision = Cookie::get('sniffr_admin_story_decision') ?? 'content-sourced';
+		$this->chosenState = Cookie::get('sniffr_admin_story_state') ?? 'unapproved';
+		$this->chosenAssignee = Cookie::get('sniffr_admin_story_assignee') ?? '';
 
-		return $model->where('state', $model->chosenState);
+		return $model->where('state', $this->chosenState);
 	}
 
 	/**
 	 * @param $model
 	 * @param $data
-	 * @return mixed
+	 * @return mixedss
 	 */
 	public function searchAssignee($model, $data)
 	{
 		if ($data) {
-			$this->assignee = $data;
+			$this->chosenAssignee = $data;
 
-			Cookie::queue('sniffr_admin_assignee', $data);
-
-			return $model->where('user_id', $data);
+			return $model->where('user_id', $this->chosenAssignee);
 		}
-
-		$model->assignee = Cookie::get('sniffr_admin_assignee') ?? '';
 
 		return $model;
 	}
@@ -215,11 +209,11 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 * @param $data
 	 * @return array
 	 */
-	public function generateData($result, $state, $data)
+	public function generateData($result)
 	{
-		Cookie::queue('sniffr_admin_decision', $this->decision);
-		Cookie::queue('sniffr_admin_state', $this->chosenState);
-		Cookie::queue('sniffr_admin_assigned', $this->assignee);
+		Cookie::queue('sniffr_admin_story_decision', $this->chosenDecision);
+		Cookie::queue('sniffr_admin_story_state', $this->chosenState);
+		Cookie::queue('sniffr_admin_story_assignee', $this->chosenAssignee);
 
 		return [
 			'assetType' => 'story',
@@ -227,8 +221,8 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 			'assetIcon' => 'book',
 			'assets' => $result,
 			'chosenState' => $this->chosenState,
-			'decision' => $this->decision,
-			'assignee' => $this->assignee,
+			'chosenDecision' => $this->chosenDecision,
+			'chosenAssignee' => $this->chosenAssignee,
 			'users' => auth()->user()->where([['client_id', NULL]])->get(),
 			'user' => auth()->user()
 		];

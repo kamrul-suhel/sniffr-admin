@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Auth;
 use App\User;
-use App\Page;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
@@ -51,7 +50,6 @@ class VideoController extends Controller
             'user' => Auth::user(),
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
-            'pages' => Page::where('active', '=', 1)->get(),
         ];
 
         $this->videoService = $videoService;
@@ -257,7 +255,6 @@ class VideoController extends Controller
             'menu' => Menu::orderBy('order', 'ASC')->get(),
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
-            'pages' => Page::where('active', '=', 1)->get(),
         ];
 
         return view('Theme::video-list', $data);

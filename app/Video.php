@@ -308,6 +308,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchCategory($model, $data)
 	{
 		if ($data) {
+			$this->chosenVertical = $data;
+
 			return $model->where('video_category_id', $data);
 		}
 
@@ -322,6 +324,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchCollection($model, $data)
 	{
 		if ($data) {
+			$this->chosenCollection = $data;
+
 			return $model->where('video_collection_id', $data);
 		}
 
@@ -336,6 +340,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchShottype($model, $data)
 	{
 		if ($data) {
+			$this->chosenShotType = $data;
+
 			return $model->where('video_shottype_id', $data);
 		}
 
@@ -350,6 +356,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchRights($model, $data)
 	{
 		if ($data) {
+			$this->chosenRights = $data;
+
 			return $model->where('rights', $data);
 		}
 
@@ -364,7 +372,7 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchState($model, $data)
 	{
 		if($data){
-			Cookie::queue('sniffr_admin_video_state', $data);
+			$this->chosenState = $data;
 
 			//override all for deleted videos
 			if ($data == 'deleted') {
@@ -373,13 +381,32 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
 			if($data !== 'all'){
 				return $model->where('state', $data);
+			}else{
+				return $model;
 			}
 		}
 
-		$data = Cookie::get('sniffr_admin_video_state') ?? 'all';
+		$this->chosenState = Cookie::get('sniffr_admin_video_state') ?? 'all';
+		$this->chosenAssignee = Cookie::get('sniffr_admin_video_assignee') ?? '';
+		$this->chosenVertical = Cookie::get('sniffr_admin_video_vertical') ?? '';
+		$this->chosenShotType = Cookie::get('sniffr_admin_video_shot_type') ?? '';
+		$this->chosenCollection = Cookie::get('sniffr_admin_video_collection') ?? '';
+		$this->chosenRights = Cookie::get('sniffr_admin_video_rights') ?? '';
 
-		if($data !== 'all'){
-			return $model->where('state', $data);
+		return $model;
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchAssignee($model, $data)
+	{
+		if ($data) {
+			$this->chosenAssignee = $data;
+
+			return $model->where('user_id', $this->chosenAssignee);
 		}
 
 		return $model;
@@ -422,15 +449,28 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 * @param $state
 	 * @return array
 	 */
-	public function generateData($result, $chosenState, $data = null)
+	public function generateData($result)
 	{
+		Cookie::queue('sniffr_admin_video_assignee', $this->chosenAssignee);
+		Cookie::queue('sniffr_admin_video_state', $this->chosenState);
+		Cookie::queue('sniffr_admin_video_vertical', $this->chosenVertical);
+		Cookie::queue('sniffr_admin_video_shot_type', $this->chosenShotType);
+		Cookie::queue('sniffr_admin_video_collection', $this->chosenCollection);
+		Cookie::queue('sniffr_admin_video_rights', $this->chosenRights);
+
 		return [
 			'assetType' => 'video',
 			'assetTypePlural' => 'videos',
 			'assetIcon' => 'youtube-play',
-			'chosenState' => $chosenState ? $chosenState : "all",
+			'chosenState' => $this->chosenState,
+			'chosenVertical' => $this->chosenVertical,
+			'chosenShotType' => $this->chosenShotType,
+			'chosenCollection' => $this->chosenCollection,
+			'chosenRights' => $this->chosenRights,
+			'chosenAssignee' => $this->chosenAssignee,
 			'assets' => $result,
 			'user' => auth()->user(),
+			'users' => auth()->user()->where([['client_id', NULL]])->get(),
 			'video_categories' => VideoCategory::all(),
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),

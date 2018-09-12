@@ -7,7 +7,7 @@
 				<h3>
 					<i class="fa fa-{{ $assetIcon }}"></i>
 					<a href="/admin/licenses/{{ $assetTypePlural }}">
-						{{ ucfirst($assetTypePlural) }}: {{ isset($decision) ?? ucwords(str_replace('-', ' ', $decision)). ' -' }} {{ ucwords(str_replace('-', ' ', $chosenState)) }}
+						{{ ucfirst($assetTypePlural) }}: {{ isset($chosenDecision) ? ucwords(str_replace('-', ' ', $chosenDecision)). ' -'  : ''}} {{ ucwords(str_replace('-', ' ', $chosenState)) }}
 					</a>
 
 					<a href="{{ url('admin/'.$assetTypePlural.'/create') }}" class="btn btn-success pull-right">
@@ -22,7 +22,18 @@
 			<form id="search-form" method="get" role="form" class="search-form-full">
 				@include('admin.'.$assetTypePlural.'.partials.filters')
 
-				<div class="col-md-2 pull-right">
+				<div class="col-md-2">
+					<div class="form-group">
+						<select id="assignee" name="assignee" class="form-control" title="Assign To">
+							<option value="">Assignee</option>
+							@foreach($users as $user)
+								<option value="{{ $user->id }}"{{ $chosenAssignee == $user->id ? ' selected' : '' }}>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-4 pull-right">
 					<div class="form-group">
 						<input type="text" class="form-control" name="term" id="search-input" placeholder="Search..." value="{{ Request::get('term') }}"> <i class="fa fa-search"></i>
 					</div>
@@ -34,7 +45,7 @@
 	<div class="clear"></div>
 
 	@if(!count($assets))
-		<p>Sorry, there are no items to show.</p>
+		<p>Sorry, there are no {{ $assetTypePlural }} to show.</p>
 	@else
 
 	<div class="gallery-env">
@@ -46,8 +57,10 @@
 			@foreach($assets as $asset)
 				@php
 					$order_column = $asset->state == 'licensed' ? 'licensed_at' : 'created_at';
-					$date = \Carbon\Carbon::parse($asset->{$order_column})->isToday() ? 'Today' : date('D jS F Y',strtotime($asset->{$order_column}))
+					$date = \Carbon\Carbon::parse($asset->{$order_column})->isToday() ? 'Today' : date('D jS F Y',strtotime($asset->{$order_column}));
+					$panelColour = ($asset->priority=='high' ? 'danger' : ($asset->priority=='medium' ? 'warning' : ''));
 				@endphp
+
 				@if($currentDay != $date)
 					@php
 						$currentDay = $date;
@@ -60,41 +73,10 @@
 				@endif
 
 				<div class="col-sm-6 col-md-4" id="asset-{{ $asset->alpha_id }}">
-					@switch($asset->state)
-						@case('rejected')
-						@case('problem')
-							@php
-								$panelColour = 'danger';
-							@endphp
-							@break
-						@case('licensed')
-							@php
-								$panelColour = 'success';
-							@endphp
-							@break
-						@case('restricted')
-							@php
-								$panelColour = 'warning';
-							@endphp
-							@break
-						@default
-							@php
-								$panelColour = 'default';
-							@endphp
-					@endswitch
-
 					<article class="album {{ $panelColour }}">
-						<header>
-
-						</header>
-
-						<section class="album-info">
-
-						</section>
-
-						<footer>
-
-						</footer>
+						<div class="album-story-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
+						<div class="album-story-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
+						@include('admin.'.$assetTypePlural.'.partials.card')
 					</article>
 				</div>
 			@endforeach
@@ -103,14 +85,14 @@
 
 			<div class="text-center"><?= $assets->appends(request()->except('page'))->render(); ?></div>
 
-			<modal v-if="modalVisible" @close="closeModal" asset-type="video"></modal>
+			<modal v-if="modalVisible" @close="closeModal" asset-type="{{ $assetType }}"></modal>
 		</div>
 	</div>
 	@endif
 @stop
 
 @section('javascript')
-    @include('admin.videos.partials.js')
+    @include('admin.'.$assetTypePlural.'.partials.js')
     <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop
 

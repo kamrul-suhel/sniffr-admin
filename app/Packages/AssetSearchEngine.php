@@ -31,7 +31,6 @@ class AssetSearchEngine
 	 */
 	public function run(): array
 	{
-
 		$this->result = $this->model;
 
 		$this->removeParameterFromData('page');
@@ -48,7 +47,7 @@ class AssetSearchEngine
 		$this->result = $this->paginateData();
 
 		// Generate data for view.
-		return $this->model->generateData($this->result, $this->data['state'] ?? null, $this->data);
+		return $this->model->generateData($this->result);
 	}
 
 	/**

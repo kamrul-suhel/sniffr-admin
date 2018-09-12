@@ -122,8 +122,8 @@ $(document).ready(function(){
                 success: function (data) {
                     if(data.status=='success') {
                         if(data.remove=='yes'){
-                            $('#story-'+storyId).fadeOut();
-                            $('#story-'+storyId).remove();
+                            $('#asset-'+storyId).fadeOut();
+                            $('#asset-'+storyId).remove();
                         } else {
                             window.location.reload();
                         }
@@ -257,27 +257,23 @@ $(document).ready(function(){
                 success: function (data) {
                     // console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
                     if(data.status=='success') {
-                        $('#story-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+                        $('#asset-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
                         if(data.field_id=='priority') {
                             if(data.field_value=='high'){
-                                $('#story-'+data.story_alpha_id+' .album').removeClass('warning');
-                                $('#story-'+data.story_alpha_id+' .album').addClass('danger', 1000);
+                                $('#asset-'+data.story_alpha_id+' .album').removeClass('warning');
+                                $('#asset-'+data.story_alpha_id+' .album').addClass('danger', 1000);
                             }else if(data.field_value=='medium'){
-                                $('#story-'+data.story_alpha_id+' .album').removeClass('danger');
-                                $('#story-'+data.story_alpha_id+' .album').addClass('warning', 1000);
+                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger');
+                                $('#asset-'+data.story_alpha_id+' .album').addClass('warning', 1000);
                             } else {
-                                $('#story-'+data.story_alpha_id+' .album').removeClass('danger warning', 1000);
+                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger warning', 1000);
                             }
                         }
                         if(data.field_id=='state') {
                             window.location.reload();
-                            // if(data.field_value=='published') {
-                            // 	$('#story-'+storyId).fadeOut();
-                            // 	$('#story-'+storyId).remove();
-                            // }
                         }
                     } else {
-                        $('#story-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+                        $('#asset-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
                     }
                 }
             });
