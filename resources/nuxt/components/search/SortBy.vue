@@ -1,7 +1,7 @@
 <template>
     <v-card class="mt-4 sort-search">
         <v-card-title class="search-title">
-            <h3>Sort by</h3>
+            <h3>Sort videos by</h3>
         </v-card-title>
 
         <v-card-text class="search-content">
@@ -27,19 +27,19 @@
             return {
                 sortItems:[
                     {
-                        text: 'New video first',
+                        text: 'Newest',
                         value: 'newVideo'
                     },
                     {
-                        text: 'New video last',
+                        text: 'Oldest',
                         value: 'newVideoLast'
                     },
                     {
-                        text: 'Video length max first',
+                        text: 'Longest',
                         value: 'videoMaxLength'
                     },
                     {
-                        text: 'Video length min first',
+                        text: 'Shortest',
                         value: 'videoMinLength'
                     }
                 ]
