@@ -119,6 +119,7 @@
         destroyed() {
             //reset stories store
             this.$store.commit('setResetStories');
+            this.$store.commit('setSearchByTitle', '');
         }
     }
 </script>
