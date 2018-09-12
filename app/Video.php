@@ -327,6 +327,22 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 * @param $data
 	 * @return mixed
 	 */
+	public function searchAssignee($model, $data)
+	{
+		if ($data) {
+			$this->assignee = $data;
+			$model->where('user_id', $data);
+		}
+
+		return $model;
+	}
+
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
 	public function searchCollection($model, $data)
 	{
 		if ($data) {

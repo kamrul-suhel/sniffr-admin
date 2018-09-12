@@ -5,10 +5,11 @@
         <th>System Role</th>
         <th>Job Role</th>
         <th>Assigned Stories</th>
-        <th>In Progress</th>
-        <th>Non Licensed</th>
-        <th>Published</th>
-        <th>Licensed</th>
+        <th>Content Sourced</th>
+        <th>Licensing</th>
+        <th>Writing</th>
+        <th>Subbing</th>
+        <th>Ready To Publish</th>
         </thead>
 
         <tbody>
@@ -45,35 +46,46 @@
                 <td>{{ ucwords(\App\UserRole::$storyJobRoles[$user->job_role] ?? 'Unset') }}</td>
                 <td>{{ $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->count() }}</td>
                 <td>
-		            <?php $inProgress = $user->assignedStories->whereIn('state', ['unapproved', 'approved', 'licensing', 'writing-inprogress', 'writing-completed', 'subs-inprogress', 'subs-approved'])->groupBy('state'); ?>
+	                <?php $contentSourced = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['unapproved', 'approved', 'rejected'])->groupBy('state'); ?>
                     <ul>
-                        @foreach($inProgress as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                        @foreach($contentSourced as $key => $value)
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=content-sourced--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
+                </td>
 
-                </td>
                 <td>
-		            <?php $nonLicensed = $user->assignedStories->whereIn('state', ['rejected', 'purgatory', 'archive'])->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->groupBy('state'); ?>
+		            <?php $licensing = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['approved', 'licensing', 'purgatory'])->groupBy('state'); ?>
                     <ul>
-                        @foreach($nonLicensed as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                        @foreach($licensing as $key => $value)
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=licensing--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
+
                 <td>
-		            <?php $licensed = $user->assignedStories->whereIn('state', ['published'])->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->groupBy('state'); ?>
+		            <?php $writing = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['licensed', 'writing-inprogress', 'subs-rejected'])->groupBy('state'); ?>
                     <ul>
-                        @foreach($licensed as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                        @foreach($writing as $key => $value)
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=writing--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
+
                 <td>
-		            <?php $licensed = $user->assignedStories->whereIn('state', ['licensed'])->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->groupBy('state'); ?>
+		            <?php $subbing = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['writing-completed', 'subs-inprogress', 'subs-unassigned'])->groupBy('state'); ?>
                     <ul>
-                        @foreach($licensed as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                        @foreach($subbing as $key => $value)
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=subbing--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $readyToPublish = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['subs-approved', 'published', 'archive'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($readyToPublish as $key => $value)
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=ready-to-publish--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>

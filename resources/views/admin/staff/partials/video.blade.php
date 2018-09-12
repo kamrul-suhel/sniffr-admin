@@ -5,9 +5,14 @@
         <th>System Role</th>
         <th>Job Role</th>
         <th>Assigned Videos</th>
+        <th>New</th>
+        <th>Accepted</th>
+        <th>Rejected</th>
         <th>In Progress</th>
-        <th>Non-Licensed</th>
+        <th>Pending</th>
         <th>Licensed</th>
+        <th>Problem</th>
+        <th>No Response</th>
         </thead>
 
         <tbody>
@@ -44,27 +49,82 @@
                 <td>{{ ucwords(\App\UserRole::$videoJobRoles[$user->job_role] ?? 'Unset') }}</td>
                 <td>{{ $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->count() }}</td>
                 <td>
-					<?php $inProgress = $user->assignedVideos->whereIn('state', ['new', 'accepted', 'inprogress', 'pending'])->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->groupBy('state'); ?>
+		            <?php $new = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['new'])->groupBy('state'); ?>
                     <ul>
-                        @foreach($inProgress as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                        @foreach($new as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
+                </td>
 
-                </td>
                 <td>
-					<?php $nonLicensed = $user->assignedVideos->whereIn('state', ['rejected', 'restricted', 'problem', 'noresponse'])->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->groupBy('state'); ?>
+		            <?php $accepted = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['accepted'])->groupBy('state'); ?>
                     <ul>
-                        @foreach($nonLicensed as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                        @foreach($accepted as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
+
                 <td>
-	                <?php $licensed = $user->assignedVideos->whereIn('state', ['licensed'])->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->groupBy('state'); ?>
+		            <?php $rejected = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['rejected'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($rejected as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $inprogress = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['inprogress'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($inprogress as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $pending = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['pending'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($pending as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $licensed = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['licensed'])->groupBy('state'); ?>
                     <ul>
                         @foreach($licensed as $key => $value)
-                            <li>{{ ucwords($key) }} : {{ $value->count() }}</li>
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $restricted = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['restricted'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($restricted as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $problem = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['problem'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($problem as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                        @endforeach
+                    </ul>
+                </td>
+
+                <td>
+		            <?php $noresponse = $user->assignedVideos->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['noresponse'])->groupBy('state'); ?>
+                    <ul>
+                        @foreach($noresponse as $key => $value)
+                            <li><a href="{{ url('admin/licenses/videos?assignee='.$user->id.'&state='.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
