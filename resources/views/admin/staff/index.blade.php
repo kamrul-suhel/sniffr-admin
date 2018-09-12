@@ -21,10 +21,27 @@
         </div>
         <hr>
     </form>
+
+    @if($type === 'video')
+        <form action="{{ route('staff.index', ['from' => $from, 'to' => $to]) }}" method="get">
+            <select id="rights" name="rights" class="form-control input-lg" onchange="this.form.submit()">
+                <option value="ex"{{ ($rights == 'ex') ? ' selected="selected"' : '' }}><a>Ex Submission</option>
+                <option value="exc"{{ ($rights == 'exc') ? ' selected="selected"' : '' }}><a>Ex Chaser</option>
+                {{--<option value="excc"{{ (request()->get('rights') == 'excc') ? ' selected="selected"' : '' }}><a>Ex Chaser Channel</option>--}}
+                {{--<option value="nonex"{{ (request()->get('rights') == 'nonex') ? ' selected="selected"' : '' }}><a>Non Ex</option>--}}
+                {{--<option value="nonexc"{{ (request()->get('rights') == 'nonexc') ? ' selected="selected"' : '' }}><a>Non Ex Chaser</option>--}}
+            </select>
+        </form>
+    @endif
+
     <div class="clear"></div>
 
     <div id="tab_staff" class="tab-pane">
-        @include('admin.staff.partials.'.$type)
+        <div class="row">
+            <div class="col-lg-12">
+                @include('admin.staff.partials.'.$type)
+            </div>
+        </div>
     </div>
 @stop
 

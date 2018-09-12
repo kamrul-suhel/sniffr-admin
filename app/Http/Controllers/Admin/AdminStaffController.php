@@ -34,6 +34,7 @@ class AdminStaffController extends Controller
 	    $to = request()->has('to') ? Carbon::parse(request()->get('to'))->endOfDay() : Carbon::now()->endOfDay();
 
     	$type = request()->get('type') ?? 'video';
+    	$rights = request()->get('rights') ?? 'ex';
 
     	$users = $this->user->where('client_id', '=', null)
 		    ->orderBy('full_name');
@@ -48,6 +49,7 @@ class AdminStaffController extends Controller
 	    }
 
         return view('admin.staff.index')
+	        ->with('rights', $rights)
 	        ->with('from', $from)
 	        ->with('to', $to)
 	        ->with('type', $type)
