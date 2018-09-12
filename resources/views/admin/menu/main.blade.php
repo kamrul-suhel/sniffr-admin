@@ -19,11 +19,6 @@
             <ul>
                 @if(Auth::user()->isAdmin())
                     <li>
-                        <a href="{{ url('admin/videos/deleted') }}">
-                            <span class="title">Deleted Videos</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{ url('admin/videos/categories') }}">
                             <span class="title">Video Categories</span>
                         </a>

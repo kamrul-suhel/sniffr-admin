@@ -20,12 +20,6 @@
 						<i class="fa fa-plus-circle"></i>
 						Add New Story
 					</a>
-					@if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
-						<a href="#" class="btn btn-primary js-story-refresh pull-right" style="margin-right:10px;">
-							<i class="fa fa-refresh"></i>
-							Refresh Stories
-						</a>
-					@endif
 				</h3>
 			</div>
 		</div>
@@ -38,7 +32,7 @@
 							@foreach(config('stories.decisions') as $decision_state_key => $decision_state)
 								<optgroup label="{{ ucwords(str_replace('-', ' ', $decision_state_key)) }}">
 									@foreach(config('stories.decisions.'.$decision_state_key) as $current_state => $state_values)
-										<option value="{{ $decision_state_key.'--'.$state_values['value'] }}" @if($state==$decision_state_key.'--'.$state_values['value']) selected @endif>
+										<option value="{{ $decision_state_key.'--'.$state_values['value'] }}" @if($decision.'--'.$chosenState==$decision_state_key.'--'.$state_values['value']) selected @endif>
 											{{ $state_values['dropdown'] }}
 										</option>
 									@endforeach
@@ -68,7 +62,6 @@
 						<input type="text" class="form-control" name="term" id="search-input" placeholder="Search..." value="{{ Request::get('term') }}"> <i class="fa fa-search"></i>
 					</div>
 				</div>
-
 			</form>
 		</div>
 	</div>
@@ -112,55 +105,53 @@
 								<div class="row padded-bottom">
 									<div class="col-sm-12">
 										<h3><a href="{{ url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.$decision.'&page='.request()->get('page')) }}" title="Edit Story on Sniffr">{{ $asset->title }}</a></h3>
-										<p>
-											@if($asset->contact)
-												@if($asset->contact->email)
-													<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-														<i class="fa fa-envelope"></i> {{ $asset->contact->email }}
-													</a>
-												@elseif($asset->contact->twitter)
-													<a href="https://twitter.com/{{ $asset->contact->twitter }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-														<i class="fa fa-twitter"></i> {{ $asset->contact->twitter }}
-													</a>
-												@elseif($asset->contact->reddit)
-													<a href="https://www.reddit.com/user/{{ $asset->contact->reddit }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-														<i class="fa fa-reddit"></i> {{ $asset->contact->reddit }}
-													</a>
-												@elseif($asset->contact->imgur)
-													<a href="https://imgur.com/user/{{ $asset->contact->imgur }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-														<i class="fa fa-italic"></i> {{ $asset->contact->imgur }}
-													</a>
-												@elseif($asset->contact->instagram)
-													<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
-														<i class="fa fa-instagram"></i> {{ $asset->contact->instagram }}
-													</a>
-												@elseif($asset->contact->youtube)
-													<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
-														<i class="fa fa-youtube"></i> {{ $asset->contact->youtube }}
-													</a>
-												@elseif($asset->contact->facebook)
-													<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact">
-														<i class="fa fa-facebook"></i> {{ $asset->contact->facebook }}
-													</a>
-												@endif
-											@else
-												<span class="btn btn-mini-info"><i class="fa fa-address-book"></i> No Contact</span>
-											@endif
-
-											<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i> ({{$asset->comments->count()}})</button>
-
-											@if($asset->source)
-												<a href="{{ $asset->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">
-													<i class="fa fa-info"></i>
+										@if($asset->contact)
+											@if($asset->contact->email)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-envelope"></i> {{ $asset->contact->email }}
+												</a>
+											@elseif($asset->contact->twitter)
+												<a href="https://twitter.com/{{ $asset->contact->twitter }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-twitter"></i> {{ $asset->contact->twitter }}
+												</a>
+											@elseif($asset->contact->reddit)
+												<a href="https://www.reddit.com/user/{{ $asset->contact->reddit }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-reddit"></i> {{ $asset->contact->reddit }}
+												</a>
+											@elseif($asset->contact->imgur)
+												<a href="https://imgur.com/user/{{ $asset->contact->imgur }}" class="btn btn-mini-info" title="View Contact" target="_blank">
+													<i class="fa fa-italic"></i> {{ $asset->contact->imgur }}
+												</a>
+											@elseif($asset->contact->instagram)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
+													<i class="fa fa-instagram"></i> {{ $asset->contact->instagram }}
+												</a>
+											@elseif($asset->contact->youtube)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="Edit Contact">
+													<i class="fa fa-youtube"></i> {{ $asset->contact->youtube }}
+												</a>
+											@elseif($asset->contact->facebook)
+												<a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact">
+													<i class="fa fa-facebook"></i> {{ $asset->contact->facebook }}
 												</a>
 											@endif
+										@else
+											<span class="btn btn-mini-info"><i class="fa fa-address-book"></i> No Contact</span>
+										@endif
 
-											@if($asset->wp_id)
-												<a href="{{ 'https://'.(env('APP_ENV') == 'prod' ? 'www' : 'testing').'.unilad.co.uk/?p='.$asset->wp_id.'&preview=true' }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
-													<i class="fa fa-wordpress"></i> @if($asset->author) {{ $asset->author }} @endif
-												</a>
-												@endif
-												</span>
+										<button id="comments" class="btn btn-mini-info pull-right" type="button" @click="showModal({{ json_encode($asset) }})"><i class="fa fa-comments"></i> ({{$asset->comments->count()}})</button>
+
+										@if($asset->source)
+											<a href="{{ $asset->source }}" class="btn btn-mini-info pull-right" title="View Source" target="_blank">
+												<i class="fa fa-info"></i>
+											</a>
+										@endif
+
+										@if($asset->wp_id)
+											<a href="{{ 'https://'.(env('APP_ENV') == 'prod' ? 'www' : 'testing').'.unilad.co.uk/?p='.$asset->wp_id.'&preview=true' }}" class="btn btn-mini-info pull-right" title="View on Wordpress" target="_blank">
+												<i class="fa fa-wordpress"></i> @if($asset->author) {{ $asset->author }} @endif
+											</a>
+										@endif
 									</div>
 								</div>
 								<div class="row">

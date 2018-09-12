@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Packages\AssetSearchEngine;
 use Illuminate\Http\Request;
 
-class LicensingController extends Controller
+class AdminLicensingController extends Controller
 {
 	/**
 	 * @var \Illuminate\Foundation\Application|mixed
@@ -37,6 +37,6 @@ class LicensingController extends Controller
 		// and return an array of data.
         $data = $this->search->run();
 
-        return view('admin.'.$this->assetType.'.index', $data);
+        return view('admin.assets.index', $data);
     }
 }

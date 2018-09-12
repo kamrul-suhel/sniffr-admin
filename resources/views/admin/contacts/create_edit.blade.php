@@ -32,10 +32,25 @@
     <div class="panel-body tab-content">
         @include('admin.contacts.partials.errors')
         <div class="tab-pane @if(!request()->has('tab')) active @endif" id="contact">
-            @if($contact)
+            <div class="col-xs-8">
                 @include('admin.contacts.partials.form')
-                @include('admin.contacts.partials.comments')
-            @endif
+            </div>
+
+            <div class="col-xs-4">
+                <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel-heading">
+                        <div class="panel-title">Comments</div>
+                        <div class="panel-options">
+                            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="panel-body" style="display: block; background: #fcfcfc;">
+                        <comments-component :asset="{{ json_encode($contact) }}"
+                                            asset-type="contact"></comments-component>
+                    </div>
+                </div>
+            </div>
         </div>
 
         @if($contact)
@@ -51,4 +66,8 @@
 
     <div class="clear"></div>
 </div>
+@stop
+
+@section('javascript')
+    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop

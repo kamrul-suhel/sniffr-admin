@@ -363,19 +363,26 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 */
 	public function searchState($model, $data)
 	{
-		$data = $data ? $data : "all";
+		if($data){
+			Cookie::queue('sniffr_admin_video_state', $data);
 
-		//override all for deleted videos
-		if ($data == 'deleted') {
-			return $model->onlyTrashed()->orderBy('updated_at', 'desc');
+			//override all for deleted videos
+			if ($data == 'deleted') {
+				return $model->onlyTrashed()->orderBy('updated_at', 'desc');
+			}
+
+			if($data !== 'all'){
+				return $model->where('state', $data);
+			}
 		}
 
-		if ($data == 'all') {
-			return $model;
+		$data = Cookie::get('sniffr_admin_video_state') ?? 'all';
+
+		if($data !== 'all'){
+			return $model->where('state', $data);
 		}
 
-		session(['state' => $data]);
-		return $model->where('state', $data);
+		return $model;
 	}
 
 	/**
@@ -415,11 +422,14 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 * @param $state
 	 * @return array
 	 */
-	public function generateData($result, $state, $data = null)
+	public function generateData($result, $chosenState, $data = null)
 	{
 		return [
-			'state' => $state ? $state : "all",
-			'videos' => $result,
+			'assetType' => 'video',
+			'assetTypePlural' => 'videos',
+			'assetIcon' => 'youtube-play',
+			'chosenState' => $chosenState ? $chosenState : "all",
+			'assets' => $result,
 			'user' => auth()->user(),
 			'video_categories' => VideoCategory::all(),
 			'video_collections' => VideoCollection::all(),

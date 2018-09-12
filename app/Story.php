@@ -141,6 +141,9 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 			$model->decision = $decision[0];
 			$model->chosenState = $decision[1];
 
+			Cookie::queue('sniffr_admin_decision', $model->decision);
+			Cookie::queue('sniffr_admin_state', $model->chosenState);
+
 			if ($decision[1] !== 'all') {
 				return $model->where('state', $decision[1]);
 			} else {
@@ -150,10 +153,10 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 			}
 		}
 
-		$model->decision = 'content-sourced';
-		$model->chosenState = 'unapproved';
+		$model->decision = Cookie::get('sniffr_admin_decision') ?? 'content-sourced';
+		$model->chosenState = Cookie::get('sniffr_admin_state') ?? 'unapproved';
 
-		return $model->where('state', 'unapproved');
+		return $model->where('state', $model->chosenState);
 	}
 
 	/**
@@ -165,8 +168,13 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	{
 		if ($data) {
 			$this->assignee = $data;
+
+			Cookie::queue('sniffr_admin_assignee', $data);
+
 			return $model->where('user_id', $data);
 		}
+
+		$model->assignee = Cookie::get('sniffr_admin_assignee') ?? '';
 
 		return $model;
 	}
@@ -214,8 +222,10 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		Cookie::queue('sniffr_admin_assigned', $this->assignee);
 
 		return [
-			'stories' => $result,
-			'state' => $state ?? 'unapproved',
+			'assetType' => 'story',
+			'assetTypePlural' => 'stories',
+			'assetIcon' => 'book',
+			'assets' => $result,
 			'chosenState' => $this->chosenState,
 			'decision' => $this->decision,
 			'assignee' => $this->assignee,

@@ -177,8 +177,8 @@ function videoAnalysis(tempFile) {
                 success: function (data) {
                     if(data.status=='success') {
                         if(data.remove=='yes'){
-                            $('#video-'+videoId).fadeOut();
-                            $('#video-'+videoId).remove();
+                            $('#asset-'+videoId).fadeOut();
+                            $('#asset-'+videoId).remove();
                         }
                         swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
                         $('.swal-button-container').css('display','inline-block');
