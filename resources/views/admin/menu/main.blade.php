@@ -19,6 +19,16 @@
             <ul>
                 @if(Auth::user()->isAdmin())
                     <li>
+                        <a href="{{ url('admin/videos?rights=ex') }}">
+                            <span class="title">Ex Submissions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('admin/videos?rights=exc') }}">
+                            <span class="title">Ex Chaser</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ url('admin/videos/deleted') }}">
                             <span class="title">Deleted Videos</span>
                         </a>
@@ -57,10 +67,17 @@
 
     @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'staff' ? 'active' : '' }}">
-            <a href="{{ url('admin/staff') }}" class="tlink">
+            <a href="{{ url('admin/staff?type=video') }}" class="tlink">
                 <i class="fa fa-group"></i>
-                <span class="title">Staff Management</span>
+                <span class="title">Video Staff</span>
             </a>
+            <ul>
+                <li>
+                    <a href="{{ url('admin/staff?type=story') }}">
+                        <span class="title">Story Staff</span>
+                    </a>
+                </li>
+            </ul>
         </li>
     @endif
 

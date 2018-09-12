@@ -58,7 +58,8 @@ class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditab
         return $this->belongsTo(Client::class);
     }
 
-    public function assignedVideos(){
+    public function assignedVideos()
+    {
     	return $this->hasMany(Video::class);
     }
 
@@ -198,6 +199,7 @@ class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditab
         $this->full_name = $data['full_name'] ?? $this->first_name;
         $this->tel = $data['tel'] ?? $this->tel;
         $this->job_title = $data['job_title'] ?? $this->job_title;
+        $this->job_role = $data['job_role'] ?? $this->job_role;
 
         if (isset($data['password'])) {
             $this->password = Hash::make($data['password']);
