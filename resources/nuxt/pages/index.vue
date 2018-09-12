@@ -16,7 +16,7 @@
 
     export default{
         asyncData(params, callback){
-            params.app.$axios.$post('/search/videos', {
+            params.app.$axios.$post('http://www.sniffr-app.test/search/videos', {
                 'featured':'true'
             })
                 .then((response) => {
@@ -34,7 +34,7 @@
 
         data() {
             return {
-                fullHeight: window.innerHeight+'px',
+                fullHeight:0
             }
         },
 
@@ -42,7 +42,9 @@
         },
 
         created(){
-            this.fullHeight = window.innerHeight+'px';
+            if(process.browser){
+                this.fullHeight = window.innerHeight+'px'
+            }
         },
 
         methods: {

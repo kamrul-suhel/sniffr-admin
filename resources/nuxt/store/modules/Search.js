@@ -178,6 +178,17 @@ const getters = {
 }
 
 const actions = {
+    nuxtServerInit: async ({commit}, {app, req, redirect}) => {
+        let url = 'http://www.sniffr-app.test/settings_object';
+        app.$axios.$get(url)
+            .then((response) => {
+                commit('setAllTags', response.tags);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
+
     fetchAllTags({commit, state}) {
         let url = '/tags';
 
