@@ -1,7 +1,5 @@
 /node_modules
 /public/hot
-/public/_nuxt
-/.nuxt
 /public/storage
 /storage/**
 /storage/*.key
