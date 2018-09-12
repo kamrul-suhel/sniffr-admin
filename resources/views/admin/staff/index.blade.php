@@ -9,7 +9,7 @@
                     {{ ucwords($type) }} Staff Management ({{$users->count()}} employees)
                 </h3>
             </div>
-        </div>
+        </div> 
     </div>
     <div class="clear"></div>
     <form class="col-lg-12">
