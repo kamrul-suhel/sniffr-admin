@@ -359,7 +359,7 @@ const actions = {
         let url = '/search/videos?'+payload.queryUrl;
 
 
-        this.$axios.$post(url, payload)
+        this.$axios.$post(url)
             .then((response) => {
                 let data = response;
                 commit('setVideoData', data.videos.data);

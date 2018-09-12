@@ -60,28 +60,32 @@
                         value: 90
                     },
                     {
-                        text: '2 Minutes',
+                        text: '2 Minute',
                         value: 120
                     },
                     {
-                        text: '3 Minutes',
+                        text: '3 Minute',
                         value: 180
                     },
                     {
-                        text: '4 Minutes',
+                        text: '4 Minute',
                         value: 240
                     },
                     {
-                        text: '5 Minutes',
+                        text: '5 Minute',
                         value: 300
                     },
                     {
-                        text: '6 Minutes',
+                        text: '6 Minute',
                         value: 360
                     },
                     {
-                        text: '7 Minutes',
+                        text: '7 Minute',
                         value: 420
+                    },
+                    {
+                        text: 'More then 7 Minute',
+                        value: 2000
                     }
                 ],
 
