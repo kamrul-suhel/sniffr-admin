@@ -2,71 +2,100 @@
     <!-- VIDEOS ITEM SECTION -->
     <div class="videos-section s-pagination-goto">
         <!-- VIDEOS ITEM SECTION -->
+        <v-navigation-drawer
+                v-model="searchDrawer"
+                absolute
+                temporary
+                disable-route-watcher>
+            <div class="py-3">
+                <search-component/>
+            </div>
+        </v-navigation-drawer>
+
         <section class="videos-section section-space">
-            <v-container grid-list-lg
-                         class="pt-0 pb-5"
-                         v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
+            <v-container grid-list-lg py-0>
                 <v-layout row wrap>
-                    <v-flex xs12 class="text-center">
-                        <h2 class="text-uppercase">Your Suggested Videos</h2>
-                        <p class="mb-0 ">We've gone ahead and procured a list of videos we think you will love!</p>
+                    <v-flex md3 xl2 hidden-sm-and-down>
+                        <search-component/>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
+                    <v-flex xs12 md9 xl10>
+                        <v-layout row wrap v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
+                            <v-flex xs12 class="text-center" >
+                                <h2 class="text-uppercase">Your Suggested Videos</h2>
+                                <p class="mb-0 ">We've gone ahead and procured a list of videos we think you will
+                                    love!</p>
+                            </v-flex>
+
+                            <v-flex xs12>
+                                <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
+                                    <video-loop-component
+                                            v-for="(mailer, index) in mailerVideos"
+                                            :video="mailer"
+                                            :key="mailer.alpha_id"
+                                            :type="'suggest'"
+                                            :index="index"
+                                            :width="'350px'"
+                                    ></video-loop-component>
+                                </v-layout>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-layout row wrap>
+                            <v-flex xs12 class="mb-0 pt-0" style="position:relative">
+                                <h2 class="text-center text-uppercase">All Videos</h2>
+                                <v-btn
+                                        absolute
+                                        top
+                                        right
+                                        flat
+                                        fab
+                                        small
+                                        @click.stop="searchDrawer = !searchDrawer"
+                                        color="dark"
+                                        class="hidden-lg-and-up">
+                                    <v-icon color="dark">filter_list</v-icon>
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-layout row wrap v-if="videos.length > 0">
                             <video-loop-component
-                                    v-for="(mailer, index) in mailerVideos"
-                                    :video="mailer"
-                                    :key="mailer.alpha_id"
-                                    :type="'suggest'"
-                                    :index="index"
-                                    :width="'350px'"
+                                    v-for="(video, index) in videos"
+                                    :video="video"
+                                    :key="video.id"
                             ></video-loop-component>
                         </v-layout>
+
+                        <v-layout align-center justify-center row fill-height v-else>
+                            <v-flex>
+                                <h2 class="text-xs-center">No video found please search again.</h2>
+                            </v-flex>
+                        </v-layout>
+
+                        <!-- Pagination -->
+                        <pagination-component
+                                v-if="paginate.last_page > 1"
+                                :pagination="paginate"
+                                :page="'video'"
+                        ></pagination-component>
                     </v-flex>
                 </v-layout>
-            </v-container>
-
-            <v-container grid-list-lg class="py-0">
-                <v-layout row wrap>
-                    <v-flex xs12 class="mb-0 pt-0">
-                        <h2 class="text-center text-uppercase">All Videos</h2>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-
-            <search-component @searchOption="searchOption($event)"></search-component>
-
-            <v-container grid-list-lg class="py-0">
-                <v-layout row wrap>
-                    <video-loop-component
-                            v-for="(video, index) in videos"
-                            :video="video"
-                            :key="video.id"
-                    ></video-loop-component>
-                </v-layout>
-
             </v-container>
         </section>
-
-        <!-- Pagination -->
-        <pagination-component
-                v-if="paginate.last_page > 1"
-                :pagination="paginate"
-                :page="'video'"
-        ></pagination-component>
     </div>
 </template>
 
 <script>
-    import SearchComponent from '@/components/includes/SearchComponent';
+    import SearchComponent from '@/components/search/index';
     import VideoLoopComponent from '@/components/includes/VideoLoopComponent';
     import PaginationComponent from '@/components/includes/PaginationComponent';
+    import SearchServices from '@/plugins/services/SearchServices';
 
     import {mapGetters} from 'vuex';
 
     export default {
-        asyncData(){
+        asyncData() {
 
         },
 
@@ -77,8 +106,7 @@
         },
         data() {
             return {
-                data: '',
-                logged_in: false,
+                searchDrawer: null
             }
         },
 
@@ -93,40 +121,35 @@
         },
 
         head: {
-          title: 'Sniffr videos'
+            title: 'Sniffr videos'
+        },
+
+        beforeCreate() {
+            SearchServices.populateSearchStore(this.$store, this.$route, this.$router);
         },
 
 
         watch: {
             '$route'(to, from, next) {
-                this.setAllVideoData(this.getQueryObject());
+                this.setAllVideoData();
             }
         },
 
         created() {
-            this.setAllVideoData(this.getQueryObject());
+            this.setAllVideoData();
         },
 
         methods: {
-            setAllVideoData(query) {
-                this.$store.dispatch('getVideoData', query);
-            },
-
-            getQueryObject() {
-                let query = {
-                    page: this.$route.query.page ? this.$route.query.page : '',
-                };
-
-                if (this.$route.query.search && this.$route.query.search !== '') {
-                    query.search = this.$route.query.search;
-                }
-
-                if (this.$route.query.tag && this.$route.query.tag !== '') {
-                    query.tag = this.$route.query.tag;
-                }
-
-                return query;
+            setAllVideoData() {
+                this.$store.dispatch('getVideoData', {
+                    queryUrl: this.$store.getters.getSearchQueryUrl,
+                    queryObject: this.$store.getters.getQueryObject
+                });
             }
+        },
+
+        destroyed(){
+            this.$store.commit('setSearchByTitle', '');
         }
     }
 </script>

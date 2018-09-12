@@ -155,7 +155,8 @@ const getters = {
 const mutations = {
 
     setVideoData(state, data) {
-        state.videos = data;
+        state.videos = [];
+        state.videos = [...data];
     },
 
     setMailerVideoData(state, data) {
@@ -355,19 +356,8 @@ const mutations = {
 
 const actions = {
     getVideoData({commit}, payload = {}) {
-        let url = '/search/videos';
+        let url = '/search/videos?'+payload.queryUrl;
 
-        if (payload.page && payload.page != 0) {
-            url = url + '?page=' + payload.page;
-        }
-
-        if (payload.search && payload.search != '') {
-            url = url + '&search=' + payload.search;
-        }
-
-        if (payload.tag && payload.tag != '') {
-            url = url + '&tag=' + payload.tag;
-        }
 
         this.$axios.$post(url)
             .then((response) => {

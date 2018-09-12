@@ -54,7 +54,7 @@ class SearchController extends Controller
     {
         $data = [];
         $mailerVideos = [];
-        $tagValue = $request->tag;
+        $tagValue = $request->tags;
         $searchValue = $request->search;
         $currentVideoId = $request->alpha_id;
         $featured = $request->featured;
@@ -80,8 +80,9 @@ class SearchController extends Controller
         }
 
         if ($tagValue) {
-            $videos = $videos->whereHas('tags', function ($query) use ($tagValue) {
-                $query->where('name', '=', $tagValue);
+            $tags =  explode(',', $tagValue);
+            $videos = $videos->whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('name', $tags);
             });
         }
 
@@ -91,7 +92,11 @@ class SearchController extends Controller
 
         $videos = $videos->where('file', '!=', NULL);
         $videos = $videos->whereNotIn('id', $unsearchableVideos);
-        $videos = $videos->orderBy('licensed_at', 'DESC');
+
+        $videos = $this->filterByMaxMinLength($videos, $request);
+
+        $sortArray = $this->sortVideoBy($request->sortBy);
+        $videos = $videos->orderBy($sortArray[0], $sortArray[1]);
 
         if ($currentVideoId) {
             $allVideo = $videos->get();
@@ -295,5 +300,55 @@ class SearchController extends Controller
         $currentStory = $currentStory
             ->first();
         return $currentStory;
+    }
+
+    private function sortVideoBy($sortBy){
+        $sortArray = [];
+
+        switch($sortBy){
+            case 'newVideoLast':
+                $sortArray[] = 'licensed_at';
+                $sortArray[] = 'ASC';
+                break;
+
+            case 'newVideo':
+                $sortArray[] = 'licensed_at';
+                $sortArray[] = 'DESC';
+                break;
+
+            case 'videoMaxLength':
+                $sortArray[] = 'duration';
+                $sortArray[] = 'DESC';
+                break;
+
+            case 'videoMinLength':
+                $sortArray[] = 'duration';
+                $sortArray[] = 'ASC';
+                break;
+
+            default:
+                $sortArray[] = 'licensed_at';
+                $sortArray[] = 'DESC';
+        }
+
+        return $sortArray;
+    }
+
+    private function filterByMaxMinLength($videos, $request){
+        if($request->has('maxLength') && $request->has('minLength')){
+            $videos = $videos->whereBetween('duration', [$request->minLength, $request->maxLength]);
+            return $videos;
+        }
+
+        if($request->has('minLength')){
+            $videos = $videos->whereBetween('duration', [$request->minLength, 60*120]);
+            return $videos;
+        }
+
+        if($request->has('maxLength')){
+            $videos = $videos->whereBetween('duration', [0, $request->maxLength]);
+            return $videos;
+        }
+        return $videos;
     }
 }

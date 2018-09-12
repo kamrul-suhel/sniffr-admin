@@ -12,6 +12,12 @@ Vue.filter('checkimage', function (value) {
     }
 });
 
+Vue.filter('capitalize', (value) => {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+});
+
 
 Vue.filter('readmore', function (text, length, suffix) {
     if (text) {
@@ -23,7 +29,7 @@ Vue.filter('readmore', function (text, length, suffix) {
 });
 
 Vue.filter('convertHyphenToSpace', function (text) {
-    if(text != null){
+    if (text != null) {
         let value = text.replace(/-/g, ' ');
         value = value.replace(/_/g, ' ');
         value = value.replace(/,/g, ', ');
@@ -52,7 +58,7 @@ Vue.filter('convertTime', function (duration) {
 
 
 Vue.filter('convertDate', function (date) {
-    if(typeof date === "undefined" || date === null ){
+    if (typeof date === "undefined" || date === null) {
         return date;
     }
     var current_date = new Date(date.replace(/-/g, "/"));
@@ -73,18 +79,18 @@ Vue.filter('convertDate', function (date) {
     return returnDate;
 });
 
-Vue.filter('licenseExpired', function(endTime){
-    if(typeof endTime === "undefined" || endTime === null ){
+Vue.filter('licenseExpired', function (endTime) {
+    if (typeof endTime === "undefined" || endTime === null) {
         return endTime;
     }
 
     let formatTime = endTime.replace('-', '/').replace('-', '/');
     let t = Date.parse(formatTime) - Date.parse(new Date());
-    let seconds = Math.floor( (t/1000) % 60 );
-    let minutes = Math.floor( (t/1000/60) % 60 );
-    let hours = Math.floor( (t/(1000*60*60)) % 24 );
-    let days = Math.floor( t/(1000*60*60*24) );
-    return days + ' days '+ hours + ' Hours ' + minutes + ' minutes left';
+    let seconds = Math.floor((t / 1000) % 60);
+    let minutes = Math.floor((t / 1000 / 60) % 60);
+    let hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    let days = Math.floor(t / (1000 * 60 * 60 * 24));
+    return days + ' days ' + hours + ' Hours ' + minutes + ' minutes left';
     return {
         'total': t,
         'days': days,
@@ -94,6 +100,6 @@ Vue.filter('licenseExpired', function(endTime){
     };
 });
 
-Vue.filter('numberFormat', function( value ){
+Vue.filter('numberFormat', function (value) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 })
