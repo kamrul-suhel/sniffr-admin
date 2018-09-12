@@ -1,15 +1,6 @@
 <template>
     <div class="stories-component">
         <section class="stories-section section-space">
-            <v-navigation-drawer
-                    v-model="searchDrawer"
-                    absolute
-                    temporary
-                    disable-route-watcher
-            >
-                <search-component/>
-            </v-navigation-drawer>
-
             <v-container grid-list-lg class="stories pt-0 pb-5"
                          v-if="client_logged_in && Object.keys(mailerStories).length > 0">
                 <v-layout row wrap>
@@ -31,23 +22,20 @@
             <v-container grid-lig-lg class="py-0">
                 <v-layout row wrap class="s-pagination-goto">
                     <v-flex xs12 class="pt-0 mb-0" style="position:relative">
-                        <h2 class="text-center text-uppercase">All Stories</h2>
-                        <v-btn
-                                absolute
-                                top
-                                right
-                                flat
-                                fab
-                                small
-                                @click.stop="searchDrawer = !searchDrawer"
-                                color="dark">
-                            <v-icon color="dark">filter_list</v-icon>
-                        </v-btn>
+                        <h2 class="text-center text-uppercase ">All Stories</h2>
                     </v-flex>
                 </v-layout>
             </v-container>
 
-            <v-container grid-list-lg class="stories pt-0" v-if="stories.length > 0">
+            <v-container grid-list-lg py-0>
+                <v-layout row wrap>
+                    <v-flex>
+                        <search-title-component :cardLayout="false"/>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <v-container grid-list-lg class="stories" v-if="stories.length > 0">
                 <v-layout row wrap>
                     <story-loop-component
                             v-for="story in stories"
@@ -63,7 +51,7 @@
                 ></pagination-component>
             </v-container>
 
-            <v-container grid-list-lg class="stories pt-0" v-else>
+            <v-container grid-list-lg class="stories" v-else>
                 <v-layout row wrap>
                     <v-flex xs12 class="text-center">
                         <h2>Sorry no story found</h2>
@@ -76,7 +64,7 @@
 </template>
 
 <script>
-    import SearchComponent from '@/components/search/index';
+    import SearchTitleComponent from '@/components/search/SearchByTitleDescription';
     import StoryLoopComponent from '@/components/StoryLoopComponent';
     import PaginationComponent from '@/components/includes/PaginationComponent';
     import SearchServices from '@/plugins/services/SearchServices';
@@ -84,7 +72,7 @@
 
     export default {
         components: {
-            SearchComponent,
+            SearchTitleComponent,
             StoryLoopComponent,
             PaginationComponent
         },

@@ -1,6 +1,6 @@
 <template>
-    <section class="search-filter-section mr-2 pa-3">
-        <search-by-title-description @searchOption="searchOption($event)"/>
+    <section class="search-filter-section px-3 py-0">
+        <search-by-title-description :cardLayout="true"/>
         <search-by-length/>
         <search-by-tags/>
         <sort-by/>
@@ -16,7 +16,7 @@
 </template>
 <script>
 
-    import SearchByTitleDescription from './SearchByTItleDescription'
+    import SearchByTitleDescription from './SearchByTitleDescription'
     import SearchByLength from './SearchByLength'
     import SearchByTags from './SearchByTags'
     import SearchByLocation from './SearchByLocation'

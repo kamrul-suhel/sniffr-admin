@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3
+    <v-flex xs12 sm6 md6 lg4 xl3
             class="asset-video-content">
         <v-card class="video-card block"
                 :style="width ? {'min-width': width}: ''">
