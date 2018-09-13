@@ -2,7 +2,7 @@
     <section class="search-filter-section px-3 py-0">
         <search-by-title-description :cardLayout="true"/>
         <search-by-length/>
-        <search-by-tags/>
+        <!--<search-by-tags/>-->
         <sort-by/>
         <!--<search-by-location/>-->
 
@@ -27,7 +27,7 @@
         components: {
             SearchByLength,
             SearchByTitleDescription,
-            SearchByTags,
+            // SearchByTags,
             SearchByLocation,
             SortBy
         },
