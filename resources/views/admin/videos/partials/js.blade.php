@@ -106,7 +106,6 @@
         });
 
         $('.js-state').click(function(e){
-            console.log('moo');
             e.preventDefault();
             var state, alertType;
             var videoId = $(this).attr("data-id");
