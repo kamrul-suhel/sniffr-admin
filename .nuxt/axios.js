@@ -113,8 +113,8 @@ export default (ctx, inject) => {
   const axiosOptions = {
     // baseURL
     baseURL : process.browser
-      ? '/api'
-      : (process.env._AXIOS_BASE_URL_ || '/api'),
+      ? 'https://www.sniffr-app.test/api'
+      : (process.env._AXIOS_BASE_URL_ || 'https://www.sniffr-app.test/api'),
 
     // Create fresh objects for all default header scopes
     // Axios creates only one which is shared across SSR requests!
