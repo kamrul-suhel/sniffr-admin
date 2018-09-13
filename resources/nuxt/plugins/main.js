@@ -3,7 +3,10 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 //
-// window.$ = require('jquery');
+if(process.browser){
+    window.$ = require('jquery');
+    window.TwitterWidgetsLoader = require('twitter-widgets');
+}
 //
 // import SearchServices from './services/SearchServices';
 //
@@ -12,7 +15,7 @@ Vue.use(Vuetify);
 //  * Twitter widget for twitter widget loader
 //  ********************************************************
 //  */
-// // window.TwitterWidgetsLoader = require('twitter-widgets');
+// //
 //
 // /**
 //  * ***********************************************
