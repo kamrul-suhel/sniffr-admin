@@ -11,7 +11,7 @@ module.exports = {
     ],
 
     axios:{
-      baseURL: process.env.APP_URL ||'http://www.sniffr-app.test'
+      baseURL: process.env.APP_URL ||'http://twilight.sniffrmedia.co.uk/api'
     },
 
 

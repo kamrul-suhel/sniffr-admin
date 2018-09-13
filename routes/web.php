@@ -11,8 +11,6 @@
 
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
-    Route::get('/settings_object', 'SettingController@index')->name('setting_object');
-
 //	Route::get(
 //		'/',
 //		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
@@ -301,12 +299,12 @@ Route::post('client/collections/cancel_collection', 'CollectionController@cancel
 |--------------------------------------------------------------------------
 */
 
-//Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
+
 //Route::get('videos',
 //	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
 //	->where('videos', 'videos')
 //	->name('videos_index');
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
+
 
 
 /*
@@ -325,7 +323,6 @@ Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('fronten
 |--------------------------------------------------------------------------
 */
 
-Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
 Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*

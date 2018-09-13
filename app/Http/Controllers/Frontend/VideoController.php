@@ -183,9 +183,7 @@ class VideoController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $isJson = $request->ajax() || $request->isJson();
-        if ($isJson) {
-            $video = Video::select($this->getVideoFieldsForFrontend())
+        $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
                 ->orderBy('licensed_at', 'DESC')
@@ -199,10 +197,7 @@ class VideoController extends Controller
                 'view_increment' => $view_increment,
             ];
 
-            return $this->successResponse($data);
-        }
-
-        return $this->getFrontendServerResponse($request);
+        return $this->successResponse($data);
     }
 
 

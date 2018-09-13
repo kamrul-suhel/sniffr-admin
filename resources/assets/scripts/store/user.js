@@ -151,7 +151,7 @@ const getters = {
 const actions = {
 
     nuxtServerInit: async ({commit}, {app, req, redirect}) => {
-        let url = 'http://www.sniffr-app.test/settings_object';
+        let url = '/settings_object';
         app.$axios.$get(url)
             .then((response) => {
                 commit('setUserStatus', response.sniffr_app);

@@ -16,7 +16,7 @@
 
     export default{
         asyncData(params, callback){
-            params.app.$axios.$post('http://www.sniffr-app.test/search/videos', {
+            params.app.$axios.$post('/search/videos', {
                 'featured':'true'
             })
                 .then((response) => {
