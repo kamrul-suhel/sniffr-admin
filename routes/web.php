@@ -13,10 +13,10 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('/settings_object', 'SettingController@index')->name('setting_object');
 
-	Route::get(
-		'/',
-		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
-	)->where('/', '/');
+//	Route::get(
+//		'/',
+//		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
+//	)->where('/', '/');
 
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
@@ -302,10 +302,10 @@ Route::post('client/collections/cancel_collection', 'CollectionController@cancel
 */
 
 //Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
-Route::get('videos',
-	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
-	->where('videos', 'videos')
-	->name('videos_index');
+//Route::get('videos',
+//	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
+//	->where('videos', 'videos')
+//	->name('videos_index');
 Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
 
 
@@ -352,4 +352,4 @@ Route::group(array('prefix' => 'api/v1'), function () {
     Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
 });
 
-Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);
+//Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);
