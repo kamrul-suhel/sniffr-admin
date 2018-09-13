@@ -39,7 +39,6 @@ trait FrontendResponse
             'image',
             'thumb',
             'mime',
-            'link',
             'vertical',
             'youtube_id',
             'embed_code',
