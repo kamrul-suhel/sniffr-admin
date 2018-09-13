@@ -120,7 +120,7 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-        return Redirect::to('admin/stories')->with([
+        return redirect()->back()->with([
             'note' => 'New Story Successfully Added!',
             'note_type' => 'success'
         ]);
@@ -308,7 +308,7 @@ class AdminStoryController extends Controller
                 'decision' => $decision,
             ]);
         } else {
-            return Redirect::to('admin/stories/?decision=' . $decision)
+            return redirect()->back()
                 ->with([
                     'note' => 'Story Updated',
                     'note_type' => 'success',
@@ -325,7 +325,7 @@ class AdminStoryController extends Controller
 			$message = 'Updating content from WP';
 		}
 
-		return Redirect::to('admin/stories/edit/' . $alpha_id)
+		return redirect()->back()
 			->with([
 				'note' => $message,
 				'note_type' => 'success',
@@ -463,7 +463,7 @@ class AdminStoryController extends Controller
             $message = 'A contact needs to be added to the story first';
         }
 
-        return Redirect::to('admin/stories/?decision='.$decision)->with([
+        return redirect()->back()->with([
             'note' => $message,
             'note_type' => $status
         ]);
@@ -477,6 +477,7 @@ class AdminStoryController extends Controller
 		$isJson = $request->ajax();
 
 		$story = Story::where('alpha_id', $alpha_id)->first();
+		$story->contacted_at = now();
 		$story->contact_made = 1;
 		$story->save();
 
@@ -487,7 +488,7 @@ class AdminStoryController extends Controller
 				'story_alpha_id' => $alpha_id,
 			]);
 		} else {
-			return Redirect::to('admin/stories/?decision=' .  Cookie::get('sniffr_admin_decision') . '&state=' .  Cookie::get('sniffr_admin_state'))
+			return redirect()->back()
 				->with([
 					'note' => 'Story Updated',
 					'note_type' => 'success',
@@ -546,7 +547,7 @@ class AdminStoryController extends Controller
         CollectionStory::where('story_id', $story->id)->delete();
         $story->destroy($story->id);
 
-        return Redirect::to('admin/stories')->with([
+        return redirect()->back()->with([
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);

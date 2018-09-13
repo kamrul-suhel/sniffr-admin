@@ -50,6 +50,20 @@
     opacity:.5;
   }
 
+  .page-videos + #nav{
+    background:#000;
+  }
+
+  .v-list, .v-list__tile {
+    background-color: black;
+    color: white;
+
+    &:hover{
+      background:#111 !important;
+      color:white;
+    }
+  }
+
 }
 
 .navigation{
@@ -104,13 +118,12 @@
 
 }
 
-.v-menu__content{
+.navigation-dropdown.v-menu__content{
   box-shadow:none;
   margin-top:10px;
-  //top:120px !important;
 
   .v-list{
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,1);
     padding: 1px 0;
   }
 
@@ -212,16 +225,4 @@
   }
 }
 
-.page-videos + #nav{
-  background:#000;
-}
 
-.v-list, .v-list__tile {
-  background-color: black;
-  color: white;
-
-  &:hover{
-    background:#111 !important;
-    color:white;
-  }
-}

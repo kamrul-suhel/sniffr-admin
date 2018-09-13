@@ -11,11 +11,10 @@ trait VideoHelper{
 
     public static function getVideoHTML($video, $embed = false, $path = 'view') {
 
-
         $path = '/admin/videos/'.$path;
         $sHTML = '';
 
-        $sHTML .= '<div class="video-container'.(  $embed && !isset($video->youtube_id) ? ' embedded' : '').'">';
+        $sHTML .= '<div class="video-container'.(  $embed && !isset($video->youtube_id) ? ' embedded' : '').'" data-id="'.$video->alpha_id.'">';
 
         if($video->nsfw==1) {
             $sHTML .= '<div class="nsfw nsfw-active" rel="'.$video->alpha_id.'">
@@ -23,32 +22,21 @@ trait VideoHelper{
 				</div>';
         }
 
-        if($video->file_watermark_dirty) {
-            $sHTML .= '<video
-                id="video_player"
-                preload="auto" controls x-webkit-airplay="allow"
-                class="video-js vjs-default-skin vjs-big-play-centered"
-                src="https://cdn.sniffrmedia.co.uk/'.basename($video->file_watermark_dirty).'">
-            </video>';
+        if($video->file || $video->file_watermark_dirty) {
+			if($video->file_watermark_dirty) {
+				$file = $video->file_watermark_dirty;
+			} else{
+				$file = $video->file;
+			}
+
+            $sHTML .= '<img id="card-video-img-'.$video->alpha_id.'" class="js-video-init" src="'.$video->image.'" value="Loading video...." /><span id="card-video-span-'.$video->alpha_id.'" class="js-video-init play"></span>
+					<video controls x-webkit-airplay="allow" id="card-video-'.$video->alpha_id.'" class="video-init" poster="'.$video->image.'" src="https://cdn.sniffrmedia.co.uk/'.basename($file).'"></video>';
         }else if($video->youtube_id){ // Youtube
             if($embed){
                 $sHTML .= '<iframe src="https://www.youtube.com/embed/'.$video->youtube_id.'?autoplay=1&playsinline=1&rel=0" class="youtube-iframe" type="text/html" frameborder="0"  allowfullscreen></iframe>';
             }else{
                 $sHTML .= '<div class="youtube-player" data-id="'.$video->youtube_id.'"></div>';
             }
-        }else if(!empty($video->file)){
-            if($video->file_watermark_dirty) {
-                $file = $video->file_watermark_dirty;
-            } else if($video->file_watermark) {
-                $file = $video->file_watermark;
-            }else{
-                $file = $video->file;
-            }
-
-            $sHTML .= '<video id="video_player" x-webkit-airplay=”allow” class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="'.$video->image.'" data-setup="{}" width="100%" style="width:100%;">
-		        <source src="'.$file.'" type="video/mp4">
-		        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-		    </video>';
         }else if(str_contains($video->url, 'facebook')){
             if(str_contains($video->url, 'posts') && $embed){
                 $sHTML .= '<div class="interactive interaadminctive-fb-post" style="background:#000 !important;text-align:center;"><div id="fb-root"></div><div class="fb-post" data-href="'.$video->url.'" data-width="165"></div>';

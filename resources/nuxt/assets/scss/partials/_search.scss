@@ -1,9 +1,25 @@
-.videos-filter-section{
-  background:#fafafa;
+.v-navigation-drawer__border{
+  //width:0;
+}
+.search-filter-section{
+  background:none;
   padding:0;
   z-index:10;
   .logo img{
     width:110px;
+  }
+
+  .v-card{
+    padding:20px;
+
+    .search-title{
+      padding:0;
+      margin-bottom:20px;
+    }
+
+    .search-content{
+      padding:0;
+    }
   }
 }
 
@@ -48,5 +64,30 @@
     input{
       margin-bottom:0;
     }
+  }
+}
+
+.tag-search{
+
+}
+
+.search-content{
+  .v-input{
+    margin:0;
+  }
+
+  .v-input__slot{
+    margin:0;
+  }
+
+  .checkbox{
+    margin:0;
+
+    .v-input__slot{
+      margin:0;
+    }
+  }
+
+  .flex{
   }
 }

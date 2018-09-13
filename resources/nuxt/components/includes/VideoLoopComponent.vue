@@ -1,18 +1,23 @@
 <template>
-    <v-flex xs12 sm6 md4 lg4 xl3 class="asset-video-content">
-        <v-card class="video-card block" :style="width ? {'min-width': width}: ''">
+    <v-flex xs12 sm6 md6 lg4 xl3
+            class="asset-video-content">
+        <v-card class="video-card block"
+                :style="width ? {'min-width': width}: ''">
             <v-card-media class="video-card-thumb-wrapper"
                           :src="onGetThumbnailImage()">
-                <a
-                        @click.stop="openVideoDialog(video)"
-                        class="video-card-thumb"
-                >
+                <a @click.stop="openVideoDialog(video)"
+                        class="video-card-thumb">
+
                     <div class="thumbnail-overlay"></div>
+
                     <span class="play-button">
-                        <v-icon color="white" size="60px">play_circle_outline</v-icon>
+                        <v-icon color="white"
+                                size="60px"
+                        >play_circle_outline</v-icon>
                     </span>
 
-                    <span class="label label-licensed" v-if="getVideoPurchased()">Purchased</span>
+                    <span class="label label-licensed"
+                          v-if="getVideoPurchased()">Purchased</span>
 
                     <span v-if="video.nsfw == '1'" class="label"
                           :class="video.nsfw == '1' ? 'label-nsfw': 'label-danger'">
@@ -26,13 +31,15 @@
             </v-card-media>
 
             <v-card-title class="pb-0">
-                <h3 class="video-card-title mb-0" @click.stop="goToDetail(video)">
+                <h3 class="video-card-title mb-0"
+                    @click.stop="goToDetail(video)">
                     {{ video.title }}
                 </h3>
             </v-card-title>
 
             <v-card-text class="pt-0">
-                <p class="video-card-text" v-if="video.description !== 'null'">
+                <p class="video-card-text"
+                   v-if="video.description !== 'null'">
                     {{ video.description | readmore(100, '...') }}
                 </p>
             </v-card-text>
@@ -47,6 +54,7 @@
                 video_image: '~/assets/images/placeholder.png',
             }
         },
+
         props: {
             video: {
                 type: Object,

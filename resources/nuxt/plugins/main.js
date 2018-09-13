@@ -5,6 +5,8 @@ Vue.use(Vuetify);
 
 window.$ = require('jquery');
 
+import SearchServices from './services/SearchServices';
+
 /*
  ********************************************************
  * Twitter widget for twitter widget loader

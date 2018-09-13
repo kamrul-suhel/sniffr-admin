@@ -20,23 +20,6 @@
 
         @if(!empty($asset))
 
-        <!--div class="form-group input-group">
-            <label class="checkbox-inline" for="contact_is_owner">
-                <input type="checkbox" name="contact_is_owner" id="contact_is_owner" class="js-contact-is-owner" value="1" {{ (isset($asset)  &&  $asset->contact_is_owner==1) ? 'checked' : '' }}>
-                Contact is owner
-            </label>
-
-            <label class="checkbox-inline" for="allow_publish">
-                <input type="checkbox" name="allow_publish" id="allow_publish" class="js-allow-publish" value="1" {{ (isset($asset)  &&  $asset->allow_publish==1) ? 'checked' : '' }}>
-                Happy to publish
-            </label>
-
-            <label class="checkbox-inline" for="permission">
-                <input type="checkbox" name="permission" id="permission" class="js-permission" value="1" {{ (isset($asset)  &&  $asset->permission==1) ? 'checked' : '' }}>
-                Has permission
-            </label>
-        </div-->
-
         <span class="form-group input-group has-feedback">
             <span class="input-group-addon">
                 Date Sourced
@@ -45,18 +28,6 @@
             <input type="text" class="form-control" name="sourced_at" id="sourced_at" />
             <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
         </span>
-
-        <!--span class="form-group input-group">
-            <span class="input-group-addon">
-                Removed from Social for
-            </span>
-
-            <select name="removed_from_social" id="removed_from_social" class="form-control">
-                @foreach(config('stories.removed_from_social') as $from)
-                <option value="{{ $from }}" {{ (isset($asset)  &&  $asset->removed_from_social==$type) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $from)) }}</option>
-                @endforeach
-            </select>
-        </span-->
 
         <span class="form-group input-group">
             <span class="input-group-addon">
@@ -71,18 +42,6 @@
             </select>
         </span>
 
-
-        <!--span class="form-group input-group">
-            <span class="input-group-addon">
-                Submitted to
-            </span>
-
-            <select name="submitted_to[]" id="submitted_to" class="selectpicker js-submitted-to" data-width="100%" title="Select who you submitted to" multiple>
-                @foreach(config('stories.submitted_to') as $site)
-                <option value="{{ $site }}" {{ (isset($asset) && (in_array($site, explode(',', $asset->submitted_to)))) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $site)) }}</option>
-                @endforeach
-            </select>
-        </span-->
         @endif
     </div>
 </div>
