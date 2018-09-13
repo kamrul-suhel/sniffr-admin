@@ -357,8 +357,6 @@ const mutations = {
 const actions = {
     getVideoData({commit}, payload = {}) {
         let url = '/search/videos?'+payload.queryUrl;
-
-
         this.$axios.$post(url)
             .then((response) => {
                 let data = response;
@@ -404,6 +402,7 @@ const actions = {
             data.offered = true;
         }
         let url = '/search/videos';
+        console.log(payload );
 
         this.$axios.$post(url, data)
             .then((response) => {
@@ -414,6 +413,7 @@ const actions = {
                 commit('setVideoLoading', false);
             })
             .catch((error) => {
+                console.log(error.response)
                 console.log(error);
             });
     },

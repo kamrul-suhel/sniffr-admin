@@ -10,11 +10,15 @@ module.exports = {
         '@nuxtjs/axios'
     ],
 
+    axios:{
+      baseURL: process.env.APP_URL ||'http://www.sniffr-app.test'
+    },
+
 
     plugins: [
         '~/plugins/main.js',
-        // '~/plugins/hotjar/index.js',
-        // '~/plugins/airbreak/index.js'
+        '~/plugins/hotjar/index.js',
+        '~/plugins/airbreak/index.js'
     ],
 
     loading: { color: '#ffffff' },
