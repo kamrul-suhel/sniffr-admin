@@ -22,7 +22,12 @@ class LicensingController extends Controller
         $this->assetType = request()->segment(3);
 
         // Instantiate the asset model type
-        $this->assetModel = app("App\\".str_singular(ucwords($this->assetType)));
+        $class = 'App\\'.str_singular(ucwords($this->assetType));
+
+        if(!class_exists($class)){
+            return;
+        }
+        $this->assetModel = app($class);
 
         // Instantiate the search engine
         $this->search = new AssetSearchEngine($this->assetModel, request()->all());
