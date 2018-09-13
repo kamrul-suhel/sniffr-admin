@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
     function clickAndDisable(link) {
         link.onclick = function(event) {
@@ -9,60 +8,87 @@
         $("#sendContract").click(function () {
             $("#sendContract").attr("disabled", true);
         });
+
+        $('.js-video-init').click(function(e) {
+            var videoId = $(this).parent('div').attr('data-id');
+            var video = $('#card-video-'+videoId);
+            $('#card-video-img-'+videoId).hide();
+            $('#card-video-span-'+videoId).hide();
+            video.show();
+            video.attr('class', 'video-js vjs-default-skin vjs-big-play-centered');
+            var myPlayer = videojs("card-video-"+videoId, {}, function(){
+                // Player (this) is initialized and ready.
+                var myPlayer = this;    // Store the video object
+                var aspectRatio = 9/16; // Make up an aspect ratio
+
+                function resizeVideoJS(){
+                    // Get the parent element's actual width
+                    var width = $('.video-container')[0].offsetWidth;
+                    // Set width to fill parent element, Set height
+                    myPlayer.width(width).height( width * aspectRatio );
+                }
+
+                resizeVideoJS(); // Initialize the function
+                window.onresize = resizeVideoJS; // Call the function on resize
+
+                myPlayer.play();
+            });
+        });
     });
-//video analysis function for labels from dynamodb API
-function videoAnalysis(tempFile) {
 
-   if(tempFile) {
-       //initialize video analysis + message
-       $("#video-analysis").html('<p>Analysing video<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></p>');
+    //video analysis function for labels from dynamodb API
+    function videoAnalysis(tempFile) {
 
-       //copy over video file for analysis (this is now executed when video accepted)
-       // $.ajax({
-        //    type: 'GET',
-        //    url: '/admin/analyse/?f='+tempFile,
-        //    data: { get_param: 'value' },
-        //    dataType: 'json',
-        //    success: function (data) {
-        // 	   if(data.status=='success') {
-        // 		   //do nothing at the moment
-        // 	   }
-        //    }
-       // });
+       if(tempFile) {
+           //initialize video analysis + message
+           $("#video-analysis").html('<p>Analysing video<span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></p>');
 
-       //wait 2 seconds for analysis and then get the video labels (if available)
-       timeout = setTimeout(function(){
-           $.ajax({
-               type: 'GET',
-               url: '/admin/labels/?f='+tempFile,
-               data: { get_param: 'value' },
-               dataType: 'json',
-               success: function (data) {
-                   if(data.status=='success') {
-                       $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
-                       for(var i=0;i<data.labels.length;i++) {
-                            var label_output='<a href="#" title="'+data.labels[i]['Name'].toLowerCase()+'" class="tag label label-info copy-tag">'+data.labels[i]['Name'].toLowerCase()+'</a> ';
-                            $("#video-analysis").append(label_output);
+           //copy over video file for analysis (this is now executed when video accepted)
+           // $.ajax({
+            //    type: 'GET',
+            //    url: '/admin/analyse/?f='+tempFile,
+            //    data: { get_param: 'value' },
+            //    dataType: 'json',
+            //    success: function (data) {
+            // 	   if(data.status=='success') {
+            // 		   //do nothing at the moment
+            // 	   }
+            //    }
+           // });
+
+           //wait 2 seconds for analysis and then get the video labels (if available)
+           timeout = setTimeout(function(){
+               $.ajax({
+                   type: 'GET',
+                   url: '/admin/labels/?f='+tempFile,
+                   data: { get_param: 'value' },
+                   dataType: 'json',
+                   success: function (data) {
+                       if(data.status=='success') {
+                           $("#video-analysis").html('<p>Suggested Tags: <span id="video-analysis-tag-added"></span> </p>');
+                           for(var i=0;i<data.labels.length;i++) {
+                                var label_output='<a href="#" title="'+data.labels[i]['Name'].toLowerCase()+'" class="tag label label-info copy-tag">'+data.labels[i]['Name'].toLowerCase()+'</a> ';
+                                $("#video-analysis").append(label_output);
+                           }
+                           if(data.labels.length>0) {
+                               $('.copy-tag').click(function(e){
+                                   e.preventDefault();
+                                   var tag = $(this).attr('title');
+                                   $('#tags').tagsinput('add', tag);
+                                   $('#video-analysis-tag-added').html(tag+' tag added. You can also add your own tags if you like.');
+                                   $(this).css('background', '#337ab7');
+                               });
+                           }
+                       } else {
+                           //$('#video-analysis').css('display','none');
+                           $("#video-analysis").html('<p>No suggested tags found but you can still add your own <span id="video-analysis-tag-added"></span> </p>');
                        }
-                       if(data.labels.length>0) {
-                           $('.copy-tag').click(function(e){
-                               e.preventDefault();
-                               var tag = $(this).attr('title');
-                               $('#tags').tagsinput('add', tag);
-                               $('#video-analysis-tag-added').html(tag+' tag added. You can also add your own tags if you like.');
-                               $(this).css('background', '#337ab7');
-                           });
-                       }
-                   } else {
-                       //$('#video-analysis').css('display','none');
-                       $("#video-analysis").html('<p>No suggested tags found but you can still add your own <span id="video-analysis-tag-added"></span> </p>');
                    }
-               }
-           });
-       }, 2000);
-   }
+               });
+           }, 2000);
+       }
 
-}
+    }
 
 (function($){
     var tagnames = new Bloodhound({
@@ -92,6 +118,7 @@ function videoAnalysis(tempFile) {
             freeInput: true,
             allowDuplicates: false
     });
+
     $('#tags').on('beforeItemAdd', function(event) {
         var tagsArray = $('#tags').val().split(",");
         var tagsCheck = false;
