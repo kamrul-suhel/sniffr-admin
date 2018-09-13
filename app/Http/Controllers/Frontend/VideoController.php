@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\ClientMailerUser;
-use App\ClientMailerVideo;
-use App\CollectionVideo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
@@ -21,7 +18,6 @@ use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
-use Pallares\LaravelNuxt\Controllers\NuxtController;
 
 class VideoController extends Controller
 {
