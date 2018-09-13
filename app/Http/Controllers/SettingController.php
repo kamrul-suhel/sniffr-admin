@@ -14,7 +14,7 @@ class SettingController extends Controller
     public function index(){
         $settings['public'] = config('settings.public');
         $settings['pricing'] = config('pricing');
-        $settings['tags'] = Tag::latest()->get()->pluck('name');
+//        $settings['tags'] = Tag::latest()->get()->pluck('name');
 
         $user = auth()->user();
         if($user){
