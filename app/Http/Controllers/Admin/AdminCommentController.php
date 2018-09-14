@@ -56,7 +56,7 @@ class AdminCommentController extends Controller
         if($assetType =='video') {
             $comment->video_id = $assetId;
         } else if($assetType =='story'){
-            $comment->video_id = $assetId;
+            $comment->story_id = $assetId;
         } else if($assetType =='contact'){
 			$comment->contact_id = $assetId;
 		}

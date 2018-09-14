@@ -32,6 +32,10 @@
 
 <footer>
     <div class="album-images-count">
+        @if($asset->state == 'new')
+            @include('admin.assets.partials.priority')
+        @endif
+
         @if($asset->trashed())
             <a href="{{ url('admin/videos/restore/'.$asset->alpha_id) }}" title="Remove from trash" class="undelete">
                 <i class="fa fa-upload"></i>
@@ -68,12 +72,12 @@
     <div class="album-options">
         @if(!$asset->trashed())
             @if($asset->state == 'new' && ($asset->rights == 'ex' || $asset->rights == 'nonex'))
-                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini-border text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
-                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini-border text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i> Accept</a>
+                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini btn-mini-border text-danger js-state rejected" title="Reject Video"><i class="fa fa-times"></i></a>
+                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini btn-mini-border text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i> Accept</a>
             @elseif($asset->state == 'pending' && ($asset->rights == 'ex' || $asset->rights == 'nonex'))
-                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini-border text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
-                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini-border text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
-                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini-border text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i> Accept</a>
+                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini btn-mini-border text-warning js-state restricted" title="Restricted License Video"><i class="fa fa-exclamation-triangle"></i></a>
+                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini btn-mini-border text-danger js-state problem" title="Problem Video"><i class="fa fa-times"></i></a>
+                <a href="#" data-id="{{ $asset->alpha_id }}" class="btn btn-mini btn-mini-border text-success js-state accepted" title="Accept Video"><i class="fa fa-check"></i> Accept</a>
             @elseif($asset->state == 'licensed')
                 <i class="fa fa-check" title="Licensed"></i> Licensed
             @elseif($asset->state == 'accepted')

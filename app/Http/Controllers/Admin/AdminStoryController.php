@@ -272,13 +272,6 @@ class AdminStoryController extends Controller
                     QueueBump::dispatch($story_id);
                 }
                 break;
-//            case ($state == 'unlicensed'):
-//                // contact has been made (set in db)
-//                if($story_id) {
-//                    $story->contact_made = 1;
-//                }
-//                $message = 'Set to contact made';
-//                break;
             case ($state == 'licensed'):
                 // add new post to WP
                 if($story_id) {
@@ -331,59 +324,6 @@ class AdminStoryController extends Controller
 				'note_type' => 'success',
 			]);
 	}
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateField(Request $request)
-    {
-        $isJson = $request->ajax();
-        $id = $request->input('story_id');
-        $field_id = $request->input('field_id');
-        $field_value = $request->input('field_value');
-        $story = Story::where('alpha_id', $id)
-            ->first();
-
-
-        if($field_id&&$field_value) {
-            switch (true) {
-                case ($field_id == 'priority'):
-                    $story->priority = ($field_value!='Priority' ? $field_value : $story->priority);
-                    break;
-                case ($field_id == 'destination'):
-                    $story->destination = ($field_value!='Destination' ? $field_value : $story->destination);
-                    break;
-                case ($field_id == 'state'):
-                    $story->state = ($field_value!='State' ? $field_value : $story->state);
-                    break;
-                case ($field_id == 'assign_to'):
-                    $story->user_id = ($field_value!='Assign To' ? $field_value : $story->user_id);
-                    break;
-            }
-
-            // Save story data to database
-            $story->save();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Updated',
-                'field_id' => ($field_id ? $field_id : 0),
-                'field_value' => ($field_value ? $field_value : NULL),
-                'story_id' => ($story ? $story->id : 0),
-                'story_alpha_id' => ($story ? $story->alpha_id : 0),
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Error',
-                'field_id' => ($field_id ? $field_id : 0),
-                'field_value' => ($field_value ? $field_value : NULL),
-                'story_id' => ($story ? $story->id : 0),
-                'story_alpha_id' => ($story ? $story->alpha_id : 0),
-            ]);
-        }
-    }
 
     /**
      * @param Request $request

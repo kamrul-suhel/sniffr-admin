@@ -189,6 +189,46 @@ $(document).ready(function(){
         }
     });
 
+    $('.js-asset-update').change(function(e) {
+        e.preventDefault();
+
+        var assetId = $(this).attr("data-id");
+        var assetType = $(this).attr("data-asset-type");
+        var fieldId = $(this).attr("id");
+        var fieldValue = $(this).val();
+
+        if( assetId && fieldId && fieldValue ) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/asset/update_field',
+                data: { story_id: assetId, field_id: fieldId, field_value: fieldValue },
+                dataType: 'json',
+                success: function (data) {
+                    // console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
+                    if(data.status=='success') {
+                        $('#asset-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+                        if(data.field_id=='priority') {
+                            if(data.field_value=='high'){
+                                $('#asset-'+data.story_alpha_id+' .album').removeClass('warning');
+                                $('#asset-'+data.story_alpha_id+' .album').addClass('danger', 1000);
+                            }else if(data.field_value=='medium'){
+                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger');
+                                $('#asset-'+data.story_alpha_id+' .album').addClass('warning', 1000);
+                            } else {
+                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger warning', 1000);
+                            }
+                        }
+                        if(data.field_id=='state') {
+                            window.location.reload();
+                        }
+                    } else {
+                        $('#asset-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+                    }
+                }
+            });
+        }
+    });
+
     $('.js-story-state').click(function(e){
         e.preventDefault();
         var state, alertType;
@@ -264,7 +304,7 @@ $(document).ready(function(){
         // swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
         // $('.swal-button-container').css('display','none');
 
-        if(state&&storyId) {
+        if(state && storyId) {
             console.log(state);
             $.ajax({
                 type: 'GET',
@@ -404,45 +444,6 @@ $(document).ready(function(){
             $('.modal .modal-dialogs').css('width', '70%');
             $('.modal .modal-content').css('height', $(window).height() * 0.7+'px');
             $('#sourceFrame').css('height', $(window).height() * 0.7+'px');
-        }
-    });
-
-    $('.js-story-update').change(function(e) {
-        e.preventDefault();
-
-        var storyId = $(this).attr("data-id");
-        var fieldId = $(this).attr("id");
-        var fieldValue = $(this).val();
-
-        if( storyId && fieldId && fieldValue ) {
-            $.ajax({
-                type: 'GET',
-                url: '/admin/stories/update_field',
-                data: { story_id: storyId, field_id: fieldId, field_value: fieldValue },
-                dataType: 'json',
-                success: function (data) {
-                    // console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
-                    if(data.status=='success') {
-                        $('#asset-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
-                        if(data.field_id=='priority') {
-                            if(data.field_value=='high'){
-                                $('#asset-'+data.story_alpha_id+' .album').removeClass('warning');
-                                $('#asset-'+data.story_alpha_id+' .album').addClass('danger', 1000);
-                            }else if(data.field_value=='medium'){
-                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger');
-                                $('#asset-'+data.story_alpha_id+' .album').addClass('warning', 1000);
-                            } else {
-                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger warning', 1000);
-                            }
-                        }
-                        if(data.field_id=='state') {
-                            window.location.reload();
-                        }
-                    } else {
-                        $('#asset-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
-                    }
-                }
-            });
         }
     });
 
