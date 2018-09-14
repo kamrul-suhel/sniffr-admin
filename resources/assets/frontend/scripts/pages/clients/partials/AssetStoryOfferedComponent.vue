@@ -303,7 +303,6 @@
                 let url = 'collections/accept_asset_price/' + this.story.collection_story_id + '/story';
                 this.acceptLoading = true;
                 axios.post(url).then((response) => {
-                    console.log(response);
                     if (response.data.success === '1') {
                         this.$store.commit('setUserOffers', this.$store.getters.getUserStatus.offers - 1);
                         this.acceptLoading = false;
