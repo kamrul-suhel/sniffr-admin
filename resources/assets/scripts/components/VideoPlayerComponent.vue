@@ -4,15 +4,11 @@
             <!-- S3 lin -->
             <div class="s3-video" v-if="s3_video">
                 <video
-                       height="100%"
                        controls
                        ref="playerVideo">
                     <source :src="video.file_watermark_dirty" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <!--<div id="cdn_video" v-html="video.iframe"></div>-->
-                <!--<plyr-video poster="path/to/poster.png" :videos="videos">-->
-                <!--</plyr-video>-->
             </div>
 
             <div class="youtube-video" v-else-if="youtubeVideo">
