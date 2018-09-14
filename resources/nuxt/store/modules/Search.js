@@ -118,7 +118,6 @@ const getters = {
     },
 
     getSearchByLocation(state) {
-        console.log(state.searchByLocations)
         return state.searchByLocations;
     },
 
@@ -183,7 +182,6 @@ const actions = {
 
         this.$axios.$get(url)
             .then(response => {
-                console.log(response);
             })
             .catch(error => {
                 console.log(error)

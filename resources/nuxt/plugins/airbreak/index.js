@@ -1,4 +1,5 @@
 export default ({ airbreak }) =>  {
+
     if(process.env.NODE_ENV !== 'production') return;
 
     let airbrake = new airbrakeJs.Client({
