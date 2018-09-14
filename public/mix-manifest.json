@@ -1,12 +1,8 @@
 {
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=2ce7b954b97ada73ddd0",
-    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=86be9bb0d7b8c044a836",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=7ab18802ce9f651a06c2",
-    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css?id=96ac70eaa7d1b28088f6",
-    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css?id=51110df8c5e8e6f14ece",
-    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=dfed1c065d11ab19e131",
-    "/assets/admin/css/admin.css.map": "/assets/admin/css/admin.css.map?id=a1546720a945028fc199",
-    "/assets/admin/css/mailer-admin.css.map": "/assets/admin/css/mailer-admin.css.map?id=7753ce84874a651b96f7",
-    "/placeholder.gif": "/placeholder.gif?id=e74a06310d4b99f90eb6",
-    "/favicon.ico": "/favicon.ico?id=a5b9a59dd01c0a656bed"
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js",
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js",
+    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css",
+    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css",
+    "/placeholder.gif": "/placeholder.gif",
+    "/favicon.ico": "/favicon.ico"
 }
