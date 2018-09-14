@@ -58,6 +58,7 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
     use SoftDeletes, Notifiable, Auditable;
 
 	const CACHE_EXPIRATION = 720;
+	public $plural = 'videos';
 	protected $guarded = ['deleted_at'];
 	protected $table = 'videos';
 	protected $fillable = [
@@ -232,6 +233,12 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
 		return $this->delete();
 	}
+
+	public function getPlural()
+	{
+		return $this->plural;
+	}
+
 
     /**
      * @param int $videos_per_page

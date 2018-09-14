@@ -3,29 +3,29 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _6d1b3b28 = () => import('../resources/nuxt/pages/videos/index.vue' /* webpackChunkName: "pages/videos/index" */).then(m => m.default || m)
-const _53abeb99 = () => import('../resources/nuxt/pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */).then(m => m.default || m)
-const _76215b58 = () => import('../resources/nuxt/pages/client.vue' /* webpackChunkName: "pages/client" */).then(m => m.default || m)
-const _9e4c81e2 = () => import('../resources/nuxt/pages/client/purchased/index.vue' /* webpackChunkName: "pages/client/purchased/index" */).then(m => m.default || m)
-const _6b5d45c7 = () => import('../resources/nuxt/pages/client/offered/index.vue' /* webpackChunkName: "pages/client/offered/index" */).then(m => m.default || m)
-const _7cd1e416 = () => import('../resources/nuxt/pages/client/profile/index.vue' /* webpackChunkName: "pages/client/profile/index" */).then(m => m.default || m)
-const _2ce9139a = () => import('../resources/nuxt/pages/client/video/_alpha_id/index.vue' /* webpackChunkName: "pages/client/video/_alpha_id/index" */).then(m => m.default || m)
-const _6d7e4dcb = () => import('../resources/nuxt/pages/client/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/client/stories/_alpha_id/index" */).then(m => m.default || m)
-const _3f4640f8 = () => import('../resources/nuxt/pages/client/profile/_slug/users/create/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/create/index" */).then(m => m.default || m)
-const _25e8b060 = () => import('../resources/nuxt/pages/client/profile/_slug/users/_userid/edit/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/_userid/edit/index" */).then(m => m.default || m)
-const _83d9d422 = () => import('../resources/nuxt/pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
-const _3b784e91 = () => import('../resources/nuxt/pages/upload/index.vue' /* webpackChunkName: "pages/upload/index" */).then(m => m.default || m)
-const _0123e28d = () => import('../resources/nuxt/pages/terms/index.vue' /* webpackChunkName: "pages/terms/index" */).then(m => m.default || m)
-const _6225ae26 = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
-const _63f02318 = () => import('../resources/nuxt/pages/upload/form/index.vue' /* webpackChunkName: "pages/upload/form/index" */).then(m => m.default || m)
-const _c0037a18 = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
-const _849f6ffe = () => import('../resources/nuxt/pages/password/set/_token/_email/index.vue' /* webpackChunkName: "pages/password/set/_token/_email/index" */).then(m => m.default || m)
-const _42e00cd8 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
-const _b0e20676 = () => import('../resources/nuxt/pages/details/_code/index.vue' /* webpackChunkName: "pages/details/_code/index" */).then(m => m.default || m)
-const _f6be2faa = () => import('../resources/nuxt/pages/unsubscribe/_email/index.vue' /* webpackChunkName: "pages/unsubscribe/_email/index" */).then(m => m.default || m)
-const _7610de76 = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
-const _e6548560 = () => import('../resources/nuxt/pages/contract/_token/accept/index.vue' /* webpackChunkName: "pages/contract/_token/accept/index" */).then(m => m.default || m)
-const _7ee9ed55 = () => import('../resources/nuxt/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _f6237f3c = () => import('../resources/nuxt/pages/videos/index.vue' /* webpackChunkName: "pages/videos/index" */).then(m => m.default || m)
+const _36398d9f = () => import('../resources/nuxt/pages/stories/index.vue' /* webpackChunkName: "pages/stories/index" */).then(m => m.default || m)
+const _d5f157dc = () => import('../resources/nuxt/pages/client.vue' /* webpackChunkName: "pages/client" */).then(m => m.default || m)
+const _df89f86e = () => import('../resources/nuxt/pages/client/purchased/index.vue' /* webpackChunkName: "pages/client/purchased/index" */).then(m => m.default || m)
+const _24471dfe = () => import('../resources/nuxt/pages/client/offered/index.vue' /* webpackChunkName: "pages/client/offered/index" */).then(m => m.default || m)
+const _4416392f = () => import('../resources/nuxt/pages/client/profile/index.vue' /* webpackChunkName: "pages/client/profile/index" */).then(m => m.default || m)
+const _d99e7126 = () => import('../resources/nuxt/pages/client/video/_alpha_id/index.vue' /* webpackChunkName: "pages/client/video/_alpha_id/index" */).then(m => m.default || m)
+const _43143885 = () => import('../resources/nuxt/pages/client/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/client/stories/_alpha_id/index" */).then(m => m.default || m)
+const _ffd87104 = () => import('../resources/nuxt/pages/client/profile/_slug/users/create/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/create/index" */).then(m => m.default || m)
+const _58c09c54 = () => import('../resources/nuxt/pages/client/profile/_slug/users/_userid/edit/index.vue' /* webpackChunkName: "pages/client/profile/_slug/users/_userid/edit/index" */).then(m => m.default || m)
+const _d4e4fd16 = () => import('../resources/nuxt/pages/login/index.vue' /* webpackChunkName: "pages/login/index" */).then(m => m.default || m)
+const _534b53cb = () => import('../resources/nuxt/pages/upload/index.vue' /* webpackChunkName: "pages/upload/index" */).then(m => m.default || m)
+const _4ec363da = () => import('../resources/nuxt/pages/terms/index.vue' /* webpackChunkName: "pages/terms/index" */).then(m => m.default || m)
+const _c759361a = () => import('../resources/nuxt/pages/submission/form/index.vue' /* webpackChunkName: "pages/submission/form/index" */).then(m => m.default || m)
+const _2331521e = () => import('../resources/nuxt/pages/upload/form/index.vue' /* webpackChunkName: "pages/upload/form/index" */).then(m => m.default || m)
+const _7c2ce27a = () => import('../resources/nuxt/pages/password/reset/_token/index.vue' /* webpackChunkName: "pages/password/reset/_token/index" */).then(m => m.default || m)
+const _f513278a = () => import('../resources/nuxt/pages/password/set/_token/_email/index.vue' /* webpackChunkName: "pages/password/set/_token/_email/index" */).then(m => m.default || m)
+const _841d8364 = () => import('../resources/nuxt/pages/videos/_alpha_id/index.vue' /* webpackChunkName: "pages/videos/_alpha_id/index" */).then(m => m.default || m)
+const _c97efb6a = () => import('../resources/nuxt/pages/details/_code/index.vue' /* webpackChunkName: "pages/details/_code/index" */).then(m => m.default || m)
+const _10c3e665 = () => import('../resources/nuxt/pages/unsubscribe/_email/index.vue' /* webpackChunkName: "pages/unsubscribe/_email/index" */).then(m => m.default || m)
+const _5c82396a = () => import('../resources/nuxt/pages/stories/_alpha_id/index.vue' /* webpackChunkName: "pages/stories/_alpha_id/index" */).then(m => m.default || m)
+const _367b0e8a = () => import('../resources/nuxt/pages/contract/_token/accept/index.vue' /* webpackChunkName: "pages/contract/_token/accept/index" */).then(m => m.default || m)
+const _6f64f55b = () => import('../resources/nuxt/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
 
@@ -87,119 +87,119 @@ export function createRouter () {
     routes: [
 		{
 			path: "/videos",
-			component: _6d1b3b28,
+			component: _f6237f3c,
 			name: "videos"
 		},
 		{
 			path: "/stories",
-			component: _53abeb99,
+			component: _36398d9f,
 			name: "stories"
 		},
 		{
 			path: "/client",
-			component: _76215b58,
+			component: _d5f157dc,
 			name: "client",
 			children: [
 				{
 					path: "purchased",
-					component: _9e4c81e2,
+					component: _df89f86e,
 					name: "client-purchased"
 				},
 				{
 					path: "offered",
-					component: _6b5d45c7,
+					component: _24471dfe,
 					name: "client-offered"
 				},
 				{
 					path: "profile",
-					component: _7cd1e416,
+					component: _4416392f,
 					name: "client-profile"
 				},
 				{
 					path: "video/:alpha_id",
-					component: _2ce9139a,
+					component: _d99e7126,
 					name: "client-video-alpha_id"
 				},
 				{
 					path: "stories/:alpha_id",
-					component: _6d7e4dcb,
+					component: _43143885,
 					name: "client-stories-alpha_id"
 				},
 				{
 					path: "profile/:slug/users/create",
-					component: _3f4640f8,
+					component: _ffd87104,
 					name: "client-profile-slug-users-create"
 				},
 				{
 					path: "profile/:slug/users/:userid/edit",
-					component: _25e8b060,
+					component: _58c09c54,
 					name: "client-profile-slug-users-userid-edit"
 				}
 			]
 		},
 		{
 			path: "/login",
-			component: _83d9d422,
+			component: _d4e4fd16,
 			name: "login"
 		},
 		{
 			path: "/upload",
-			component: _3b784e91,
+			component: _534b53cb,
 			name: "upload"
 		},
 		{
 			path: "/terms",
-			component: _0123e28d,
+			component: _4ec363da,
 			name: "terms"
 		},
 		{
 			path: "/submission/form",
-			component: _6225ae26,
+			component: _c759361a,
 			name: "submission-form"
 		},
 		{
 			path: "/upload/form",
-			component: _63f02318,
+			component: _2331521e,
 			name: "upload-form"
 		},
 		{
 			path: "/password/reset/:token?",
-			component: _c0037a18,
+			component: _7c2ce27a,
 			name: "password-reset-token"
 		},
 		{
 			path: "/password/set/:token?/:email?",
-			component: _849f6ffe,
+			component: _f513278a,
 			name: "password-set-token-email"
 		},
 		{
 			path: "/videos/:alpha_id",
-			component: _42e00cd8,
+			component: _841d8364,
 			name: "videos-alpha_id"
 		},
 		{
 			path: "/details/:code?",
-			component: _b0e20676,
+			component: _c97efb6a,
 			name: "details-code"
 		},
 		{
 			path: "/unsubscribe/:email?",
-			component: _f6be2faa,
+			component: _10c3e665,
 			name: "unsubscribe-email"
 		},
 		{
 			path: "/stories/:alpha_id",
-			component: _7610de76,
+			component: _5c82396a,
 			name: "stories-alpha_id"
 		},
 		{
 			path: "/contract/:token?/accept",
-			component: _e6548560,
+			component: _367b0e8a,
 			name: "contract-token-accept"
 		},
 		{
 			path: "/",
-			component: _7ee9ed55,
+			component: _6f64f55b,
 			name: "index"
 		}
     ],

@@ -14,9 +14,11 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use SoftDeletes, Notifiable, Auditable;
 
+	public $plural = 'stories';
     protected $guarded = ['deleted_at'];
     public static $rules = [];
     protected $table = 'stories';
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -122,6 +124,11 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		}
 
 		return $this->delete();
+	}
+
+	public function getPlural()
+	{
+		return $this->plural;
 	}
 
 	//**********************

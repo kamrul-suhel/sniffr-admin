@@ -24,19 +24,18 @@
                 <article class="album {{ $panelColour }}">
                     <div class="album-story-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
                     <div class="album-story-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
-                    @include('admin.'.$assetTypePlural.'.partials.card')
+                    @include('admin.'.$asset->getPlural().'.partials.card')
                 </article>
             </div>
         @endforeach
 
         <div class="clear"></div>
 
-        <div class="text-center"><?= $assets->appends(request()->except('page'))->render(); ?></div>
 
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $assetType }}"></modal>
     </div>
 </div>
 
 @section('javascript')
-    @include('admin.'.$assetTypePlural.'.partials.js')
+    @include('admin.'.$asset->getPlural().'.partials.js')
 @stop

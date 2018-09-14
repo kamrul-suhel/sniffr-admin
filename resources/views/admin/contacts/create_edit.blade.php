@@ -58,14 +58,20 @@
 
         @if($contact)
             @if($stories->count() > 0)
-                @php $assets = $stories @endphp
+                @php
+                    $assets = $stories;
+                    $assetType = 'story';
+                @endphp
                 <div class="tab-pane" id="stories">
                     @include('admin.assets.gallery')
                 </div>
             @endif
 
             @if($videos->count() > 0)
-                @php $assets = $videos @endphp
+                @php
+                    $assets = $videos;
+                    $assetType = 'video';
+                @endphp
                 <div class="tab-pane" id="videos">
                     @include('admin.assets.gallery')
                 </div>
