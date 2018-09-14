@@ -88,11 +88,13 @@
     </div>
 
     <div class="album-options no-border">
-        @foreach(config('stories.decisions.'.$chosenDecision) as $key => $state_values)
-            @if($chosenState == $key)
-                @if($state_values['negative_label'])<a href="#" data-id="{{ $asset->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a>@endif
-                @if($state_values['positive_label'])<a href="{{ ($asset->state=='licensing' ? url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.lcfirst($chosenDecision)) : '#') }}" data-id="{{ $asset->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
-            @endif
-        @endforeach
+        @if(isset($chosenDecision))
+            @foreach(config('stories.decisions.'.$chosenDecision) as $key => $state_values)
+                @if($chosenState == $key)
+                    @if($state_values['negative_label'])<a href="#" data-id="{{ $asset->alpha_id }}" class="{{ $state_values['negative_class'] }} btn-mini btn-mini-border left" title="{{ $state_values['negative_label'] }}"><i class="fa fa-times"></i></a>@endif
+                    @if($state_values['positive_label'])<a href="{{ ($asset->state=='licensing' ? url('admin/stories/edit/'.$asset->alpha_id.'/?decision='.lcfirst($chosenDecision)) : '#') }}" data-id="{{ $asset->alpha_id }}" class="{{ $state_values['positive_class'] }} btn-mini btn-mini-border" title="{{ $state_values['positive_label'] }}"><i class="fa fa-check"></i> {{ $state_values['positive_label'] }}</a> @endif
+                @endif
+            @endforeach
+        @endif
     </div>
 </footer>

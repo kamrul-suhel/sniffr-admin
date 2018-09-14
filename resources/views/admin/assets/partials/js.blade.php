@@ -1,26 +1,61 @@
-<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuut3P8ipXPBhj93RZiymyThtzovaswws&libraries=places"></script>
-<script type="text/javascript" src="https://benignware.github.io/jquery-placepicker/js/jquery.placepicker.min.js"></script> -->
-
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#js-story-form').validate({
-        rules: {
-            title: {
-                required: true
-            },
-            contact: {
-                required: true
-            },
-        },
+    // TAGS
+    var tagnames = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: {
+            url: '/tags',
+            filter: function(list) {
+                return $.map(list, function(tagname) {
+                    return { name: tagname }; });
+            }
+        }
+    });
+    tagnames.initialize();
 
-        messages: {
-            title: 'Please enter a story title',
-            contact: 'Please add a contact'
-        },
+    $('#tags').tagsinput({
+        typeaheadjs: [{
+            minLength: 1,
+            highlight: true,
+        },{
+            minlength: 1,
+            name: 'tagnames',
+            displayKey: 'name',
+            valueKey: 'name',
+            source: tagnames.ttAdapter()
+        }],
+        freeInput: true,
+        allowDuplicates: false
+    });
 
-        errorPlacement: function (error, element) {
-            error.insertAfter(element.parent());
-        },
+    $('#tags').on('beforeItemAdd', function(event) {
+        var tagsArray = $('#tags').val().split(",");
+        var tagsCheck = false;
+        event.item = event.item.toLowerCase();
+        if(!event.item) {
+            event.cancel = true;
+        }
+        for (i=0;i<tagsArray.length;i++){
+            if(tagsArray[i].trim()==event.item){
+                tagsCheck = true;
+                $('.tt-input valid').val('');
+                event.cancel = true;
+            }
+        }
+    });
+
+    $('#tags').on('itemRemoved', function(event) {
+        console.log(event.item);
+        if(event.item) {
+            $('a[title="'+event.item+'"]').css('background', '#666');
+            $('#video-analysis-tag-added').html('');
+        }
+    });
+    // TAGS --->
+
+    $("#sendContract").click(function () {
+        $("#sendContract").attr("disabled", true);
     });
 
     $("#saveStory").click(function (e) {
@@ -29,12 +64,129 @@ $(document).ready(function(){
     });
 
     $('#sourced_at').datetimepicker({
-        // format: 'YYYY-MM-DD HH:MM:SS',
-        defaultDate: @if(!empty($story->sourced_at)) '{{ $story->sourced_at }}' @else $.now() @endif
+        // format: 'YYYY-MM-DD HH:MM:SS'
     });
 
-    $("#sendContract").click(function () {
-        $("#sendContract").attr("disabled", true);
+    $('#duration').mask('00:00:00');
+
+
+    // LISTENERS
+    $('.js-video-init').click(function(e) {
+        var videoId = $(this).parent('div').attr('data-id');
+        var video = $('#card-video-'+videoId);
+        $('#card-video-img-'+videoId).hide();
+        $('#card-video-span-'+videoId).hide();
+        video.show();
+        video.attr('class', 'video-js vjs-default-skin vjs-big-play-centered');
+        var myPlayer = videojs("card-video-"+videoId, {}, function(){
+            // Player (this) is initialized and ready.
+            var myPlayer = this;    // Store the video object
+            var aspectRatio = 9/16; // Make up an aspect ratio
+
+            function resizeVideoJS(){
+                // Get the parent element's actual width
+                var width = $('.video-container')[0].offsetWidth;
+                // Set width to fill parent element, Set height
+                myPlayer.width(width).height( width * aspectRatio );
+            }
+
+            resizeVideoJS(); // Initialize the function
+            window.onresize = resizeVideoJS; // Call the function on resize
+
+            myPlayer.play();
+        });
+    });
+
+    $('.js-state').click(function(e){
+        e.preventDefault();
+        var state, alertType;
+        var videoId = $(this).attr("data-id");
+        var myClass = $(this).attr("class");
+
+        console.log($(this));
+
+        switch (true) {
+            case /accepted/.test(myClass):
+                state = 'accepted';
+                alertType = 'success';
+                break;
+            case /licensed/.test(myClass):
+                state = 'licensed';
+                alertType = 'success';
+                break;
+            case /licensed/.test(myClass):
+                state = 'restricted';
+                alertType = 'warning';
+                break;
+            case /licensed/.test(myClass):
+                state = 'problem';
+                alertType = 'error';
+                break;
+            case /rejected/.test(myClass):
+                state = 'rejected';
+                alertType = 'error';
+                break;
+        }
+
+        $(this).removeClass('js-state');
+
+        swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+        $('.swal-button-container').css('display','none');
+
+        if(state && videoId) {
+            // console.log(state);
+            $.ajax({
+                type: 'GET',
+                url: '/admin/videos/status/'+state+'/'+videoId,
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.status=='success') {
+                        if(data.remove=='yes'){
+                            $('#asset-'+videoId).fadeOut();
+                            $('#asset-'+videoId).remove();
+                        }
+                        swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
+                        $('.swal-button-container').css('display','inline-block');
+                    } else {
+                        $('.swal-button-container').css('display','inline-block');
+                    }
+                }
+            });
+        }
+    });
+
+    $('.js-state-accept').click(function(e){
+        e.preventDefault();
+        var dataUrl = $(this).attr('href');
+        var parseUrl = dataUrl.split('/');
+        var state = parseUrl[6];
+        var videoId = parseUrl[7];
+        var alertType;
+
+        $(this).removeAttr("href");
+
+        swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
+        $('.swal-button-container').css('display','none');
+
+        if(dataUrl) {
+            $.ajax({
+                type: 'GET',
+                url: dataUrl,
+                data: { get_param: 'value' },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.status=='success') {
+                        swal({  title: data.message, icon: 'success', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } }).then(() => {
+                            //location.reload();
+                            window.location.href = '/admin/videos/edit/'+data.video_alpha_id+'/?previous_state='+data.previous_state;
+                        });
+
+                        $('.swal-button-container').css('display','inline-block');
+                    }
+                }
+            });
+        }
     });
 
     $('.js-story-state').click(function(e){
@@ -182,6 +334,20 @@ $(document).ready(function(){
         }
     });
 
+    $('.js-story-add-video-button').click(function(e){ //on add input button click
+        e.preventDefault();
+
+        $('.js-video-inputs-wrapper').append('<div class="form-group input-group"><input type="text" class="form-control" placeholder="Search videos" /><input type="hidden" name="videos[]" /><span class="input-group-btn"><button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button></span></div>');
+
+        $('.js-video-inputs-wrapper').find('input[type=text]:last').autocomplete({
+            source: '/admin/videos/autocomplete',
+            minLength: 3,
+            select: function(event, ui) {
+                $(this).next().val(ui.item.id);
+            }
+        });
+    });
+
     $('.js-story-show-asset').click(function (e) {
         e.preventDefault();
         var url = $.trim($(this).attr('href'));
@@ -280,44 +446,6 @@ $(document).ready(function(){
         }
     });
 
-    $('.js-submitted-to').change(function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        var arr = $(this).val();
-        if(arr.length>0) {
-            if($.inArray('UNILAD', arr) !== -1) {
-                $('#rights').val('exclusive');
-                $('#rights-box-status').removeClass('danger').addClass('success');
-                $('#rights-box-status').text('Exclusive');
-                $('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
-            } else {
-                $('#rights').val('');
-                $('#rights-box-status').removeClass('success').removeClass('danger');
-                $('#rights-box-status').text('Pending');
-                $('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
-            }
-            if(arr.length>1) {
-                $('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to multiple </h5>');
-                $('#rights').val('non-exclusive');
-                $('#rights-box-status').removeClass('success').addClass('danger');
-                $('#rights-box-status').text('Non-Exclusive');
-                $('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
-            } else {
-                $('#submitted-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Submitted to '+arr[0].replace('-', ' ')+' </h5>');
-            }
-        } else {
-            $('#submitted-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Submitted to pending </h5>');
-        }
-    });
-
-    $('.js-permission').click(function(e){
-        if ($(this).is(':checked')) {
-            $('#permission-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Has permission </h5>');
-        } else {
-            $('#permission-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Permission pending </h5>');
-        }
-    });
-
     $('.js-problem-status').change(function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -329,58 +457,100 @@ $(document).ready(function(){
         }
     });
 
-    $('.js-allow-publish').click(function(e){
-        if ($(this).is(':checked')) {
-            $('#publish-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Happy to publish </h5>');
-        } else {
-            $('#publish-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Publication status pending </h5>');
-        }
-    });
-
-    $('.js-contact-is-owner').click(function(e){
-        if ($(this).is(':checked')) {
-            $('#owner-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Contact is owner </h5>');
-        } else {
-            $('#owner-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Owner pending </h5>');
-        }
-    });
-
-    $('.add-video-button').click(function(e){ //on add input button click
-        e.preventDefault();
-
-        $('.video-inputs-wrapper').append('<div class="form-group input-group"><input type="text" class="form-control" placeholder="Search videos" /><input type="hidden" name="videos[]" /><span class="input-group-btn"><button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button></span></div>');
-
-        $('.video-inputs-wrapper').find('input[type=text]:last').autocomplete({
-            source: '/admin/videos/autocomplete',
-            minLength: 3,
-            select: function(event, ui) {
-                $(this).next().val(ui.item.id);
-            }
-        });
-    });
-
-    $('.js-rights-status').change(function(e) {
-        if($(this).val()=='exclusive') {
-            $('#rights-box-status').removeClass('danger').addClass('success');
-            $('#rights-box-status').text('Exclusive');
-            $('#rights-status').html('<h5 class="text-success"><i class="fa fa-check-square-o"></i> Exclusive rights </h5>');
-        }
-        if($(this).val()=='non-exclusive') {
-            $('#rights-box-status').removeClass('success').addClass('danger');
-            $('#rights-box-status').text('Non-Exclusive');
-            $('#rights-status').html('<h5 class="text-warning"><i class="fa fa-check-square-o"></i> Non-Exclusive rights </h5>');
-        }
-        if(!$(this).val()) {
-            $('#rights-box-status').removeClass('success').removeClass('danger');
-            $('#rights-box-status').text('Pending');
-            $('#rights-status').html('<h5 class="text-danger"><i class="fa fa-square-o"></i> Rights status pending </h5>');
-        }
-    });
-
-    $('.video-inputs-wrapper').on("click",".js-remove-input",  function(e){ //user click on remove text
+    $('.js-video-inputs-wrapper').on("click",".js-remove-input",  function(e){ //user click on remove text
         e.preventDefault();
         $(this).parent().parent().remove();
     });
+    // LISTENERS ------>
+
+
+
+    // VALIDATE: js form validations >> Admin Create edit
+    $('#video-form').validate({
+        rules: {
+            title: {
+                required: true
+            }
+        },
+        messages: {
+            title: 'You must enter the video title',
+            date_filmed: 'You must enter when the video was filmed',
+            description: 'You must enter a short description or story behind the video'
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+    });
+
+    //js form validations >> Admin Comment
+    $('#comment-form').validate({
+        rules: {
+            comment: {
+                required: true
+            }
+        },
+        messages: {
+            comment: 'You must enter a comment first'
+        }
+    });
+
+    $('#js-story-form').validate({
+        rules: {
+            title: {
+                required: true
+            },
+            contact: {
+                required: true
+            },
+        },
+
+        messages: {
+            title: 'Please enter a story title',
+            contact: 'Please add a contact'
+        },
+
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        },
+    });
+
+    $('#sniffr-create-contact').validate({
+        rules: {
+            full_name: {
+                required: true
+            },
+            email: {
+                email: true
+            },
+        },
+
+        messages: {
+            full_name: 'Please enter your full named',
+            email: 'Please enter a valid email'
+        },
+
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        },
+
+        submitHandler: function(form) {
+            $.ajax({
+                url: form.action,
+                type: form.method,
+                data: $(form).serialize(),
+                success: function(response) {
+                    var contact = response.contact_email ? response.contact_email : response.contact_name;
+                    $('#js-autocomplete-contact').val(contact);
+                    $('#js-contact-id').val(response.contact_id);
+                    $('#add_contact_modal').modal('hide');
+                },
+                error: function(response){
+                    alert(response.responseJSON.errors.email[0]);
+                }
+            });
+        }
+    });
+    // VALIDATE ----->
 
     function checkJobs() {
         setTimeout(function() {
@@ -425,5 +595,4 @@ $(document).ready(function(){
     // 	}).data('placepicker');
     // });
 });
-
 </script>

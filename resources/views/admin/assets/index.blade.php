@@ -47,11 +47,12 @@
 	@if(!count($assets))
 		<p>Sorry, there are no {{ $assetTypePlural }} to show.</p>
 	@else
-		@include('admin.assets.gallery')
+		@include('admin.assets.partials.gallery')
 	@endif
 @stop
 
 @section('javascript')
     <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
+	@include('admin.assets.partials.js')
 @stop
 

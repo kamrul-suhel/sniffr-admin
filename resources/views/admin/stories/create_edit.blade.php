@@ -75,7 +75,7 @@
                             </div>
 
                             <div class="panel-body">
-                                <div class="video-inputs-wrapper">
+                                <div class="js-video-inputs-wrapper">
                                     @if(isset($asset))
                                         @foreach($asset->videos as $video)
                                             <div class="form-group input-group">
@@ -91,7 +91,7 @@
 
                                 <br>
 
-                                <button class="btn btn-default add-video-button pull-right">Add Video Asset</button>
+                                <button class="btn btn-default js-story-add-video-button pull-right">Add Video Asset</button>
                             </div>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
 
                             @if(auth()->user()->role === 'admin')
                                 <div class="col-lg-12">
-                                    @include('admin.videos.partials.log')
+                                    @include('admin.assets.partials.log')
                                 </div>
                             @endif
 
@@ -213,7 +213,6 @@
 @stop
 
 @section('javascript')
-    @include('admin.stories.partials.js')
-    @include('admin.contacts.partials.js')
     <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
+    @include('admin.assets.partials.js')
 @stop

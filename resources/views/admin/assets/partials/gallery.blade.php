@@ -31,11 +31,6 @@
 
         <div class="clear"></div>
 
-
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $assetType }}"></modal>
     </div>
 </div>
-
-@section('javascript')
-    @include('admin.'.$asset->getPlural().'.partials.js')
-@stop

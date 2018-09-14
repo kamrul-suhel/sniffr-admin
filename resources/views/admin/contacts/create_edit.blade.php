@@ -63,7 +63,7 @@
                     $assetType = 'story';
                 @endphp
                 <div class="tab-pane" id="stories">
-                    @include('admin.assets.gallery')
+                    @include('admin.assets.partials.gallery')
                 </div>
             @endif
 
@@ -73,7 +73,7 @@
                     $assetType = 'video';
                 @endphp
                 <div class="tab-pane" id="videos">
-                    @include('admin.assets.gallery')
+                    @include('admin.assets.partials.gallery')
                 </div>
             @endif
         @endif

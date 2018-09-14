@@ -102,7 +102,6 @@ new Vue({
 
     methods: {
         showModal(asset) {
-            console.log('moo');
             this.$store.commit('setAsset', asset);
             this.$store.commit('setModalVisibility', true);
         },
