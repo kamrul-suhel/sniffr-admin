@@ -14,51 +14,51 @@
 
         <section class="videos-section section-space">
             <v-container grid-list-lg py-0>
+                <v-layout row wrap v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
+                    <v-flex xs12 class="text-center" >
+                        <h2 class="text-uppercase">Your Suggested Videos</h2>
+                        <p class="mb-0 ">We've gone ahead and procured a list of videos we think you will
+                            love!</p>
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
+                            <video-loop-component
+                                    v-for="(mailer, index) in mailerVideos"
+                                    :video="mailer"
+                                    :key="mailer.alpha_id"
+                                    :type="'suggest'"
+                                    :index="index"
+                                    :width="'350px'"
+                            ></video-loop-component>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>
+
                 <v-layout row wrap>
+                    <v-flex md3 xl2 hidden-sm-and-down></v-flex>
+                    
+                    <v-flex xs12 md9 xl10 class="mb-0 pt-0" style="position:relative">
+                        <h2 class="text-center text-uppercase">All Videos</h2>
+                        <v-btn
+                                absolute
+                                top
+                                right
+                                flat
+                                fab
+                                small
+                                @click.stop="searchDrawer = !searchDrawer"
+                                color="dark"
+                                class="hidden-lg-and-up">
+                            <v-icon color="dark">filter_list</v-icon>
+                        </v-btn>
+                    </v-flex>
+
                     <v-flex md3 xl2 hidden-sm-and-down>
                         <search-component/>
                     </v-flex>
 
                     <v-flex xs12 md9 xl10>
-                        <v-layout row wrap v-if="client_logged_in && Object.keys(mailerVideos).length > 0">
-                            <v-flex xs12 class="text-center" >
-                                <h2 class="text-uppercase">Your Suggested Videos</h2>
-                                <p class="mb-0 ">We've gone ahead and procured a list of videos we think you will
-                                    love!</p>
-                            </v-flex>
-
-                            <v-flex xs12>
-                                <v-layout align-content-center style="overflow-x:scroll;" class="mb-4">
-                                    <video-loop-component
-                                            v-for="(mailer, index) in mailerVideos"
-                                            :video="mailer"
-                                            :key="mailer.alpha_id"
-                                            :type="'suggest'"
-                                            :index="index"
-                                            :width="'350px'"
-                                    ></video-loop-component>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout row wrap>
-                            <v-flex xs12 class="mb-0 pt-0" style="position:relative">
-                                <h2 class="text-center text-uppercase">All Videos</h2>
-                                <v-btn
-                                        absolute
-                                        top
-                                        right
-                                        flat
-                                        fab
-                                        small
-                                        @click.stop="searchDrawer = !searchDrawer"
-                                        color="dark"
-                                        class="hidden-lg-and-up">
-                                    <v-icon color="dark">filter_list</v-icon>
-                                </v-btn>
-                            </v-flex>
-                        </v-layout>
-
                         <v-layout row wrap v-if="videos.length > 0">
                             <video-loop-component
                                     v-for="(video, index) in videos"

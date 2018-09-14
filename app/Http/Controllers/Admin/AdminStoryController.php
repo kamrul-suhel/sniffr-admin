@@ -547,7 +547,7 @@ class AdminStoryController extends Controller
         CollectionStory::where('story_id', $story->id)->delete();
         $story->destroy($story->id);
 
-        return redirect()->back()->with([
+        return redirect('admin/licenses/stories')->with([
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);
