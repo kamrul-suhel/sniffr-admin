@@ -140,7 +140,7 @@ const getters = {
         }
 
         if(state.searchByTitle !== ''){
-            queryUrl += 'search='+state.searchByTitle;
+            queryUrl += '&search='+state.searchByTitle;
         }
 
         if(state.searchByMiniLength > 0){
