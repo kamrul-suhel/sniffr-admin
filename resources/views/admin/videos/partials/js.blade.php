@@ -1,10 +1,4 @@
-
 <script type="text/javascript">
-    function clickAndDisable(link) {
-        link.onclick = function(event) {
-            event.preventDefault();
-        }
-    }
     $(document).ready(function(){
         $("#sendContract").click(function () {
             $("#sendContract").attr("disabled", true);
@@ -50,18 +44,18 @@
         tagnames.initialize();
 
         $('#tags').tagsinput({
-                typeaheadjs: [{
-                            minLength: 1,
-                            highlight: true,
-                },{
-                        minlength: 1,
-                        name: 'tagnames',
-                        displayKey: 'name',
-                        valueKey: 'name',
-                        source: tagnames.ttAdapter()
-                }],
-                freeInput: true,
-                allowDuplicates: false
+            typeaheadjs: [{
+                        minLength: 1,
+                        highlight: true,
+            },{
+                    minlength: 1,
+                    name: 'tagnames',
+                    displayKey: 'name',
+                    valueKey: 'name',
+                    source: tagnames.ttAdapter()
+            }],
+            freeInput: true,
+            allowDuplicates: false
         });
 
         $('#tags').on('beforeItemAdd', function(event) {
@@ -112,6 +106,8 @@
             var videoId = $(this).attr("data-id");
             var myClass = $(this).attr("class");
 
+            console.log($(this));
+
             switch (true) {
                 case /accepted/.test(myClass):
                     state = 'accepted';
@@ -140,29 +136,7 @@
             swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
             $('.swal-button-container').css('display','none');
 
-        if(state&&videoId) {
-            // console.log(state);
-            $.ajax({
-                type: 'GET',
-                url: '/admin/videos/status/'+state+'/'+videoId,
-                data: {},
-                dataType: 'json',
-                success: function (data) {
-                    if(data.status=='success') {
-                        if(data.remove=='yes'){
-                            $('#asset-'+videoId).fadeOut();
-                            $('#asset-'+videoId).remove();
-                        }
-                        swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
-                        $('.swal-button-container').css('display','inline-block');
-                    } else {
-                        $('.swal-button-container').css('display','inline-block');
-                    }
-                }
-            });
-        }
-    });
-            if(state&&videoId) {
+            if(state && videoId) {
                 // console.log(state);
                 $.ajax({
                     type: 'GET',
@@ -172,8 +146,8 @@
                     success: function (data) {
                         if(data.status=='success') {
                             if(data.remove=='yes'){
-                                $('#video-'+videoId).fadeOut();
-                                $('#video-'+videoId).remove();
+                                $('#asset-'+videoId).fadeOut();
+                                $('#asset-'+videoId).remove();
                             }
                             swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: true, closeOnEsc: true, buttons: { cancel: false, confirm: true } });
                             $('.swal-button-container').css('display','inline-block');

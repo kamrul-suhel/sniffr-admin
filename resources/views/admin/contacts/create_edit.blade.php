@@ -1,6 +1,10 @@
 @extends('admin.master')
 
 @section('content')
+@php
+    $stories = $contact->stories;
+    $videos = $contact->videos;
+@endphp
 <div id="admin-container">
     @include('admin.contacts.partials.breadcrumb')
 
@@ -12,17 +16,17 @@
         </li>
 
         @if($contact)
-            @if($contact->stories->count() > 0)
+            @if($stories->count() > 0)
                 <li>
                     <a href="#stories" role="tab" data-toggle="tab">
-                        Stories ({{ $contact->stories->count() }})
+                        Stories ({{ $stories->count() }})
                     </a>
                 </li>
             @endif
-            @if($contact->videos->count() > 0)
+            @if($videos->count() > 0)
                 <li>
                     <a href="#videos" role="tab" data-toggle="tab">
-                        Videos ({{ $contact->videos->count() }})
+                        Videos ({{ $videos->count() }})
                     </a>
                 </li>
             @endif
@@ -46,21 +50,26 @@
                     </div>
 
                     <div class="panel-body" style="display: block; background: #fcfcfc;">
-                        <comments-component :asset="{{ json_encode($contact) }}"
-                                            asset-type="contact"></comments-component>
+                        <comments-component :asset="{{ json_encode($contact) }}" asset-type="contact"></comments-component>
                     </div>
                 </div>
             </div>
         </div>
 
         @if($contact)
-            <div class="tab-pane" id="stories">
-                @include('admin.contacts.partials.stories')
-            </div>
+            @if($stories->count() > 0)
+                @php $assets = $stories @endphp
+                <div class="tab-pane" id="stories">
+                    @include('admin.assets.gallery')
+                </div>
+            @endif
 
-            <div class="tab-pane" id="videos">
-                @include('admin.contacts.partials.videos')
-            </div>
+            @if($videos->count() > 0)
+                @php $assets = $videos @endphp
+                <div class="tab-pane" id="videos">
+                    @include('admin.assets.gallery')
+                </div>
+            @endif
         @endif
     </div>
 

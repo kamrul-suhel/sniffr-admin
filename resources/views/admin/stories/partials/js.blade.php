@@ -382,6 +382,34 @@ $(document).ready(function(){
         $(this).parent().parent().remove();
     });
 
+    function checkJobs() {
+        setTimeout(function() {
+            $.ajax({
+                type: 'GET',
+                url: '/admin/mailers/checkjobs',
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.jobs == 0) {
+                        swal.close();
+                        swal({
+                            title: 'Stories are now up-to-date.',
+                            icon: 'success',
+                            closeModal: true,
+                            closeOnClickOutside: true,
+                            closeOnEsc: true
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    } else {
+                        // jobs are still in the queue, so run again
+                        checkJobs();
+                    }
+                }
+            });
+        }, 500);
+    }
+
     // var mapPlacepicker = $(".placepicker").placepicker({placeChanged: function(place) {
     // 	var location_value = place.formatted_address +" Latitude" +this.getLocation().latitude + " Longitude" + this.getLocation().longitude;
     //
