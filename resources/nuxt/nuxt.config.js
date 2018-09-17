@@ -10,8 +10,9 @@ module.exports = {
         '@nuxtjs/axios'
     ],
 
+
     axios:{
-      baseURL: process.env.APP_URL ||'http://sniffr-app.test/api'
+      baseURL: process.env.APP_URL ||'twilight.sniffrmedia.co.uk/api'
     },
 
     plugins: [

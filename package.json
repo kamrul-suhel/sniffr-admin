@@ -1,5 +1,11 @@
 {
     "private": true,
+    "config": {
+        "nuxt": {
+            "host": "0.0.0.0",
+            "port": "3333"
+        }
+    },
     "scripts": {
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -11,7 +17,8 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "build": "nuxt build -c resources/nuxt/nuxt.config.js",
         "start": "nuxt start -c resources/nuxt/nuxt.config.js",
-        "work": "HOST=0.0.0.0 PORT=3333 nuxt -c resources/nuxt/nuxt.config.js"
+        "work": "nuxt -c resources/nuxt/nuxt.config.js",
+        "test": "NODE_ENV=development node server.js"
     },
     "dependencies": {
         "@nuxtjs/axios": "^5.3.1",
