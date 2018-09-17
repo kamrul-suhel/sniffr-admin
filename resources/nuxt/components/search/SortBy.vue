@@ -7,12 +7,13 @@
         <v-card-text class="search-content">
             <v-layout row wrap>
                 <v-flex xs12 py-0 v-for="(sort, index) in sortItems" :key="index">
-                    <v-checkbox color="dark"
-                                class="checkbox"
-                                v-model="sortBy"
-                                :label="sort.text"
-                                :value="sort.value"
-                    ></v-checkbox>
+                    <v-radio-group v-model="sortBy">
+                        <v-radio color="dark"
+                                 class="checkbox"
+                                 :label="sort.text"
+                                 :value="sort.value"
+                        ></v-radio>
+                    </v-radio-group>
                 </v-flex>
             </v-layout>
         </v-card-text>

@@ -220,8 +220,8 @@ trait VideoHelper{
             $linkVars['state'] = 'problem';
         }
 
-        $linkVars['image'] = $linkVars['image'] ? $linkVars['image'] : '/assets/admin/images/placeholder.png';
-        $linkVars['thumb'] = $linkVars['thumb'] ? $linkVars['thumb'] : '/assets/admin/images/placeholder.png';
+        $linkVars['image'] = $linkVars['image'] ? $linkVars['image'] : '/assets/images/placeholder.png';
+        $linkVars['thumb'] = $linkVars['thumb'] ? $linkVars['thumb'] : '/assets/images/placeholder.png';
 
         return $linkVars;
     }

@@ -40,52 +40,28 @@
                         value: 0
                     },
                     {
-                        text: '10 Seconds',
+                        text: '10S',
                         value: 10
                     },
                     {
-                        text: '15 Seconds',
-                        value: 15
-                    },
-                    {
-                        text: '30 Seconds',
+                        text: '30S',
                         value: 30
                     },
                     {
-                        text: '1 Minute',
+                        text: '1M',
                         value: 60
                     },
                     {
-                        text: '1.5 Minute',
-                        value: 90
-                    },
-                    {
-                        text: '2 Minute',
-                        value: 120
-                    },
-                    {
-                        text: '3 Minute',
+                        text: '3M',
                         value: 180
                     },
                     {
-                        text: '4 Minute',
-                        value: 240
-                    },
-                    {
-                        text: '5 Minute',
+                        text: '5M',
                         value: 300
                     },
                     {
-                        text: '6 Minute',
-                        value: 360
-                    },
-                    {
-                        text: '7 Minute',
+                        text: '10M',
                         value: 420
-                    },
-                    {
-                        text: 'More then 7 Minute',
-                        value: 2000
                     }
                 ],
 
