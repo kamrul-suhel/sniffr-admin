@@ -3,7 +3,7 @@
 @section('content')
     <!-- This is where -->
     <ol class="breadcrumb">
-        <li><a href="{{ (isset($chosenDecision) ? '/admin/stories/?decision='.$chosenDecision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a></li>
+        <li><a href="{{ (isset($chosen_decision) ? '/admin/stories/?decision='.$chosen_decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a></li>
         <li class="active">
             @if(!empty($asset->id))
                 <strong>Edit Story</strong>
@@ -176,11 +176,11 @@
 
                             <input type="hidden" id="id" name="id" value="{{ $asset->id }}"/>
                             <input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}"/>
-                            <input type="hidden" name="decision" value="{{ (isset($chosenDecision) ? $chosenDecision : '') }}"/>
+                            <input type="hidden" name="decision" value="{{ (isset($chosen_decision) ? $chosen_decision : '') }}"/>
                         @endif
 
                         <input type="hidden" name="_token" value="<?= csrf_token() ?>"/>
-                        <input type="hidden" name="decision" value="{{ (isset($chosenDecision) ? $chosenDecision : '') }}"/>
+                        <input type="hidden" name="decision" value="{{ (isset($chosen_decision) ? $chosen_decision : '') }}"/>
                         <input type="hidden" name="type" value="{{ (isset($asset) ? $asset->type : 'new') }}"/>
                     </div>
                 </div>
@@ -194,13 +194,13 @@
         <a href="{{ url('admin/stories/delete/'.$asset->alpha_id) }}" class="btn btn-danger">Delete Story</a>
     @endif
 
-    @if(isset($asset->id) && isset($chosenDecision) && $chosenDecision == 'licensing' && ($asset->state=='licensing' || $asset->state=='unlicensed' || $asset->state=='unapproved' || $asset->state=='rejected'))
-        <a href="{{ url('admin/stories/status/licensed/'.$asset->alpha_id.'/?decision='.(isset($chosenDecision) ? $chosenDecision : '')) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
+    @if(isset($asset->id) && isset($chosen_decision) && $chosen_decision == 'licensing' && ($asset->state=='licensing' || $asset->state=='unlicensed' || $asset->state=='unapproved' || $asset->state=='rejected'))
+        <a href="{{ url('admin/stories/status/licensed/'.$asset->alpha_id.'/?decision='.(isset($chosen_decision) ? $chosen_decision : '')) }}" class="btn btn-primary pull-right" style="margin-left:10px;">License (without contract)</a>
     @endif
 
     <a href="#" id="saveStory" class="btn btn-success pull-right">{{ $button_text }}</a>
 
-    @if(isset($asset) && isset($chosenDecision) && $chosenDecision!='content-sourced' && $asset->url)
+    @if(isset($asset) && isset($chosen_decision) && $chosen_decision!='content-sourced' && $asset->url)
         <a href="{{ $asset->url }}" class="btn btn-grey pull-right" target="_blank" style="margin-right:10px;">View Story in Wordpress</a>
     @endif
 

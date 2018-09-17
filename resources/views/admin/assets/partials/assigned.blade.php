@@ -1,4 +1,4 @@
-<select id="assign_to" name="assign_to" data-type="{{ $assetType }}" data-id="{{ $asset->alpha_id }}" class="js-asset-update" title="Assign To">
+<select id="assign_to" name="assign_to" data-type="{{ $asset_type }}" data-id="{{ $asset->alpha_id }}" class="js-asset-update" title="Assign To">
     <option value="">Select User</option>
 	<?php $userId = $asset->user()->first() ? $asset->user()->first()->id : 0; ?>
     @foreach($users as $user)

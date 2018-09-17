@@ -60,7 +60,7 @@
             @if($stories->count() > 0)
                 @php
                     $assets = $stories;
-                    $assetType = 'story';
+                    $asset_type = 'story';
                 @endphp
                 <div class="tab-pane" id="stories">
                     @include('admin.assets.partials.gallery')
@@ -70,7 +70,7 @@
             @if($videos->count() > 0)
                 @php
                     $assets = $videos;
-                    $assetType = 'video';
+                    $asset_type = 'video';
                 @endphp
                 <div class="tab-pane" id="videos">
                     @include('admin.assets.partials.gallery')

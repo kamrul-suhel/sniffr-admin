@@ -223,13 +223,13 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		Cookie::queue('sniffr_admin_story_assignee', $this->chosenAssignee);
 
 		return [
-			'assetType' => 'story',
-			'assetTypePlural' => 'stories',
-			'assetIcon' => 'book',
+			'asset_type' => 'story',
+			'asset_type_plural' => 'stories',
+			'asset_icon' => 'book',
 			'assets' => $result,
-			'chosenState' => $this->chosenState,
-			'chosenDecision' => $this->chosenDecision,
-			'chosenAssignee' => $this->chosenAssignee,
+			'chosen_state' => $this->chosenState,
+			'chosen_decision' => $this->chosenDecision,
+			'chosen_assignee' => $this->chosenAssignee,
 			'users' => auth()->user()->where([['client_id', NULL]])->get(),
 			'user' => auth()->user()
 		];

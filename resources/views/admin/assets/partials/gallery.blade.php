@@ -31,6 +31,6 @@
 
         <div class="clear"></div>
 
-        <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $assetType }}"></modal>
+        <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $asset_type }}"></modal>
     </div>
 </div>

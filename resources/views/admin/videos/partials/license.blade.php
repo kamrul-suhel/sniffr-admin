@@ -25,18 +25,6 @@
                 - Deleted
             @endif
         </div>
-        <div class="panel-options">
-            <form action="{{ route('videos.update', ['id' => $asset->alpha_id]) }}" method="post">
-                {{ csrf_field() }}
-                <input type="hidden" name="index" value="true">
-
-                <select class="form-control" name="priority" onchange="this.form.submit()">
-                    <option value="low" {{ $asset->priority == "low" ? 'selected' : '' }}>Low Priority</option>
-                    <option value="medium" {{ $asset->priority == "medium" ? 'selected' : '' }}>Medium Priority</option>
-                    <option value="high" {{ $asset->priority == "high" ? 'selected' : '' }}>High Priority</option>
-                </select>
-            </form>
-        </div>
     </div>
 
     <div class="panel-body" style="display: block;">
@@ -46,6 +34,10 @@
     </div>
 
     <div class="panel-footer">
+        @include('admin.assets.partials.priority')
+
+        @include('admin.assets.partials.assigned')
+
         <div class="text-right">
             @if(!$asset->hasContract())
 
