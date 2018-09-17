@@ -25,6 +25,30 @@
                 - Deleted
             @endif
         </div>
+
+        <div class="pull-right">
+            @if($asset->state == 'accepted')
+                @if($asset->reminders)
+                    Reminder {{ $asset->reminders }}
+                    Sent: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
+                    <a href="{{ url('admin/videos/remind/' . $asset->alpha_id ) }}"
+                       class="btn btn-primary btn-danger">
+                        Send Reminder
+                    </a>
+                @else
+                    More Details
+                    Requested: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
+                    <a href="{{ url('admin/videos/remind/' . $asset->alpha_id ) }}"
+                       class="btn btn-primary btn-danger">
+                        Send Reminder
+                    </a>
+                @endif
+                <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
+                   class="btn btn-primary btn-danger">
+                    Reject
+                </a>
+            @endif
+        </div>
     </div>
 
     <div class="panel-body" style="display: block;">
@@ -34,13 +58,13 @@
     </div>
 
     <div class="panel-footer">
-        @include('admin.assets.partials.priority')
+        <div class="pull-left">
+            @include('admin.assets.partials.priority')
 
-        @include('admin.assets.partials.assigned')
-
+            @include('admin.assets.partials.assigned')
+        </div>
         <div class="text-right">
             @if(!$asset->hasContract())
-
                 @if($asset->state == 'pending' || $asset->state == 'problem' || $asset->state == 'licensed' || $asset->state=='restricted')
                     @if($asset->state != 'licensed')
                         <a href="{{ url('admin/videos/status/licensed/' . $asset->alpha_id ) }}"
@@ -79,28 +103,6 @@
                     </a>
                     <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
                        class="btn btn-primary btn-danger">Reject
-                    </a>
-                @elseif($asset->state == 'accepted')
-                    <div class="pull-left">
-                        @if($asset->reminders)
-                            Reminder {{ $asset->reminders }}
-                            Sent: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
-                            <a href="{{ url('admin/videos/remind/' . $asset->alpha_id ) }}"
-                               class="btn btn-primary btn-danger">
-                                Send Reminder
-                            </a>
-                        @else
-                            More Details
-                            Requested: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
-                            <a href="{{ url('admin/videos/remind/' . $asset->alpha_id ) }}"
-                               class="btn btn-primary btn-danger">
-                                Send Reminder
-                            </a>
-                        @endif
-                    </div>
-                    <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
-                       class="btn btn-primary btn-danger">
-                        Reject
                     </a>
                 @elseif($asset->state == 'rejected')
                     <a href="{{ url('admin/videos/status/accepted/' . $asset->alpha_id ) }}"
