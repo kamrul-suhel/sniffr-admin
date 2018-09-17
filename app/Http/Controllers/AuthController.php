@@ -14,7 +14,6 @@ use Session;
 use Illuminate\Http\Request;
 use Validator;
 use Redirect;
-use App\Page;
 use App\VideoCategory;
 
 /**
@@ -65,7 +64,6 @@ class AuthController extends Controller
             'type' => 'login',
             'video_categories' => VideoCategory::all(),
             'theme_settings' => config('settings.theme'),
-            'pages' => Page::where('active', '=', 1)->get(),
             'settings' => $settings
         ];
 

@@ -9,7 +9,6 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-use App\Page;
 use App\User;
 use App\Video;
 use App\Contact;
@@ -42,7 +41,6 @@ class ThemeSubmissionController extends Controller
             'user' => $user,
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
-            'pages' => Page::where('active', '=', 1)->get(),
         ];
     }
 

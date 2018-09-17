@@ -55,24 +55,13 @@ class AdminCommentController extends Controller
 
         if($assetType =='video') {
             $comment->video_id = $assetId;
-            $comment->story_id = 0;
-        } else {
+        } else if($assetType =='story'){
             $comment->story_id = $assetId;
-            $comment->video_id = 0;
-        }
+        } else if($assetType =='contact'){
+			$comment->contact_id = $assetId;
+		}
 
         $comment->save();
-
-        //If comment is from contacts/{id}/edit
-        if($request->has('contact_id')) {
-            return redirect('admin/contacts/'.$request->get('contact_id').'/edit');
-        }
-
-        if($request->get('asset_type')=='video') {
-            $route = 'admin_video_edit';
-        } else {
-            $route = 'admin.stories.edit';
-        }
 
 		if ($isJson) {
         	$comment = Comment::where('id', $comment->id)->with('user')->first();
@@ -81,6 +70,14 @@ class AdminCommentController extends Controller
 				'status' => 'success',
 				'comment' =>  $comment
 			]);
+		}
+
+		if($assetType=='video') {
+			$route = 'admin_video_edit';
+		} else if($assetType =='story'){
+			$route = 'admin.stories.edit';
+		} else if($assetType =='contact'){
+			$route = 'admin.comments.edit';
 		}
 
         return redirect()->route($route, ['id' => $request->get('alpha_id')])->with([

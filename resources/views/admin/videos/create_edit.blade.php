@@ -115,7 +115,7 @@
 
                         @if(auth()->user()->role === 'admin')
                         <div class="tab-pane" id="logs">
-                            @include('admin.videos.partials.log')
+                            @include('admin.assets.partials.log')
                         </div>
                         @endif
 
@@ -196,7 +196,6 @@
 @stop
 
 @section('javascript')
-    @include('admin.videos.partials.js')
-    @include('admin.contacts.partials.js')
     <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
+    @include('admin.assets.partials.js')
 @stop

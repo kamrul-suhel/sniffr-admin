@@ -58,6 +58,7 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
     use SoftDeletes, Notifiable, Auditable;
 
 	const CACHE_EXPIRATION = 720;
+	public $plural = 'videos';
 	protected $guarded = ['deleted_at'];
 	protected $table = 'videos';
 	protected $fillable = [
@@ -170,9 +171,9 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function createdUser()
+	public function user()
 	{
-		return $this->belongsTo(User::class, 'user_id');
+		return $this->belongsTo(User::class);
 	}
 
 	/**
@@ -232,6 +233,12 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
 		return $this->delete();
 	}
+
+	public function getPlural()
+	{
+		return $this->plural;
+	}
+
 
     /**
      * @param int $videos_per_page
@@ -308,6 +315,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchCategory($model, $data)
 	{
 		if ($data) {
+			$this->chosenVertical = $data;
+
 			return $model->where('video_category_id', $data);
 		}
 
@@ -322,6 +331,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchCollection($model, $data)
 	{
 		if ($data) {
+			$this->chosenCollection = $data;
+
 			return $model->where('video_collection_id', $data);
 		}
 
@@ -336,6 +347,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchShottype($model, $data)
 	{
 		if ($data) {
+			$this->chosenShotType = $data;
+
 			return $model->where('video_shottype_id', $data);
 		}
 
@@ -350,6 +363,8 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function searchRights($model, $data)
 	{
 		if ($data) {
+			$this->chosenRights = $data;
+
 			return $model->where('rights', $data);
 		}
 
@@ -363,19 +378,44 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 */
 	public function searchState($model, $data)
 	{
-		$data = $data ? $data : "all";
+		$this->chosenState = $data ? $data : Cookie::get('sniffr_admin_video_state');
 
-		//override all for deleted videos
-		if ($data == 'deleted') {
-			return $model->onlyTrashed()->orderBy('updated_at', 'desc');
+		if($this->chosenState){
+			//override all for deleted videos
+			if ($this->chosenState == 'deleted') {
+				return $model->onlyTrashed()->orderBy('updated_at', 'desc');
+			}
+
+			if($this->chosenState !== 'all'){
+				return $model->where('state', $this->chosenState);
+			}else{
+				return $model;
+			}
 		}
 
-		if ($data == 'all') {
-			return $model;
+		$this->chosenAssignee = Cookie::get('sniffr_admin_video_assignee') ?? '';
+		$this->chosenVertical = Cookie::get('sniffr_admin_video_vertical') ?? '';
+		$this->chosenShotType = Cookie::get('sniffr_admin_video_shot_type') ?? '';
+		$this->chosenCollection = Cookie::get('sniffr_admin_video_collection') ?? '';
+		$this->chosenRights = Cookie::get('sniffr_admin_video_rights') ?? '';
+
+		return $model;
+	}
+
+	/**
+	 * @param $model
+	 * @param $data
+	 * @return mixed
+	 */
+	public function searchAssignee($model, $data)
+	{
+		if ($data) {
+			$this->chosenAssignee = $data;
+
+			return $model->where('user_id', $this->chosenAssignee);
 		}
 
-		session(['state' => $data]);
-		return $model->where('state', $data);
+		return $model;
 	}
 
 	/**
@@ -415,12 +455,28 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 * @param $state
 	 * @return array
 	 */
-	public function generateData($result, $state, $data = null)
+	public function generateData($result)
 	{
+		Cookie::queue('sniffr_admin_video_assignee', $this->chosenAssignee);
+		Cookie::queue('sniffr_admin_video_state', $this->chosenState);
+		Cookie::queue('sniffr_admin_video_vertical', $this->chosenVertical);
+		Cookie::queue('sniffr_admin_video_shot_type', $this->chosenShotType);
+		Cookie::queue('sniffr_admin_video_collection', $this->chosenCollection);
+		Cookie::queue('sniffr_admin_video_rights', $this->chosenRights);
+
 		return [
-			'state' => $state ? $state : "all",
-			'videos' => $result,
+			'asset_type' => 'video',
+			'asset_type_plural' => 'videos',
+			'asset_icon' => 'youtube-play',
+			'chosen_state' => $this->chosenState,
+			'chosen_vertical' => $this->chosenVertical,
+			'chosen_shot_type' => $this->chosenShotType,
+			'chosen_collection' => $this->chosenCollection,
+			'chosen_rights' => $this->chosenRights,
+			'chosen_assignee' => $this->chosenAssignee,
+			'assets' => $result,
 			'user' => auth()->user(),
+			'users' => auth()->user()->where([['client_id', NULL]])->get(),
 			'video_categories' => VideoCategory::all(),
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),

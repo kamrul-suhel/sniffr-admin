@@ -9,6 +9,7 @@ use Redirect;
 use App\Comment;
 use App\Contact;
 use App\Video;
+use App\User;
 use App\Libraries\VideoHelper;
 use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
@@ -130,6 +131,7 @@ class AdminContactController extends Controller
              'contact' => $contact,
              'decision' => $decision,
              'user' => Auth::user(),
+			 'users' => User::all(),
              'videos' => $contact->videos,
              'comments' => $contact->comments()->orderBy('created_at', 'desc')->paginate(6)
          ];
