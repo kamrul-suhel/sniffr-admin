@@ -193,36 +193,33 @@ $(document).ready(function(){
         e.preventDefault();
 
         var assetId = $(this).attr("data-id");
-        var assetType = $(this).attr("data-asset-type");
+        var assetType = $(this).attr("data-type");
         var fieldId = $(this).attr("id");
         var fieldValue = $(this).val();
 
         if( assetId && fieldId && fieldValue ) {
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: '/admin/asset/update_field',
-                data: { story_id: assetId, field_id: fieldId, field_value: fieldValue },
+                data: { asset_id: assetId, asset_type: assetType, field_id: fieldId, field_value: fieldValue },
                 dataType: 'json',
                 success: function (data) {
                     // console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
                     if(data.status=='success') {
                         $('#asset-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
-                        if(data.field_id=='priority') {
-                            if(data.field_value=='high'){
-                                $('#asset-'+data.story_alpha_id+' .album').removeClass('warning');
-                                $('#asset-'+data.story_alpha_id+' .album').addClass('danger', 1000);
-                            }else if(data.field_value=='medium'){
-                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger');
-                                $('#asset-'+data.story_alpha_id+' .album').addClass('warning', 1000);
-                            } else {
-                                $('#asset-'+data.story_alpha_id+' .album').removeClass('danger warning', 1000);
+                        $('#asset-'+ data.asset_alpha_id +' .album').removeClass('danger warning', 1000);
+                        if(data.field_id == 'priority') {
+                            if(data.field_value == 'high'){
+                                $('#asset-'+ data.asset_alpha_id +' .album').addClass('danger', 1000);
+                            }else if(data.field_value == 'medium'){
+                                $('#asset-'+ data.asset_alpha_id +' .album').addClass('warning', 1000);
                             }
                         }
-                        if(data.field_id=='state') {
+                        if(data.field_id == 'state') {
                             window.location.reload();
                         }
                     } else {
-                        $('#asset-update-error-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+                        $('#asset-update-error-'+data.asset_alpha_id).show().delay(2000).fadeOut('medium');
                     }
                 }
             });
@@ -301,9 +298,6 @@ $(document).ready(function(){
         $(this).removeClass('js-story-state');
         $(this).attr("disabled", true);
 
-        // swal({  title: 'loading..', icon: 'info', buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false });
-        // $('.swal-button-container').css('display','none');
-
         if(state && storyId) {
             console.log(state);
             $.ajax({
@@ -315,14 +309,10 @@ $(document).ready(function(){
                     if(data.status=='success') {
                         if(data.remove=='yes'){
                             $('#asset-'+storyId).fadeOut();
-                            $('#asset-'+storyId).remove();
                         } else {
                             window.location.reload();
                         }
-                        // swal({  title: data.message, icon: alertType, buttons: true, closeModal: true, closeOnClickOutside: false, closeOnEsc: false, buttons: { cancel: false, confirm: true } });
-                        // $('.swal-button-container').css('display','inline-block');
                     } else {
-                        // $('.swal-button-container').css('display','inline-block');
                     }
                 }
             });

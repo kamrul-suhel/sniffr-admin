@@ -96,7 +96,7 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
-	Route::post('assets/update_field', array('uses' => 'Admin\AdminAssetController@updateField'));
+	Route::get('asset/update_field', array('uses' => 'Admin\AdminAssetController@updateField'));
 
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
     Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
@@ -112,7 +112,6 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 	Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'))->name('admin.stories.update');
 	Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
 	Route::get('stories/status/{state}/{id}', array('uses' => 'Admin\AdminStoryController@status'));
-	Route::get('stories/update_field', array('uses' => 'Admin\AdminStoryController@updateField'));
 	Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
 	Route::get('stories/reminder/{id}', array('uses' => 'Admin\AdminStoryController@sendReminder'));
 	Route::get('stories/contact_made/{id}', array('uses' => 'Admin\AdminStoryController@contactMade'));

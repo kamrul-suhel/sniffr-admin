@@ -120,7 +120,7 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-        return redirect()->back()->with([
+        return redirect('/admin/licenses/stories?state=content-sourced--unapproved')->with([
             'note' => 'New Story Successfully Added!',
             'note_type' => 'success'
         ]);
@@ -260,14 +260,17 @@ class AdminStoryController extends Controller
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
-        // sync to WP + custom message + whether to remove from view (depending on state)
+        // sync to WP + custom message +s whether to remove from view (depending on state)
         switch (true) {
             case ($state == 'unapproved'):
+				$remove = 'yes';
                 break;
             case ($state == 'rejected'):
+				$remove = 'yes';
                 break;
             case ($state == 'approved'):
-                // make initial contact (will need to add twitter/fb/reddit in future)
+				$remove = 'yes';
+                // make initial contact (will need to add fb/insta in future)
                 if($story_id && $story->contact->canAutoBump()){
                     QueueBump::dispatch($story_id);
                 }

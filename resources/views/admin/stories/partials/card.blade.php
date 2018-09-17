@@ -38,14 +38,7 @@
                 </div>
 
                 <div class="form-group">
-                    <!-- <strong>Assigned in Sniffr:</strong> -->
-                    <select id="assign_to" name="assign_to" data-id="{{ $asset->alpha_id }}" class="js-story-update" title="Assign To">
-                        <option value="">Select User</option>
-						<?php $storyUserId = $asset->user()->first()->id; ?>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" @if($storyUserId == $user->id) selected @endif>@if($user->full_name) {{ $user->full_name }} @else {{ $user->username }} @endif</option>
-                        @endforeach
-                    </select>
+                    @include('admin.assets.partials.assigned')
                 </div>
             </div>
         </div>

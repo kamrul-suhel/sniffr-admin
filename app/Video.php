@@ -171,9 +171,9 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function createdUser()
+	public function user()
 	{
-		return $this->belongsTo(User::class, 'user_id');
+		return $this->belongsTo(User::class);
 	}
 
 	/**
@@ -378,22 +378,21 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 */
 	public function searchState($model, $data)
 	{
-		if($data){
-			$this->chosenState = $data;
+		$this->chosenState = $data ? $data : Cookie::get('sniffr_admin_video_state');
 
+		if($this->chosenState){
 			//override all for deleted videos
-			if ($data == 'deleted') {
+			if ($this->chosenState == 'deleted') {
 				return $model->onlyTrashed()->orderBy('updated_at', 'desc');
 			}
 
-			if($data !== 'all'){
-				return $model->where('state', $data);
+			if($this->chosenState !== 'all'){
+				return $model->where('state', $this->chosenState);
 			}else{
 				return $model;
 			}
 		}
 
-		$this->chosenState = Cookie::get('sniffr_admin_video_state') ?? 'all';
 		$this->chosenAssignee = Cookie::get('sniffr_admin_video_assignee') ?? '';
 		$this->chosenVertical = Cookie::get('sniffr_admin_video_vertical') ?? '';
 		$this->chosenShotType = Cookie::get('sniffr_admin_video_shot_type') ?? '';

@@ -36,6 +36,8 @@
             @include('admin.assets.partials.priority')
         @endif
 
+        @include('admin.assets.partials.assigned')
+
         @if($asset->trashed())
             <a href="{{ url('admin/videos/restore/'.$asset->alpha_id) }}" title="Remove from trash" class="undelete">
                 <i class="fa fa-upload"></i>
