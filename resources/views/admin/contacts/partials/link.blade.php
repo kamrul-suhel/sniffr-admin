@@ -8,7 +8,7 @@
 
     @if($asset->contact->email)
         <a href="{{ url('admin/contacts/'.$asset->contact->id.'/edit/') }}" class="btn btn-mini-info" title="View Contact" target="_blank">
-            <i class="fa fa-envelope"></i> {{ $asset->contact->email }}
+            <i class="fa fa-envelope"></i> {{ $asset->contact->email }} @if($asset_type == 'video')(<strong>{{ count($asset->contact->videos) }}</strong>)@endif
         </a>
     @elseif($asset->contact->twitter)
         <a href="https://twitter.com/{{ $asset->contact->twitter }}" class="btn btn-mini-info" title="View Contact" target="_blank">

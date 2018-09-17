@@ -142,14 +142,16 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 */
 	public function searchState($model, $data)
 	{
-		if ($data) {
-			//explode key=>value
-			$decision = explode('--', $data);
-			$this->chosenDecision = $decision[0];
-			$this->chosenState = $decision[1];
+		$decision = explode('--', $data);
+		$this->chosenDecision = isset($decision[0]) ? $decision[0] : '';
+		$this->chosenState = isset($decision[1]) ? $decision[1] : '';
 
-			if ($decision[1] !== 'all') {
-				return $model->where('state', $decision[1]);
+		$this->chosenDecision = $this->chosenDecision ? $this->chosenDecision : Cookie::get('sniffr_admin_story_decision');
+		$this->chosenState = $this->chosenState ? $this->chosenState : Cookie::get('sniffr_admin_story_state');
+
+		if ($this->chosenState) {
+			if ($this->chosenState !== 'all') {
+				return $model->where('state', $this->chosenState);
 			} else {
 				$this->chosenDecision = 'all';
 				$this->chosenState = 'all';
@@ -157,8 +159,6 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 			}
 		}
 
-		$this->chosenDecision = Cookie::get('sniffr_admin_story_decision') ?? 'content-sourced';
-		$this->chosenState = Cookie::get('sniffr_admin_story_state') ?? 'unapproved';
 		$this->chosenAssignee = Cookie::get('sniffr_admin_story_assignee') ?? '';
 
 		return $model->where('state', $this->chosenState);
