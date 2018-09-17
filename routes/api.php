@@ -17,7 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::get('/settings_object', 'SettingController@index')->name('setting_object');
 Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
 Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
