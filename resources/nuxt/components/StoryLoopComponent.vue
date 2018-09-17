@@ -76,13 +76,17 @@
         methods: {
             getFilterText(text, length) {
                 if (text == null) return "";
-                var tmp = document.createElement("DIV");
-                tmp.innerHTML = text;
-                return tmp.textContent.substring(0, length) || tmp.innerText.substring(0, length) || "";
+
+                if (process.browser) {
+                    var tmp = document.createElement("DIV");
+                    tmp.innerHTML = text;
+                    return tmp.textContent.substring(0, length) || tmp.innerText.substring(0, length) || "";
+                }
+                return text;
             },
 
             onStoryDetail() {
-                this.$router.push({path: 'stories/'+ this.story.alpha_id})
+                this.$router.push({path: 'stories/' + this.story.alpha_id})
             },
 
             getIsPurchasedAsset() {

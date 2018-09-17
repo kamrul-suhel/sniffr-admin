@@ -11,7 +11,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "build": "nuxt build -c resources/nuxt/nuxt.config.js",
         "start": "nuxt start -c resources/nuxt/nuxt.config.js",
-        "work" : "nuxt -c resources/nuxt/nuxt.config.js"
+        "work": "HOST=0.0.0.0 PORT=3333 nuxt -c resources/nuxt/nuxt.config.js"
     },
     "dependencies": {
         "@nuxtjs/axios": "^5.3.1",
@@ -37,6 +37,7 @@
     },
     "devDependencies": {
         "axios": "^0.18.0",
+        "babel-eslint": "^8.2.1",
         "blueimp-file-upload": "^9.21.0",
         "bootstrap-colorpicker": "^2.5.2",
         "bootstrap-tagsinput": "^0.7.1",
@@ -44,6 +45,10 @@
         "browser-sync-webpack-plugin": "^2.2.2",
         "corejs-typeahead": "^1.2.1",
         "cross-env": "^5.1.4",
+        "eslint": "^4.15.0",
+        "eslint-friendly-formatter": "^3.0.0",
+        "eslint-loader": "^1.7.1",
+        "eslint-plugin-vue": "^4.0.0",
         "fitvids.1.1.0": "^1.1.0",
         "gsap": "^1.20.4",
         "intl-tel-input": "^12.1.13",
@@ -69,11 +74,6 @@
         "toastr": "^2.1.4",
         "video_background": "^1.0.2",
         "vue-cli-plugin-vuetify": "^0.1.6",
-        "vuetify": "^1.1.1",
-        "babel-eslint": "^8.2.1",
-        "eslint": "^4.15.0",
-        "eslint-friendly-formatter": "^3.0.0",
-        "eslint-loader": "^1.7.1",
-        "eslint-plugin-vue": "^4.0.0"
+        "vuetify": "^1.1.1"
     }
 }

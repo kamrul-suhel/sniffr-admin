@@ -7,6 +7,7 @@ if(process.browser){
     window.$ = require('jquery');
     window.TwitterWidgetsLoader = require('twitter-widgets');
 }
+
 //
 // import SearchServices from './services/SearchServices';
 //

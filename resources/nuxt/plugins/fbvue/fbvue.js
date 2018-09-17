@@ -20,3 +20,4 @@ if (process.browser) {
         }
         Vue.FB = undefined
     }
+}

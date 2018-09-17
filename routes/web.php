@@ -283,15 +283,6 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| Collection Routes
-|--------------------------------------------------------------------------
-*/
-Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
-Route::post('client/collections', 'CollectionController@store')->name('client.store');
-Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -306,24 +297,6 @@ Route::post('client/collections/cancel_collection', 'CollectionController@cancel
 //	->name('videos_index');
 
 
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Stories Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
-
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Search video/story dialogs box, getting current video, next & previous link
-|--------------------------------------------------------------------------
-*/
-
-Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*
 |--------------------------------------------------------------------------
