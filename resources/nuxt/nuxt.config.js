@@ -11,9 +11,8 @@ module.exports = {
     ],
 
     axios:{
-      baseURL: process.env.APP_URL ||'http://www.sniffr-app.test/api'
+      baseURL: process.env.APP_URL ||'http://sniffr-app.test/api'
     },
-
 
     plugins: [
         '~/plugins/main.js',
@@ -60,7 +59,7 @@ module.exports = {
     css: [
         {
           lang: 'css',
-          src: '../../node_modules/vuetify/dist/vuetify.css'
+          src: '../../node_modules/vuetify/dist/vuetify.min.css'
         },
         {
             src: '@/assets/scss/styles.scss',
