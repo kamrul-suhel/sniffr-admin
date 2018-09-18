@@ -13,9 +13,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">Full Name</span>
-                        <input type="text" class="form-control" id="full_name" name="full_name" value="{{
-                        $contact->full_name or old('full_name')
-                        }}" title="full name">
+                        <input type="text" class="form-control" id="full_name" name="full_name" value="{{ $contact->full_name or old('full_name') }}" title="full name">
                     </div>
                 </div>
             </div>
@@ -26,8 +24,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">Email</span>
-                        <input type="text" class="form-control" id="email" name="email"
-                               value="{{ $contact->email or old('email') }}">
+                        <input type="text" class="form-control" id="email" name="email" value="{{ $contact->email or old('email') }}">
                     </div>
                 </div>
             </div>
@@ -74,9 +71,7 @@
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">City</span>
-                    <input type="text" class="form-control" id="location" name="location" title="location" value="{{
-                    $contact->location or old('location')
-                    }}">
+                    <input type="text" class="form-control" id="location" name="location" title="location" value="{{ $contact->location or old('location') }}">
                 </div>
             </div>
         </div>
@@ -88,9 +83,7 @@
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Paypal</span>
-                    <input type="text" class="form-control" id="paypal" name="paypal" value="{{
-                    $contact->paypal or old('paypal')
-                    }}" title="paypal">
+                    <input type="text" class="form-control" id="paypal" name="paypal" value="{{ $contact->paypal or old('paypal') }}" title="paypal">
                 </div>
             </div>
         </div>
@@ -102,54 +95,42 @@
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Twitter</span>
-                    <input type="text" class="form-control" id="twitter" name="twitter" value="{{
-                    $contact->twitter or old('twitter')
-                    }}">
+                    <input type="text" class="form-control" id="twitter" name="twitter" value="{{ $contact->twitter or old('twitter') }}">
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Facebook</span>
-                    <input type="text" class="form-control" id="facebook" name="facebook" value="{{
-                    $contact->facebook or old('facebook')
-                    }}">
+                    <input type="text" class="form-control" id="facebook" name="facebook" value="{{ $contact->facebook or old('facebook') }}">
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Instagram</span>
-                    <input type="text" class="form-control" id="instagram" name="instagram" value="{{
-                    $contact->instagram or old('instagram')
-                    }}">
+                    <input type="text" class="form-control" id="instagram" name="instagram" value="{{ $contact->instagram or old('instagram') }}">
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Reddit</span>
-                    <input type="text" class="form-control" id="reddit" name="reddit" value="{{
-                    $contact->reddit or old('reddit')
-                    }}">
+                    <input type="text" class="form-control" id="reddit" name="reddit" value="{{ $contact->reddit or old('reddit') }}">
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Youtube</span>
-                    <input type="text" class="form-control" id="youtube" name="youtube" value="{{
-                    $contact->youtube or old('youtube')
-                    }}">
+                    <input type="text" class="form-control" id="youtube" name="youtube" value="{{ $contact->youtube or old('youtube') }}">
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Imgur</span>
-                    <input type="text" class="form-control" id="imgur" name="imgur" value="{{
-                    $contact->imgur or old('imgur')
-                    }}">
+                    <input type="text" class="form-control" id="imgur" name="imgur" value="{{ $contact->imgur or old('imgur') }}">
                 </div>
             </div>
 
@@ -178,9 +159,7 @@
             <div class="col-md-12">
                 <div class="form-group input-group">
                     <span class="input-group-addon">Notes</span>
-                    <textarea class="form-control" id="other" name="other" rows="4" title="notes">{{
-                    $contact->other or old('other')
-                    }}</textarea>
+                    <textarea class="form-control" id="other" name="other" rows="4" title="notes">{{ $contact->other or old('other') }}</textarea>
                 </div>
             </div>
         </div>

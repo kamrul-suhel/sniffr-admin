@@ -12,7 +12,7 @@
             @endphp
 
             @if($currentDay != $date)
-                @php
+                @phps
                     $currentDay = $date;
                 @endphp
                 <div class="col-xs-12 date-header">
@@ -22,8 +22,8 @@
 
             <div class="col-sm-6 col-md-4" id="asset-{{ $asset->alpha_id }}">
                 <article class="album {{ $panelColour }}">
-                    <div class="album-story-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
-                    <div class="album-story-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
+                    <div class="album-asset-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
+                    <div class="album-asset-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
                     @include('admin.'.$asset->getPlural().'.partials.card')
                 </article>
             </div>

@@ -1,4 +1,4 @@
-@if($asset->more_details)
+@if($asset && $asset->more_details)
 <div class="panel panel-primary" data-collapsed="0">
     <div class="panel-heading">
         <div class="panel-title">Rights</div>
@@ -22,7 +22,7 @@
 </div>
 @endif
 
-@if($asset->rights == 'nonexc')
+@if($asset && $asset->rights == 'nonexc')
 <div class="panel panel-primary" data-collapsed="0">
     <div class="panel-heading">
         <div class="panel-title">

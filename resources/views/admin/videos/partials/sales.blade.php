@@ -1,4 +1,4 @@
-<div class="col-lg-12">
+
     <table class="table">
         <thead>
         <th>Sale Price</th>
@@ -30,4 +30,3 @@
         @endforeach
         </tbody>
     </table>
-</div>

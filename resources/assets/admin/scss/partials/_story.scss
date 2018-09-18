@@ -32,21 +32,23 @@
     overflow: inherit !important;
     min-height: 10px !important;
 }
-.album-story-update {
+.album-asset-update {
     display: none;
     position: absolute;
     top: 10px;
     right: 30px;
     text-align: right;
     color: #00a651;
+    z-index: 1;
 }
-.album-story-update-error {
+.album-asset-update-error {
     display: none;
     position: absolute;
     top: 10px;
     right: 30px;
     text-align: right;
     color: #cc2424;
+    z-index: 1;
 }
 .album-options.no-border {
     border-left: 0px !important;

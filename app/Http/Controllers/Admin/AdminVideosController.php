@@ -174,6 +174,7 @@ class AdminVideosController extends Controller
 	{
 		$data = [
 			'user' => Auth::user(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'video_categories' => VideoCategory::all(),
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),
@@ -259,7 +260,7 @@ class AdminVideosController extends Controller
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),
 			'user' => Auth::user(),
-			'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'creators' => Contact::orderBy('created_at', 'desc')->get(),
 			'activeLicenses' => $activeLicenses,
 			'logs' => $logs

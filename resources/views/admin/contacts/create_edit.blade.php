@@ -41,18 +41,7 @@
             </div>
 
             <div class="col-xs-4">
-                <div class="panel panel-primary" data-collapsed="0">
-                    <div class="panel-heading">
-                        <div class="panel-title">Comments</div>
-                        <div class="panel-options">
-                            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="panel-body" style="display: block; background: #fcfcfc;">
-                        <comments-component :asset="{{ json_encode($contact) }}" asset-type="contact"></comments-component>
-                    </div>
-                </div>
+                @include('admin.assets.partials.comments')
             </div>
         </div>
 
