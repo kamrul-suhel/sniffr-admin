@@ -101,7 +101,7 @@
             <span class="input-group-addon">
                 Uploaded Date
             </span>
-            <input type="text" class="form-control" name="created_at" id="created_at" disabled="disabled" value="{{ $asset ? ($asset->created_at)->format('d/m/Y') : '' }}"/>
+            <input type="text" class="form-control" name="created_at" id="created_at" disabled="disabled" value="{{ $asset ? ($asset->created_at)->format('d/m/Y H:i:s') : '' }}"/>
         </div>
 
         <div class="form-group input-group">

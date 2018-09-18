@@ -100,7 +100,8 @@
                     @endif
 
                 @elseif($asset->hasContract())
-                <a class="btn btn-info" href="{{ route('contract.download', ['id' => $asset->currentContract->reference_id]) }}" title="Download Contract">Download Contract</a>
+                    <a class="btn btn-info" href="{{ route('contract.download', ['id' => $asset->currentContract->reference_id, 'redacted' => 'true']) }}" title="Download Redacted Contract"><i class="fa fa-file-text"></i></a>&nbsp;
+                    <a class="btn btn-info" href="{{ route('contract.download', ['id' => $asset->currentContract->reference_id]) }}" title="Download Contract">Download Contract</a>
                 @endif
             </div>
 

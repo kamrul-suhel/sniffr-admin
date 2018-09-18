@@ -55,7 +55,16 @@
                 <div class="col-sm-4">
                     @include('admin.videos.partials.contact')
 
-                    @include('admin.users.partials.select')
+                    <div class="row">
+                        <div class="col-xs-6">
+                            @include('admin.users.partials.select')
+                        </div>
+
+                        <div class="col-xs-6">
+                            @include('admin.assets.partials.priority-panel')
+                        </div>
+                    </div>
+
 
                     @if($asset)
                         @include('admin.assets.partials.comments')
