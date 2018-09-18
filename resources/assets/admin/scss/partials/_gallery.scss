@@ -112,7 +112,6 @@
                 a{
                     color: #8d929a;
                     font-size: 18px;
-                    //display: inline-block;
                     border-radius: 3px;
                     background-clip: padding-box;
                     transition: all 300ms ease-in-out;
@@ -142,6 +141,7 @@
 
             .album-images-count{
                 color: #8d929a;
+                display: flex;
             }
 
             .album-options{

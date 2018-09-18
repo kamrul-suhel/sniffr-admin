@@ -146,7 +146,6 @@ class VideosTableSeeder extends Seeder
                 'file' => $social_video ? null : $video_data['file'] . $video_data['extension'],
                 'file_watermark' => $social_video ? null : $video_data['file'] . '-watermark' . $video_data['extension'],
                 'file_watermark_dirty' => $social_video ? null : $video_data['file'] . '-watermark-dirty' . $video_data['extension'],
-                'link' => '',
                 'vertical' => ($social_video) ? null : $video_data['vertical'],
                 'embed_code' => (($social_video) && ($social_video_data['platform'] == 'instagram')) ? VideoHelper::getInstagramJSON($social_video_data['url'])['html'] : '',
                 'duration' => $faker->numberBetween(10, 1000),

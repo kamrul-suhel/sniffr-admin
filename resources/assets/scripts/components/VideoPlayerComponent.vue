@@ -3,9 +3,12 @@
         <div v-if="showVideo">
             <!-- S3 lin -->
             <div class="s3-video" v-if="s3_video">
-                <div id="cdn_video" v-html="video.iframe"></div>
-                <!--<plyr-video poster="path/to/poster.png" :videos="videos">-->
-                <!--</plyr-video>-->
+                <video
+                       controls
+                       ref="playerVideo">
+                    <source :src="video.file_watermark_dirty" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
 
             <div class="youtube-video" v-else-if="youtubeVideo">
@@ -29,7 +32,7 @@
         <div xs12 v-else
              :class="{'vertical': video.vertical? video.vertical : '', 'horizontal': !video.vertical}"
              align-content-center
-             xs12 sm12 md7 lg7 xl7>
+             sm12 md7>
 
             <v-card flat class="video-player-poster">
                 <span class="label label-licensed" v-if="getVideoPurchased()">Purchased</span>
@@ -107,14 +110,18 @@
                 this.resetShowVideo();
 
                 if (this.video.file_watermark_dirty !== null) {
-                    this.s3_video = true;
-                    let video = {src: this.video.file_watermark_dirty};
+                    // let video = {src: this.video.file_watermark_dirty};
+                    var promise = new Promise((resolve, reject) => {
+                        this.s3_video = true;
+                        resolve();
+                    });
 
-                    setTimeout(() => {
-                        document.getElementById('video_player').play();
-                        $('.plyr__control.plyr__control--overlaid').click()
+                    promise.then(() => {
+                        setTimeout(() => {
+                            this.$refs.playerVideo.play();
+                        }, 100);
 
-                    }, 100);
+                    });
                     return;
                 }
 

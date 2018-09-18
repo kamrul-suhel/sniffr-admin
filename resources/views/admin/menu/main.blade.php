@@ -10,12 +10,12 @@
             </a>
         </li>
 
-        <li class="{{ Request::segment(2) == 'videos' ? 'active' : '' }}">
+        <li class="{{ Request::segment(3) == 'videos' ? 'active' : '' }}">
             <a href="{{ url('admin/licenses/videos') }}" class="tlink">
                 <i class="fa fa-youtube-play"></i>
                 <span class="title">Videos</span>
-                <!-- <div class="mobile-menu">Videos</div> -->
             </a>
+
             <ul>
                 @if(Auth::user()->isAdmin())
                     <li>
@@ -26,11 +26,6 @@
                     <li>
                         <a href="{{ url('admin/videos?rights=exc') }}">
                             <span class="title">Ex Chaser</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('admin/videos/deleted') }}">
-                            <span class="title">Deleted Videos</span>
                         </a>
                     </li>
                     <li>
@@ -57,7 +52,7 @@
             </ul>
         </li>
 
-        <li class="{{ Request::segment(2) == 'stories' ? 'active' : '' }}">
+        <li class="{{ Request::segment(3) == 'stories' ? 'active' : '' }}">
             <a href="{{ url('admin/licenses/stories') }}" class="tlink">
                 <i class="fa fa-book"></i>
                 <span class="title">Stories</span>

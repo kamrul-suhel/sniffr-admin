@@ -14,9 +14,11 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use SoftDeletes, Notifiable, Auditable;
 
+	public $plural = 'stories';
     protected $guarded = ['deleted_at'];
     public static $rules = [];
     protected $table = 'stories';
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -124,6 +126,11 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		return $this->delete();
 	}
 
+	public function getPlural()
+	{
+		return $this->plural;
+	}
+
 	//**********************
 	// Search Functions   **
 	//**********************
@@ -135,37 +142,39 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 */
 	public function searchState($model, $data)
 	{
-		if ($data) {
-			//explode key=>value
-			$decision = explode('--', $data);
-			$model->decision = $decision[0];
-			$model->chosenState = $decision[1];
+		$decision = explode('--', $data);
+		$this->chosenDecision = isset($decision[0]) ? $decision[0] : '';
+		$this->chosenState = isset($decision[1]) ? $decision[1] : '';
 
-			if ($decision[1] !== 'all') {
-				return $model->where('state', $decision[1]);
+		$this->chosenDecision = $this->chosenDecision ? $this->chosenDecision : Cookie::get('sniffr_admin_story_decision');
+		$this->chosenState = $this->chosenState ? $this->chosenState : Cookie::get('sniffr_admin_story_state');
+
+		if ($this->chosenState) {
+			if ($this->chosenState !== 'all') {
+				return $model->where('state', $this->chosenState);
 			} else {
-				$model->decision = 'all';
-				$model->chosenState = 'all';
+				$this->chosenDecision = 'all';
+				$this->chosenState = 'all';
 				return $model;
 			}
 		}
 
-		$model->decision = 'content-sourced';
-		$model->chosenState = 'unapproved';
+		$this->chosenAssignee = Cookie::get('sniffr_admin_story_assignee') ?? '';
 
-		return $model->where('state', 'unapproved');
+		return $model->where('state', $this->chosenState);
 	}
 
 	/**
 	 * @param $model
 	 * @param $data
-	 * @return mixed
+	 * @return mixedss
 	 */
 	public function searchAssignee($model, $data)
 	{
 		if ($data) {
-			$this->assignee = $data;
-			return $model->where('user_id', $data);
+			$this->chosenAssignee = $data;
+
+			return $model->where('user_id', $this->chosenAssignee);
 		}
 
 		return $model;
@@ -207,18 +216,20 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	 * @param $data
 	 * @return array
 	 */
-	public function generateData($result, $state, $data)
+	public function generateData($result)
 	{
-		Cookie::queue('sniffr_admin_decision', $this->decision);
-		Cookie::queue('sniffr_admin_state', $this->chosenState);
-		Cookie::queue('sniffr_admin_assigned', $this->assignee);
+		Cookie::queue('sniffr_admin_story_decision', $this->chosenDecision);
+		Cookie::queue('sniffr_admin_story_state', $this->chosenState);
+		Cookie::queue('sniffr_admin_story_assignee', $this->chosenAssignee);
 
 		return [
-			'stories' => $result,
-			'state' => $state ?? 'unapproved',
-			'chosenState' => $this->chosenState,
-			'decision' => $this->decision,
-			'assignee' => $this->assignee,
+			'asset_type' => 'story',
+			'asset_type_plural' => 'stories',
+			'asset_icon' => 'book',
+			'assets' => $result,
+			'chosen_state' => $this->chosenState,
+			'chosen_decision' => $this->chosenDecision,
+			'chosen_assignee' => $this->chosenAssignee,
 			'users' => auth()->user()->where([['client_id', NULL]])->get(),
 			'user' => auth()->user()
 		];

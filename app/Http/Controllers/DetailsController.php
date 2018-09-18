@@ -9,7 +9,6 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\User;
-use App\Page;
 use App\Video;
 use App\Contact;
 use App\VideoCategory;
@@ -38,7 +37,6 @@ class DetailsController extends Controller
             'user' => $user,
             'theme_settings' => config('settings.theme'),
             'video_categories' => VideoCategory::all(),
-            'pages' => Page::where('active', '=', 1)->get(),
         ];
     }
 

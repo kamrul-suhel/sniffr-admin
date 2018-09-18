@@ -32,7 +32,7 @@
             <th>Videos</th>
             <th>Stories</th>
             <th>Edit</th>
-        @foreach($contacts as $contact)
+            @foreach($contacts as $contact)
             <tr>
                 <td>{{ $contact->full_name }}</td>
                 <td>{{ $contact->email }}</td>
@@ -45,7 +45,7 @@
                     </a>
                 </td>
             </tr>
-        @endforeach
+            @endforeach
     </table>
 
     <div class="clear"></div>

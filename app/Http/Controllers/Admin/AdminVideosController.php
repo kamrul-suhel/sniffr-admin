@@ -58,78 +58,6 @@ class AdminVideosController extends Controller
 
 	/**
 	 * @param Request $request
-	 * @param string $state
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function index(Request $request, $state = 'all')
-	{
-		$search_value = $request->input('search_value', null);
-		$category_value = $request->input('category');
-		$collection_value = $request->input('collection');
-		$shot_value = $request->input('shot_type');
-		$rights = $request->input('rights');
-
-		$videos = new Video;
-
-		if ($search_value) {
-			$videos = $videos->where(function ($query) use ($search_value) {
-				$query->where('title', 'LIKE', '%' . $search_value . '%')
-					->orWhereHas('tags', function ($q) use ($search_value) {
-						$q->where('name', 'LIKE', '%' . $search_value . '%');
-					})
-					->orWhereHas('contact', function ($q) use ($search_value) {
-						$q->where('email', 'LIKE', '%' . $search_value . '%');
-					})
-					->orWhere('alpha_id', $search_value);
-			});
-		}
-
-		if (!empty($category_value)) {
-			$videos = $videos->where('video_category_id', $category_value);
-		}
-
-		if (!empty($collection_value)) {
-			$videos = $videos->where('video_collection_id', $collection_value);
-		}
-
-		if (!empty($shot_value)) {
-			$videos = $videos->where('video_shottype_id', $shot_value);
-		}
-
-		if (!empty($rights)) {
-			$videos = $videos->where('rights', $rights);
-		}
-
-		if ($state != 'all') {
-			$videos = $videos->where('state', $state);
-			session(['state' => $state]);
-		}
-
-		if($state == 'all') {
-			$videos = $videos->orderByRaw('CASE WHEN licensed_at IS NULL THEN created_at ELSE licensed_at END DESC')->paginate(24);
-		} else {
-			$videos = $videos->orderByRaw('created_at DESC')->paginate(24);
-		}
-
-		//override all for deleted videos
-		if ($state == 'deleted') {
-			$videos = Video::onlyTrashed()->orderBy('created_at', 'desc')->paginate(24);
-		}
-
-		$data = [
-			'state' => $state,
-			'videos' => $videos,
-			'user' => Auth::user(),
-			'video_categories' => VideoCategory::all(),
-			'video_collections' => VideoCollection::all(),
-			'video_shottypes' => VideoShotType::all(),
-		];
-
-		return view('admin.videos.index', $data);
-	}
-
-	/**
-	 * @param Request $request
 	 * @param $state
 	 * @param $id
 	 * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -269,6 +197,7 @@ class AdminVideosController extends Controller
 		$video->title = $request->input('title');
 		$video->description = $request->input('description');
 		$video->contact_id = $request->input('contact_id');
+		$video->precedent_link = $request->input('precedent_link');
 		$video->user_id = Auth::user()->id;
 		$video->state = 'new';
 		$video->save();
@@ -325,11 +254,11 @@ class AdminVideosController extends Controller
 			'contact' => $asset->contact,
 			'post_route' => url('admin/videos/update'),
 			'button_text' => 'Update Video',
-			'user' => Auth::user(),
 			'contacts' => Contact::all(),
 			'video_categories' => VideoCategory::all(),
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),
+			'user' => Auth::user(),
 			'users' => User::all(),
 			'creators' => Contact::orderBy('created_at', 'desc')->get(),
 			'activeLicenses' => $activeLicenses,
@@ -358,8 +287,10 @@ class AdminVideosController extends Controller
 		}
 
 		// update video information in Youtube
-		$title = str_replace(['<', '>'], '', $request->input('title'));
-		$this->setSnippet($video, $title, $request->input('description'), $tags);
+		if($request->has('title')) {
+			$title = str_replace(['<', '>'], '', $request->input('title'));
+			$this->setSnippet($video, $title, $request->input('description'), $tags);
+		}
 
 		if ($request->hasFile('image')) {
 			$imageFile = $request->file('image');
@@ -395,25 +326,33 @@ class AdminVideosController extends Controller
 			$this->videoService->saveVideoLink($video, $request->get('url'));
 		}
 
-		$duration = $request->input('duration');
-		$video->duration = $this->getDuration($video, $duration);
+		if($request->input('duration')) {
+			$video->duration = $this->getDuration($video, $request->input('duration'));
+		}
 
 		$video->user_id = Auth::id();
 		$video->active = $request->input('active') ?: $video->active;
 		$video->featured = $request->input('featured') ?: $video->featured;
-		$video->class = $request->input('class') ?: null;
+		$video->class = $request->input('class') ?: $video->class;
 		$video->video_collection_id = ($request->input('video_collection_id') ? $request->input('video_collection_id') : $video->video_collection_id);
 		$video->video_shottype_id = ($request->input('video_shottype_id') ? $request->input('video_shottype_id') : $video->video_shottype_id);
 		$video->video_category_id = ($request->input('video_category_id') ? $request->input('video_category_id') : $video->video_category_id);
 		$video->contact_id = ($request->input('contact_id') ? $request->input('contact_id') : $video->contact_id);
-		$video->title = $title;
-		$video->location = $request->input('location');
-		$video->details = $request->input('details');
-		$video->notes = $request->input('notes');
-		$video->credit = $request->input('credit');
-		$video->description = $request->input('description');
+		$video->title = $title ?? $video->title;
+		$video->location = $request->input('location') ? $request->input('location') : $video->location ;
+		$video->details = $request->input('details') ? $request->input('details') : $video->details ;
+		$video->notes = $request->input('notes') ? $request->input('notes') : $video->notes ;
+		$video->credit = $request->input('credit') ? $request->input('credit') : $video->credit ;
+		$video->description = $request->input('description') ? $request->input('description') : $video->description ;
+		$video->precedent_link = $request->input('precedent_link') ? $request->input('precedent_link') : $video->precedent_link ;
+		$video->priority = $request->input('priority') ? $request->input('priority') : $video->priority ;
 
 		$video->save();
+
+		//If coming from the video/index page
+		if(request()->has('index')) {
+			return redirect()->back()->with(['note' => 'Updated Video Priority', 'note_type' => 'success']);
+		}
 
 		return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
 			'note' => 'Successfully Updated Video!',

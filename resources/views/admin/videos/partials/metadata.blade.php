@@ -1,4 +1,15 @@
 <div class="row">
+    <span class="form-group col-md-6">
+        <span class="input-group">
+            <span class="input-group-addon">
+                Precedent Link @if($asset && $asset->precedent_link) <a target="_blank" href="{{$asset->precedent_link}}"><i class="fa fa-external-link"></i></a> @endif
+            </span>
+            <input type="text" class="form-control" name="precedent_link" id="precedent_link" value="{{ ($asset && $asset->precedent_link != 'null') ? $asset->precedent_link : '' }}"/>
+        </span>
+    </span>
+</div>
+
+<div class="row">
     <div class="form-group col-md-6">
         <span class="input-group">
             <span class="input-group-addon">
@@ -76,7 +87,6 @@
             <span class="input-group-addon">
                 Location
             </span>
-
             <input type="text" class="form-control" name="location" id="location" value="{{ ($asset && $asset->location != 'null') ? $asset->location : '' }}"/>
         </span>
     </span>
@@ -154,7 +164,7 @@
         <div class="form-group input-group">
             <span class="input-group-addon">Credit</span>
             <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{
-                $asset->credist or old('credit')
+                $asset->credit or old('credit')
                 }}</textarea>
         </div>
     </div>

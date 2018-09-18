@@ -47,72 +47,6 @@ class AdminStoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
-    {
-        $search_value = $request->input('search_value', null);
-        $state = $request->input('state') ? $request->input('state') : Cookie::get('sniffr_admin_state');
-        $decision = $request->input('decision', (Cookie::get('sniffr_admin_decision') ?? 'content-sourced'));
-        $assigned_to = $request->input('assignee', (Cookie::get('sniffr_admin_assigned') ?? null));
-		$stories = new Story;
-
-		if ($search_value) {
-			$stories = $stories->where(function ($query) use ($search_value) {
-				$query->where('title', 'LIKE', '%' . $search_value . '%')
-					->orWhere('author', 'LIKE', '%' . $search_value . '%')
-					->orWhere('alpha_id', $search_value)
-					->orWhereHas('contact', function ($q) use ($search_value) {
-						$q->where('full_name', 'LIKE', '%' . $search_value . '%');
-					});
-			});
-		}
-
-		if ($assigned_to) {
-			$stories = $stories->where('user_id', $assigned_to);
-		}
-
-		// Need to check if state exists in current decision tree
-		$stateExists = false;
-
-
-		if (config('stories.decisions.' . $decision)) {
-			foreach (config('stories.decisions.' . $decision) as $current_state => $state_values) {
-				if ($state == $state_values['value']) {
-					$stateExists = true;
-				}
-			}
-		} else {
-			$decision = 'content-sourced';
-		}
-
-		if (!$stateExists) { // Get the first (default) state in the array
-			$state = key(config('stories.decisions.' . $decision));
-		}
-
-		if ($decision != 'all') { // get everything
-			$stories = $stories->where('state', $state);
-		}
-
-        $stories = $stories->orderBy('updated_at', 'DESC')->paginate(12);
-
-        $data = [
-            'stories' => $stories,
-            'state' => $state,
-            'decision' => $decision,
-            'assignee' => $assigned_to,
-            'users' => User::where([['client_id', NULL]])->get(),
-            'user' => Auth::user(),
-        ];
-
-		Cookie::queue('sniffr_admin_decision', $decision);
-		Cookie::queue('sniffr_admin_state', $state);
-		Cookie::queue('sniffr_admin_assigned', $assigned_to);
-
-        return view('admin.stories.index', $data);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function create()
     {
         $data = [
@@ -186,7 +120,7 @@ class AdminStoryController extends Controller
 		$attachedVideos = Input::get('videos') ? array_filter(Input::get('videos')) : [];
 		$story->videos()->sync($attachedVideos);
 
-        return Redirect::to('admin/stories')->with([
+        return redirect('/admin/licenses/stories?state=content-sourced--unapproved')->with([
             'note' => 'New Story Successfully Added!',
             'note_type' => 'success'
         ]);
@@ -326,25 +260,21 @@ class AdminStoryController extends Controller
         // create message for frontend
         $message = 'Successfully ' . ucfirst($state) . ' Story';
 
-        // sync to WP + custom message + whether to remove from view (depending on state)
+        // sync to WP + custom message +s whether to remove from view (depending on state)
         switch (true) {
             case ($state == 'unapproved'):
+				$remove = 'yes';
                 break;
             case ($state == 'rejected'):
+				$remove = 'yes';
                 break;
             case ($state == 'approved'):
-                // make initial contact (will need to add twitter/fb/reddit in future)
+				$remove = 'yes';
+                // make initial contact (will need to add fb/insta in future)
                 if($story_id && $story->contact->canAutoBump()){
                     QueueBump::dispatch($story_id);
                 }
                 break;
-//            case ($state == 'unlicensed'):
-//                // contact has been made (set in db)
-//                if($story_id) {
-//                    $story->contact_made = 1;
-//                }
-//                $message = 'Set to contact made';
-//                break;
             case ($state == 'licensed'):
                 // add new post to WP
                 if($story_id) {
@@ -374,7 +304,7 @@ class AdminStoryController extends Controller
                 'decision' => $decision,
             ]);
         } else {
-            return Redirect::to('admin/stories/?decision=' . $decision)
+            return redirect()->back()
                 ->with([
                     'note' => 'Story Updated',
                     'note_type' => 'success',
@@ -391,65 +321,12 @@ class AdminStoryController extends Controller
 			$message = 'Updating content from WP';
 		}
 
-		return Redirect::to('admin/stories/edit/' . $alpha_id)
+		return redirect()->back()
 			->with([
 				'note' => $message,
 				'note_type' => 'success',
 			]);
 	}
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateField(Request $request)
-    {
-        $isJson = $request->ajax();
-        $id = $request->input('story_id');
-        $field_id = $request->input('field_id');
-        $field_value = $request->input('field_value');
-        $story = Story::where('alpha_id', $id)
-            ->first();
-
-
-        if($field_id&&$field_value) {
-            switch (true) {
-                case ($field_id == 'priority'):
-                    $story->priority = ($field_value!='Priority' ? $field_value : $story->priority);
-                    break;
-                case ($field_id == 'destination'):
-                    $story->destination = ($field_value!='Destination' ? $field_value : $story->destination);
-                    break;
-                case ($field_id == 'state'):
-                    $story->state = ($field_value!='State' ? $field_value : $story->state);
-                    break;
-                case ($field_id == 'assign_to'):
-                    $story->user_id = ($field_value!='Assign To' ? $field_value : $story->user_id);
-                    break;
-            }
-
-            // Save story data to database
-            $story->save();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Updated',
-                'field_id' => ($field_id ? $field_id : 0),
-                'field_value' => ($field_value ? $field_value : NULL),
-                'story_id' => ($story ? $story->id : 0),
-                'story_alpha_id' => ($story ? $story->alpha_id : 0),
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Error',
-                'field_id' => ($field_id ? $field_id : 0),
-                'field_value' => ($field_value ? $field_value : NULL),
-                'story_id' => ($story ? $story->id : 0),
-                'story_alpha_id' => ($story ? $story->alpha_id : 0),
-            ]);
-        }
-    }
 
     /**
      * @param Request $request
@@ -529,7 +406,7 @@ class AdminStoryController extends Controller
             $message = 'A contact needs to be added to the story first';
         }
 
-        return Redirect::to('admin/stories/?decision='.$decision)->with([
+        return redirect()->back()->with([
             'note' => $message,
             'note_type' => $status
         ]);
@@ -543,6 +420,7 @@ class AdminStoryController extends Controller
 		$isJson = $request->ajax();
 
 		$story = Story::where('alpha_id', $alpha_id)->first();
+		$story->contacted_at = now();
 		$story->contact_made = 1;
 		$story->save();
 
@@ -553,7 +431,7 @@ class AdminStoryController extends Controller
 				'story_alpha_id' => $alpha_id,
 			]);
 		} else {
-			return Redirect::to('admin/stories/?decision=' .  Cookie::get('sniffr_admin_decision') . '&state=' .  Cookie::get('sniffr_admin_state'))
+			return redirect()->back()
 				->with([
 					'note' => 'Story Updated',
 					'note_type' => 'success',
@@ -612,7 +490,7 @@ class AdminStoryController extends Controller
         CollectionStory::where('story_id', $story->id)->delete();
         $story->destroy($story->id);
 
-        return Redirect::to('admin/stories')->with([
+        return redirect('admin/licenses/stories')->with([
             'note' => 'Successfully Deleted Story',
             'note_type' => 'success'
         ]);

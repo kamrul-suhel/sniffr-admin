@@ -3,7 +3,6 @@
     <v-dialog
             v-model="video_dialog"
             transition="false"
-            scrollable
             class="video-dialog-container"
             content-class="video-dialog-container"
     >

@@ -96,15 +96,28 @@ Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('
 Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('', 'Admin\DashboardController@index')->name('admin.dashboard');
 
-    Route::get('licenses/{asset_type}', 'Admin\LicensingController@index', ['as' => 'licenses']);
-    Route::get('licenses/{asset_type}/{alpha_id}', 'Admin\LicensingController@show', ['as' => 'licenses']);
+	Route::get('asset/update_field', array('uses' => 'Admin\AdminAssetController@updateField'));
 
     Route::get('users/{id}/stories', 'Admin\AdminUsersController@storiesSent')->name('users.stories.sent');
     Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
     Route::post('users/invitation', 'Admin\AdminUsersController@storiesSent')->name('admin.users.invitation.create');
 
+	Route::get('licenses/{asset_type}', 'Admin\AdminLicensingController@index', ['as' => 'licenses']);
+	Route::get('licenses/{asset_type}/{alpha_id}', 'Admin\AdminLicensingController@show', ['as' => 'licenses']);
+
+	// Admin Story Functionality
+	Route::get('stories/create', 'Admin\AdminStoryController@create')->name('admin.stories.create');
+	Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
+	Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit')->name('admin.stories.edit');
+	Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'))->name('admin.stories.update');
+	Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
+	Route::get('stories/status/{state}/{id}', array('uses' => 'Admin\AdminStoryController@status'));
+	Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
+	Route::get('stories/reminder/{id}', array('uses' => 'Admin\AdminStoryController@sendReminder'));
+	Route::get('stories/contact_made/{id}', array('uses' => 'Admin\AdminStoryController@contactMade'));
+	Route::get('stories/wp_refresh/{id}', array('uses' => 'Admin\AdminStoryController@wpSync'));
+
     // Admin Video Functionality
-    Route::get('videos', 'Admin\AdminVideosController@index')->name('videos.index');
     Route::get('videos/edit/{id}', 'Admin\AdminVideosController@edit')->name('admin_video_edit');
     Route::post('videos/update', array('uses' => 'Admin\AdminVideosController@update'))->name('videos.update');
     Route::get('videos/delete/{id}', array('uses' => 'Admin\AdminVideosController@destroy'))->name('videos.destroy');
@@ -152,26 +165,6 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/contract/download/{reference_id}', 'Contract\ContractController@generatePdf')->name('contract.download');
 
     Route::get('media', 'Admin\AdminMediaController@index');
-
-    Route::get('pages', 'Admin\AdminPageController@index');
-    Route::get('pages/create', 'Admin\AdminPageController@create');
-    Route::post('pages/store', array('uses' => 'Admin\AdminPageController@store'));
-    Route::get('pages/edit/{id}', 'Admin\AdminPageController@edit');
-    Route::post('pages/update', array('uses' => 'Admin\AdminPageController@update'));
-    Route::get('pages/delete/{id}', array('uses' => 'Admin\AdminPageController@destroy'));
-
-    Route::get('stories', 'Admin\AdminStoryController@index');
-    Route::get('stories/create', 'Admin\AdminStoryController@create')->name('admin.stories.create');
-    Route::post('stories/store', array('uses' => 'Admin\AdminStoryController@store'));
-    Route::get('stories/edit/{id}', 'Admin\AdminStoryController@edit')->name('admin.stories.edit');
-    Route::post('stories/update', array('uses' => 'Admin\AdminStoryController@update'))->name('admin.stories.update');
-    Route::get('stories/delete/{id}', array('uses' => 'Admin\AdminStoryController@destroy'));
-    Route::get('stories/status/{state}/{id}', array('uses' => 'Admin\AdminStoryController@status'));
-    Route::get('stories/update_field', array('uses' => 'Admin\AdminStoryController@updateField'));
-    Route::get('stories/get_source', array('uses' => 'Admin\AdminStoryController@getSource'));
-    Route::get('stories/reminder/{id}', array('uses' => 'Admin\AdminStoryController@sendReminder'));
-	Route::get('stories/contact_made/{id}', array('uses' => 'Admin\AdminStoryController@contactMade'));
-	Route::get('stories/wp_refresh/{id}', array('uses' => 'Admin\AdminStoryController@wpSync'));
 
     Route::get('mailers', 'Admin\AdminClientMailerController@index');
     Route::get('mailers/refresh', array('uses' => 'Admin\AdminClientMailerController@refresh'));

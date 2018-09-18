@@ -16,7 +16,6 @@ const getters = {
 
 const actions = {
     nuxtServerInit(){
-        console.log(context);
     },
 
     setSettingObjectFromServer({commit, state}) {

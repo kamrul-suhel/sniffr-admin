@@ -59,7 +59,6 @@
                 },
 
                 set(value){
-                    console.log(value);
                 }
             },
 
