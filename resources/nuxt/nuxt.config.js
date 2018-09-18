@@ -10,12 +10,15 @@ module.exports = {
         '@nuxtjs/axios'
     ],
 
+    proxy: [
+    ],
 
     axios:{
-      baseURL: process.env.APP_URL ||'twilight.sniffrmedia.co.uk/api'
+      baseURL: process.env.APP_URL ||'http://www.sniffr-app.test/api'
     },
 
     plugins: [
+        '~/plugins/axios',
         '~/plugins/main.js',
         '~/plugins/hotjar/index.js',
         '~/plugins/airbreak/index.js'
