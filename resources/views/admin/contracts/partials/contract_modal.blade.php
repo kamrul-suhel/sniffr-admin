@@ -51,7 +51,6 @@
                     </div>
 
                     <div class="row">
-
                         <div class="col-md-12">
                             <div class="form-group input-group">
                                 <span class="input-group-addon">Success System</span>
@@ -90,12 +89,11 @@
                         </div>
                     </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
-                </div>
-            </form>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <input type="submit" value="{{ 'Create' }} Contract" class="btn btn-success pull-right"/>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
