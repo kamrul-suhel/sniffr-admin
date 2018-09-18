@@ -11,36 +11,39 @@
             </div>
         </div>  
     </div>
-    <div class="clear"></div>
-    <form class="col-lg-12">
-        <div class="input-group">
-            <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker"
-                   autocomplete="off">
-            <a href="{{ url('admin/staff?type='.$type) }}" class="btn btn-lg btn-success input-group-addon"
-               style="background-color: #00a65a; color: white;">Reset</a>
-        </div>
-        <hr>
-    </form>
 
-    @if($type === 'video')
-        <form action="{{ route('staff.index', ['from' => $from, 'to' => $to]) }}" method="get">
-            <select id="rights" name="rights" class="form-control input-lg" onchange="this.form.submit()">
-                <option value="ex"{{ ($rights == 'ex') ? ' selected="selected"' : '' }}><a>Ex Submission</option>
-                <option value="exc"{{ ($rights == 'exc') ? ' selected="selected"' : '' }}><a>Ex Chaser</option>
-                {{--<option value="excc"{{ (request()->get('rights') == 'excc') ? ' selected="selected"' : '' }}><a>Ex Chaser Channel</option>--}}
-                {{--<option value="nonex"{{ (request()->get('rights') == 'nonex') ? ' selected="selected"' : '' }}><a>Non Ex</option>--}}
-                {{--<option value="nonexc"{{ (request()->get('rights') == 'nonexc') ? ' selected="selected"' : '' }}><a>Non Ex Chaser</option>--}}
-            </select>
+    <div class="clear"></div>
+
+    <div class="row">
+        @if($type === 'video')
+            <form class="col-xs-6" action="{{ route('staff.index', ['from' => $from, 'to' => $to]) }}" method="get">
+                <select id="rights" name="rights" class="form-control input-lg" onchange="this.form.submit()">
+                    <option value="ex"{{ ($rights == 'ex') ? ' selected="selected"' : '' }}><a>Ex Submission</option>
+                    <option value="exc"{{ ($rights == 'exc') ? ' selected="selected"' : '' }}><a>Ex Chaser</option>
+                    {{--<option value="excc"{{ (request()->get('rights') == 'excc') ? ' selected="selected"' : '' }}><a>Ex Chaser Channel</option>--}}
+                    {{--<option value="nonex"{{ (request()->get('rights') == 'nonex') ? ' selected="selected"' : '' }}><a>Non Ex</option>--}}
+                    {{--<option value="nonexc"{{ (request()->get('rights') == 'nonexc') ? ' selected="selected"' : '' }}><a>Non Ex Chaser</option>--}}
+                </select>
+            </form>
+        @endif
+
+        <form class="col-xs-6">
+            <div class="input-group">
+                <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker" autocomplete="off">
+
+                <a href="{{ url('admin/staff?type='.$type) }}" class="btn btn-lg btn-success input-group-addon" style="background-color: #00a65a; color: white;">Reset</a>
+            </div>
+
+            <hr>
         </form>
-    @endif
+    </div>
+
 
     <div class="clear"></div>
 
     <div id="tab_staff" class="tab-pane">
         <div class="row">
-            <div class="col-lg-12">
-                @include('admin.staff.partials.'.$type)
-            </div>
+            @include('admin.staff.partials.'.$type)
         </div>
     </div>
 @stop

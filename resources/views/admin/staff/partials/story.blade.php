@@ -1,5 +1,5 @@
 <div class="panel-body">
-    <table class="table table-striped table-responsive">
+    <table class="table table-striped table-responsive table-bordered">
         <thead>
         <th>Name</th>
         <th>System Role</th>
@@ -49,7 +49,7 @@
 	                <?php $contentSourced = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['unapproved', 'approved', 'rejected'])->groupBy('state'); ?>
                     <ul>
                         @foreach($contentSourced as $key => $value)
-                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=content-sourced--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=content-sourced--'.$key)  }}">{{ ucwords($key) }}&nbsp;:&nbsp;{{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
@@ -58,7 +58,7 @@
 		            <?php $licensing = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['approved', 'licensing', 'purgatory'])->groupBy('state'); ?>
                     <ul>
                         @foreach($licensing as $key => $value)
-                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=licensing--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=licensing--'.$key)  }}">{{ ucwords($key) }}&nbsp;:&nbsp;{{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
@@ -67,7 +67,7 @@
 		            <?php $writing = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['licensed', 'writing-inprogress', 'subs-rejected'])->groupBy('state'); ?>
                     <ul>
                         @foreach($writing as $key => $value)
-                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=writing--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=writing--'.$key)  }}">{{ ucwords($key) }}&nbsp;:&nbsp;{{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
@@ -76,7 +76,7 @@
 		            <?php $subbing = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['writing-completed', 'subs-inprogress', 'subs-unassigned'])->groupBy('state'); ?>
                     <ul>
                         @foreach($subbing as $key => $value)
-                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=subbing--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=subbing--'.$key)  }}">{{ ucwords($key) }}&nbsp;:&nbsp;{{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
@@ -85,7 +85,7 @@
 		            <?php $readyToPublish = $user->assignedStories->where('updated_at', '>=', $from)->where('updated_at', '<=', $to)->whereIn('state', ['subs-approved', 'published', 'archive'])->groupBy('state'); ?>
                     <ul>
                         @foreach($readyToPublish as $key => $value)
-                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=ready-to-publish--'.$key)  }}">{{ ucwords($key) }} : {{ $value->count() }}</a></li>
+                            <li><a href="{{ url('admin/licenses/stories?assignee='.$user->id.'&state=ready-to-publish--'.$key)  }}">{{ ucwords($key) }}&nbsp;:&nbsp;{{ $value->count() }}</a></li>
                         @endforeach
                     </ul>
                 </td>
