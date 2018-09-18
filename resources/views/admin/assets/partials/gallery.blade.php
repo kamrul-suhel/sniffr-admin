@@ -34,4 +34,3 @@
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $asset_type }}"></modal>
     </div>
 </div>
-F
