@@ -51,7 +51,7 @@ class AdminStoryController extends Controller
     {
         $data = [
 			'user' => Auth::user(),
-			'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'contact' => null,
 			'asset' => null,
             'decision' => 'content-sourced',
@@ -152,7 +152,7 @@ class AdminStoryController extends Controller
             'decision' => $decision,
 	        'logs' => $logs,
             'user' => Auth::user(),
-            'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'contact' => $asset->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all()
@@ -230,7 +230,7 @@ class AdminStoryController extends Controller
             'button_text' => 'Save Draft',
             'decision' => $decision,
             'user' => Auth::user(),
-            'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'contact' => $story->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
