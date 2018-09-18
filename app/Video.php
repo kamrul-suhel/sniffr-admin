@@ -55,10 +55,9 @@ use OwenIt\Auditing\Auditable;
  */
 class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes, Notifiable, Auditable;
+	use SoftDeletes, Notifiable, Auditable;
 
 	const CACHE_EXPIRATION = 720;
-	public $plural = 'videos';
 	protected $guarded = ['deleted_at'];
 	protected $table = 'videos';
 	protected $fillable = [
@@ -78,30 +77,30 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		'credit',
 		'terms',
 		'active',
-        'featured',
-        'duration',
-        'image',
-        'embed_code',
-        'url',
-        'created_at',
-        'source'
-    ];
+		'featured',
+		'duration',
+		'image',
+		'embed_code',
+		'url',
+		'created_at',
+		'source'
+	];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function tags()
+	{
+		return $this->belongsToMany(Tag::class);
+	}
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function contact()
-    {
-        return $this->belongsTo(Contact::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function contact()
+	{
+		return $this->belongsTo(Contact::class);
+	}
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -111,29 +110,29 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		return $this->belongsTo(CollectionVideo::class);
 	}
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
+	public function comments()
+	{
+		return $this->hasMany(Comment::class);
+	}
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
-    public function contracts()
-    {
-        return $this->hasMany(Contract::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
+	public function contracts()
+	{
+		return $this->hasMany(Contract::class);
+	}
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
 	 */
-    public function currentContract()
-    {
-        return $this->hasOne('\App\Contract')->latest();
-    }
+	public function currentContract()
+	{
+		return $this->hasOne('\App\Contract')->latest();
+	}
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\hasOne
@@ -152,15 +151,15 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	}
 
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
-    public function downloads()
-    {
-        return $this->hasMany(Download::class);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\hasMany
+	 */
+	public function downloads()
+	{
+		return $this->hasMany(Download::class);
+	}
 
-    /**
+	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
 	 */
 	public function mailers()
@@ -234,73 +233,67 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		return $this->delete();
 	}
 
-	public function getPlural()
+	/**
+	 * @param int $videos_per_page
+	 * @param $page
+	 * @return mixed
+	 * TODO: Not being used
+	 * @codeCoverageIgnore
+	 */
+	public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
 	{
-		return $this->plural;
+		if (config('settings.cache.cache_enabled')) {
+			return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
+				return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
+			});
+		}
+
+		return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
 	}
 
+	/**
+	 * @return Comment[]
+	 * @codeCoverageIgnore
+	 */
+	public function getCachedComments()
+	{
+		return Cache::remember($this->cacheKey() . ':comments', self::CACHE_EXPIRATION, function () {
+			return $this->comments->toArray();
+		});
+	}
 
-    /**
-     * @param int $videos_per_page
-     * @param $page
-     * @return mixed
-     * TODO: Not being used
-     * @codeCoverageIgnore
-     */
-    public function getCachedVideosLicensedPaginated(int $videos_per_page, $page)
-    {
-        if (config('settings.cache.cache_enabled')) {
-            return Cache::tags('licensed.paginated')->remember($this->cacheKey($page) . ':licensed', self::CACHE_EXPIRATION, function () use ($videos_per_page, $page) {
-                return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
-            });
-        }
+	/**
+	 * @return Download[]
+	 * @codeCoverageIgnore
+	 */
+	public function getCachedDownloads()
+	{
+		return Cache::remember($this->cacheKey() . ':downloads', self::CACHE_EXPIRATION, function () {
+			return $this->downloads->toArray();
+		});
+	}
 
-        return $this->where('state', 'licensed')->orderBy('id', 'DESC')->paginate($videos_per_page);
-    }
+	/**
+	 * @return Contact[]
+	 * @codeCoverageIgnore
+	 */
+	public function getCachedContact()
+	{
+		return Cache::remember($this->cacheKey() . ':contact', self::CACHE_EXPIRATION, function () {
+			return $this->contact->toArray();
+		});
+	}
 
-    /**
-     * @return Comment[]
-     * @codeCoverageIgnore
-     */
-    public function getCachedComments()
-    {
-        return Cache::remember($this->cacheKey() . ':comments', self::CACHE_EXPIRATION, function () {
-            return $this->comments->toArray();
-        });
-    }
-
-    /**
-     * @return Download[]
-     * @codeCoverageIgnore
-     */
-    public function getCachedDownloads()
-    {
-        return Cache::remember($this->cacheKey() . ':downloads', self::CACHE_EXPIRATION, function () {
-            return $this->downloads->toArray();
-        });
-    }
-
-    /**
-     * @return Contact[]
-     * @codeCoverageIgnore
-     */
-    public function getCachedContact()
-    {
-        return Cache::remember($this->cacheKey() . ':contact', self::CACHE_EXPIRATION, function () {
-            return $this->contact->toArray();
-        });
-    }
-
-    /**
-     * @return Tag[]
-     * @codeCoverageIgnore
-     */
-    public function getCachedTags()
-    {
-        return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
-            return $this->tags->toArray();
-        });
-    }
+	/**
+	 * @return Tag[]
+	 * @codeCoverageIgnore
+	 */
+	public function getCachedTags()
+	{
+		return Cache::remember($this->cacheKey() . ':tags', self::CACHE_EXPIRATION, function () {
+			return $this->tags->toArray();
+		});
+	}
 
 
 	//**********************
@@ -380,15 +373,15 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	{
 		$this->chosenState = $data ? $data : Cookie::get('sniffr_admin_video_state');
 
-		if($this->chosenState){
+		if ($this->chosenState) {
 			//override all for deleted videos
 			if ($this->chosenState == 'deleted') {
 				return $model->onlyTrashed()->orderBy('updated_at', 'desc');
 			}
 
-			if($this->chosenState !== 'all'){
+			if ($this->chosenState !== 'all') {
 				return $model->where('state', $this->chosenState);
-			}else{
+			} else {
 				return $model;
 			}
 		}

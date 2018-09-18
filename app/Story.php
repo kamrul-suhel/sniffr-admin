@@ -14,7 +14,6 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use SoftDeletes, Notifiable, Auditable;
 
-	public $plural = 'stories';
     protected $guarded = ['deleted_at'];
     public static $rules = [];
     protected $table = 'stories';
@@ -126,10 +125,6 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		return $this->delete();
 	}
 
-	public function getPlural()
-	{
-		return $this->plural;
-	}
 
 	//**********************
 	// Search Functions   **
@@ -167,7 +162,7 @@ class Story extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	/**
 	 * @param $model
 	 * @param $data
-	 * @return mixedss
+	 * @return mixed
 	 */
 	public function searchAssignee($model, $data)
 	{

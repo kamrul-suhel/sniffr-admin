@@ -24,7 +24,7 @@
                 <article class="album {{ $panelColour }}">
                     <div class="album-asset-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
                     <div class="album-asset-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
-                    @include('admin.'.$asset->getPlural().'.partials.card')
+                    @include('admin.'.str_plural($asset_type).'.partials.card')
                 </article>
             </div>
         @endforeach
@@ -34,3 +34,4 @@
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $asset_type }}"></modal>
     </div>
 </div>
+F
