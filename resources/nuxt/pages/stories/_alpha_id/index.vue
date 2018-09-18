@@ -11,7 +11,7 @@
             </v-layout>
 
             <v-layout row wrap>
-                <v-flex xs12 sm12 md7 lg8 xl8>
+                <v-flex xs12 sm12 md8 lg8 xl8>
                     <div class="story-content">
                         <v-badge right color="black" v-if="order">
                             <span slot="badge"><v-icon dark color="white">done</v-icon></span>
@@ -38,7 +38,7 @@
                     </div>
                 </v-flex>
 
-                <v-flex xs12 sm12 md5 lg4 xl4 class="client-assets">
+                <v-flex xs12 sm12 md4 lg4 xl4 class="client-assets">
                     <h2>Assets</h2>
 
                     <v-divider style="margin-bottom:20px;"></v-divider>

@@ -1,172 +1,172 @@
 <template>
     <section class="quote-dialog">
         <v-dialog persistent
-                  v-model="open_quote_dialog"
-                  max-width="500px"
-                  class="login-section"
-                  @keydown.esc="onQuoteDialogClose()">
-            <v-card raised>
-                <v-card-text class="buy-section">
-                    <v-form method="post"
-                            v-model="valid"
-                            lazy-validation
-                            ref="quote_form">
-                        <v-layout row wrap
-                                  id="buy-section">
+                      v-model="open_quote_dialog"
+                      max-width="500px"
+                      class="login-section"
+                      @keydown.esc="onQuoteDialogClose()">
+                <v-card raised>
+                    <v-card-text class="buy-section">
+                        <v-form method="post"
+                                v-model="valid"
+                                lazy-validation
+                                ref="quote_form">
+                            <v-layout row wrap
+                                      id="buy-section">
 
-                            <v-flex xs12>
-                                <h2 class="text-center text-uppercase">Quote</h2>
-                                <p class="text-xs-center">Please provide us with your requirements</p>
-                            </v-flex>
-
-                            <v-flex xs12 v-if="!client_logged_in">
                                 <v-flex xs12>
-                                    <v-text-field
-                                            name="name"
-                                            label="Name"
-                                            v-model="request_quote.name"
+                                    <h2 class="text-center text-uppercase">Quote</h2>
+                                    <p class="text-xs-center">Please provide us with your requirements</p>
+                                </v-flex>
+
+                                <v-flex xs12 v-if="!client_logged_in">
+                                    <v-flex xs12>
+                                        <v-text-field
+                                                name="name"
+                                                label="Name"
+                                                v-model="request_quote.name"
+                                                color="dark"
+                                                validate-on-blur
+                                                :rules="nameRules"
+                                                required
+                                        >
+                                        </v-text-field>
+                                    </v-flex>
+
+                                    <v-flex xs12>
+                                        <v-text-field
+                                                name="email"
+                                                label="Email"
+                                                type="email"
+                                                v-model="request_quote.email"
+                                                color="dark"
+                                                validate-on-blur
+                                                :rules="emailRules"
+                                                :error-messages="emailError"
+                                                required>
+                                        </v-text-field>
+                                        <small class="red--text"
+                                               v-if="errors.user_email">{{ errors.user_email[0] }}</small>
+
+                                    </v-flex>
+
+                                    <v-flex xs12>
+                                        <v-text-field
+                                                name="phone"
+                                                label="Phone"
+                                                v-model="request_quote.phone"
+                                                color="dark">
+                                        </v-text-field>
+                                    </v-flex>
+
+                                    <v-flex xs12>
+                                        <small class="red--text"
+                                               v-if="errors.company_name">{{ errors.company_name[0] }}
+                                        </small>
+                                        <v-text-field
+                                                name="company"
+                                                label="Company"
+                                                v-model="request_quote.company"
+                                                color="dark">
+                                        </v-text-field>
+                                    </v-flex>
+                                </v-flex>
+
+                                <v-flex v-if="type === 'video' || type === 'story'">
+                                    <v-flex xs12>
+                                        <v-select
+                                                name="license_type"
+                                                label="License Type"
+                                                color="light"
+                                                :items="licenses"
+                                                v-model="license_type"
+                                                item-value="slug"
+                                                item-text="name"
+                                                :rules="licenseRules"
+                                                :error="validation.error"
+                                                required
+                                        ></v-select>
+                                    </v-flex>
+
+                                    <v-flex xs12>
+                                        <v-select
+                                                name="license_platform"
+                                                content-class="s-platform"
+                                                class="s-platform"
+                                                label="Platform"
+                                                color="dark"
+                                                :items="platforms"
+                                                v-model="license_platform"
+                                                item-value="slug"
+                                                multiple
+                                                item-text="name"
+                                                :rules="platformRules"
+                                                :error="validation.error"
+                                                required
+                                        ></v-select>
+                                    </v-flex>
+
+                                    <v-flex xs12>
+                                        <v-select
+                                                name="license_length"
+                                                label="License Length"
+                                                color="dark"
+                                                :items="lengths"
+                                                v-model="license_length"
+                                                item-value="slug"
+                                                item-text="name"
+                                                :rules="lengthRules"
+                                                :error="validation.error"
+                                                required
+                                        ></v-select>
+                                    </v-flex>
+                                </v-flex>
+
+                                <v-flex xs12>
+                                    <v-textarea
+                                            v-model="notes"
+                                            name="notes"
                                             color="dark"
-                                            validate-on-blur
-                                            :rules="nameRules"
-                                            required
-                                    >
-                                    </v-text-field>
+                                            label="Additional information"
+                                    ></v-textarea>
                                 </v-flex>
+                            </v-layout>
 
+                            <v-layout row justify-center>
+                                <v-flex>
+                                    <div class="red--text text-xs-center"
+                                         v-if="validation.error">{{validation.message}}
+                                    </div>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row align-center>
                                 <v-flex xs12>
-                                    <v-text-field
-                                            name="email"
-                                            label="Email"
-                                            type="email"
-                                            v-model="request_quote.email"
-                                            color="dark"
-                                            validate-on-blur
-                                            :rules="emailRules"
-                                            :error-messages="emailError"
-                                            required>
-                                    </v-text-field>
-                                    <small class="red--text"
-                                           v-if="errors.user_email">{{ errors.user_email[0] }}</small>
+                                    <div class="buy-button right">
+                                        <input type="hidden" name="_token"/>
 
+                                        <v-btn flat
+                                               dark
+                                               color="black"
+                                               @click.native="cancelCollection()">Cancel
+                                        </v-btn>
+
+                                        <v-btn
+                                                raised
+                                                dark
+                                                size="medium"
+                                                :loading="loading"
+                                                :disabled="disabled"
+                                                @click="buttonClicked()">
+                                            Request Quote
+                                        </v-btn>
+                                    </div>
                                 </v-flex>
-
-                                <v-flex xs12>
-                                    <v-text-field
-                                            name="phone"
-                                            label="Phone"
-                                            v-model="request_quote.phone"
-                                            color="dark">
-                                    </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs12>
-                                    <small class="red--text"
-                                           v-if="errors.company_name">{{ errors.company_name[0] }}
-                                    </small>
-                                    <v-text-field
-                                            name="company"
-                                            label="Company"
-                                            v-model="request_quote.company"
-                                            color="dark">
-                                    </v-text-field>
-                                </v-flex>
-                            </v-flex>
-
-                            <v-flex v-if="type === 'video' || type === 'story'">
-                                <v-flex xs12>
-                                    <v-select
-                                            name="license_type"
-                                            label="License Type"
-                                            color="light"
-                                            :items="licenses"
-                                            v-model="license_type"
-                                            item-value="slug"
-                                            item-text="name"
-                                            :rules="licenseRules"
-                                            :error="validation.error"
-                                            required
-                                    ></v-select>
-                                </v-flex>
-
-                                <v-flex xs12>
-                                    <v-select
-                                            name="license_platform"
-                                            content-class="s-platform"
-                                            class="s-platform"
-                                            label="Platform"
-                                            color="dark"
-                                            :items="platforms"
-                                            v-model="license_platform"
-                                            item-value="slug"
-                                            multiple
-                                            item-text="name"
-                                            :rules="platformRules"
-                                            :error="validation.error"
-                                            required
-                                    ></v-select>
-                                </v-flex>
-
-                                <v-flex xs12>
-                                    <v-select
-                                            name="license_length"
-                                            label="License Length"
-                                            color="dark"
-                                            :items="lengths"
-                                            v-model="license_length"
-                                            item-value="slug"
-                                            item-text="name"
-                                            :rules="lengthRules"
-                                            :error="validation.error"
-                                            required
-                                    ></v-select>
-                                </v-flex>
-                            </v-flex>
-
-                            <v-flex xs12>
-                                <v-textarea
-                                        v-model="notes"
-                                        name="notes"
-                                        color="dark"
-                                        label="Additional information"
-                                ></v-textarea>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout row justify-center>
-                            <v-flex>
-                                <div class="red--text text-xs-center"
-                                     v-if="validation.error">{{validation.message}}
-                                </div>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-layout row align-center>
-                            <v-flex xs12>
-                                <div class="buy-button right">
-                                    <input type="hidden" name="_token"/>
-
-                                    <v-btn flat
-                                           dark
-                                           color="black"
-                                           @click.native="cancelCollection()">Cancel
-                                    </v-btn>
-
-                                    <v-btn
-                                            raised
-                                            dark
-                                            size="medium"
-                                            :loading="loading"
-                                            :disabled="disabled"
-                                            @click="buttonClicked()">
-                                        Request Quote
-                                    </v-btn>
-                                </div>
-                            </v-flex>
-                        </v-layout>
-                    </v-form>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
+                            </v-layout>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
     </section>
 </template>
 <script>
@@ -259,17 +259,19 @@
                     this.alpha_name = 'story_alpha_id';
                 }
 
-                Object.values(this.settings.pricing.type).forEach((type) => {
-                    this.licenses.push(type);
-                });
+                if(this.settings){
+                    Object.values(this.settings.pricing.type).forEach((type) => {
+                        this.licenses.push(type);
+                    });
 
-                Object.values(this.settings.pricing.platform).forEach((platform) => {
-                    this.platforms.push(platform);
-                });
+                    Object.values(this.settings.pricing.platform).forEach((platform) => {
+                        this.platforms.push(platform);
+                    });
 
-                Object.values(this.settings.pricing.length).forEach((length) => {
-                    this.lengths.push(length);
-                });
+                    Object.values(this.settings.pricing.length).forEach((length) => {
+                        this.lengths.push(length);
+                    });
+                }
 
 
                 return this.assetType;

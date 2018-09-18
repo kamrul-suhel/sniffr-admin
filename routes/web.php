@@ -11,12 +11,10 @@
 
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
-    Route::get('/settings_object', 'SettingController@index')->name('setting_object');
-
-	Route::get(
-		'/',
-		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
-	)->where('/', '/');
+//	Route::get(
+//		'/',
+//		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
+//	)->where('/', '/');
 
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
@@ -278,15 +276,6 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| Collection Routes
-|--------------------------------------------------------------------------
-*/
-Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
-Route::post('client/collections', 'CollectionController@store')->name('client.store');
-Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -294,32 +283,13 @@ Route::post('client/collections/cancel_collection', 'CollectionController@cancel
 |--------------------------------------------------------------------------
 */
 
-//Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
-Route::get('videos',
-	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
-	->where('videos', 'videos')
-	->name('videos_index');
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
+
+//Route::get('videos',
+//	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
+//	->where('videos', 'videos')
+//	->name('videos_index');
 
 
-/*
-|--------------------------------------------------------------------------
-| Frontend Stories Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
-
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Search video/story dialogs box, getting current video, next & previous link
-|--------------------------------------------------------------------------
-*/
-
-Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
-Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*
 |--------------------------------------------------------------------------
@@ -345,4 +315,4 @@ Route::group(array('prefix' => 'api/v1'), function () {
     Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
 });
 
-Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);
+//Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);

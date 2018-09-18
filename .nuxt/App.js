@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 
-import '../node_modules/vuetify/dist/vuetify.css'
+import '../node_modules/vuetify/dist/vuetify.min.css'
 
 import '../resources/nuxt/assets/scss/styles.scss'
 
 
 let layouts = {
+
+  "_default-main": () => import('../resources/nuxt/layouts/default-main.vue'  /* webpackChunkName: "layouts/default-main" */).then(m => m.default || m),
 
   "_default": () => import('../resources/nuxt/layouts/default.vue'  /* webpackChunkName: "layouts/default" */).then(m => m.default || m),
 

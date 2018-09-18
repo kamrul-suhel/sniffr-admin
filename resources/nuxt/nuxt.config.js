@@ -1,15 +1,24 @@
-const laravelNuxt = require("laravel-nuxt");
-
-module.exports = laravelNuxt({
+module.exports = {
     // Options such as mode, srcDir and generate.dir are already handled for you.
     build: {
         vendor: []
     },
 
+    srcDir: __dirname,
+
     modules: [
+        '@nuxtjs/axios'
     ],
 
+    proxy: [
+    ],
+
+    axios:{
+      baseURL: process.env.APP_URL ||'http://www.sniffr-app.test/api'
+    },
+
     plugins: [
+        '~/plugins/axios',
         '~/plugins/main.js',
         '~/plugins/hotjar/index.js',
         '~/plugins/airbreak/index.js'
@@ -54,13 +63,13 @@ module.exports = laravelNuxt({
     css: [
         {
           lang: 'css',
-          src: './node_modules/vuetify/dist/vuetify.css'
+          src: '../../node_modules/vuetify/dist/vuetify.min.css'
         },
         {
             src: '@/assets/scss/styles.scss',
             lang: 'scss'
         }
     ]
-});
+};
 
 

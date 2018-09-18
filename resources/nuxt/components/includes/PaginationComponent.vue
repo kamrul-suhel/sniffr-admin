@@ -1,25 +1,26 @@
 <template>
     <div class="text-xs-center pagination-section">
-            <v-layout justify-center mt-4>
-                <v-flex xs12>
-                    <v-pagination
-                            color="black"
-                            class="dark"
-                            :length="pagination.last_page"
-                            v-model="current_page"
-                            :total-visible="total_visible"
-                    ></v-pagination>
-                </v-flex>
-            </v-layout>
+        <v-layout justify-center mt-4>
+            <v-flex xs12>
+                <v-pagination
+                        color="black"
+                        class="dark"
+                        :length="pagination.last_page"
+                        v-model="current_page"
+                        :total-visible="total_visible"
+                ></v-pagination>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 
 <script>
     import SearchService from '@/plugins/services/SearchServices'
+
     export default {
         data() {
             return {
-                current_page: this.$route.query.page ? Number(this.$route.query.page): 1,
+                current_page: this.$route.query.page ? Number(this.$route.query.page) : 1,
                 total_visible: 10,
             }
         },
