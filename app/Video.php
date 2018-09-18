@@ -87,6 +87,14 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
         'source'
     ];
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -166,14 +174,6 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 	public function mailers()
 	{
 		return $this->belongsToMany(ClientMailer::class);
-	}
-
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function user()
-	{
-		return $this->belongsTo(User::class);
 	}
 
 	/**
