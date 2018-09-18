@@ -6,6 +6,7 @@ use App\ClientMailer;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
+use App\UserRole;
 use Password;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -18,7 +19,7 @@ class AdminUsersController extends Controller
 {
     use ResetsPasswords;
 
-    protected $user, $client, $clientMailer;
+    protected $user, $client, $clientMailer, $userRole;
 
     /**
      * AdminUsersController constructor.
@@ -26,11 +27,13 @@ class AdminUsersController extends Controller
      * @param Client $client
      * @param ClientMailer $clientMailer
      */
-    public function __construct(User $user, Client $client, ClientMailer $clientMailer)
+    public function __construct(User $user, Client $client, ClientMailer $clientMailer, UserRole $userRole)
     {
         $this->middleware('admin');
 
         $this->user = $user;
+
+        $this->userRole = $userRole;
 
         $this->clientMailer = $clientMailer;
 
@@ -77,12 +80,15 @@ class AdminUsersController extends Controller
     {
         $clients = $this->client->get();
 
+	    $userJobRoles = $this->userRole::$videoJobRoles + $this->userRole::$storyJobRoles;
+
         $data = [
             'post_route' => url('admin/user/store'),
             'admin_user' => auth()->user(),
             'button_text' => 'Create User',
             'clients' => $clients,
-            'user' => null
+            'user' => null,
+	        'userJobRoles' => $userJobRoles
         ];
 
         return view('admin.users.create_edit', $data);
@@ -137,11 +143,14 @@ class AdminUsersController extends Controller
     {
         $user = $this->user->find($id);
 
+        $userJobRoles = $this->userRole::$videoJobRoles + $this->userRole::$storyJobRoles;
+
         $data = [
             'clients' => $this->client->get(),
             'post_route' => url('admin/user/update'),
             'user' => $user,
             'button_text' => 'Update User',
+	        'userJobRoles' => $userJobRoles
         ];
 
         return view('admin.users.create_edit', $data);

@@ -185,7 +185,7 @@
 				<div class="col-sm-6">
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
-							<div class="panel-title">User Role</div>
+							<div class="panel-title">System Role</div>
 
 							<div class="panel-options">
 								<a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
@@ -218,7 +218,33 @@
 					</div>
 				</div>
 
-				<div class="col-sm-6" id="client-box">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="panel panel-primary" data-collapsed="0">
+                            <div class="panel-heading">
+                                <div class="panel-title">Job Role</div>
+
+                                <div class="panel-options">
+                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="panel-body" style="display: block;">
+                                <p>Select the user's job role below</p>
+                                <select id="job_role" name="job_role">
+                                    <option value="">-- Select an Option -- </option>
+                                    @foreach($userJobRoles as $key => $value)
+                                        <option value="{{$key}}" {{ ((($user) && ($user->job_role == $key)) || (old('job_role') == $value)) ? ' selected' : '' }}>
+                                            {{ ucwords($value) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6" id="client-box">
 					<div class="panel panel-primary" data-collapsed="0">
 						<div class="panel-heading">
 							<div class="panel-title">Client</div>

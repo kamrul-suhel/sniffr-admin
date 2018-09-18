@@ -86,13 +86,13 @@ class Video extends Model implements \OwenIt\Auditing\Contracts\Auditable
 		'source'
 	];
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function tags()
-	{
-		return $this->belongsToMany(Tag::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
