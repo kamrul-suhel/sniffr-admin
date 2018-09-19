@@ -19,7 +19,7 @@ const actions = {
         // check if settings data is load or not
         if(typeof state.settings != 'object'){
             return new Promise(function(resolve, reject){
-                let url = '/settings_object';
+                let url = 'api/settings_object';
                 axios.get(url)
                     .then((response) => {
                         let data = response.data;

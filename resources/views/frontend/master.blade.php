@@ -8,7 +8,7 @@
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/css/video-js.css')}}" />
-    <link rel="stylesheet" href="{{mix('assets/frontend/css/styles.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/frontend/css/styles.css')}}" />
 
     <!-- If we need to add page specific style -->
     @yield('page_styles')
@@ -30,7 +30,6 @@
         </v-app>
     </section>
 
-    <script src="{{asset('assets/frontend/scripts/jquery.js')}}"></script>
     <script src="{{mix('assets/frontend/scripts/scripts.js')}}"></script>
 
     @yield('page_script')
