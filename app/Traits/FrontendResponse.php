@@ -97,7 +97,7 @@ trait FrontendResponse
     }
 
     public function getFrontendServerResponse(Request $request){
-    	return view('frontend.master.blade');
+    	return view('frontend.master');
 	}
 
 }

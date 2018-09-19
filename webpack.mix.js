@@ -38,6 +38,11 @@ mix.js([
 ], 'public/assets/admin/scripts/scripts.js')
     .sourceMaps();
 
+mix.js([
+    'resources/assets/frontend/scripts/main.js',
+], 'public/assets/frontend/scripts/scripts.js')
+    .sourceMaps();
+
 if (mix.inProduction()) {
     mix.version();
 }

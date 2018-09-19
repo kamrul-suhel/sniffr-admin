@@ -10,6 +10,8 @@ window.axios = require('axios');
 window.Vue = require('vue');
 window.Vuetify = require('Vuetify');
 
+import $ from "jquery";
+
 import Vuerouter from 'vue-router';
 
 
