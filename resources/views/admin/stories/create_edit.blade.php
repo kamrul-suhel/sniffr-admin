@@ -3,7 +3,7 @@
 @section('content')
     <!-- This is where -->
     <ol class="breadcrumb">
-        <li><a href="{{ (isset($chosen_decision) ? '/admin/stories/?decision='.$chosen_decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a></li>
+        <li><a href="{{ (isset($chosen_decision) ? '/admin/licenses/stories/?decision='.$chosen_decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a></li>
         <li class="active">
             @if(!empty($asset->id))
                 <strong>Edit Story</strong>
