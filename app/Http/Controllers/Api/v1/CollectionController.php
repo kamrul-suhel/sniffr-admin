@@ -147,4 +147,34 @@ class CollectionController extends Controller
             'message' => 'Email has been sent to new user'
         ], 200);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function cancelCollection(Request $request)
+    {
+        $isJson = $request->ajax();
+
+        $collection = $this->collection->find($request->get('collection_id'));
+
+        if(isset($collection->user_id)) {
+            $user = $request->user('api');
+            if ($user->id !== $collection->user_id) {
+                if ($isJson) {
+                    return response([
+                        'message' => 'permission denied',
+                    ], 403);
+                }
+            }
+        }
+
+        $collection->delete();
+
+        if ($isJson) {
+            return response([
+                'message' => 'collection was deleted',
+            ], 200);
+        }
+    }
 }
