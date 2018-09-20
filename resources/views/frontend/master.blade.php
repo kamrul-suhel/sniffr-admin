@@ -17,7 +17,7 @@
 <body {{ (Request::is('/')) ? 'class="home"' : '' }}>
     <section id="sniffr">
         <v-app v-if="sniffrStateReady">
-            <navigation-component></navigation-component>
+            {{--<navigation-component></navigation-component>--}}
 
             <v-content>
                 <div id="scroll_to"></div>
@@ -26,7 +26,7 @@
                 </transition>
             </v-content>
 
-            <footer-component></footer-component>
+            {{--<footer-component></footer-component>--}}
         </v-app>
     </section>
 
