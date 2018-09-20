@@ -46,7 +46,7 @@ Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 */
 Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
 Route::post('client/collections', 'Api\v1\CollectionController@store')->name('client.store');
-Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
+Route::post('client/collections/cancel_collection', 'Api\v1\CollectionController@cancelCollection')->name('client.cancel_collection');
 
 
 Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
@@ -67,11 +67,11 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
-    Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
-    Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.purchased.stories');
-    Route::get('stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
-    Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
+    Route::get('stories/{id}/download', 'Api\v1\Client\ClientStoryController@downloadStory')->name('client.stories.download');
+    Route::get('stories/purchased', 'Api\v1\Client\ClientStoryController@getPurchasedStories')->name('client.purchased.stories');
+    Route::get('stories/offered', 'Api\v1\Client\ClientStoryController@getOfferedStories')->name('client.purchased.stories');
+    Route::get('stories', 'Api\v1\Client\ClientStoryController@index')->name('client.stories');
+    Route::get('stories/{alpha_id}', 'Api\v1\StoryController@show')->name('client.stories.show');
 
 
     /*
