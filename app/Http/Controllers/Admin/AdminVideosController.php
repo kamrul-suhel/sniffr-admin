@@ -203,9 +203,9 @@ class AdminVideosController extends Controller
 		$video->state = 'new';
 		$video->save();
 
-		return redirect()->route('admin_video_edit', ['id' => $video->alpha_id])->with([
+		return redirect('/admin/licenses/videos?state=new')->with([
 			'note' => 'New Video Successfully Added!',
-			'note_type' => 'success',
+			'note_type' => 'success'
 		]);
 	}
 
