@@ -20,7 +20,7 @@ class UserController extends Controller
         }
         $settings['sniffr_app'] = [
             "user" => ($user ? $user : "''"),
-            "user_offers" => (auth()->user() ? auth()->user()->userOffers() : "")
+            "user_offers" => ($user ? $user->userOffers() : "")
         ];
         return $this->successResponse($settings);
     }
