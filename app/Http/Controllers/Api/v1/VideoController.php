@@ -1,18 +1,17 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Api\v1;
 
 use App\Traits\FrontendResponse;
+use Illuminate\Http\Request;
 use Response;
 use App\Video;
 use Auth;
 use App\VideoCategory;
 
-use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Facades\Input;
 
-class VideoController extends Controller {
+class VideoController extends FrontendApiController {
 
 	use FrontendResponse;
 
@@ -45,11 +44,34 @@ class VideoController extends Controller {
 		return Response::json($response->get($this->public_columns), 200);
 	}
 
+    /**
+     * @param string $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function show(string $id)
+    {
+        $video = Video::select($this->getVideoFieldsForFrontend())
+            ->where('state', 'licensed')
+            ->with('tags')
+            ->orderBy('licensed_at', 'DESC')
+            ->where('alpha_id', $id)
+            ->first();
+        $iFrame = $this->getVideoHtml($video, true);
+        $view_increment = $this->handleViewCount($id);
+        $data = [
+            'video' => $video,
+            'iframe' => $iFrame,
+            'view_increment' => $view_increment,
+        ];
+
+        return $this->successResponse($data);
+    }
+
 	public function video($id)
 	{
 		$settings = config('settings.site');
 		$video = Video::find($id);
-		
+
 		// If user has access to all the content
 		//if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest() && Auth::user()->subscribed()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings['free_registration'] && Auth::user()->role == 'registered') ){
 		if($video->access == 'guest' || ( ($video->access == 'subscriber' || $video->access == 'registered') && !Auth::guest()) || (!Auth::guest() && (Auth::user()->role == 'demo' || Auth::user()->role == 'admin')) || (!Auth::guest() && $video->access == 'registered' && $settings['free_registration'] && Auth::user()->role == 'registered') ){
