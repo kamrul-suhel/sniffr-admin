@@ -33,11 +33,11 @@ class CollectionController extends Controller
      * @param Video $video
      * @param Story $story
      * @param Client $client
-     * @param User $user
+     * @param Request $request
      */
     public function __construct(
         Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory,
-        CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, User $user)
+        CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, Request $request)
     {
         $this->collection = $collection;
         $this->collectionVideo = $collectionVideo;
@@ -46,7 +46,7 @@ class CollectionController extends Controller
         $this->video = $video;
         $this->story = $story;
         $this->client = $client;
-        $this->user = $user;
+        $this->user = $request->user('api');
     }
 
     /**
@@ -56,12 +56,11 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->user('api');
 
         $data = [
             'name' => "order_" . strtolower(str_random(10)),
-            'user_id' => $user->id ?? null,
-            'client_id' => $user->client_id ?? null,
+            'user_id' => $this->user->id ?? null,
+            'client_id' => $this->user->client_id ?? null,
             'status' => 'open',
         ];
 
@@ -69,10 +68,10 @@ class CollectionController extends Controller
 
         if ($request->get('type') == 'video') {
             $video = $this->video->where('alpha_id', $request->get('asset_alpha_id'))->first();
-            $collectionVideo = $collection->addVideoToCollection($video, $user);
+            $collectionVideo = $collection->addVideoToCollection($video, $this->user);
         } else {
             $story = $this->story->where('alpha_id', $request->get('asset_alpha_id'))->first();
-            $collectionStory = $collection->addStoryToCollection($story, $user);
+            $collectionStory = $collection->addStoryToCollection($story, $this->user);
         }
 
         return response([
@@ -94,8 +93,7 @@ class CollectionController extends Controller
     public function requestQuote(Request $request, $type, $collection_asset_id)
     {
         $data = $request->except('_token');
-        $user = $request->user('api');
-        $client = $user->client;
+        $client = $this->user->client;
 
         if ($type == 'video') {
             $collectionVideo = $this->collectionVideo->find($collection_asset_id);
@@ -131,8 +129,8 @@ class CollectionController extends Controller
         $client = $collection->client;
 
         $params = [
-            'username' => is_null($user->full_name) ? $user->username : $user->full_name,
-            'user' => $user->email,
+            'username' => is_null($this->user->full_name) ? $this->user->username : $this->user->full_name,
+            'user' => $this->user->email,
             'collection' => $collection
         ];
 
@@ -140,7 +138,7 @@ class CollectionController extends Controller
         $collectionQuote->emailPendingQuote($params);
 
         if (env('APP_ENV') === 'prod') {
-            $user->slackChannel('quotes')->notify(new RequestQuote($user, $client, $asset));
+            $this->user->slackChannel('quotes')->notify(new RequestQuote($this->user, $client, $asset));
         }
 
         return response([
@@ -159,8 +157,7 @@ class CollectionController extends Controller
         $collection = $this->collection->find($request->get('collection_id'));
 
         if(isset($collection->user_id)) {
-            $user = $request->user('api');
-            if ($user->id !== $collection->user_id) {
+            if ($this->user->id !== $collection->user_id) {
                 if ($isJson) {
                     return response([
                         'message' => 'permission denied',
