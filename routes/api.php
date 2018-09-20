@@ -13,15 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('user', function (Request $request) {
-    return response()->json(['user' => $request->user()]);
-});
+Route::middleware('auth:api')->get('user', 'Frontend\UserController@index');
 
 
 Route::get('settings_object', 'SettingController@index')->name('setting_object');
-Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
-Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');
+Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
+Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos.show');
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +45,7 @@ Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 |--------------------------------------------------------------------------
 */
 Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
-Route::post('client/collections', 'CollectionController@store')->name('client.store');
+Route::post('client/collections', 'Api\v1\CollectionController@store')->name('client.store');
 Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
 
 
@@ -90,3 +87,37 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     Route::post('collections/request_quote/{type}/{collection_video_id}', 'CollectionController@requestQuote')->name('client.request_quote');
 
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Auth and Password Reset Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('login', 'AuthController@login_form')->name('login');
+Route::get('islogin', 'AuthController@isLogin')->name('islogin');
+Route::post('login', 'AuthController@login')->name('auth.login');
+
+Route::get('password/reset', ['uses' => 'AuthController@password_reset', 'as' => 'password.remind']);
+Route::post('password/reset', ['uses' => 'AuthController@password_request', 'as' => 'password.request']);
+
+Route::get('password/reset/{token}', ['uses' => 'AuthController@password_reset_token', 'as' => 'password.reset']);
+Route::post('password/reset/{token}', ['uses' => 'AuthController@password_reset_post', 'as' => 'password.update']);
+
+Route::get('password/set/{token}/{email}', ['uses' => 'AuthController@setPassword', 'as' => 'password.set_password']);
+Route::post('password/set/{token}/{email}', ['uses' => 'AuthController@setPasswordPost', 'as' => 'password.set_password_post']);
+
+
+Route::get('unsubscribe/{email}', 'ThemeContactController@index');
+Route::post('unsubscribe', 'ThemeContactController@edit');
+
+Route::get('logout', 'AuthController@logout')->name('auth.logout');
+
+Route::get('upload_dir', function () {
+    echo Config::get('site.uploads_dir');
+});
+
+Route::get('terms', 'ThemeTermsController@index');
+
+Route::get('contract/{token}/accept', 'Contract\ContractController@accept')->name('contract.accept');
+Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('contract.sign');
