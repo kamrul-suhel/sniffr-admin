@@ -3,7 +3,7 @@
 @section('content')
     <!-- This is where -->
     <ol class="breadcrumb">
-        <li><a href="{{ (isset($chosen_decision) ? '/admin/stories/?decision='.$chosen_decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a></li>
+        <li><a href="{{ (isset($chosen_decision) ? '/admin/licenses/stories/?decision='.$chosen_decision : '/admin/stories') }}"><i class="fa fa-tasks"></i> Stories</a></li>
         <li class="active">
             @if(!empty($asset->id))
                 <strong>Edit Story</strong>
@@ -28,15 +28,8 @@
     <form method="POST" action="{{ $post_route }}" id="js-story-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
         <div class="row">
             <div class="col-sm-12">
-                @if(isset($asset))
-                    @if(\App\CollectionStory::isOffered($asset->id)->count() > 0
-                        || \App\CollectionStory::isRequested($asset->id)->count() > 0)
-                        <div class="col-lg-12 label label-warning">
-                            {{ \App\CollectionStory::isOffered($asset->id)->count() > 0 ? "Offered: ".\App\CollectionStory::isOffered($asset->id)->count() : '' }}
-                            {{ \App\CollectionStory::isRequested($asset->id)->count() > 0 ? "Requested: ".\App\CollectionStory::isRequested($asset->id)->count() : '' }}
-                        </div>
-                    @endif
-                @endif
+                @include('admin.assets.partials.quotes')
+
                 <div class="form-group">
                     <div>
                         <input type="text" class="form-control story-title" name="title" id="title" placeholder="Story Title" value="@if(!empty($asset->title)){{ $asset->title }}@endif"/>
@@ -47,143 +40,107 @@
 
         <div class="row">
             <div class="col-sm-4"> <!-- first column -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        @include('admin.stories.partials.assets')
+                @include('admin.stories.partials.assets')
 
-                        <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">
-                                <div class="panel-title">Story Description</div>
+                <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel-heading">
+                        <div class="panel-title">Story Description</div>
 
-                                <div class="panel-options">
-                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                </div>
-                            </div>
+                        <div class="panel-options">
+                            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                        </div>
+                    </div>
 
-                            <div class="panel-body" style="display: block;">
-                                <textarea class="form-control" name="description" id="description">@if(!empty($asset->description)){{ htmlspecialchars($asset->description) }}@endif</textarea>
-                            </div>
+                    <div class="panel-body" style="display: block;">
+                        <textarea class="form-control" name="description" id="details">@if(!empty($asset->description)){{ htmlspecialchars($asset->description) }}@endif</textarea>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary" data-collapsed="0">
+                    <div class="panel-heading">
+                        <div class="panel-title">Include Video Assets</div>
+
+                        <div class="panel-options">
+                            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="js-video-inputs-wrapper">
+                            @if(isset($asset))
+                                @foreach($asset->videos as $video)
+                                    <div class="form-group input-group">
+                                        <input type="text" class="form-control" value="{{ $video->title }}" disabled/>
+                                        <input type="hidden" name="videos[]" value="{{ $video->id }}"/>
+                                        <span class="input-group-btn">
+                                        <button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </span>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
 
-                        <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">
-                                <div class="panel-title">Include Video Assets</div>
+                        <br>
 
-                                <div class="panel-options">
-                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <div class="js-video-inputs-wrapper">
-                                    @if(isset($asset))
-                                        @foreach($asset->videos as $video)
-                                            <div class="form-group input-group">
-                                                <input type="text" class="form-control" value="{{ $video->title }}" disabled/>
-                                                <input type="hidden" name="videos[]" value="{{ $video->id }}"/>
-                                                <span class="input-group-btn">
-												<button class="js-remove-input btn btn-default"><i class="fa fa-times" aria-hidden="true"></i></button>
-											</span>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-
-                                <br>
-
-                                <button class="btn btn-default js-story-add-video-button pull-right">Add Video Asset</button>
-                            </div>
-                        </div>
+                        <button class="btn btn-default js-story-add-video-button pull-right">Add Video Asset</button>
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-4"> <!-- second column -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        @include('admin.stories.partials.licensing_information')
-                    </div>
-                </div>
+                @include('admin.stories.partials.licensing_information')
             </div>
 
             <div class="col-sm-4"> <!-- third column -->
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="panel panel-primary" data-collapsed="0">
-                            <div class="panel-heading">
-                                <div class="panel-title">Assigned to</div>
+                    <div class="col-xs-6">
+                        @include('admin.users.partials.select')
+                    </div>
 
-                                <div class="panel-options">
-                                    <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                </div>
-                            </div>
+                    <div class="col-xs-6">
+                        @include('admin.assets.partials.priority-panel')
+                    </div>
+                </div>
 
-                            <div class="panel-body" style="display: block;">
-                                <select id="user_id" name="user_id" class="form-control">
-                                    <option value="">Not assigned</option>
-                                    @foreach($users as $user2)
-                                        <option value="{{ $user2->id }}"
-                                                @if(isset($asset)) @if(!empty($user2->id == $asset->user_id))selected="selected"@endif @endif>{{ $user2->username }}</option>
-                                    @endforeach
-                                </select>
+                @if(isset($asset->id))
+                    @include('admin.assets.partials.comments')
+
+                    @if(auth()->user()->role === 'admin')
+                        @include('admin.assets.partials.log')
+                    @endif
+
+                    @if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
+                    <div class="panel panel-primary" data-collapsed="0">
+                        <div class="panel-heading">
+                            <div class="panel-title">Admin</div>
+
+                            <div class="panel-options">
+                                <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
                             </div>
                         </div>
 
-                        @if(isset($asset->id))
-                            <div class="panel panel-primary" data-collapsed="0">
-                                <div class="panel-heading">
-                                    <div class="panel-title">Comments</div>
-                                    <div class="panel-options">
-                                        <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                    </div>
-                                </div>
+                        <div class="panel-body" style="display: block;">
+                            <span class="form-group input-group">
+                                <span class="input-group-addon">WordPress ID</span>
 
-                                <div class="panel-body" style="display: block; background: #fcfcfc;">
-                                    <comments-component :asset="{{ json_encode($asset) }}"
-                                                        asset-type="story"></comments-component>
-                                </div>
-                            </div>
+                                <input type="text" class="form-control" name="wp_id" id="wp_id" value="{{ isset($asset) ? $asset->wp_id : '' }}"/>
+                            </span>
 
-                            @if(auth()->user()->role === 'admin')
-                                <div class="col-lg-12">
-                                    @include('admin.assets.partials.log')
-                                </div>
-                            @endif
-
-                            @if($user->username == 'ianlainchbury' || $user->username == 'mikewright' || $user->username == 'hemmitkerrai')
-                                <div class="panel panel-primary" data-collapsed="0">
-                                    <div class="panel-heading">
-                                        <div class="panel-title">Admin</div>
-
-                                        <div class="panel-options">
-                                            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
-                                        </div>
-                                    </div>
-
-                                    <div class="panel-body" style="display: block;">
-                                        <span class="form-group input-group">
-                                            <span class="input-group-addon">WordPress ID</span>
-
-                                            <input type="text" class="form-control" name="wp_id" id="wp_id" value="{{ isset($asset) ? $asset->wp_id : '' }}"/>
-                                        </span>
-
-                                        <a href="{{ url('admin/stories/wp_refresh/'.$asset->alpha_id) }}" class="btn btn-warning">WP Refresh</a>
-                                    </div>
-                                </div>
-                            @endif
-
-                            @include('admin.contracts.partials.form')
-
-                            <input type="hidden" id="id" name="id" value="{{ $asset->id }}"/>
-                            <input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}"/>
-                            <input type="hidden" name="decision" value="{{ (isset($chosen_decision) ? $chosen_decision : '') }}"/>
-                        @endif
-
-                        <input type="hidden" name="_token" value="<?= csrf_token() ?>"/>
-                        <input type="hidden" name="decision" value="{{ (isset($chosen_decision) ? $chosen_decision : '') }}"/>
-                        <input type="hidden" name="type" value="{{ (isset($asset) ? $asset->type : 'new') }}"/>
+                            <a href="{{ url('admin/stories/wp_refresh/'.$asset->alpha_id) }}" class="btn btn-warning">WP Refresh</a>
+                        </div>
                     </div>
-                </div>
+                    @endif
+
+                    @include('admin.contracts.partials.form')
+
+                    <input type="hidden" id="id" name="id" value="{{ $asset->id }}"/>
+                    <input type="hidden" id="alpha_id" name="alpha_id" value="{{ $asset->alpha_id }}"/>
+                    <input type="hidden" name="decision" value="{{ (isset($chosen_decision) ? $chosen_decision : '') }}"/>
+                @endif
+
+                <input type="hidden" name="_token" value="<?= csrf_token() ?>"/>
+                <input type="hidden" name="decision" value="{{ (isset($chosen_decision) ? $chosen_decision : '') }}"/>
+                <input type="hidden" name="type" value="{{ (isset($asset) ? $asset->type : 'new') }}"/>
             </div>
         </div>
     </form>

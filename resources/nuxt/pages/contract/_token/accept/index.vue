@@ -99,7 +99,7 @@
                     .then(response => {
                         this.showMessage = true;
                         this.buttonDisable = true;
-                        if (!response.data.error) {
+                        if (!response.error) {
                             this.message = response.success_message;
                             this.signed = response.signed
                             this.display_thank_you = true
@@ -109,7 +109,11 @@
                         }
                     })
                     .catch(error => {
-                        console.log(error);
+                        this.showMessage = true;
+                        this.buttonDisable = true;
+                        this.error = true;
+                        this.display_thank_you = true
+                        this.message = "Something went wrong. Please refresh this page again.";
                     });
             }
         }
