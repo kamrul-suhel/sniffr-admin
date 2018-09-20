@@ -53,9 +53,9 @@ return [
 		],
 		'licensing' => [
 			'approved' => [
-				'dropdown' => 'Ready for Pickup',
+				'dropdown' => 'Awaiting Contact',
 				'value' => 'approved',
-				'positive_label' => 'License Story',
+				'positive_label' => 'Made Contact',
 				'negative_label' => 'Purgatory',
 				'positive_class' => 'text-success js-story-state licensing',
 				'negative_class' => 'text-danger js-story-state purgatory',
@@ -63,7 +63,7 @@ return [
 			'licensing' => [
 				'dropdown' => 'In Progress',
 				'value' => 'licensing',
-				'positive_label' => 'Edit License',
+				'positive_label' => 'Edit',
 				'negative_label' => 'Back to Sourced',
 				'positive_class' => 'text-success',
 				'negative_class' => 'text-danger js-story-state approved',

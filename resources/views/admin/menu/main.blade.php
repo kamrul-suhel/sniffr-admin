@@ -19,12 +19,12 @@
             <ul>
                 @if(Auth::user()->isAdmin())
                     <li>
-                        <a href="{{ url('admin/licenses/videos?rights=ex') }}">
+                        <a href="{{ url('admin/licenses/videos?state=all&rights=ex') }}">
                             <span class="title">Ex Submissions</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('admin/licenses/videos?rights=exc') }}">
+                        <a href="{{ url('admin/licenses/videos?state=all&rights=exc') }}">
                             <span class="title">Ex Chaser</span>
                         </a>
                     </li>
