@@ -24,101 +24,138 @@ class AdminStaffController extends Controller
 	}
 
 	/**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-	    $from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay() : Carbon::now()->subMonths(1)->startOfDay();
-	    $to = request()->has('to') ? Carbon::parse(request()->get('to'))->endOfDay() : Carbon::now()->endOfDay();
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		$from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay() : Carbon::now()->subMonths(1)->startOfDay();
+		$to = request()->has('to') ? Carbon::parse(request()->get('to'))->endOfDay() : Carbon::now()->endOfDay();
 
-    	$type = request()->get('type') ?? 'video';
-    	$rights = request()->get('rights') ?? 'ex';
+		$type = request()->get('type') ?? 'video';
+		$rights = request()->get('rights') ?? 'ex';
 
-    	$users = $this->user->where('client_id', '=', null)
-		    ->orderBy('full_name');
+		$users = $this->user
+			->where('client_id', '=', null)
+			->orderBy('full_name');
 
+		if ($type === 'video') {
+			$users = $this->getVideoStats($users, $from, $to);
+			$states = config('videos.states_with_names');
+		} else {
+			$users = $users->with('assignedStories')
+				->whereIn('job_role', array_keys($this->userRole::$storyJobRoles))->get();
+			$states = null;
+		}
 
-    	if($type === 'video') {
-    		$users = $users->with('assignedVideos')
-			    ->whereIn('job_role', array_keys($this->userRole::$videoJobRoles));
-	    } else {
-		    $users = $users->with('assignedStories')
-			    ->whereIn('job_role', array_keys($this->userRole::$storyJobRoles));
-	    }
+		return view('admin.staff.index')
+			->with('rights', $rights)
+			->with('from', $from)
+			->with('to', $to)
+			->with('type', $type)
+			->with('users', $users)
+			->with('states', $states);
+	}
 
-        return view('admin.staff.index')
-	        ->with('rights', $rights)
-	        ->with('from', $from)
-	        ->with('to', $to)
-	        ->with('type', $type)
-	        ->with('users', $users->get());
-    }
+	/**
+	 * @param $users
+	 * @param $from
+	 * @param $to
+	 * @return mixed
+	 */
+	public function getVideoStats($users, $from, $to)
+	{
+		$users = $users->whereHas('assignedVideos')
+			->whereIn('job_role', array_keys($this->userRole::$videoJobRoles))->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+		foreach ($users as $user) {
+			$videos = $this->video->select(\DB::raw('count(id) as total, state'))
+				->where('user_id', $user->id)
+				->groupBy('state')
+				->where('updated_at', '>=', $from)
+				->where('updated_at', '<=', $to)
+				->get()->toArray();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+			$total = 0;
+			$array = [];
+			foreach($videos as $workload) {
+				if($workload['state'] === null) {
+					$array['nostate'] = $workload['total'];
+				} else {
+					$array[$workload['state']] = $workload['total'];
+				}
+				$total += $workload['total'];
+			}
+			$user['workload'] = $array;
+			$user['workloadTotal'] = $total;
+		}
+		return $users;
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		//
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		//
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
+	{
+		//
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
 }

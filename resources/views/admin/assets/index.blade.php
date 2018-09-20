@@ -44,6 +44,7 @@
 
 	<div class="clear"></div>
 
+
 	@if(!count($assets))
 		<p>Sorry, there are no {{ $asset_type_plural }} to show.</p>
 	@else
