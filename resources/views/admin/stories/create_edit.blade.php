@@ -65,7 +65,7 @@
                         </div>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="panel-body" style="display:none">
                         <div class="js-video-inputs-wrapper">
                             @if(isset($asset))
                                 @foreach($asset->videos as $video)

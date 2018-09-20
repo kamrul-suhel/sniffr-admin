@@ -2,9 +2,7 @@
     <div class="panel-heading">
         <div class="panel-title">
             @if($asset)
-                {{ ucfirst($asset->state) }}
                 @if($asset->state=='licensed')
-                    |
                     <i class="fa fa-{{ $asset->rights == 'nonexc' ? 'times' : 'check' }}-circle"></i> {{ $asset->rights == 'nonexc' ? 'Non-' : '' }}
                     Ex{{ $asset->rights != 'ex' ? ' Chaser' : '' }}
                     Video
@@ -20,24 +18,18 @@
             <div class="pull-right">
                 @if($asset->state == 'accepted')
                     @if($asset->reminders)
-                        Reminder {{ $asset->reminders }}
-                        Sent: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
+                        Reminder {{ $asset->reminders }} Sent: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
                         <a href="{{ url('admin/videos/remind/' . $asset->alpha_id ) }}"
                            class="btn btn-primary btn-danger">
                             Send Reminder
                         </a>
                     @else
-                        More Details
-                        Requested: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
+                        More Details Sent: {{ ($asset->more_details_sent) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $asset->more_details_sent)->diffForHumans() : '' }}
                         <a href="{{ url('admin/videos/remind/' . $asset->alpha_id ) }}"
                            class="btn btn-primary btn-danger">
                             Send Reminder
                         </a>
                     @endif
-                    <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
-                       class="btn btn-primary btn-danger">
-                        Reject
-                    </a>
                 @endif
             </div>
         @endif
@@ -60,23 +52,6 @@
     <div class="panel-footer">
         @if($asset)
         <div class="text-right">
-            @if(!$asset->hasContract())
-                @if($asset->state == 'new' && ($asset->rights == 'ex' || $asset->rights == 'nonex'))
-                    <a href="{{ url('admin/videos/status/accepted/' . $asset->alpha_id ) }}"
-                       class="btn btn-primary btn-success js-state-accept">
-                        Accept
-                    </a>
-                    <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
-                       class="btn btn-primary btn-danger">Reject
-                    </a>
-                @elseif($asset->state == 'rejected')
-                    <a href="{{ url('admin/videos/status/accepted/' . $asset->alpha_id ) }}"
-                       class="btn btn-primary btn-success">
-                        Accept
-                    </a>
-                @endif
-            @endif
-
             @if($asset->file)
                 <a href="{{ url('/download/'.$asset->alpha_id) }}"
                    class="btn btn-primary{{ $asset->file_watermark ? ' js-download' : '' }}" title="Download Video"
@@ -99,6 +74,28 @@
             <a href="{{ url('/admin/nsfw/'.$asset->alpha_id) }}" class="btn btn-primary" title="Flag NSFW">
                 <i class="fa fa-flag"></i>
             </a>
+
+            @if(!$asset->hasContract())
+                @if($asset->state == 'new' && ($asset->rights == 'ex' || $asset->rights == 'nonex'))
+                    <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
+                       class="btn btn-primary btn-danger">Reject
+                    </a>
+                    <a href="{{ url('admin/videos/status/accepted/' . $asset->alpha_id ) }}"
+                       class="btn btn-primary btn-success js-state-accept">
+                        Accept
+                    </a>
+                @elseif($asset->state == 'rejected')
+                    <a href="{{ url('admin/videos/status/accepted/' . $asset->alpha_id ) }}"
+                       class="btn btn-primary btn-success">
+                        Accept
+                    </a>
+                @elseif($asset->state == 'accepted')
+                    <a href="{{ url('admin/videos/status/rejected/' . $asset->alpha_id ) }}"
+                       class="btn btn-primary btn-danger">
+                        Reject
+                    </a>
+                @endif
+            @endif
         </div>
 
         <div class="clearfix"></div>

@@ -12,7 +12,7 @@
             @endphp
 
             @if($currentDay != $date)
-                @phps
+                @php
                     $currentDay = $date;
                 @endphp
                 <div class="col-xs-12 date-header">
@@ -32,5 +32,9 @@
         <div class="clear"></div>
 
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $asset_type }}"></modal>
+    </div>
+
+    <div class="text-center">
+		<?= $assets->appends(request()->except('page'))->render(); ?>
     </div>
 </div>

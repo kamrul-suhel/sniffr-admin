@@ -23,7 +23,8 @@
                     Vertical
                 </span>
 
-                <select id="video_category_id" name="video_category_id" class="selectpicker form-control" title="choose a vertical">
+                <select id="video_category_id" name="video_category_id" class="form-control">
+                    <option value="">Select Vertical</option>
                     @foreach($video_categories as $category)
                         <option value="{{ $category->id }}" {{ (($asset) && ($asset->video_category_id == $category->id)) ? 'selected="selected"' : '' }}>
                             {{ $category->name }}
@@ -39,7 +40,8 @@
                     Collection
                 </span>
 
-                <select id="video_collection_id" name="video_collection_id" class="selectpicker form-control" title="choose a collection">
+                <select id="video_collection_id" name="video_collection_id" class="form-control">
+                    <option value="">Select Collection</option>
                     @foreach($video_collections as $collection)
                         <option value="{{ $collection->id }}" @if(!empty($asset->video_collection_id) && $asset->video_collection_id == $collection->id)selected="selected"@endif>
                             {{ $collection->name }}
@@ -55,14 +57,13 @@
                     Shot Type
                 </span>
 
-                <select id="video_shottype_id" name="video_shottype_id" class="selectpicker form-control">
-                    <option value="">Please Select</option>
+                <select id="video_shottype_id" name="video_shottype_id" class="form-control">
+                    <option value="">Select Shot Type</option>
                     @foreach($video_shottypes as $shottype)
                         <option value="{{ $shottype->id }}" {{ (($asset) && ($asset->video_shottype_id == $shottype->id)) ? 'selected="selected"' : '' }}>
                             {{ $shottype->name }}
                         </option>
                     @endforeach
-                    <option value="">N/A</option>
                 </select>
             </span>
         </div>

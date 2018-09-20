@@ -4,7 +4,7 @@
     <form method="POST" action="{{ ($asset) ? route('videos.update', ['id' => $asset->id]) : route('videos.store') }}" id="video-form" name="video-form" accept-charset="UTF-8" file="1" enctype="multipart/form-data">
         <div id="admin-container">
             <ol class="breadcrumb">
-                <li><a href="/admin/licenses/videos">All Videos</a></li>
+                <li><a href="/admin/licenses/videos?state=all">All Videos</a></li>
                 @if($asset)
                     <li><a href="/admin/licenses/videos?state={{ ($asset->state) ?: 'new' }}">{{ ($asset->state) ? ucfirst($asset->state) : 'New' }}</a></li>
                     <span class="album-asset-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</span>

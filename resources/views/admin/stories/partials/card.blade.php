@@ -51,7 +51,7 @@
             <i class="fa fa-file-o" title="Created"></i> <strong>Created:</strong> {{ date('jS M Y h:i:s', strtotime($asset->created_at)) }} <br>
 
             @if(isset($asset->contact))
-                @if($asset->contacted_at && $asset->contact_made)
+                @if($asset->contact_made)
                     <i class="fa fa-check-circle-o" title="Made Contact"></i>
                     <strong>Made Contact:</strong>
                     <a href="#" class="btn-mini">{{ date('jS M H:i:s',strtotime($asset->contacted_at)) }}</a>
@@ -59,13 +59,11 @@
                     <i class="fa fa-clock-o" title="Contacted"></i>
                     <strong>@if($asset->reminders) {{ $asset->reminders }} Reminder{{ ($asset->reminders>1 ? 's' : '') }} : @else Contacted: @endif</strong>{{ $asset->contacted_at ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$asset->contacted_at)->diffForHumans() : 'Not yet' }}
                     <a href="{{ url('admin/stories/reminder/'.$asset->alpha_id) }}" class="text-danger btn-mini">{{ $asset->contact->canAutoBump() ? ' Re-send' : ' Manually' }}</a>
-                    <a href="{{ url('admin/stories/contact_made/'.$asset->alpha_id) }}" data-id="{{ $asset->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
                 @else
                     <i class="fa fa-question-circle-o" title="Not Contacted"></i>
                     <strong>Not Contacted</strong>
                     @if($asset->state != 'unapproved' && $asset->state != 'rejected')
                         <a href="{{ url('admin/stories/reminder/'.$asset->alpha_id) }}" class="text-danger btn-mini">{{ $asset->contact->canAutoBump() ? ' Send' : ' Manually' }}</a>
-                        <a href="{{ url('admin/stories/contact_made/'.$asset->alpha_id) }}" data-id="{{ $asset->alpha_id }}" class="text-success approved btn-mini btn-mini-border" title="Made Contact"><i class="fa fa-square-o"></i> Made Contact</a>
                     @endif
                 @endif
             @else
