@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('user', 'Frontend\UserController@index');
-
 
 Route::get('settings_object', 'SettingController@index')->name('setting_object');
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
@@ -50,13 +48,16 @@ Route::post('client/collections/cancel_collection', 'Api\v1\CollectionController
 
 
 Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
+
+    Route::get('user', 'Api\v1\UserController@index');
+
     /*
     |--------------------------------------------------------------------------
     | Download Videos
     |--------------------------------------------------------------------------
     */
-    Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-    Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
+    Route::get('videos/{id}/download', 'Api\v1\Client\ClientVideosController@downloadVideo')->name('client.video.download');
+    Route::get('videos/purchased', 'Api\v1\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
     Route::get('videos/offered', 'Api\v1\Client\ClientVideoController@getOfferedVideos')->name('client.purchased.videos');
     Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
     Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
@@ -66,7 +67,6 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     | Download Stories
     |--------------------------------------------------------------------------
     */
-
     Route::get('stories/{id}/download', 'Api\v1\Client\ClientStoryController@downloadStory')->name('client.stories.download');
     Route::get('stories/purchased', 'Api\v1\Client\ClientStoryController@getPurchasedStories')->name('client.purchased.stories');
     Route::get('stories/offered', 'Api\v1\Client\ClientStoryController@getOfferedStories')->name('client.purchased.stories');
@@ -79,7 +79,6 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     | Collections Routes for video
     |--------------------------------------------------------------------------
     */
-
     Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
     Route::post('collections/accept_asset_price/{collection_asset_id}/{type}', 'CollectionController@acceptAssetQuote')->name('client.accept_asset_quote');
     Route::post('collections/reject_asset_price/{collection_asset_id}/{type}', 'CollectionController@rejectAssetQuote')->name('client.accept_asset_quote');

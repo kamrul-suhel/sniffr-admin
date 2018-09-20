@@ -12,7 +12,6 @@ use App\Notifications\RequestQuote;
 use App\Story;
 use App\Traits\FrontendResponse;
 use App\Traits\Slug;
-use App\User;
 use App\Video;
 use Illuminate\Http\Request;
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Client;
 
+use App;
 use App\ClientMailer;
 use App\Collection;
 use App\Http\Controllers\Api\v1\BaseApiController;
@@ -21,18 +22,19 @@ class ClientVideoController extends BaseApiController
     /**
      * @var int
      */
-    private $videos_per_page;
+    private $videos_per_page, $user;
 
     /**
      * ClientVideosController constructor.
      */
     public function __construct(Request $request, DownloadService $downloadService)
     {
+        $this->user = $request->user('api');
         $this->downloadService = $downloadService;
         $settings = config('settings.site');
         $this->videos_per_page = $settings['videos_per_page'] ?: 24;
         $this->data = [
-            'user' => $request->user('api'),
+            'user' => $this->user,
         ];
     }
 
@@ -42,13 +44,12 @@ class ClientVideoController extends BaseApiController
      */
     public function index(Request $request)
     {
-        $user = $request->user('api');
-        if (!$user) {
+        if (!$this->user) {
             return $this->errorResponse('Sorry you are not authorize to see this resources', 401);
         }
 
         if ($request->ajax() || $request->isJson()) {
-            $user_id = $user->id;
+            $user_id = $this->user->id;
             $client_videos_mailer = ClientMailer::with('videos.orders')
                 ->whereHas('users', function ($query) use ($user_id) {
                     $query->where('users.id', '=', $user_id);
@@ -65,7 +66,7 @@ class ClientVideoController extends BaseApiController
 
             $data = [
                 'videos' => $client_videos_mailer,
-                'user' => $user
+                'user' => $this->user
             ];
 
             return $this->successResponse($data);
@@ -87,15 +88,13 @@ class ClientVideoController extends BaseApiController
             ];
             return $this->successResponse($data);
         }
-
-        return $this->getFrontendServerResponse($request);
     }
 
     public function getOfferedVideos(Request $request)
     {
         if ($request->ajax()) {
-            $clientId = auth()->user()->client_id;
-            $userId = auth()->user()->id;
+            $clientId = $this->user->client_id;
+            $userId = $this->user->id;
 
             $offeredVideos = Collection::with('collectionVideos.video');
 
@@ -126,14 +125,13 @@ class ClientVideoController extends BaseApiController
 
             return $this->successResponse($data);
         }
-        return view('frontend.master');
     }
 
     public function getPurchasedVideos(Request $request)
     {
         if ($request->ajax()) {
             $clientId = $request->user()->client_id;
-            $userId = $request->user()->id;
+            $userId = $this->user->id;
 
             $purchasedVideos = Collection::with('collectionVideos.video');
 
@@ -163,7 +161,6 @@ class ClientVideoController extends BaseApiController
             ];
             return $this->successResponse($data);
         }
-        return view('frontend.master');
     }
 
 
@@ -175,7 +172,7 @@ class ClientVideoController extends BaseApiController
             abort(404, 'Asset Not Found');
         }
 
-        $client = App\Client::find(auth()->user()->client_id);
+        $client = $this->user->client_id;
         $purchases = $client->activeLicences()->get();
 
         $belongsToClient = false;
@@ -215,9 +212,10 @@ class ClientVideoController extends BaseApiController
     }
 
     /**
-     * @param int $storyId
+     * @param int $videoId
      * @param bool $download
      * @return string
+     * @throws \Exception
      */
     public function getVideoPdf(int $videoId, bool $download = true)
     {
