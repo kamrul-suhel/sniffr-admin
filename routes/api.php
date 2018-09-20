@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     */
     Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
     Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
-    Route::get('videos/offered', 'Frontend\Client\ClientVideosController@getOfferedVideos')->name('client.purchased.videos');
+    Route::get('videos/offered', 'Api\v1\Client\ClientVideoController@getOfferedVideos')->name('client.purchased.videos');
     Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
     Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
 

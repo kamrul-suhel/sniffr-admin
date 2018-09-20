@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\v1\Client;
 
 use App\ClientMailer;
-use App\Http\Controllers\Api\FrontendApiController;
+use App\Collection;
+use App\Http\Controllers\Api\v1\FrontendApiController;
 use App\Libraries\VideoHelper;
 use App\Services\DownloadService;
 use App\Traits\FrontendResponse;
