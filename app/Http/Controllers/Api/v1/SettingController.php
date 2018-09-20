@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class SettingController extends Controller
+class SettingController extends BaseApiController
 {
     //
 }

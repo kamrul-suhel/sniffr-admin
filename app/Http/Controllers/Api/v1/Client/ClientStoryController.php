@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Api\v1\Client;
 
 use App\ClientMailer;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\v1\BaseApiController;
 use App\Story;
 use App\Collection;
 use Chumper\Zipper\Facades\Zipper;
 use App\Traits\FrontendResponse;
 use App\Services\DownloadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App;
 
-class ClientStoryController extends Controller
+class ClientStoryController extends BaseApiController
 {
     /**
      * @var DownloadService

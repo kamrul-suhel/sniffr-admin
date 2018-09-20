@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Api\FrontendApiController;
 use Illuminate\Http\Request;
 
-class AssetStorySearchController extends FrontendApiController
+class AssetStorySearchController extends BaseApiController
 {
     /**
      * @param Request $request

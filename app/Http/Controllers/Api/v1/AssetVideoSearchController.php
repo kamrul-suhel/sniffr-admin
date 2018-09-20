@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;
 
-class AssetVideoSearchController extends FrontendApiController
+class AssetVideoSearchController extends BaseApiController
 {
     use FrontendResponse, AssetVideoTrait, VideoHelper;
 

@@ -11,7 +11,7 @@ use App\VideoCategory;
 
 use Illuminate\Support\Facades\Input;
 
-class VideoController extends FrontendApiController {
+class VideoController extends BaseApiController {
 
 	use FrontendResponse;
 

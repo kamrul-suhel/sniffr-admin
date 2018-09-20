@@ -15,9 +15,8 @@ use App\Traits\Slug;
 use App\User;
 use App\Video;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class CollectionController extends Controller
+class CollectionController extends BaseApiController
 {
 
     use Slug, VideoHelper, FrontendResponse;

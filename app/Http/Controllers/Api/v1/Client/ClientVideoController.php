@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api\v1\Client;
 
 use App\ClientMailer;
 use App\Collection;
-use App\Http\Controllers\Api\v1\FrontendApiController;
+use App\Http\Controllers\Api\v1\BaseApiController;
 use App\Libraries\VideoHelper;
 use App\Services\DownloadService;
 use App\Traits\FrontendResponse;
 use App\Video;
 use Illuminate\Http\Request;
 
-class ClientVideoController extends FrontendApiController
+class ClientVideoController extends BaseApiController
 {
     use FrontendResponse;
     use VideoHelper;
