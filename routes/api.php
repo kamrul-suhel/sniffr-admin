@@ -19,6 +19,8 @@ Route::get('settings_object', 'SettingController@index')->name('setting_object')
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
 Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos.show');
 
+Route::post('upload', 'Api\v1\VideoController@store')->name('videos_store');
+
 /*
 |--------------------------------------------------------------------------
 | Frontend Stories Routes
