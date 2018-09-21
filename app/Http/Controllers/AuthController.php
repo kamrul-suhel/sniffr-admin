@@ -55,19 +55,11 @@ class AuthController extends Controller
      */
     public function login_form(Request $request)
     {
-        if (!Auth::guest()) {
-            return Redirect::to('/');
+        if (Auth::guest()) {
+            return redirect('/');
         }
-        $settings = config('settings.site');
 
-        $data = [
-            'type' => 'login',
-            'video_categories' => VideoCategory::all(),
-            'theme_settings' => config('settings.theme'),
-            'settings' => $settings
-        ];
-
-        return $this->getFrontendServerResponse($request);
+        return redirect('/admin');
     }
 
     /**

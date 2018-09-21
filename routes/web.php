@@ -2,25 +2,10 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
-//Route::get('dm', function(){
-//	//$dmResponse = Twitter::postDm(array('screen_name' => 'ianlainchbury', 'text' => 'DM Test', 'format' => 'json'));
-//	$dmResponse = Twitter::postDm(array('screen_name' => 'ianlainchbury', 'text' => 'DM Test', 'format' => 'json'));
-//
-//	dd($dmResponse);
-//});
-
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
-
-    Route::get('/settings_object', 'SettingController@index')->name('setting_object');
-
-	Route::get(
-		'/',
-		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
-	)->where('/', '/');
 
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
-    Route::post('upload', 'Frontend\VideoController@store')->name('videos_store');
     Route::get('upload_video', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
     // TODO: remove this form route
     Route::get('upload/form', 'Frontend\VideoController@form')->name('videos_upload_form');
@@ -222,105 +207,21 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 */
 Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
-    /*
-   |--------------------------------------------------------------------------
-   | Purchased Controller
-   |--------------------------------------------------------------------------
-   */
-    Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
-    Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
-    Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Download Videos
-    |--------------------------------------------------------------------------
-    */
-    Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-    Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
-    Route::get('videos/offered', 'Frontend\Client\ClientVideosController@getOfferedVideos')->name('client.purchased.videos');
-    Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-    Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
+//    /*
+//    |--------------------------------------------------------------------------
+//    | Download Videos
+//    |--------------------------------------------------------------------------
+//    */
+//    Route::get('videos/{id}/download', 'Frontend\Client\ClientVideosController@downloadVideo')->name('client.video.download');
+//    Route::get('videos/purchased', 'Frontend\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
+//    Route::get('videos/offered', 'Frontend\Client\ClientVideosController@getOfferedVideos')->name('client.purchased.videos');
+//    Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
+//    Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Download Stories
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::get('stories/{id}/download', 'Frontend\Client\ClientStoriesController@downloadStory')->name('client.stories.download');
-    Route::get('stories/purchased', 'Frontend\Client\ClientStoriesController@getPurchasedStories')->name('client.purchased.stories');
-    Route::get('stories/offered', 'Frontend\Client\ClientStoriesController@getOfferedStories')->name('client.purchased.stories');
-    Route::get('stories', 'Frontend\Client\ClientStoriesController@index')->name('client.stories');
-    Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('client.stories.show');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Account and Profile Management
-    |--------------------------------------------------------------------------
-    */
-    Route::get('profile', 'Client\ClientAccountController@myAccount')->name('client.profile.edit');
-    Route::post('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
-    Route::resource('profile/{slug}/users', 'Client\ClientUserController', ['as' => 'client.profile']);
-
-    /*
-    |--------------------------------------------------------------------------
-    | Collections Routes for video
-    |--------------------------------------------------------------------------
-    */
-
-    Route::post('collections/get_video_price/{collection_video_id}', 'CollectionController@getVideoPrice')->name('client.get_video_price');
-    Route::post('collections/accept_asset_price/{collection_asset_id}/{type}', 'CollectionController@acceptAssetQuote')->name('client.accept_asset_quote');
-    Route::post('collections/reject_asset_price/{collection_asset_id}/{type}', 'CollectionController@rejectAssetQuote')->name('client.accept_asset_quote');
-    Route::post('collections/accept_collection_quote/{collection_id}/{quote_id}', 'CollectionController@acceptCollectionQuote')->name('client.accept_collection_quote');
-    Route::post('collections/request_quote/{type}/{collection_video_id}', 'CollectionController@requestQuote')->name('client.request_quote');
 
 });
 
-
-/*
-|--------------------------------------------------------------------------
-| Collection Routes
-|--------------------------------------------------------------------------
-*/
-Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
-Route::post('client/collections', 'CollectionController@store')->name('client.store');
-Route::post('client/collections/cancel_collection', 'CollectionController@cancelCollection')->name('client.cancel_collection');
-
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Videos Routes
-|--------------------------------------------------------------------------
-*/
-
-//Route::get('videos', 'Frontend\VideoController@index')->name('frontend.videos');
-Route::get('videos',
-	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
-	->where('videos', 'videos')
-	->name('videos_index');
-Route::get('videos/{alpha_id}', 'Frontend\VideoController@show')->name('frontend.videos.show');;
-
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Stories Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
-
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Search video/story dialogs box, getting current video, next & previous link
-|--------------------------------------------------------------------------
-*/
-
-Route::post('search/videos/{alpha_id?}', 'SearchController@videos');
-Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 /*
 |--------------------------------------------------------------------------
@@ -330,20 +231,5 @@ Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 
 //Route::post('stripe/webhook', 'Laravel\Cashier\WebhookController@handleWebhook');
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
 
-
-Route::group(array('prefix' => 'api/v1'), function () {
-    Route::get('/', 'Api\v1\ApiController@index');
-
-    Route::get('videos', 'Api\v1\VideoController@index');
-    Route::get('video/{id}', 'Api\v1\VideoController@video');
-    Route::get('video_categories', 'Api\v1\VideoController@video_categories');
-    Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
-});
-
-Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);
+//Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);

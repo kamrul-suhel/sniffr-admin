@@ -1,10 +1,12 @@
 import jQuery from 'jquery';
 export default class VideoReloadServices {
     reloadAll(){
-        this.reloadFacebook();
-        this.reloadInstagrm();
-        this.reloadTwitter();
-        this.reloadVideoJs();
+        if(process.browser){
+            this.reloadFacebook();
+            this.reloadInstagrm();
+            this.reloadTwitter();
+            this.reloadVideoJs();
+        }
     }
 
     reloadFacebook() {

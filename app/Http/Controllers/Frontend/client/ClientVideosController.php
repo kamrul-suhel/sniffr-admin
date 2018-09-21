@@ -136,8 +136,8 @@ class ClientVideosController extends Controller
     public function getPurchasedVideos(Request $request)
     {
         if ($request->ajax()) {
-            $clientId = auth()->user()->client_id;
-            $userId = auth()->user()->id;
+            $clientId = $request->user()->client_id;
+            $userId = $request->user()->id;
 
             $purchasedVideos = Collection::with('collectionVideos.video');
 

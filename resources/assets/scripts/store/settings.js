@@ -1,5 +1,5 @@
 const state = {
-    settings: ''
+    settings: null
 }
 
 const mutations = {
@@ -15,27 +15,19 @@ const getters = {
 }
 
 const actions = {
-    nuxtServerInit(){
+    nuxtServerInit: async ({commit}, {app, req, redirect}) => {
+        let url = '/settings_object';
+        app.$axios.$get(url)
+            .then((response) => {
+                commit('setSettingsObject', response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     },
 
     setSettingObjectFromServer({commit, state}) {
         // check if settings data is load or not
-        if (typeof state.settings != 'object') {
-            return new Promise((resolve, reject) => {
-                let url = '/settings_object';
-                this.$axios.setHeader('X-Requested-With', 'XMLHttpRequest');
-                this.$axios.$get(url)
-                    .then((response) => {
-                        let data = response;
-                        commit('setSettingsObject', data);
-                        resolve(data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        reject();
-                    });
-            });
-        }
     }
 }
 

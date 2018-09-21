@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\ClientMailerUser;
-use App\ClientMailerVideo;
-use App\CollectionVideo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Video\CreateVideoRequest;
 use App\Services\VideoService;
@@ -20,7 +17,6 @@ use App\Libraries\VideoHelper;
 use App\Jobs\QueueEmail;
 use App\Notifications\SubmissionNew;
 use App\Notifications\SubmissionAlert;
-use Pallares\LaravelNuxt\Controllers\NuxtController;
 
 class VideoController extends Controller
 {
@@ -185,9 +181,7 @@ class VideoController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $isJson = $request->ajax() || $request->isJson();
-        if ($isJson) {
-            $video = Video::select($this->getVideoFieldsForFrontend())
+        $video = Video::select($this->getVideoFieldsForFrontend())
                 ->where('state', 'licensed')
                 ->with('tags')
                 ->orderBy('licensed_at', 'DESC')
@@ -201,10 +195,7 @@ class VideoController extends Controller
                 'view_increment' => $view_increment,
             ];
 
-            return $this->successResponse($data);
-        }
-
-        return $this->getFrontendServerResponse($request);
+        return $this->successResponse($data);
     }
 
 

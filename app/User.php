@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Auditable;
 
 /**
@@ -30,7 +31,7 @@ use OwenIt\Auditing\Auditable;
  */
 class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use Notifiable, SoftDeletes, Auditable;
+    use HasApiTokens, Notifiable, SoftDeletes, Auditable;
 
     public $webhook;
 
@@ -153,8 +154,9 @@ class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditab
      * @param $data
      * @return mixed
      */
-    public function createUser($data)
+    public function createUser($data, $existingUser = null)
     {
+        $existingUser = $existingUser ? $existingUser : auth()->user();
         $user = new $this;
         $user->email = $data['email'];
 
@@ -164,15 +166,15 @@ class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditab
         }
         $user->password = $password;
 
-        $role = (auth()->user()->role == 'client') ? 'client' : $data['role'];
+        $role = ($existingUser->role == 'client') ? 'client' : $data['role'];
         $user->role = $role;
 
-        if(request()->segment(1) === 'client') {
-            $client_id = auth()->user()->client_id;
+        if(request()->segment(2) === 'client') {
+            $client_id = $existingUser->client_id;
             $user->active = 1;
         } else {
-            $client_id = (auth()->user()->role == 'client')
-                ? auth()->user()->client_id
+            $client_id = ($existingUser->role == 'client')
+                ? $existingUser->client_id
                 : $data['client_id'];
             $user->active = isset($data['active']) ? $data['active'] : $user->active ?? 0;
         }

@@ -76,9 +76,7 @@
         data() {
             return {
                 current_page: 0,
-
                 nextPageAlphaId: '',
-
                 previousPageAlphaId: '',
                 swipeDirection:''
             }

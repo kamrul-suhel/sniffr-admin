@@ -16,15 +16,6 @@ class SettingController extends Controller
         $settings['pricing'] = config('pricing');
 //        $settings['tags'] = Tag::latest()->get()->pluck('name');
 
-        $user = auth()->user();
-        if($user){
-        	$user['client'] = $user->client;
-		}
-        $settings['sniffr_app']  = [
-            "user" => ($user ? $user : "''"),
-            "user_offers" => (auth()->user() ? auth()->user()->userOffers() : "")
-        ];
-
         return $this->successResponse($settings);
     }
 }
