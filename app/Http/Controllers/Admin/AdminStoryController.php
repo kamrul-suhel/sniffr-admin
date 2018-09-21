@@ -51,7 +51,7 @@ class AdminStoryController extends Controller
     {
         $data = [
 			'user' => Auth::user(),
-			'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'contact' => null,
 			'asset' => null,
             'decision' => 'content-sourced',
@@ -152,7 +152,7 @@ class AdminStoryController extends Controller
             'decision' => $decision,
 	        'logs' => $logs,
             'user' => Auth::user(),
-            'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'contact' => $asset->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all()
@@ -230,7 +230,7 @@ class AdminStoryController extends Controller
             'button_text' => 'Save Draft',
             'decision' => $decision,
             'user' => Auth::user(),
-            'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'contact' => $story->contact,
             'video_categories' => VideoCategory::all(),
             'video_collections' => VideoCollection::all(),
@@ -275,6 +275,12 @@ class AdminStoryController extends Controller
                     QueueBump::dispatch($story_id);
                 }
                 break;
+			case ($state == 'licensing'):
+				$remove = 'yes';
+				// Made contact
+				$story->contact_made = 1;
+				$story->contacted_at = now();
+				break;
             case ($state == 'licensed'):
                 // add new post to WP
                 if($story_id) {
@@ -411,33 +417,6 @@ class AdminStoryController extends Controller
             'note_type' => $status
         ]);
     }
-
-	/**
-	 * @param Request $request
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function contactMade(Request $request, $alpha_id){
-		$isJson = $request->ajax();
-
-		$story = Story::where('alpha_id', $alpha_id)->first();
-		$story->contacted_at = now();
-		$story->contact_made = 1;
-		$story->save();
-
-		if ($isJson) {
-			return response()->json([
-				'status' => 'success',
-				'message' => 'Contact updated',
-				'story_alpha_id' => $alpha_id,
-			]);
-		} else {
-			return redirect()->back()
-				->with([
-					'note' => 'Story Updated',
-					'note_type' => 'success',
-				]);
-		}
-	}
 
     /**
      * @param UploadedFile $imageFile

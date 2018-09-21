@@ -174,6 +174,7 @@ class AdminVideosController extends Controller
 	{
 		$data = [
 			'user' => Auth::user(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'video_categories' => VideoCategory::all(),
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),
@@ -194,16 +195,74 @@ class AdminVideosController extends Controller
 	{
 		$video = new Video();
 		$video->alpha_id = VideoHelper::quickRandom();
+
+		if ($request->hasFile('image')) {
+			$imageFile = $request->file('image');
+			$imageUrl = $this->saveImageFile($imageFile);
+			$video->image = $imageUrl;
+		}
+
+		if ($request->get('new_social_link')) {
+			$videoStats = new VideoStats();
+			$validate = $videoStats->validateUrl(request()->get('new_social_link'));
+
+			if (isset($validate->message)) {
+				return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
+					'note' => 'Url does not exist',
+					'note_type' => 'error',
+				]);
+			}
+
+			$videoSocialLink = new VideoSocialLink();
+			$videoSocialLink->create([
+				'video_id' => $video->id,
+				'platform' => 'facebook',
+				'link' => $request->get('new_social_link')
+			]);
+		}
+
+		//handle file upload to S3 and Youtube ingestion
+		if ($request->hasFile('file')) {
+			$this->videoService->saveUploadedVideoFile($video, $request->file('file'));
+		}
+
+		if ($request->get('url')) {
+			$this->videoService->saveVideoLink($video, $request->get('url'));
+		}
+
+		if($request->input('duration')) {
+			$video->duration = $this->getDuration($video, $request->input('duration'));
+		}
+
+
 		$video->title = $request->input('title');
+		$video->details = $request->input('details');
+		$video->location = $request->input('location');
 		$video->description = $request->input('description');
 		$video->contact_id = $request->input('contact_id');
 		$video->precedent_link = $request->input('precedent_link');
+		$video->featured = $request->input('featured') ? 1 : 0;
+		$video->credit = $request->input('credit');
+		$video->notes = $request->input('notes');
+		$video->class = $request->input('class');
+		$video->priority = $request->input('priority');
+		$video->video_collection_id = $request->input('video_collection_id');
+		$video->video_shottype_id = $request->input('video_shottype_id');
+		$video->video_category_id = $request->input('video_category_id');
+		$video->priority = $request->input('priority');
 		$video->user_id = Auth::user()->id;
 		$video->state = 'new';
+
 		$video->save();
 
-		return redirect()->route('admin_video_edit', ['id' => $video->alpha_id])->with([
-			'note' => 'New Video Successfully Added!',
+		$tags = $request->input('tags');
+
+		if ($tags) {
+			$this->addUpdateVideoTags($video, $tags);
+		}
+
+		return Redirect::to('admin/videos/edit/' . $video->alpha_id )->with([
+			'note' => 'Successfully Added Video!',
 			'note_type' => 'success',
 		]);
 	}
@@ -259,7 +318,7 @@ class AdminVideosController extends Controller
 			'video_collections' => VideoCollection::all(),
 			'video_shottypes' => VideoShotType::all(),
 			'user' => Auth::user(),
-			'users' => User::all(),
+			'users' => User::where('client_id', '=', null)->get(),
 			'creators' => Contact::orderBy('created_at', 'desc')->get(),
 			'activeLicenses' => $activeLicenses,
 			'logs' => $logs

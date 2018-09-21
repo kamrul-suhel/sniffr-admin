@@ -206,7 +206,7 @@ $(document).ready(function(){
                 success: function (data) {
                     // console.log('field: '+data.field_id+' | value: '+data.field_value+' | story: '+data.story_id);
                     if(data.status=='success') {
-                        $('#asset-update-'+data.story_alpha_id).show().delay(2000).fadeOut('medium');
+                        $('#asset-update-'+data.asset_alpha_id).show().delay(2000).fadeOut('medium');
                         $('#asset-'+ data.asset_alpha_id +' .album').removeClass('danger warning', 1000);
                         if(data.field_id == 'priority') {
                             if(data.field_value == 'high'){

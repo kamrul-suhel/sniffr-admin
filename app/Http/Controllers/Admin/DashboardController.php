@@ -43,7 +43,7 @@ class DashboardController extends Controller
     public function index()
     {
         $from = request()->has('from') ? Carbon::parse(request()->get('from'))->startOfDay() : Carbon::now()->subMonths(1)->startOfDay();
-        $to = request()->has('to') ? Carbon::parse(request()->get('to'))->startOfDay() : Carbon::now()->endOfDay();
+        $to = request()->has('to') ? Carbon::parse(request()->get('to'))->endOfDay() : Carbon::now()->endOfDay();
         $rights = request()->get('rights') ?? 'ex';
 
         $allVideosStateTotal = $this->getAllVideoStatesByRights($from, $to, $rights);

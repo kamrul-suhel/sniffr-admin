@@ -45,7 +45,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Company</th>
-                    <th>Role</th>
+                    <th>System Role</th>
                     <th>Active</th>
 
                     @if(Auth::user()->isAdmin())

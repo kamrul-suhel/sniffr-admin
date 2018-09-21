@@ -147,7 +147,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('contract/{contract}/delete', 'Contract\ContractController@delete')->name('contract.delete');
     Route::resource('contract', 'Contract\ContractController');
     Route::get('contract/{type}/{id}/send', 'Contract\ContractController@send')->name('contract.send');
-    Route::get('/contract/download/{reference_id}', 'Contract\ContractController@generatePdf')->name('contract.download');
+    Route::get('/contract/download/{reference_id}/{redacted?}', 'Contract\ContractController@generatePdf')->name('contract.download');
 
     Route::get('media', 'Admin\AdminMediaController@index');
 
@@ -172,11 +172,12 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('clients/delete/{id}', array('uses' => 'Admin\AdminClientController@destroy'));
 
     Route::resource('collections', 'Admin\AdminCollectionController', ['as' => 'admin']);
-
     Route::get('contacts/autocomplete', 'Admin\AdminContactController@autocomplete')->name('contact.autocomplete');
     Route::resource('contacts', 'Admin\AdminContactController');
 
     Route::resource('users', 'Admin\AdminUsersController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
+
+    Route::resource('staff', 'Admin\AdminStaffController');
 
     Route::get('labels', 'Admin\AdminLabelController@index');
     Route::get('analyse', 'Admin\AdminLabelController@analyseVideo');

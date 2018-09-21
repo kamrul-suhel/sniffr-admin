@@ -239,7 +239,7 @@ class AdminContactController extends Controller
 
 		$queries = Contact::where('full_name', 'LIKE', '%'.$term.'%')
 			->orWhere('email', 'LIKE', '%'.$term.'%')
-			->take(10)->get();
+			->take(30)->get();
 
 		if(!count($queries)) {
 			$results[] = [ 'id' => '', 'value' => 'No results found' ];
