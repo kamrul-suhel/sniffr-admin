@@ -22,9 +22,9 @@
 
             <div class="col-sm-6 col-md-4" id="asset-{{ $asset->alpha_id }}">
                 <article class="album {{ $panelColour }}">
-                    <div class="album-story-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
-                    <div class="album-story-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
-                    @include('admin.'.$asset->getPlural().'.partials.card')
+                    <div class="album-asset-update" id="asset-update-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-up"></i></a> Updated</div>
+                    <div class="album-asset-update-error" id="asset-update-error-{{ $asset->alpha_id }}"><i class="fa fa-thumbs-down"></i></a> Something went wrong</div>
+                    @include('admin.'.str_plural($asset_type).'.partials.card')
                 </article>
             </div>
         @endforeach
@@ -33,4 +33,10 @@
 
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $asset_type }}"></modal>
     </div>
+
+    @if($assets instanceof \Illuminate\Pagination\LengthAwarePaginator )
+    <div class="text-center">
+		<?= $assets->appends(request()->except('page'))->render(); ?>
+    </div>
+    @endif
 </div>

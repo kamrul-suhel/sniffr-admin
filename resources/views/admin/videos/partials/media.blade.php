@@ -1,5 +1,13 @@
-<div class="row">
-    <div class="col-md-9">
+<div class="panel panel-primary" data-collapsed="0">
+    <div class="panel-heading">
+        <div class="panel-title">Media</div>
+
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="fa fa-angle-down"></i></a>
+        </div>
+    </div>
+
+    <div class="panel-body">
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Video Image Cover (16:9)
@@ -8,7 +16,7 @@
             <input type="file" multiple="true" class="form-control" name="image" id="image"/>
         </span>
 
-        @if($asset->image != 'placeholder.gif')
+        @if($asset && $asset->image != 'placeholder.gif')
             <img src="{{ $asset->image }}" class="video-img" width="200"/>
         @endif
 
@@ -20,7 +28,7 @@
             <input type="file" multiple="true" class="form-control" name="file" id="file"/>
         </span>
 
-        @if($asset->file)
+        @if($asset && $asset->file)
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Original
@@ -30,7 +38,7 @@
         </span>
         @endif
 
-        @if($asset->file_watermark)
+        @if($asset && $asset->file_watermark)
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Watermark
@@ -40,7 +48,7 @@
         </span>
         @endif
 
-        @if($asset->file_watermark_dirty)
+        @if($asset && $asset->file_watermark_dirty)
         <span class="form-group input-group">
             <span class="input-group-addon">
                 Dirty
@@ -56,7 +64,7 @@
             </span>
 
             <input type="text" class="form-control" name="url" id="url"
-                   @if(is_null($asset->url)) placeholder="Current video is an uploaded file" @endif value="{{ $asset->url or null }}" title="URL"/>
+                   @if($asset && is_null($asset->url)) placeholder="Current video is an uploaded file" @endif value="{{ $asset->url or null }}" title="URL"/>
         </span>
 
         <span class="form-group input-group">

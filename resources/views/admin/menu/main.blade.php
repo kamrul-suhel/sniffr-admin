@@ -19,6 +19,16 @@
             <ul>
                 @if(Auth::user()->isAdmin())
                     <li>
+                        <a href="{{ url('admin/licenses/videos?state=all&rights=ex') }}">
+                            <span class="title">Ex Submissions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('admin/licenses/videos?state=all&rights=exc') }}">
+                            <span class="title">Ex Chaser</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ url('admin/videos/categories') }}">
                             <span class="title">Video Categories</span>
                         </a>
@@ -51,19 +61,28 @@
     @endif
 
     @if(Auth::user()->isAdmin())
+        <li class="{{ Request::segment(2) == 'staff' ? 'active' : '' }}">
+            <a href="{{ url('admin/staff?type=video') }}" class="tlink">
+                <i class="fa fa-group"></i>
+                <span class="title">Video Staff</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{ url('admin/staff?type=story') }}">
+                        <span class="title">Story Staff</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
+
+    @if(Auth::user()->isAdmin())
         <li class="{{ Request::segment(2) == 'mailers' ? 'active' : '' }}">
             <a href="{{ url('admin/mailers') }}" class="tlink">
                 <i class="fa fa-envelope-open"></i>
                 <span class="title">Mailers</span>
             </a>
         </li>
-
-    <!-- <li class="{{ Request::segment(2) == 'media' ? 'active' : '' }}">
-        <a href="{{ url('admin/media') }}">
-            <i class="fa fa-picture-o"></i>
-            <span class="title">Media</span>
-        </a>
-    </li> -->
     @endif
 
     @if(auth()->user()->isAdmin())
