@@ -194,6 +194,51 @@ class AdminVideosController extends Controller
 	public function store(Request $request)
 	{
 		$video = new Video();
+
+		$tags = $request->input('tags');
+
+		if ($tags) {
+			$this->addUpdateVideoTags($video, $tags);
+		}
+
+		if ($request->hasFile('image')) {
+			$imageFile = $request->file('image');
+			$imageUrl = $this->saveImageFile($imageFile);
+			$video->image = $imageUrl;
+		}
+
+		if ($request->get('new_social_link')) {
+			$videoStats = new VideoStats();
+			$validate = $videoStats->validateUrl(request()->get('new_social_link'));
+
+			if (isset($validate->message)) {
+				return Redirect::to('admin/videos/edit/' . $request->input('id'))->with([
+					'note' => 'Url does not exist',
+					'note_type' => 'error',
+				]);
+			}
+
+			$videoSocialLink = new VideoSocialLink();
+			$videoSocialLink->create([
+				'video_id' => $video->id,
+				'platform' => 'facebook',
+				'link' => $request->get('new_social_link')
+			]);
+		}
+
+		//handle file upload to S3 and Youtube ingestion
+		if ($request->hasFile('file')) {
+			$this->videoService->saveUploadedVideoFile($video, $request->file('file'));
+		}
+
+		if ($request->get('url')) {
+			$this->videoService->saveVideoLink($video, $request->get('url'));
+		}
+
+		if($request->input('duration')) {
+			$video->duration = $this->getDuration($video, $request->input('duration'));
+		}
+
 		$video->alpha_id = VideoHelper::quickRandom();
 		$video->title = $request->input('title');
 		$video->details = $request->input('details');
