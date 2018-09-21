@@ -11,14 +11,14 @@ namespace App\Http\Controllers\Api\v1\Traits;
 
 trait AssetVideoTrait
 {
-    public function getCurrentVideo($alpha_id)
+    public function getCurrentVideo($alpha_id, $user)
     {
         $currentVideo = $this->video
             ->select($this->getVideoFieldsForFrontend())
             ->where('alpha_id', $alpha_id);
 
-        if (auth()->check()) {
-            $client_id = auth()->user()->client_id;
+        if ($user) {
+            $client_id = $user->client_id;
             $currentVideo = $currentVideo->with(['videoCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'video_id'])
                     ->where('status', 'purchased');

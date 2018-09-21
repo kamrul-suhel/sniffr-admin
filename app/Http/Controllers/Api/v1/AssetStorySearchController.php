@@ -2,10 +2,37 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\ClientMailerStory;
+use App\ClientMailerUser;
+use App\ClientMailerVideo;
+use App\Collection;
+use App\CollectionStory;
+use App\CollectionVideo;
+use App\Story;
+use App\Traits\FrontendResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AssetStorySearchController extends BaseApiController
 {
+    use FrontendResponse;
+
+    protected $collection, $collectionStory, $collectionVideo, $story, $clientMailerStory, $clientMailerUser, $clientMailerVideo;
+
+    public function __construct(Collection $collection, CollectionVideo $collectionVideo,
+                                CollectionStory $collectionStory, Story $story,
+                                ClientMailerUser $clientMailerUser, ClientMailerStory $clientMailerStory,
+                                ClientMailerVideo $clientMailerVideo)
+    {
+        $this->collection = $collection;
+        $this->collectionVideo = $collectionVideo;
+        $this->collectionStory = $collectionStory;
+        $this->story = $story;
+        $this->clientMailerStory = $clientMailerStory;
+        $this->clientMailerVideo = $clientMailerVideo;
+        $this->clientMailerUser = $clientMailerUser;
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -17,6 +44,7 @@ class AssetStorySearchController extends BaseApiController
         $searchValue = $request->search;
         $currentStoryId = $request->alpha_id;
         $settings = config('settings.site');
+        $user = $request->user('api');
 
         if ($currentStoryId) {
             $currentStory = $this->getCurrentstory($currentStoryId);
@@ -37,8 +65,8 @@ class AssetStorySearchController extends BaseApiController
             $stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
         }
 
-        if (auth()->check()) {
-            $client_id = auth()->user()->client_id;
+        if ($user) {
+            $client_id = $user->client_id;
             $stories = $stories->with(['storyCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'story_id'])->where('status', 'purchased');
                 $query->whereHas('collection', function ($query) use ($client_id) {
@@ -72,9 +100,9 @@ class AssetStorySearchController extends BaseApiController
             $data['prev_story_alpha_id'] = $previousAlphaId;
         }
 
-        if (auth()->check()) {
+        if ($user) {
             $mailers = $this->clientMailerUser
-                ->where('user_id', auth()->user()->id)
+                ->where('user_id', $user->id)
                 ->where('sent_at', ">", Carbon::now()->subDay())// 24 hours
                 ->pluck('client_mailer_id');
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Traits\FrontendResponse;
 use App\Http\Controllers\Controller;

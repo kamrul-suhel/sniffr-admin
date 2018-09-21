@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Client;
 
 use App;
+use App\Client;
 use App\ClientMailer;
 use App\Collection;
 use App\Http\Controllers\Api\v1\BaseApiController;
@@ -10,6 +11,7 @@ use App\Libraries\VideoHelper;
 use App\Services\DownloadService;
 use App\Traits\FrontendResponse;
 use App\Video;
+use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Http\Request;
 
 class ClientVideoController extends BaseApiController
@@ -166,13 +168,13 @@ class ClientVideoController extends BaseApiController
 
     public function downloadVideo($videoId)
     {
-        $video = Video::withTrashed()->find($videoId);
+        $video = Video::withTrashed()->findOrfail($videoId);
 
         if (!$video) {
             abort(404, 'Asset Not Found');
         }
 
-        $client = $this->user->client_id;
+        $client = Client::findOrFail($this->user->client_id);
         $purchases = $client->activeLicences()->get();
 
         $belongsToClient = false;

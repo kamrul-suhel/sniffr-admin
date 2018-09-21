@@ -7,6 +7,7 @@ use App\Collection;
 use App\CollectionQuote;
 use App\CollectionStory;
 use App\CollectionVideo;
+use App\Http\Requests\User\CreateUserQuoteRequest;
 use App\Libraries\VideoHelper;
 use App\Notifications\RequestQuote;
 use App\Story;
@@ -136,9 +137,9 @@ class CollectionController extends BaseApiController
     }
 
     /**
-     * Register new user, and email then set password email. Also create a new collection and link to that user
+     * @param CreateUserQuoteRequest $request
      * @param $collection_id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function registerUser(CreateUserQuoteRequest $request, $collection_id)
     {

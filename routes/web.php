@@ -219,14 +219,6 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 */
 Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
-    /*
-   |--------------------------------------------------------------------------
-   | Purchased Controller
-   |--------------------------------------------------------------------------
-   */
-    Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
-    Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
-    Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
 
 //    /*
 //    |--------------------------------------------------------------------------
@@ -253,21 +245,6 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 });
 
 
-
-/*
-|--------------------------------------------------------------------------
-| Frontend Videos Routes
-|--------------------------------------------------------------------------
-*/
-
-
-//Route::get('videos',
-//	'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class)
-//	->where('videos', 'videos')
-//	->name('videos_index');
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Payment Webhooks
@@ -276,20 +253,5 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 
 //Route::post('stripe/webhook', 'Laravel\Cashier\WebhookController@handleWebhook');
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
-
-
-Route::group(array('prefix' => 'api/v1'), function () {
-    Route::get('/', 'Api\v1\ApiController@index');
-
-    Route::get('videos', 'Api\v1\VideoController@index');
-    Route::get('video/{id}', 'Api\v1\VideoController@video');
-    Route::get('video_categories', 'Api\v1\VideoController@video_categories');
-    Route::get('video_category/{id}', 'Api\v1\VideoController@video_category');
-});
 
 //Route::fallback( '\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class);

@@ -223,6 +223,7 @@ class ClientStoryController extends BaseApiController
      * @param int $storyId
      * @param bool $download
      * @return string
+     * @throws \Exception
      */
     public function getStoryPdf(int $storyId, bool $download = true)
     {

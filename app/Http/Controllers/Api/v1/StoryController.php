@@ -33,8 +33,8 @@ class StoryController extends BaseApiController
 
     /**
      * @param Request $request
-     * @param string $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @param string $alpha_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function show(Request $request, string $alpha_id)
     {

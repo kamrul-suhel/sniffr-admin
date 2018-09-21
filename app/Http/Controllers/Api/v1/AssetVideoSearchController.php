@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\v1\Traits\AssetVideoTrait;
 use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Traits\FrontendResponse;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;
@@ -20,12 +21,12 @@ class AssetVideoSearchController extends BaseApiController
 {
     use FrontendResponse, AssetVideoTrait, VideoHelper;
 
-    protected $collection, $collectionStory, $collectionVideo, $video, $clientMailerStory, $clientMailerUser, $clientMailerVideo;
+    protected $collection, $collectionStory, $collectionVideo, $video, $clientMailerStory, $clientMailerUser, $clientMailerVideo, $user;
 
     public function __construct(Collection $collection, CollectionVideo $collectionVideo,
                                 CollectionStory $collectionStory, Video $video,
                                 ClientMailerUser $clientMailerUser, ClientMailerStory $clientMailerStory,
-                                ClientMailerVideo $clientMailerVideo)
+                                ClientMailerVideo $clientMailerVideo, User $user, Request $request)
     {
         $this->collection = $collection;
         $this->collectionVideo = $collectionVideo;
@@ -34,6 +35,7 @@ class AssetVideoSearchController extends BaseApiController
         $this->clientMailerStory = $clientMailerStory;
         $this->clientMailerVideo = $clientMailerVideo;
         $this->clientMailerUser = $clientMailerUser;
+        $this->user = $request->user('api') ? $request->user('api') : $user;
     }
 
     /**
@@ -49,10 +51,9 @@ class AssetVideoSearchController extends BaseApiController
         $currentVideoId = $request->alpha_id;
         $featured = $request->featured;
         $settings = config('settings.site');
-        $user = $request->user('api');
 
         if ($currentVideoId) {
-            $currentVideo = $this->getCurrentVideo($currentVideoId);
+            $currentVideo = $this->getCurrentVideo($currentVideoId, $this->user);
         }
 
         //Remove any exclusive based collections that have been purchased and downloaded.
@@ -113,8 +114,8 @@ class AssetVideoSearchController extends BaseApiController
 
         // If we are not searching then return all video with paginate
         if (!$currentVideoId) {
-            if ($user) {
-                $client_id = $user->client_id;
+            if ($this->user) {
+                $client_id = $this->user->client_id;
                 $videos = $videos->with(['videoCollections' => function ($query) use ($client_id) {
                     $query->select(['id', 'collection_id', 'video_id'])->where('status', 'purchased');
                     $query->whereHas('collection', function ($query) use ($client_id) {
@@ -127,8 +128,8 @@ class AssetVideoSearchController extends BaseApiController
         }
 
         // Recommended Videos via the Mailer
-        if ($user) {
-            $mailers = $this->clientMailerUser->where('user_id', $user->id)
+        if ($this->user) {
+            $mailers = $this->clientMailerUser->where('user_id', $this->user->id)
                 ->where('sent_at', ">", Carbon::now()->subDay())// 24 hours
                 ->pluck('client_mailer_id');
 

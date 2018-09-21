@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::middleware('auth:api')->get('user', 'Api\v1\UserController@index');
 
 Route::get('settings_object', 'SettingController@index')->name('setting_object');
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
@@ -24,8 +25,8 @@ Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos
 |--------------------------------------------------------------------------
 */
 
-Route::get('stories', 'Frontend\StoryController@index')->name('frontend.stories');
-Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('frontend.stories.show');
+Route::get('stories', 'Api\v1\StoryController@index')->name('frontend.stories');
+Route::get('stories/{alpha_id}', 'Api\v1\StoryController@show')->name('frontend.stories.show');
 
 
 /*
@@ -34,7 +35,7 @@ Route::get('stories/{alpha_id}', 'Frontend\StoryController@show')->name('fronten
 |--------------------------------------------------------------------------
 */
 
-Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
+Route::post('search/stories/{alpha_id?}', 'Api\v1\AssetStorySearchController@stories');
 
 
 /*
@@ -42,25 +43,34 @@ Route::post('search/stories/{alpha_id?}', 'SearchController@stories');
 | Collection Routes
 |--------------------------------------------------------------------------
 */
-Route::post('client/collections/register_user/{collection_id}', 'CollectionController@registerUser')->name('client.register_user');
+Route::post('client/collections/register_user/{collection_id}', 'Api\v1\CollectionController@registerUser')->name('client.register_user');
 Route::post('client/collections', 'Api\v1\CollectionController@store')->name('client.store');
 Route::post('client/collections/cancel_collection', 'Api\v1\CollectionController@cancelCollection')->name('client.cancel_collection');
 
 
 Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
 
-    Route::get('user', 'Api\v1\UserController@index');
+    /*
+    |--------------------------------------------------------------------------
+    | Purchased Controller
+    | No needed
+    |--------------------------------------------------------------------------
+    */
+//    Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
+//    Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
+//    Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
+
 
     /*
     |--------------------------------------------------------------------------
     | Download Videos
     |--------------------------------------------------------------------------
     */
-    Route::get('videos/{id}/download', 'Api\v1\Client\ClientVideosController@downloadVideo')->name('client.video.download');
-    Route::get('videos/purchased', 'Api\v1\Client\ClientVideosController@getPurchasedVideos')->name('client.purchased.videos');
+    Route::get('videos/{id}/download', 'Api\v1\Client\ClientVideoController@downloadVideo')->name('client.video.download');
+    Route::get('videos/purchased', 'Api\v1\Client\ClientVideoController@getPurchasedVideos')->name('client.purchased.videos');
     Route::get('videos/offered', 'Api\v1\Client\ClientVideoController@getOfferedVideos')->name('client.purchased.videos');
-    Route::get('videos', 'Frontend\Client\ClientVideosController@index')->name('client.videos');
-    Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
+    Route::get('videos', 'Api\v1\Client\ClientVideoController@index')->name('client.videos');
+    Route::get('videos/{alpha_id}', 'Api\v1\Client\ClientVideoController@show')->name('client.stories.show');
 
     /*
     |--------------------------------------------------------------------------
@@ -105,7 +115,6 @@ Route::post('password/reset/{token}', ['uses' => 'AuthController@password_reset_
 
 Route::get('password/set/{token}/{email}', ['uses' => 'AuthController@setPassword', 'as' => 'password.set_password']);
 Route::post('password/set/{token}/{email}', ['uses' => 'AuthController@setPasswordPost', 'as' => 'password.set_password_post']);
-
 
 Route::get('unsubscribe/{email}', 'ThemeContactController@index');
 Route::post('unsubscribe', 'ThemeContactController@edit');
