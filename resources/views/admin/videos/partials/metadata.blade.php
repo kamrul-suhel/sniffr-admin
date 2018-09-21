@@ -17,6 +17,35 @@
             </span>
         </div>
 
+        <div class="form-group input-group">
+            <span class="input-group-addon">Credit</span>
+            <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{ $asset->credit or old('credit') }}</textarea>
+        </div>
+
+        <div class="form-group input-group">
+            <span class="input-group-addon">Notes</span>
+            <textarea class="form-control" name="notes" id="notes" rows="4" title="notes">{{
+				$asset->notes or old('notes')
+				}}</textarea>
+        </div>
+
+        <div class="form-group">
+            <span class="input-group">
+                <span class="input-group-addon">Rights</span>
+
+                <select name="rights" class="form-control">
+                    <option value="">License</option>
+                    <option value="ex"{{ $asset && $asset->rights == 'ex' ? ' selected="selected"' : '' }}>Ex Submission</option>
+                    <option value="exc"{{ $asset && $asset->rights == 'exc' ? ' selected="selected"' : '' }}>Ex Chaser</option>
+                    <option value="excc"{{ $asset && $asset->rights == 'excc' ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>
+                    <option value="nonex"{{ $asset && $asset->rights == 'nonex' ? ' selected="selected"' : '' }}>Non Ex Submission</option>
+                    <option value="nonexc"{{ $asset && $asset->rights == 'nonexc' ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
+                </select>
+            </span>
+        </div>
+
+        <hr>
+
         <div class="form-group">
             <span class="input-group">
                 <span class="input-group-addon">
@@ -121,33 +150,6 @@
                     <option {{ ($asset && $key == $asset->class) ? 'selected': '' }} value="{{ $key }}">{{ $value['modifier'] }}:{{ $value['name'] }}</option>
                 @endforeach
             </select>
-        </div>
-
-        <div class="form-group">
-            <span class="input-group">
-                <span class="input-group-addon">Rights</span>
-
-                <select name="rights" class="form-control">
-                    <option value="">License</option>
-                    <option value="ex"{{ $asset && $asset->rights == 'ex' ? ' selected="selected"' : '' }}>Ex Submission</option>
-                    <option value="exc"{{ $asset && $asset->rights == 'exc' ? ' selected="selected"' : '' }}>Ex Chaser</option>
-                    <option value="excc"{{ $asset && $asset->rights == 'excc' ? ' selected="selected"' : '' }}>Ex Chaser Channel</option>
-                    <option value="nonex"{{ $asset && $asset->rights == 'nonex' ? ' selected="selected"' : '' }}>Non Ex Submission</option>
-                    <option value="nonexc"{{ $asset && $asset->rights == 'nonexc' ? ' selected="selected"' : '' }}>Non Ex Chaser</option>
-                </select>
-            </span>
-        </div>
-
-        <div class="form-group input-group">
-            <span class="input-group-addon">Credit</span>
-            <textarea class="form-control" name="credit" id="credit" rows="4" title="">{{ $asset->credit or old('credit') }}</textarea>
-        </div>
-
-        <div class="form-group input-group">
-            <span class="input-group-addon">Notes</span>
-            <textarea class="form-control" name="notes" id="notes" rows="4" title="notes">{{
-				$asset->notes or old('notes')
-				}}</textarea>
         </div>
 
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager')

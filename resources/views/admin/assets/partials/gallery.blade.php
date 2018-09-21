@@ -34,7 +34,9 @@
         <modal v-if="modalVisible" @close="closeModal" asset-type="{{ $asset_type }}"></modal>
     </div>
 
+    @if($assets instanceof \Illuminate\Pagination\LengthAwarePaginator )
     <div class="text-center">
 		<?= $assets->appends(request()->except('page'))->render(); ?>
     </div>
+    @endif
 </div>

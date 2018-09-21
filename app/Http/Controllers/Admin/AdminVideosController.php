@@ -196,16 +196,27 @@ class AdminVideosController extends Controller
 		$video = new Video();
 		$video->alpha_id = VideoHelper::quickRandom();
 		$video->title = $request->input('title');
+		$video->details = $request->input('details');
+		$video->location = $request->input('location');
 		$video->description = $request->input('description');
 		$video->contact_id = $request->input('contact_id');
 		$video->precedent_link = $request->input('precedent_link');
+		$video->featured = $request->input('featured') ? 1 : 0;
+		$video->credit = $request->input('credit');
+		$video->notes = $request->input('notes');
+		$video->class = $request->input('class');
+		$video->priority = $request->input('priority');
+		$video->video_collection_id = $request->input('video_collection_id');
+		$video->video_shottype_id = $request->input('video_shottype_id');
+		$video->video_category_id = $request->input('video_category_id');
 		$video->user_id = Auth::user()->id;
 		$video->state = 'new';
+
 		$video->save();
 
-		return redirect('/admin/licenses/videos?state=new')->with([
-			'note' => 'New Video Successfully Added!',
-			'note_type' => 'success'
+		return Redirect::to('admin/videos/edit/' . $video->	alpha_id )->with([
+			'note' => 'Successfully Added Video!',
+			'note_type' => 'success',
 		]);
 	}
 
