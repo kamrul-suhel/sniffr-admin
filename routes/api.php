@@ -95,6 +95,14 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     Route::post('collections/accept_collection_quote/{collection_id}/{quote_id}', 'Api\v1\CollectionController@acceptCollectionQuote')->name('client.accept_collection_quote');
     Route::post('collections/request_quote/{type}/{collection_video_id}', 'Api\v1\CollectionController@requestQuote')->name('client.request_quote');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Account and Profile Management
+    |--------------------------------------------------------------------------
+    */
+    Route::get('profile', 'Api\v1\Client\ClientAccountController@myAccount')->name('client.profile.edit');
+    Route::post('profile/{client}', 'Api\v1\Client\ClientAccountController@update')->name('client.update');
+    Route::resource('profile/{slug}/users', 'Api\v1\Client\ClientUserController', ['as' => 'client.profile']);
 });
 
 

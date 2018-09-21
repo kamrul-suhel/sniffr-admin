@@ -232,16 +232,6 @@ Route::group(['middleware' => ['client'], 'prefix' => 'client'], function () {
 //    Route::get('videos/{alpha_id}', 'Frontend\Client\ClientVideosController@show')->name('client.stories.show');
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Account and Profile Management
-    |--------------------------------------------------------------------------
-    */
-    Route::get('profile', 'Client\ClientAccountController@myAccount')->name('client.profile.edit');
-    Route::post('profile/{client}', 'Client\ClientAccountController@update')->name('client.update');
-    Route::resource('profile/{slug}/users', 'Client\ClientUserController', ['as' => 'client.profile']);
-
-
 });
 
 
