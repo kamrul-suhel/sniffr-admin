@@ -194,6 +194,7 @@ class AdminVideosController extends Controller
 	public function store(Request $request)
 	{
 		$video = new Video();
+		$video->alpha_id = VideoHelper::quickRandom();
 
 		$tags = $request->input('tags');
 
@@ -239,7 +240,7 @@ class AdminVideosController extends Controller
 			$video->duration = $this->getDuration($video, $request->input('duration'));
 		}
 
-		$video->alpha_id = VideoHelper::quickRandom();
+
 		$video->title = $request->input('title');
 		$video->details = $request->input('details');
 		$video->location = $request->input('location');
