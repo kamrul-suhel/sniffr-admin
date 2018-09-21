@@ -2,19 +2,7 @@
 
 \TalvBansal\MediaManager\Routes\MediaRoutes::get();
 
-//Route::get('dm', function(){
-//	//$dmResponse = Twitter::postDm(array('screen_name' => 'ianlainchbury', 'text' => 'DM Test', 'format' => 'json'));
-//	$dmResponse = Twitter::postDm(array('screen_name' => 'ianlainchbury', 'text' => 'DM Test', 'format' => 'json'));
-//
-//	dd($dmResponse);
-//});
-
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
-
-//	Route::get(
-//		'/',
-//		'\\'.Pallares\LaravelNuxt\Controllers\NuxtController::class
-//	)->where('/', '/');
 
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');

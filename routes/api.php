@@ -15,11 +15,13 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('user', 'Api\v1\UserController@index');
 
-Route::get('settings_object', 'SettingController@index')->name('setting_object');
+Route::get('settings_object', 'Api\v1\SettingController@index')->name('api.setting_object');
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
 Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos.show');
 
 Route::post('upload', 'Api\v1\VideoController@store')->name('videos_store');
+Route::get('details/{code}', 'Api\v1\DetailController@show')->name('api.details.show');
+Route::post('details/{code}', 'Api\v1\DetailController@store')->name('api.details.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +29,8 @@ Route::post('upload', 'Api\v1\VideoController@store')->name('videos_store');
 |--------------------------------------------------------------------------
 */
 
-Route::get('stories', 'Api\v1\StoryController@index')->name('frontend.stories');
-Route::get('stories/{alpha_id}', 'Api\v1\StoryController@show')->name('frontend.stories.show');
+Route::get('stories', 'Api\v1\StoryController@index')->name('api.stories');
+Route::get('stories/{alpha_id}', 'Api\v1\StoryController@show')->name('api.stories.show');
 
 
 /*
@@ -48,7 +50,6 @@ Route::post('search/stories/{alpha_id?}', 'Api\v1\AssetStorySearchController@sto
 Route::post('client/collections/register_user/{collection_id}', 'Api\v1\CollectionController@registerUser')->name('client.register_user');
 Route::post('client/collections', 'Api\v1\CollectionController@store')->name('client.store');
 Route::post('client/collections/cancel_collection', 'Api\v1\CollectionController@cancelCollection')->name('client.cancel_collection');
-
 
 Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
 

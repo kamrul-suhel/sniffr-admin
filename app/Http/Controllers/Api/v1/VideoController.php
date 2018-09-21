@@ -7,6 +7,7 @@ use App\Http\Requests\Video\CreateVideoRequest;
 use App\Jobs\QueueEmail;
 use App\Libraries\VideoHelper;
 use App\Notifications\SubmissionNew;
+use App\Services\VideoService;
 use App\Traits\FrontendResponse;
 use App\User;
 use Illuminate\Http\Request;
@@ -25,6 +26,32 @@ class VideoController extends BaseApiController {
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
 
 	private $default_limit = 50;
+
+    /**
+     * @var VideoService
+     */
+    private $videoService;
+
+    /**
+     * @var []
+     */
+    private $data;
+
+    /**
+     * VideoController constructor.
+     * @param \App\Services\VideoService $videoService
+     */
+    public function __construct(VideoService $videoService)
+    {
+        //TODO: Remove pages?
+        $this->data = [
+            'user' => Auth::user(),
+            'theme_settings' => config('settings.theme'),
+            'video_categories' => VideoCategory::all(),
+        ];
+
+        $this->videoService = $videoService;
+    }
 
     /**
      * @return \Illuminate\Http\JsonResponse
