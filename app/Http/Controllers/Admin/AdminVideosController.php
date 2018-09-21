@@ -196,12 +196,6 @@ class AdminVideosController extends Controller
 		$video = new Video();
 		$video->alpha_id = VideoHelper::quickRandom();
 
-		$tags = $request->input('tags');
-
-		if ($tags) {
-			$this->addUpdateVideoTags($video, $tags);
-		}
-
 		if ($request->hasFile('image')) {
 			$imageFile = $request->file('image');
 			$imageUrl = $this->saveImageFile($imageFile);
@@ -255,12 +249,19 @@ class AdminVideosController extends Controller
 		$video->video_collection_id = $request->input('video_collection_id');
 		$video->video_shottype_id = $request->input('video_shottype_id');
 		$video->video_category_id = $request->input('video_category_id');
+		$video->priority = $request->input('priority');
 		$video->user_id = Auth::user()->id;
 		$video->state = 'new';
 
 		$video->save();
 
-		return Redirect::to('admin/videos/edit/' . $video->	alpha_id )->with([
+		$tags = $request->input('tags');
+
+		if ($tags) {
+			$this->addUpdateVideoTags($video, $tags);
+		}
+
+		return Redirect::to('admin/videos/edit/' . $video->alpha_id )->with([
 			'note' => 'Successfully Added Video!',
 			'note_type' => 'success',
 		]);
