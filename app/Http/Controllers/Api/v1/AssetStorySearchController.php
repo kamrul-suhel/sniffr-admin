@@ -13,24 +13,13 @@ use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class AssetStorySearchController extends BaseApiController
+class AssetStorySearchController extends AssetBaseStoryVideoController
 {
     use FrontendResponse;
 
-    protected $collection, $collectionStory, $collectionVideo, $story, $clientMailerStory, $clientMailerUser, $clientMailerVideo;
-
-    public function __construct(Collection $collection, CollectionVideo $collectionVideo,
-                                CollectionStory $collectionStory, Story $story,
-                                ClientMailerUser $clientMailerUser, ClientMailerStory $clientMailerStory,
-                                ClientMailerVideo $clientMailerVideo)
+    public function __construct()
     {
-        $this->collection = $collection;
-        $this->collectionVideo = $collectionVideo;
-        $this->collectionStory = $collectionStory;
-        $this->story = $story;
-        $this->clientMailerStory = $clientMailerStory;
-        $this->clientMailerVideo = $clientMailerVideo;
-        $this->clientMailerUser = $clientMailerUser;
+        Parent::__construct();
     }
 
     /**

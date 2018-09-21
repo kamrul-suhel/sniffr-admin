@@ -12,30 +12,16 @@ use App\Http\Controllers\Api\v1\Traits\AssetVideoTrait;
 use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Traits\FrontendResponse;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Video;
 
-class AssetVideoSearchController extends BaseApiController
+class AssetVideoSearchController extends AssetBaseStoryVideoController
 {
     use FrontendResponse, AssetVideoTrait, VideoHelper;
 
-    protected $collection, $collectionStory, $collectionVideo, $video, $clientMailerStory, $clientMailerUser, $clientMailerVideo, $user;
-
-    public function __construct(Collection $collection, CollectionVideo $collectionVideo,
-                                CollectionStory $collectionStory, Video $video,
-                                ClientMailerUser $clientMailerUser, ClientMailerStory $clientMailerStory,
-                                ClientMailerVideo $clientMailerVideo, User $user, Request $request)
+    public function __construct()
     {
-        $this->collection = $collection;
-        $this->collectionVideo = $collectionVideo;
-        $this->collectionStory = $collectionStory;
-        $this->video = $video;
-        $this->clientMailerStory = $clientMailerStory;
-        $this->clientMailerVideo = $clientMailerVideo;
-        $this->clientMailerUser = $clientMailerUser;
-        $this->user = $request->user('api') ? $request->user('api') : $user;
+        Parent::__construct();
     }
 
     /**
