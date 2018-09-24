@@ -55,11 +55,7 @@ class AuthController extends Controller
      */
     public function login_form(Request $request)
     {
-        if (Auth::guest()) {
-            return redirect('/');
-        }
-
-        return redirect('/admin');
+        return $this->getFrontendServerResponse($request);
     }
 
     /**
