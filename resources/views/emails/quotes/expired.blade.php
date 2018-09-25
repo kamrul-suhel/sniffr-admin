@@ -40,9 +40,9 @@
             <br>
             <hr>
             <p>
-                You can license the item again (if available) <a href="{{ url('client/'.str_plural($data['type']).'/'.$data['collectionAsset']->{$data['type']}->alpha_id) }}">here</a>.
+                You can license the item again (if available) <a href="{{ url(env('FRONTEND_URL').'/client/'.str_plural($data['type']).'/'.$data['collectionAsset']->{$data['type']}->alpha_id) }}">here</a>.
                 <br><br>
-                We have new media coming in everyday! Check out our <a href="{{ url('videos') }}">Videos</a> and <a href="{{ url('stories') }}">Stories</a> now!
+                We have new media coming in everyday! Check out our <a href="{{ url(env('FRONTEND_URL').'/videos') }}">Videos</a> and <a href="{{ url(env('FRONTEND_URL').'/stories') }}">Stories</a> now!
             </p>
             <hr>
         </div>

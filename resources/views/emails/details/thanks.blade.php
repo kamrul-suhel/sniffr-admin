@@ -23,7 +23,7 @@
 
 <div>&nbsp;</div>
 
-<div>If you would like to submit any more content to us, you can do so by following this link: <a href="{{ url('/upload/') }}">{{ url('/upload/') }}</a></div>
+<div>If you would like to submit any more content to us, you can do so by following this link: <a href="{{ url(env('FRONTEND_URL').'/upload/') }}">{{ url(env('FRONTEND_URL').'/upload/') }}</a></div>
 
 <div>&nbsp;</div>
 
