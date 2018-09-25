@@ -9,7 +9,7 @@ Hi,
 
         @if($story['thumb'])IMG: {{ $story['thumb'] }} @endif
         {{ TextHelper::shorten($story['excerpt'], 250) }}
-        VIEW STORY: {{ url('client/story/show/'.$story['alpha_id']) }}
+        VIEW STORY: {{ url(env('FRONTEND_URL').'/client/story/show/'.$story['alpha_id']) }}
         --------
 
     @endforeach
@@ -21,7 +21,7 @@ Hi,
 
         @if($video['image'])IMG: {{ $video['image'] }} @endif
         {{ TextHelper::shorten($video['description'], 250) }}
-        VIEW STORY: {{ url('client/video/show/'.$video['alpha_id']) }}
+        VIEW STORY: {{ url(env('FRONTEND_URL').'/client/video/show/'.$video['alpha_id']) }}
         --------
 
     @endforeach

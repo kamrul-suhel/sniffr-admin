@@ -89,7 +89,7 @@
             <br>
 
             <p>
-                <a class="pull-right" href="{{ url('/client/profile') }}"
+                <a class="pull-right" href="{{ url(env('FRONTEND_URL').'/client/profile') }}"
                    style="background:#000;color:#fff;padding:10px 8px;border-radius:5px;font-weight:bold;">
                     Account Settings
                 </a>

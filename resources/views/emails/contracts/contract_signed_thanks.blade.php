@@ -14,7 +14,7 @@
 
     <div>&nbsp;</div>
 
-    <div><a href="{{ route('contract.download.public', ['id' => $asset->contracts->first()->reference_id]) }}">{{ url('download/contract/'.$asset->contracts->first()->reference_id) }}</a></div>
+    <div><a href="{{ url(env('FRONTEND_URL').'/contract/download/'.$asset->contracts->first()->reference_id) }}">{{ url(env('FRONTEND_URL').'/download/contract/'.$asset->contracts->first()->reference_id) }}</a></div>
 
     <div>&nbsp;</div>
 

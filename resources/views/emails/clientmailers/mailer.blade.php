@@ -8,7 +8,7 @@
         <hr>
         <h2>Stories</h2>
         <p>
-            <a href="{{ url('/client/stories') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">
+            <a href="{{ url(env('FRONTEND_URL').'/client/stories') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">
                 Checkout all your stories here
             </a>
         </p>
@@ -20,7 +20,7 @@
         <hr>
         <h2>Videos</h2>
         <p>
-            <a href="{{ url('/client/videos') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">
+            <a href="{{ url(env('FRONTEND_URL').'/client/videos') }}" style="display:block;color:#000;text-decoration:underline;margin-bottom:15px;">
                 Checkout all your videos here
             </a>
         </p>
@@ -31,6 +31,6 @@
         <strong>No Stories or Videos have been selected</strong>
     @endif
 
-    <img src="{{ url('/downloaded/track/'.$mailer->id.'/'.$user->id.'/') }}">
+    <img src="{{ url(env('FRONTEND_URL').'/downloaded/track/'.$mailer->id.'/'.$user->id.'/') }}">
 
 @endsection

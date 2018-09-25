@@ -21,7 +21,7 @@
                         <tr>
                             <td style="border-radius: 50px; background: #ffffff; text-align: center;"
                                 class="button-td">
-                                <a href="{{ url('videos') }}"
+                                <a href="{{ url(env('FRONTEND_URL').'/videos') }}"
                                    style="background: #ffffff; border: 15px solid #ffffff; font-family: 'Montserrat', sans-serif; font-size: 14px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 50px; font-weight: bold;"
                                    class="button-a">
                                     <span style="color:#26a4d3;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Back To Sniffr&nbsp;&nbsp;&nbsp;&nbsp;</span>

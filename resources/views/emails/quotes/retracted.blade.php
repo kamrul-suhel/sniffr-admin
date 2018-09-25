@@ -68,8 +68,8 @@
 
             <p>
                 <br><br>
-                Rest assured we have many more <a href="{{ url('videos') }}">Videos</a> and <a
-                        href="{{ url('stories') }}">Stories</a> for you!
+                Rest assured we have many more <a href="{{ url(env('FRONTEND_URL').'/videos') }}">Videos</a> and <a
+                        href="{{ url(env('FRONTEND_URL').'/stories') }}">Stories</a> for you!
             </p>
 
             <hr>
