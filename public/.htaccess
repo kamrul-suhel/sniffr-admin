@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
@@ -15,7 +18,7 @@
 
     <FilesMatch "\.env">
         Order deny,allow
-        Deny from all
+        Deny from alls
     </FilesMatch>
 
 </IfModule>
