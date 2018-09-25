@@ -65,6 +65,14 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
 
 
     /*
+    |----------------------------------------------------------------------
+    |   Remove oauth_access_token from database for current user
+    |----------------------------------------------------------------------
+     */
+    Route::get('token/id', 'Api\v1\UserController@getAccessTokenId');
+
+
+    /*
     |--------------------------------------------------------------------------
     | Download Videos
     |--------------------------------------------------------------------------

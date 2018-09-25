@@ -8,7 +8,7 @@ import 'babel-polyfill';
 
 window.axios = require('axios');
 window.Vue = require('vue');
-window.Vuetify = require('Vuetify');
+window.Vuetify = require('vuetify');
 
 import $ from "jquery";
 
