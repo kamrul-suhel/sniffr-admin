@@ -30,7 +30,7 @@ const mutations = {
 const actions = {
     getVideoNextAndPrevLink({commit, state}, payload) {
         return new Promise(function (resolve, reject) {
-            let url = '/search/videos/'+payload.alpha_id;
+            let url = '/api/search/videos/'+payload.alpha_id;
 
             axios.post(url)
                 .then((response) => {

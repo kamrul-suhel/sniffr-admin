@@ -139,4 +139,27 @@ class AssetVideoSearchController extends AssetBaseStoryVideoController
         $data['mailerVideos'] = $mailerVideos;
         return $this->successResponse($data);
     }
+
+    private function getCurrentVideo($alpha_id)
+    {
+        $currentVideo = $this->video
+            ->select($this->getVideoFieldsForFrontend())
+            ->where('alpha_id', $alpha_id);
+
+        if (auth()->check()) {
+            $client_id = auth()->user()->client_id;
+            $currentVideo = $currentVideo->with(['videoCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'video_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentVideo = $currentVideo->with('tags')
+            ->first();
+        $currentVideo->iframe = $this->getVideoHtml($currentVideo, true);
+        return $currentVideo;
+    }
 }

@@ -112,4 +112,27 @@ class AssetStorySearchController extends AssetBaseStoryVideoController
 
         return $this->successResponse($data);
     }
+
+    private function getCurrentStory($alpha_id)
+    {
+        $currentStory = $this->story
+            ->select($this->getAssetStoryFieldsForFrontend())
+            ->where('alpha_id', $alpha_id)
+            ->with('assets');
+
+        if (auth()->user()) {
+            $client_id = auth()->user()->client_id;
+            $currentStory = $currentStory->with(['storyCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'story_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentStory = $currentStory
+            ->first();
+        return $currentStory;
+    }
 }
