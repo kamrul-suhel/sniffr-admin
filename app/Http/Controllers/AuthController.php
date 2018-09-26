@@ -150,9 +150,9 @@ class AuthController extends Controller
     {
         $credentials = ['email' => $request->input('email')];
 
-        $response = Password::sendResetLink($credentials, function ($message) {
-            $message->subject('Password Reset Info');
-        });
+        config()->set('app.url', env('FRONTEND_URL'));
+        $response = Password::sendResetLink($credentials);
+        config()->set('app.url', env('APP_URL'));
 
         switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:
