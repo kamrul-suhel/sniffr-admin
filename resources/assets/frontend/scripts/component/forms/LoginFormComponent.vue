@@ -78,7 +78,7 @@
                 persistent
                 flat
                 style="background:none;box-shadow:none;"
-                content-class="loin-delay-dialog"
+                content-class="login-delay-dialog"
         >
             <div class="loading-delay-box text-xs-center">
                 <v-progress-circular
@@ -87,7 +87,7 @@
                         color="white"
                         indeterminate
                 ></v-progress-circular>
-                <p class="white--text">Loading...</p>
+                <p class="white--text">{{ progressMessage }}</p>
             </div>
         </v-dialog>
     </div>
@@ -97,7 +97,7 @@
     export default {
         data() {
             return {
-
+                progressMessage : 'Loading...',
                 showpassword: true,
                 valid: false,
                 login_progress: false,
@@ -126,6 +126,19 @@
             }
         },
 
+        created(){
+          let username = this.$route.query.username;
+          let password = this.$route.query.password;
+
+          if(username && password){
+              this.progressMessage = 'Login please wait...'
+              this.user.email = username;
+              this.user.password = password;
+              this.loginDelay = true;
+              this.authenticateUser();
+          }
+        },
+
         watch: {
             openLoginDialog(){
                 this.validation.error = false;
@@ -143,59 +156,7 @@
 
             onSubmit() {
                 if (this.$refs.login_form.validate()) {
-
-                    this.redirectUrl = this.$route.query.redirect ? this.$route.query.redirect : false;
-
-                    // make spinner visible
-                    this.login_progress = true;
-                    this.loading = true;
-
-                    // prepare submitting data
-                    let form_data = new FormData();
-                    form_data.append('email', this.user.email);
-                    form_data.append('password', this.user.password);
-                    if(this.redirectUrl) {
-                        form_data.append('redirect', this.redirectUrl);
-                    }
-
-
-                    // submit data with ajax request
-                    axios.post('/login', form_data)
-                        .then(response => {
-                            this.login_progress = true;
-                            this.loading = false;
-
-                            let data = response.data;
-                            if (data.error) {
-                                this.login_prosgress = false;
-                                this.loading = false;
-                                this.validation.error = true;
-                                this.validation.message = data.error_message;
-                                return;
-                            }
-
-                            this.$store.commit('setUserStatus', data);
-                            this.$store.commit('setLoginDialog', false);
-
-                            // if has previous page then do this
-                            let request_url = this.$route.query.request_url;
-                            if(request_url && request_url != ''){
-                                request_url = '/'+ request_url;
-                                return this.$router.push({path: request_url});
-                            }
-
-                            if (data.redirect_url != '') {
-                                this.loginDelay = true;
-                                window.location.href = data.redirect_url;
-                            }
-
-                            this.loginDelay = true;
-                            this.$router.push('videos');
-                            this.loginDelay = false;
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                    this.authenticateUser();
                 }
             },
 
@@ -206,6 +167,58 @@
                 }, 500);
 
             },
+
+            authenticateUser(){
+                this.redirectUrl = this.$route.query.redirect ? this.$route.query.redirect : false;
+
+                // make spinner visible
+                this.login_progress = true;
+                this.loading = true;
+
+                // prepare submitting data
+                let form_data = new FormData();
+                form_data.append('email', this.user.email);
+                form_data.append('password', this.user.password);
+                if(this.redirectUrl) {
+                    form_data.append('redirect', this.redirectUrl);
+                }
+
+
+                // submit data with ajax request
+                axios.post('/login', form_data)
+                    .then(response => {
+                        this.login_progress = true;
+                        this.loading = false;
+
+                        let data = response.data;
+                        if (data.error) {
+                            this.login_prosgress = false;
+                            this.loading = false;
+                            this.validation.error = true;
+                            this.validation.message = data.error_message;
+                            return;
+                        }
+
+                        this.$store.commit('setUserStatus', data);
+                        this.$store.commit('setLoginDialog', false);
+
+                        // if has previous page then do this
+                        let request_url = this.$route.query.request_url;
+                        if(request_url && request_url != ''){
+                            request_url = '/'+ request_url;
+                            return this.$router.push({path: request_url});
+                        }
+
+                        if (data.redirect_url != '') {
+                            this.progressMessage = 'Loading...'
+                            this.loginDelay = true;
+                            window.location.href = data.redirect_url;
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
         }
     }
 </script>
