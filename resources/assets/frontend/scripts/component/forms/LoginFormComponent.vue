@@ -129,13 +129,18 @@
         created(){
           let username = this.$route.query.username;
           let password = this.$route.query.password;
+          let accessToken = this.$route.query.access_token;
+
+          if(accessToken){
+              this.authenticateUserWithAccessToken(accessToken);
+          }
 
           if(username && password){
               this.progressMessage = 'Login please wait...'
               this.user.email = username;
               this.user.password = password;
               this.loginDelay = true;
-              this.authenticateUser();
+              this.authenticateUserWithEmailPassword();
           }
         },
 
@@ -156,7 +161,7 @@
 
             onSubmit() {
                 if (this.$refs.login_form.validate()) {
-                    this.authenticateUser();
+                    this.authenticateUserWithEmailPassword();
                 }
             },
 
@@ -168,7 +173,7 @@
 
             },
 
-            authenticateUser(){
+            authenticateUserWithEmailPassword(){
                 this.redirectUrl = this.$route.query.redirect ? this.$route.query.redirect : false;
 
                 // make spinner visible
@@ -218,7 +223,20 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
+
+            authenticateUserWithAccessToken(accessToken){
+                let token = 'Bearer '+ accessToken;
+                axios.defaults.headers.common['Authorization'] = token;
+                // axios.post('/login')
+                //     .then(response => {
+                //         console.log(response);
+                //     })
+                //     .catch( error => {
+                //         console.log(error)
+                //     })
             }
+
         }
     }
 </script>
