@@ -29,9 +29,12 @@ class UserController extends Controller
 
     public function getAccessTokenId (){
         $user = auth()->user();
-        $data = [
-            'id' => $user->token()->id
-        ];
+        $accessTokens = DB::table('oauth_access_tokens')->where('id', $user->token()->id)->get();
+        return $this->successResponse($accessTokens);
+    }
+
+    public function destroyAccessTokenId (){
+        $user = auth()->user();
         $accessTokens = DB::table('oauth_access_tokens')->where('id', $user->token()->id)->get();
 
         if($accessTokens){
