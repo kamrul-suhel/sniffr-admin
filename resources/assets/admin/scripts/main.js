@@ -44,7 +44,7 @@ import MailerStoriesComponent from './pages/mailer/MailerComponent'
  * Filter library
  ********************************************************
  */
-require('../../../nuxt/plugins/filters/filters');
+require('../../frontend/scripts/filters/filters');
 
 /*
  ********************************************************

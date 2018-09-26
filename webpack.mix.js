@@ -21,6 +21,12 @@ mix.js(['resources/assets/admin/js/app.js',
         processCssUrls: false
     });
 
+mix.sass('resources/assets/frontend/scss/styles.scss',
+    'public/assets/frontend/css/styles.css'
+).options({
+    processCssUrls: false
+});
+
 mix.sass('resources/assets/scss/admin.scss',
     'public/assets/admin/css/mailer-admin.css'
 ).options({
@@ -58,10 +64,7 @@ if (!mix.inProduction()) {
 */
 
 //Copying file from resource folder to public
-mix.copy(
-    'resources/nuxt/assets/images',
-    'public/assets/images'
-);
+
 
 mix.copy(
     'node_modules/tinymce/',
@@ -78,17 +81,7 @@ mix.copy(
     'public/assets/scripts/'
 );
 
-// Placeholder image
-mix.copy(
-    'resources/nuxt/assets/images/placeholder.png',
-    'public/placeholder.gif'
-);
 
-// Favicon icon
-mix.copy(
-    'resources/nuxt/static/favicon.ico',
-    'public/favicon.ico'
-);
 
 /*
 * *********************************************
@@ -100,7 +93,7 @@ mix.copy(
         // 'resources/assets/talvbansal/media-manager/fonts',
         'node_modules/bootstrap/fonts',
         'node_modules/font-awesome/fonts',
-        'resources/nuxt/assets/fonts'
+        'frontend/assets/fonts'
     ],
     'public/assets/fonts/'
 );
