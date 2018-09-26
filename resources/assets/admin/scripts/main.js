@@ -91,7 +91,7 @@ new Vue({
 
     created() {
         // initialize code go here before load any of component. like user, settings
-        axios.get('/settings_object')
+        axios.get('/api/settings_object')
             .then(response => {
                 this.$store.commit('setUserStatus', response.data.sniffr_app);
             })

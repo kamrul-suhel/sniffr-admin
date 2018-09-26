@@ -99,7 +99,7 @@
 
         methods: {
             getStoriesData(queryObject = {page: 1, searchTerm: ''}) {
-                let url = '/search/stories';
+                let url = '/api/search/stories';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
                 }

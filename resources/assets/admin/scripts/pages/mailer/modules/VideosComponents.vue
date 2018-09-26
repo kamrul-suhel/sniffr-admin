@@ -90,7 +90,7 @@
 
         methods: {
             getVideosData(queryObject = null) {
-                let url = '/search/videos';
+                let url = '/api/search/videos';
                 if (queryObject.page != null) {
                     url += '?page=' + queryObject.page;
                 }
