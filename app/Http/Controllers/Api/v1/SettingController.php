@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Traits\FrontendResponse;
 
 class SettingController extends BaseApiController
 {
-    use FrontendResponse;
     //
     public function index(){
         $settings['public'] = config('settings.public');

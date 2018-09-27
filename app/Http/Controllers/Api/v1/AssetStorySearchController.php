@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 
 class AssetStorySearchController extends AssetBaseStoryVideoController
 {
-    use FrontendResponse;
 
     public function __construct()
     {
@@ -120,8 +119,8 @@ class AssetStorySearchController extends AssetBaseStoryVideoController
             ->where('alpha_id', $alpha_id)
             ->with('assets');
 
-        if (auth()->user()) {
-            $client_id = auth()->user()->client_id;
+        if ($this->user) {
+            $client_id = $this->user->client_id;
             $currentStory = $currentStory->with(['storyCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'story_id'])
                     ->where('status', 'purchased');

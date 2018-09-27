@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Traits\FrontendResponse;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class UserController extends BaseApiController
 {
-    use FrontendResponse;
 
     /**
      * @return \Illuminate\Http\JsonResponse
@@ -27,12 +24,19 @@ class UserController extends Controller
         return $this->successResponse($settings);
     }
 
+    /**
+     * @return mixed
+     */
     public function getAccessTokenId (){
         $user = auth()->user();
         $accessTokens = DB::table('oauth_access_tokens')->where('id', $user->token()->id)->get();
         return $this->successResponse($accessTokens);
     }
 
+
+    /**
+     * @return mixed
+     */
     public function destroyAccessTokenId (){
         $user = auth()->user();
         $accessTokens = DB::table('oauth_access_tokens')->where('id', $user->token()->id)->get();

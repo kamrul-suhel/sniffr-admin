@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
 use App\ClientMailerOpen;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class MailerController extends Controller
 {
-
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http|\Illuminate\View\View
@@ -31,5 +30,4 @@ class MailerController extends Controller
         header('Content-Type: image/png');
         return base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=');
     }
-
 }

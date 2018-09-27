@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Http\Controllers\Api\v1\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;

@@ -38,8 +38,16 @@ Route::get('stories/{alpha_id}', 'Api\v1\StoryController@show')->name('api.stori
 | Frontend Search video/story dialogs box, getting current video, next & previous link
 |--------------------------------------------------------------------------
 */
-
 Route::post('search/stories/{alpha_id?}', 'Api\v1\AssetStorySearchController@stories');
+
+
+/*
+|--------------------------------------------------------------------------
+| Mailer route
+|--------------------------------------------------------------------------
+*/
+Route::get('downloaded/track/{mailer_id}/{client_id}', 'Api\v1\MailerController@store')->name('mailer_track_store');
+
 
 
 /*
@@ -141,11 +149,6 @@ Route::post('unsubscribe', 'ThemeContactController@edit');
 
 Route::get('logout', 'AuthController@logout')->name('auth.logout');
 
-Route::get('upload_dir', function () {
-    echo Config::get('site.uploads_dir');
-});
 
-Route::get('terms', 'ThemeTermsController@index');
-
-Route::get('contract/{token}/accept', 'Contract\ContractController@accept')->name('contract.accept');
-Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('contract.sign');
+Route::get('contract/{token}/accept', 'Api\v1\Contract\ContractController@accept')->name('contract.accept');
+Route::post('contract/{token}/sign', 'Api\v1\Contract\ContractController@sign')->name('contract.sign');

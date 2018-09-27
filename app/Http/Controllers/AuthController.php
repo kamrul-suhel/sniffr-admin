@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\ForgotPasswordRequest;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClientPasswordUpdated;
 use App\User;
-use App\Traits\FrontendResponse;
 use Auth;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Password;

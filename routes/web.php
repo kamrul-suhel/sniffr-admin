@@ -6,9 +6,7 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
     Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
-    Route::get('upload_video', 'Frontend\VideoController@upload')->name('upload')->name('videos_upload');
     // TODO: remove this form route
-    Route::get('upload/form', 'Frontend\VideoController@form')->name('videos_upload_form');
     Route::post('issue', 'Frontend\VideoController@issueAlert');
     Route::post('videocheck', 'Frontend\VideoController@videoCheck');
     Route::get('details/{code}', 'DetailsController@show')->name('details_show');
@@ -16,7 +14,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
     // TODO: remove this form route
     Route::get('details/form/{code}', 'DetailsController@form')->name('details_form');
 
-    Route::get('downloaded/track/{mailer_id}/{client_id}', 'Frontend\MailerController@store')->name('mailer_track_store');
 
     Route::get('tags', 'ThemeTagController@index');
 
@@ -68,7 +65,6 @@ Route::get('upload_dir', function () {
     echo Config::get('site.uploads_dir');
 });
 
-Route::get('terms', 'ThemeTermsController@index');
 
 Route::get('contract/{token}/accept', 'Contract\ContractController@accept')->name('contract.accept');
 Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('contract.sign');

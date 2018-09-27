@@ -3,50 +3,24 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Client;
-use App\Collection;
 use App\CollectionQuote;
-use App\CollectionStory;
 use App\CollectionVideo;
 use App\Http\Requests\User\CreateUserQuoteRequest;
 use App\Libraries\VideoHelper;
 use App\Notifications\RequestQuote;
-use App\Story;
-use App\Traits\FrontendResponse;
 use App\Traits\Slug;
-use App\User;
 use App\Video;
 use Illuminate\Http\Request;
 
-class CollectionController extends BaseApiController
+class CollectionController extends AssetBaseStoryVideoController
 {
 
-    use Slug, VideoHelper, FrontendResponse;
+    use Slug, VideoHelper;
 
-    protected $collection, $collectionVideo, $collectionStory, $collectionQuote, $video, $story, $client, $user;
 
-    /**
-     * CollectionController constructor.
-     * @param Collection $collection
-     * @param CollectionVideo $collectionVideo
-     * @param CollectionStory $collectionStory
-     * @param CollectionQuote $collectionQuote
-     * @param Video $video
-     * @param Story $story
-     * @param Client $client
-     * @param Request $request
-     */
-    public function __construct(
-        Collection $collection, CollectionVideo $collectionVideo, CollectionStory $collectionStory,
-        CollectionQuote $collectionQuote, Video $video, Story $story, Client $client, Request $request, User $user)
+    public function __construct()
     {
-        $this->collection = $collection;
-        $this->collectionVideo = $collectionVideo;
-        $this->collectionStory = $collectionStory;
-        $this->collectionQuote = $collectionQuote;
-        $this->video = $video;
-        $this->story = $story;
-        $this->client = $client;
-        $this->user = $request->user('api') ? $request->user('api') : $user;
+        parent::__construct();
     }
 
     /**
@@ -474,7 +448,7 @@ class CollectionController extends BaseApiController
             return redirect('/');
         }
 
-        if ($user->id !== $collection->user_id) {
+        if ($this->user->id !== $collection->user_id) {
             if ($isJson) {
                 return response([
                     'collection' => null,

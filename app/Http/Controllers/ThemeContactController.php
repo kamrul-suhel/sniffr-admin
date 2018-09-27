@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contact;
-use Illuminate\Support\Facades\Input;
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 
 class ThemeContactController extends Controller
@@ -24,7 +23,6 @@ class ThemeContactController extends Controller
             }
             return $this->errorResponse("Sorry, we cannot find the email associated with your account. Please contact <u>licensing@unilad.co.uk</u>");
         }
-        return $this->getFrontendServerResponse($request);
     }
 
     public function edit(Request $request)

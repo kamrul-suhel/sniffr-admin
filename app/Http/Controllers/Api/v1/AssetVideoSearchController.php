@@ -2,22 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Collection;
-use App\ClientMailerUser;
-use App\ClientMailerVideo;
-use App\ClientMailerStory;
-use App\CollectionVideo;
-use App\CollectionStory;
 use App\Http\Controllers\Api\v1\Traits\AssetVideoTrait;
 use App\Libraries\VideoHelper;
-use App\Setting;
-use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AssetVideoSearchController extends AssetBaseStoryVideoController
 {
-    use FrontendResponse, AssetVideoTrait, VideoHelper;
+    use AssetVideoTrait, VideoHelper;
 
     public function __construct()
     {
@@ -39,7 +31,7 @@ class AssetVideoSearchController extends AssetBaseStoryVideoController
         $settings = config('settings.site');
 
         if ($currentVideoId) {
-            $currentVideo = $this->getCurrentVideo($currentVideoId, $this->user);
+            $currentVideo = $this->getCurrentVideo($currentVideoId);
         }
 
         //Remove any exclusive based collections that have been purchased and downloaded.

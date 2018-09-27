@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Libraries\VideoHelper;
-use App\Traits\FrontendResponse;
-use Auth;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -17,7 +15,6 @@ use App\Notifications\DetailsReview;
 
 class DetailController extends BaseApiController
 {
-    use FrontendResponse;
     use VideoHelper;
 
     /**
@@ -67,8 +64,6 @@ class DetailController extends BaseApiController
 
             return $this->errorResponse('Sorry, we could not find your video');
         }
-
-        return $this->getFrontendServerResponse($request);
     }
 
     /**
@@ -143,6 +138,5 @@ class DetailController extends BaseApiController
         if ($request->ajax() || $request->isJson()) {
             return $this->successResponse();
         }
-        return view('frontend.master', $this->data);
     }
 }

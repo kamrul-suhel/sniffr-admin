@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Input;
 
 class VideoController extends BaseApiController {
 
-	use FrontendResponse;
     use VideoHelper;
     const HOME_URL = 'https://www.unilad.co.uk';
     const THANKS_URL = 'https://www.unilad.co.uk/submit/thanks';
@@ -197,6 +196,117 @@ class VideoController extends BaseApiController {
                 'url' => $filePath
             ]
         ]);
+    }
+
+
+    /*
+     * ***********************************************************
+     * Those methods not been use, but it was there. need to remove
+     * ***********************************************************
+     */
+
+    /**
+     * TODO: Method is not being used
+     *
+     * @codeCoverageIgnore
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function issueAlert(Request $request)
+    {
+        $alert = 'File: ' . Input::get('file') . ',
+        Line: ' . Input::get('line') . ',
+        Message: ' . Input::get('message') . ',
+        Exception: ' . Input::get('exception') . ',
+        Title: ' . Input::get('user_title') . ',
+        Email: ' . Input::get('user_email') . ',
+        File: ' . Input::get('user_file') . ',
+        Url: ' . Input::get('user_url') . ',
+        UserAgent: ' . $_SERVER['HTTP_USER_AGENT'] . '';
+        $user = new User();
+        $user->slackChannel('alerts')->notify(new SubmissionAlert($alert));
+        return response()->json(['status' => 'success', 'message' => 'Successfully sent alert']);
+    }
+
+    /**
+     * TODO: are we using this method?
+     * @param VideoCategory $videoCategory
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function category(VideoCategory $videoCategory)
+    {
+        $page = Input::get('page', 1);
+
+        $cat = VideoCategory::where('slug', '=', $videoCategory)->first();
+
+        $parent_cat = VideoCategory::where('parent_id', '=', $cat->id)->first();
+
+        if (!empty($parent_cat->id)) {
+            $parent_cat2 = VideoCategory::where('parent_id', '=', $parent_cat->id)->first();
+            if (!empty($parent_cat2->id)) {
+                $videos = Video::select($this->getVideoFieldsForFrontend())
+                    ->where('state', 'licensed')
+                    ->where('video_category_id', '=', $cat->id)
+                    ->orWhere('video_category_id', '=', $parent_cat->id)
+                    ->orWhere('video_category_id', '=', $parent_cat2->id)
+                    ->orderBy('licensed_at', 'DESC')
+                    ->simplePaginate(9);
+            } else {
+                $videos = Video::where('state', 'licensed')
+                    ->where('video_category_id', '=', $cat->id)
+                    ->orWhere('video_category_id', '=', $parent_cat->id)
+                    ->orderBy('licensed_at', 'DESC')
+                    ->simplePaginate(9);
+            }
+        } else {
+            $videos = Video::where('state', 'licensed')
+                ->where('video_category_id', '=', $cat->id)
+                ->orderBy('licensed_at', 'DESC')
+                ->simplePaginate(9);
+        }
+
+        $data = [
+            'videos' => $videos,
+            'current_page' => $page,
+            'category' => $cat,
+            'page_title' => 'Videos - ' . $cat->name,
+            'page_description' => 'Page ' . $page,
+            'pagination_url' => '/videos/category/' . $videoCategory,
+            'menu' => Menu::orderBy('order', 'ASC')->get(),
+            'video_categories' => VideoCategory::all(),
+            'theme_settings' => config('settings.theme'),
+        ];
+
+        return view('Theme::video-list', $data);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     * TODO: Method is not being used?
+     *
+     * @codeCoverageIgnore
+     */
+    public function handleViewCount($id)
+    {
+        // check if this key already exists in the view_media session
+        $blank_array = [];
+        if (!array_key_exists($id, session('viewed_video', $blank_array))) {
+
+            try {
+                // increment view
+                $video = Video::where('alpha_id', $id)->first();
+                $video->views = $video->views + 1;
+                $video->save();
+                // Add key to the view_media session
+                session('viewed_video.' . $id);
+                return true;
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Api\v1\Client;
 use App\Http\Controllers\Api\v1\BaseApiController;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
-use App\Traits\FrontendResponse;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ClientUserController extends BaseApiController
 {
-    use FrontendResponse;
 
     protected $user;
 
