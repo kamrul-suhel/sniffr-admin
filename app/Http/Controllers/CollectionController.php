@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserQuoteRequest;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use Auth;
 use App\Client;
 use App\Collection;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

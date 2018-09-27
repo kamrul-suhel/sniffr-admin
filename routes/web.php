@@ -4,11 +4,8 @@
 
 Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
-    Route::get('videos/category/{category}', 'Frontend\VideoController@category')->name('videos_category_index');
-    Route::get('videos/{id}', 'Frontend\VideoController@show')->name('videos_show');
+
     // TODO: remove this form route
-    Route::post('issue', 'Frontend\VideoController@issueAlert');
-    Route::post('videocheck', 'Frontend\VideoController@videoCheck');
     Route::get('details/{code}', 'DetailsController@show')->name('details_show');
     Route::post('details/{code}', 'DetailsController@store')->name('details_store');
     // TODO: remove this form route

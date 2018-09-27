@@ -19,6 +19,16 @@ Route::get('settings_object', 'Api\v1\SettingController@index')->name('api.setti
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
 Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos.show');
 
+
+/*
+|--------------------------------------------------------------------------
+| Video route not using in frontend. need to remove
+|--------------------------------------------------------------------------
+*/
+Route::post('issue', 'Api\v1\VideoController@issueAlert');
+Route::get('videos/category/{category}', 'Api\v1\VideoController@category')->name('videos_category_index');
+Route::get('videos/{id}', 'Api\v1\VideoController@show')->name('videos_show');
+
 Route::post('upload', 'Api\v1\VideoController@store')->name('videos_store');
 Route::get('details/{code}', 'Api\v1\DetailController@show')->name('api.details.show');
 Route::post('details/{code}', 'Api\v1\DetailController@store')->name('api.details.store');
@@ -49,7 +59,6 @@ Route::post('search/stories/{alpha_id?}', 'Api\v1\AssetStorySearchController@sto
 Route::get('downloaded/track/{mailer_id}/{client_id}', 'Api\v1\MailerController@store')->name('mailer_track_store');
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Collection Routes
@@ -60,17 +69,6 @@ Route::post('client/collections', 'Api\v1\CollectionController@store')->name('cl
 Route::post('client/collections/cancel_collection', 'Api\v1\CollectionController@cancelCollection')->name('client.cancel_collection');
 
 Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | Purchased Controller
-    | No needed
-    |--------------------------------------------------------------------------
-    */
-//    Route::get('purchased', 'Frontend\Client\ClientPurchasedController@index')->name('client.purchased');
-//    Route::get('offered', 'Frontend\Client\ClientPurchasedController@index')->name('client.offered');
-//    Route::get('quotes', 'Frontend\Client\ClientQuotesController@index')->name('client.quotes');
-
 
     /*
     |----------------------------------------------------------------------

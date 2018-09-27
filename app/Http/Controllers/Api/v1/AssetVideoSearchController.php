@@ -138,8 +138,8 @@ class AssetVideoSearchController extends AssetBaseStoryVideoController
             ->select($this->getVideoFieldsForFrontend())
             ->where('alpha_id', $alpha_id);
 
-        if (auth()->check()) {
-            $client_id = auth()->user()->client_id;
+        if ($this->user) {
+            $client_id = $this->user->client_id;
             $currentVideo = $currentVideo->with(['videoCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'video_id'])
                     ->where('status', 'purchased');

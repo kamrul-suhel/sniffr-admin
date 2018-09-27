@@ -8,7 +8,6 @@ use App\Jobs\QueueEmail;
 use App\Libraries\VideoHelper;
 use App\Notifications\SubmissionNew;
 use App\Services\VideoService;
-use App\Traits\FrontendResponse;
 use App\User;
 use Illuminate\Http\Request;
 use Response;

@@ -8,7 +8,7 @@ use App\Http\Requests\Company\EditCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Jobs\Auth\QueueEmailCompany;
 use App\Libraries\VideoHelper;
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\User;
 use App\Traits\Slug;
 use Illuminate\Http\Request;

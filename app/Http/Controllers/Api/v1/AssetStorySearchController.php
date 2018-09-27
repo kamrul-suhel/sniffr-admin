@@ -9,7 +9,6 @@ use App\Collection;
 use App\CollectionStory;
 use App\CollectionVideo;
 use App\Story;
-use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 

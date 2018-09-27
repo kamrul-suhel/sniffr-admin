@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Contract;
 
 use App\Contract;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
 use App\Http\Requests\Contract\DeleteContractRequest;
-use App\Http\Traits\Controller\Api\v1\Traits\FrontendResponse;
 use App\Jobs\QueueEmail;
 use App\Libraries\VideoHelper;
 use App\Services\ContractService;
