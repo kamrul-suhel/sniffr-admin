@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import StoryAssetDialogComponent from '../../../scripts/includes/StoryAssetsDialogComponent'
+    import StoryAssetDialogComponent from '../includes/StoryAssetsDialogComponent'
     export default {
         components: {
             StoryAssetDialogComponent

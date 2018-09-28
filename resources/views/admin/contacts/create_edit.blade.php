@@ -73,5 +73,4 @@
 @stop
 
 @section('javascript')
-    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop

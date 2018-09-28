@@ -3,13 +3,14 @@
  * Glabal package
  ********************************************************
  */
-import 'babel-polyfill';
 
 window.axios = require('axios');
 window.Vue = require('vue');
 window.Vuetify = require('vuetify');
 
 import Vuerouter from 'vue-router';
+
+import $ from "jquery";
 
 /*
  ********************************************************
@@ -33,18 +34,10 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').att
 
 /*
  ********************************************************
- * Root component
- ********************************************************
- */
-import MailerStoriesComponent from './pages/mailer/MailerComponent'
-
-
-/*
- ********************************************************
  * Filter library
  ********************************************************
  */
-require('../../frontend/scripts/filters/filters');
+require('./filters/filters');
 
 /*
  ********************************************************
@@ -91,7 +84,7 @@ new Vue({
 
     created() {
         // initialize code go here before load any of component. like user, settings
-        axios.get('/api/settings_object')
+        axios.get('/admin/user')
             .then(response => {
                 this.$store.commit('setUserStatus', response.data.sniffr_app);
             })

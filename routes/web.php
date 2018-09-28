@@ -183,6 +183,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     Route::get('reminders', 'Admin\AdminLabelController@automateEmailReminders');
 
+    Route::get('user', 'Api\v1\UserController@getAuthUserForAdmin');
+
 
     /*
     |--------------------------------------------------------------------------

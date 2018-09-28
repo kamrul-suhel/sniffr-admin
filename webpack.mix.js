@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -10,7 +11,6 @@ let mix = require('laravel-mix');
  |
  */
 
-
 mix.js(['resources/assets/admin/js/app.js',
         'resources/assets/admin/js/custom.js'],
     'public/assets/admin/js'
@@ -21,18 +21,12 @@ mix.js(['resources/assets/admin/js/app.js',
         processCssUrls: false
     });
 
-mix.sass('resources/assets/frontend/scss/styles.scss',
-    'public/assets/frontend/css/styles.css'
+mix.sass(
+    'resources/assets/admin/scss/vuetify-custom.scss',
+    'public/assets/admin/css/vuetify.css'
 ).options({
     processCssUrls: false
 });
-
-mix.sass('resources/assets/scss/admin.scss',
-    'public/assets/admin/css/mailer-admin.css'
-).options({
-    processCssUrls: false
-});
-
 
 /*
 * *********************************************
@@ -42,11 +36,6 @@ mix.sass('resources/assets/scss/admin.scss',
 mix.js([
     'resources/assets/admin/scripts/main.js',
 ], 'public/assets/admin/scripts/scripts.js')
-    .sourceMaps();
-
-mix.js([
-    'resources/assets/frontend/scripts/main.js',
-], 'public/assets/frontend/scripts/scripts.js')
     .sourceMaps();
 
 if (mix.inProduction()) {
@@ -65,7 +54,6 @@ if (!mix.inProduction()) {
 
 //Copying file from resource folder to public
 
-
 mix.copy(
     'node_modules/tinymce/',
     'public/assets/admin/js/'
@@ -75,13 +63,6 @@ mix.copy(
     'node_modules/intl-tel-input/build',
     'public/assets/admin/css/intl-tel-input'
 );
-
-mix.copy(
-    'resources/assets/scripts/vendor/',
-    'public/assets/scripts/'
-);
-
-
 
 /*
 * *********************************************

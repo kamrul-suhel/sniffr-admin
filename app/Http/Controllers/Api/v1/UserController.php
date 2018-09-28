@@ -47,4 +47,16 @@ class UserController extends BaseApiController
 
         return $this->successResponse($accessTokens);
     }
+
+    public function getAuthUserForAdmin(){
+        $user = auth()->user();
+        if ($user) {
+            $user['client'] = $user->client;
+        }
+
+        $settings['sniffr_app'] = [
+            "user" => ($user ? $user : "''")
+        ];
+        return $this->successResponse($settings);
+    }
 }

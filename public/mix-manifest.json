@@ -1,14 +1,10 @@
 {
-    "/assets/frontend/scripts/scripts.js": "/assets/frontend/scripts/scripts.js?id=6f1804e2de9f6f6c6c9a",
-    "/assets/frontend/scripts/scripts.js.map": "/assets/frontend/scripts/scripts.js.map?id=f3f872f13eb6b910f944",
-    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=03798c69fa4286a97c73",
-    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=a03eb205ef02d734cf2c",
-    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=35a68ca892e25f931d80",
-    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css?id=6d5d744e44a8ee9d6ec6",
-    "/assets/admin/css/mailer-admin.css": "/assets/admin/css/mailer-admin.css?id=85fc7a19aa491bebe249",
-    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=e915dd1e36635eff5b45",
-    "/assets/admin/css/admin.css.map": "/assets/admin/css/admin.css.map?id=eeb66ee1a42cd5d50e1b",
-    "/assets/admin/css/mailer-admin.css.map": "/assets/admin/css/mailer-admin.css.map?id=41b897bba5e958a40426",
-    "/placeholder.gif": "/placeholder.gif?id=e74a06310d4b99f90eb6",
-    "/favicon.ico": "/favicon.ico?id=a5b9a59dd01c0a656bed"
+    "/assets/admin/js/app.js": "/assets/admin/js/app.js?id=3f17f99277186a5dd761",
+    "/assets/admin/css/admin.css": "/assets/admin/css/admin.css?id=dbdaf8dfa50d39c1d210",
+    "/assets/admin/css/vuetify.css": "/assets/admin/css/vuetify.css?id=d887ad3d92e5ef13f2de",
+    "/assets/admin/js/app.js.map": "/assets/admin/js/app.js.map?id=883e7932efe11265e66e",
+    "/assets/admin/css/admin.css.map": "/assets/admin/css/admin.css.map?id=a7a82bfa41398d81fe2f",
+    "/assets/admin/css/vuetify.css.map": "/assets/admin/css/vuetify.css.map?id=8d5b48105d3a5a6e3662",
+    "/assets/admin/scripts/scripts.js": "/assets/admin/scripts/scripts.js?id=a1fca6c839bd2769519c",
+    "/assets/admin/scripts/scripts.js.map": "/assets/admin/scripts/scripts.js.map?id=7ff5585cea8ff66e32bd"
 }

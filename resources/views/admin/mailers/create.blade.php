@@ -2,7 +2,8 @@
 
 @section('css')
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <link href="{{asset('assets/admin/css/mailer-admin.css')}}" rel="stylesheet">
+    <!-- Vue style integration -->
+    <link rel="stylesheet" href="{{mix('assets/admin/css/vuetify.css')}}"/>
 @stop
 
 @section('content')
@@ -22,9 +23,6 @@
 @stop
 
 @section('javascript')
-    <!-- Vue scripts -->
-    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
-
     <script>
         $ = jQuery;
         $(document).ready(function () {
