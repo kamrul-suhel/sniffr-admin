@@ -154,6 +154,5 @@
 @stop
 
 @section('javascript')
-    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
     @include('admin.assets.partials.js')
 @stop

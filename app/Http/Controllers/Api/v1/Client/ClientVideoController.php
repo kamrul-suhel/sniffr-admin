@@ -9,14 +9,12 @@ use App\Collection;
 use App\Http\Controllers\Api\v1\BaseApiController;
 use App\Libraries\VideoHelper;
 use App\Services\DownloadService;
-use App\Traits\FrontendResponse;
 use App\Video;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Http\Request;
 
 class ClientVideoController extends BaseApiController
 {
-    use FrontendResponse;
     use VideoHelper;
 
     const PAGINATE_PER_PAGE = 12;
@@ -24,20 +22,17 @@ class ClientVideoController extends BaseApiController
     /**
      * @var int
      */
-    private $videos_per_page, $user;
+    private $user, $downloadService;
 
     /**
-     * ClientVideosController constructor.
+     * ClientVideoController constructor.
+     * @param Request $request
+     * @param DownloadService $downloadService
      */
     public function __construct(Request $request, DownloadService $downloadService)
     {
         $this->user = $request->user('api');
         $this->downloadService = $downloadService;
-        $settings = config('settings.site');
-        $this->videos_per_page = $settings['videos_per_page'] ?: 24;
-        $this->data = [
-            'user' => $this->user,
-        ];
     }
 
     /**

@@ -32,7 +32,7 @@ const mutations = {
 const actions = {
     getStoryNextAndPrevLink({commit, state}, payload) {
         return new Promise(function (resolve, reject) {
-            let url = '/search/stories/'+payload.alpha_id;
+            let url = '/api/search/stories/'+payload.alpha_id;
 
             axios.post(url)
                 .then((response) => {

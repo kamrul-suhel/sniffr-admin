@@ -2,22 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Collection;
-use App\ClientMailerUser;
-use App\ClientMailerVideo;
-use App\ClientMailerStory;
-use App\CollectionVideo;
-use App\CollectionStory;
 use App\Http\Controllers\Api\v1\Traits\AssetVideoTrait;
 use App\Libraries\VideoHelper;
-use App\Setting;
-use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AssetVideoSearchController extends AssetBaseStoryVideoController
 {
-    use FrontendResponse, AssetVideoTrait, VideoHelper;
+    use AssetVideoTrait, VideoHelper;
 
     public function __construct()
     {
@@ -39,7 +31,7 @@ class AssetVideoSearchController extends AssetBaseStoryVideoController
         $settings = config('settings.site');
 
         if ($currentVideoId) {
-            $currentVideo = $this->getCurrentVideo($currentVideoId, $this->user);
+            $currentVideo = $this->getCurrentVideo($currentVideoId);
         }
 
         //Remove any exclusive based collections that have been purchased and downloaded.
@@ -138,5 +130,28 @@ class AssetVideoSearchController extends AssetBaseStoryVideoController
 
         $data['mailerVideos'] = $mailerVideos;
         return $this->successResponse($data);
+    }
+
+    private function getCurrentVideo($alpha_id)
+    {
+        $currentVideo = $this->video
+            ->select($this->getVideoFieldsForFrontend())
+            ->where('alpha_id', $alpha_id);
+
+        if ($this->user) {
+            $client_id = $this->user->client_id;
+            $currentVideo = $currentVideo->with(['videoCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'video_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentVideo = $currentVideo->with('tags')
+            ->first();
+        $currentVideo->iframe = $this->getVideoHtml($currentVideo, true);
+        return $currentVideo;
     }
 }

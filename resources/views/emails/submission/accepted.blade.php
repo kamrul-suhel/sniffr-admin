@@ -25,7 +25,7 @@
 
 <div>&nbsp;</div>
 
-<div><a href="{{ url('/details/' . $video->more_details_code) }}">Confirm additional details</a></div>
+<div><a href="{{ url(env('FRONTEND_URL').'/details/' . $video->more_details_code) }}">Confirm additional details</a></div>
 
 <div>&nbsp;</div>
 

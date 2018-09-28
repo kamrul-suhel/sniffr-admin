@@ -22,7 +22,7 @@
     <div>
         <strong>username</strong>: {{ $email_data['email'] }}
         </div>
-            <strong>password</strong>: <a href="{{ route('password.set_password', ['token' => $email_data['token'], 'email' => $email_data['email']]) }}">click here to set your password</a>
+            <strong>password</strong>: <a href="{{ url(env('FRONTEND_URL').'/password/set/'.$email_data['token'].'/'.$email_data['email']) }}">click here to set your password</a>
         </div>
     </div>
 

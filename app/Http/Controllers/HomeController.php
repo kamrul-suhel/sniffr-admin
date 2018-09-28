@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Video;
 use Illuminate\Http\Request;
 

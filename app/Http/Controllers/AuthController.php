@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\ForgotPasswordRequest;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\Auth\QueueEmailClientPasswordUpdated;
 use App\User;
-use App\Traits\FrontendResponse;
 use Auth;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Password;
@@ -150,9 +149,9 @@ class AuthController extends Controller
     {
         $credentials = ['email' => $request->input('email')];
 
-        $response = Password::sendResetLink($credentials, function ($message) {
-            $message->subject('Password Reset Info');
-        });
+        config()->set('app.url', env('FRONTEND_URL'));
+        $response = Password::sendResetLink($credentials);
+        config()->set('app.url', env('APP_URL'));
 
         switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:

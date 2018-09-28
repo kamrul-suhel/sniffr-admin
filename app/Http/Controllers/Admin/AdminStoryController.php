@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Audit;
 use App\CollectionStory;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Jobs\Quotes\QueueEmailRetractQuote;
 use RedditAPI;
-use App\Traits\FrontendResponse;
 use App\Traits\WordpressAPI;
 use Goutte;
 use Auth;

@@ -3,28 +3,27 @@
 namespace App\Http\Controllers\Contract;
 
 use App\Contract;
-use App\Http\Requests\Contract\DeleteContractRequest;
-use App\Notifications\ContractSigned;
-use App\Traits\FrontendResponse;
-use Auth;
-use App\User;
-use App\Video;
-use App\Story;
-use App\Contact;
-use App\VideoCategory;
-use App\VideoCollection;
-use App\Libraries\VideoHelper;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\CreateContractRequest;
-use App\Jobs\QueueVideoYoutubeUpload;
+use App\Http\Requests\Contract\DeleteContractRequest;
 use App\Jobs\QueueEmail;
-use App\Jobs\QueueStory;
-use Illuminate\Http\Request;
+use App\Libraries\VideoHelper;
+use App\Services\ContractService;
+use App\Story;
+use App\Video;
 use PDF;
 
 class ContractController extends Controller
 {
     use FrontendResponse;
+
+    private $contractService;
+
+    public function __construct()
+    {
+        $this->contractService = new ContractService();
+    }
 
     /**
      * @param DeleteContractRequest $request
@@ -84,6 +83,7 @@ class ContractController extends Controller
     /**
      * @param CreateContractRequest $request
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function store(CreateContractRequest $request)
     {
@@ -125,7 +125,8 @@ class ContractController extends Controller
     }
 
     /**
-     * @param int $video_id
+     * @param string $type
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function send($type = 'video', int $id)
@@ -191,114 +192,6 @@ class ContractController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param string $token
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function accept(Request $request, string $token)
-    {
-        $contract = Contract::where('token', '=', $token)->first();
-
-        if (!$contract) {
-            if($request->ajax() || $request->isJson()){
-                return $this->errorResponse("This contract is no longer available");
-            }
-			return $this->getFrontendServerResponse($request);
-        }
-
-        if($contract->video_id) {
-            $video = Video::with('contact')
-                ->find($contract->video_id);
-
-            $contract_text = $this->getContractText($contract, $video->id, 'video');
-            $story = '';
-        } else {
-            $story = Story::with('contact')
-                ->find($contract->story_id);
-
-            $contract_text = $this->getContractText($contract, $story->id, 'story');
-            $video = '';
-        }
-
-        if ($request->ajax() || $request->isJson()) {
-            return $this->successResponse([
-                'videos' => $video,
-                'stories' => $story,
-                'signed' => ($contract->signed_at) ? true : false,
-                'contract' => nl2br($contract_text),
-            ]);
-        }
-
-        return $this->getFrontendServerResponse($request);
-    }
-
-    /**
-     * @param Request $request
-     * @param string $token
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function sign(Request $request, string $token)
-    {
-        $contract = Contract::where('token', '=', $token)->first();
-        $contract->signed_at = now();
-        $contract->ip = $request->ip();
-        $contract->user_agent = $request->header('User-Agent');
-        $contract->save();
-
-        if (!$contract) {
-            abort(404);
-        }
-
-        if($contract->video_id) {
-            $video = Video::with('contact')->find($contract->video_id);
-    		$video->licensed_at = now();
-            $video->state = 'licensed';
-            $video->save();
-
-    		// Set to process for youtube and analysis
-    		if (empty($video->youtube_id) && $video->file) {
-    			QueueVideoYoutubeUpload::dispatch($video->id)
-    				->delay(now()->addSeconds(5));
-    		}
-
-    		// Send contract signed notification email
-    		QueueEmail::dispatch($video->id, 'contract_signed', 'video');
-
-            if (env('APP_ENV') != 'local') {
-    			$user = new User();
-    			$user->slackChannel('contracts')->notify(new ContractSigned($video));
-            }
-
-            $story = '';
-
-        } else {
-            $story = Story::with('contact')->find($contract->story_id);
-            $story->state = 'licensed';
-            $story->save();
-
-            // Push story to WP
-            QueueStory::dispatch($story->alpha_id, 'push', 0);
-
-            // Send contract signed notification email
-    		QueueEmail::dispatch($story->id, 'contract_signed', 'story');
-
-            // Need to add slack alert for stories (like videos)
-
-            $video = '';
-        }
-
-        if ($request->ajax() || $request->isJson()) {
-            return $this->successResponse([
-                'videos' => $video,
-                'stories' => $story,
-                'signed' => true
-            ]);
-        }
-
-        return view('frontend.master');
-    }
-
-    /**
      * @param string $reference_id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
@@ -312,7 +205,7 @@ class ContractController extends Controller
 
         $asset_id = ($contract->video_id ? $contract->video_id : $contract->story_id);
 
-        $contract_text = $this->getContractText($contract, $asset_id, ($contract->video_id ? 'video' : 'story'), $redacted);
+        $contract_text = $this->contractService->getContractText($contract, $asset_id, ($contract->video_id ? 'video' : 'story'), $redacted);
 
         $pdf = PDF::loadView('pdf.contract', [
             'contract_text' => $contract_text
@@ -321,33 +214,4 @@ class ContractController extends Controller
         return $pdf->download(VideoHelper::quickRandom() . '.pdf');
     }
 
-    /**
-     * @param Contract $contract
-     * @return mixed
-     */
-    private function getContractText(Contract $contract, $asset_id, $type = 'video', $redacted = false)
-    {
-        $asset = ($type=='video' ? Video::find($asset_id) : Story::find($asset_id));
-
-        $contract_text = config('contracts')[$contract->contract_model_id]['text'];
-        $contract_text = $contract->signed_at ? str_replace(':contract_date', '<strong>'.$contract->signed_at.'</strong>', $contract_text) : str_replace(':contract_date', '<strong>'.date('d-m-Y').'</strong>', $contract_text);
-        $contract_text = str_replace(':licensor_name', '<strong>'.$asset->contact->full_name.'</strong>', $contract_text);
-		$contract_text = str_replace(':licensor_email', ($redacted ? '********************' : '<strong>'.$asset->contact->email.'</strong>'), $contract_text);
-        $contract_text = $asset->title ? str_replace(':story_title', ucwords($type).' Title: <strong>'.$asset->title.'</strong>', $contract_text) : str_replace(':story_title', '', $contract_text);
-        $contract_text = $asset->url ? str_replace(':story_link', 'URL: <strong>'.$asset->url.'</strong>', $contract_text) : str_replace(':story_link', '', $contract_text);
-		$contract_text = $asset->author ? str_replace(':story_author','Author: <strong>'.$asset->author.'</strong>', $contract_text) : str_replace(':story_author', '', $contract_text);
-		$contract_text = !$redacted && $contract->upfront_payment ? str_replace(':upfront_payment', 'UNILAD agree to pay an initial upfront payment of: <strong>£'.$contract->upfront_payment.'</strong>.<br />', $contract_text) : str_replace(':upfront_payment', '', $contract_text);
-		$contract_text = !$redacted && $contract->success_system ? str_replace(':success_system', 'UNILAD agree to pay the following, based on the performance of the '.$type.' on UNILAD\'s Facebook page: <strong>'.config('success_system')[$contract->success_system].'</strong>', $contract_text) : str_replace(':success_system', '', $contract_text);
-		$contract_text = str_replace(':video_ref', '<strong>'.$asset->alpha_id.'</strong>', $contract_text);
-        $contract_text = str_replace(':contract_ref_number', ($redacted ? '********-********-*******' : '<strong>'.$contract->reference_id.'</strong>'), $contract_text);
-        $contract_text = str_replace(':unilad_share', ($redacted ? '***' : '<strong>'.(100 - $contract->revenue_share).'%</strong>'), $contract_text);
-        $contract_text = str_replace(':creator_share', ($redacted ? '***' : '<strong>'.$contract->revenue_share.'%</strong>'), $contract_text);
-
-        $currencies = config('currencies');
-        if (($contract->upfront_payment_currency_id != 1) && (key_exists($contract->upfront_payment_currency_id, $currencies))) {
-            $contract_text = str_replace('£', $currencies[$contract->upfront_payment_currency_id]['symbol'], $contract_text);
-        }
-
-        return $contract_text;
-    }
 }

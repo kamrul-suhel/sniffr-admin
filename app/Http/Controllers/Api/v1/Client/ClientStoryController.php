@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\v1\Client;
 
 use App\ClientMailer;
 use App\Http\Controllers\Api\v1\BaseApiController;
+use App\Http\Traits\Controller\Api\v1\Traits\FrontendResponse;
 use App\Story;
 use App\Collection;
 use Chumper\Zipper\Facades\Zipper;
-use App\Traits\FrontendResponse;
 use App\Services\DownloadService;
 use Illuminate\Http\Request;
 use App;
@@ -19,10 +19,9 @@ class ClientStoryController extends BaseApiController
      */
     private $downloadService;
 
-    use FrontendResponse;
     const PAGINATE_PER_PAGE = 12;
 
-    public function __construct(Request $request, DownloadService $downloadService)
+    public function __construct(DownloadService $downloadService)
     {
         $this->downloadService = $downloadService;
         $settings = config('settings.site');
@@ -57,8 +56,6 @@ class ClientStoryController extends BaseApiController
             ];
             return $this->successResponse($data);
         }
-
-        return view('frontend.master');
     }
 
     /**
@@ -79,9 +76,6 @@ class ClientStoryController extends BaseApiController
             ];
             return $this->successResponse($data);
         }
-
-        return view('frontend.master');
-
     }
 
     public function getOfferedStories(Request $request)
@@ -119,7 +113,6 @@ class ClientStoryController extends BaseApiController
 
             return $this->successResponse($data);
         }
-        return view('frontend.master');
     }
 
     /**
@@ -159,12 +152,12 @@ class ClientStoryController extends BaseApiController
             ];
             return $this->successResponse($data);
         }
-        return view('frontend.master');
     }
 
     /**
-     * @param $story_id
+     * @param $storyId
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \Exception
      */
     public function downloadStory($storyId)
     {

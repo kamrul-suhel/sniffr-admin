@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Libraries\VideoHelper;
-use App\Traits\FrontendResponse;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;

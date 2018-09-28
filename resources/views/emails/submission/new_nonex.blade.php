@@ -17,7 +17,7 @@
 
 <div>&nbsp;</div>
 
-<div><a href="{{ url('admin/videos/edit/' . $video->id) }}">{{ $video->title }}</a></div>
+<div><a href="{{ url(env('FRONTEND_URL').'/admin/videos/edit/' . $video->id) }}">{{ $video->title }}</a></div>
 
 <div>&nbsp;</div>
 

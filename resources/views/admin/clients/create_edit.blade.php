@@ -395,6 +395,4 @@
 @stop
 
 @section('javascript')
-    <!-- Vue scripts -->
-    <script src="{{asset('assets/admin/scripts/scripts.js')}}"></script>
 @stop

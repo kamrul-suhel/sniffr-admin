@@ -11,7 +11,7 @@ use App\CollectionStory;
 use App\Libraries\VideoHelper;
 use App\Setting;
 use App\Story;
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Video;

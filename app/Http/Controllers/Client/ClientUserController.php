@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\User\CreateUserRequest;
 use App\Jobs\Auth\QueueEmailClient;
-use App\Traits\FrontendResponse;
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

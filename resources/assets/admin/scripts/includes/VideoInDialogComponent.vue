@@ -63,7 +63,7 @@
 
 <script>
     import VideoDialogBoxEventBus from '../event-bus/video-dialog-box-event-bus';
-    import VideoPlayer from '../../../scripts/components/VideoPlayerComponent';
+    import VideoPlayer from '../component/VideoPlayerComponent';
 
     export default {
         components:{

@@ -1,11 +1,5 @@
 {
     "private": true,
-    "config": {
-        "nuxt": {
-            "host": "0.0.0.0",
-            "port": "3000"
-        }
-    },
     "scripts": {
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -14,15 +8,9 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "copy": "cross-env NODE_ENV=copy node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "build": "nuxt build -c resources/nuxt/nuxt.config.js",
-        "start": "nuxt start -c resources/nuxt/nuxt.config.js",
-        "work": "nuxt -c resources/nuxt/nuxt.config.js",
-        "test": "NODE_ENV=development node server.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "dependencies": {
-        "@nuxtjs/axios": "^5.3.1",
-        "@nuxtjs/proxy": "^1.2.4",
         "autoprefixer": "^8.3.0",
         "babel-polyfill": "^6.26.0",
         "bootstrap-datepicker": "^1.8.0",
@@ -36,7 +24,6 @@
         "global": "^4.3.2",
         "glyphicons-halflings": "^1.9.1",
         "material-design-icons-iconfont": "^3.0.3",
-        "nuxt": "^1.4.2",
         "select2": "^4.0.6-rc.1",
         "twitter-widgets": "^1.0.0",
         "video.js": "^6.9.0",

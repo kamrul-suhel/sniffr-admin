@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Http\Requests\Contact\CreateContactRequest;
 use App\Http\Requests\Contact\UpdateContactRequest;
 use Auth;
@@ -11,7 +12,6 @@ use App\Contact;
 use App\Video;
 use App\User;
 use App\Libraries\VideoHelper;
-use App\Traits\FrontendResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;

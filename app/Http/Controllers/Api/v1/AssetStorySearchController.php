@@ -9,13 +9,11 @@ use App\Collection;
 use App\CollectionStory;
 use App\CollectionVideo;
 use App\Story;
-use App\Traits\FrontendResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AssetStorySearchController extends AssetBaseStoryVideoController
 {
-    use FrontendResponse;
 
     public function __construct()
     {
@@ -111,5 +109,28 @@ class AssetStorySearchController extends AssetBaseStoryVideoController
         $data['stories'] = $stories;
 
         return $this->successResponse($data);
+    }
+
+    private function getCurrentStory($alpha_id)
+    {
+        $currentStory = $this->story
+            ->select($this->getAssetStoryFieldsForFrontend())
+            ->where('alpha_id', $alpha_id)
+            ->with('assets');
+
+        if ($this->user) {
+            $client_id = $this->user->client_id;
+            $currentStory = $currentStory->with(['storyCollections' => function ($query) use ($client_id) {
+                $query->select(['id', 'collection_id', 'story_id'])
+                    ->where('status', 'purchased');
+                $query->whereHas('collection', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }]);
+        }
+
+        $currentStory = $currentStory
+            ->first();
+        return $currentStory;
     }
 }

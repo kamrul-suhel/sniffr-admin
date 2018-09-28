@@ -1,0 +1,56 @@
+@import "./vuetify.min.css";
+
+@import "vuetify_partials/variables";
+@import "vuetify_partials/mixin";
+
+//
+/**
+******************************************************
+  Video dialogs scss
+******************************************************
+ */
+@import 'vuetify_partials/asset-video-dialog-box';
+@import 'vuetify_partials/asset-story-in-dialog';
+@import 'vuetify_partials/login';
+
+
+/* ************************* Quote buy dialogs component ******************* */
+@import "vuetify_partials/quote-buy-dialog";
+@import "vuetify_partials/asset-video-card";
+
+
+/* ************************* Animation css ******************* */
+@import "vuetify_partials/buttons";
+
+
+/**
+******************************************************
+  Global admin style
+******************************************************
+ */
+
+.story-input {
+  .v-input{
+    margin:0;
+    padding:0
+  }
+}
+
+.title{
+  font-size:12px !important;
+}
+
+@include extra-small-device{
+}
+
+@include small-device{
+}
+
+@include medium-device{
+}
+
+@include large-device{
+}
+
+@include extra-large-device{
+}

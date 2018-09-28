@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\v1\Traits\FrontendResponse;
 use App\Tag;
-use App\Traits\FrontendResponse;
 
 class ThemeTagController extends Controller
 {
