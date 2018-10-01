@@ -126,7 +126,7 @@ class VideoController extends BaseApiController {
 	}
 
     /**
-     * @param CreateVideoRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
