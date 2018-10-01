@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api\v1;
 use App\ClientMailerOpen;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class MailerController extends Controller
+class MailerController extends BaseApiController
 {
     /**
      * @param Request $request

@@ -31,7 +31,6 @@ class AssetStorySearchController extends AssetBaseStoryVideoController
         $searchValue = $request->search;
         $currentStoryId = $request->alpha_id;
         $settings = config('settings.site');
-        $user = $request->user('api');
 
         if ($currentStoryId) {
             $currentStory = $this->getCurrentstory($currentStoryId);
@@ -52,8 +51,8 @@ class AssetStorySearchController extends AssetBaseStoryVideoController
             $stories = $stories->where('title', 'LIKE', '%' . $searchValue . '%');
         }
 
-        if ($user) {
-            $client_id = $user->client_id;
+        if ($this->user) {
+            $client_id = $this->user->client_id;
             $stories = $stories->with(['storyCollections' => function ($query) use ($client_id) {
                 $query->select(['id', 'collection_id', 'story_id'])->where('status', 'purchased');
                 $query->whereHas('collection', function ($query) use ($client_id) {
@@ -87,9 +86,9 @@ class AssetStorySearchController extends AssetBaseStoryVideoController
             $data['prev_story_alpha_id'] = $previousAlphaId;
         }
 
-        if ($user) {
+        if ($this->user) {
             $mailers = $this->clientMailerUser
-                ->where('user_id', $user->id)
+                ->where('user_id', $this->user->id)
                 ->where('sent_at', ">", Carbon::now()->subDay())// 24 hours
                 ->pluck('client_mailer_id');
 
