@@ -62,6 +62,8 @@ Route::get('upload_dir', function () {
     echo Config::get('site.uploads_dir');
 });
 
+Route::post('upload', 'Api\v1\VideoController@store')->name('videos_store');
+
 
 Route::get('contract/{token}/accept', 'Contract\ContractController@accept')->name('contract.accept');
 Route::post('contract/{token}/sign', 'Contract\ContractController@sign')->name('contract.sign');
