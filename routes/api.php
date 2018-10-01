@@ -30,7 +30,7 @@ Route::post('issue', 'Api\v1\VideoController@issueAlert');
 Route::get('videos/category/{category}', 'Api\v1\VideoController@category')->name('videos_category_index');
 Route::get('videos/{id}', 'Api\v1\VideoController@show')->name('videos_show');
 
-Route::post('upload', 'Api\v1\VideoController@store')->name('videos_store');
+
 Route::get('details/{code}', 'Api\v1\DetailController@show')->name('api.details.show');
 Route::post('details/{code}', 'Api\v1\DetailController@store')->name('api.details.store');
 
