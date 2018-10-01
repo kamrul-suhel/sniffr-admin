@@ -34,6 +34,8 @@ Route::get('videos/{id}', 'Api\v1\VideoController@show')->name('videos_show');
 Route::get('details/{code}', 'Api\v1\DetailController@show')->name('api.details.show');
 Route::post('details/{code}', 'Api\v1\DetailController@store')->name('api.details.store');
 
+Route::post('upload', 'Api\v1\VideoController@store')->name('api.video.upload');
+
 /*
 |--------------------------------------------------------------------------
 | Frontend Stories Routes
