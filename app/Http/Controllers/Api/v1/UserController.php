@@ -2,24 +2,37 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends BaseApiController
 {
+    /**
+     * @var
+     */
+    private $user;
+
+    /**
+     * UserController constructor.
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->user = $request->user('api');
+    }
 
     /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $user = auth()->user();
-        if ($user) {
-            $user['client'] = $user->client;
+        if ($this->user) {
+            $this->user['client'] = $this->user->client;
         }
 
         $settings['sniffr_app'] = [
-            "user" => ($user ? $user : "''"),
-            "user_offers" => ($user ? $user->userOffers() : "")
+            "user" => ($this->user ? $this->user : "''"),
+            "user_offers" => ($this->user ? $this->user->userOffers() : "")
         ];
         return $this->successResponse($settings);
     }
@@ -28,8 +41,7 @@ class UserController extends BaseApiController
      * @return mixed
      */
     public function getAccessTokenId (){
-        $user = auth()->user();
-        $accessTokens = DB::table('oauth_access_tokens')->where('id', $user->token()->id)->get();
+        $accessTokens = DB::table('oauth_access_tokens')->where('id', $this->user->token()->id)->get();
         return $this->successResponse($accessTokens);
     }
 
@@ -38,25 +50,26 @@ class UserController extends BaseApiController
      * @return mixed
      */
     public function destroyAccessTokenId (){
-        $user = auth()->user();
-        $accessTokens = DB::table('oauth_access_tokens')->where('id', $user->token()->id)->get();
+        $accessTokens = DB::table('oauth_access_tokens')->where('id', $this->user->token()->id)->get();
 
         if($accessTokens){
-            DB::table('oauth_access_tokens')->where('id', $user->token()->id)->delete();
+            DB::table('oauth_access_tokens')->where('id', $this->user->token()->id)->delete();
         }
 
         return $this->successResponse($accessTokens);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAuthUserForAdmin(){
-        $user = auth()->user();
-        if ($user) {
-            $user['client'] = $user->client;
+        if (auth()->user) {
+            $user['client'] = auth()->user->client;
         }
 
-        $settings['sniffr_app'] = [
-            "user" => ($user ? $user : "''")
+        $user['sniffr_app'] = [
+            "user" => (auth()->user ? auth()->user : "''")
         ];
-        return $this->successResponse($settings);
+        return $this->successResponse($user);
     }
 }
