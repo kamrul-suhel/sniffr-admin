@@ -8,11 +8,13 @@ use App\Story;
 class StoryController extends BaseApiController
 {
 
-    protected $story, $isJson;
+    protected $story, $isJson, $user;
+
     public function __construct(Story $story, Request $request)
     {
         $this->story = $story;
         $this->isJson = $request->ajax() || $request->isJson();
+        $this->user = $request->user('api');
     }
 
     /**
@@ -28,8 +30,8 @@ class StoryController extends BaseApiController
                 ->where('alpha_id', $alpha_id)
                 ->with('assets');
 
-            if (auth()->user()) {
-                $client_id = auth()->user()->client_id;
+            if ($this->user) {
+                $client_id = $this->user->client_id;
                 $story = $story->with(['storyCollections' => function ($query) use ($client_id) {
                     $query->select(['id', 'collection_id', 'story_id'])
                         ->where('status', 'purchased');
