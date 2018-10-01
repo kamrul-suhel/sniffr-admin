@@ -30,7 +30,7 @@
     <![endif]-->
 </head>
 <body class="page-body skin-black">
-<a href="{{ url('/') }}" class="top-left-logo">
+<a href="{{ url(env('FRONTEND_URL')) }}" class="top-left-logo">
     <img src="/assets/images/logo-sniffr-white.png">
 </a>
 
