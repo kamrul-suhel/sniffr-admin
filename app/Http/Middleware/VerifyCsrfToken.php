@@ -16,7 +16,7 @@ class VerifyCsrfToken extends Middleware
         'api/*',
         'login',
         'issue',
-        'api/upload',
+        'upload',
 		'search/*',
         'upload/form',
         'password/reset/*',
