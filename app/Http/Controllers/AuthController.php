@@ -127,7 +127,8 @@ class AuthController extends Controller
             $data = ['success' => 'You are successfully logout'];
             return $this->successResponse($data);
         }
-        return Redirect::to('/')->with([
+        $redirectUrl = env('FRONTEND_URL'). "?logout=true";
+        return Redirect::to($redirectUrl)->with([
             'note' => 'You have been successfully logged out',
             'note_type' => 'success'
         ]);

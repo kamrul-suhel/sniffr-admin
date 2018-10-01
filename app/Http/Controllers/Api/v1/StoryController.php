@@ -9,6 +9,7 @@ class StoryController extends BaseApiController
 {
 
     protected $story, $isJson, $user;
+
     public function __construct(Story $story, Request $request)
     {
         $this->story = $story;

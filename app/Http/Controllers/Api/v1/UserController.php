@@ -18,7 +18,7 @@ class UserController extends BaseApiController
      */
     public function __construct(Request $request)
     {
-        $this->user = $request->user('api');
+        $this->user = $request->user('api') ? $request->user('api') : auth()->user();
     }
 
     /**
@@ -63,12 +63,13 @@ class UserController extends BaseApiController
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAuthUserForAdmin(){
-        if (auth()->user) {
-            $user['client'] = auth()->user->client;
+        $user = [];
+        if (auth()->user()) {
+            $user['client'] = auth()->user()->client;
         }
 
         $user['sniffr_app'] = [
-            "user" => (auth()->user ? auth()->user : "''")
+            "user" => (auth()->user() ? auth()->user() : "''")
         ];
         return $this->successResponse($user);
     }
