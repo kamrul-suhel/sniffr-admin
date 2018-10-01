@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('user', 'Api\v1\UserController@index');
 
+
 Route::get('settings_object', 'Api\v1\SettingController@index')->name('api.setting_object');
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
 Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos.show');
@@ -74,7 +75,7 @@ Route::group(['middleware' => 'auth:api','prefix' => 'client'], function () {
     |----------------------------------------------------------------------
     |   Remove oauth_access_token from database for current user
     |----------------------------------------------------------------------
-     */
+    */
     Route::get('token/get', 'Api\v1\UserController@getAccessTokenId');
     Route::post('token/delete', 'Api\v1\UserController@destroyAccessTokenId');
 

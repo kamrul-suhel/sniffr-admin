@@ -1,5 +1,7 @@
 <?php
-
+$allowDomain = [];
+$allowDomain[] = env('FRONTEND_URL');
+$allowDomain[] = env('BACKEND_URL');
 return [
 
     /*
@@ -11,9 +13,9 @@ return [
     | to accept any value.
     |
     */
-   
+
     'supportsCredentials' => false,
-    'allowedOrigins' => ['*'],
+    'allowedOrigins' => $allowDomain,
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
