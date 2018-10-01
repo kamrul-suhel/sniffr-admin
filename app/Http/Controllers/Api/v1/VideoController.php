@@ -126,10 +126,10 @@ class VideoController extends BaseApiController {
 	}
 
     /**
-     * @param CreateVideoRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(CreateVideoRequest $request)
+    public function store(Request $request)
     {
         ini_set('max_execution_time', 1800);
         ini_set('max_execution_time', 1800);
