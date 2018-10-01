@@ -15,7 +15,7 @@ return [
     */
 
     'supportsCredentials' => false,
-    'allowedOrigins' => $allowDomain,
+    'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
