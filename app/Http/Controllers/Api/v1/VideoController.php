@@ -131,8 +131,6 @@ class VideoController extends BaseApiController {
      */
     public function store(Request $request)
     {
-        return response()->json(['data' => 'success']);
-        ini_set('max_execution_time', 1800);
         ini_set('max_execution_time', 1800);
         ini_set('upload_max_filesize', '512M');
         ini_set('post_max_size', '512M');
