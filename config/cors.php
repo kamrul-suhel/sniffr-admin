@@ -1,7 +1,6 @@
 <?php
 $allowDomain = [];
 $allowDomain[] = env('FRONTEND_URL');
-$allowDomain[] = env('BACKEND_URL');
 return [
 
     /*
