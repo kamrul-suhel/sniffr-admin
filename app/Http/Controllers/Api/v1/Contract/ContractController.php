@@ -73,6 +73,7 @@ class ContractController extends BaseApiController
     public function sign(Request $request, string $token)
     {
         $contract = Contract::where('token', '=', $token)->first();
+
         $contract->signed_at = now();
         $contract->ip = $request->ip();
         $contract->user_agent = $request->header('User-Agent');

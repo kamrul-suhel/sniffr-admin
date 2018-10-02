@@ -159,6 +159,10 @@ Route::post('unsubscribe', 'ThemeContactController@edit');
 
 Route::get('logout', 'AuthController@logout')->name('auth.logout');
 
-
+/*
+|--------------------------------------------------------------------------
+| Contract accept & sign.
+|--------------------------------------------------------------------------
+*/
 Route::get('contract/{token}/accept', 'Api\v1\Contract\ContractController@accept')->name('contract.accept');
 Route::post('contract/{token}/sign', 'Api\v1\Contract\ContractController@sign')->name('contract.sign');
