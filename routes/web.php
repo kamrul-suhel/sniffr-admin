@@ -16,15 +16,6 @@ Route::group(['before' => 'if_logged_in_must_be_subscribed'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Submission Routes (for exclusive and non-exclusive videos)
-    |--------------------------------------------------------------------------
-    */
-    Route::post('submission', 'ThemeSubmissionController@store');
-    Route::get('submission', 'ThemeSubmissionController@index');
-    Route::get('submission/form', 'ThemeSubmissionController@form');
-
-    /*
-    |--------------------------------------------------------------------------
     | Download Routes
     |--------------------------------------------------------------------------
     */

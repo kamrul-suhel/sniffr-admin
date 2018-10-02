@@ -20,6 +20,15 @@ Route::get('settings_object', 'Api\v1\SettingController@index')->name('api.setti
 Route::post('search/videos/{alpha_id?}', 'Api\v1\AssetVideoSearchController@videos');
 Route::get('videos/{alpha_id}', 'Api\v1\VideoController@show')->name('api.videos.show');
 
+/*
+|--------------------------------------------------------------------------
+| Submission Routes (for exclusive and non-exclusive videos)
+|--------------------------------------------------------------------------
+*/
+Route::post('submission', 'ThemeSubmissionController@store');
+Route::get('submission', 'ThemeSubmissionController@index');
+Route::get('submission/form', 'ThemeSubmissionController@form');
+
 
 /*
 |--------------------------------------------------------------------------
