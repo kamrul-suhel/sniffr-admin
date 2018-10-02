@@ -18,8 +18,8 @@
     <div>&nbsp;</div>
 
     <div>Please click the following link and then agree to the terms provided on the page: <a
-                href="{{ url(env('FRONTEND_URL'). '/contract/'.$contract->token. '/accept' }}">{{
-                url(env('FRONTEND_URL'). '/contract/'.$contract->token. '/accept' }}</a></div>
+                href="{{ url(env('FRONTEND_URL'). '/contract/'.$contract->token. '/accept') }}">{{
+                url(env('FRONTEND_URL'). '/contract/'.$contract->token. '/accept') }}</a></div>
 
     <div>&nbsp;</div>
 
