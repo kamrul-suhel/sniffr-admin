@@ -155,85 +155,7 @@
             }
         });
 
-
-        var ctx = $('#video-sub-stacked-graph');
-        ctx.height(285);
-        new Chart($("#video-sub-stacked-graph"), {
-            "type": "bar",
-            "data": {
-                "labels": [
-                    @foreach($allVideosStateTotalTotalsExc as $key => $date)
-					<?php echo "'" . date('d M y', strtotime($key)) . "',"; ?>
-                    @endforeach
-                ],
-                "datasets": [
-                    {
-                        "label": 'New',
-                        "data": [
-                            @foreach($allVideosStateTotalTotalsExc as $newDate)
-                            @if(array_search('new' , array_column($newDate, 'state')) !== false)
-                            {{ $newDate[array_search('new', array_column($newDate, 'state'))]->total }},
-                            @else
-							<?php echo "'0',";?>
-                            @endif
-                            @endforeach
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(54, 162, 235, 0.2)",
-                        "borderWidth": 1
-                    },
-                    {
-                        "label": 'Pending',
-                        "data": [
-                            @foreach($allVideosStateTotalTotalsExc as $pendingDate)
-                            @if(array_search('pending' , array_column($pendingDate, 'state')) !== false)
-                            {{ $pendingDate[array_search('pending', array_column($pendingDate, 'state'))]->total }},
-                            @else
-							<?php echo "'0',";?>
-                            @endif
-                            @endforeach
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(255, 205, 86, 0.2)",
-                        "borderWidth": 1
-                    },
-                    {
-                        "label": 'Licensed',
-                        "data": [
-                            @foreach($allVideosStateTotalTotalsExc as $licensedDate)
-                            @if(array_search('licensed' , array_column($licensedDate, 'state')) !== false)
-                            {{ $licensedDate[array_search('licensed', array_column($licensedDate, 'state'))]->total }},
-                            @else
-							<?php echo "'0',";?>
-                            @endif
-                            @endforeach
-                        ],
-                        "fill": false,
-                        "backgroundColor": "rgba(0, 160, 90, 0.2)",
-                        "borderWidth": 1
-                    }
-                ]
-            },
-            "options": {
-                maintainAspectRatio: false,
-                legend: {
-                    display: true
-                },
-                "scales": {
-                    "xAxes": [{
-                        stacked: true
-                    }],
-                    "yAxes": [{
-                        stacked: true,
-                        "ticks": {
-                            "beginAtZero": true
-                        }
-                    }]
-                }
-            }
-        });
-
-			<?php if(\Auth::user()->isAdmin()): ?>
+                @if(\Auth::user()->isAdmin())
         var ctx = $('#exc-licensed-breakdown');
         ctx.height(285);
         new Chart($("#exc-licensed-breakdown"), {
@@ -246,8 +168,9 @@
                 ],
                 "datasets": [
 						<?php foreach ($exc_contracts_users as $user): $userId = $user[0]->user_id; ?>
+                        @php $user = \App\User::withTrashed()->find($userId); @endphp
                     {
-                        "label": '<?php echo \App\User::find($userId)->full_name; ?>',
+                        "label": '<?php echo $user->full_name; echo $user->deleted_at ? '(deleted)' : ''; ?>',
                         "data": [
 							<?php foreach ($exc_contracts as $contract) {
 							echo count($contract->where('user_id', $userId)) . ',';
@@ -291,8 +214,9 @@
                 ],
                 "datasets": [
 						<?php foreach ($exc_contracts_stories_users as $user): $userId = $user[0]->user_id; ?>
+                        @php $user = \App\User::withTrashed()->find($userId); @endphp
                     {
-                        "label": '<?php echo \App\User::find($userId)->full_name; ?>',
+                        "label": '<?php echo $user->full_name; echo $user->deleted_at ? '(deleted)' : ''; ?>',
                         "data": [
 							<?php foreach ($exc_contracts_stories as $contract) {
 							echo count($contract->where('user_id', $userId)) . ',';
@@ -323,7 +247,7 @@
                 }
             }
         });
-		<?php endif; ?>
+        @endif
 
     })(jQuery);
 </script>

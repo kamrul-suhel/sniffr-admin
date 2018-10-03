@@ -25,7 +25,7 @@
             @foreach($logs as $log)
                 <li>
                     @if($log->user_id)
-                        <td><small>{{ \App\User::find($log->user_id)->full_name }}</small></td>
+                        <td><small>{{ \App\User::withTrashed()->find($log->user_id)->full_name }}</small></td>
                     @else
                         <td><small>System</small></td>
                     @endif
