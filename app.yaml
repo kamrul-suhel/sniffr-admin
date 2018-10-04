@@ -1,0 +1,51 @@
+runtime: php
+env: flex
+
+runtime_config:
+  document_root: public
+
+# Ensure we skip ".env", which is only for local development
+skip_files:
+  - .env
+
+env_variables:
+  # Put production environment variables here.
+  GOOGLE_BUCKET_NAME: mike-test-181909.appspot.com
+  APP_LOG: errorlog
+  APP_DEBUG: true
+  APP_KEY: base64:wXWxg1pTrTrXMEjy/oPJS3QKGGi/eH6jAEdEaTBXWrM=
+  STORAGE_DIR: /tmp
+
+  #CACHE_DRIVER: database
+  SESSION_DRIVER: database
+  ## Set these environment variables according to your CloudSQL configuration.
+  DB_HOST: localhost
+  DB_PORT: 3306
+  DB_DATABASE: videoapp
+  DB_USERNAME: root
+  DB_PASSWORD: hr6i9u5KJGzdp7K9
+  DB_SOCKET: "/cloudsql/mike-test-181909:us-central1:mike-test001"
+
+  MAIL_DRIVER: smtp
+  MAIL_HOST: smtp.mailtrap.io
+  MAIL_PORT: 2525
+  MAIL_USERNAME: c325a006821a63
+  MAIL_PASSWORD: 910c6c62f7f659
+
+  DYNAMODB_CONNECTION: aws
+  DYNAMODB_KEY: AKIAJQXRSVZW4SG7EUGA
+  DYNAMODB_SECRET: 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
+  DYNAMODB_REGION: us-east-1
+  DYNAMODB_LOCAL: false
+
+liveness_check:
+   path: '/liveness_check'
+   check_interval_sec: 30
+   timeout_sec: 4
+   failure_threshold: 2
+   success_threshold: 2
+
+beta_settings:
+    # for Cloud SQL, set this value to the Cloud SQL connection name,
+    # e.g. "project:region:cloudsql-instance"
+    cloud_sql_instances: "mike-test-181909:us-central1:mike-test001"

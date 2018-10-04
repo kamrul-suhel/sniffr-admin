@@ -1,0 +1,108 @@
+{
+    "name": "laravel/laravel",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/schooch/twitter"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "airbrake/phpbrake": "^0.6.0",
+        "aws/aws-sdk-php-laravel": "~3.0",
+        "baopham/dynamodb": "^4.1",
+        "barryvdh/laravel-cors": "^0.11.2",
+        "barryvdh/laravel-dompdf": "^0.8.2",
+        "chumper/zipper": "^1.0",
+        "codewizz/laravel-reddit-api": "^0.1.2",
+        "comocode/laravel-ab": "dev-master",
+        "doctrine/dbal": "^2.6",
+        "dumpk/elastcoder": "^0.9.1",
+        "facebook/graph-sdk": "^5.6",
+        "fideloper/proxy": "~4.0",
+        "google/apiclient": "^2.2",
+        "google/cloud-storage": "^1.0",
+        "intervention/image": "^2.4",
+        "janyksteenbeek/youtubepartner": "^1.1",
+        "laravel/framework": "5.6.*",
+        "laravel/passport": "^7.0",
+        "laravel/tinker": "~1.0",
+        "laravelcollective/html": "^5.5",
+        "league/csv": "^9.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "michaeljwright/aws-rekognition": "^0.2",
+        "nao-pon/flysystem-google-drive": "~1.1",
+        "owen-it/laravel-auditing": "^8.0",
+        "pbmedia/laravel-ffmpeg": "^2.0",
+        "predis/predis": "^1.1",
+        "ralouphie/mimey": "^1.0",
+        "ramsey/uuid": "^3.7",
+        "schooch/youtube": "^5.0.5",
+        "talvbansal/media-manager": "^2.5",
+        "thujohn/twitter": "dev-test",
+        "true/punycode": "~2.0",
+        "weidner/goutte": "^1.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.2",
+        "codeception/codeception": "^2.4",
+        "filp/whoops": "~2.0",
+        "fzaninotto/faker": "~1.4",
+        "laravel/dusk": "~4.0",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~7.0"
+    },
+    "autoload": {
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ],
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/Libraries/Hvconfig.php",
+            "app/Libraries/ImageHandler.php",
+            "app/Libraries/NestedHelper.php",
+            "app/Libraries/TextHelper.php",
+            "app/Libraries/TimeHelper.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/dusk"
+            ]
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
+        ],
+        "post-install-cmd": [
+            "chmod -R 755 bootstrap\/cache",
+            "php artisan cache:clear"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}

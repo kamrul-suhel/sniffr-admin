@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 5.6
+  - 5.5
+  - 7
+  - hhvm
+
+before_install:
+  - bash travis.build.sh
+  - cd build/laravel
+
+script:
+  - phpunit ./vendor/comocode/laravel-ab/tests/AbTests.php
+
+after_script:
+  - cd ../../
+  - rm -rf build
